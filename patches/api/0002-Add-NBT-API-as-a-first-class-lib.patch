@@ -1,0 +1,201 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 31 Jul 2021 20:15:05 +0300
+Subject: [PATCH] Add NBT API as a first-class lib
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index e16706bc30fc3c851485fe0c68be4abdcc70e6e2..03d1f31c48d7c4efda158646d32e3a420fd79fd0 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -42,6 +42,7 @@ dependencies {
+     api("org.apache.logging.log4j:log4j-api:2.17.1")
+     api("org.slf4j:slf4j-api:1.8.0-beta4")
+     api("io.sentry:sentry:5.4.0") // Pufferfish
++    api("de.tr7zw:item-nbt-api:2.11.0-SNAPSHOT") // Kiterino
+ 
+     implementation("org.ow2.asm:asm:9.2")
+     implementation("org.ow2.asm:asm-commons:9.2")
+diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
+index 049c36807d2a970842442c1b7517c06f3f150041..9125c2a504e6a99737432ec2def386873321996f 100644
+--- a/src/main/java/org/bukkit/Chunk.java
++++ b/src/main/java/org/bukkit/Chunk.java
+@@ -283,4 +283,16 @@ public interface Chunk extends PersistentDataHolder {
+      * @return if the block is contained within
+      */
+     boolean contains(@NotNull BlockData block);
++
++    // Kiterino start
++    /**
++     * Returns NBT representation of this chunk.
++     *
++     * @return vanilla NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTChunk getNBT() {
++        return new de.tr7zw.changeme.nbtapi.NBTChunk(this);
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index e405c279f6135c94c775a856ab88fd3cace6bd5c..145bf1031b3d6f7c83e6f800d16dd1c98c396f61 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -745,4 +745,26 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+     @NotNull
+     float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants);
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Returns NBT representation of this block.
++     *
++     * @return vanilla NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTBlock getNBT() {
++        return new de.tr7zw.changeme.nbtapi.NBTBlock(this);
++    }
++
++    /**
++     * Returns a custom tag container of this chunk.
++     *
++     * @return custom NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTCompound getNBTC() {
++        return getNBT().getData();
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
+index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a2e0ad974 100644
+--- a/src/main/java/org/bukkit/block/TileState.java
++++ b/src/main/java/org/bukkit/block/TileState.java
+@@ -50,4 +50,16 @@ public interface TileState extends BlockState, PersistentDataHolder {
+      */
+     boolean isSnapshot();
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Returns NBT representation of this tile entity.
++     *
++     * @return vanilla NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTTileEntity getNBT() {
++        return new de.tr7zw.changeme.nbtapi.NBTTileEntity(this);
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 3fa4f583c8d38c8cb62065f7f18986c985e4c92f..36367e44c3df6a14c5d793e4f49f81142b3d5228 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -868,4 +868,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      */
+     boolean isInDaylight();
+     // Purpur end
++
++    // Kiterino start
++    /**
++     * Returns NBT representation of this entity.
++     *
++     * @return vanilla NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTEntity getNBT() {
++        return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
+index 91444a8bb400d1db36df118c8c24645c26fa72be..791c3c7d75f373f6fa38c549b3d5d9d6181ae4b9 100644
+--- a/src/main/java/org/bukkit/inventory/ItemStack.java
++++ b/src/main/java/org/bukkit/inventory/ItemStack.java
+@@ -1612,4 +1612,42 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
+         return random.nextInt(unbreaking + 1) > 0;
+     }
+     // Purpur end
++
++    // Kiterino start
++    /**
++     * Returns NBT representation of this item. The ItemStack will be cloned!
++     *
++     * @return item's NBT tags container
++     */
++    @NotNull
++    public de.tr7zw.changeme.nbtapi.NBTItem getNBT() {
++        return getNBT(false);
++    }
++
++    /**
++     * Returns NBT representation of this item. If directApply is true,
++     * all changes will be mapped to the original item. Changes to the NBTItem will
++     * overwrite changes done to the original item in that case.
++     *
++     * @param directApply if true, changes to NBTItem will affect this ItemStack
++     * @return item's NBT tags container
++     */
++    @NotNull
++    public de.tr7zw.changeme.nbtapi.NBTItem getNBT(boolean directApply) {
++        return new de.tr7zw.changeme.nbtapi.NBTItem(this, directApply);
++    }
++
++    /**
++     * Applies NBT data from the provided NBT item.
++     *
++     * @param nbt ItemStack's NBT container
++     */
++    public void setNBT(@NotNull de.tr7zw.changeme.nbtapi.NBTItem nbt) {
++        ItemStack nbtItem = nbt.getItem();
++        setType(nbtItem.getType());
++        setAmount(nbtItem.getAmount());
++        setData(nbtItem.getData());
++        setItemMeta(nbtItem.getItemMeta());
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
+index eebb3da156e2d95efbe22d4afa470b977ce19f10..e5e558a02fafaf2dcddb0cf18c27626aeb0e17cb 100644
+--- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
++++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
+@@ -165,4 +165,16 @@ public interface PersistentDataContainer {
+      */
+     boolean has(@NotNull NamespacedKey key);
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Returns a custom tag container.
++     *
++     * @return custom NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getNBTC() {
++        return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
+index 80b277cc57f092f04fbf7810ac78d250b207b775..b20272a346937763e78a13369f925e56d46ae4ac 100644
+--- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
++++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
+@@ -20,4 +20,16 @@ public interface PersistentDataHolder {
+     @NotNull
+     PersistentDataContainer getPersistentDataContainer();
+ 
++    // Kiterino start
++    /**
++     * Returns a custom tag container.
++     *
++     * @return custom NBT tags container
++     */
++    @NotNull
++    default de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getNBTC() {
++        return getPersistentDataContainer().getNBTC();
++    }
++    // Kiterino end
++
+ }

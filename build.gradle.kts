@@ -42,7 +42,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven("https://libraries.minecraft.net/")
-        maven("https://repo.codemc.io/repository/maven-public/")
+        maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://oss.sonatype.org/content/groups/public/")
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://ci.emc.gs/nexus/content/groups/aikar/")
