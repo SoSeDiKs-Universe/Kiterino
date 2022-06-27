@@ -1,0 +1,199 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Sun, 10 Apr 2016 22:50:33 -0400
+Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
+
+If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
+
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index fecd65dc87a99a5692c59dd590b20327b1eb31c2..f0c65c08f91b01ef77409b247cbf5a5d18d9d367 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -834,7 +834,7 @@ public abstract class PlayerList {
+ 
+     public ServerPlayer respawn(ServerPlayer entityplayer, ServerLevel worldserver, boolean flag, Location location, boolean avoidSuffocation, org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag...respawnFlags) {
+         // Paper end
+-        entityplayer.stopRiding(); // CraftBukkit
++        //entityplayer.stopRiding(); // CraftBukkit // EMC - remove stop riding
+         this.players.remove(entityplayer);
+         this.playersByName.remove(entityplayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Spigot
+         entityplayer.getLevel().removePlayerImmediately(entityplayer, Entity.RemovalReason.DISCARDED);
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index d3438154fb7d7f05e83fa7e94ad8c8f4b637f683..1542b189250d16ce5698413938a6a44b50427ad5 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -285,7 +285,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     public ImmutableList<Entity> passengers;
+     protected int boardingCooldown;
+     @Nullable
+-    private Entity vehicle;
++    public Entity vehicle; // EMC - make public
+     public Level level;
+     public double xo;
+     public double yo;
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index e24261f2ddc3de614feb9ae38e7e04c57ea7364b..643c50939922bb8b86c1815d30258a94229b57d3 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -574,12 +574,91 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return this.teleport(location, TeleportCause.PLUGIN);
+     }
+ 
++    // EMC start - vehicle passenger teleporting
++    private static CraftEntity teleportingEntity;
++    private CraftEntity storedRoot;
++    private com.google.common.collect.ImmutableList<CraftEntity> storedPassengers;
++    void detachEntities() {
++        if (teleportingEntity == null) {
++            teleportingEntity = this;
++            this.storedRoot = entity.getRootVehicle().getBukkitEntity();
++            this.storedRoot.detachEntities();
++            teleportingEntity = null;
++            return;
++        }
++        this.storedPassengers = this.entity.passengers.stream().map(Entity::getBukkitEntity).collect(com.google.common.collect.ImmutableList.toImmutableList());
++        this.forceEjectPassengers();
++        for (CraftEntity ent : this.storedPassengers) {
++            ent.detachEntities();
++        }
++    }
++    void forceEjectPassengers() {
++        for (int i = this.entity.passengers.size() - 1; i >= 0; --i) {
++            Entity passenger = (this.entity.passengers.get(i));
++            passenger.vehicle = null;
++        }
++        this.entity.passengers = com.google.common.collect.ImmutableList.of();
++    }
++    void teleportAndReattachEntities(Location location) {
++        if (teleportingEntity == null) {
++            if (this.storedRoot != null) {
++                teleportingEntity = this;
++                this.storedRoot.teleportAndReattachEntities(location);
++                CraftEntity root = this.storedRoot;
++                this.storedRoot = null;
++                root.reattachPassengers();
++                teleportingEntity = null;
++            }
++            return;
++        }
++        if (!teleportingEntity.equals(this)) {
++            this.teleportEntity(location);
++        }
++        for (CraftEntity ent : this.storedPassengers) {
++            ent.teleportAndReattachEntities(location);
++        }
++    }
++    void teleportEntity(Location location) {
++        if (getWorld().equals(location.getWorld())) {
++            if (this.storedPassengers == null || this.storedPassengers.isEmpty()) {
++                this.entity.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
++                this.entity.setYHeadRot(location.getYaw());
++            } else {
++                ServerLevel world = (ServerLevel) this.entity.level;
++                Entity target = this.entity.getType().create(world);
++                if (target == null) {
++                    return;
++                }
++                target.restoreFrom(this.entity);
++                target.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
++                target.setYHeadRot(location.getYaw());
++                this.entity.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
++                this.setHandle(target);
++                world.addDuringTeleport(target);
++            }
++        } else {
++            this.entity.teleportTo(((CraftWorld) location.getWorld()).getHandle(), new BlockPos(location.getX(), location.getY(), location.getZ()));
++        }
++    }
++    private void reattachPassengers() {
++        if (this.storedPassengers == null) {
++            return;
++        }
++        this.entity.passengers = this.storedPassengers.stream().map(CraftEntity::getHandle).collect(com.google.common.collect.ImmutableList.toImmutableList());
++        for (CraftEntity passenger : this.storedPassengers) {
++            passenger.getHandle().vehicle = this.getHandle();
++            passenger.reattachPassengers();
++        }
++        this.storedPassengers = null;
++    }
++    // EMC end - vehicle passenger teleporting
++
+     @Override
+     public boolean teleport(Location location, TeleportCause cause) {
+         Preconditions.checkArgument(location != null, "location");
+         location.checkFinite();
+ 
+-        if (this.entity.isVehicle() || this.entity.isRemoved()) {
++        if (this.entity.isRemoved()) { // EMC
+             // Purpur start
+             if (!entity.isRemoved() && new org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent(entity.getBukkitEntity(), org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent())
+                 return teleport(location, cause);
+@@ -588,13 +667,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         }
+ 
+         // If this entity is riding another entity, we must dismount before teleporting.
+-        this.entity.stopRiding();
++        //this.entity.stopRiding(); // EMC
++        this.detachEntities(); // EMC
+ 
+         // Let the server handle cross world teleports
+         if (!location.getWorld().equals(this.getWorld())) {
+             // Prevent teleportation to an other world during world generation
+             Preconditions.checkState(!entity.generation, "Cannot teleport entity to an other world during world generation");
+             this.entity.teleportTo(((CraftWorld) location.getWorld()).getHandle(), new BlockPos(location.getX(), location.getY(), location.getZ()));
++            this.teleportAndReattachEntities(location); // EMC
+             return true;
+         }
+ 
+@@ -603,6 +684,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         // SPIGOT-619: Force sync head rotation also
+         this.entity.setYHeadRot(location.getYaw());
+ 
++        this.teleportAndReattachEntities(location); // EMC
+         return true;
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index a43aad1317b50b5ef42a84721f82318beccd66ea..188726c819139050e0407e01839a1cdb68edeb7e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1172,7 +1172,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         }
+ 
+         // If this player is riding another entity, we must dismount before teleporting.
+-        entity.stopRiding();
++        //entity.stopRiding(); // EMC
+ 
+         // SPIGOT-5509: Wakeup, similar to riding
+         if (this.isSleeping()) {
+@@ -1192,15 +1192,30 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+             this.getHandle().closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.TELEPORT); // Paper
+         }
+ 
++        this.detachEntities(); // EMC
+         // Check if the fromWorld and toWorld are the same.
+         if (fromWorld == toWorld) {
+             entity.connection.teleport(to);
+         } else {
+             server.getHandle().respawn(entity, toWorld, true, to, !toWorld.paperConfig().environment.disableTeleportationSuffocationCheck); // Paper
+         }
++        this.teleportAndReattachEntities(location); // EMC
+         return true;
+     }
+ 
++    // EMC start
++    @Override
++    void teleportEntity(Location location) {
++        ServerPlayer entity = this.getHandle();
++        if (getWorld().equals(location.getWorld())) {
++            entity.connection.teleport(location);
++        } else {
++            ServerLevel toWorld = ((CraftWorld) location.getWorld()).getHandle();
++            server.getHandle().respawn(entity, toWorld, true, location, !toWorld.paperConfig().environment.disableTeleportationSuffocationCheck);
++        }
++    }
++    // EMC end
++
+     @Override
+     public void setSneaking(boolean sneak) {
+         this.getHandle().setShiftKeyDown(sneak);

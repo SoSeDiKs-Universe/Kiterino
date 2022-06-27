@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 8 Jul 2021 14:31:15 +0300
+Subject: [PATCH] Rebrand
+
+
+diff --git a/src/main/java/org/bukkit/command/defaults/VersionCommand.java b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
+index aba57d1a3e1e20210538a6ea02066f2907309f48..951d9a599d3a7c3fc12aaae60b4518d20df9b48a 100644
+--- a/src/main/java/org/bukkit/command/defaults/VersionCommand.java
++++ b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
+@@ -43,7 +43,7 @@ public class VersionCommand extends BukkitCommand {
+         if (!testPermission(sender)) return true;
+ 
+         if (args.length == 0) {
+-            sender.sendMessage("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")"); // Patina
++            sender.sendMessage("This server is running Kiterino (a custom Purpur-based fork for SoSeDiK's Universe; MC: 1.19)."); // Patina // Kiterino
+             //sendVersion(sender); // Patina
+         } else {
+             StringBuilder name = new StringBuilder();

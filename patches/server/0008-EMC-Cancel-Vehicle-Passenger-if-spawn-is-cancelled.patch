@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Aikar <aikar@aikar.co>
+Date: Fri, 25 Apr 2014 00:38:10 -0400
+Subject: [PATCH] EMC - Cancel Vehicle/Passenger if spawn is cancelled
+
+Otherwise lots of chickens
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index 902e420d19288df124da2292a60f95e97afb9fee..f04f8af34c91638b2f8c51fa50475aee0618f9a4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -746,6 +746,16 @@ public class CraftEventFactory {
+ 
+         CreatureSpawnEvent event = new CreatureSpawnEvent(entity, spawnReason);
+         craftServer.getPluginManager().callEvent(event);
++        // EMC start
++        if (event.isCancelled()) {
++            if (entity.getVehicle() != null) {
++                entity.getVehicle().remove();
++            }
++            if (entity.getPassenger() != null) {
++                entity.getPassenger().remove();
++            }
++        }
++        // EMC end
+         return event;
+     }
+ 

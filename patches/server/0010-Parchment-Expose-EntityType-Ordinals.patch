@@ -1,0 +1,76 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lexikiq <noellekiq@gmail.com>
+Date: Sun, 20 Jun 2021 23:15:44 -0400
+Subject: [PATCH] Parchment - Expose EntityType Ordinals
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
+index 86fa3f03e72b0c656ed86cae9ee64feb3f77fb3d..9dfbcbffe12fdb9b9e08ca82fb73455aaee25dd7 100644
+--- a/src/main/java/net/minecraft/world/entity/EntityType.java
++++ b/src/main/java/net/minecraft/world/entity/EntityType.java
+@@ -154,6 +154,8 @@ import org.slf4j.Logger;
+ 
+ public class EntityType<T extends Entity> implements EntityTypeTest<Entity, T> {
+ 
++    private static int ordinal = 0; // Parchment
++    private static final java.util.Map<EntityType, Integer> ordinals = new java.util.HashMap<>(); // Parchment
+     private static final Logger LOGGER = LogUtils.getLogger();
+     public static final String ENTITY_TAG = "EntityTag";
+     private final Holder.Reference<EntityType<?>> builtInRegistryHolder;
+@@ -295,9 +297,31 @@ public class EntityType<T extends Entity> implements EntityTypeTest<Entity, T> {
+     public void setDimensions(EntityDimensions dimensions) { this.dimensions = dimensions; } // Purpur
+ 
+     private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
+-        return (EntityType) Registry.register(Registry.ENTITY_TYPE, id, (EntityType<T>) type.build(id)); // CraftBukkit - decompile error
++        // Parchment start
++        EntityType<T> build = type.build(id);
++        ordinals.put(build, ordinal);
++        ordinal += 1;
++        return (EntityType) Registry.register(Registry.ENTITY_TYPE, id, (EntityType<T>) build); // CraftBukkit - decompile error
+     }
+ 
++    public int ordinal() {
++        return ordinals.get(this);
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        if (this == o) return true;
++        if (o == null || getClass() != o.getClass()) return false;
++        EntityType<?> that = (EntityType<?>) o;
++        return id.equals(that.id);
++    }
++
++    @Override
++    public int hashCode() {
++        return java.util.Objects.hash(id);
++    }
++    // Parchment end
++
+     // Purpur start
+     public static EntityType<?> getFromBukkitType(org.bukkit.entity.EntityType bukkitType) {
+         return getFromKey(new ResourceLocation(bukkitType.getKey().toString()));
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 239c9636738a627eec206ee894cb616518b663f4..aa593ab3fdee042a33fcdcd8402d1173a88b85b9 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -608,6 +608,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
+     }
+     // Paper end
+ 
++    // Parchment start
++    @Override
++    public int entityID(org.bukkit.entity.EntityType type) {
++        String name = type.getName();
++        if (name == null) {
++            throw new IllegalArgumentException("Entity name is undefined");
++        }
++        return net.minecraft.world.entity.EntityType.byString(name)
++                .orElseThrow(() -> new IllegalArgumentException("Could not find corresponding NMS entity"))
++                .ordinal();
++    }
++    // Parchment end
++
+     /**
+      * This helper class represents the different NBT Tags.
+      * <p>
