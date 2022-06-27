@@ -1,0 +1,84 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 14:32:55 +0300
+Subject: [PATCH] Allow force sleeping
+
+
+diff --git a/src/main/java/net/minecraft/server/commands/TeleportCommand.java b/src/main/java/net/minecraft/server/commands/TeleportCommand.java
+index 027ca5b67c544048815ddef4bb36d0a8fc3d038c..d09b088ff7a618d9bc360a73df759af0601230a7 100644
+--- a/src/main/java/net/minecraft/server/commands/TeleportCommand.java
++++ b/src/main/java/net/minecraft/server/commands/TeleportCommand.java
+@@ -159,7 +159,7 @@ public class TeleportCommand {
+ 
+                 world.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 1, target.getId());
+                 target.stopRiding();
+-                if (((ServerPlayer) target).isSleeping()) {
++                if (((ServerPlayer) target).isSleeping() && ((ServerPlayer) target).checkBedExists()) { // Kiterino - wake up only if bed exists
+                     ((ServerPlayer) target).stopSleepInBed(true, true);
+                 }
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index a4785c179a5080a452ab180f9452e3b36dac90ab..13ffe3a7b92bcaf59d95ccad8445214cbdb21c62 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -3030,7 +3030,7 @@ public abstract class LivingEntity extends Entity {
+                 this.getCombatTracker().recheckStatus();
+             }
+ 
+-            if (this.isSleeping() && !this.checkBedExists()) {
++            if (false && this.isSleeping() && !this.checkBedExists()) { // Kiterino - do not wake up if no bed underneath
+                 this.stopSleeping();
+             }
+         }
+@@ -4284,6 +4284,16 @@ public abstract class LivingEntity extends Entity {
+         return this.getSleepingPos().isPresent();
+     }
+ 
++    // Kiterino start
++    public void forceSleep(double x, double y, double z) {
++        this.setPose(Pose.SLEEPING);
++        this.setPosToBed(new BlockPos(x, 0, z));
++        this.setSleepingPos(new BlockPos(x + 0.2, y + 0.1, z + 0.2));
++        this.setDeltaMovement(Vec3.ZERO);
++        this.hasImpulse = true;
++    }
++    // Kiterino end
++
+     public void startSleeping(BlockPos pos) {
+         if (this.isPassenger()) {
+             this.stopRiding();
+@@ -4306,7 +4316,7 @@ public abstract class LivingEntity extends Entity {
+         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
+     }
+ 
+-    private boolean checkBedExists() {
++    public boolean checkBedExists() { // Kiterino - private -> public
+         return (Boolean) this.getSleepingPos().map((blockposition) -> {
+             return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
+         }).orElse(false);
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index c0e3e2f09b6b5ed11b9240203e877bb9a6a0a647..6da7d16f450393fd88e4505d9b2f2b459d293f0e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1259,7 +1259,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         //entity.stopRiding(); // EMC
+ 
+         // SPIGOT-5509: Wakeup, similar to riding
+-        if (this.isSleeping()) {
++        if (this.isSleeping() && getHandle().checkBedExists()) { // Kiterino - wake up only if bed exists
+             this.wakeup(false);
+         }
+ 
+@@ -2971,4 +2971,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         return getHandle().flyingFallDamage;
+     }
+     // Purpur end
++
++    // Kiterino start
++    @Override
++    public void forceSleep() {
++        Location loc = getLocation();
++        getHandle().forceSleep(loc.getX(), loc.getY(), loc.getZ());
++    }
++    // Kiterino end
+ }

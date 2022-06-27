@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 14:32:56 +0300
+Subject: [PATCH] Allow force sleeping
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 399c90caf95cca21e2aeb87c67b994cfbe01bcf2..b590398de3d4a5f8c933515252d57b4f2dbff450 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -2813,4 +2813,11 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      */
+     public boolean hasFlyingFallDamage();
+     // Purpur end
++
++    // Kiterino start
++    /**
++     * Forces player to sleep
++     */
++    void forceSleep();
++    // Kiterino end
+ }

@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 12 Jul 2021 19:26:22 +0300
+Subject: [PATCH] Add ability to get active container id
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index 0a9c7b4f16ba1966ce8754c0b5bef270145f4a95..51ed1ef5a159730601581b9bcab4489644ba3924 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -812,4 +812,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+             this.getHandle().setLastDeathLocation(Optional.of(CraftMemoryMapper.toNms(location)));
+         }
+     }
++
++    // Kiterino start
++    @Override
++    public int getActiveContainerId() {
++        return getHandle().containerMenu.containerId;
++    }
++
++    @Override
++    public int getActiveContainerStateId() {
++        return getHandle().containerMenu.getStateId();
++    }
++    // Kiterino end
+ }

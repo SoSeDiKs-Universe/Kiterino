@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 12 Jul 2021 19:26:22 +0300
+Subject: [PATCH] Add ability to get active container id
+
+
+diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
+index 3d6809eb9017b65f2a34ebcaade1cf3c039b7bcf..3221d63e90c029b89b430689ddf53a589221ff41 100644
+--- a/src/main/java/org/bukkit/entity/HumanEntity.java
++++ b/src/main/java/org/bukkit/entity/HumanEntity.java
+@@ -772,4 +772,20 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+      * @param location where to set the last death player location
+      */
+     public void setLastDeathLocation(@Nullable Location location);
++
++    // Kiterino start
++    /**
++     * Get current active container id
++     *
++     * @return current active container id
++     */
++    int getActiveContainerId();
++
++    /**
++     * Get current active container state id
++     *
++     * @return current active container state id
++     */
++    int getActiveContainerStateId();
++    // Kiterino start
+ }
