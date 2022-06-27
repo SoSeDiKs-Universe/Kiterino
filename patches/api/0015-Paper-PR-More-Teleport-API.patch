@@ -1,0 +1,279 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Owen1212055 <23108066+Owen1212055@users.noreply.github.com>
+Date: Sun, 5 Sep 2021 00:36:05 -0400
+Subject: [PATCH] Paper PR - More Teleport API
+
+
+diff --git a/src/main/java/io/papermc/paper/entity/LookAnchor.java b/src/main/java/io/papermc/paper/entity/LookAnchor.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..e2780f09de4a858bd5f16041400cfb616223d4f6
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/entity/LookAnchor.java
+@@ -0,0 +1,24 @@
++package io.papermc.paper.entity;
++
++import org.bukkit.Location;
++import org.bukkit.entity.Entity;
++import org.bukkit.entity.LivingEntity;
++
++/**
++ * Represents what part of the entity should be used when determining where to face a location/entity.
++ *
++ * @see org.bukkit.entity.Player#lookAt(Location, LookAnchor)
++ * @see org.bukkit.entity.Player#lookAt(Entity, LookAnchor, LookAnchor)
++ */
++public enum LookAnchor {
++    /**
++     * Represents the entity's feet.
++     * @see LivingEntity#getLocation()
++     */
++    FEET,
++    /**
++     * Represents the entity's eyes.
++     * @see LivingEntity#getEyeLocation()
++     */
++    EYES;
++}
+diff --git a/src/main/java/io/papermc/paper/entity/RelativeTeleportFlag.java b/src/main/java/io/papermc/paper/entity/RelativeTeleportFlag.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..91dcc8a4ca6d2179fe9ffb079896c7722eae2117
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/entity/RelativeTeleportFlag.java
+@@ -0,0 +1,33 @@
++package io.papermc.paper.entity;
++
++import org.bukkit.Location;
++import org.bukkit.event.player.PlayerTeleportEvent;
++
++/**
++ * Represents coordinates in a teleportation that should be handled relatively.
++ *
++ * @see org.bukkit.entity.Player#teleport(Location, PlayerTeleportEvent.TeleportCause, boolean, boolean, RelativeTeleportFlag...)
++ */
++public enum RelativeTeleportFlag {
++    /**
++     * Represents the player's X coordinate
++     */
++    X,
++    /**
++     * Represents the player's Y coordinate
++     */
++    Y,
++    /**
++     * Represents the player's Z coordinate
++     */
++    Z,
++    /**
++     * Represents the player's yaw
++     */
++    YAW,
++    /**
++     * Represents the player's pitch
++     */
++    PITCH;
++
++}
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 36367e44c3df6a14c5d793e4f49f81142b3d5228..595eeba132a7bd8a546fab83fe2a912dcdf46a1c 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -121,10 +121,71 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      *
+      * @param yaw the yaw
+      * @param pitch the pitch
+-     * @throws UnsupportedOperationException if used for players
+      */
+     public void setRotation(float yaw, float pitch);
+ 
++    // Paper start - Teleport API
++    /**
++     * Teleports this entity to the given location.
++     * <p>
++     * Note: Teleporting to a different world with ignorePassengers to true while the entity has entities riding it
++     * will cause this teleportation to return false.
++     *
++     * @param location New location to teleport this entity to
++     * @param ignorePassengers If passengers should be ignored when teleporting
++     * @return <code>true</code> if the teleport was successful
++     */
++    default boolean teleport(@NotNull Location location, boolean ignorePassengers) {
++        return teleport(location, TeleportCause.PLUGIN, ignorePassengers);
++    }
++
++    /**
++     * Teleports this entity to the given location.
++     * <p>
++     * Note: Teleporting to a different world with ignorePassengers to true while the entity has entities riding it
++     * will cause this teleportation to return false.
++     *
++     * @param location New location to teleport this entity to
++     * @param ignorePassengers If passengers should be ignored when teleporting
++     * @return <code>true</code> if the teleport was successful
++     */
++    default boolean teleport(@NotNull Location location, @NotNull TeleportCause cause, boolean ignorePassengers) {
++        return teleport(location, cause, ignorePassengers, true);
++    }
++
++    /**
++     * Teleports this entity to the given location.
++     * <p>
++     * Note: Teleporting to a different world with ignorePassengers to true while the entity has entities riding it
++     * will cause this teleportation to return false.
++     * Note: Teleporting to a different world with dismount to false while this entity is riding another entity will
++     * cause this teleportation to return false.
++     *
++     * @param location New location to teleport this entity to
++     * @param ignorePassengers If passengers should be ignored when teleporting
++     * @param dismount If the entity should be dismounted if they are riding another entity
++     * @return <code>true</code> if the teleport was successful
++     */
++    default boolean teleport(@NotNull Location location, boolean ignorePassengers, boolean dismount) {
++        return teleport(location, TeleportCause.PLUGIN, ignorePassengers, dismount);
++    }
++
++    /**
++     * Teleports this entity to the given location.
++     * <p>
++     * Note: Teleporting to a different world with ignorePassengers to true while the entity has entities riding it
++     * will cause this teleportation to return false.
++     * Note: Teleporting to a different world with dismount to false while this entity is riding another entity will
++     * cause this teleportation to return false.
++     *
++     * @param location New location to teleport this entity to
++     * @param ignorePassengers If passengers should be ignored when teleporting
++     * @param dismount If the entity should be dismounted if they are riding another entity
++     * @return <code>true</code> if the teleport was successful
++     */
++    boolean teleport(@NotNull Location location, @NotNull TeleportCause cause, boolean ignorePassengers, boolean dismount);
++    // Paper end - Teleport API
++
+     /**
+      * Teleports this entity to the given location. If this entity is riding a
+      * vehicle, it will be dismounted prior to teleportation.
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 3ba77cfee35cad93991bf0cee726f7b549df6c58..399c90caf95cca21e2aeb87c67b994cfbe01bcf2 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -2695,6 +2695,57 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+     String getClientBrandName();
+     // Paper end
+ 
++    // Paper start - Teleport API
++    /**
++     * Teleports this entity to the given location.
++     * <p>
++     * Note: Teleporting to a different world with ignorePassengers to true while the entity has entities riding it
++     * will cause this teleportation to return false.
++     * Note: Teleporting to a different world with dismount to false while this entity is riding another entity will
++     * cause this teleportation to return false.
++     *
++     * <p>
++     * Relative teleportation flags are only used client side, and cause the player to not lose velocity in that
++     * specific coordinate. The location of the teleportation will not change.
++     *
++     * @param location New location to teleport this entity to
++     * @param ignorePassengers If passengers should be ignored when teleporting
++     * @param dismount If the entity should be dismounted if they are riding another entity
++     * @param teleportFlags Coordinates of the location that the client should handle as relative teleportation
++     * @return <code>true</code> if the teleport was successful
++     */
++    boolean teleport(@NotNull Location location, @NotNull org.bukkit.event.player.PlayerTeleportEvent.TeleportCause cause, boolean ignorePassengers, boolean dismount, @NotNull io.papermc.paper.entity.RelativeTeleportFlag... teleportFlags);
++
++    /**
++     * Causes the player to look towards the given position.
++     *
++     * @param x x coordinate
++     * @param y y coordinate
++     * @param z z coordinate
++     * @param playerAnchor What part of the player should face the given position
++     */
++    void lookAt(double x, double y, double z, @NotNull io.papermc.paper.entity.LookAnchor playerAnchor);
++
++    /**
++     * Causes the player to look towards the given location.
++     *
++     * @param location Location to look at
++     * @param playerAnchor What part of player should face the location
++     */
++    default void lookAt(@NotNull Location location, @NotNull io.papermc.paper.entity.LookAnchor playerAnchor) {
++        lookAt(location.getX(), location.getY(), location.getZ(), playerAnchor);
++    }
++
++    /**
++     * Causes the player to look towards the given entity.
++     *
++     * @param entity Entity to look at
++     * @param playerAnchor What part of the player should face the entity
++     * @param entityAnchor What part of the entity the player should face
++     */
++    void lookAt(@NotNull org.bukkit.entity.Entity entity, @NotNull io.papermc.paper.entity.LookAnchor playerAnchor,  @NotNull io.papermc.paper.entity.LookAnchor entityAnchor);
++    // Paper end - Teleport API
++
+     @NotNull
+     @Override
+     Spigot spigot();
+diff --git a/src/main/java/org/bukkit/event/player/PlayerTeleportEvent.java b/src/main/java/org/bukkit/event/player/PlayerTeleportEvent.java
+index 553d7740489fe729166c8ca8ef8c7834db3663ad..f1780588807689727dda1691c82e9aa4d297035a 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerTeleportEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerTeleportEvent.java
+@@ -13,8 +13,14 @@ public class PlayerTeleportEvent extends PlayerMoveEvent {
+     private static final HandlerList handlers = new HandlerList();
+     private TeleportCause cause = TeleportCause.UNKNOWN;
+ 
++    // Paper start - Teleport API
++    private boolean dismounted = true;
++    private final java.util.Set<io.papermc.paper.entity.RelativeTeleportFlag> teleportFlagSet;
++    // Paper end
++
+     public PlayerTeleportEvent(@NotNull final Player player, @NotNull final Location from, @Nullable final Location to) {
+         super(player, from, to);
++        teleportFlagSet = java.util.Collections.emptySet(); // Paper - Teleport API
+     }
+ 
+     public PlayerTeleportEvent(@NotNull final Player player, @NotNull final Location from, @Nullable final Location to, @NotNull final TeleportCause cause) {
+@@ -23,6 +29,16 @@ public class PlayerTeleportEvent extends PlayerMoveEvent {
+         this.cause = cause;
+     }
+ 
++    // Paper start - Teleport API
++    public PlayerTeleportEvent(@NotNull final Player player, @NotNull final Location from, @Nullable final Location to, @NotNull final TeleportCause cause, boolean dismounted, @NotNull java.util.Set<io.papermc.paper.entity.RelativeTeleportFlag> teleportFlagSet) {
++        super(player, from, to);
++
++        this.dismounted = dismounted;
++        this.teleportFlagSet = teleportFlagSet;
++        this.cause = cause;
++    }
++    // Paper end
++
+     /**
+      * Gets the cause of this teleportation event
+      *
+@@ -80,6 +96,28 @@ public class PlayerTeleportEvent extends PlayerMoveEvent {
+         UNKNOWN;
+     }
+ 
++    // Paper start - Teleport API
++    /**
++     * Gets if the player will be dismounted in this teleportation.
++     *
++     * @return dismounted or not
++     */
++    public boolean willDismountPlayer() {
++        return dismounted;
++    }
++
++    /**
++     * Returns the relative teleportation flags used in this teleportation.
++     * This determines which axis the player will not lose their velocity in.
++     *
++     * @return an immutable set of relative teleportation flags
++     */
++    @NotNull
++    public java.util.Set<io.papermc.paper.entity.RelativeTeleportFlag> getRelativeTeleportationFlags() {
++        return teleportFlagSet;
++    }
++    // Paper end
++
+     @NotNull
+     @Override
+     public HandlerList getHandlers() {
