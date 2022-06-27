@@ -1,0 +1,337 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:21:16 +0200
+Subject: [PATCH] Weeper - Packet support
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/SkinParts.java b/src/main/java/com/destroystokyo/paper/SkinParts.java
+index 4a0c39405d4fbed457787e3c6ded4cc6591bc8c2..6eeb26ac9d1fda673019e68f6e55c96049db34ff 100644
+--- a/src/main/java/com/destroystokyo/paper/SkinParts.java
++++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
+@@ -1,5 +1,10 @@
+ package com.destroystokyo.paper;
+ 
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Skin parts
++ */
+ public interface SkinParts {
+ 
+     boolean hasCapeEnabled();
+@@ -17,4 +22,23 @@ public interface SkinParts {
+     boolean hasHatsEnabled();
+ 
+     int getRaw();
++
++    interface Builder {
++        @NotNull
++        Builder withCape();
++        @NotNull
++        Builder withJacket();
++        @NotNull
++        Builder withLeftSleeve();
++        @NotNull
++        Builder withRightSleeve();
++        @NotNull
++        Builder withLeftPants();
++        @NotNull
++        Builder withRightPants();
++        @NotNull
++        Builder withHat();
++        @NotNull
++        SkinParts build();
++    }
+ }
+diff --git a/src/main/java/com/github/weepingmc/packet/PacketPipeline.java b/src/main/java/com/github/weepingmc/packet/PacketPipeline.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..c13f90878e9feadd2fb2a6e8b6f20862e1439e0f
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/PacketPipeline.java
+@@ -0,0 +1,26 @@
++package com.github.weepingmc.packet;
++
++import com.github.weepingmc.packet.options.EntityMetaBuilder;
++
++import org.bukkit.scoreboard.Team;
++import org.jetbrains.annotations.NotNull;
++
++import com.destroystokyo.paper.SkinParts;
++
++public interface PacketPipeline {
++
++    @NotNull
++    PacketStepBuilder create();
++
++    @NotNull
++    EntityMetaBuilder createEntityMetaBuilder();
++
++    @NotNull
++    SkinParts.Builder createSkinPartsBuilder();
++
++    @NotNull
++    Team createTeam(@NotNull String name);
++
++    @NotNull
++    String generateRandomString(int count, boolean letters, boolean numbers);
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/PacketStep.java b/src/main/java/com/github/weepingmc/packet/PacketStep.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..b9e036645e35ea07cf70e9e67b182cf9056f6e0c
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/PacketStep.java
+@@ -0,0 +1,9 @@
++package com.github.weepingmc.packet;
++
++import org.bukkit.entity.Player;
++import org.jetbrains.annotations.NotNull;
++
++@FunctionalInterface
++public interface PacketStep {
++    void execute(@NotNull Player player);
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..ce7d35d0fda07bd36ac5538c4b2b2b4ee52c00ac
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+@@ -0,0 +1,99 @@
++package com.github.weepingmc.packet;
++
++import com.destroystokyo.paper.profile.PlayerProfile;
++
++import org.bukkit.Bukkit;
++import org.bukkit.Location;
++import org.bukkit.block.data.BlockData;
++import org.bukkit.entity.EntityType;
++import org.bukkit.entity.Player;
++import org.bukkit.inventory.EquipmentSlot;
++import org.bukkit.inventory.ItemStack;
++import com.github.weepingmc.packet.options.Animation;
++import com.github.weepingmc.packet.options.EntityMetaBuilder;
++import com.github.weepingmc.packet.options.PlayerAbility;
++import com.github.weepingmc.packet.options.ProfileAction;
++import com.github.weepingmc.packet.options.TeamMode;
++import org.bukkit.plugin.java.JavaPlugin;
++import org.bukkit.scoreboard.Team;
++import org.bukkit.util.Vector;
++import org.jetbrains.annotations.NotNull;
++
++import java.util.Collection;
++import java.util.Set;
++import java.util.UUID;
++import java.util.concurrent.TimeUnit;
++
++public interface PacketStepBuilder {
++
++    @NotNull
++    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction);
++
++    @NotNull
++    PacketStepBuilder spawnPlayer(int entityId, @NotNull UUID uuid, @NotNull Location location);
++
++    @NotNull
++    PacketStepBuilder setPlayerTeam(@NotNull Team team, @NotNull TeamMode teamMode);
++
++    @NotNull
++    PacketStepBuilder teleportEntity(int entityId, @NotNull Location location, boolean onGround);
++
++    @NotNull
++    PacketStepBuilder sendBlockChange(@NotNull Location location, @NotNull BlockData blockData);
++
++    @NotNull
++    PacketStepBuilder sleepAt(int entityId, @NotNull Location location);
++
++    @NotNull
++    PacketStepBuilder rotateHead(int entityId, float yaw);
++
++    @NotNull
++    PacketStepBuilder rotateFullHead(int entityId, float yaw, float pitch, boolean onGround);
++
++    @NotNull
++    PacketStepBuilder movePositionAndRotateFullHead(int entityId, @NotNull Vector direction, byte yaw, byte pitch, boolean onGround);
++
++    @NotNull
++    PacketStepBuilder destroyEntity(int entityId);
++
++    @NotNull
++    PacketStepBuilder animateBlockBreak(int entityID, @NotNull Location location, byte destroyStage);
++
++    @NotNull
++    PacketStepBuilder setEquipmentItem(int entityId, @NotNull EquipmentSlot equipmentSlot, @NotNull ItemStack itemStack);
++
++    @NotNull
++    PacketStepBuilder delay(@NotNull JavaPlugin javaPlugin, long time, @NotNull TimeUnit timeUnit);
++
++    @NotNull
++    PacketStepBuilder custom(@NotNull PacketStep packetStep);
++
++    @NotNull
++    PacketStepBuilder removeEntity(int entityId);
++
++    @NotNull
++    PacketStepBuilder animateEntity(int entityId, @NotNull Animation animation);
++
++    @NotNull
++    PacketStepBuilder spawnEntity(int entityId, @NotNull UUID uuid, @NotNull Location location, @NotNull EntityType entityType, @NotNull Vector movementDirection);
++
++    @NotNull
++    PacketStepBuilder withMeta(int entityId, @NotNull EntityMetaBuilder metaBuilder);
++
++    /**
++     * sets the player abilities
++     *
++     * @param playerAbilities [Invulnerable, Flying, Allow Flying, Creative Mode (Instant Break)]
++     * @param flySpeed 0.05 by default.
++     * @param fieldOfViewModifier Modifies the field of view, like a speed potion. A Notchian server will use the same value as the movement speed sent in the Entity Properties packet, which defaults to 0.1 for players.
++     * @return builder
++     */
++    @NotNull
++    PacketStepBuilder playerAbilities(@NotNull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier);
++
++    default void send(){
++        send(Bukkit.getOnlinePlayers());
++    }
++
++    void send(@NotNull Collection<? extends Player> players);
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/Animation.java b/src/main/java/com/github/weepingmc/packet/options/Animation.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..eed9614c64f7fcb36ca2b10bb148931442a881ca
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/Animation.java
+@@ -0,0 +1,10 @@
++package com.github.weepingmc.packet.options;
++
++public enum Animation {
++    SWING_MAIN_ARM,
++    TAKE_DAMAGE,
++    LEAVE_BED,
++    SWING_OFFHAND,
++    CRITICAL_EFFECT,
++    MAGIC_CRITICAL_EFFECT
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/EntityMetaBuilder.java b/src/main/java/com/github/weepingmc/packet/options/EntityMetaBuilder.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..6f4d7a7df5e785a01820152e0f831d143fece7d6
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/EntityMetaBuilder.java
+@@ -0,0 +1,22 @@
++package com.github.weepingmc.packet.options;
++
++import com.destroystokyo.paper.SkinParts;
++import net.kyori.adventure.text.Component;
++import net.md_5.bungee.api.chat.BaseComponent;
++import org.jetbrains.annotations.NotNull;
++
++import java.util.Set;
++
++public interface EntityMetaBuilder {
++    @NotNull
++    EntityMetaBuilder withEntityStatus(@NotNull Set<EntityStatus> entityStatus);
++
++    @NotNull
++    EntityMetaBuilder withCustomName(@NotNull BaseComponent[] baseComponents);
++
++    @NotNull
++    EntityMetaBuilder withCustomName(@NotNull Component component);
++
++    @NotNull
++    EntityMetaBuilder withSkinParts(@NotNull SkinParts skinParts);
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/EntityStatus.java b/src/main/java/com/github/weepingmc/packet/options/EntityStatus.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..8c0a564f3538598d090dc009641f61bd7ce675b8
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/EntityStatus.java
+@@ -0,0 +1,11 @@
++package com.github.weepingmc.packet.options;
++
++public enum EntityStatus {
++    IS_ON_FIRE,
++    IS_CROUCHING,
++    IS_SPRINTING,
++    IS_SWIMMING,
++    IS_INVISIBLE,
++    HAS_GLOWING_EFFECT,
++    IS_FLYING_WITH_ELYTRA
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/PlayerAbility.java b/src/main/java/com/github/weepingmc/packet/options/PlayerAbility.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..4006afbec75cefb42f5722249f65ab2a47e716fd
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/PlayerAbility.java
+@@ -0,0 +1,5 @@
++package com.github.weepingmc.packet.options;
++
++public enum PlayerAbility {
++  ALLOW_FLYING, CREATIVE_MODE_INSTANT_BREAK, FLYING, INVULNERABLE
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java b/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..ad2398e817783f9e77b12c2beb3a1271564001bb
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java
+@@ -0,0 +1,9 @@
++package com.github.weepingmc.packet.options;
++
++public enum ProfileAction {
++    ADD_PLAYER,
++    UPDATE_GAME_MODE,
++    UPDATE_LATENCY,
++    UPDATE_DISPLAY_NAME,
++    REMOVE_PLAYER;
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/TeamMode.java b/src/main/java/com/github/weepingmc/packet/options/TeamMode.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..aafa50f0809a03dcdd3a8fcf914d04e780fe1656
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/TeamMode.java
+@@ -0,0 +1,9 @@
++package com.github.weepingmc.packet.options;
++
++public enum TeamMode {
++    CREATE_TEAM,
++    REMOVE_TEAM,
++    UPDATE_TEAM_INFO,
++    ADD_PLAYERS_TO_TEAM,
++    REMOVE_PLAYERS_FROM_TEAM
++}
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 9222adc75b68b9a899b4eca2a1803844b9cdbe26..d5cd176a978374ac19366da590e7586375a2b6ad 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2406,6 +2406,15 @@ public final class Bukkit {
+     public static @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer() {
+         return server.getPotionBrewer();
+     }
++
++    /**
++     * Returns the {@link com.github.weepingmc.packet.PacketPipeline}
++     * @return the packet pipeline
++     */
++    @NotNull
++    public static com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
++        return server.getPacketPipeline();
++    }
+     // Paper end
+ 
+     @NotNull
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 18a9a57bfed70bd818f183ed02a21207e5fc46b2..674f2a9b1685801c798e3e1cda98a02fa241ffd9 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2108,6 +2108,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      * @return the potion brewer
+      */
+     @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer();
++
++    /**
++     * Returns the {@link com.github.weepingmc.packet.PacketPipeline}
++     * @return the packet pipeline
++     */
++    @NotNull
++    com.github.weepingmc.packet.PacketPipeline getPacketPipeline();
+     // Paper end
+ 
+     // Purpur start

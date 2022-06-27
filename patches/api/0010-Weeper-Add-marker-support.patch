@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 8 Jul 2021 23:22:47 +0200
+Subject: [PATCH] Weeper - Add marker support
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+index ce7d35d0fda07bd36ac5538c4b2b2b4ee52c00ac..eeac698d5dc1d6a10bc922c2944666f085646bde 100644
+--- a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+@@ -18,7 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
+ import org.bukkit.scoreboard.Team;
+ import org.bukkit.util.Vector;
+ import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
+ 
++import java.awt.Color;
+ import java.util.Collection;
+ import java.util.Set;
+ import java.util.UUID;
+@@ -91,6 +93,9 @@ public interface PacketStepBuilder {
+     @NotNull
+     PacketStepBuilder playerAbilities(@NotNull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier);
+ 
++    @NotNull
++    PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time);
++
+     default void send(){
+         send(Bukkit.getOnlinePlayers());
+     }

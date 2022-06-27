@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 22:31:23 +0200
+Subject: [PATCH] Weeper - Add mechanix to generate comments to vanilla mob
+ goals
+
+
+diff --git a/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java b/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java
+index 7a052f6deaa30f8a177a2aaf172f9da6c308a22b..5ea4e835909ec09b0cd9d946ec51fca49c90c26a 100644
+--- a/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java
++++ b/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java
+@@ -58,6 +58,11 @@ public class VanillaMobGoalTest {
+         if (missingFromAPI.size() != 0) {
+             System.out.println("Missing from API: ");
+             for (GoalKey<?> key : missingFromAPI) {
++                System.out.printf("""
++                        /**
++                        * MobGoal %s applicable to any entity that is instance of %s
++                        */
++                        """, key.getNamespacedKey().getKey(), key.getEntityClass().getSimpleName());
+                 System.out.println("GoalKey<" + key.getEntityClass().getSimpleName() + "> " + key.getNamespacedKey().getKey().toUpperCase() +
+                                    " = GoalKey.of(" + key.getEntityClass().getSimpleName() + ".class, NamespacedKey.minecraft(\"" + key.getNamespacedKey().getKey() + "\"));");
+             }

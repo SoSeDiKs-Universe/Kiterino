@@ -1,0 +1,94 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 12 Oct 2021 21:44:34 +0200
+Subject: [PATCH] Weeper - Implement take and place
+
+
+diff --git a/src/main/java/com/github/weepingmc/inventory/InventoryItemStackMoveStrategy.java b/src/main/java/com/github/weepingmc/inventory/InventoryItemStackMoveStrategy.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..49151b6c9b413f22c8f11a10f6a72639d2744eed
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/inventory/InventoryItemStackMoveStrategy.java
+@@ -0,0 +1,13 @@
++package com.github.weepingmc.inventory;
++
++import org.jetbrains.annotations.NotNull;
++
++public interface InventoryItemStackMoveStrategy {
++    default boolean canPlace(@NotNull SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
++        return true;
++    }
++
++    default boolean canTake(@NotNull SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
++        return true;
++    }
++}
+diff --git a/src/main/java/com/github/weepingmc/inventory/SlotItemStackMovementStrategyItem.java b/src/main/java/com/github/weepingmc/inventory/SlotItemStackMovementStrategyItem.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..be4156c71f9dd45d5fd97559952d819131cb823e
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/inventory/SlotItemStackMovementStrategyItem.java
+@@ -0,0 +1,11 @@
++package com.github.weepingmc.inventory;
++
++import org.bukkit.inventory.InventoryHolder;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++public record SlotItemStackMovementStrategyItem(
++        @NotNull InventoryHolder inventoryHolder,
++        @NotNull ItemStack itemStack,
++        int slot
++) { }
+diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
+index f9531c0f909c7caeddfb8f06ef9a11469ba7d434..3d6809eb9017b65f2a34ebcaade1cf3c039b7bcf 100644
+--- a/src/main/java/org/bukkit/entity/HumanEntity.java
++++ b/src/main/java/org/bukkit/entity/HumanEntity.java
+@@ -2,6 +2,9 @@ package org.bukkit.entity;
+ 
+ import java.util.Collection;
+ import java.util.Set;
++import java.util.function.BiFunction;
++import com.github.weepingmc.inventory.InventoryItemStackMoveStrategy;
++import com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem;
+ import org.bukkit.GameMode;
+ import org.bukkit.Location;
+ import org.bukkit.Material;
+@@ -90,6 +93,37 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+     @Nullable
+     public InventoryView openInventory(@NotNull Inventory inventory);
+ 
++    // Weeper start - inventoryItemStackMoveStrategy
++    /**
++     * Opens an inventory window with the specified inventory on the top and
++     * the player's inventory on the bottom.
++     *
++     * @param inventory The inventory to open
++     * @param mayPlaceStrategy place conditions
++     * @return The newly opened inventory view
++     */
++    @Nullable
++    default InventoryView openInventory(@NotNull Inventory inventory, @Nullable BiFunction<InventoryHolder, ItemStack, Boolean> mayPlaceStrategy){
++        return openInventory(inventory, new InventoryItemStackMoveStrategy() {
++            @Override
++            public boolean canPlace(@NotNull SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
++                return mayPlaceStrategy != null ? mayPlaceStrategy.apply(slotItemStackMovementStrategyItem.inventoryHolder(), slotItemStackMovementStrategyItem.itemStack()) : true;
++            }
++        });
++    }
++
++    /**
++     * Opens an inventory window with the specified inventory on the top and
++     * the player's inventory on the bottom.
++     *
++     * @param inventory The inventory to open
++     * @param inventoryItemStackMoveStrategy place conditions
++     * @return The newly opened inventory view
++     */
++    @Nullable
++    InventoryView openInventory(@NotNull Inventory inventory, @Nullable InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy);
++    // Weeper end - inventoryItemStackMoveStrategy
++
+     /**
+      * Opens an empty workbench inventory window with the player's inventory
+      * on the bottom.
