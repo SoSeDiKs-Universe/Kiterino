@@ -1,0 +1,182 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: foss-mc <69294560+foss-mc@users.noreply.github.com>
+Date: Thu, 1 Jul 2021 12:09:38 +0000
+Subject: [PATCH] Patina - Remove VersionFetcher
+
+
+diff --git a/src/main/java/org/bukkit/command/defaults/VersionCommand.java b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
+index eac5830986cd0638950bbb1e6f10a30e246e09a7..aba57d1a3e1e20210538a6ea02066f2907309f48 100644
+--- a/src/main/java/org/bukkit/command/defaults/VersionCommand.java
++++ b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
+@@ -1,6 +1,6 @@
+ package org.bukkit.command.defaults;
+ 
+-import com.destroystokyo.paper.util.VersionFetcher; // Paper - version supplier
++// Patina - Remove VersionFetcher
+ import com.google.common.base.Charsets;
+ import com.google.common.base.Preconditions;
+ import com.google.common.collect.ImmutableList;
+@@ -27,14 +27,7 @@ import org.bukkit.util.StringUtil;
+ import org.jetbrains.annotations.NotNull;
+ 
+ public class VersionCommand extends BukkitCommand {
+-    private VersionFetcher versionFetcher;
+-    private VersionFetcher getVersionFetcher() { // lazy load because unsafe isn't available at command registration
+-        if (versionFetcher == null) {
+-            versionFetcher = Bukkit.getUnsafe().getVersionFetcher();
+-        }
+-
+-        return versionFetcher;
+-    }
++    // Patina - Remove VersionFetcher
+ 
+     public VersionCommand(@NotNull String name) {
+         super(name);
+@@ -50,8 +43,8 @@ public class VersionCommand extends BukkitCommand {
+         if (!testPermission(sender)) return true;
+ 
+         if (args.length == 0) {
+-            //sender.sendMessage("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")"); // Paper - moved to setVersionMessage
+-            sendVersion(sender);
++            sender.sendMessage("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")"); // Patina
++            //sendVersion(sender); // Patina
+         } else {
+             StringBuilder name = new StringBuilder();
+ 
+@@ -154,135 +147,5 @@ public class VersionCommand extends BukkitCommand {
+         return ImmutableList.of();
+     }
+ 
+-    private final ReentrantLock versionLock = new ReentrantLock();
+-    private boolean hasVersion = false;
+-    private net.kyori.adventure.text.Component versionMessage = null; // Paper
+-    private final Set<CommandSender> versionWaiters = new HashSet<CommandSender>();
+-    private boolean versionTaskStarted = false;
+-    private long lastCheck = 0;
+-
+-    private void sendVersion(@NotNull CommandSender sender) {
+-        if (hasVersion) {
+-            if (System.currentTimeMillis() - lastCheck > getVersionFetcher().getCacheTime()) { // Paper - use version supplier
+-                lastCheck = System.currentTimeMillis();
+-                hasVersion = false;
+-            } else {
+-                sender.sendMessage(versionMessage);
+-                return;
+-            }
+-        }
+-        versionLock.lock();
+-        try {
+-            if (hasVersion) {
+-                sender.sendMessage(versionMessage);
+-                return;
+-            }
+-            versionWaiters.add(sender);
+-            sender.sendMessage(net.kyori.adventure.text.Component.text("Checking version, please wait...", net.kyori.adventure.text.format.NamedTextColor.WHITE, net.kyori.adventure.text.format.TextDecoration.ITALIC)); // Paper
+-            if (!versionTaskStarted) {
+-                versionTaskStarted = true;
+-                new Thread(new Runnable() {
+-
+-                    @Override
+-                    public void run() {
+-                        obtainVersion();
+-                    }
+-                }).start();
+-            }
+-        } finally {
+-            versionLock.unlock();
+-        }
+-    }
+-
+-    private void obtainVersion() {
+-        String version = Bukkit.getVersion();
+-        // Paper start
+-        if (version.startsWith("null")) { // running from ide?
+-            setVersionMessage(net.kyori.adventure.text.Component.text("* Unknown version, custom build?", net.kyori.adventure.text.format.NamedTextColor.RED)); // Purpur
+-            return;
+-        }
+-        setVersionMessage(getVersionFetcher().getVersionMessage(version));
+-        /*
+-        if (version == null) version = "Custom";
+-        String[] parts = version.substring(0, version.indexOf(' ')).split("-");
+-        if (parts.length == 4) {
+-            int cbVersions = getDistance("craftbukkit", parts[3]);
+-            int spigotVersions = getDistance("spigot", parts[2]);
+-            if (cbVersions == -1 || spigotVersions == -1) {
+-                setVersionMessage("Error obtaining version information");
+-            } else {
+-                if (cbVersions == 0 && spigotVersions == 0) {
+-                    setVersionMessage("You are running the latest version");
+-                } else {
+-                    setVersionMessage("You are " + (cbVersions + spigotVersions) + " version(s) behind");
+-                }
+-            }
+-
+-        } else if (parts.length == 3) {
+-            int cbVersions = getDistance("craftbukkit", parts[2]);
+-            if (cbVersions == -1) {
+-                setVersionMessage("Error obtaining version information");
+-            } else {
+-                if (cbVersions == 0) {
+-                    setVersionMessage("You are running the latest version");
+-                } else {
+-                    setVersionMessage("You are " + cbVersions + " version(s) behind");
+-                }
+-            }
+-        } else {
+-            setVersionMessage("Unknown version, custom build?");
+-        }
+-         */
+-        // Paper end
+-    }
+-
+-    // Paper start
+-    private void setVersionMessage(final @NotNull net.kyori.adventure.text.Component msg) {
+-        lastCheck = System.currentTimeMillis();
+-        // Purpur start
+-        int distance = getVersionFetcher().distance();
+-        final net.kyori.adventure.text.Component message = net.kyori.adventure.text.Component.join(net.kyori.adventure.text.JoinConfiguration.separator(net.kyori.adventure.text.Component.newline()),
+-            ChatColor.parseMM("<grey>Current: %s%s*", distance == 0 ? "<green>" : distance > 0 ? "<yellow>" : "<red>", Bukkit.getVersion()),
+-            // Purpur end
+-            msg
+-        );
+-        this.versionMessage = net.kyori.adventure.text.Component.text()
+-            .append(message)
+-            .hoverEvent(net.kyori.adventure.text.Component.text("Click to copy to clipboard", net.kyori.adventure.text.format.NamedTextColor.WHITE))
+-            .clickEvent(net.kyori.adventure.text.event.ClickEvent.copyToClipboard(net.kyori.adventure.text.serializer.plain.PlainComponentSerializer.plain().serialize(message)))
+-            .build();
+-        // Paper end
+-        versionLock.lock();
+-        try {
+-            hasVersion = true;
+-            versionTaskStarted = false;
+-            for (CommandSender sender : versionWaiters) {
+-                sender.sendMessage(versionMessage);
+-            }
+-            versionWaiters.clear();
+-        } finally {
+-            versionLock.unlock();
+-        }
+-    }
+-
+-    private static int getDistance(@NotNull String repo, @NotNull String hash) {
+-        try {
+-            BufferedReader reader = Resources.asCharSource(
+-                    new URL("https://hub.spigotmc.org/stash/rest/api/1.0/projects/SPIGOT/repos/" + repo + "/commits?since=" + URLEncoder.encode(hash, "UTF-8") + "&withCounts=true"),
+-                    Charsets.UTF_8
+-            ).openBufferedStream();
+-            try {
+-                JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
+-                return obj.get("totalCount").getAsInt();
+-            } catch (JsonSyntaxException ex) {
+-                ex.printStackTrace();
+-                return -1;
+-            } finally {
+-                reader.close();
+-            }
+-        } catch (IOException e) {
+-            e.printStackTrace();
+-            return -1;
+-        }
+-    }
++    // Patina - Remove VersionFetcher
+ }
