@@ -1,0 +1,85 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 27 Jun 2022 22:56:58 +0300
+Subject: [PATCH] Paper PR - Allow using degrees for ArmorStand rotations
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftArmorStand.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftArmorStand.java
+index f4065938bbfd04519d1363ee8781c316aca468ab..f80cafe3544c7e6c3c29073ba6539783adf6666c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftArmorStand.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftArmorStand.java
+@@ -312,6 +312,74 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
+         return getHandle().isDisabled(org.bukkit.craftbukkit.CraftEquipmentSlot.getNMS(slot));
+     }
+ 
++    @Override
++    public io.papermc.paper.math.Rotations getBodyRotations() {
++        return fromNMSRotations(getHandle().bodyPose);
++    }
++
++    @Override
++    public void setBodyRotations(io.papermc.paper.math.Rotations rotations) {
++        getHandle().setBodyPose(toNMSRotations(rotations));
++    }
++
++    @Override
++    public io.papermc.paper.math.Rotations getLeftArmRotations() {
++        return fromNMSRotations(getHandle().leftArmPose);
++    }
++
++    @Override
++    public void setLeftArmRotations(io.papermc.paper.math.Rotations rotations) {
++        getHandle().setLeftArmPose(toNMSRotations(rotations));
++    }
++
++    @Override
++    public io.papermc.paper.math.Rotations getRightArmRotations() {
++        return fromNMSRotations(getHandle().rightArmPose);
++    }
++
++    @Override
++    public void setRightArmRotations(io.papermc.paper.math.Rotations rotations) {
++        getHandle().setRightArmPose(toNMSRotations(rotations));
++    }
++
++    @Override
++    public io.papermc.paper.math.Rotations getLeftLegRotations() {
++        return fromNMSRotations(getHandle().leftLegPose);
++    }
++
++    @Override
++    public void setLeftLegRotations(io.papermc.paper.math.Rotations rotations) {
++        getHandle().setLeftLegPose(toNMSRotations(rotations));
++    }
++
++    @Override
++    public io.papermc.paper.math.Rotations getRightLegRotations() {
++        return fromNMSRotations(getHandle().rightLegPose);
++    }
++
++    @Override
++    public void setRightLegRotations(io.papermc.paper.math.Rotations rotations) {
++        getHandle().setRightLegPose(toNMSRotations(rotations));
++    }
++
++    @Override
++    public io.papermc.paper.math.Rotations getHeadRotations() {
++        return fromNMSRotations(getHandle().headPose);
++    }
++
++    @Override
++    public void setHeadRotations(io.papermc.paper.math.Rotations rotations) {
++        getHandle().setHeadPose(toNMSRotations(rotations));
++    }
++
++    private static io.papermc.paper.math.Rotations fromNMSRotations(Rotations old) {
++        return io.papermc.paper.math.Rotations.ofDegrees(old.getX(), old.getY(), old.getZ());
++    }
++
++    private static Rotations toNMSRotations(io.papermc.paper.math.Rotations old) {
++        return new Rotations((float) old.x(), (float) old.y(), (float) old.z());
++    }
++
+     @Override
+     public boolean canTick() {
+         return this.getHandle().canTick;

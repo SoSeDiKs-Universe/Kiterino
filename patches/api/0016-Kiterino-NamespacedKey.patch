@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 13 Feb 2022 06:11:42 +0100
+Subject: [PATCH] Kiterino NamespacedKey
+
+
+diff --git a/src/main/java/org/bukkit/NamespacedKey.java b/src/main/java/org/bukkit/NamespacedKey.java
+index 236c9aea9ffc36269e5c32eacc9f1fd6bd039c88..5b9894cceb7750af832736e04ca19fee792a3a09 100644
+--- a/src/main/java/org/bukkit/NamespacedKey.java
++++ b/src/main/java/org/bukkit/NamespacedKey.java
+@@ -30,6 +30,12 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
+      * compatibility measures.
+      */
+     public static final String BUKKIT = "bukkit";
++    // Kiterino start
++    /**
++     * The namespace representing custom Kiterino keys.
++     */
++    public static final String KITERINO = "kiterino";
++    // Kiterino end
+     //
+     private static final Pattern VALID_NAMESPACE = Pattern.compile("[a-z0-9._-]+");
+     private static final Pattern VALID_KEY = Pattern.compile("[a-z0-9/._-]+");
+@@ -145,6 +151,19 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
+         return new NamespacedKey(MINECRAFT, key);
+     }
+ 
++    // Kiterino start
++    /**
++     * Get a key in the Kiterino namespace.
++     *
++     * @param key the key to use
++     * @return new key in the Kiterino namespace
++     */
++    @NotNull
++    public static NamespacedKey kiterino(@NotNull String key) {
++        return new NamespacedKey(KITERINO, key);
++    }
++    // Kiterino end
++
+     /**
+      * Get a NamespacedKey from the supplied string with a default namespace if
+      * a namespace is not defined. This is a utility method meant to fetch a

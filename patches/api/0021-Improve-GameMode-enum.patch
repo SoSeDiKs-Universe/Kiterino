@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 11 Feb 2022 00:30:55 +0100
+Subject: [PATCH] Improve GameMode enum
+
+
+diff --git a/src/main/java/org/bukkit/GameMode.java b/src/main/java/org/bukkit/GameMode.java
+index ef49495909a37d718a87d5dfbcd644d46e27fa88..9b50007972ed3af2682347b7b307be3d3a45255d 100644
+--- a/src/main/java/org/bukkit/GameMode.java
++++ b/src/main/java/org/bukkit/GameMode.java
+@@ -48,6 +48,18 @@ public enum GameMode implements net.kyori.adventure.translation.Translatable { /
+         this.value = value;
+         this.translationKey = "gameMode." +  this.name().toLowerCase(java.util.Locale.ENGLISH); // Paper
+     }
++    
++    // Kiterino start
++    /**
++     * Checks whether this game mode is
++     * considered "survivable"
++     *
++     * @return true, if survival or adventure
++     */
++    public boolean isSurvival() {
++        return this == SURVIVAL || this == ADVENTURE;
++    }
++    // Kiterino end
+ 
+     /**
+      * Gets the mode value associated with this GameMode

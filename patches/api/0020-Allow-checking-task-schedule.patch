@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 24 Jul 2020 15:16:45 +0300
+Subject: [PATCH] Allow checking task schedule
+
+
+diff --git a/src/main/java/org/bukkit/scheduler/BukkitRunnable.java b/src/main/java/org/bukkit/scheduler/BukkitRunnable.java
+index 35599aac72c50273abb9efe35bcb6406d9b1aba6..d508b6b10c251d55e71aaf64d400cdb2f96a614b 100644
+--- a/src/main/java/org/bukkit/scheduler/BukkitRunnable.java
++++ b/src/main/java/org/bukkit/scheduler/BukkitRunnable.java
+@@ -10,6 +10,17 @@ import org.jetbrains.annotations.NotNull;
+ public abstract class BukkitRunnable implements Runnable {
+     private BukkitTask task;
+ 
++    // Kiterino start
++    /**
++     * Returns true if this task has been scheduled.
++     *
++     * @return true if the task has been scheduled
++     */
++    public synchronized boolean isScheduled() {
++        return task != null;
++    }
++    // Kiterino end
++
+     /**
+      * Returns true if this task has been cancelled.
+      *

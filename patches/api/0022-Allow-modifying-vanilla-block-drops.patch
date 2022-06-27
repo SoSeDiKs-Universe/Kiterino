@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 30 Jan 2021 18:55:39 +0200
+Subject: [PATCH] Allow modifying vanilla block drops
+
+
+diff --git a/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java b/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java
+index 3dd4bd38e72c04e74e5787fb38ca9abd10bad06b..5607f2688ab3570fa616951ee8320f21a74561ec 100644
+--- a/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java
++++ b/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java
+@@ -31,6 +31,7 @@ public class BlockDropItemEvent extends BlockEvent implements Cancellable {
+     private boolean cancel;
+     private final BlockState blockState;
+     private final List<Item> items;
++    private List<org.bukkit.inventory.ItemStack> drops; // Kiterino
+ 
+     public BlockDropItemEvent(@NotNull Block block, @NotNull BlockState blockState, @NotNull Player player, @NotNull List<Item> items) {
+         super(block);
+@@ -73,6 +74,54 @@ public class BlockDropItemEvent extends BlockEvent implements Cancellable {
+         return items;
+     }
+ 
++    // Kiterino start
++    private void vanillaDrops() {
++        drops = new java.util.ArrayList<>();
++        items.forEach(item -> drops.add(item.getItemStack()));
++    }
++
++    /**
++     * Whether vanilla drops were overwritten or not
++     *
++     * @return True, if drops were changed
++     */
++    public boolean changeDrops() {
++        return drops != null;
++    }
++
++    /**
++     * Makes block to not drop any items
++     */
++    public void clearDrops() {
++        if (drops == null) drops = new java.util.ArrayList<>();
++        else drops.clear();
++    }
++
++    /**
++     * Adds items to be dropped
++     *
++     * @param drops Items to drop
++     */
++    public void addDrops(@NotNull org.bukkit.inventory.ItemStack... drops) {
++        if (this.drops == null) vanillaDrops();
++        this.drops.addAll(List.of(drops));
++    }
++
++    /**
++     * Gets list of the ItemStack drops caused by the block break.
++     * <p>
++     * This list is mutable - removing an item from it will cause it to not
++     * drop. Adding to the list is allowed.
++     *
++     * @return The Item the block caused to drop
++     */
++    @NotNull
++    public List<org.bukkit.inventory.ItemStack> getDrops() {
++        if (drops == null) vanillaDrops();
++        return drops;
++    }
++    // Kiterino end
++
+     @Override
+     public boolean isCancelled() {
+         return cancel;
