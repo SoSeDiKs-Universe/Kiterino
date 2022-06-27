@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 13:06:31 +0300
+Subject: [PATCH] Suppress warnings
+
+
+diff --git a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
+index 09d0ced75b0bea1fbc629befdbc4d50c50619e80..4d491a3ea0158837467f6263844f6bebbda02674 100644
+--- a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
++++ b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
+@@ -39,6 +39,7 @@ public class SmeltItemFunction extends LootItemConditionalFunction {
+                 }
+             }
+ 
++            if (!org.purpurmc.purpur.PurpurConfig.loggerSuppressUnrecognizedRecipeErrors) // Kiterino - suppress
+             LOGGER.warn("Couldn't smelt {} because there is no smelting recipe", (Object)stack);
+             return stack;
+         }
+diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
+index 243a5fc49ba920c1e1d7b35889708bc3fca251df..2de52f7e644ba3dfe2bd38c966f5657423619f93 100644
+--- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
++++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
+@@ -414,10 +414,10 @@ public class PurpurConfig {
+     }
+ 
+     public static boolean loggerSuppressInitLegacyMaterialError = false;
+-    public static boolean loggerSuppressIgnoredAdvancementWarnings = false;
+-    public static boolean loggerSuppressUnrecognizedRecipeErrors = false;
+-    public static boolean loggerSuppressSetBlockFarChunk = false;
+-    public static boolean loggerSuppressSentExpiredChat = false;
++    public static boolean loggerSuppressIgnoredAdvancementWarnings = true; // Kiterino - true by default
++    public static boolean loggerSuppressUnrecognizedRecipeErrors = true; // Kiterino - true by default
++    public static boolean loggerSuppressSetBlockFarChunk = true; // Kiterino - true by default
++    public static boolean loggerSuppressSentExpiredChat = true; // Kiterino - true by default
+     private static void loggerSettings() {
+         loggerSuppressInitLegacyMaterialError = getBoolean("settings.logger.suppress-init-legacy-material-errors", loggerSuppressInitLegacyMaterialError);
+         loggerSuppressIgnoredAdvancementWarnings = getBoolean("settings.logger.suppress-ignored-advancement-warnings", loggerSuppressIgnoredAdvancementWarnings);
