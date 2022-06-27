@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 27 Jun 2022 19:17:06 +0300
+Subject: [PATCH] Accept the EULA
+
+
+diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
+index 0a843e0afbcb1af8e2641515eb244b791b819b8c..f34490a8bba6d3ff7871373b0016ab4f22e1028a 100644
+--- a/src/main/java/net/minecraft/server/Main.java
++++ b/src/main/java/net/minecraft/server/Main.java
+@@ -133,6 +133,20 @@ public class Main {
+                 System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
+             }
+             // Spigot End
++
++            // Kiterino start - We at SoSeDiK's Universe agree to Mojang's EULA
++            if (!eula.hasAgreedToEULA()) {
++                Main.LOGGER.warn("Automatically accepting Mojang's EULA. Please, stop using this Software immediately if you do not agree with this.");
++                Main.LOGGER.warn("Note: this is a persistent change and will be stored in eula.txt from now on.");
++                try (java.io.OutputStream outputStream = java.nio.file.Files.newOutputStream(path1)) {
++                    var properties = new java.util.Properties();
++                    properties.setProperty("eula", "true");
++                    properties.store(outputStream, null);
++                }
++                eulaAgreed = true;
++            }
++            // Kiterino end
++
+             if (!eula.hasAgreedToEULA() && !eulaAgreed) { // Spigot
+                 Main.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
+                 return;
