@@ -1,0 +1,178 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jake Potrebic <jake.m.potrebic@gmail.com>
+Date: Sat, 26 Feb 2022 16:41:11 -0800
+Subject: [PATCH] Add FillBottleEvents for player and dispenser
+
+Adds 2 events, PlayerFillBottleEvent and BlockFillBottleEvent. These
+events do not have a common superclass due to needing to extend
+PlayerEvent and BlockEvent respectively.
+
+TODO: Add a common interface between Block and AreaEffectCloud,
+something like BottleSource to add a "source" field to each event to get
+the source of the bottle fill, water block, cauldron, beehive, or
+AreaEffectCloud.
+
+Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
+
+diff --git a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
+index 4039dc7454e9d45f5740a46e308849682497e039..31bd4de73857f25020842f42195d594211a1d275 100644
+--- a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
++++ b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
+@@ -184,7 +184,13 @@ public interface CauldronInteraction {
+                 // CraftBukkit end
+                 Item item = itemstack.getItem();
+ 
+-                entityhuman.setItemInHand(enumhand, ItemUtils.createFilledResult(itemstack, entityhuman, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)));
++                // Paper start - glass bottle events
++                final var event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(entityhuman, enumhand, itemstack, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER));
++                if (event.isCancelled()) {
++                    return InteractionResult.SUCCESS;
++                }
++                entityhuman.setItemInHand(enumhand, ItemUtils.createFilledResult(itemstack, entityhuman, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem())));
++                // Paper end
+                 entityhuman.awardStat(Stats.USE_CAULDRON);
+                 entityhuman.awardStat(Stats.ITEM_USED.get(item));
+                 // LayeredCauldronBlock.lowerFillLevel(iblockdata, world, blockposition); // CraftBukkit
+diff --git a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
+index 9aef3cfd930594c1a2c92a02a18133d0eab2279c..b4827bff0aedf0c9c6066b6f0a75442f9871034f 100644
+--- a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
++++ b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
+@@ -1063,12 +1063,24 @@ public interface DispenseItemBehavior {
+                 if (iblockdata.is(BlockTags.BEEHIVES, (blockbase_blockdata) -> {
+                     return blockbase_blockdata.hasProperty(BeehiveBlock.HONEY_LEVEL) && blockbase_blockdata.getBlock() instanceof BeehiveBlock;
+                 }) && (Integer) iblockdata.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
++                    // Paper start - glass bottle events
++                    final var bottleEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFillBottleEvent(worldserver, pointer.getPos(), stack, new ItemStack(Items.HONEY_BOTTLE));
++                    if (bottleEvent.isCancelled()) {
++                        return stack;
++                    }
++                    // Paper end
+                     ((BeehiveBlock) iblockdata.getBlock()).releaseBeesAndResetHoneyLevel(worldserver, iblockdata, blockposition, (Player) null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
+                     this.setSuccess(true);
+-                    return this.takeLiquid(pointer, stack, new ItemStack(Items.HONEY_BOTTLE));
++                    return this.takeLiquid(pointer, stack, CraftItemStack.asNMSCopy(bottleEvent.getResultItem())); // Paper - glass bottle events
+                 } else if (worldserver.getFluidState(blockposition).is(FluidTags.WATER)) {
++                    // Paper start - glass bottle events
++                    final var bottleEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFillBottleEvent(worldserver, pointer.getPos(), stack, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER));
++                    if (bottleEvent.isCancelled()) {
++                        return stack;
++                    }
++                    // Paper end
+                     this.setSuccess(true);
+-                    return this.takeLiquid(pointer, stack, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER));
++                    return this.takeLiquid(pointer, stack, CraftItemStack.asNMSCopy(bottleEvent.getResultItem())); // Paper
+                 } else {
+                     return super.execute(pointer, stack);
+                 }
+diff --git a/src/main/java/net/minecraft/world/item/BottleItem.java b/src/main/java/net/minecraft/world/item/BottleItem.java
+index 5d99fbdc2460d77f0ee4d39fe9e52276076f987d..65631bf5c422d354b05084bfa0b3a91a7b6172a6 100644
+--- a/src/main/java/net/minecraft/world/item/BottleItem.java
++++ b/src/main/java/net/minecraft/world/item/BottleItem.java
+@@ -31,11 +31,18 @@ public class BottleItem extends Item {
+         });
+         ItemStack itemStack = user.getItemInHand(hand);
+         if (!list.isEmpty()) {
++            // Paper start - glass bottle events
++            final var event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(user, hand, itemStack, new ItemStack(Items.DRAGON_BREATH));
++            if (event.isCancelled()) {
++                user.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
++                return InteractionResultHolder.pass(itemStack);
++            }
++            // Paper end
+             AreaEffectCloud areaEffectCloud = list.get(0);
+             areaEffectCloud.setRadius(areaEffectCloud.getRadius() - 0.5F);
+             world.playSound((Player)null, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.NEUTRAL, 1.0F, 1.0F);
+             world.gameEvent(user, GameEvent.FLUID_PICKUP, user.position());
+-            return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, new ItemStack(Items.DRAGON_BREATH)), world.isClientSide());
++            return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem())), world.isClientSide()); // Paper
+         } else {
+             HitResult hitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
+             if (hitResult.getType() == HitResult.Type.MISS) {
+@@ -48,9 +55,16 @@ public class BottleItem extends Item {
+                     }
+ 
+                     if (world.getFluidState(blockPos).is(FluidTags.WATER)) {
++                        // Paper start - glass bottle events
++                        final var event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(user, hand, itemStack, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER));
++                        if (event.isCancelled()) {
++                            user.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
++                            return InteractionResultHolder.pass(itemStack);
++                        }
++                        // Paper end
+                         world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                         world.gameEvent(user, GameEvent.FLUID_PICKUP, blockPos);
+-                        return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)), world.isClientSide());
++                        return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem())), world.isClientSide()); // Paper
+                     }
+                 }
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
+index 0e61c47307b9e06eddc43a3aa5f8ae9da24acd08..48301d77cfb20219b8a75fd287154c9fe441a5bb 100644
+--- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
+@@ -145,12 +145,22 @@ public class BeehiveBlock extends BaseEntityBlock {
+                 flag = true;
+                 world.gameEvent((Entity) player, GameEvent.SHEAR, pos);
+             } else if (itemstack.is(Items.GLASS_BOTTLE)) {
++                // Paper start - glass bottle events
++                final var event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemstack, new ItemStack(Items.HONEY_BOTTLE));
++                if (event.isCancelled()) {
++                    player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
++                    return InteractionResult.PASS;
++                }
++                final ItemStack resultItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem());
++                // Paper end
+                 itemstack.shrink(1);
+                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                 if (itemstack.isEmpty()) {
+-                    player.setItemInHand(hand, new ItemStack(Items.HONEY_BOTTLE));
+-                } else if (!player.getInventory().add(new ItemStack(Items.HONEY_BOTTLE))) {
+-                    player.drop(new ItemStack(Items.HONEY_BOTTLE), false);
++                    // Paper start
++                    player.setItemInHand(hand, resultItem);
++                } else if (!player.getInventory().add(resultItem)) {
++                    player.drop(resultItem, false);
++                    // Paper end
+                 }
+ 
+                 flag = true;
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftEquipmentSlot.java b/src/main/java/org/bukkit/craftbukkit/CraftEquipmentSlot.java
+index e91714a66f582c14184ddb5e4bf2443d3ed45efb..0e1413c39d4fb1ecfd72362a71b672c88441ff89 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftEquipmentSlot.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftEquipmentSlot.java
+@@ -28,4 +28,13 @@ public class CraftEquipmentSlot {
+     public static net.minecraft.world.entity.EquipmentSlot getNMS(EquipmentSlot slot) {
+         return CraftEquipmentSlot.slots[slot.ordinal()];
+     }
++
++    // Paper start
++    public static EquipmentSlot getHandSlot(net.minecraft.world.InteractionHand hand) {
++        return switch (hand) {
++            case MAIN_HAND -> org.bukkit.inventory.EquipmentSlot.HAND;
++            case OFF_HAND -> org.bukkit.inventory.EquipmentSlot.OFF_HAND;
++        };
++    }
++    // Paper end
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index 4079413e745534067936c7c871e458d49e7f9062..b95233d87a29be50a23128e81e9c472e7d471c15 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -1889,5 +1889,17 @@ public class CraftEventFactory {
+         io.papermc.paper.event.block.BlockPreDispenseEvent event = new io.papermc.paper.event.block.BlockPreDispenseEvent(block, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack), slot);
+         return event.callEvent();
+     }
++
++    public static io.papermc.paper.event.player.PlayerFillBottleEvent callPlayerFillBottleEvent(net.minecraft.world.entity.player.Player player, InteractionHand hand, ItemStack glassBottle, ItemStack resultItem) {
++        final io.papermc.paper.event.player.PlayerFillBottleEvent event = new io.papermc.paper.event.player.PlayerFillBottleEvent(((org.bukkit.entity.Player) player.getBukkitEntity()), org.bukkit.craftbukkit.CraftEquipmentSlot.getHandSlot(hand), CraftItemStack.asBukkitCopy(glassBottle), CraftItemStack.asCraftMirror(resultItem));
++        event.callEvent();
++        return event;
++    }
++
++    public static io.papermc.paper.event.block.BlockFillBottleEvent callBlockFillBottleEvent(LevelAccessor level, BlockPos blockPos, ItemStack glassBottle, ItemStack resultItem) {
++        final io.papermc.paper.event.block.BlockFillBottleEvent event = new io.papermc.paper.event.block.BlockFillBottleEvent(CraftBlock.at(level, blockPos), CraftItemStack.asBukkitCopy(glassBottle), CraftItemStack.asCraftMirror(resultItem));
++        event.callEvent();
++        return event;
++    }
+     // Paper end
+ }

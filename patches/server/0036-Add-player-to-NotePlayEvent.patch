@@ -27,7 +27,7 @@ index 443bf39734ba2b0a7cdf0362d415ff176b2e8c85..da181d65a146abd757e6c5dfb430550d
          int k = event.getNote().getId();
          float f = (float) Math.pow(2.0D, (double) (k - 12) / 12.0D);
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 1d12149e8f6a8f53fb5df5c21bec4b91cd655b1e..3fe134ae22106eeae501bf83978baba04aa9472a 100644
+index e1160011e24b62d6a9660712257e9e1e7c8b7f84..43096aa69432775dcac1f8ae99b5e2f53ce2db94 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 @@ -1422,7 +1422,12 @@ public class CraftEventFactory {

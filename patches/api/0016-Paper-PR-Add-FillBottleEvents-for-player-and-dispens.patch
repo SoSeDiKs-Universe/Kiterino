@@ -1,0 +1,194 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jake Potrebic <jake.m.potrebic@gmail.com>
+Date: Sat, 26 Feb 2022 16:43:33 -0800
+Subject: [PATCH] Paper PR - Add FillBottleEvents for player and dispenser
+
+Adds 2 events, PlayerFillBottleEvent and BlockFillBottleEvent. These
+events do not have a common superclass due to needing to extend
+PlayerEvent and BlockEvent respectively.
+
+TODO: Add a common interface between Block and AreaEffectCloud,
+something like BottleSource to add a "source" field to each event to get
+the source of the bottle fill, water block, cauldron, beehive, or
+AreaEffectCloud.
+
+Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
+
+diff --git a/src/main/java/io/papermc/paper/event/block/BlockFillBottleEvent.java b/src/main/java/io/papermc/paper/event/block/BlockFillBottleEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..4d939e1d936dcb59807b1f39db7197f41426b700
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/event/block/BlockFillBottleEvent.java
+@@ -0,0 +1,79 @@
++package io.papermc.paper.event.block;
++
++import org.bukkit.block.Block;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.HandlerList;
++import org.bukkit.event.block.BlockEvent;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Called when a {@link org.bukkit.block.Dispenser} fills up a bottle.
++ */
++public class BlockFillBottleEvent extends BlockEvent implements Cancellable {
++
++    private static final HandlerList HANDLER_LIST = new HandlerList();
++
++    private final ItemStack bottle;
++    private ItemStack resultItem;
++    private boolean cancelled;
++
++
++    public BlockFillBottleEvent(@NotNull Block block, @NotNull ItemStack bottle, @NotNull ItemStack resultItem) {
++        super(block);
++        this.bottle = bottle;
++        this.resultItem = resultItem;
++    }
++
++    /**
++     * Gets the bottle item that's being filled.
++     *
++     * @return the bottle item
++     */
++    public @NotNull ItemStack getBottle() {
++        return this.bottle;
++    }
++
++    /**
++     * Gets the result of the glass bottle that's being filled.
++     *
++     * @return the result of the filling
++     */
++    public @NotNull ItemStack getResultItem() {
++        return this.resultItem;
++    }
++
++    /**
++     * Sets the result of the glass bottle being filled.
++     *
++     * @param resultItem the result of the filling
++     */
++    public void setResultItem(@NotNull ItemStack resultItem) {
++        this.resultItem = resultItem;
++    }
++
++    @Override
++    public boolean isCancelled() {
++        return this.cancelled;
++    }
++
++    /**
++     * {@inheritDoc}
++     * <p>
++     * Cancelling this event will prevent {@link #getBottle()} from being
++     * replaced/consumed.
++     */
++    @Override
++    public void setCancelled(boolean cancel) {
++        this.cancelled = cancel;
++    }
++
++    @Override
++    public @NotNull HandlerList getHandlers() {
++        return HANDLER_LIST;
++    }
++
++    public static @NotNull HandlerList getHandlerList() {
++        return HANDLER_LIST;
++    }
++}
+diff --git a/src/main/java/io/papermc/paper/event/player/PlayerFillBottleEvent.java b/src/main/java/io/papermc/paper/event/player/PlayerFillBottleEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..22f3f867e8ff5041816926ddd599e3758387ea03
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/event/player/PlayerFillBottleEvent.java
+@@ -0,0 +1,87 @@
++package io.papermc.paper.event.player;
++
++import org.bukkit.entity.Player;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.HandlerList;
++import org.bukkit.event.player.PlayerEvent;
++import org.bukkit.inventory.EquipmentSlot;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++public class PlayerFillBottleEvent extends PlayerEvent implements Cancellable {
++
++    private static final HandlerList HANDLER_LIST = new HandlerList();
++
++    private final EquipmentSlot hand;
++    private final ItemStack bottle;
++    private ItemStack resultItem;
++    private boolean cancelled;
++
++    public PlayerFillBottleEvent(@NotNull Player player, @NotNull EquipmentSlot hand, @NotNull ItemStack bottle, @NotNull ItemStack resultItem) {
++        super(player);
++        this.hand = hand;
++        this.bottle = bottle;
++        this.resultItem = resultItem;
++    }
++
++    /**
++     * The hand used to fill the bottle.
++     *
++     * @return the hand
++     */
++    public @NotNull EquipmentSlot getHand() {
++        return this.hand;
++    }
++
++    /**
++     * Gets the bottle item that's being filled.
++     *
++     * @return the bottle item
++     */
++    public @NotNull ItemStack getBottle() {
++        return this.bottle;
++    }
++
++    /**
++     * Gets the result of the bottle that's being filled.
++     *
++     * @return the result of the filling
++     */
++    public @NotNull ItemStack getResultItem() {
++        return this.resultItem;
++    }
++
++    /**
++     * Sets the result of the bottle being filled.
++     *
++     * @param resultItem the result of the filling
++     */
++    public void setResultItem(@NotNull ItemStack resultItem) {
++        this.resultItem = resultItem;
++    }
++
++    @Override
++    public boolean isCancelled() {
++        return this.cancelled;
++    }
++
++    /**
++     * {@inheritDoc}
++     * <p>
++     * Cancelling this event will prevent {@link #getBottle()} from being
++     * replaced/consumed.
++     */
++    @Override
++    public void setCancelled(boolean cancel) {
++        this.cancelled = cancel;
++    }
++
++    @Override
++    public @NotNull HandlerList getHandlers() {
++        return HANDLER_LIST;
++    }
++
++    public static @NotNull HandlerList getHandlerList() {
++        return HANDLER_LIST;
++    }
++}

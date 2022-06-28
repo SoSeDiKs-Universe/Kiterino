@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 28 Oct 2020 14:28:55 +0200
+Subject: [PATCH] Allow storing honey bottles in brewing stands
+
+
+diff --git a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
+index c6dbd248488d4a61fb9bcb9ef7afe87f7961265f..83c5e5d211d23a4e9cfbb5bde7f262c85131e44e 100644
+--- a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
+@@ -168,7 +168,7 @@ public class BrewingStandMenu extends AbstractContainerMenu {
+         }
+ 
+         public static boolean mayPlaceItem(ItemStack stack) {
+-            return stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION) || stack.is(Items.GLASS_BOTTLE) || PotionBrewing.isCustomInput(stack); // Paper
++            return stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION) || stack.is(Items.GLASS_BOTTLE) || stack.is(Items.HONEY_BOTTLE) || PotionBrewing.isCustomInput(stack); // Paper // Kiterino - added honey bottle
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
+index 55006724ccec9f3de828ec18693728e9741ff65f..049d86f4b9f53bda4509271b75b5fb08ed2671cf 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
+@@ -335,7 +335,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
+ 
+     @Override
+     public boolean canPlaceItem(int slot, ItemStack stack) {
+-        return slot == 3 ? PotionBrewing.isIngredient(stack) : (slot == 4 ? stack.is(Items.BLAZE_POWDER) : (stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION) || stack.is(Items.GLASS_BOTTLE) || PotionBrewing.isCustomInput(stack)) && this.getItem(slot).isEmpty()); // Paper
++        return slot == 3 ? PotionBrewing.isIngredient(stack) : (slot == 4 ? stack.is(Items.BLAZE_POWDER) : (stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION) || stack.is(Items.GLASS_BOTTLE) || stack.is(Items.HONEY_BOTTLE) || PotionBrewing.isCustomInput(stack)) && this.getItem(slot).isEmpty()); // Paper // Kiterino - added honey bottle
+     }
+ 
+     @Override

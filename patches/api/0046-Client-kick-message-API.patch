@@ -1,0 +1,85 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 2 Feb 2022 05:09:41 +0100
+Subject: [PATCH] Client kick message API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index cef897fa7f50ae5bbc6b06d8a236c1ab5536e660..0b08fd041fa711d6d30c0172f711372cc6db0f96 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -2883,5 +2883,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      * @return true, if placed successfully
+      */
+     boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
++
++    /**
++     * Kicks player with custom kick message.
++     *
++     * @param reason kick reason
++     * @param message kick message
++     */
++    void kick(final @Nullable net.kyori.adventure.text.Component reason, final @Nullable net.kyori.adventure.text.Component message);
++
++    /**
++     * Kicks player with custom kick message and cause.
++     *
++     * @param reason kick reason
++     * @param message kick message
++     * @param cause kick cause
++     */
++    void kick(final @Nullable Component reason, final @Nullable net.kyori.adventure.text.Component message, @NotNull org.bukkit.event.player.PlayerKickEvent.Cause cause);
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
+index b76966953753dabcb31293846d39a4b4d5ef472a..21e374f29eaacc90dfce44e48e711c4da97717ea 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
+@@ -14,6 +14,7 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+     private net.kyori.adventure.text.Component kickReason; // Paper
+     private final Cause cause; // Paper
+     private boolean cancel;
++    private net.kyori.adventure.text.Component clientMessage; // Kiterino
+ 
+     @Deprecated // Paper
+     public PlayerKickEvent(@NotNull final Player playerKicked, @NotNull final String kickReason, @NotNull final String leaveMessage) {
+@@ -41,6 +42,13 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+         this.cause = cause;
+     }
+ 
++    // Kiterino start
++    public PlayerKickEvent(@NotNull Player playerKicked, @NotNull net.kyori.adventure.text.Component kickReason, @NotNull net.kyori.adventure.text.Component leaveMessage, @org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component clientMessage, @NotNull Cause cause) {
++        this(playerKicked, kickReason, leaveMessage, cause);
++        this.clientMessage = clientMessage;
++    }
++    // Kiterino end
++
+     /**
+      * Gets the leave message send to all online players
+      *
+@@ -205,4 +213,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+         UNKNOWN,
+     }
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Gets the message displayed to the client
++     *
++     * @return client kick message
++     */
++    public @NotNull net.kyori.adventure.text.Component clientMessage() {
++        return this.clientMessage == null ? reason() : this.clientMessage;
++    }
++
++    /**
++     * Sets the message displayed to the client.
++     * Setting null will reset message to {@link #reason()}.
++     *
++     * @param clientMessage client kick message
++     */
++    public void clientMessage(@org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component clientMessage) {
++        this.clientMessage = clientMessage;
++    }
++    // Kiterino end
+ }
