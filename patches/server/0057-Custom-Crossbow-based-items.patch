@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 8 Jun 2022 12:22:23 +0300
+Subject: [PATCH] Custom Crossbow-based items
+
+
+diff --git a/src/main/java/net/minecraft/world/item/CrossbowItem.java b/src/main/java/net/minecraft/world/item/CrossbowItem.java
+index 2d30300de78de957358cfddac12294b308062e2a..f7b948e2369e4a5db1d35fb4ae1a73cba5c7174e 100644
+--- a/src/main/java/net/minecraft/world/item/CrossbowItem.java
++++ b/src/main/java/net/minecraft/world/item/CrossbowItem.java
+@@ -358,6 +358,22 @@ public class CrossbowItem extends ProjectileWeaponItem implements Vanishable {
+                 this.midLoadSoundPlayed = false;
+             }
+ 
++            // Kiterino start - no sounds for custom items, auto releasing
++            var compound = stack.tag;
++            String namespace = org.bukkit.Bukkit.getName();
++            if (compound != null && compound.contains(namespace)) {
++                compound = compound.getCompound(namespace);
++                if (compound.contains("Id")) {
++                    if (f >= 1F) {
++                        releaseUsing(stack, world, user, 0);
++                        return;
++                    }
++                    this.startSoundPlayed = true;
++                    this.midLoadSoundPlayed = true;
++                }
++            }
++            // Kiterino end
++
+             if (f >= 0.2F && !this.startSoundPlayed) {
+                 this.startSoundPlayed = true;
+                 world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), soundeffect, SoundSource.PLAYERS, 0.5F, 1.0F);

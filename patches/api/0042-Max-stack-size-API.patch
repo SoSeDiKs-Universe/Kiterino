@@ -1,0 +1,61 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 7 Jun 2022 15:13:53 +0300
+Subject: [PATCH] Max stack size API
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index d5cd176a978374ac19366da590e7586375a2b6ad..587bf8a5966a8801de9516529f524ef272fbb99a 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2460,4 +2460,16 @@ public final class Bukkit {
+         server.removeFuel(material);
+     }
+     // Purpur end
++
++    // Kiterino start
++    /**
++     * Set max stack size of an item
++     *
++     * @param material item type
++     * @param maxStackSize max stack size
++     */
++    public static void setMaxStackSize(@NotNull Material material, int maxStackSize) {
++        server.setMaxStackSize(material, maxStackSize);
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
+index 9dbaf0262ea57a3159ae6ebc62c36dd8ee6d20f1..df3deb58e7a1b15bf74eb3bb33cc087bece67ca6 100644
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -4064,7 +4064,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+     private final int id;
+     private final Constructor<? extends MaterialData> ctor;
+     private static final Map<String, Material> BY_NAME = Maps.newHashMap();
+-    private final int maxStack;
++    int maxStack; // Kiterino - remove final, make package-private
+     private final short durability;
+     public final Class<?> data;
+     private final boolean legacy;
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 674f2a9b1685801c798e3e1cda98a02fa241ffd9..fa2b69bd84a8642d073c069099fb74f9d0466c36 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2147,4 +2147,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     public void removeFuel(@NotNull Material material);
+     // Purpur end
++
++    // Kiterino start
++    /**
++     * Set max stack size of an item
++     *
++     * @param material item type
++     * @param maxStackSize max stack size
++     */
++    default void setMaxStackSize(@NotNull Material material, int maxStackSize) {
++        material.maxStack = maxStackSize;
++    }
++    // Kiterino end
+ }

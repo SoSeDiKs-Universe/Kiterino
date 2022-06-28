@@ -1,0 +1,95 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 13 Aug 2020 17:13:47 +0300
+Subject: [PATCH] KItem RecipeChoice
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/inventory/ItemChoice.java b/src/main/java/me/sosedik/kiterino/inventory/ItemChoice.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..2f44350020ec85f8902ec8b33ee259088ac9cf71
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/inventory/ItemChoice.java
+@@ -0,0 +1,83 @@
++package me.sosedik.kiterino.inventory;
++
++import com.google.common.base.Preconditions;
++import org.bukkit.inventory.ItemStack;
++import org.bukkit.inventory.RecipeChoice;
++import org.jetbrains.annotations.NotNull;
++
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.Collections;
++import java.util.List;
++import java.util.Objects;
++
++public class ItemChoice implements RecipeChoice {
++
++	private List<ItemStack> choices;
++
++	public ItemChoice(@NotNull ItemStack... stacks) {
++		this(Arrays.asList(stacks));
++	}
++
++	public ItemChoice(@NotNull List<ItemStack> choices) {
++		Preconditions.checkArgument(!choices.isEmpty(), "Must have at least one choice");
++		for (ItemStack choice : choices) Preconditions.checkArgument(choice != null, "Cannot have null choice");
++
++		this.choices = new ArrayList<>(choices);
++	}
++
++	@NotNull
++	@Override
++	public ItemStack getItemStack() {
++		return choices.get(0).clone();
++	}
++
++	@NotNull
++	public List<ItemStack> getChoices() {
++		return Collections.unmodifiableList(choices);
++	}
++
++	@NotNull
++	@Override
++	public ItemChoice clone() {
++		try {
++			ItemChoice clone = (ItemChoice) super.clone();
++			clone.choices = new ArrayList<>(choices);
++			return clone;
++		} catch (CloneNotSupportedException ex) {
++			throw new AssertionError(ex);
++		}
++	}
++
++	@Override
++	public boolean test(@NotNull ItemStack t) {
++		for (ItemStack match : choices) {
++			String id = match.subtractId();
++			if (id == null ? match.getType() == t.getType() : id.equals(t.subtractId()))
++				return true;
++		}
++		return false;
++	}
++
++	@Override
++	public int hashCode() {
++		int hash = 7;
++		hash = 41 * hash + Objects.hashCode(this.choices);
++		return hash;
++	}
++
++	@Override
++	public boolean equals(Object obj) {
++		if (this == obj) return true;
++		if (obj == null) return false;
++		if (getClass() != obj.getClass()) return false;
++		final ItemChoice other = (ItemChoice) obj;
++		return Objects.equals(this.choices, other.choices);
++	}
++
++	@Override
++	public String toString() {
++		return "ItemChoice{" + "choices=" + choices + '}';
++	}
++
++}

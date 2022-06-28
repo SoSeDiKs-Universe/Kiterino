@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 7 Jun 2022 14:48:33 +0300
+Subject: [PATCH] Add PlayerStartUsingItemEvent
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index f74810fe635ef514fe20bd3c737275de2611e723..22abf0f9c5e8ba3208b56fa2082426ab48eb6699 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -3897,7 +3897,18 @@ public abstract class LivingEntity extends Entity {
+         if (!itemstack.isEmpty() && !this.isUsingItem() || forceUpdate) { // Paper use override flag
+             this.useItem = itemstack;
+             // Paper start - lag compensate eating
+-            this.useItemRemaining = this.totalEatTimeTicks = itemstack.getUseDuration();
++            // Kiterino start - custom item use duration
++            int useDuration = itemstack.getUseDuration();
++            if (this instanceof ServerPlayer player) {
++                var event = new me.sosedik.kiterino.event.player.PlayerStartUsingItemEvent(player.getBukkitEntity(), itemstack.asBukkitMirror(), useDuration);
++                if (!event.callEvent()) {
++                    stopUsingItem();
++                    return;
++                }
++                useDuration = event.getUseDuration();
++            }
++            this.useItemRemaining = this.totalEatTimeTicks = useDuration;
++            // Kiterino end
+             this.eatStartTime = System.nanoTime();
+             // Paper end
+             if (!this.level.isClientSide) {

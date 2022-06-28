@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 7 Jun 2022 15:31:47 +0300
+Subject: [PATCH] Vanilla edible items
+
+
+diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
+index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..49b5ef99ff429ec5cc2ed8cb27d84bf4c7e8943a 100644
+--- a/src/main/java/net/minecraft/world/item/Item.java
++++ b/src/main/java/net/minecraft/world/item/Item.java
+@@ -66,7 +66,7 @@ public class Item implements ItemLike {
+     @Nullable
+     private String descriptionId;
+     @Nullable
+-    private final FoodProperties foodProperties;
++    private FoodProperties foodProperties; // Kiterino - remove final
+ 
+     public static int getId(Item item) {
+         return item == null ? 0 : Registry.ITEM.getId(item);
+@@ -364,6 +364,12 @@ public class Item implements ItemLike {
+         return this.foodProperties;
+     }
+ 
++    // Kiterino start
++    public void setFoodProperties(@Nullable FoodProperties foodProperties) {
++        this.foodProperties = foodProperties;
++    }
++    // Kiterino end
++
+     public SoundEvent getDrinkingSound() {
+         return SoundEvents.GENERIC_DRINK;
+     }
+diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
+index 2de52f7e644ba3dfe2bd38c966f5657423619f93..f5bd61d8c03d9ba939c21c6f407bc60a7ec7fc85 100644
+--- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
++++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
+@@ -453,12 +453,23 @@ public class PurpurConfig {
+             return;
+         }
+         properties.getKeys(false).forEach(foodKey -> {
+-            FoodProperties food = Foods.ALL_PROPERTIES.get(foodKey);
+-            if (food == null) {
+-                PurpurConfig.log(Level.SEVERE, "Invalid food property: " + foodKey);
+-                return;
++            // Kiterino start
++            FoodProperties foodCheck = Foods.ALL_PROPERTIES.get(foodKey);
++            FoodProperties food;
++            org.bukkit.Material material;
++            if (foodCheck == null) {
++                material = org.bukkit.Material.getMaterial(foodKey.toUpperCase());
++                if (material == null) {
++                    PurpurConfig.log(Level.SEVERE, "Invalid food property: " + foodKey);
++                    return;
++                }
++                food = new FoodProperties.Builder().build();
++            } else {
++                food = foodCheck;
++                material = null;
+             }
+-            FoodProperties foodDefaults = Foods.DEFAULT_PROPERTIES.get(foodKey);
++            FoodProperties foodDefaults = material == null ? Foods.DEFAULT_PROPERTIES.get(foodKey) : food.copy();
++            // Kiterino end
+             food.setNutrition(properties.getInt(foodKey + ".nutrition", foodDefaults.getNutrition()));
+             food.setSaturationModifier((float) properties.getDouble(foodKey + ".saturation-modifier", foodDefaults.getSaturationModifier()));
+             food.setIsMeat(properties.getBoolean(foodKey + ".is-meat", foodDefaults.isMeat()));
+@@ -495,6 +506,7 @@ public class PurpurConfig {
+                     food.getEffects().add(Pair.of(new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon), chance));
+                 });
+             }
++            if (material != null) org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftCopy(new org.bukkit.inventory.ItemStack(material)).handle.getItem().setFoodProperties(food); // Kiterino
+         });
+     }
+ }

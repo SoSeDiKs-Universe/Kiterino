@@ -1,0 +1,122 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 17 Mar 2022 19:05:46 +0200
+Subject: [PATCH] More item drop API
+
+
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index 1cfd8f250cda6dcfb0c5851f0c376e8596431edf..96e68b9cad34c0de2c72d1b8fa1bd32f66f86f7d 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -804,5 +804,53 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+     default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
+         getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
+     }
++
++    /**
++     * Drops an item at the location of the block.
++     *
++     * @param item ItemStack to drop
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default org.bukkit.entity.Item dropItem(@NotNull ItemStack item) {
++        return getWorld().dropItem(getLocation().toCenterLocation(), item);
++    }
++
++    /**
++     * Drops an item at the location of the block.
++     * Note that functions will run before the entity is spawned
++     *
++     * @param item ItemStack to drop
++     * @param function the function to be run before the entity is spawned.
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default org.bukkit.entity.Item dropItem(@NotNull ItemStack item, @Nullable org.bukkit.util.Consumer<org.bukkit.entity.Item> function) {
++        return getWorld().dropItem(getLocation().toCenterLocation(), item, function);
++    }
++
++    /**
++     * Drops an item at the location of the block with a random offset
++     *
++     * @param item ItemStack to drop
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default org.bukkit.entity.Item dropItemNaturally(@NotNull ItemStack item) {
++        return getWorld().dropItemNaturally(getLocation().toCenterLocation(), item);
++    }
++
++    /**
++     * Drops an item at the location of the block with a random offset
++     * Note that functions will run before the entity is spawned
++     *
++     * @param item ItemStack to drop
++     * @param function the function to be run before the entity is spawned.
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default org.bukkit.entity.Item dropItemNaturally(@NotNull ItemStack item, @Nullable org.bukkit.util.Consumer<org.bukkit.entity.Item> function) {
++        return getWorld().dropItem(getLocation().toCenterLocation(), item, function);
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index b5982f58422b820c9bb82af557b630a5c7830ec9..2c629a971c341d33bc16f327c70fa712db34869e 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -972,5 +972,53 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+     default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
+         getWorld().playSound(getLocation(), sound, category, volume, pitch);
+     }
++
++    /**
++     * Drops an item at the location of the block.
++     *
++     * @param item ItemStack to drop
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default Item dropItem(@NotNull org.bukkit.inventory.ItemStack item) {
++        return getWorld().dropItem(getLocation(), item);
++    }
++
++    /**
++     * Drops an item at the location of the block.
++     * Note that functions will run before the entity is spawned
++     *
++     * @param item ItemStack to drop
++     * @param function the function to be run before the entity is spawned.
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default Item dropItem(@NotNull org.bukkit.inventory.ItemStack item, @Nullable org.bukkit.util.Consumer<Item> function) {
++        return getWorld().dropItem(getLocation(), item, function);
++    }
++
++    /**
++     * Drops an item at the location of the block with a random offset
++     *
++     * @param item ItemStack to drop
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default Item dropItemNaturally(@NotNull org.bukkit.inventory.ItemStack item) {
++        return getWorld().dropItemNaturally(getLocation(), item);
++    }
++
++    /**
++     * Drops an item at the location of the block with a random offset
++     * Note that functions will run before the entity is spawned
++     *
++     * @param item ItemStack to drop
++     * @param function the function to be run before the entity is spawned.
++     * @return ItemDrop entity created as a result of this method
++     */
++    @NotNull
++    default Item dropItemNaturally(@NotNull org.bukkit.inventory.ItemStack item, @Nullable org.bukkit.util.Consumer<Item> function) {
++        return getWorld().dropItem(getLocation(), item, function);
++    }
+     // Kiterino end
+ }

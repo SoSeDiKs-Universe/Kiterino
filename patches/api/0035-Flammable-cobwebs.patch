@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 19 Feb 2021 23:28:54 +0200
+Subject: [PATCH] Flammable cobwebs
+
+
+diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
+index 7924103e613c92669bbf8299009be29452da564e..9dbaf0262ea57a3159ae6ebc62c36dd8ee6d20f1 100644
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -6687,6 +6687,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+             case CAMPFIRE:
+             case CARTOGRAPHY_TABLE:
+             case CHEST:
++            case COBWEB: // Kiterino
+             case COMPOSTER:
+             case CRAFTING_TABLE:
+             case CYAN_BANNER:
+@@ -6969,6 +6970,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+             case CAVE_VINES:
+             case CAVE_VINES_PLANT:
+             case COAL_BLOCK:
++            case COBWEB: // Kiterino
+             case COMPOSTER:
+             case CORNFLOWER:
+             case CYAN_CARPET:

@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 8 Jun 2022 13:03:53 +0300
+Subject: [PATCH] Support recipe grid for AItems
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
+index aa7a158b9b5d23885f8e033808037c3c201ebf6f..cf8a4a8ed5b45e261e95959fc0f33c7d889f3691 100644
+--- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
++++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
+@@ -57,6 +57,21 @@ public class StackedContents {
+                 if (a == null || b == null) {
+                     return false;
+                 }
++                // Kiterino start
++                var compound = a.tag;
++                String namespace = org.bukkit.Bukkit.getName();
++                if (compound != null && compound.contains(namespace)) {
++                    compound = compound.getCompound(namespace);
++                    if (compound.contains("Id")) {
++                        var compound1 = b.tag;
++                        if (compound1 == null) return false;
++                        if (!compound1.contains(namespace)) return false;
++                        compound1 = compound1.getCompound(namespace);
++                        if (!compound1.contains("Id")) return false;
++                        return compound.getString("Id").equals(compound1.getString("Id"));
++                    }
++                }
++                // Kiterino end
+                 return ItemStack.tagMatches(a, b);
+             }
+         });
+diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+index 1efb0b316ecb1c794c8667577bb78f251cd2c66b..175cf35e7b191a763840d7c675ceee0ccd75e0dc 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
++++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+@@ -58,7 +58,7 @@ public final class Ingredient implements Predicate<ItemStack> {
+                 return recipeitemstack_provider.getItems().stream();
+                 // Paper start
+             }).distinct().peek(stack -> {
+-                stack.isExactRecipeIngredient = this.exact;
++                stack.isExactRecipeIngredient = this.exact || this.kItem; // Kiterino
+             }).toArray((i) -> {
+                 // Paper end
+                 return new ItemStack[i];

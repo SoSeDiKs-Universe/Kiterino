@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Jun 2022 00:12:29 +0300
+Subject: [PATCH] PlayerLoadProjectileEvent
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
+index 93ff0479cfaa92b07495bfb900ff7f977f27a413..8f5a7bd938b6dadd45ea7f38dce10b063563b14e 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Player.java
++++ b/src/main/java/net/minecraft/world/entity/player/Player.java
+@@ -2353,7 +2353,7 @@ public abstract class Player extends LivingEntity {
+             ItemStack itemstack1 = ProjectileWeaponItem.getHeldProjectile(this, predicate);
+ 
+             if (!itemstack1.isEmpty()) {
+-                return itemstack1;
++                return getProjectile(stack, itemstack1); // Kiterino
+             } else {
+                 predicate = ((ProjectileWeaponItem) stack.getItem()).getAllSupportedProjectiles();
+ 
+@@ -2361,15 +2361,27 @@ public abstract class Player extends LivingEntity {
+                     ItemStack itemstack2 = this.inventory.getItem(i);
+ 
+                     if (predicate.test(itemstack2) && tryReadyArrow(stack, itemstack2)) { // Paper
+-                        return itemstack2;
++                        return getProjectile(stack, itemstack2); // Kiterino
+                     }
+                 }
+ 
+-                return this.abilities.instabuild ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
++                return getProjectile(stack, this.abilities.instabuild ? new ItemStack(Items.ARROW) : ItemStack.EMPTY); // Kiterino
+             }
+         }
+     }
+ 
++    // Kiterino start
++    private ItemStack getProjectile(ItemStack weapon, ItemStack projectile) {
++        if (!(getBukkitEntity() instanceof org.bukkit.entity.Player player)) return projectile;
++        var event = new me.sosedik.kiterino.event.player.PlayerLoadsProjectileEvent(player, weapon.asBukkitMirror(), projectile.isEmpty() ? null : projectile.asBukkitMirror());
++        event.callEvent();
++        if (!event.isFiringAllowed()) return ItemStack.EMPTY;
++        var item = event.getProjectile();
++        if (item == null) return new ItemStack(Items.ARROW);
++        return item instanceof org.bukkit.craftbukkit.inventory.CraftItemStack craftItem ? craftItem.handle : org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(item);
++    }
++    // Kiterino end
++
+     @Override
+     public ItemStack eat(Level world, ItemStack stack) {
+         this.getFoodData().eat(stack.getItem(), stack);

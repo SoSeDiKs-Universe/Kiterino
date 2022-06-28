@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 7 Apr 2022 00:29:37 +0300
+Subject: [PATCH] Call EntityChangeBlockEvent for shovel interactions
+
+
+diff --git a/src/main/java/net/minecraft/world/item/ShovelItem.java b/src/main/java/net/minecraft/world/item/ShovelItem.java
+index ee1ed9262e4f2a8f1889feb7b2d4f64a2efa63a5..187f420601a52b27da8d5fc5bd7f5501cb3a9487 100644
+--- a/src/main/java/net/minecraft/world/item/ShovelItem.java
++++ b/src/main/java/net/minecraft/world/item/ShovelItem.java
+@@ -37,9 +37,11 @@ public class ShovelItem extends DiggerItem {
+             BlockState blockState2 = level.purpurConfig.shovelTurnsBlockToGrassPath.contains(blockState.getBlock()) ? Blocks.DIRT_PATH.defaultBlockState() : null; // Purpur
+             BlockState blockState3 = null;
+             if (blockState2 != null && level.getBlockState(blockPos.above()).isAir()) {
++                if (player != null && !level.isClientSide() && org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, blockPos, blockState2).isCancelled()) return InteractionResult.PASS; // Kiterino
+                 level.playSound(player, blockPos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                 blockState3 = blockState2;
+             } else if (blockState.getBlock() instanceof CampfireBlock && blockState.getValue(CampfireBlock.LIT)) {
++                if (player != null && !level.isClientSide() && org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, blockPos, blockState2).isCancelled()) return InteractionResult.PASS; // Kiterino
+                 if (!level.isClientSide()) {
+                     level.levelEvent((Player)null, 1009, blockPos, 0);
+                 }

@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 19 Feb 2022 08:20:30 +0200
+Subject: [PATCH] Add PlayerSaddleEntityEvent
+
+
+diff --git a/src/main/java/net/minecraft/world/item/SaddleItem.java b/src/main/java/net/minecraft/world/item/SaddleItem.java
+index c35375e15c0368fec12d37a4b82668b51d9fe9ff..2ac69ab91158f58e561a18a050db01caa2376cd6 100644
+--- a/src/main/java/net/minecraft/world/item/SaddleItem.java
++++ b/src/main/java/net/minecraft/world/item/SaddleItem.java
+@@ -18,9 +18,14 @@ public class SaddleItem extends Item {
+         if (entity instanceof Saddleable saddleable && entity.isAlive()) {
+             if (!saddleable.isSaddled() && saddleable.isSaddleable()) {
+                 if (!user.level.isClientSide) {
+-                    saddleable.equipSaddle(SoundSource.NEUTRAL);
++                    // Kiterino start
++                    var event = new me.sosedik.kiterino.event.player.PlayerSaddleEntityEvent((org.bukkit.entity.Player) user.getBukkitEntity(), (org.bukkit.entity.Steerable) entity.getBukkitEntity(), stack.asBukkitMirror());
++                    if (!event.callEvent()) return InteractionResult.PASS;
++                    saddleable.equipSaddle(event.isPlaySound() ? SoundSource.NEUTRAL : null);
+                     entity.level.gameEvent(entity, GameEvent.EQUIP, entity.position());
++                    if (event.isConsumeItem())
+                     stack.shrink(1);
++                    // Kiterino end
+                 }
+ 
+                 return InteractionResult.sidedSuccess(user.level.isClientSide);

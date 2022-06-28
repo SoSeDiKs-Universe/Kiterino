@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 14 Jul 2021 17:03:20 +0300
+Subject: [PATCH] Max stack size API
+
+
+diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
+index 8b250dab8f3cb788ae1cfad43737afda31b72c0f..3397486368134e7ab69f7793468b3ab5c4a1fb4b 100644
+--- a/src/main/java/net/minecraft/world/item/Item.java
++++ b/src/main/java/net/minecraft/world/item/Item.java
+@@ -58,7 +58,7 @@ public class Item implements ItemLike {
+     @Nullable
+     protected final CreativeModeTab category;
+     public final Rarity rarity;
+-    private final int maxStackSize;
++    private int maxStackSize; // Kiterino - remove final
+     private final int maxDamage;
+     private final boolean isFireResistant;
+     @Nullable
+@@ -153,6 +153,12 @@ public class Item implements ItemLike {
+         return this.maxStackSize;
+     }
+ 
++    // Kiterino start
++    public void setMaxStackSize(int maxStackSize) {
++        this.maxStackSize = maxStackSize;
++    }
++    // Kiterino end
++
+     public final int getMaxDamage() {
+         return this.maxDamage;
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index a1b9d816a3b7bad4fcd3839c642be09291ced4f0..d47a9e83ac7a922ffaa704e6cf75287ae1447107 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -2981,4 +2981,12 @@ public final class CraftServer implements Server {
+         return getServer().lagging;
+     }
+     // Purpur end
++
++	// Kiterino start
++	@Override
++	public void setMaxStackSize(org.bukkit.Material material, int maxStackSize) {
++		Server.super.setMaxStackSize(material, maxStackSize);
++		CraftItemStack.asCraftCopy(new ItemStack(material)).handle.getItem().setMaxStackSize(maxStackSize);
++	}
++	// Kiterino end
+ }

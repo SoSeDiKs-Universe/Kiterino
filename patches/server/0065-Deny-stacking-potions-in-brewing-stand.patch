@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 26 Dec 2021 19:08:38 +0200
+Subject: [PATCH] Deny stacking potions in brewing stand
+
+
+diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+index f127a6886cf164bbced94f4bfc852a17222f0dd9..d0c7183a91a1c0231b589556a1ffedade5627040 100644
+--- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+@@ -767,6 +767,11 @@ public abstract class AbstractContainerMenu {
+         return this.moveItemStackTo(stack, startIndex, endIndex, fromLast, false);
+     }
+     protected boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean fromLast, boolean isCheck) {
++        // Kiterino start
++        return this.moveItemStackTo(stack, startIndex, endIndex, fromLast, isCheck, false);
++    }
++    protected boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean fromLast, boolean isCheck, boolean ignoreStacks) {
++        // Kiterino end
+         if (isCheck) {
+             stack = stack.copy();
+         }
+@@ -781,7 +786,7 @@ public abstract class AbstractContainerMenu {
+         Slot slot;
+         ItemStack itemstack1;
+ 
+-        if (stack.isStackable()) {
++        if (stack.isStackable() && !ignoreStacks) { // Kiterino
+             while (!stack.isEmpty()) {
+                 if (fromLast) {
+                     if (k < startIndex) {
+diff --git a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
+index 13720c2df8ac37d020d4a785e48c45877edf74b9..c6dbd248488d4a61fb9bcb9ef7afe87f7961265f 100644
+--- a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
+@@ -93,8 +93,8 @@ public class BrewingStandMenu extends AbstractContainerMenu {
+                     if (!this.moveItemStackTo(itemstack1, 3, 4, false)) {
+                         return ItemStack.EMPTY;
+                     }
+-                } else if (BrewingStandMenu.PotionSlot.mayPlaceItem(itemstack) && itemstack.getCount() == 1) {
+-                    if (!this.moveItemStackTo(itemstack1, 0, 3, false)) {
++                } else if (BrewingStandMenu.PotionSlot.mayPlaceItem(itemstack)/* && itemstack.getCount() == 1*/) {
++                    if (!this.moveItemStackTo(itemstack1, 0, 3, false, false, true)) { // Kiterino - Move only one potion
+                         return ItemStack.EMPTY;
+                     }
+                 } else if (index >= 5 && index < 32) {

@@ -1,0 +1,85 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 16 Mar 2022 12:43:34 +0200
+Subject: [PATCH] More Sound API
+
+
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index 66de1889c4e54995ce5dff68ad6fbe0b5410e097..1cfd8f250cda6dcfb0c5851f0c376e8596431edf 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -777,5 +777,32 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+     default de.tr7zw.changeme.nbtapi.NBTCompound getKNBT() {
+         return getNBTC().getOrCreateCompound(org.bukkit.Bukkit.getName());
+     }
++
++    /**
++     * Play a sound at the location of the block.
++     * <p>
++     * This function will fail silently if Sound is null.
++     *
++     * @param sound The sound to play
++     * @param volume The volume of the sound
++     * @param pitch The pitch of the sound
++     */
++    default void playSound(@NotNull org.bukkit.Sound sound, float volume, float pitch) {
++        playSound(sound, org.bukkit.SoundCategory.BLOCKS, volume, pitch);
++    }
++
++    /**
++     * Play a sound at the location of the block.
++     * <p>
++     * This function will fail silently if Sound is null.
++     *
++     * @param sound The sound to play
++     * @param category The category of the sound
++     * @param volume The volume of the sound
++     * @param pitch The pitch of the sound
++     */
++    default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
++        getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 595eeba132a7bd8a546fab83fe2a912dcdf46a1c..b5982f58422b820c9bb82af557b630a5c7830ec9 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -940,5 +940,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+     default de.tr7zw.changeme.nbtapi.NBTEntity getNBT() {
+         return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
+     }
++
++    /**
++     * Play a sound at the location of the entity.
++     * <p>
++     * This function will fail silently if Sound is null.
++     *
++     * @param sound The sound to play
++     * @param volume The volume of the sound
++     * @param pitch The pitch of the sound
++     */
++    default void playSound(@NotNull org.bukkit.Sound sound, float volume, float pitch) {
++        org.bukkit.SoundCategory soundGroup;
++        if (this instanceof HumanEntity) soundGroup = org.bukkit.SoundCategory.PLAYERS;
++        else if (this instanceof Ambient) soundGroup = org.bukkit.SoundCategory.AMBIENT;
++        else if (this instanceof Monster) soundGroup = org.bukkit.SoundCategory.HOSTILE;
++        else soundGroup = org.bukkit.SoundCategory.NEUTRAL;
++        playSound(sound, soundGroup, volume, pitch);
++    }
++
++    /**
++     * Play a sound at the location of the entity.
++     * <p>
++     * This function will fail silently if Sound is null.
++     *
++     * @param sound The sound to play
++     * @param category The category of the sound
++     * @param volume The volume of the sound
++     * @param pitch The pitch of the sound
++     */
++    default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
++        getWorld().playSound(getLocation(), sound, category, volume, pitch);
++    }
+     // Kiterino end
+ }
