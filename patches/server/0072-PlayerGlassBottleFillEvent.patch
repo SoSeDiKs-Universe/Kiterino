@@ -1,0 +1,118 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 27 Dec 2021 12:28:03 +0200
+Subject: [PATCH] PlayerGlassBottleFillEvent
+
+
+diff --git a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
+index 4039dc7454e9d45f5740a46e308849682497e039..b48807cbef91fa4dc5fd213e53831b93af6f2063 100644
+--- a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
++++ b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
+@@ -184,12 +184,22 @@ public interface CauldronInteraction {
+                 // CraftBukkit end
+                 Item item = itemstack.getItem();
+ 
+-                entityhuman.setItemInHand(enumhand, ItemUtils.createFilledResult(itemstack, entityhuman, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)));
++                // Kiterino start
++                var result = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
++                var event = new me.sosedik.kiterino.event.player.PlayerGlassBottleFillEvent((org.bukkit.entity.Player) entityhuman.getBukkitEntity(), itemstack.asBukkitCopy(), result.asBukkitMirror());
++                if (event.callEvent()) {
++                    result = ItemStack.fromBukkitCopy(event.getNewItem());
++                    entityhuman.setItemInHand(enumhand, ItemUtils.createFilledResult(itemstack, entityhuman, result));
+                 entityhuman.awardStat(Stats.USE_CAULDRON);
+                 entityhuman.awardStat(Stats.ITEM_USED.get(item));
+                 // LayeredCauldronBlock.lowerFillLevel(iblockdata, world, blockposition); // CraftBukkit
+                 world.playSound((Player) null, blockposition, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                 world.gameEvent((Entity) null, GameEvent.FLUID_PICKUP, blockposition);
++                } else {
++                    ((org.bukkit.entity.Player) entityhuman.getBukkitEntity()).updateInventory();
++                    return InteractionResult.PASS;
++                }
++                // Kiterino end
+             }
+ 
+             return InteractionResult.sidedSuccess(world.isClientSide);
+diff --git a/src/main/java/net/minecraft/world/item/BottleItem.java b/src/main/java/net/minecraft/world/item/BottleItem.java
+index 5d99fbdc2460d77f0ee4d39fe9e52276076f987d..68b4e0aae03bbe938c4a5e9d99d7d3728cc90cbe 100644
+--- a/src/main/java/net/minecraft/world/item/BottleItem.java
++++ b/src/main/java/net/minecraft/world/item/BottleItem.java
+@@ -31,11 +31,21 @@ public class BottleItem extends Item {
+         });
+         ItemStack itemStack = user.getItemInHand(hand);
+         if (!list.isEmpty()) {
++            // Kiterino start
++            var result = new ItemStack(Items.DRAGON_BREATH);
++            var event = new me.sosedik.kiterino.event.player.PlayerGlassBottleFillEvent((org.bukkit.entity.Player) user.getBukkitEntity(), itemStack.asBukkitCopy(), result.asBukkitMirror());
++            if (event.callEvent()) {
++                result = ItemStack.fromBukkitCopy(event.getNewItem());
+             AreaEffectCloud areaEffectCloud = list.get(0);
+             areaEffectCloud.setRadius(areaEffectCloud.getRadius() - 0.5F);
+             world.playSound((Player)null, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.NEUTRAL, 1.0F, 1.0F);
+             world.gameEvent(user, GameEvent.FLUID_PICKUP, user.position());
+-            return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, new ItemStack(Items.DRAGON_BREATH)), world.isClientSide());
++                return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, result), world.isClientSide());
++            } else {
++                ((org.bukkit.entity.Player) user.getBukkitEntity()).updateInventory();
++                return InteractionResultHolder.pass(itemStack);
++            }
++            // Kiterino end
+         } else {
+             HitResult hitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
+             if (hitResult.getType() == HitResult.Type.MISS) {
+@@ -48,9 +58,19 @@ public class BottleItem extends Item {
+                     }
+ 
+                     if (world.getFluidState(blockPos).is(FluidTags.WATER)) {
++                        // Kiterino start
++                        var result = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
++                        var event = new me.sosedik.kiterino.event.player.PlayerGlassBottleFillEvent((org.bukkit.entity.Player) user.getBukkitEntity(), itemStack.asBukkitCopy(), result.asBukkitMirror());
++                        if (event.callEvent()) {
++                            result = ItemStack.fromBukkitCopy(event.getNewItem());
+                         world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                         world.gameEvent(user, GameEvent.FLUID_PICKUP, blockPos);
+-                        return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)), world.isClientSide());
++                            return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, result), world.isClientSide());
++                        } else {
++                            ((org.bukkit.entity.Player) user.getBukkitEntity()).updateInventory();
++                            return InteractionResultHolder.pass(itemStack);
++                        }
++                        // Kiterino end
+                     }
+                 }
+ 
+diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
+index 0e61c47307b9e06eddc43a3aa5f8ae9da24acd08..bbb409eba97fdcc063d38c733f5be7b03d9f32d4 100644
+--- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
+@@ -145,16 +145,28 @@ public class BeehiveBlock extends BaseEntityBlock {
+                 flag = true;
+                 world.gameEvent((Entity) player, GameEvent.SHEAR, pos);
+             } else if (itemstack.is(Items.GLASS_BOTTLE)) {
++                // Kiterino start
++                var result = new ItemStack(Items.HONEY_BOTTLE);
++                var event = new me.sosedik.kiterino.event.player.PlayerGlassBottleFillEvent((org.bukkit.entity.Player) player.getBukkitEntity(), itemstack.asBukkitCopy(), result.asBukkitMirror());
++                if (event.callEvent()) {
++                    result = ItemStack.fromBukkitCopy(event.getNewItem());
+                 itemstack.shrink(1);
+                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                 if (itemstack.isEmpty()) {
+-                    player.setItemInHand(hand, new ItemStack(Items.HONEY_BOTTLE));
+-                } else if (!player.getInventory().add(new ItemStack(Items.HONEY_BOTTLE))) {
+-                    player.drop(new ItemStack(Items.HONEY_BOTTLE), false);
++                    player.setItemInHand(hand, result);
++                } else if (!player.getInventory().add(result)) {
++                    player.drop(result, false);
++                } else {
++                    ((org.bukkit.entity.Player) player.getBukkitEntity()).updateInventory();
+                 }
+ 
+                 flag = true;
+                 world.gameEvent((Entity) player, GameEvent.FLUID_PICKUP, pos);
++                } else {
++                    ((org.bukkit.entity.Player) player.getBukkitEntity()).updateInventory();
++                    return InteractionResult.PASS;
++                }
++                // Kiterino end
+             }
+ 
+             if (!world.isClientSide() && flag) {
