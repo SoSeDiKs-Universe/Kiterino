@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 30 Nov 2021 00:04:10 +0100
+Subject: [PATCH] Store field mappings
+
+
+diff --git a/src/main/java/io/papermc/paper/util/ObfHelper.java b/src/main/java/io/papermc/paper/util/ObfHelper.java
+index b8b17d046f836c8652ab094db00ab1af84971b2c..c31ad0b3a9f238bd08889c4c158277621c3fc2eb 100644
+--- a/src/main/java/io/papermc/paper/util/ObfHelper.java
++++ b/src/main/java/io/papermc/paper/util/ObfHelper.java
+@@ -110,10 +110,24 @@ public enum ObfHelper {
+                     );
+                 }
+ 
++                // Kiterino start
++                final Map<String, String> fieldMappings = new HashMap<>();
++                for (final MappingTree.FieldMapping fieldMapping : cls.getFields()) {
++                    fieldMappings.put(
++                        pool.string(methodKey(
++                            fieldMapping.getName(SPIGOT_NAMESPACE),
++                            fieldMapping.getDesc(SPIGOT_NAMESPACE)
++                        )),
++                        pool.string(fieldMapping.getName(MOJANG_PLUS_YARN_NAMESPACE))
++                    );
++                }
++                // Kiterino end
++
+                 final ClassMapping map = new ClassMapping(
+                     cls.getName(SPIGOT_NAMESPACE).replace('/', '.'),
+                     cls.getName(MOJANG_PLUS_YARN_NAMESPACE).replace('/', '.'),
+-                    Map.copyOf(methods)
++                    Map.copyOf(methods),
++                    Map.copyOf(fieldMappings) // Kiterino
+                 );
+                 classes.add(map);
+             }
+@@ -141,6 +155,7 @@ public enum ObfHelper {
+     public record ClassMapping(
+         String obfName,
+         String mojangName,
+-        Map<String, String> methodsByObf
++        Map<String, String> methodsByObf,
++        Map<String, String> fieldsByObf // Kiterino
+     ) {}
+ }

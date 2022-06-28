@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 31 Jul 2021 22:21:04 +0300
+Subject: [PATCH] Packet Additions
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+index c95457ec05e92a94cf2a76f867668552bfa11f5f..b7d6e2614d697096983d5236c329454cd7123ddb 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+@@ -83,6 +83,18 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+ 		return this;
+ 	}
+ 
++    // Kiterino start
++    @Override
++    @Nonnull
++    public PacketStepBuilder sendPlayerProfile(@Nonnull PlayerProfile playerProfile, @Nonnull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName, @Nullable org.bukkit.GameMode gameMode) {
++        GameProfile gameProfile = ((CraftPlayerProfile) playerProfile).getGameProfile();
++        ClientboundPlayerInfoPacket.PlayerUpdate playerUpdate = new ClientboundPlayerInfoPacket.PlayerUpdate(gameProfile, 0, gameMode == null ? GameType.DEFAULT_MODE : GameType.byId(gameMode.getValue()), displayName == null ? null : io.papermc.paper.adventure.PaperAdventure.asVanilla(displayName), null);
++        ClientboundPlayerInfoPacket clientboundPlayerInfoPacket = new ClientboundPlayerInfoPacket(from(profileAction), Collections.singletonList(playerUpdate));
++        initial.setNext(of(clientboundPlayerInfoPacket));
++        return this;
++    }
++    // Kiterino end
++
+ 	@Override
+ 	@Nonnull
+ 	public PacketStepBuilder spawnPlayer(int entityId, @Nonnull UUID uuid, @Nonnull Location location) {
+@@ -258,8 +270,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+     @Override
+     public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time) {
+         FriendlyByteBuf friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
+-        friendlyByteBuf.writeBlockPos(BlockPos.of(location.toBlockKey()));
+-        friendlyByteBuf.writeInt(ColorUtil.toARGB(color));
++        friendlyByteBuf.writeBlockPos(new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
++        friendlyByteBuf.writeInt(color.getRGB());
+         friendlyByteBuf.writeUtf(text==null?"": text);
+         friendlyByteBuf.writeInt(time);
+         initial.setNext(of(new ClientboundCustomPayloadPacket(ClientboundCustomPayloadPacket.DEBUG_GAME_TEST_ADD_MARKER, friendlyByteBuf)));

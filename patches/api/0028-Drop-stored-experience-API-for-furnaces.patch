@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 08:46:09 +0100
+Subject: [PATCH] Drop stored experience API for furnaces
+
+
+diff --git a/src/main/java/org/bukkit/block/Furnace.java b/src/main/java/org/bukkit/block/Furnace.java
+index 8745e5aeaa81cd42d6625f415c623daa28776647..5bae51bae2ae7bc11f9ae7573ab238cea9cea5d2 100644
+--- a/src/main/java/org/bukkit/block/Furnace.java
++++ b/src/main/java/org/bukkit/block/Furnace.java
+@@ -135,4 +135,11 @@ public interface Furnace extends Container {
+     @NotNull
+     @Override
+     public FurnaceInventory getSnapshotInventory();
++
++    // Kiterino start
++    /**
++     * Drop stored experience
++     */
++    void dropStoredExperience();
++    // Kiterino end
+ }

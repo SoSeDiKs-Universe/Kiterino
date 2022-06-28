@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 14 Dec 2021 14:36:04 +0100
+Subject: [PATCH] Add player to NotePlayEvent
+
+
+diff --git a/src/main/java/org/bukkit/event/block/NotePlayEvent.java b/src/main/java/org/bukkit/event/block/NotePlayEvent.java
+index 676b31f6f38d4e85cd4bd16ccf42cbc39a5d8423..48e1ddb533e2134212f6233bc1f6d58e0704b08d 100644
+--- a/src/main/java/org/bukkit/event/block/NotePlayEvent.java
++++ b/src/main/java/org/bukkit/event/block/NotePlayEvent.java
+@@ -17,12 +17,20 @@ public class NotePlayEvent extends BlockEvent implements Cancellable {
+     private Instrument instrument;
+     private Note note;
+     private boolean cancelled = false;
++    private final @org.jetbrains.annotations.Nullable org.bukkit.entity.Player player; // Kiterino
+ 
+     public NotePlayEvent(@NotNull Block block, @NotNull Instrument instrument, @NotNull Note note) {
++        // Kiterino start
++        this(block, instrument, note, null);
++    }
++
++    public NotePlayEvent(@NotNull Block block, @NotNull Instrument instrument, @NotNull Note note, @org.jetbrains.annotations.Nullable org.bukkit.entity.Player player) {
+         super(block);
+         this.instrument = instrument;
+         this.note = note;
++        this.player = player;
+     }
++    // Kiterino end
+ 
+     @Override
+     public boolean isCancelled() {
+@@ -76,6 +84,18 @@ public class NotePlayEvent extends BlockEvent implements Cancellable {
+         }
+     }
+ 
++    // Kiterino start
++    /**
++     * Gets the {@link org.bukkit.entity.Player} who played the note
++     *
++     * @return player who played the note, if present
++     */
++    @org.jetbrains.annotations.Nullable
++    public org.bukkit.entity.Player getWhoPlayed() {
++        return this.player;
++    }
++    // Kiterino end
++
+     @NotNull
+     @Override
+     public HandlerList getHandlers() {

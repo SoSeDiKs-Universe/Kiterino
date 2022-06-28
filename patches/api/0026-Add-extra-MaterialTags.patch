@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 21 Feb 2022 11:44:15 +0200
+Subject: [PATCH] Add extra MaterialTags
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/MaterialTags.java b/src/main/java/com/destroystokyo/paper/MaterialTags.java
+index 41384ef616c5d3099482ea7d09dea12a240e758a..2dee357d82b7f021416c516b6ccab029ef4a94a6 100644
+--- a/src/main/java/com/destroystokyo/paper/MaterialTags.java
++++ b/src/main/java/com/destroystokyo/paper/MaterialTags.java
+@@ -658,4 +658,22 @@ public class MaterialTags {
+      */
+     public static final MaterialSetTag CUT_COPPER_SLABS = new MaterialSetTag(keyFor("cut_copper_slabs"))
+         .endsWith("CUT_COPPER_SLAB").ensureSize("CUT_COPPER_SLABS", 8).lock();
++
++    // Kiterino start
++    /**
++     * Covers the variants of items that can be equipped in any of the armor slots.
++     */
++    public static final MaterialSetTag ALL_EQUIPPABLE = new MaterialSetTag(keyFor("all_equippable"))
++        .add(HEAD_EQUIPPABLE)
++        .add(CHEST_EQUIPPABLE)
++        .add(LEGGINGS)
++        .add(BOOTS)
++        .lock();
++
++    /**
++     * Covers the variants of items that can be equipped in any of the armor slots.
++     */
++    public static final MaterialSetTag MINECARTS = new MaterialSetTag(keyFor("minecarts"))
++        .endsWith("MINECART").ensureSize("MINECARTS", 6).lock();
++    // Kiterino end
+ }

@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 20 Apr 2022 15:01:32 +0300
+Subject: [PATCH] Expose pre-collision move vector to
+ VehicleBlockCollisionEvent
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index d24419096e273adef3ac5763d105f65ac94a56e0..e575d55a1b299692f8953bb42715cb5efb7c15fb 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1135,7 +1135,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                     }
+ 
+                     if (!bl.getType().isAir()) {
+-                        VehicleBlockCollisionEvent event = new VehicleBlockCollisionEvent(vehicle, bl);
++                        VehicleBlockCollisionEvent event = new VehicleBlockCollisionEvent(vehicle, bl, org.bukkit.craftbukkit.util.CraftVector.toBukkit(moveVector)); // Kiterino - Expose pre-collision move vector
+                         this.level.getCraftServer().getPluginManager().callEvent(event);
+                     }
+                 }

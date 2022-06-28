@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 31 Jul 2021 22:21:05 +0300
+Subject: [PATCH] Packet Additions
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+index eeac698d5dc1d6a10bc922c2944666f085646bde..d5c283e7a8581730fadcd89f52e925a77df5afdd 100644
+--- a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+@@ -31,6 +31,16 @@ public interface PacketStepBuilder {
+     @NotNull
+     PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction);
+ 
++    // Kiterino start
++    @NotNull
++    default PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName) {
++        return sendPlayerProfile(playerProfile, profileAction, displayName, null);
++    }
++
++    @NotNull
++    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName, @Nullable org.bukkit.GameMode gameMode);
++    // Kiterino end
++
+     @NotNull
+     PacketStepBuilder spawnPlayer(int entityId, @NotNull UUID uuid, @NotNull Location location);
+ 
+@@ -101,4 +111,8 @@ public interface PacketStepBuilder {
+     }
+ 
+     void send(@NotNull Collection<? extends Player> players);
++
++    default void send(@NotNull Player... players) {
++        send(java.util.List.of(players));
++    }
+ }
