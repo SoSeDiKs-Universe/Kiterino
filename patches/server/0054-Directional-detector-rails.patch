@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 20 Apr 2022 04:00:34 +0300
+Subject: [PATCH] Directional detector rails
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java b/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
+index 05dfb1790a292f9f85b641377c2ca3675726c127..10ffc2aef0699535c4d465cdda7b68ec288f763e 100644
+--- a/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
+@@ -175,6 +175,13 @@ public class DetectorRailBlock extends BaseRailBlock {
+     }
+ 
+     private <T extends AbstractMinecart> List<T> getInteractingMinecartOfType(Level world, BlockPos pos, Class<T> entityClass, Predicate<Entity> entityPredicate) {
++        // Kiterino start - directional detector rails
++        BlockState belowState = world.getBlockState(pos.below());
++        if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
++            Direction dir = belowState.getValue(GlazedTerracottaBlock.FACING).getOpposite();
++            entityPredicate = entityPredicate.and(e -> Math.signum(e.getDeltaMovement().get(dir.getAxis())) == dir.getAxisDirection().getStep());
++        }
++        // Kiterino end
+         return world.getEntitiesOfClass(entityClass, this.getSearchBB(pos), entityPredicate);
+     }
+ 

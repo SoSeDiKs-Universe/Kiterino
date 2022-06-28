@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 15:17:04 +0100
+Subject: [PATCH] Exact note block tuning
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+index bd1d04e80073ccf4e757836cd5fae6d66e7f8c58..b0f72f0f08832ac9f765d00adb1daa4541e5cdd4 100644
+--- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+@@ -96,8 +96,17 @@ public class NoteBlock extends Block {
+         if (world.isClientSide) {
+             return InteractionResult.SUCCESS;
+         } else {
++            // Kiterino start
++            var itemInHand = player.getItemInHand(hand);
++            if (itemInHand.getItem() == net.minecraft.world.item.Items.STICK) {
++                int currentNote = state.getValue(NOTE);
++                int newNote = Math.min(24, itemInHand.getCount() - 1);
++                if (currentNote != newNote)
++                    state = state.setValue(NOTE, newNote);
++            } else {
+             if (player.isShiftKeyDown()) state = state.cycleBackwards(NOTE); else // Kiterino
+             state = (BlockState) state.cycle(NoteBlock.NOTE);
++            } // Kiterino end
+             world.setBlock(pos, state, 3);
+             this.playNote(player, world, pos, state); // CraftBukkit
+             player.awardStat(Stats.TUNE_NOTEBLOCK);

@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 04:13:35 +0100
+Subject: [PATCH] Better Impaling
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index 34db1bd524bb97fbbe0f86b088a2ac343e730f5e..f34b8c3bfc5345b19aab8373e0775cde5e4368ef 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -1628,6 +1628,12 @@ public abstract class Mob extends LivingEntity {
+ 
+         if (target instanceof LivingEntity) {
+             f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
++            // Kiterino start
++            if (((LivingEntity) target).getMobType() != net.minecraft.world.entity.MobType.WATER && target.isInWaterRainOrBubble()) {
++                int impalingLevel = EnchantmentHelper.getItemEnchantmentLevel(net.minecraft.world.item.enchantment.Enchantments.IMPALING, getMainHandItem());
++                if (impalingLevel > 0) f += net.minecraft.world.item.enchantment.Enchantments.IMPALING.getDamageBonus(impalingLevel, net.minecraft.world.entity.MobType.WATER);
++            }
++            // Kiterino end
+             f1 += (float) EnchantmentHelper.getKnockbackBonus(this);
+         }
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
+index 8ecc36633cc1116acdd8081cf8f811796d729411..93ff0479cfaa92b07495bfb900ff7f977f27a413 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Player.java
++++ b/src/main/java/net/minecraft/world/entity/player/Player.java
+@@ -1298,6 +1298,12 @@ public abstract class Player extends LivingEntity {
+ 
+                 if (target instanceof LivingEntity) {
+                     f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
++                    // Kiterino start
++                    if (((LivingEntity) target).getMobType() != MobType.WATER && target.isInWaterRainOrBubble()) {
++                        int impalingLevel = EnchantmentHelper.getItemEnchantmentLevel(net.minecraft.world.item.enchantment.Enchantments.IMPALING, getMainHandItem());
++                        if (impalingLevel > 0) f += net.minecraft.world.item.enchantment.Enchantments.IMPALING.getDamageBonus(impalingLevel, MobType.WATER);
++                    }
++                    // Kiterino end
+                 } else {
+                     f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), MobType.UNDEFINED);
+                 }
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
+index 5be708a76642d4133757c5d181b3c5412aa799ae..295f154474c0ef895bc52673ba21cedbca8c6c07 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
+@@ -134,6 +134,12 @@ public class ThrownTrident extends AbstractArrow {
+             LivingEntity entityliving = (LivingEntity) entity;
+ 
+             f += EnchantmentHelper.getDamageBonus(this.tridentItem, entityliving.getMobType());
++            // Kiterino start
++            if (entityliving.getMobType() != net.minecraft.world.entity.MobType.WATER && entityliving.isInWaterRainOrBubble()) {
++                int impalingLevel = EnchantmentHelper.getItemEnchantmentLevel(net.minecraft.world.item.enchantment.Enchantments.IMPALING, tridentItem);
++                if (impalingLevel > 0) f += net.minecraft.world.item.enchantment.Enchantments.IMPALING.getDamageBonus(impalingLevel, net.minecraft.world.entity.MobType.WATER);
++            }
++            // Kiterino end
+         }
+ 
+         Entity entity1 = this.getOwner();

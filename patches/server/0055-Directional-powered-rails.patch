@@ -1,0 +1,75 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 20 Apr 2022 04:21:48 +0300
+Subject: [PATCH] Directional powered rails
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
+index 8c6e5e98dd5f425bd9322c01bba06c90d76673dc..8fd89f92e7d38cf34bcea2504b1245958eb204ff 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
+@@ -637,6 +637,19 @@ public abstract class AbstractMinecart extends Entity {
+             }
+         }
+ 
++        // Kiterino start - directional powered rails
++        if (flag1) {
++            BlockState belowState = level.getBlockState(pos.below());
++            if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
++                Direction dir = belowState.getValue(net.minecraft.world.level.block.GlazedTerracottaBlock.FACING).getOpposite();
++                Vec3 vel = getDeltaMovement();
++                if (dir.getAxisDirection().getStep() == Math.signum(vel.get(dir.getAxis()))) {
++                    flag1 = false;
++                }
++            }
++        }
++        // Kiterino end
++
+         double d11;
+ 
+         if (flag1) {
+@@ -742,6 +755,44 @@ public abstract class AbstractMinecart extends Entity {
+             }
+         }
+ 
++        // Kiterino start - directional powered rails
++        if (state.is(Blocks.POWERED_RAIL)) {
++            BlockState belowState = level.getBlockState(pos.below());
++            if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
++                Direction dir = belowState.getValue(net.minecraft.world.level.block.GlazedTerracottaBlock.FACING).getOpposite();
++                Vec3 vel = getDeltaMovement();
++                if (state.getValue(PoweredRailBlock.POWERED)) {
++                    double addition = 0.1;
++                    if (dir.getAxis() == Direction.Axis.X) {
++                        boolean matchingAxis = blockpropertytrackposition == RailShape.EAST_WEST || blockpropertytrackposition == RailShape.ASCENDING_EAST || blockpropertytrackposition == RailShape.ASCENDING_WEST;
++                        if (matchingAxis) {
++                            double signum = Math.signum(vel.x());
++                            if (signum == 0 || dir.getAxisDirection().getStep() == -signum) {
++                                vel = vel.multiply(0, 1, 1);
++                                vel = vel.add(dir.getStepX() * addition, dir.getStepY() * addition, dir.getStepZ() * addition);
++                                setDeltaMovement(vel);
++                            }
++                        }
++                    } else if (dir.getAxis() == Direction.Axis.Z) {
++                        boolean matchingAxis = blockpropertytrackposition == RailShape.NORTH_SOUTH || blockpropertytrackposition == RailShape.ASCENDING_NORTH || blockpropertytrackposition == RailShape.ASCENDING_WEST;
++                        if (matchingAxis) {
++                            double signum = Math.signum(vel.z());
++                            if (signum == 0 || dir.getAxisDirection().getStep() == -signum) {
++                                vel = vel.multiply(1, 1, 0);
++                                vel = vel.add(dir.getStepX() * addition, dir.getStepY() * addition, dir.getStepZ() * addition);
++                                setDeltaMovement(vel);
++                            }
++                        }
++                    }
++                } else if (getPassengers().isEmpty() && dir.getAxisDirection().getStep() != Math.signum(vel.get(dir.getAxis()))) {
++                    double braking = 0.025;
++                    vel = vel.multiply(braking, braking, braking);
++                    setDeltaMovement(vel);
++                }
++            }
++        }
++        // Kiterino end
++
+     }
+ 
+     private boolean isRedstoneConductor(BlockPos pos) {

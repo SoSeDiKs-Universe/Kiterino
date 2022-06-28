@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 14:43:49 +0100
+Subject: [PATCH] Shulker bullets despawn on owner death
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java b/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java
+index 0e66418720ca833e676295edc7e28473ce9d9f23..91a9e8e0ad0471ec41a608ba3ba6ea99427581db 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java
+@@ -217,6 +217,15 @@ public class ShulkerBullet extends Projectile {
+         Vec3 vec3d;
+ 
+         if (!this.level.isClientSide) {
++            // Kiterino start
++            if (!isInvulnerable()) {
++                var owner = getOwner();
++                if (owner == null || !owner.isAlive()) {
++                    discard();
++                    return;
++                }
++            }
++            // Kiterino end
+             if (this.finalTarget == null && this.targetId != null) {
+                 this.finalTarget = ((ServerLevel) this.level).getEntity(this.targetId);
+                 if (this.finalTarget == null) {

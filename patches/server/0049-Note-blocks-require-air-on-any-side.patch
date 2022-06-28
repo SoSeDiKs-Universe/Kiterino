@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 13:36:01 +0100
+Subject: [PATCH] Note blocks require air on any side
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+index da181d65a146abd757e6c5dfb430550dc9342911..23287113b786fa13212681db3f0cf9d5777c18e0 100644
+--- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+@@ -65,7 +65,7 @@ public class NoteBlock extends Block {
+     }
+ 
+     private void playNote(@Nullable Entity entity, Level world, BlockPos blockposition, BlockState data) { // CraftBukkit
+-        if (world.purpurConfig.noteBlockIgnoreAbove || world.getBlockState(blockposition.above()).isAir()) { // Purpur
++        if (world.purpurConfig.noteBlockIgnoreAbove || hasAir(world, blockposition)) { // Purpur // Kiterino - moved air check down
+             // CraftBukkit start
+             // org.bukkit.event.block.NotePlayEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callNotePlayEvent(world, blockposition, data.getValue(NoteBlock.INSTRUMENT), data.getValue(NoteBlock.NOTE)); // Paper - move event into block event handler
+             // if (event.isCancelled()) {
+@@ -79,6 +79,18 @@ public class NoteBlock extends Block {
+ 
+     }
+ 
++	// Kiterino start
++	private boolean hasAir(Level world, BlockPos blockPos) {
++		for (Direction.Plane plane : Direction.Plane.values()) {
++			for (Direction direction : plane) {
++				if (world.getBlockState(blockPos.relative(direction)).isAir())
++					return true;
++			}
++		}
++		return false;
++	}
++	// Kiterino end
++
+     @Override
+     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+         if (world.isClientSide) {

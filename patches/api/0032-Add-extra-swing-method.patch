@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 14 Aug 2020 17:45:27 +0300
+Subject: [PATCH] Add extra swing method
+
+
+diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
+index 09ed6e3c8abfc3118260b268e61604aa9ad6c26a..b86a6b521aefd94f1e2a25ca19303f1c6b51b50b 100644
+--- a/src/main/java/org/bukkit/entity/LivingEntity.java
++++ b/src/main/java/org/bukkit/entity/LivingEntity.java
+@@ -984,4 +984,19 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+      */
+     void setShouldBurnInDay(boolean shouldBurnInDay);
+     // Purpur end
++
++    // Kiterino start
++    /**
++     * Makes this entity swing their hand.
++     *
++     * This method does nothing if this entity does not have an animation for
++     * swinging their hand.
++     *
++     * @param hand hand to be swung, either {@link org.bukkit.inventory.EquipmentSlot#HAND} or {@link org.bukkit.inventory.EquipmentSlot#OFF_HAND}
++     */
++    default void swingHand(@NotNull org.bukkit.inventory.EquipmentSlot hand) {
++        if (hand == org.bukkit.inventory.EquipmentSlot.OFF_HAND) swingOffHand();
++        else swingMainHand();
++    }
++    // Kiterino end
+ }

@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 12 Dec 2021 23:00:31 +0100
+Subject: [PATCH] Fix MC-98160 and MC-105103
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+index a933a135e40097f88c22342159a13a4f500f0a8f..be6c6ca9438b70f3a96d72241b5e8734a5155308 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+@@ -885,7 +885,7 @@ public class Boat extends Entity {
+         if (!this.isPassenger()) {
+             if (onGround) {
+                 if (this.fallDistance > 3.0F) {
+-                    if (this.status != Boat.Status.ON_LAND) {
++                    if (this.status != Boat.Status.ON_LAND && this.status != Status.IN_AIR) { // Kiterino - Fix MC-98160 and MC-105103
+                         this.resetFallDistance();
+                         return;
+                     }
