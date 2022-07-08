@@ -31,10 +31,10 @@ index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..49b5ef99ff429ec5cc2ed8cb27d84bf4
          return SoundEvents.GENERIC_DRINK;
      }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 2de52f7e644ba3dfe2bd38c966f5657423619f93..f5bd61d8c03d9ba939c21c6f407bc60a7ec7fc85 100644
+index f8f33eed8906a2f8e50214b9348ae1108e48b672..75d47de29a188b176f5eb1e6ca48cf4c95c34d5b 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -453,12 +453,23 @@ public class PurpurConfig {
+@@ -454,12 +454,23 @@ public class PurpurConfig {
              return;
          }
          properties.getKeys(false).forEach(foodKey -> {
@@ -63,7 +63,7 @@ index 2de52f7e644ba3dfe2bd38c966f5657423619f93..f5bd61d8c03d9ba939c21c6f407bc60a
              food.setNutrition(properties.getInt(foodKey + ".nutrition", foodDefaults.getNutrition()));
              food.setSaturationModifier((float) properties.getDouble(foodKey + ".saturation-modifier", foodDefaults.getSaturationModifier()));
              food.setIsMeat(properties.getBoolean(foodKey + ".is-meat", foodDefaults.isMeat()));
-@@ -495,6 +506,7 @@ public class PurpurConfig {
+@@ -496,6 +507,7 @@ public class PurpurConfig {
                      food.getEffects().add(Pair.of(new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon), chance));
                  });
              }

@@ -151,10 +151,10 @@ index 36367e44c3df6a14c5d793e4f49f81142b3d5228..595eeba132a7bd8a546fab83fe2a912d
       * Teleports this entity to the given location. If this entity is riding a
       * vehicle, it will be dismounted prior to teleportation.
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 3ba77cfee35cad93991bf0cee726f7b549df6c58..399c90caf95cca21e2aeb87c67b994cfbe01bcf2 100644
+index 477914ea8b9c757b5462e805604e54cb20488a18..7b2bb67896db9d498b8cf441b8dd14941e314781 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2695,6 +2695,57 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -2702,6 +2702,57 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      String getClientBrandName();
      // Paper end
  

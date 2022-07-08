@@ -5,10 +5,10 @@ Subject: [PATCH] Elder Guardian appearance API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index b590398de3d4a5f8c933515252d57b4f2dbff450..00fecf5e9f75a850db613d0484616faebcde4ec8 100644
+index 54fdfe7de065e57451b4a7cd0bcbef16eab00dd8..a0a6e956b1b9603f77b028d2ae010585426a5eb8 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2819,5 +2819,21 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -2826,5 +2826,21 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * Forces player to sleep
       */
      void forceSleep();

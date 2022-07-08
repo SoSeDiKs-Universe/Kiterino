@@ -5,10 +5,10 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 3d6809eb9017b65f2a34ebcaade1cf3c039b7bcf..3221d63e90c029b89b430689ddf53a589221ff41 100644
+index fc4c5a323faa4f9be55fa278af4c33ce7dedc4f4..89fd95001f680bde150339a89356a2d33c474609 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -772,4 +772,20 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -779,4 +779,20 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
       * @param location where to set the last death player location
       */
      public void setLastDeathLocation(@Nullable Location location);

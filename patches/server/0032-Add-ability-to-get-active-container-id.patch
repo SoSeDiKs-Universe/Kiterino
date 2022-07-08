@@ -5,10 +5,10 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 0a9c7b4f16ba1966ce8754c0b5bef270145f4a95..51ed1ef5a159730601581b9bcab4489644ba3924 100644
+index e9ca6f7c521bb2966eebdb520fece12fa0c94ede..732c9aed54e9da22eaad98a72b78adffe4a435ac 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -812,4 +812,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -821,4 +821,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
              this.getHandle().setLastDeathLocation(Optional.of(CraftMemoryMapper.toNms(location)));
          }
      }

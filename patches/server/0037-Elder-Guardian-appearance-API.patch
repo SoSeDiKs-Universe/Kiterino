@@ -5,10 +5,10 @@ Subject: [PATCH] Elder Guardian appearance API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6da7d16f450393fd88e4505d9b2f2b459d293f0e..3697af0aa3f6359f5c6fc3300f407dc514edd330 100644
+index 83ffb008ee43bdfce80286522ca687fe217ce6d3..1dcaeaf7faa82e2808182666ff15547bf48f6fa2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2978,5 +2978,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2985,5 +2985,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          Location loc = getLocation();
          getHandle().forceSleep(loc.getX(), loc.getY(), loc.getZ());
      }

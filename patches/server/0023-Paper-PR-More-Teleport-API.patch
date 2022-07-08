@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - More Teleport API
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 99c8b4957194868c36f9ea214c7f77a23ce8002a..6860ef9a0ad6e1636bb7199a3402798cdd34c7ac 100644
+index 3bb51f34be4341c991487a78d8793f074ffdcba4..79f4d039ed17d13a36e7c22a6a720c73be04410b 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -1733,11 +1733,17 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
@@ -38,7 +38,7 @@ index 99c8b4957194868c36f9ea214c7f77a23ce8002a..6860ef9a0ad6e1636bb7199a3402798c
          if (player.isRemoved()) {
              LOGGER.info("Attempt to teleport removed player {} restricted", player.getScoreboardName());
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 643c50939922bb8b86c1815d30258a94229b57d3..3eb0f2e2a8e0c7f7b30d62f00b874e1110af256f 100644
+index d560a7101741c7c0c8b5cc99539d3a6c09ddb218..81693f3dd7b19ff80596c2c147abb284cf206917 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -655,8 +655,28 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -52,7 +52,7 @@ index 643c50939922bb8b86c1815d30258a94229b57d3..3eb0f2e2a8e0c7f7b30d62f00b874e11
 +    @Override
 +    public boolean teleport(Location location, TeleportCause cause, boolean ignorePassengers, boolean dismount) {
 +        // Paper end
-         Preconditions.checkArgument(location != null, "location");
+         Preconditions.checkArgument(location != null, "location cannot be null");
          location.checkFinite();
 +        /*
 +        // Paper start - Teleport passenger API
@@ -71,10 +71,10 @@ index 643c50939922bb8b86c1815d30258a94229b57d3..3eb0f2e2a8e0c7f7b30d62f00b874e11
          if (this.entity.isRemoved()) { // EMC
              // Purpur start
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 188726c819139050e0407e01839a1cdb68edeb7e..c0e3e2f09b6b5ed11b9240203e877bb9a6a0a647 100644
+index 0d948c29f214dcc5c47fa15017f4f6701cd72ff1..8f07a8ce7fc38f5aeccaf96fba4af204ff869667 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1121,7 +1121,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1128,7 +1128,18 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public void setRotation(float yaw, float pitch) {
@@ -94,7 +94,7 @@ index 188726c819139050e0407e01839a1cdb68edeb7e..c0e3e2f09b6b5ed11b9240203e877bb9
      }
  
      // Paper start - Chunk priority
-@@ -1136,8 +1147,81 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1143,8 +1154,81 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
@@ -176,7 +176,7 @@ index 188726c819139050e0407e01839a1cdb68edeb7e..c0e3e2f09b6b5ed11b9240203e877bb9
          location.checkFinite();
  
          ServerPlayer entity = this.getHandle();
-@@ -1150,7 +1234,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1157,7 +1241,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             return false;
          }
  
@@ -185,7 +185,7 @@ index 188726c819139050e0407e01839a1cdb68edeb7e..c0e3e2f09b6b5ed11b9240203e877bb9
              // Purpur start
              if (new org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent(entity.getBukkitEntity(), org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent())
                  return teleport(location, cause);
-@@ -1195,7 +1279,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1202,7 +1286,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          this.detachEntities(); // EMC
          // Check if the fromWorld and toWorld are the same.
          if (fromWorld == toWorld) {
