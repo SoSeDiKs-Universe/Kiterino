@@ -39,10 +39,10 @@ index ad0af20dc32a518110c5e74a7ac54ea1c3b93bcb..5d41cb19b3ce447eb04189c275983897
                  }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 00fbf9ffdfa1c0d821ff86108c33e8b62a3d1268..fb299c59fd9e9a61ef069b291acb6857807429ab 100644
+index 295e3372d1e986549c96397c6ce26fb37e49f1ac..e0ef19b15fcfa022040de18f9d6af7bfb8d9abad 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2387,5 +2387,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2394,5 +2394,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
  
          return this.adventure$pointers;
      }
