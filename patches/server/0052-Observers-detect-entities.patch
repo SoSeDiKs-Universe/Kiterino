@@ -5,7 +5,7 @@ Subject: [PATCH] Observers detect entities
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2ee1e55113d4f4b18411e8d884691d91336f4372..69f9cdb5a9620cc68c3c7a4276c2bd85153c2623 100644
+index 5377b4c2754023971509ea0cd765633499119352..998833a56fcee77c4f61cff98f0d1e31c99c3f88 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -1249,6 +1249,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {

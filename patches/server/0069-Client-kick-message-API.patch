@@ -5,7 +5,7 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 79f4d039ed17d13a36e7c22a6a720c73be04410b..c3b5d927aa8aa9d97eace0b5cae333d886baae9d 100644
+index 4fd14aef82b99a63f78070a37d91965f594fc3cd..974cc4e5b7def1978b8b51b752277f5ba95a19a8 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -493,6 +493,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser

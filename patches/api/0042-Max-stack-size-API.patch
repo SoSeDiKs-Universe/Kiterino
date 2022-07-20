@@ -26,10 +26,10 @@ index cbcc6eddbb732c9450baf39805bcbb0f8f4f427f..c42882628d9bd6a63ad280319c6bbd8e
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 9dbaf0262ea57a3159ae6ebc62c36dd8ee6d20f1..df3deb58e7a1b15bf74eb3bb33cc087bece67ca6 100644
+index 067005a9f6f85f6d8807d9570145f4ece766812a..452e2c35b8ef6c5fc792ba8070b6a733d24011b5 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -4064,7 +4064,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+@@ -4066,7 +4066,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
      private final int id;
      private final Constructor<? extends MaterialData> ctor;
      private static final Map<String, Material> BY_NAME = Maps.newHashMap();

@@ -5,10 +5,10 @@ Subject: [PATCH] Non-solid coral fans
 
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index b20b3d54342a8c81d1ff4062028c7b7d2eec4fe5..7924103e613c92669bbf8299009be29452da564e 100644
+index 5da8af8e11dfa741aea4c167c4cb5e63dbdf5e70..08830e1a143e14ed3da165d3bcf5a8301374ffd9 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -5666,26 +5666,28 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+@@ -5668,26 +5668,28 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
              case DARK_PRISMARINE_SLAB:
              case DARK_PRISMARINE_STAIRS:
              case DAYLIGHT_DETECTOR:

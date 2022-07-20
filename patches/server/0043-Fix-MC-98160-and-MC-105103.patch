@@ -5,7 +5,7 @@ Subject: [PATCH] Fix MC-98160 and MC-105103
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index a933a135e40097f88c22342159a13a4f500f0a8f..be6c6ca9438b70f3a96d72241b5e8734a5155308 100644
+index ed260c5f8cdf9027ad95c81cb84bb91879647836..432b10ec21ce5dfe8f99c3af29d19292bbcf39cd 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 @@ -885,7 +885,7 @@ public class Boat extends Entity {

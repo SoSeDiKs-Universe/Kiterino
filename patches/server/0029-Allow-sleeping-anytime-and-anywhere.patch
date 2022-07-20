@@ -5,7 +5,7 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 89a10b7238c305f968695aa492670ab9d1137e7e..915419fa7002e84e95077e3a5209a7e0a7742548 100644
+index be00c02551484961f6eea7cba276d05d280712fa..1cd4324b1692adf1ff358442ff9497a05a3996e0 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -634,8 +634,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -37,7 +37,7 @@ index 89a10b7238c305f968695aa492670ab9d1137e7e..915419fa7002e84e95077e3a5209a7e0
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 9c09e46aeea0527880e935c1e3cf1046036d5764..ee2f8e8491dff4ed010c0d05c71c27181e4a7863 100644
+index 60873c874abbeff8f30b3536f5c4cc03e663530a..d88fa9574891ed8f3116f525f6b055ea2f6a3416 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1334,6 +1334,7 @@ public class ServerPlayer extends Player {
