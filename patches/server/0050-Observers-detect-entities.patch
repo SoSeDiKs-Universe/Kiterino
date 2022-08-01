@@ -5,17 +5,17 @@ Subject: [PATCH] Observers detect entities
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5377b4c2754023971509ea0cd765633499119352..998833a56fcee77c4f61cff98f0d1e31c99c3f88 100644
+index 43bb11f090cdf49a5b677e539fbbba6b07049a51..ea602ab438cad0d239fac903285089fff058b696 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -1249,6 +1249,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
  
-                 this.level.getProfiler().pop();
+                 //this.level.getProfiler().pop(); // Purpur
              }
 +            // Kiterino start
 +            if (this instanceof net.minecraft.world.entity.LivingEntity && movement.lengthSqr() > 0.00615D) {
-+                level.getProfiler().push("move");
-+                level.getProfiler().push("kiterino:observerCheck");
++                //level.getProfiler().push("move");
++                //level.getProfiler().push("kiterino:observerCheck");
 +                double height = Math.min(getBoundingBox().getYsize(), 3D);
 +                BlockPos base = blockPosition();
 +                do {
@@ -31,8 +31,8 @@ index 5377b4c2754023971509ea0cd765633499119352..998833a56fcee77c4f61cff98f0d1e31
 +                    height--;
 +                    base = base.above();
 +                } while (height > 0);
-+                level.getProfiler().pop();
-+                level.getProfiler().pop();
++                //level.getProfiler().pop();
++                //level.getProfiler().pop();
 +            }
 +            // Kiterino end
          }

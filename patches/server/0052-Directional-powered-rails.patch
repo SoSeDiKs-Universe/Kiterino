@@ -5,10 +5,10 @@ Subject: [PATCH] Directional powered rails
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 8c6e5e98dd5f425bd9322c01bba06c90d76673dc..8fd89f92e7d38cf34bcea2504b1245958eb204ff 100644
+index b16ad4d5f3cdf8e0e44f74ae481b04d38e7a6c9e..93ab3ae9b2bc24d3a54d287056e31bb465875336 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -637,6 +637,19 @@ public abstract class AbstractMinecart extends Entity {
+@@ -638,6 +638,19 @@ public abstract class AbstractMinecart extends Entity {
              }
          }
  
@@ -28,7 +28,7 @@ index 8c6e5e98dd5f425bd9322c01bba06c90d76673dc..8fd89f92e7d38cf34bcea2504b124595
          double d11;
  
          if (flag1) {
-@@ -742,6 +755,44 @@ public abstract class AbstractMinecart extends Entity {
+@@ -743,6 +756,44 @@ public abstract class AbstractMinecart extends Entity {
              }
          }
  

@@ -13,7 +13,7 @@ index aba57d1a3e1e20210538a6ea02066f2907309f48..951d9a599d3a7c3fc12aaae60b4518d2
  
          if (args.length == 0) {
 -            sender.sendMessage("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")"); // Patina
-+            sender.sendMessage("This server is running Kiterino (a custom Purpur-based fork for SoSeDiK's Universe; MC: 1.19)."); // Patina // Kiterino
++            sender.sendMessage("This server is running Kiterino (a custom Purpur-based fork for SoSeDiK's Universe; MC: 1.19.1)."); // Patina // Kiterino
              //sendVersion(sender); // Patina
          } else {
              StringBuilder name = new StringBuilder();

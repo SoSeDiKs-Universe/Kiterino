@@ -5,7 +5,7 @@ Subject: [PATCH] Deny stacking potions in brewing stand
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index d5acd56f39af64f2f72d418da48fa7fffd680243..07575b415b6a7d0e29a0f1c9b90547df7c76d877 100644
+index bc7fd6480e784c43e236bfbbe7a60d8eb204c127..44ce1b15071cf8c99eefcd469139301f626c4a7d 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -768,6 +768,11 @@ public abstract class AbstractContainerMenu {

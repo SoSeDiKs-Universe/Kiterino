@@ -5,7 +5,7 @@ Subject: [PATCH] Weeper - Implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 79770da8a1e4ca3f5c531fd040626b90124aeb66..d5acd56f39af64f2f72d418da48fa7fffd680243 100644
+index 31c9bb73b73be99b95a7dde55d276964522a6d7d..bc7fd6480e784c43e236bfbbe7a60d8eb204c127 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@

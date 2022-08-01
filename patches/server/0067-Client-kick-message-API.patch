@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 4fd14aef82b99a63f78070a37d91965f594fc3cd..974cc4e5b7def1978b8b51b752277f5ba95a19a8 100644
+index 5d9544e64c9b7e098e7e5c4390ac254f7b3facd2..7413d1012c7aa303d1f3417d841702e24605b7aa 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -493,6 +493,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -523,6 +523,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
      }
  
      public void disconnect(net.kyori.adventure.text.Component reason, org.bukkit.event.player.PlayerKickEvent.Cause cause) {
@@ -21,8 +21,8 @@ index 4fd14aef82b99a63f78070a37d91965f594fc3cd..974cc4e5b7def1978b8b51b752277f5b
          // Paper end
          // CraftBukkit start - fire PlayerKickEvent
          if (this.processedDisconnect) {
-@@ -500,7 +506,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
-         }
+@@ -551,7 +557,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+ 
          net.kyori.adventure.text.Component leaveMessage = net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.format.NamedTextColor.YELLOW, io.papermc.paper.configuration.GlobalConfiguration.get().messages.useDisplayNameInQuitMessage ? this.player.getBukkitEntity().displayName() : net.kyori.adventure.text.Component.text(this.player.getScoreboardName())); // Paper - Adventure
  
 -        PlayerKickEvent event = new PlayerKickEvent(this.player.getBukkitEntity(), reason, leaveMessage, cause); // Paper - Adventure & kick event reason
@@ -30,7 +30,7 @@ index 4fd14aef82b99a63f78070a37d91965f594fc3cd..974cc4e5b7def1978b8b51b752277f5b
  
          if (this.cserver.getServer().isRunning()) {
              this.cserver.getPluginManager().callEvent(event);
-@@ -511,14 +517,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -562,14 +568,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
              return;
          }
          // Send the possibly modified leave message
@@ -39,30 +39,30 @@ index 4fd14aef82b99a63f78070a37d91965f594fc3cd..974cc4e5b7def1978b8b51b752277f5b
          // CraftBukkit end
  
          this.player.quitReason = org.bukkit.event.player.PlayerQuitEvent.QuitReason.KICKED; // Paper
-         this.connection.send(new ClientboundDisconnectPacket(ichatbasecomponent), (future) -> {
+         this.connection.send(new ClientboundDisconnectPacket(ichatbasecomponent), PacketSendListener.thenRun(() -> {
              this.connection.disconnect(ichatbasecomponent);
-         });
+         }));
 -        this.onDisconnect(ichatbasecomponent, event.leaveMessage()); // CraftBukkit - fire quit instantly // Paper - use kick event leave message
 +        this.onDisconnect(PaperAdventure.asVanilla(event.reason()), event.leaveMessage()); // CraftBukkit - fire quit instantly // Paper - use kick event leave message // Kiterino - add client message
          this.connection.setReadOnly();
          MinecraftServer minecraftserver = this.server;
          Connection networkmanager = this.connection;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 69643627846b4649fc68d2949e5b9d3edbe9e85e..97ba4baa50bb42e05c82a11e94bd78496eb6f55d 100644
+index 5635ef69f2e0e546f0e64a68cc9df9d217cbacdb..4790c038880df142060d868ebd5b958c4b2d4c5b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3021,5 +3021,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3066,5 +3066,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          return true;
      }
 +
 +    @Override
-+    public void kick(final net.kyori.adventure.text.Component reason, final net.kyori.adventure.text.Component message) {
++    public void kick(net.kyori.adventure.text.Component reason, net.kyori.adventure.text.Component message) {
 +        kick(reason, message, org.bukkit.event.player.PlayerKickEvent.Cause.PLUGIN);
 +    }
 +
 +    @Override
-+    public void kick(net.kyori.adventure.text.Component reason, final net.kyori.adventure.text.Component message, org.bukkit.event.player.PlayerKickEvent.Cause cause) {
++    public void kick(net.kyori.adventure.text.Component reason, net.kyori.adventure.text.Component message, org.bukkit.event.player.PlayerKickEvent.Cause cause) {
 +        org.spigotmc.AsyncCatcher.catchOp("player kick");
 +        final ServerGamePacketListenerImpl connection = this.getHandle().connection;
 +        if (connection != null) {

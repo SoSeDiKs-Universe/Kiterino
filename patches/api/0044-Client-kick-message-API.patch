@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index e24699e63f4d02818bc3a23104be1b535db1c40b..9d64c348fbb0b19d03f54a5cb0c2ed8084aa7c60 100644
+index 98988ac7b37707a2f9d66975b31218679cd53145..4d8ee182bc12fc7de328b25963e8e79d6e73aee3 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2890,5 +2890,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3001,5 +3001,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * @return true, if placed successfully
       */
      boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
@@ -32,7 +32,7 @@ index e24699e63f4d02818bc3a23104be1b535db1c40b..9d64c348fbb0b19d03f54a5cb0c2ed80
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
-index b76966953753dabcb31293846d39a4b4d5ef472a..21e374f29eaacc90dfce44e48e711c4da97717ea 100644
+index 449f2dccd466ba5f220148a20a03b36a2a565d9b..e9b8181ae4afaba1a670350738859f8910e7c46c 100644
 --- a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
 +++ b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
 @@ -14,6 +14,7 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
@@ -57,7 +57,7 @@ index b76966953753dabcb31293846d39a4b4d5ef472a..21e374f29eaacc90dfce44e48e711c4d
      /**
       * Gets the leave message send to all online players
       *
-@@ -205,4 +213,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+@@ -213,4 +221,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
          UNKNOWN,
      }
      // Paper end

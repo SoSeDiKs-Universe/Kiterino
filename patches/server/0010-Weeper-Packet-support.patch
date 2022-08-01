@@ -781,7 +781,7 @@ index ee8f6838d774fd316178a10db5101102963c1847..8e1a295ea7b70c62843ec8b23a3fffef
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2c457cac71ca5b206ef6f13493e936a3e684956e..0c9ca894697c553ca757307d738b4c9366a66c1e 100644
+index ab3f5d8df443f1f23f4cf11af46ed4c95ff30f0e..e81138803fc6dbdaeff02480a1993b644420daeb 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -333,7 +333,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -809,7 +809,7 @@ index 2c457cac71ca5b206ef6f13493e936a3e684956e..0c9ca894697c553ca757307d738b4c93
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 411593b1b105d62440d76b7bd1b8c74b701e3e75..9d0b17c6b71260c1f63a01b94d8adc119413e26c 100644
+index cd414a9275e6d9f8c704854763b18f4ee43b67b7..503f4d499d28ee30a4d64c55a980e006860b6a83 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity {
@@ -822,10 +822,10 @@ index 411593b1b105d62440d76b7bd1b8c74b701e3e75..9d0b17c6b71260c1f63a01b94d8adc11
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 69c35b9258b85fcc19ca77435c96e47bb79c1c80..808a4bd0fdcf2d45dfc89f7169b28a55726e13d4 100644
+index ce63db79af0d74f9073d28fd8b390757b430d708..6271ca1845e8bd38821402037a3981ec48e38f7b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2963,6 +2963,11 @@ public final class CraftServer implements Server {
+@@ -2999,6 +2999,11 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  

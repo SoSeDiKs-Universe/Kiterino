@@ -5,15 +5,16 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 7b2bb67896db9d498b8cf441b8dd14941e314781..54fdfe7de065e57451b4a7cd0bcbef16eab00dd8 100644
+index 61a1ce4dd91ae61758de983aefd79d3e9c30ed68..91e5b18c4cd053441e87e10064e4bc3844e4c41e 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2820,4 +2820,11 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -2930,4 +2930,12 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       */
-     public boolean hasFlyingFallDamage();
+     void clearBlockHighlights();
      // Purpur end
 +
 +    // Kiterino start
++
 +    /**
 +     * Forces player to sleep
 +     */
