@@ -38,10 +38,10 @@ index 049c36807d2a970842442c1b7517c06f3f150041..9125c2a504e6a99737432ec2def38687
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index e405c279f6135c94c775a856ab88fd3cace6bd5c..145bf1031b3d6f7c83e6f800d16dd1c98c396f61 100644
+index 9930ebe7a23d306c602840fd43652fbdaba481b3..4067f8ac6ff71fe63b966fddaa843fe734e2fdca 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -745,4 +745,26 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -760,4 +760,26 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
      @NotNull
      float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants);
      // Paper end

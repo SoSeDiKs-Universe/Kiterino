@@ -5,10 +5,10 @@ Subject: [PATCH] More item drop API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 1cfd8f250cda6dcfb0c5851f0c376e8596431edf..96e68b9cad34c0de2c72d1b8fa1bd32f66f86f7d 100644
+index 22b7713f54b7babffd707e642fa65796d34cc206..f6aaf2e5e0562184d25e8eb34ae594b61256736b 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -804,5 +804,53 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -819,5 +819,53 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
      default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
          getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
      }

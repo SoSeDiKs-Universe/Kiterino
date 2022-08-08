@@ -5,10 +5,10 @@ Subject: [PATCH] Kiterino NBT additions
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 145bf1031b3d6f7c83e6f800d16dd1c98c396f61..66de1889c4e54995ce5dff68ad6fbe0b5410e097 100644
+index 4067f8ac6ff71fe63b966fddaa843fe734e2fdca..f90d24409cd749fdc27cb8959f641f2bb9b4d2d4 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -766,5 +766,16 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -781,5 +781,16 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
      default de.tr7zw.changeme.nbtapi.NBTCompound getNBTC() {
          return getNBT().getData();
      }
