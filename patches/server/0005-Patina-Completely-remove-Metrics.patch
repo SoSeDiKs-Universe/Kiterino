@@ -6,7 +6,7 @@ Subject: [PATCH] Patina - Completely remove Metrics
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 deleted file mode 100644
-index 87ceded240a43371b1ac4319dc66bcfa8bfbb504..0000000000000000000000000000000000000000
+index 2697535e2cc2e3a5f39d6fd7eae7dc78b8dee61d..0000000000000000000000000000000000000000
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ /dev/null
 @@ -1,675 +0,0 @@
@@ -615,7 +615,7 @@ index 87ceded240a43371b1ac4319dc66bcfa8bfbb504..00000000000000000000000000000000
 -
 -                metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
 -                metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
--                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version_version", () -> (Metrics.class.getPackage().getImplementationVersion() != null) ? Metrics.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino
+-                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (Metrics.class.getPackage().getImplementationVersion() != null) ? Metrics.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino
 -
 -                metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
 -                    Map<String, Map<String, Integer>> map = new HashMap<>();
@@ -686,7 +686,7 @@ index 87ceded240a43371b1ac4319dc66bcfa8bfbb504..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 2443a23ce05d5dc1dd19dfe59e66f0cd15044a1e..3d06108e71cd4895019ca3893241312931f117b2 100644
+index 67b79349363e7149a603c2396d40dda31c4435ed..2df21becf305906bcf52177e74741b7288561575 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -222,7 +222,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
@@ -1346,7 +1346,7 @@ index 8f15af52d2ed734732134bf011ccdd4b7856a284..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index 5d162f59fc5ef9adf7fa762b137bbcfca745d9c5..56aace7c0c3a4919afb579a51ad6f91f530dd892 100644
+index 5d162f59fc5ef9adf7fa762b137bbcfca745d9c5..1a6edf004b7616e39ea5944e10ca6d0ff02e9b2e 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
 @@ -48,7 +48,7 @@ public class SpigotConfig
@@ -1354,7 +1354,7 @@ index 5d162f59fc5ef9adf7fa762b137bbcfca745d9c5..56aace7c0c3a4919afb579a51ad6f91f
      static Map<String, Command> commands;
      /*========================================================================*/
 -    private static Metrics metrics;
-+    //private static Metrics metrics; // Patina
++    //private static Metrics metrics; // Patina - remove metrics
  
      public static void init(File configFile)
      {
