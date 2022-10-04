@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a141e5cdcec4d09b05252782e8a0ab5fac532680..f1f25c7498d89a9ac06bea37257295de0f64ba65 100644
+index da7ee9a8748737a2041c3a5aa6e69de48e77485c..d3ae1a36799ebddad68a1033086b6185dfb319ff 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
@@ -17,10 +17,10 @@ index a141e5cdcec4d09b05252782e8a0ab5fac532680..f1f25c7498d89a9ac06bea37257295de
      implementation("org.ow2.asm:asm:9.2")
      implementation("org.ow2.asm:asm-commons:9.2")
 diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
-index 049c36807d2a970842442c1b7517c06f3f150041..9125c2a504e6a99737432ec2def386873321996f 100644
+index e1e1bc868019f715370490719ef887e0eee3ddec..ee1487c7ed5ff8694dda6c4dcc7c566e6a4dcd38 100644
 --- a/src/main/java/org/bukkit/Chunk.java
 +++ b/src/main/java/org/bukkit/Chunk.java
-@@ -283,4 +283,16 @@ public interface Chunk extends PersistentDataHolder {
+@@ -284,4 +284,16 @@ public interface Chunk extends PersistentDataHolder {
       * @return if the block is contained within
       */
      boolean contains(@NotNull BlockData block);
@@ -38,10 +38,10 @@ index 049c36807d2a970842442c1b7517c06f3f150041..9125c2a504e6a99737432ec2def38687
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 9930ebe7a23d306c602840fd43652fbdaba481b3..4067f8ac6ff71fe63b966fddaa843fe734e2fdca 100644
+index 9930ebe7a23d306c602840fd43652fbdaba481b3..86b30a5509bd6905eb68b8cd8e78771e0e4adefd 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -760,4 +760,26 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -760,4 +760,27 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
      @NotNull
      float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants);
      // Paper end
@@ -58,7 +58,8 @@ index 9930ebe7a23d306c602840fd43652fbdaba481b3..4067f8ac6ff71fe63b966fddaa843fe7
 +    }
 +
 +    /**
-+     * Returns a custom tag container of this chunk.
++     * Returns a custom tag container of this block.
++     * <p>Block's custom data is stored within its {@link Chunk}'s nbt data.
 +     *
 +     * @return custom NBT tags container
 +     */
@@ -90,10 +91,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 1f116f33e6dbce8d8d67d799beeedecf792cd728..c61941e90b393ac4999a1361d6dc85ad83d8a335 100644
+index be7ad89699619aba9df4699403c9a70fd2bc9da1..05ef29a827558d3a1b6d75c7cb9f42439d982613 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -957,4 +957,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -984,4 +984,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      boolean isInDaylight();
      // Purpur end
@@ -158,12 +159,12 @@ index 91444a8bb400d1db36df118c8c24645c26fa72be..791c3c7d75f373f6fa38c549b3d5d9d6
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index eebb3da156e2d95efbe22d4afa470b977ce19f10..e5e558a02fafaf2dcddb0cf18c27626aeb0e17cb 100644
+index d30ad7cae1dfbb47ab1a6e3e2fcd6fb76163fe78..6f7fdf516f22631a5d3dd14949ff3acafbe71267 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-@@ -165,4 +165,16 @@ public interface PersistentDataContainer {
-      */
-     boolean has(@NotNull NamespacedKey key);
+@@ -198,4 +198,16 @@ public interface PersistentDataContainer {
+         this.readFromBytes(bytes, true);
+     }
      // Paper end
 +
 +    // Kiterino start

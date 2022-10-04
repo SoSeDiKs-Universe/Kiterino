@@ -5,10 +5,10 @@ Subject: [PATCH] Kiterino NBT additions
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 4067f8ac6ff71fe63b966fddaa843fe734e2fdca..f90d24409cd749fdc27cb8959f641f2bb9b4d2d4 100644
+index 86b30a5509bd6905eb68b8cd8e78771e0e4adefd..c7353698f7a254b0214fbafea64caa8f87108b51 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -781,5 +781,16 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -782,5 +782,16 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
      default de.tr7zw.changeme.nbtapi.NBTCompound getNBTC() {
          return getNBT().getData();
      }
@@ -26,13 +26,14 @@ index 4067f8ac6ff71fe63b966fddaa843fe734e2fdca..f90d24409cd749fdc27cb8959f641f2b
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 791c3c7d75f373f6fa38c549b3d5d9d6181ae4b9..c10244e984afec20ecfdb0056a99e39d9d7a26ea 100644
+index 791c3c7d75f373f6fa38c549b3d5d9d6181ae4b9..8663a2e8bcea33a6cbaee89d10c5b0c6456171e2 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1637,6 +1637,29 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
-         return new de.tr7zw.changeme.nbtapi.NBTItem(this, directApply);
+@@ -1649,5 +1649,28 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
+         setData(nbtItem.getData());
+         setItemMeta(nbtItem.getItemMeta());
      }
- 
++
 +    /**
 +     * Returns a custom tag container of this item under
 +     * Kiterino namespace.
@@ -55,15 +56,13 @@ index 791c3c7d75f373f6fa38c549b3d5d9d6181ae4b9..c10244e984afec20ecfdb0056a99e39d
 +    public de.tr7zw.changeme.nbtapi.NBTCompound getKNBT(boolean directApply) {
 +        return getNBT(directApply).getOrCreateCompound(Bukkit.getName());
 +    }
-+
-     /**
-      * Applies NBT data from the provided NBT item.
-      *
+     // Kiterino end
+ }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index e5e558a02fafaf2dcddb0cf18c27626aeb0e17cb..1e87e1d6981e9feef85e5a3a7869e3c96be139d8 100644
+index 6f7fdf516f22631a5d3dd14949ff3acafbe71267..289b12cfdef70c9a54287969e0370148f968bb09 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-@@ -176,5 +176,15 @@ public interface PersistentDataContainer {
+@@ -209,5 +209,15 @@ public interface PersistentDataContainer {
      default de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getNBTC() {
          return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
      }

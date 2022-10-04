@@ -33,12 +33,12 @@ index 3c4dadd0012c11191c873fe25a7625193563915d..e8a231ea17f63bb8834ff6784b50fcae
              clone.unbreakable = this.unbreakable;
              clone.damage = this.damage;
 diff --git a/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java b/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
-index f0588bec9be09cb8273c310fb3de8bfe72dee9e5..559e2c10f768d7c808de1243743e6981ba8e9878 100644
+index 20c7144307ecf1eb5c600f3b84df7bc15fa941d6..ae94fd71b8ea8cdbf6fb0420d826ae24c246d43b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
-@@ -168,5 +168,13 @@ public class CraftPersistentDataContainer implements PersistentDataContainer {
- 
-         return this.customDataTags.containsKey(key.toString());
+@@ -189,5 +189,13 @@ public class CraftPersistentDataContainer implements PersistentDataContainer {
+             this.putAll(compound);
+         }
      }
 +
 +    public Map<String, Tag> getTagsCloned() {

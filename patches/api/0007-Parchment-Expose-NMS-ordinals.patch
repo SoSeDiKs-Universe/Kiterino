@@ -5,12 +5,12 @@ Subject: [PATCH] Parchment - Expose NMS ordinals
 
 
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 4fcafddf3792b66c618f91e04d102f374de565a8..6964065d8ef7641203b85a32dde2b86d2f02ee0e 100644
+index 88acc4d2bd56748630840dc9f1c2cb253711eb38..14dbb7b59a253fefd03dfd4a2a1f5a1a38f6679a 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -243,4 +243,13 @@ public interface UnsafeValues {
+@@ -270,4 +270,13 @@ public interface UnsafeValues {
       */
-     boolean isCollidable(@org.jetbrains.annotations.NotNull Material material);
+     void setBiomeKey(RegionAccessor accessor, int x, int y, int z, NamespacedKey biomeKey);
      // Paper end
 +
 +    // Parchment start

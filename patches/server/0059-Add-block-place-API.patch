@@ -5,10 +5,10 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 8978a1422f3c66701ce0fe5063be4118f0ec6e70..5635ef69f2e0e546f0e64a68cc9df9d217cbacdb 100644
+index 4d5001f5290655d343ad7f5f3d0e1a200bdcdbe4..5551cf1927dfcbd4e5bad2c21e78432f588efda9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3035,5 +3035,36 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3095,5 +3095,36 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void showElderGuardian(boolean playSound) {
          getHandle().connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.GUARDIAN_ELDER_EFFECT, playSound ? 1F : 0F));
      }

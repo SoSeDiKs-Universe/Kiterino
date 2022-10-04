@@ -5,18 +5,18 @@ Subject: [PATCH] Campfires store potion effects
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-index fee09e6ff72cf1da389d5811dd005642cd50a5b4..bf88aa71178d9744e9421977f4d0ac16cb51f7ed 100644
+index 4f276b2a86735a2c664738450ae0fbdd82031d4e..611ca71db76bf0c83a74994d84a501cd089580d6 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-@@ -112,6 +112,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -117,6 +117,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
                  } else {
-                     this.applySplash(list, hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null);
+                     this.applySplash(list, hitResult != null && hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null); // Paper - nullable hitResult
                  }
 +                splashCampfires(list); // Kiterino
              }
  
              int i = potionregistry.hasInstantEffects() ? 2007 : 2002;
-@@ -121,6 +122,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -126,6 +127,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
          }
      }
  

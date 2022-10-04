@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a9acec9feef3c5322ce2c312cd8800bcdaca0947..7f106fcfae6375ee7e8913e42edaec3b043d684e 100644
+index a61a0f4f1ce89681336d2ed246e6b616aa6fe73d..8e42c0172df3f1370f2b92c6bf3c95f906e67764 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -9,7 +9,7 @@ plugins {
@@ -15,9 +15,9 @@ index a9acec9feef3c5322ce2c312cd8800bcdaca0947..7f106fcfae6375ee7e8913e42edaec3b
 -    implementation(project(":purpur-api")) // Purpur
 +    implementation(project(":kiterino-api")) // Kiterino
      // Pufferfish start
-     implementation("io.papermc.paper:paper-mojangapi:1.19.2-R0.1-SNAPSHOT") { // Purpur
+     implementation("io.papermc.paper:paper-mojangapi:1.19.2-R0.1-SNAPSHOT") {
          exclude("io.papermc.paper", "paper-api")
-@@ -87,7 +87,7 @@ tasks.jar {
+@@ -86,7 +86,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -49,7 +49,7 @@ index acd95cf1dc7f009b63e44e4404e1736283fd458e..2697535e2cc2e3a5f39d6fd7eae7dc78
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-index 005fdd2e2ebc0b6f7cb06b2efdb705b9ed23a1ea..1b235a2263f39b183012417df5518de98b1b706b 100644
+index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270580f4890 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 +++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 @@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
@@ -62,7 +62,7 @@ index 005fdd2e2ebc0b6f7cb06b2efdb705b9ed23a1ea..1b235a2263f39b183012417df5518de9
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0afdaebb071061bc26ae302bfe0d86149227850c..fa2e1ca411dbe88a648a001f86e929c57c83374d 100644
+index e9c20441e37db68d500c230a4371610f98c69428..1ece7d58a12c410710ab08dd12ae737aebbc5927 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -248,7 +248,7 @@ import javax.annotation.Nullable; // Paper
@@ -88,10 +88,10 @@ index fb87620c742ff7912f5e8ccd2a7930dd605576d9..170682ee941b8e500877922bf13230cd
  
          if (stream != null) {
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index d44b8ce90db7c6c27f71aa841d6fb64b159b7b42..1826d6229264c1e338baad97adaf958e6aae1f01 100644
+index 14844cb8a402ac987f44a91b95d5ebdac73c6dfe..03de5b041e5c0a2812777ad2356a0323d8e2125c 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -235,7 +235,7 @@ public class PurpurConfig {
+@@ -244,7 +244,7 @@ public class PurpurConfig {
          if (!TimingsManager.hiddenConfigs.contains("settings.seed")) TimingsManager.hiddenConfigs.add("settings.seed");
      }
  

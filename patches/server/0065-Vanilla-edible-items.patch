@@ -5,7 +5,7 @@ Subject: [PATCH] Vanilla edible items
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..49b5ef99ff429ec5cc2ed8cb27d84bf4c7e8943a 100644
+index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..3463db3a30cc7a2449fd7e76b723c257b30c9572 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
 @@ -66,7 +66,7 @@ public class Item implements ItemLike {
@@ -17,8 +17,8 @@ index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..49b5ef99ff429ec5cc2ed8cb27d84bf4
  
      public static int getId(Item item) {
          return item == null ? 0 : Registry.ITEM.getId(item);
-@@ -364,6 +364,12 @@ public class Item implements ItemLike {
-         return this.foodProperties;
+@@ -368,6 +368,13 @@ public class Item implements ItemLike {
+         return SoundEvents.GENERIC_DRINK;
      }
  
 +    // Kiterino start
@@ -27,14 +27,15 @@ index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..49b5ef99ff429ec5cc2ed8cb27d84bf4
 +    }
 +    // Kiterino end
 +
-     public SoundEvent getDrinkingSound() {
-         return SoundEvents.GENERIC_DRINK;
++
+     public SoundEvent getEatingSound() {
+         return SoundEvents.GENERIC_EAT;
      }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index fe28f8263a27ad432a08576c8b8f9662a32196f8..dd9d9558d3f62e37c3e788c36282dfa851eb2a61 100644
+index 9306bc1496db04c2558d2a6754030bbb411c01c9..d32a1e171733903b0f6bf1f1b853fc4c17020614 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -468,12 +468,23 @@ public class PurpurConfig {
+@@ -524,12 +524,23 @@ public class PurpurConfig {
              return;
          }
          properties.getKeys(false).forEach(foodKey -> {
@@ -63,11 +64,11 @@ index fe28f8263a27ad432a08576c8b8f9662a32196f8..dd9d9558d3f62e37c3e788c36282dfa8
              food.setNutrition(properties.getInt(foodKey + ".nutrition", foodDefaults.getNutrition()));
              food.setSaturationModifier((float) properties.getDouble(foodKey + ".saturation-modifier", foodDefaults.getSaturationModifier()));
              food.setIsMeat(properties.getBoolean(foodKey + ".is-meat", foodDefaults.isMeat()));
-@@ -510,6 +521,7 @@ public class PurpurConfig {
+@@ -566,6 +577,7 @@ public class PurpurConfig {
                      food.getEffects().add(Pair.of(new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon), chance));
                  });
              }
 +            if (material != null) org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftCopy(new org.bukkit.inventory.ItemStack(material)).handle.getItem().setFoodProperties(food); // Kiterino
          });
      }
- }
+ 

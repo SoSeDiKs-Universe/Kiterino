@@ -5,10 +5,10 @@ Subject: [PATCH] Custom Crossbow-based items
 
 
 diff --git a/src/main/java/net/minecraft/world/item/CrossbowItem.java b/src/main/java/net/minecraft/world/item/CrossbowItem.java
-index 2d30300de78de957358cfddac12294b308062e2a..f7b948e2369e4a5db1d35fb4ae1a73cba5c7174e 100644
+index 37cbd0d95f3232ed399c6ef19f714c547b9fd8e5..91e827fcc6cbd49d5738f9005502beb006787c7f 100644
 --- a/src/main/java/net/minecraft/world/item/CrossbowItem.java
 +++ b/src/main/java/net/minecraft/world/item/CrossbowItem.java
-@@ -358,6 +358,22 @@ public class CrossbowItem extends ProjectileWeaponItem implements Vanishable {
+@@ -366,6 +366,22 @@ public class CrossbowItem extends ProjectileWeaponItem implements Vanishable {
                  this.midLoadSoundPlayed = false;
              }
  

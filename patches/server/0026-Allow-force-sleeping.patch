@@ -18,10 +18,10 @@ index 027ca5b67c544048815ddef4bb36d0a8fc3d038c..d09b088ff7a618d9bc360a73df759af0
                  }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 929f17b4e34ff3217a381075853e8e232dfd3bf9..f48bd42b91772f3cbf474d63d6b5e19b159a0f1f 100644
+index 0aa245ed6f64081182d5b776cfee6b99488a67b2..8fba0ffb8e44d41e5d62887ae0426b79d5d3dc33 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3030,7 +3030,7 @@ public abstract class LivingEntity extends Entity {
+@@ -3052,7 +3052,7 @@ public abstract class LivingEntity extends Entity {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -57,10 +57,10 @@ index 929f17b4e34ff3217a381075853e8e232dfd3bf9..f48bd42b91772f3cbf474d63d6b5e19b
              return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index f3839c16815b50dfce41c31bc6992dcbbd6759a5..938554eda97963242adb8d1f3dbefd337d65bfa5 100644
+index c44f3b9cc34a545da60f772567b72f1fba4648d5..5e17a7eebf2fd4470c3a65cbb2e05131a0769ebc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1289,7 +1289,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1329,7 +1329,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          if (dismount) entity.stopRiding(); // Paper - Teleport API
  
          // SPIGOT-5509: Wakeup, similar to riding
@@ -69,8 +69,8 @@ index f3839c16815b50dfce41c31bc6992dcbbd6759a5..938554eda97963242adb8d1f3dbefd33
              this.wakeup(false);
          }
  
-@@ -3023,4 +3023,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
-         this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket(ClientboundCustomPayloadPacket.DEBUG_GAME_TEST_CLEAR, new FriendlyByteBuf(io.netty.buffer.Unpooled.buffer())));
+@@ -3083,4 +3083,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         this.getHandle().connection.send(packet);
      }
      // Purpur end
 +

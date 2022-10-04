@@ -5,10 +5,10 @@ Subject: [PATCH] Flammable cobwebs
 
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 08830e1a143e14ed3da165d3bcf5a8301374ffd9..067005a9f6f85f6d8807d9570145f4ece766812a 100644
+index 5e59be9351f5ac95999e018f9fc9587a02247003..a3d4feb26c0213c1c4e72e6b6227f3d2d1696865 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -6689,6 +6689,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+@@ -6690,6 +6690,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
              case CAMPFIRE:
              case CARTOGRAPHY_TABLE:
              case CHEST:
@@ -16,7 +16,7 @@ index 08830e1a143e14ed3da165d3bcf5a8301374ffd9..067005a9f6f85f6d8807d9570145f4ec
              case COMPOSTER:
              case CRAFTING_TABLE:
              case CYAN_BANNER:
-@@ -6971,6 +6972,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
+@@ -6972,6 +6973,7 @@ public enum Material implements Keyed, net.kyori.adventure.translation.Translata
              case CAVE_VINES:
              case CAVE_VINES_PLANT:
              case COAL_BLOCK:

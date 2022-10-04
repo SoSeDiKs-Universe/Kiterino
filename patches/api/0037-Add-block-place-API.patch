@@ -5,10 +5,10 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index a22e111ddcd400aa8a1b6b2e07319d3b21563c68..98988ac7b37707a2f9d66975b31218679cd53145 100644
+index cfa47c53a3ca71e14012ada54d0bff7a662b09ec..b670333c37a6df86fbc63857fd25fb6834342b39 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2953,5 +2953,53 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3012,5 +3012,53 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * @param playSound whether sound should be played
       */
      void showElderGuardian(boolean playSound);

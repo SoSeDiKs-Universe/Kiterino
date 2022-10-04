@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 6c46107e13a5fd648d64844ffa5b326d4909d702..09ed6e3c8abfc3118260b268e61604aa9ad6c26a 100644
+index 4a4606f2598b868e43c270cd3056d44549bc914e..a5c4ad214573c16d52d116c7ca0953108b6212ee 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -908,6 +908,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -985,6 +985,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       * @param hurtDirection hurt direction
       */
      void setHurtDirection(float hurtDirection);

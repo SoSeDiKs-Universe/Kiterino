@@ -5,10 +5,10 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 3c01361e731e48674c2bc478c98ba2f9dccd1961..1a43bb7a03b6f88c0ccf8cd6ef1f44a607f41643 100644
+index 540ce36dc73e81f8a400f2147ce90c3a7460849e..43fac3f94978032f33fa711ec17e4c9ad6467991 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -635,8 +635,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -670,8 +670,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  if (!event.isCancelled()) {
                      this.setDayTime(this.getDayTime() + event.getSkipAmount());
                  }
@@ -28,7 +28,7 @@ index 3c01361e731e48674c2bc478c98ba2f9dccd1961..1a43bb7a03b6f88c0ccf8cd6ef1f44a6
              if (!event.isCancelled()) {
                  this.wakeUpAllPlayers();
              }
-@@ -644,6 +655,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -679,6 +690,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && this.isRaining()) {
                  this.resetWeatherCycle();
              }
@@ -37,10 +37,10 @@ index 3c01361e731e48674c2bc478c98ba2f9dccd1961..1a43bb7a03b6f88c0ccf8cd6ef1f44a6
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 1013618b91df8b2bdf2aa3f5f9f91f0af5a8a7f0..b35f5bcc681497d3f8590baf166c4d93a1d88521 100644
+index 12637019da44019475042e4cf88d3e0ebd0fd068..9bab7ed78d089d02f9b8bcd607cc7d357f67babc 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1333,6 +1333,7 @@ public class ServerPlayer extends Player {
+@@ -1322,6 +1322,7 @@ public class ServerPlayer extends Player {
                  return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
              } else {
                  this.setRespawnPosition(this.level.dimension(), blockposition, this.getYRot(), false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - PlayerSetSpawnEvent

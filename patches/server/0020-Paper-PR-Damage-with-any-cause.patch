@@ -202,10 +202,10 @@ index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547d
 +    // Paper - end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e81138803fc6dbdaeff02480a1993b644420daeb..de26614fd447375860f8b5f9b91c5cfae963f191 100644
+index 310b79da23dc564a4e04353ef29610605d17bf50..e521172949a84bbd8a914a372b3fb2b5dd9d3c52 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1997,7 +1997,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2012,7 +2012,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          this.hurtMarked = true;
      }
  
@@ -237,10 +237,10 @@ index a407e802164603c74ec1f4ad3c98bc50398954bc..03ab833ede5ba4622752e5c4f241d0bd
      public double getHealth() {
          return this.getParent().getHealth();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 3b088100dfd1f97177d6f67254bbcb7bb741b66f..ee783331c65cd0a27ea8f1a397b62d9697bae1c3 100644
+index 4e26fb4ef3f32321d9d7370de7472a6715806621..20bbeba09f311f027eb06cf95fbcad95020e1371 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -345,7 +345,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -347,7 +347,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      // Paper End - Bee Stinger API
      @Override
      public void damage(double amount) {
@@ -249,7 +249,7 @@ index 3b088100dfd1f97177d6f67254bbcb7bb741b66f..ee783331c65cd0a27ea8f1a397b62d96
      }
  
      @Override
-@@ -363,6 +363,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -365,6 +365,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          entity.hurt(reason, (float) amount);
      }
  

@@ -5,7 +5,7 @@ Subject: [PATCH] Parchment - Expose EntityType Ordinals
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 86fa3f03e72b0c656ed86cae9ee64feb3f77fb3d..9dfbcbffe12fdb9b9e08ca82fb73455aaee25dd7 100644
+index ae3910f765f6fccf6045b2acb97083dbaedc297f..8d8ace17f3fe7023b094d7757b9b41008205b516 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -154,6 +154,8 @@ import org.slf4j.Logger;
@@ -51,10 +51,10 @@ index 86fa3f03e72b0c656ed86cae9ee64feb3f77fb3d..9dfbcbffe12fdb9b9e08ca82fb73455a
      public static EntityType<?> getFromBukkitType(org.bukkit.entity.EntityType bukkitType) {
          return getFromKey(new ResourceLocation(bukkitType.getKey().toString()));
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index eccc90a3925b7f96f929fa0aa07af8b229ed1639..25c261e226dcf4c52da82aa41ce8150a8da04698 100644
+index 572d363b191b6528c9b8de366f11f3f540c09397..cb27f34cc813faa43d751d9e07b71ec95382c5fd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -608,6 +608,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -621,6 +621,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
      }
      // Paper end
  

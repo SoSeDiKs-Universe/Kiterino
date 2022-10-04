@@ -5,10 +5,10 @@ Subject: [PATCH] Deny stacking potions in brewing stand
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index bc7fd6480e784c43e236bfbbe7a60d8eb204c127..44ce1b15071cf8c99eefcd469139301f626c4a7d 100644
+index b20ae30295733304976a2106fcfd9ad08e2be1d8..2c1b6a31c9e7c9090a3f1117ec86c8a302eb9eaf 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-@@ -768,6 +768,11 @@ public abstract class AbstractContainerMenu {
+@@ -767,6 +767,11 @@ public abstract class AbstractContainerMenu {
          return this.moveItemStackTo(stack, startIndex, endIndex, fromLast, false);
      }
      protected boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean fromLast, boolean isCheck) {
@@ -20,7 +20,7 @@ index bc7fd6480e784c43e236bfbbe7a60d8eb204c127..44ce1b15071cf8c99eefcd469139301f
          if (isCheck) {
              stack = stack.copy();
          }
-@@ -782,7 +787,7 @@ public abstract class AbstractContainerMenu {
+@@ -781,7 +786,7 @@ public abstract class AbstractContainerMenu {
          Slot slot;
          ItemStack itemstack1;
  

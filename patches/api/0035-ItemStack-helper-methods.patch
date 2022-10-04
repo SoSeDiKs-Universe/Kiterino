@@ -5,11 +5,11 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index c10244e984afec20ecfdb0056a99e39d9d7a26ea..67f084898e39378f79ec2b784392cf3ab31c92c0 100644
+index 8663a2e8bcea33a6cbaee89d10c5b0c6456171e2..1ed1886fd85fc7b678465cae0858fdac903a8f23 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1673,4 +1673,48 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
-         setItemMeta(nbtItem.getItemMeta());
+         return getNBT(directApply).getOrCreateCompound(Bukkit.getName());
      }
      // Kiterino end
 +
@@ -27,7 +27,7 @@ index c10244e984afec20ecfdb0056a99e39d9d7a26ea..67f084898e39378f79ec2b784392cf3a
 +    }
 +
 +    /**
-+     * Checks whether this item has Kiterino Id tag.
++     * Checks whether this item has Kiterino ID tag.
 +     *
 +     * @return true if item has Kiterino tag
 +     */

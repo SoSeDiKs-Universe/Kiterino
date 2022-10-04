@@ -5,10 +5,10 @@ Subject: [PATCH] Add extra swing method
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 09ed6e3c8abfc3118260b268e61604aa9ad6c26a..b86a6b521aefd94f1e2a25ca19303f1c6b51b50b 100644
+index a5c4ad214573c16d52d116c7ca0953108b6212ee..90cc4cae3ef7f5b23a0eebb035a2921dcdf79b5c 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -984,4 +984,19 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1061,4 +1061,19 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);
      // Purpur end

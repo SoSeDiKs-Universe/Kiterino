@@ -5,13 +5,13 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index fc4c5a323faa4f9be55fa278af4c33ce7dedc4f4..89fd95001f680bde150339a89356a2d33c474609 100644
+index dd6db7819af5c4c8b3508cc63229035a727eccfe..8ef807d85b9ab3d213a384dd21d1dc2bfa8119c0 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -779,4 +779,20 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
-      * @param location where to set the last death player location
+@@ -793,4 +793,20 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
       */
-     public void setLastDeathLocation(@Nullable Location location);
+     @Nullable
+     public Firework fireworkBoost(@NotNull ItemStack fireworkItemStack);
 +
 +    // Kiterino start
 +    /**
