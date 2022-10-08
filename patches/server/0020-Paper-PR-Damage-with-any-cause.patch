@@ -268,10 +268,10 @@ index 4e26fb4ef3f32321d9d7370de7472a6715806621..20bbeba09f311f027eb06cf95fbcad95
      public Location getEyeLocation() {
          Location loc = getLocation();
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index f04f8af34c91638b2f8c51fa50475aee0618f9a4..4079413e745534067936c7c871e458d49e7f9062 100644
+index 22757915894c49025389fbd19e2622d021c04120..6fe607e60e760311e2e57e70300d497953f0125b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -983,9 +983,12 @@ public class CraftEventFactory {
+@@ -973,9 +973,12 @@ public class CraftEventFactory {
      }
  
      private static EntityDamageEvent handleEntityDamageEvent(Entity entity, DamageSource source, Map<DamageModifier, Double> modifiers, Map<DamageModifier, Function<? super Double, Double>> modifierFunctions, boolean cancelled) {
@@ -285,7 +285,7 @@ index f04f8af34c91638b2f8c51fa50475aee0618f9a4..4079413e745534067936c7c871e458d4
              CraftEventFactory.entityDamage = null;
              EntityDamageEvent event;
              if (damager == null) {
-@@ -1012,7 +1015,7 @@ public class CraftEventFactory {
+@@ -1002,7 +1005,7 @@ public class CraftEventFactory {
              }
              return event;
          } else if (source instanceof EntityDamageSource) {
@@ -294,7 +294,7 @@ index f04f8af34c91638b2f8c51fa50475aee0618f9a4..4079413e745534067936c7c871e458d4
              DamageCause cause = (source.isSweep()) ? DamageCause.ENTITY_SWEEP_ATTACK : DamageCause.ENTITY_ATTACK;
  
              if (source instanceof IndirectEntityDamageSource) {
-@@ -1030,7 +1033,7 @@ public class CraftEventFactory {
+@@ -1020,7 +1023,7 @@ public class CraftEventFactory {
  
              return CraftEventFactory.callEntityDamageEvent(damager, entity, cause, modifiers, modifierFunctions, cancelled, source.isCritical()); // Paper - add critical damage API
          } else if (source == DamageSource.OUT_OF_WORLD) {
@@ -303,7 +303,7 @@ index f04f8af34c91638b2f8c51fa50475aee0618f9a4..4079413e745534067936c7c871e458d4
              event.setCancelled(cancelled);
              CraftEventFactory.callEvent(event);
              if (!event.isCancelled()) {
-@@ -1040,13 +1043,13 @@ public class CraftEventFactory {
+@@ -1030,13 +1033,13 @@ public class CraftEventFactory {
              }
              return event;
          } else if (source == DamageSource.LAVA) {
@@ -320,7 +320,7 @@ index f04f8af34c91638b2f8c51fa50475aee0618f9a4..4079413e745534067936c7c871e458d4
  
              if (!event.isCancelled()) {
                  event.getEntity().setLastDamageCause(event);
-@@ -1056,7 +1059,7 @@ public class CraftEventFactory {
+@@ -1046,7 +1049,7 @@ public class CraftEventFactory {
              return event;
          } else if (CraftEventFactory.blockDamage != null) {
              DamageCause cause = null;
@@ -329,7 +329,7 @@ index f04f8af34c91638b2f8c51fa50475aee0618f9a4..4079413e745534067936c7c871e458d4
              if (source == DamageSource.CACTUS || source == DamageSource.SWEET_BERRY_BUSH || source == DamageSource.STALAGMITE || source == DamageSource.FALLING_STALACTITE || source == DamageSource.ANVIL) {
                  cause = DamageCause.CONTACT;
              } else if (source == DamageSource.HOT_FLOOR) {
-@@ -1072,84 +1075,21 @@ public class CraftEventFactory {
+@@ -1062,84 +1065,21 @@ public class CraftEventFactory {
              } else {
                  throw new IllegalStateException(String.format("Unhandled damage of %s by %s from %s", entity, damager, source.msgId));
              }
