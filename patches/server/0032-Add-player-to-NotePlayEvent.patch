@@ -27,10 +27,10 @@ index 443bf39734ba2b0a7cdf0362d415ff176b2e8c85..da181d65a146abd757e6c5dfb430550d
          int k = event.getNote().getId();
          float f = (float) Math.pow(2.0D, (double) (k - 12) / 12.0D);
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 64d6dce0542adcf81be95c2c06dbcf5b1316b345..9f4b18d4ae262762734fa011b9796117b5b30c47 100644
+index 44bb816a12996438da862508666c3d4f7a87709a..f28039de0b836998af9c3b572e65172bab85c813 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1412,7 +1412,12 @@ public class CraftEventFactory {
+@@ -1423,7 +1423,12 @@ public class CraftEventFactory {
      }
  
      public static NotePlayEvent callNotePlayEvent(Level world, BlockPos pos, NoteBlockInstrument instrument, int note) {
