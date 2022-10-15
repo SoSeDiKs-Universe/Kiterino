@@ -1,0 +1,66 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 11 Oct 2022 14:28:39 +0300
+Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
+index 4c2351b03b58511b80017b58ee9b20ab5193adc9..557ca09727948875459a7925864d85aa45f53a25 100644
+--- a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
++++ b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
+@@ -74,13 +74,24 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
+ 
+     @SuppressWarnings("deprecation")
+     public static void processRequest(MinecraftServer server, Connection networkManager) {
++        ServerStatus ping = getEventResponse(server, networkManager);
++
++        if (ping == null) {
++            networkManager.disconnect(null);
++            return;
++        }
++
++        // Send response
++        networkManager.send(new ClientboundStatusResponsePacket(ping));
++    }
++
++    public static ServerStatus getEventResponse(MinecraftServer server, Connection networkManager) {
+         StandardPaperServerListPingEventImpl event = new StandardPaperServerListPingEventImpl(server, networkManager, server.getStatus());
+         server.server.getPluginManager().callEvent(event);
+ 
+         // Close connection immediately if event is cancelled
+         if (event.isCancelled()) {
+-            networkManager.disconnect(null);
+-            return;
++            return null;
+         }
+ 
+         // Setup response
+@@ -103,8 +114,7 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
+             ping.setFavicon(event.getServerIcon().getData());
+         }
+ 
+-        // Send response
+-        networkManager.send(new ClientboundStatusResponsePacket(ping));
++        return ping;
+     }
+ 
+ }
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 3fb2323c89d04f1a545897a1e67f6f637f5ab9c1..46471e2dbab093b7dbe2afcf1f40bdab9a808ea9 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -418,7 +418,13 @@ public abstract class PlayerList {
+         this.server.getServerResourcePack().ifPresent((minecraftserver_serverresourcepackinfo) -> {
+             player.sendTexturePack(minecraftserver_serverresourcepackinfo.url(), minecraftserver_serverresourcepackinfo.hash(), minecraftserver_serverresourcepackinfo.isRequired(), minecraftserver_serverresourcepackinfo.prompt());
+         });
+-        player.sendServerStatus(this.server.getStatus());
++        // Paper start - fire ServerListPingEvent
++        net.minecraft.server.MCUtil.scheduleAsyncTask(() -> {
++            if (player.hasDisconnected()) return;
++            net.minecraft.network.protocol.status.ServerStatus status = com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl.getEventResponse(this.server, player.networkManager);
++            if (status != null) player.sendServerStatus(status);
++        });
++        // Paper end
+         Iterator iterator = player.getActiveEffects().iterator();
+ 
+         while (iterator.hasNext()) {
