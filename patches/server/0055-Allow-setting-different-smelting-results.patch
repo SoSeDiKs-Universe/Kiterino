@@ -5,7 +5,7 @@ Subject: [PATCH] Allow setting different smelting results
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index e1abe61edfaa7b1497b5367310b49146f10fa139..f8267630134f5a48d04e013b89b550945d860de4 100644
+index 8bc29f442d855606f5367d8b7a1ed5a2361ea84f..f2d1613d497b58f86dabdb4ffa0bcc4818b11494 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 @@ -486,6 +486,7 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit

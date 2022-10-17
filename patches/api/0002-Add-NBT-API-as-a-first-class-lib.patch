@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index da7ee9a8748737a2041c3a5aa6e69de48e77485c..d3ae1a36799ebddad68a1033086b6185dfb319ff 100644
+index 8e64ccdb928bc38cb703e60c8ec31339a6f6d894..c977946c32fe324adb3bffb949711641589419ec 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
@@ -91,10 +91,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index be7ad89699619aba9df4699403c9a70fd2bc9da1..05ef29a827558d3a1b6d75c7cb9f42439d982613 100644
+index 28be71aa677ed8cb9a9d06b3aba7af40f0992f68..251ddb4dc7c82bee9d630b9acfb16a285ccc6450 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -984,4 +984,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -989,4 +989,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      boolean isInDaylight();
      // Purpur end

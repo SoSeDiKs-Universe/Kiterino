@@ -781,10 +781,10 @@ index ee8f6838d774fd316178a10db5101102963c1847..8e1a295ea7b70c62843ec8b23a3fffef
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index efd84a22bc063fe6266be876a38186c08296caa2..310b79da23dc564a4e04353ef29610605d17bf50 100644
+index bef8f4d080fb6067f87b9df986ac33f7003c2a84..8483d15b3e6928a7447ee6fea7759a80075ba94b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -333,7 +333,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -332,7 +332,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -793,7 +793,7 @@ index efd84a22bc063fe6266be876a38186c08296caa2..310b79da23dc564a4e04353ef2961060
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -342,11 +342,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -341,11 +341,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -809,7 +809,7 @@ index efd84a22bc063fe6266be876a38186c08296caa2..310b79da23dc564a4e04353ef2961060
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 9dca0d694aa8fa7f8bec0d2504986085e0cc6fe9..90c136c7971f1b6344b5c750544bc78c3887fc00 100644
+index 1fc877194950ee754e9ffdbe3ff9b80bb316560f..b37ae6e9e737d76523080044c11f5f357b07a203 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity {

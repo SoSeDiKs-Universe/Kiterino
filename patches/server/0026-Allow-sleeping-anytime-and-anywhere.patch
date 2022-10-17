@@ -5,7 +5,7 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 540ce36dc73e81f8a400f2147ce90c3a7460849e..43fac3f94978032f33fa711ec17e4c9ad6467991 100644
+index eff24c121471172fe3d3cd1f6765deac0e10551f..cc0015d2c2211d11b7f94b7b20f09ccb01699362 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -670,8 +670,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -37,10 +37,10 @@ index 540ce36dc73e81f8a400f2147ce90c3a7460849e..43fac3f94978032f33fa711ec17e4c9a
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 12637019da44019475042e4cf88d3e0ebd0fd068..9bab7ed78d089d02f9b8bcd607cc7d357f67babc 100644
+index 43be9e2af0711773103af63eb4e15572e5fee39b..757e097125c869c24fe89f9d05be587838d5cc17 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1322,6 +1322,7 @@ public class ServerPlayer extends Player {
+@@ -1341,6 +1341,7 @@ public class ServerPlayer extends Player {
                  return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
              } else {
                  this.setRespawnPosition(this.level.dimension(), blockposition, this.getYRot(), false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - PlayerSetSpawnEvent
@@ -49,7 +49,7 @@ index 12637019da44019475042e4cf88d3e0ebd0fd068..9bab7ed78d089d02f9b8bcd607cc7d35
                      return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
                  } else {
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 64ca2c92c4908bbb0272d1c22870af68aa9daad2..a6817872574afede2757151f45200946b9a5e58e 100644
+index e87a436711e179a4384630de41188c09a75a7f0d..68794d2fea0ba5bf21032d7e766ea6c257890a20 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -294,7 +294,7 @@ public abstract class Player extends LivingEntity {

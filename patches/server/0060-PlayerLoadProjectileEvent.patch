@@ -5,7 +5,7 @@ Subject: [PATCH] PlayerLoadProjectileEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 6426bee4f56b318bf81e2743da1424f35ec2ffa7..3bc23cdca655660be94446960e9781ca1900600d 100644
+index 0bd15aa833f8e02964b48bd3d22d3f75ab29dae9..d92ecc24fac9c5b9ae8904acd25bcb4f42167402 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -2363,7 +2363,7 @@ public abstract class Player extends LivingEntity {

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index ee86564be4c6d85195317b5f4c3b0bf0c5a256be..f5e6974cfd3ad12a99189d314d7e124edeafbb56 100644
+index f5821755303fe6c95c89f5cccbb09e95c8050ef1..fb12d74a4bd6634c5b518433d90291cb37b44501 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -2990,4 +2990,11 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3008,4 +3008,11 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       */
      void sendDeathScreen(@NotNull Component message, @Nullable Entity killer);
      // Purpur end

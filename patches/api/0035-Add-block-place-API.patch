@@ -5,13 +5,13 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index cfa47c53a3ca71e14012ada54d0bff7a662b09ec..b670333c37a6df86fbc63857fd25fb6834342b39 100644
+index fb12d74a4bd6634c5b518433d90291cb37b44501..21386507ebf366d667674e94101da1b19c4f3ec3 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3012,5 +3012,53 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
-      * @param playSound whether sound should be played
+@@ -3014,5 +3014,53 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      * Forces player to sleep
       */
-     void showElderGuardian(boolean playSound);
+     void forceSleep();
 +
 +    /**
 +     * Place block as if this player placed it

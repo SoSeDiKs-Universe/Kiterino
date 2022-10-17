@@ -202,10 +202,10 @@ index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547d
 +    // Paper - end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index d4e9b9712fa6d629d1f383ddc44e246ec2c2bb82..ebf25801ddd5b17c449656b43a999616a6682278 100644
+index 8483d15b3e6928a7447ee6fea7759a80075ba94b..9b9dfa0998200042a5d56cc843f89962f8a60edf 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2013,7 +2013,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2011,7 +2011,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          this.hurtMarked = true;
      }
  

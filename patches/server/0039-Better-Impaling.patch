@@ -5,7 +5,7 @@ Subject: [PATCH] Better Impaling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index ec4f04327eb875989af4d7da0171e2000fadef6b..f9e06b09e1829b51ee56480a40eaafcbbb67df3b 100644
+index d5e3bd662da349fc2ee58c7800d79c60300f33b3..f087f6665f2a4a652dc4d095ea508edb456f5e14 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1634,6 +1634,12 @@ public abstract class Mob extends LivingEntity {
@@ -22,7 +22,7 @@ index ec4f04327eb875989af4d7da0171e2000fadef6b..f9e06b09e1829b51ee56480a40eaafcb
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index a6817872574afede2757151f45200946b9a5e58e..6426bee4f56b318bf81e2743da1424f35ec2ffa7 100644
+index 68794d2fea0ba5bf21032d7e766ea6c257890a20..0bd15aa833f8e02964b48bd3d22d3f75ab29dae9 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -1299,6 +1299,12 @@ public abstract class Player extends LivingEntity {
@@ -39,7 +39,7 @@ index a6817872574afede2757151f45200946b9a5e58e..6426bee4f56b318bf81e2743da1424f3
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), MobType.UNDEFINED);
                  }
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
-index 5be708a76642d4133757c5d181b3c5412aa799ae..295f154474c0ef895bc52673ba21cedbca8c6c07 100644
+index d49d66e28e757ba126aa84355fc56d92b53cd509..2f714caa146294fc92bcf6c0e9016ddde96e205e 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
 @@ -134,6 +134,12 @@ public class ThrownTrident extends AbstractArrow {
