@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 26 May 2022 03:30:05 +0300
+Subject: [PATCH] Paper PR - Deep clone unhandled nbt tags inside
+ CraftMetaItem's constuctor
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+index 3c4dadd0012c11191c873fe25a7625193563915d..2099a2cb1d87d2529c42481a011440e98dcf5096 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+@@ -341,7 +341,7 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+             this.destroyableKeys = new java.util.HashSet<>(meta.destroyableKeys);
+         }
+         // Paper end
+-        this.unhandledTags.putAll(meta.unhandledTags);
++        meta.unhandledTags.forEach((key, tag) -> this.unhandledTags.put(key, tag.copy())); // Paper - Deep clone unhandled nbt tags
+         this.persistentDataContainer.putAll(meta.persistentDataContainer.getRaw());
+ 
+         this.internalTag = meta.internalTag;
