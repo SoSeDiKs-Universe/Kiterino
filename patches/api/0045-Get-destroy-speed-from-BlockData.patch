@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 24 Oct 2022 18:51:56 +0300
+Subject: [PATCH] Get destroy speed from BlockData
+
+
+diff --git a/src/main/java/org/bukkit/block/data/BlockData.java b/src/main/java/org/bukkit/block/data/BlockData.java
+index b166d053b3c44f06cb1f5b643e7f7e117eb21d17..3940fe0b0743e178595cd1cd390b8c4757cf87c0 100644
+--- a/src/main/java/org/bukkit/block/data/BlockData.java
++++ b/src/main/java/org/bukkit/block/data/BlockData.java
+@@ -172,4 +172,28 @@ public interface BlockData extends Cloneable {
+      */
+     boolean isPreferredTool(@NotNull org.bukkit.inventory.ItemStack tool);
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Gets the speed at which this block will be destroyed by a given {@link org.bukkit.inventory.ItemStack}
++     * <p>Default value is 1.0
++     *
++     * @param item {@link org.bukkit.inventory.ItemStack} used to mine this Block
++     * @see #getDestroySpeed(org.bukkit.inventory.ItemStack, boolean)
++     * @return the speed that this Block will be mined by the given {@link org.bukkit.inventory.ItemStack}
++     */
++    default float getDestroySpeed(@NotNull org.bukkit.inventory.ItemStack item) {
++        return getDestroySpeed(item, false);
++    }
++
++    /**
++     * Gets the speed at which this block will be destroyed by a given {@link org.bukkit.inventory.ItemStack}
++     * <p>Default value is 1.0
++     *
++     * @param item {@link org.bukkit.inventory.ItemStack} used to mine this Block
++     * @param considerEnchants true to look at enchants on the item
++     * @return the speed that this Block will be mined by the given {@link org.bukkit.inventory.ItemStack}
++     */
++    float getDestroySpeed(@NotNull org.bukkit.inventory.ItemStack item, boolean considerEnchants);
++    // Kiterino end
+ }
