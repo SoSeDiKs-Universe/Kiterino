@@ -6,20 +6,20 @@ Subject: [PATCH] Trigger PlayerInventorySlotChangeEvent upon changing player's
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 757e097125c869c24fe89f9d05be587838d5cc17..6b41c5fdc9aa54527579fa0ad2946cb5ecc26de8 100644
+index a262cfe9ba4b36036e04d5d5bab7d864d7407a20..0c807575ed0a059eb3e1d79b1228db1396ae93fc 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -333,7 +333,7 @@ public class ServerPlayer extends Player {
                              CriteriaTriggers.INVENTORY_CHANGED.trigger(ServerPlayer.this, ServerPlayer.this.getInventory(), stack);
                              return;
                          }
--                        com.destroystokyo.paper.event.player.PlayerInventorySlotChangeEvent event = new com.destroystokyo.paper.event.player.PlayerInventorySlotChangeEvent(ServerPlayer.this.getBukkitEntity(), slotId, CraftItemStack.asBukkitCopy(oldStack), CraftItemStack.asBukkitCopy(stack));
-+                        com.destroystokyo.paper.event.player.PlayerInventorySlotChangeEvent event = new com.destroystokyo.paper.event.player.PlayerInventorySlotChangeEvent(ServerPlayer.this.getBukkitEntity(), slotId, CraftItemStack.asBukkitCopy(oldStack), CraftItemStack.asCraftMirror(stack)); // Kiterino - mirror to allow live changes
+-                        io.papermc.paper.event.player.PlayerInventorySlotChangeEvent event = new io.papermc.paper.event.player.PlayerInventorySlotChangeEvent(ServerPlayer.this.getBukkitEntity(), slotId, CraftItemStack.asBukkitCopy(oldStack), CraftItemStack.asBukkitCopy(stack));
++                        io.papermc.paper.event.player.PlayerInventorySlotChangeEvent event = new io.papermc.paper.event.player.PlayerInventorySlotChangeEvent(ServerPlayer.this.getBukkitEntity(), slotId, CraftItemStack.asBukkitCopy(oldStack), CraftItemStack.asCraftMirror(stack)); // Kiterino - mirror to allow live changes
                          event.callEvent();
-                         if (event.isTriggerAdvancements()) {
+                         if (event.shouldTriggerAdvancements()) {
                              CriteriaTriggers.INVENTORY_CHANGED.trigger(ServerPlayer.this, ServerPlayer.this.getInventory(), stack);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 1b925ae42608bceddfe9c536146c211d3f37a8c2..683b56014e0992eb57894465543e4677c7615df7 100644
+index 1b925ae42608bceddfe9c536146c211d3f37a8c2..d425464ef0f5b7f1effa6d43ee69a5612aea4af7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -118,11 +118,21 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
@@ -34,9 +34,9 @@ index 1b925ae42608bceddfe9c536146c211d3f37a8c2..683b56014e0992eb57894465543e4677
          }
 +        // Kiterino start
 +        if (this instanceof CraftPlayer player) {
-+            var event = new com.destroystokyo.paper.event.player.PlayerInventorySlotChangeEvent(player, -1, oldStack, CraftItemStack.asCraftMirror(stack));
++            var event = new io.papermc.paper.event.player.PlayerInventorySlotChangeEvent(player, -1, oldStack, CraftItemStack.asCraftMirror(stack));
 +            event.callEvent();
-+            if (event.isTriggerAdvancements()) {
++            if (event.shouldTriggerAdvancements()) {
 +                net.minecraft.advancements.CriteriaTriggers.INVENTORY_CHANGED.trigger(player.getHandle(), player.getHandle().getInventory(), stack);
 +            }
 +        }

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index eff24c121471172fe3d3cd1f6765deac0e10551f..cc0015d2c2211d11b7f94b7b20f09ccb01699362 100644
+index 61f00f57ebdbd28b2710ab26e5cbfd3bd79cd444..8c617ca2e3393329392f5a1df33b30eaff2e89de 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -670,8 +670,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -672,8 +672,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  if (!event.isCancelled()) {
                      this.setDayTime(this.getDayTime() + event.getSkipAmount());
                  }
@@ -28,7 +28,7 @@ index eff24c121471172fe3d3cd1f6765deac0e10551f..cc0015d2c2211d11b7f94b7b20f09ccb
              if (!event.isCancelled()) {
                  this.wakeUpAllPlayers();
              }
-@@ -679,6 +690,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -681,6 +692,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && this.isRaining()) {
                  this.resetWeatherCycle();
              }
@@ -37,7 +37,7 @@ index eff24c121471172fe3d3cd1f6765deac0e10551f..cc0015d2c2211d11b7f94b7b20f09ccb
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 43be9e2af0711773103af63eb4e15572e5fee39b..757e097125c869c24fe89f9d05be587838d5cc17 100644
+index 3740433ae55435252953490b85e4cea8b4f780ea..a262cfe9ba4b36036e04d5d5bab7d864d7407a20 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1341,6 +1341,7 @@ public class ServerPlayer extends Player {

@@ -59,7 +59,7 @@ index 3fb2323c89d04f1a545897a1e67f6f637f5ab9c1..46471e2dbab093b7dbe2afcf1f40bdab
          });
 -        player.sendServerStatus(this.server.getStatus());
 +        // Paper start - fire ServerListPingEvent
-+        net.minecraft.server.MCUtil.scheduleAsyncTask(() -> {
++        io.papermc.paper.util.MCUtil.scheduleAsyncTask(() -> {
 +            if (player.hasDisconnected()) return;
 +            net.minecraft.network.protocol.status.ServerStatus status = com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl.getEventResponse(this.server, player.networkManager);
 +            if (status != null) player.sendServerStatus(status);

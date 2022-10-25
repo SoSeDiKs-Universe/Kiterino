@@ -5,13 +5,13 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 4a4606f2598b868e43c270cd3056d44549bc914e..a5c4ad214573c16d52d116c7ca0953108b6212ee 100644
+index c730b7e091b897fac7faa2d756b90ea5f0cef44d..5b187e1045faa42e0397cb4032df5bbe1027df11 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -985,6 +985,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
-      * @param hurtDirection hurt direction
+@@ -1015,6 +1015,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+      * @param directionZ The relative z position of the knockback source direction
       */
-     void setHurtDirection(float hurtDirection);
+     void knockback(double strength, double directionX, double directionZ);
 +
 +    /**
 +     * This number represents how much the entity is trying to move sideways.

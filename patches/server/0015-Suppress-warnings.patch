@@ -17,10 +17,10 @@ index 09d0ced75b0bea1fbc629befdbc4d50c50619e80..4d491a3ea0158837467f6263844f6beb
              return stack;
          }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 6eff4e3f242b859b60517e0bdce2b1202778da2c..4ac8c027917fd21035a035033f3faf0dd69816c8 100644
+index 21ca8e387a971b2b9fe918fe316bdb174da6138e..1b1fa1217a73f6aff650bc868096eae020d934d8 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -484,10 +484,10 @@ public class PurpurConfig {
+@@ -486,10 +486,10 @@ public class PurpurConfig {
      }
  
      public static boolean loggerSuppressInitLegacyMaterialError = false;

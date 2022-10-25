@@ -5,12 +5,12 @@ Subject: [PATCH] Allow grass spread upon coarse dirt
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java b/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
-index 61783f17b655cbb6430d22fb3a81931ab3ea130c..3757781a1f7ef49fb10a19097eec6605bd64b00c 100644
+index af46c05a34292d271fd4a809398e6b299e10b12b..bbcfa5c0ab2316760f07a53a21240338d3b8fb8d 100644
 --- a/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
-@@ -58,6 +58,11 @@ public abstract class SpreadingSnowyDirtBlock extends SnowyDirtBlock {
-                     if (world.getBlockState(blockposition1).is(Blocks.DIRT) && SpreadingSnowyDirtBlock.canPropagate(iblockdata1, world, blockposition1)) {
-                         org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(world, pos, blockposition1, (BlockState) iblockdata1.setValue(SpreadingSnowyDirtBlock.SNOWY, world.getBlockState(blockposition1.above()).is(Blocks.SNOW))); // CraftBukkit
+@@ -85,6 +85,11 @@ public abstract class SpreadingSnowyDirtBlock extends SnowyDirtBlock {
+                         org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(world, pos, blockposition1, (BlockState) iblockdata1.setValue(SpreadingSnowyDirtBlock.SNOWY, access.getBlockState(blockposition1.above()).is(Blocks.SNOW))); // CraftBukkit
+                     // Paper end
                      }
 +                    // Kiterino start
 +                    else if (world.getBlockState(blockposition1).is(Blocks.COARSE_DIRT) && SpreadingSnowyDirtBlock.canPropagate(iblockdata1, (LevelReader) world, blockposition1)) {
