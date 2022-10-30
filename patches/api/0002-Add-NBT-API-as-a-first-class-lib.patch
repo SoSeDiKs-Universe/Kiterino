@@ -91,12 +91,12 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 28be71aa677ed8cb9a9d06b3aba7af40f0992f68..251ddb4dc7c82bee9d630b9acfb16a285ccc6450 100644
+index 3959765b110b6fed91348c11ff85e302a885776c..376bf40e0a22703eef5a1b8f872c3ee0e2c95866 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -989,4 +989,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1002,4 +1002,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
-     boolean isInDaylight();
+     void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
 +
 +    // Kiterino start

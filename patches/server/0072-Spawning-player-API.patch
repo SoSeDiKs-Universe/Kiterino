@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f0385181aae3b0ce5dc903a16de802cd3abb4ee1..d518f11aef4191e4413c178403a1a9512b6df191 100644
+index 065e24faf9164c0c2feef04c695e64014875a699..0296adf5cb4b2f0e73cebba9ac06eafb49b31072 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -418,6 +418,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -419,6 +419,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public int activatedPriority = gg.pufferfish.pufferfish.PufferfishConfig.maximumActivationPrio; // golf score
      public final BlockPos.MutableBlockPos cachedBlockPos = new BlockPos.MutableBlockPos(); // used where needed
      // Pufferfish end
@@ -36,10 +36,10 @@ index f0385181aae3b0ce5dc903a16de802cd3abb4ee1..d518f11aef4191e4413c178403a1a951
      
      public float getBukkitYaw() {
          return this.yRot;
-@@ -2320,6 +2341,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
-                 nbt.putBoolean("Paper.FreezeLock", true);
+@@ -2326,6 +2347,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                 nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
-             // Paper end
+             // Purpur end
 +
 +            // Kiterino start
 +            if (spawningPlayerUuid != null) {
@@ -49,9 +49,9 @@ index f0385181aae3b0ce5dc903a16de802cd3abb4ee1..d518f11aef4191e4413c178403a1a951
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2488,6 +2515,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2499,6 +2526,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
-             // Paper end
+             // Purpur end
  
 +            // Kiterino start
 +            if (nbt.contains("Kiterino.SpawningPlayerUUID")) {
@@ -75,11 +75,11 @@ index 6b8356e592bfca69cf785457284c99e47e360bd6..4bcd4886e925fc3deff7b21b7801f6cb
                                              // CraftBukkit start
                                              // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 73eccdf5160043ad8caab51b2692aad778a3a3d1..ecda208c6838ee893964b7cb0130466991edd747 100644
+index b678ab6ed6de356b3aabc0e5e3edfab9b33e1eb0..637db4b4ed51434b5a685fc7bb2f4f0e9d73c3ab 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1429,4 +1429,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
-         return getHandle().rideableUnderWater();
+@@ -1439,4 +1439,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         getHandle().immuneToFire = fireImmune;
      }
      // Purpur end
 +

@@ -202,10 +202,10 @@ index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547d
 +    // Paper - end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 8483d15b3e6928a7447ee6fea7759a80075ba94b..9b9dfa0998200042a5d56cc843f89962f8a60edf 100644
+index 3bc27cc6be09e2f405c119f169b4c56e23616cba..08158899a00af7e9b55c6b38aec8439ecfb57261 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2011,7 +2011,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2012,7 +2012,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          this.hurtMarked = true;
      }
  
@@ -237,7 +237,7 @@ index a407e802164603c74ec1f4ad3c98bc50398954bc..03ab833ede5ba4622752e5c4f241d0bd
      public double getHealth() {
          return this.getParent().getHealth();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 4e26fb4ef3f32321d9d7370de7472a6715806621..20bbeba09f311f027eb06cf95fbcad95020e1371 100644
+index 06859558f06df1927cbf632a58dbc96f1ccfd28d..165b60d60a92c61b9949dff7665aa5f32b82b446 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -347,7 +347,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
