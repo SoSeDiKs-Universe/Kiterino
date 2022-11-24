@@ -5,15 +5,15 @@ Subject: [PATCH] EMC - Allow negative Amplifier values
 
 
 diff --git a/src/main/java/net/minecraft/world/effect/MobEffectInstance.java b/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
-index aa34db072f496e53abef7541156ddf8d2ef0c1c8..e5b30cca132232db9c4d8b7a75af7414b7314546 100644
+index 3aecf016ce182391e20c8d31b9399a9855ceb3e6..cee441c5f1c0a1a97708b204d5f76182280bc326 100644
 --- a/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
 +++ b/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
-@@ -344,7 +344,7 @@ public class MobEffectInstance implements Comparable<MobEffectInstance> {
+@@ -348,7 +348,7 @@ public class MobEffectInstance implements Comparable<MobEffectInstance> {
              optional = Optional.empty();
          }
  
--        return new MobEffectInstance(type, j, Math.max(i, 0), bl, bl2, bl3, key, mobEffectInstance, optional); // Purpur - add key
-+        return new MobEffectInstance(type, j, i, bl, bl2, bl3, key, mobEffectInstance, optional); // Purpur - add key // EMC - always use Amplifier, don't check > 0
+-        return new MobEffectInstance(type, j, Math.max(i, 0), bl, bl2, bl3, mobEffectInstance, optional, key); // Purpur - add key
++        return new MobEffectInstance(type, j, i, bl, bl2, bl3, mobEffectInstance, optional, key); // Purpur - add key // EMC - always use Amplifier, don't check > 0
      }
  
      public void setNoCounter(boolean permanent) {

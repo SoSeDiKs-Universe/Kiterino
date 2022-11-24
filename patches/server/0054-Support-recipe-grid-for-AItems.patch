@@ -13,12 +13,12 @@ index 0331830815f14779e578e3fe94c400e4ab55c6a0..4f895bc29645ff6052596ca3e0a84597
                      return false;
                  }
 +                // Kiterino start
-+                var compound = a.tag;
++                var compound = a.getTag();
 +                String namespace = org.bukkit.Bukkit.getName();
 +                if (compound != null && compound.contains(namespace)) {
 +                    compound = compound.getCompound(namespace);
 +                    if (compound.contains("Id")) {
-+                        var compound1 = b.tag;
++                        var compound1 = b.getTag();
 +                        if (compound1 == null) return false;
 +                        if (!compound1.contains(namespace)) return false;
 +                        compound1 = compound1.getCompound(namespace);

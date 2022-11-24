@@ -13,7 +13,7 @@ index 37cbd0d95f3232ed399c6ef19f714c547b9fd8e5..91e827fcc6cbd49d5738f9005502beb0
              }
  
 +            // Kiterino start - no sounds for custom items, auto releasing
-+            var compound = stack.tag;
++            var compound = stack.getTag();
 +            String namespace = org.bukkit.Bukkit.getName();
 +            if (compound != null && compound.contains(namespace)) {
 +                compound = compound.getCompound(namespace);

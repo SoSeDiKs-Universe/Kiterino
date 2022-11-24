@@ -6,10 +6,10 @@ Subject: [PATCH] Expose pre-collision move vector to
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 08158899a00af7e9b55c6b38aec8439ecfb57261..cf6512774707dd5663633d0580607e1e41fc6b3e 100644
+index e76846a8e4e7315e6aef008302311c765a412e43..a5ce6b9ae6056d08ba58b3884e92b47a7cb667e4 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1137,7 +1137,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1139,7 +1139,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                      }
  
                      if (!bl.getType().isAir()) {

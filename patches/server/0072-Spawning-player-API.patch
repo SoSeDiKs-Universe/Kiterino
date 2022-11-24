@@ -5,14 +5,13 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 065e24faf9164c0c2feef04c695e64014875a699..0296adf5cb4b2f0e73cebba9ac06eafb49b31072 100644
+index 7fa9dae9db82940649aca9f22d27937ebb22b417..4cadc76f5e39e42ab3a1e99707aef9bbb0d676e3 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -419,6 +419,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
-     public int activatedPriority = gg.pufferfish.pufferfish.PufferfishConfig.maximumActivationPrio; // golf score
+@@ -421,6 +421,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public final BlockPos.MutableBlockPos cachedBlockPos = new BlockPos.MutableBlockPos(); // used where needed
      // Pufferfish end
-+
+ 
 +    // Kiterino start
 +    public @Nullable UUID spawningPlayerUuid;
 +
@@ -33,10 +32,11 @@ index 065e24faf9164c0c2feef04c695e64014875a699..0296adf5cb4b2f0e73cebba9ac06eafb
 +        }
 +    }
 +    // Kiterino end
-     
++
      public float getBukkitYaw() {
          return this.yRot;
-@@ -2326,6 +2347,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     }
+@@ -2328,6 +2349,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -49,7 +49,7 @@ index 065e24faf9164c0c2feef04c695e64014875a699..0296adf5cb4b2f0e73cebba9ac06eafb
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2499,6 +2526,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2501,6 +2528,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
              // Purpur end
  
@@ -63,7 +63,7 @@ index 065e24faf9164c0c2feef04c695e64014875a699..0296adf5cb4b2f0e73cebba9ac06eafb
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
              CrashReportCategory crashreportsystemdetails = crashreport.addCategory("Entity being loaded");
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 6b8356e592bfca69cf785457284c99e47e360bd6..4bcd4886e925fc3deff7b21b7801f6cbe9d8a1bb 100644
+index 50712b2222703fff01378e2ececb0fc0dba60b65..f8ed8c38494197ce6915ad2b579928596783160a 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -291,6 +291,7 @@ public final class NaturalSpawner {

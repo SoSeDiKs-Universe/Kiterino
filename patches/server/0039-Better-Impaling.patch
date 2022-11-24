@@ -5,7 +5,7 @@ Subject: [PATCH] Better Impaling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index d5e3bd662da349fc2ee58c7800d79c60300f33b3..f087f6665f2a4a652dc4d095ea508edb456f5e14 100644
+index bc18c166ca776b0ef6e816eb034e410c391258b6..5cd8fbb900aeca707973084a8734f44514669034 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1634,6 +1634,12 @@ public abstract class Mob extends LivingEntity {
@@ -22,10 +22,10 @@ index d5e3bd662da349fc2ee58c7800d79c60300f33b3..f087f6665f2a4a652dc4d095ea508edb
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 68794d2fea0ba5bf21032d7e766ea6c257890a20..0bd15aa833f8e02964b48bd3d22d3f75ab29dae9 100644
+index ed250df83a3f1d68bb602bdcdc0da4be259f5c50..248fa294cb2ec53f920a66dfa1183535f1f281b5 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -1299,6 +1299,12 @@ public abstract class Player extends LivingEntity {
+@@ -1308,6 +1308,12 @@ public abstract class Player extends LivingEntity {
  
                  if (target instanceof LivingEntity) {
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());

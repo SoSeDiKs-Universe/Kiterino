@@ -22,12 +22,12 @@ index 809c6531d056cc9538e9bec9cdc5ca6e4c9f4792..4108080a2075ad1e1a2300f0b00b7e37
  
 +                    // Kiterino start
 +                    if (kItem) {
-+                        var compound = itemstack1.tag;
++                        var compound = itemstack1.getTag();
 +                        String namespace = org.bukkit.Bukkit.getName();
 +                        if (compound != null && compound.contains(namespace)) {
 +                            compound = compound.getCompound(namespace);
 +                            if (compound.contains("Id")) {
-+                                var compound1 = itemstack.tag;
++                                var compound1 = itemstack.getTag();
 +                                if (compound1 == null) continue;
 +                                if (!compound1.contains(namespace)) continue;
 +                                compound1 = compound1.getCompound(namespace);

@@ -18,10 +18,10 @@ index 027ca5b67c544048815ddef4bb36d0a8fc3d038c..d09b088ff7a618d9bc360a73df759af0
                  }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index d159272e541952a330a58bb41873d08f9c2cf573..db4ef1919cdd1e79e7ee8e1219518e3ec0fdd11c 100644
+index 87c55ce76ea90cc1e64eb7e6ee2e5fdebac86203..931a81a6b68a9fa68d17d9bafc6d18b984591f82 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3054,7 +3054,7 @@ public abstract class LivingEntity extends Entity {
+@@ -3056,7 +3056,7 @@ public abstract class LivingEntity extends Entity {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -30,7 +30,7 @@ index d159272e541952a330a58bb41873d08f9c2cf573..db4ef1919cdd1e79e7ee8e1219518e3e
                  this.stopSleeping();
              }
          }
-@@ -4290,6 +4290,16 @@ public abstract class LivingEntity extends Entity {
+@@ -4311,6 +4311,16 @@ public abstract class LivingEntity extends Entity {
          return this.getSleepingPos().isPresent();
      }
  
@@ -47,7 +47,7 @@ index d159272e541952a330a58bb41873d08f9c2cf573..db4ef1919cdd1e79e7ee8e1219518e3e
      public void startSleeping(BlockPos pos) {
          if (this.isPassenger()) {
              this.stopRiding();
-@@ -4312,7 +4322,7 @@ public abstract class LivingEntity extends Entity {
+@@ -4333,7 +4343,7 @@ public abstract class LivingEntity extends Entity {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  
@@ -57,7 +57,7 @@ index d159272e541952a330a58bb41873d08f9c2cf573..db4ef1919cdd1e79e7ee8e1219518e3e
              return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index bd363cd808f294f47298258ee7b99aeb36150887..32d16320431247bf620fde3d0f8b0cf30c74f384 100644
+index 6c816179a2fef2c913580339eb68040e5af3fd92..10f632b4c4f50cbc55b96f1b7542988ab1911557 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1333,7 +1333,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -69,7 +69,7 @@ index bd363cd808f294f47298258ee7b99aeb36150887..32d16320431247bf620fde3d0f8b0cf3
              this.wakeup(false);
          }
  
-@@ -3094,4 +3094,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3129,4 +3129,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          this.getHandle().connection.send(packet);
      }
      // Purpur end
