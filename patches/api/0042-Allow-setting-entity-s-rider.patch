@@ -5,7 +5,7 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 04868e6c1c79681188cf4adda1e36155e2f61cab..35aeb0010cf7ff3e3f75c3f82515a278ab31eba1 100644
+index 92fdb9d6a561b9bf5c3cf3c09d9e63cefba70206..da851cf9db56b1072707c4a260829eca8756bc19 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
 @@ -961,6 +961,29 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent

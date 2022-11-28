@@ -26,10 +26,10 @@ index 86b30a5509bd6905eb68b8cd8e78771e0e4adefd..c7353698f7a254b0214fbafea64caa8f
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 791c3c7d75f373f6fa38c549b3d5d9d6181ae4b9..8663a2e8bcea33a6cbaee89d10c5b0c6456171e2 100644
+index fca5d2fcf3e09e2b6341a32d52dc979cd526d35d..b28dfd6d490e618b3d0149ccff188fe4ee009c39 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1649,5 +1649,28 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
+@@ -1663,5 +1663,28 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
          setData(nbtItem.getData());
          setItemMeta(nbtItem.getItemMeta());
      }

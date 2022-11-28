@@ -18,10 +18,10 @@ index 027ca5b67c544048815ddef4bb36d0a8fc3d038c..d09b088ff7a618d9bc360a73df759af0
                  }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 87c55ce76ea90cc1e64eb7e6ee2e5fdebac86203..931a81a6b68a9fa68d17d9bafc6d18b984591f82 100644
+index 7c80f75d17fa107ce4a55ca7ff97424b0aeffd5f..fc2b1e6823fd01fc91ec588b81b9e7cba8cdb72f 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3056,7 +3056,7 @@ public abstract class LivingEntity extends Entity {
+@@ -3071,7 +3071,7 @@ public abstract class LivingEntity extends Entity {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -30,7 +30,7 @@ index 87c55ce76ea90cc1e64eb7e6ee2e5fdebac86203..931a81a6b68a9fa68d17d9bafc6d18b9
                  this.stopSleeping();
              }
          }
-@@ -4311,6 +4311,16 @@ public abstract class LivingEntity extends Entity {
+@@ -4326,6 +4326,16 @@ public abstract class LivingEntity extends Entity {
          return this.getSleepingPos().isPresent();
      }
  
@@ -47,7 +47,7 @@ index 87c55ce76ea90cc1e64eb7e6ee2e5fdebac86203..931a81a6b68a9fa68d17d9bafc6d18b9
      public void startSleeping(BlockPos pos) {
          if (this.isPassenger()) {
              this.stopRiding();
-@@ -4333,7 +4343,7 @@ public abstract class LivingEntity extends Entity {
+@@ -4348,7 +4358,7 @@ public abstract class LivingEntity extends Entity {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  

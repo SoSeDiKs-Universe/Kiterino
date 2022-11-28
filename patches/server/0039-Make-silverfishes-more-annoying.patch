@@ -5,7 +5,7 @@ Subject: [PATCH] Make silverfishes more annoying
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Silverfish.java b/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
-index 7f8d1a048cbe42782be78b60d7cc5f22a6879539..74ee60f339774db2ed6e9b7162dff309c13b75b2 100644
+index f5922a8b2994c9af84fb372907d085950055741f..d6f23a9fd8870487bae7924dde927ea198400857 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
 @@ -104,7 +104,7 @@ public class Silverfish extends Monster {

@@ -52,10 +52,10 @@ index 5cd8fbb900aeca707973084a8734f44514669034..fec9c4c5972ea48c97911b22c51cf130
              return InteractionResult.PASS;
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 10208b3be330e8a02a4b248a3861ba978e64aab4..b678ab6ed6de356b3aabc0e5e3edfab9b33e1eb0 100644
+index ede4d01f59de68326c65bb1b08ce29ddb6fc94d5..df52d87acf1580814b8518c490e83cb2d3de7860 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1401,6 +1401,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1407,6 +1407,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return rider != null ? (org.bukkit.entity.Player) rider.getBukkitEntity() : null;
      }
  

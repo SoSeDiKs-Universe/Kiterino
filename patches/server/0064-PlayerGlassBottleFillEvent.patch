@@ -5,7 +5,7 @@ Subject: [PATCH] PlayerGlassBottleFillEvent
 
 
 diff --git a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
-index 4039dc7454e9d45f5740a46e308849682497e039..b48807cbef91fa4dc5fd213e53831b93af6f2063 100644
+index c9cd5fe3e942d1ce0133c17d6dd2747b70878d4e..33623f17ce9dca9fa621a184873af6f026c9d686 100644
 --- a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
 +++ b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
 @@ -184,12 +184,22 @@ public interface CauldronInteraction {
@@ -81,7 +81,7 @@ index 5d99fbdc2460d77f0ee4d39fe9e52276076f987d..68b4e0aae03bbe938c4a5e9d99d7d372
                  }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
-index 0e61c47307b9e06eddc43a3aa5f8ae9da24acd08..bbb409eba97fdcc063d38c733f5be7b03d9f32d4 100644
+index c2715a576d2b36188da2e2e472b22a3ea2f9d7d3..ba6be12c250fce23b4e40c5a9ad53d7c37e3d4bf 100644
 --- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 @@ -145,16 +145,28 @@ public class BeehiveBlock extends BaseEntityBlock {

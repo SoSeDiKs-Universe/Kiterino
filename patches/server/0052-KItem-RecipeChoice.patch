@@ -5,7 +5,7 @@ Subject: [PATCH] KItem RecipeChoice
 
 
 diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-index 809c6531d056cc9538e9bec9cdc5ca6e4c9f4792..4108080a2075ad1e1a2300f0b00b7e3751d57542 100644
+index 809c6531d056cc9538e9bec9cdc5ca6e4c9f4792..6e86850f1f70fee51774f708d04ca2fb2ce1b1d7 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 @@ -39,6 +39,7 @@ public final class Ingredient implements Predicate<ItemStack> {

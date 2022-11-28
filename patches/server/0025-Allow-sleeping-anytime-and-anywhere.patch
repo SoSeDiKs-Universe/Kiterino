@@ -5,10 +5,10 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index debe60edb4d21eae61363e089f8355c7523446c1..809b49e79cd1df9045c1c7387876836ccc562113 100644
+index cbed021e15dc0a0f3569268f445dec5da624ec22..fbe462fe4559160c38439af3bb75703fb6bf2d0e 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -672,8 +672,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -673,8 +673,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  if (!event.isCancelled()) {
                      this.setDayTime(this.getDayTime() + event.getSkipAmount());
                  }
@@ -28,7 +28,7 @@ index debe60edb4d21eae61363e089f8355c7523446c1..809b49e79cd1df9045c1c7387876836c
              if (!event.isCancelled()) {
                  this.wakeUpAllPlayers();
              }
-@@ -681,6 +692,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -682,6 +693,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && this.isRaining()) {
                  this.resetWeatherCycle();
              }
