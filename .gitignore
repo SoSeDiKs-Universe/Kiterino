@@ -51,6 +51,7 @@ manifest.mf
 # other stuff
 run/
 
+build-data/
 Kiterino-API
 Kiterino-MojangAPI
 Kiterino-Server
