@@ -130,7 +130,7 @@ index 0000000000000000000000000000000000000000..e7f793d362c27b3bdcadbe3612acba86
 +
 +}
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547dce3b9a70 100644
+index b87867b0cd507b969f398399684c597e99e26753..ab7e8d82db67bdedb6fb1214fb8da2f0bddff24c 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 @@ -11,6 +11,8 @@ import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -142,7 +142,7 @@ index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547d
  
  public class DamageSource {
  
-@@ -319,4 +321,58 @@ public class DamageSource {
+@@ -319,4 +321,60 @@ public class DamageSource {
      public Vec3 getSourcePosition() {
          return null;
      }
@@ -187,6 +187,8 @@ index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547d
 +            return EntityDamageEvent.DamageCause.CONTACT;
 +        } else if (source == DamageSource.SWEET_BERRY_BUSH) {
 +            return EntityDamageEvent.DamageCause.CONTACT;
++        } else if (source == DamageSource.FREEZE) {
++            return EntityDamageEvent.DamageCause.FREEZE;
 +        } else if (source == DamageSource.STALAGMITE) {
 +            return EntityDamageEvent.DamageCause.CONTACT;
 +        } else if (source == DamageSource.HOT_FLOOR) {
@@ -202,7 +204,7 @@ index b87867b0cd507b969f398399684c597e99e26753..c9bff553540560caa287f27a3fbd547d
 +    // Paper - end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 0273893337a09d3afb9deed4115c27abff28844d..e76846a8e4e7315e6aef008302311c765a412e43 100644
+index 911807b3f2c902d3377131508ad2ea2bf667c5ac..ef21614d1bd5e6f829fcd18c7346005206f2d39d 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -2014,7 +2014,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -237,7 +239,7 @@ index a407e802164603c74ec1f4ad3c98bc50398954bc..03ab833ede5ba4622752e5c4f241d0bd
      public double getHealth() {
          return this.getParent().getHealth();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index bf0223e1a054e212aa005b72a696323eff37276e..6b764667e92c8b958ad26f957a86ff412e194dfe 100644
+index d5e90792bc0befece01ddaf51ab3007e0e0f3a9f..8b5a1fec03efbf41e914599ef5a0770aba8240a1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -347,7 +347,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
