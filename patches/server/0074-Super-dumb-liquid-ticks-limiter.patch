@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 2 Dec 2022 09:28:31 +0200
+Subject: [PATCH] Super dumb liquid ticks limiter
+
+
+diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
+index c56e948d88ef50409d284eafb0af98970ffd2c8a..f5578364bb1255108c7caa6c9006454e2531293a 100644
+--- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
++++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
+@@ -801,6 +801,14 @@ public abstract class FlowingFluid extends Fluid {
+                 world.updateNeighborsAt(pos, iblockdata.getBlock());
+             }
+         }
++        // Kiterino start - Super dumb liquid physics limiter to reduce the load
++        else {
++            if (org.bukkit.Bukkit.isLagging() || org.bukkit.Bukkit.getCurrentTick() % 20 > 12) {
++                world.scheduleTick(pos, this, 9);
++                return;
++            }
++        }
++        // Kiterino end
+ 
+         this.spread(world, pos, state);
+     }

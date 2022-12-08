@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 7 Dec 2022 10:18:16 +0200
+Subject: [PATCH] Simple water biome cache
+
+
+diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
+index 54e57791f6220325d05939decae46dc4d91d1906..db90805cb70e70ab3a1234c6408b6964d2402aca 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
++++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
+@@ -123,6 +123,8 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
+     }
+     // Paper end - rewrite light engine
+ 
++    public @Nullable Boolean infiniteWater; // Kiterino
++
+     public ChunkAccess(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biome, long inhabitedTime, @Nullable LevelChunkSection[] sectionArrayInitializer, @Nullable BlendingData blendingData) {
+         this.locX = pos.x; this.locZ = pos.z; // Paper - reduce need for field lookups
+         this.chunkPos = pos; this.coordinateKey = ChunkPos.asLong(locX, locZ); // Paper - cache long key
+diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
+index 1321e4a1e0833292982b282c78d94beebfc1432f..bc5d329de623e0e52244a9365280ec73dae3a746 100644
+--- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
++++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
+@@ -78,19 +78,27 @@ public abstract class WaterFluid extends FlowingFluid {
+     // Kiterino start
+     @Override
+     protected boolean canConvertToSource(LevelReader world, BlockPos pos) {
+-        return isInInfiniteBiome(world, pos) || canConvertToSource(world);
++        return isInInfiniteBiome(this, world, pos) || canConvertToSource(world);
+     }
+ 
+     @Override
+     protected boolean isUnfillableInBiome(Fluid fluid, LevelReader world, BlockPos flowTo) {
+-        return isInInfiniteBiome(world, flowTo);
++        return isInInfiniteBiome(fluid, world, flowTo);
+     }
+ 
+-    private boolean isInInfiniteBiome(LevelReader world, BlockPos pos) {
+-        if (isInfiniteBiome(world.getBiome(pos))) return true;
+-        if (true) return false; // ToDo: TPS killer, needs caching
++    private boolean isInInfiniteBiome(Fluid fluid, LevelReader world, BlockPos pos) {
++        net.minecraft.world.level.chunk.ChunkAccess chunk = world.getChunkIfLoadedImmediately(pos.getX() >> 4, pos.getZ() >> 4);
++        if (chunk == null) return isInfiniteBiome(world.getBiome(pos));
++        if (chunk.infiniteWater != null) return chunk.infiniteWater;
++        if (isInfiniteBiome(world.getBiome(pos))) return chunk.infiniteWater = true;
+         if (!((world instanceof net.minecraft.server.level.ServerLevel level))) return false;
+-        return level.findClosestBiome3d(this::isInfiniteBiome, pos, 18, 8, 8) != null;
++        if (org.bukkit.Bukkit.isLagging() || org.bukkit.Bukkit.getCurrentTick() % 20 > 6) {
++            level.scheduleTick(pos, fluid, 15);
++            return false;
++        }
++        net.minecraft.world.level.ChunkPos chunkPos = chunk.getPos();
++        pos = new BlockPos(chunkPos.getMiddleBlockX(), world.getSeaLevel(), chunkPos.getMiddleBlockZ());
++        return chunk.infiniteWater = level.findClosestBiome3d(this::isInfiniteBiome, pos, 18, 8, 8) != null;
+     }
+ 
+     private boolean isInfiniteBiome(net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome) {

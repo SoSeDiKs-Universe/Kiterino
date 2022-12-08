@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 7 Dec 2022 10:39:11 +0200
+Subject: [PATCH] Allow explosions underwater (/fluids)
+
+
+diff --git a/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java b/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
+index 44c3f0ceea4b4464873302ecdc53f7eb1cc83052..9f99fbad47409df18b75bd3bbfd3a786ffb2baad 100644
+--- a/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
++++ b/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
+@@ -7,7 +7,12 @@ import net.minecraft.world.level.material.FluidState;
+ 
+ public class ExplosionDamageCalculator {
+     public Optional<Float> getBlockExplosionResistance(Explosion explosion, BlockGetter world, BlockPos pos, BlockState blockState, FluidState fluidState) {
+-        return blockState.isAir() && fluidState.isEmpty() ? Optional.empty() : Optional.of(Math.max(blockState.getBlock().getExplosionResistance(), fluidState.getExplosionResistance()));
++        // Kiterino start
++        //return blockState.isAir() && fluidState.isEmpty() ? Optional.empty() : Optional.of(Math.max(blockState.getBlock().getExplosionResistance(), fluidState.getExplosionResistance()));
++        if (blockState.isAir()) return Optional.empty();
++        if (!fluidState.isEmpty()) return Optional.empty();
++        return Optional.of(blockState.getBlock().getExplosionResistance());
++        // Kiterino end
+     }
+ 
+     public boolean shouldBlockExplode(Explosion explosion, BlockGetter world, BlockPos pos, BlockState state, float power) {

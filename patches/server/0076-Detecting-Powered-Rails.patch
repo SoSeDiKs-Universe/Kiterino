@@ -1,0 +1,84 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 2 Dec 2022 15:15:41 +0200
+Subject: [PATCH] Detecting Powered Rails
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java b/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
+index 10ffc2aef0699535c4d465cdda7b68ec288f763e..169cb9052de8acf77bcdb6c4e2b7a9cdb49b92de 100644
+--- a/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
+@@ -174,7 +174,7 @@ public class DetectorRailBlock extends BaseRailBlock {
+         return 0;
+     }
+ 
+-    private <T extends AbstractMinecart> List<T> getInteractingMinecartOfType(Level world, BlockPos pos, Class<T> entityClass, Predicate<Entity> entityPredicate) {
++    public <T extends AbstractMinecart> List<T> getInteractingMinecartOfType(Level world, BlockPos pos, Class<T> entityClass, Predicate<Entity> entityPredicate) { // Kiterino - private -> public
+         // Kiterino start - directional detector rails
+         BlockState belowState = world.getBlockState(pos.below());
+         if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
+diff --git a/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java b/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java
+index 40893e71fe8447b695350273bef9623bd5accdcd..5e5034ca3adb42339c154ad63d7f9709e0b0c4fa 100644
+--- a/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java
+@@ -258,4 +258,60 @@ public class PoweredRailBlock extends BaseRailBlock {
+     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+         builder.add(PoweredRailBlock.SHAPE, PoweredRailBlock.POWERED, PoweredRailBlock.WATERLOGGED);
+     }
++
++    // Kiterino start - copypaste from DetectorRailBlock
++    @Override
++    public boolean isSignalSource(BlockState state) {
++        return true;
++    }
++
++    @Override
++    public int getSignal(BlockState state, net.minecraft.world.level.BlockGetter world, BlockPos pos, net.minecraft.core.Direction direction) {
++        if (!(world instanceof Level level)) return 0;
++        BlockState relativeBlockState = world.getBlockState(pos.relative(direction.getOpposite()));
++        if (!relativeBlockState.is(Blocks.REPEATER)) return 0;
++        if (relativeBlockState.getValue(RepeaterBlock.FACING) != direction) return 0;
++        return ((DetectorRailBlock) Blocks.DETECTOR_RAIL).getInteractingMinecartOfType(level, pos, net.minecraft.world.entity.vehicle.AbstractMinecart.class, e -> true).isEmpty() ? 0 : 15;
++    }
++
++    @Override
++    public boolean hasAnalogOutputSignal(BlockState state) {
++        return true;
++    }
++
++    @Override
++    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
++        return Blocks.DETECTOR_RAIL.getAnalogOutputSignal(Blocks.DETECTOR_RAIL.defaultBlockState().setValue(DetectorRailBlock.POWERED, true), world, pos);
++    }
++
++    @Override
++    public void entityInside(BlockState state, Level world, BlockPos pos, net.minecraft.world.entity.Entity entity) {
++        if (!new io.papermc.paper.event.entity.EntityInsideBlockEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(world, pos)).callEvent()) { return; } // Paper
++        if (!world.isClientSide) {
++            if (entity instanceof net.minecraft.world.entity.vehicle.AbstractMinecart) {
++                outputSignal(pos, world);
++            }
++            world.scheduleTick(pos, this, 20);
++            world.updateNeighbourForOutputSignal(pos, this);
++        }
++    }
++
++    @Override
++    public void tick(BlockState state, net.minecraft.server.level.ServerLevel world, BlockPos pos, net.minecraft.util.RandomSource random) {
++        world.updateNeighbourForOutputSignal(pos, this);
++        outputSignal(pos, world);
++    }
++
++    private void outputSignal(BlockPos pos, Level world) {
++        for (net.minecraft.core.Direction direction : net.minecraft.core.Direction.Plane.HORIZONTAL) {
++            BlockPos relative = pos.relative(direction);
++            BlockState relativeState = world.getBlockStateIfLoaded(relative);
++            if (relativeState == null) continue;
++            if (relativeState.getBlock() != Blocks.REPEATER) continue;
++            if (relativeState.getValue(RepeaterBlock.FACING) != direction.getOpposite()) continue;
++
++            relativeState.neighborChanged(world, relative, this, pos, false);
++        }
++    }
++    // Kiterino end
+ }

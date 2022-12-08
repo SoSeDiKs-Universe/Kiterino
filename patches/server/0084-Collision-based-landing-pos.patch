@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 4 Dec 2022 20:08:59 +0200
+Subject: [PATCH] Collision based landing pos
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index b93e558816c230925d4c6d36ffc582c5753fc77e..c5ec8a94d5c30c3f1d0a2587c833cfb44a7364fd 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1339,6 +1339,14 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     /** @deprecated */
+     @Deprecated
+     public BlockPos getOnPosLegacy() {
++        // Kiterino start
++        for (VoxelShape shape : this.level.getBlockCollisions(this, this.getBoundingBox().move(0, 0.2D, 0))) {
++            Vec3 boundingBoxShape = shape.bounds().getCenter();
++            if (boundingBoxShape.y() <= this.getY()) {
++                return new BlockPos(boundingBoxShape);
++            }
++        }
++        // Kiterino end
+         return this.getOnPos(0.2F);
+     }
+ 
