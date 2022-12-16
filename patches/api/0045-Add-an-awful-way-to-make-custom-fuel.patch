@@ -1,0 +1,133 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 15 Dec 2022 20:10:57 +0200
+Subject: [PATCH] Add an awful way to make custom fuel
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/event/block/FuelCheckEvent.java b/src/main/java/me/sosedik/kiterino/event/block/FuelCheckEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..dd939065a8196eaf60de11e67aff0a43c2460b00
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/event/block/FuelCheckEvent.java
+@@ -0,0 +1,57 @@
++package me.sosedik.kiterino.event.block;
++
++import org.bukkit.event.Event;
++import org.bukkit.event.HandlerList;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Super awful way to make custom fuel!
++ */
++public class FuelCheckEvent extends Event {
++
++	private static final HandlerList handlers = new HandlerList();
++	private final ItemStack fuel;
++	private boolean isFuel = false;
++
++	public FuelCheckEvent(@NotNull ItemStack fuel) {
++		this.fuel = fuel;
++	}
++
++	/**
++	 * Get the checking item.
++	 *
++	 * @return possible fuel item
++	 */
++	public final @NotNull ItemStack getFuel() {
++		return fuel;
++	}
++
++	/**
++	 * Check if item was marked as fuel.
++	 *
++	 * @return whether item marked as fuel or not
++	 */
++	public boolean isFuel() {
++		return isFuel;
++	}
++
++	/**
++	 * Set whether this item is a fuel
++	 *
++	 * @param isFuel whether this item is a fuel
++	 */
++	public void setIsFuel(boolean isFuel) {
++		this.isFuel = isFuel;
++	}
++
++	@Override
++	public @NotNull HandlerList getHandlers() {
++		return handlers;
++	}
++
++	public static @NotNull HandlerList getHandlerList() {
++		return handlers;
++	}
++
++}
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 518fe7105c7f41571e97a1eac8f9ffe1da944066..d418253e3c07a6cf5dfc422710b98b82985560c1 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2510,6 +2510,28 @@ public final class Bukkit {
+         server.removeFuel(material);
+     }
+ 
++    // Kiterino start
++    /**
++     * Check whether this material can be used as fuel for furnaces
++     *
++     * @param type type
++     * @return whether provided material is fuel
++     */
++    public static boolean isFuel(@NotNull Material type) {
++        return server.isFuel(type);
++    }
++
++    /**
++     * Check whether this item can be used as fuel for furnaces
++     *
++     * @param item item
++     * @return whether provided item is fuel
++     */
++    public static boolean isFuel(@NotNull ItemStack item) {
++        return server.isFuel(item);
++    }
++    // Kiterino end
++
+     /**
+      * Creates debug block highlight on specified block location and show it to all players on the server.
+      * <p>
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index b1e1c7fdd67d37e567bd549bf32e830ddd30a10b..a7b44ecbd19a50063355319cf1479a44a817b965 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2194,6 +2194,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     public void removeFuel(@NotNull Material material);
+ 
++    // Kiterino start
++    /**
++     * Check whether this material can be used as fuel for furnaces
++     *
++     * @param type type
++     * @return whether provided material is fuel
++     */
++    default boolean isFuel(@NotNull Material type) {
++        return isFuel(new ItemStack(type));
++    }
++
++    /**
++     * Check whether this item can be used as fuel for furnaces
++     *
++     * @param item item
++     * @return whether provided item is fuel
++     */
++    boolean isFuel(@NotNull ItemStack item);
++    // Kiterino end
++
+     /**
+      * Creates debug block highlight on specified block location and show it to all players on the server.
+      * <p>

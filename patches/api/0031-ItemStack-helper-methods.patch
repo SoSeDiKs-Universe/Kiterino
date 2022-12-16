@@ -5,10 +5,10 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index b28dfd6d490e618b3d0149ccff188fe4ee009c39..5745cfd233959cef685de08c34544b36625dbe49 100644
+index b28dfd6d490e618b3d0149ccff188fe4ee009c39..29c40edbdb5e724c7aa38495c8a80b90d246edb9 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1687,4 +1687,48 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
+@@ -1687,4 +1687,75 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
          return getNBT(directApply).getOrCreateCompound(Bukkit.getName());
      }
      // Kiterino end
@@ -33,6 +33,33 @@ index b28dfd6d490e618b3d0149ccff188fe4ee009c39..5745cfd233959cef685de08c34544b36
 +     */
 +    public boolean isKItem() {
 +        return subtractId() != null;
++    }
++
++    /**
++     * Returns clone of this item with colored
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta}.
++     *
++     * @param color color
++     * @return colored item
++     */
++    public @NotNull ItemStack asColor(@NotNull org.bukkit.DyeColor color) {
++        return asColor(color.getColor());
++    }
++
++    /**
++     * Returns clone of this item with colored
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta}.
++     *
++     * @param color color
++     * @return colored item
++     */
++    public @NotNull ItemStack asColor(@NotNull org.bukkit.Color color) {
++        ItemStack clone = clone();
++        if (meta instanceof org.bukkit.inventory.meta.LeatherArmorMeta leatherMeta) {
++            leatherMeta.setColor(color);
++            clone.setItemMeta(leatherMeta);
++        }
++        return clone;
 +    }
 +
 +    /**
