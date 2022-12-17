@@ -5,14 +5,15 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 0d8280a455a9ed7cc3cdc435975513e3d9f75373..2ffa7c877a5fa9380b2cf1b0aa47daa64dca129c 100644
+index b2bf94e981a83ff28c351e99941ce29e3cc8ea62..894443580b2e117c800fc4d93771edf9678f8976 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3067,5 +3067,53 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
-      * Forces player to sleep
+@@ -3061,4 +3061,54 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       */
-     void forceSleep();
+     void sendDeathScreen(@NotNull Component message, @Nullable Entity killer);
+     // Purpur end
 +
++    // Kiterino end
 +    /**
 +     * Place block as if this player placed it
 +     * <p>Item in hand will be consumed if placed successfully
@@ -60,5 +61,5 @@ index 0d8280a455a9ed7cc3cdc435975513e3d9f75373..2ffa7c877a5fa9380b2cf1b0aa47daa6
 +     * @return true, if placed successfully
 +     */
 +    boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
-     // Kiterino end
++    // Kiterino end
  }

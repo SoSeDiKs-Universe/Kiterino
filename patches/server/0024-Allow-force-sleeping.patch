@@ -18,7 +18,7 @@ index 027ca5b67c544048815ddef4bb36d0a8fc3d038c..d09b088ff7a618d9bc360a73df759af0
                  }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 7c80f75d17fa107ce4a55ca7ff97424b0aeffd5f..fc2b1e6823fd01fc91ec588b81b9e7cba8cdb72f 100644
+index 7c80f75d17fa107ce4a55ca7ff97424b0aeffd5f..36833b783038beefdda358452baec7139c0ecd27 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3071,7 +3071,7 @@ public abstract class LivingEntity extends Entity {
@@ -30,24 +30,7 @@ index 7c80f75d17fa107ce4a55ca7ff97424b0aeffd5f..fc2b1e6823fd01fc91ec588b81b9e7cb
                  this.stopSleeping();
              }
          }
-@@ -4326,6 +4326,16 @@ public abstract class LivingEntity extends Entity {
-         return this.getSleepingPos().isPresent();
-     }
- 
-+    // Kiterino start
-+    public void forceSleep(double x, double y, double z) {
-+        this.setPose(Pose.SLEEPING);
-+        this.setPosToBed(new BlockPos(x, 0, z));
-+        this.setSleepingPos(new BlockPos(x + 0.2, y + 0.1, z + 0.2));
-+        this.setDeltaMovement(Vec3.ZERO);
-+        this.hasImpulse = true;
-+    }
-+    // Kiterino end
-+
-     public void startSleeping(BlockPos pos) {
-         if (this.isPassenger()) {
-             this.stopRiding();
-@@ -4348,7 +4358,7 @@ public abstract class LivingEntity extends Entity {
+@@ -4348,7 +4348,7 @@ public abstract class LivingEntity extends Entity {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  
@@ -57,7 +40,7 @@ index 7c80f75d17fa107ce4a55ca7ff97424b0aeffd5f..fc2b1e6823fd01fc91ec588b81b9e7cb
              return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6c816179a2fef2c913580339eb68040e5af3fd92..10f632b4c4f50cbc55b96f1b7542988ab1911557 100644
+index 6c816179a2fef2c913580339eb68040e5af3fd92..577c79dd9458fe8ef1c1d81bd7aa4e0636e46cc9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1333,7 +1333,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -69,16 +52,3 @@ index 6c816179a2fef2c913580339eb68040e5af3fd92..10f632b4c4f50cbc55b96f1b7542988a
              this.wakeup(false);
          }
  
-@@ -3129,4 +3129,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
-         this.getHandle().connection.send(packet);
-     }
-     // Purpur end
-+
-+    // Kiterino start
-+    @Override
-+    public void forceSleep() {
-+        Location loc = getLocation();
-+        getHandle().forceSleep(loc.getX(), loc.getY(), loc.getZ());
-+    }
-+    // Kiterino end
- }

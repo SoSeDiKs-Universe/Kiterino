@@ -5,14 +5,15 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 10f632b4c4f50cbc55b96f1b7542988ab1911557..f138dffb5bb62715792570d015c6a98b5d241265 100644
+index 577c79dd9458fe8ef1c1d81bd7aa4e0636e46cc9..f1c2c86aa1acc54b1974a544ca4806d87d1e03da 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3136,5 +3136,36 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
-         Location loc = getLocation();
-         getHandle().forceSleep(loc.getX(), loc.getY(), loc.getZ());
+@@ -3129,4 +3129,37 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         this.getHandle().connection.send(packet);
      }
+     // Purpur end
 +
++    // Kiterino start
 +    @Override
 +    public boolean placeBlock(org.bukkit.inventory.EquipmentSlot hand, Location location, org.bukkit.block.BlockFace blockFace, boolean consume) {
 +        return placeBlock(hand, getInventory().getItem(hand), location, blockFace, consume);
@@ -43,5 +44,5 @@ index 10f632b4c4f50cbc55b96f1b7542988ab1911557..f138dffb5bb62715792570d015c6a98b
 +
 +        return true;
 +    }
-     // Kiterino end
++    // Kiterino end
  }
