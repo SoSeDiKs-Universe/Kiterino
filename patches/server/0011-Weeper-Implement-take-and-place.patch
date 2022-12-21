@@ -5,10 +5,10 @@ Subject: [PATCH] Weeper - Implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 31c9bb73b73be99b95a7dde55d276964522a6d7d..b20ae30295733304976a2106fcfd9ad08e2be1d8 100644
+index 8b198d31578c4618f730d572844292ae3bdda2c7..b1b94084b95511b7f8c99dbfc71b0f6b5ddeb06d 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-@@ -157,6 +157,12 @@ public abstract class AbstractContainerMenu {
+@@ -158,6 +158,12 @@ public abstract class AbstractContainerMenu {
          return slot;
      }
  

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting different smelting results
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index 8bc29f442d855606f5367d8b7a1ed5a2361ea84f..f2d1613d497b58f86dabdb4ffa0bcc4818b11494 100644
+index 5ae858b81e6f9903b7296077cf497f62bb8d6995..e69e08cb10b33ff965797100e9ef4fd17344f975 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -486,6 +486,7 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+@@ -480,6 +480,7 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
              itemstack1 = CraftItemStack.asNMSCopy(result);
  
              if (!itemstack1.isEmpty()) {
@@ -16,7 +16,7 @@ index 8bc29f442d855606f5367d8b7a1ed5a2361ea84f..f2d1613d497b58f86dabdb4ffa0bcc48
                  if (itemstack2.isEmpty()) {
                      nonnulllist.set(2, itemstack1.copy());
                  } else if (CraftItemStack.asCraftMirror(itemstack2).isSimilar(result)) {
-@@ -493,6 +494,11 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+@@ -487,6 +488,11 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
                  } else {
                      return false;
                  }

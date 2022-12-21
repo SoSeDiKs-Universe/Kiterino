@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - BoneMeal API
 
 
 diff --git a/src/main/java/net/minecraft/world/item/BoneMealItem.java b/src/main/java/net/minecraft/world/item/BoneMealItem.java
-index ad0af20dc32a518110c5e74a7ac54ea1c3b93bcb..5d41cb19b3ce447eb04189c27598389772ed21f0 100644
+index 664c3a6b34035ebeff19926be311b1fd6f08dc19..dd67f7b3a4e7bf4d648a1b955b0beeec8cad9bd5 100644
 --- a/src/main/java/net/minecraft/world/item/BoneMealItem.java
 +++ b/src/main/java/net/minecraft/world/item/BoneMealItem.java
 @@ -36,15 +36,17 @@ public class BoneMealItem extends Item {
@@ -39,10 +39,10 @@ index ad0af20dc32a518110c5e74a7ac54ea1c3b93bcb..5d41cb19b3ce447eb04189c275983897
                  }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index dabf1649f5bf14ec17dad6d43dcd7e2b7df255d3..b8de9d51998bd8abfef186c5913d40d604eae8ec 100644
+index 804f81c478c09a5b6d0b10a78dc2b7ae0b88cc18..a3d96aab3b0129310a01dc73c69b23efeb1db59e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2417,5 +2417,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2420,5 +2420,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
  
          return this.adventure$pointers;
      }

@@ -5,7 +5,7 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 894443580b2e117c800fc4d93771edf9678f8976..b208079a3728eb15ae1910c5412d6f2913ec7b53 100644
+index e9d0eab32b07b67ea8b2fff8766175e795ed598f..fcd31a02ee12216514977be43f91c52e99ca5136 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -3110,5 +3110,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -32,7 +32,7 @@ index 894443580b2e117c800fc4d93771edf9678f8976..b208079a3728eb15ae1910c5412d6f29
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
-index 449f2dccd466ba5f220148a20a03b36a2a565d9b..e9b8181ae4afaba1a670350738859f8910e7c46c 100644
+index 5c968a0867223925b7eb5d6e04dbc33c41b7be6b..b0b9ecd48b826b638082158bc9c1c456db8e8013 100644
 --- a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
 +++ b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
 @@ -14,6 +14,7 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
@@ -57,7 +57,7 @@ index 449f2dccd466ba5f220148a20a03b36a2a565d9b..e9b8181ae4afaba1a670350738859f89
      /**
       * Gets the leave message send to all online players
       *
-@@ -213,4 +221,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+@@ -217,4 +225,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
          UNKNOWN,
      }
      // Paper end

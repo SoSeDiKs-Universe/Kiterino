@@ -5,7 +5,7 @@ Subject: [PATCH] Simple water biome cache
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index 54e57791f6220325d05939decae46dc4d91d1906..db90805cb70e70ab3a1234c6408b6964d2402aca 100644
+index e254b2d04e4fc1dc76c26f61ea38aeb27755143f..3f9b2e870a788c833fcf78c578e163b88dfe6c5a 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 @@ -123,6 +123,8 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
@@ -18,13 +18,13 @@ index 54e57791f6220325d05939decae46dc4d91d1906..db90805cb70e70ab3a1234c6408b6964
          this.locX = pos.x; this.locZ = pos.z; // Paper - reduce need for field lookups
          this.chunkPos = pos; this.coordinateKey = ChunkPos.asLong(locX, locZ); // Paper - cache long key
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-index 1321e4a1e0833292982b282c78d94beebfc1432f..bc5d329de623e0e52244a9365280ec73dae3a746 100644
+index 4eeb199f5c25d082f4b16c77b4c33ff44a7308af..cfa1c0818442749ed97066bcaa51467e45e925b9 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-@@ -78,19 +78,27 @@ public abstract class WaterFluid extends FlowingFluid {
+@@ -67,19 +67,27 @@ public abstract class WaterFluid extends FlowingFluid {
      // Kiterino start
      @Override
-     protected boolean canConvertToSource(LevelReader world, BlockPos pos) {
+     protected boolean canConvertToSource(Level world, BlockPos pos) {
 -        return isInInfiniteBiome(world, pos) || canConvertToSource(world);
 +        return isInInfiniteBiome(this, world, pos) || canConvertToSource(world);
      }

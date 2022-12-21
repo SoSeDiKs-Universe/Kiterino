@@ -5,10 +5,10 @@ Subject: [PATCH] Lower minecarts rail sticking height
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 2c8995c25b1efea7846f1b17068f3e3f585523cd..040dd951f4caa8d66ecdc79ba0cf4d0707624b90 100644
+index f0f727a375670d7e6d8003defcdf4029db9a4769..af0231f61711b24c5ece852e44f4fbafe59d54d3 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -392,14 +392,19 @@ public abstract class AbstractMinecart extends Entity {
+@@ -391,14 +391,19 @@ public abstract class AbstractMinecart extends Entity {
              int j = Mth.floor(this.getY());
              int k = Mth.floor(this.getZ());
  

@@ -5,12 +5,12 @@ Subject: [PATCH] Packet Additions
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
-index eeac698d5dc1d6a10bc922c2944666f085646bde..d5c283e7a8581730fadcd89f52e925a77df5afdd 100644
+index e4db4fa403a1fec235d33b6e16c9bb1d21e09f46..fcbab099210dfdbab22c22bbd724e9b4643fa3b0 100644
 --- a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
-@@ -31,6 +31,16 @@ public interface PacketStepBuilder {
+@@ -39,6 +39,21 @@ public interface PacketStepBuilder {
      @NotNull
-     PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction);
+     PacketStepBuilder removePlayerProfile(@NotNull PlayerProfile playerProfile);
  
 +    // Kiterino start
 +    @NotNull
@@ -19,13 +19,18 @@ index eeac698d5dc1d6a10bc922c2944666f085646bde..d5c283e7a8581730fadcd89f52e925a7
 +    }
 +
 +    @NotNull
-+    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName, @Nullable org.bukkit.GameMode gameMode);
++    default PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName, @Nullable org.bukkit.GameMode gameMode) {
++        return sendPlayerProfile(playerProfile, profileAction, displayName, gameMode, true);
++    }
++
++    @NotNull
++    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName, @Nullable org.bukkit.GameMode gameMode, boolean listed);
 +    // Kiterino end
 +
      @NotNull
      PacketStepBuilder spawnPlayer(int entityId, @NotNull UUID uuid, @NotNull Location location);
  
-@@ -101,4 +111,8 @@ public interface PacketStepBuilder {
+@@ -109,4 +124,8 @@ public interface PacketStepBuilder {
      }
  
      void send(@NotNull Collection<? extends Player> players);

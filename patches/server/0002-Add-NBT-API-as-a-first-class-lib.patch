@@ -5,10 +5,10 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index a029f51983bcfe49beab1359f282f0f957723ef2..c0cf7a4235a59adc39de393c7019a2fea52e49e8 100644
+index 46858fb57f122033a68aeb4ad3943132a677fb46..22acd8b6a396ccc0641a63dc8467ca05b91150d9 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -309,6 +309,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -304,6 +304,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          }
          // Purpur end
  
@@ -18,5 +18,5 @@ index a029f51983bcfe49beab1359f282f0f957723ef2..c0cf7a4235a59adc39de393c7019a2fe
 +        // Kiterino end
 +
          // CraftBukkit start
-         // this.setPlayerList(new DedicatedPlayerList(this, this.registryHolder, this.playerDataStorage)); // Spigot - moved up
+         // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up
          server.loadPlugins();

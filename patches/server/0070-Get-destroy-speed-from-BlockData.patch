@@ -5,10 +5,10 @@ Subject: [PATCH] Get destroy speed from BlockData
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-index edce55a0cebe245cd944fcc1df735df66c736e43..eb5cab07d01b71c1ca29b62a22b4106c775f2efb 100644
+index 1fefe185800dd48dd328697127405e0844543e5e..07493307de9f2a181008635b96c90a54c959bc11 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-@@ -628,4 +628,28 @@ public class CraftBlockData implements BlockData {
+@@ -631,4 +631,28 @@ public class CraftBlockData implements BlockData {
          return !state.requiresCorrectToolForDrops() || nms.isCorrectToolForDrops(state);
      }
      // Paper end

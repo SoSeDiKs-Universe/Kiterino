@@ -25,85 +25,85 @@ index 0000000000000000000000000000000000000000..8ba823dacabdee481a11fc4bf13b2223
 + */
 +public class PlayerLoadsProjectileEvent extends PlayerEvent {
 +
-+	private static final HandlerList handlers = new HandlerList();
++    private static final HandlerList handlers = new HandlerList();
 +
-+	private final @NotNull ItemStack weapon;
-+	private @Nullable ItemStack projectile;
-+	private boolean firingAllowed;
++    private final @NotNull ItemStack weapon;
++    private @Nullable ItemStack projectile;
++    private boolean firingAllowed;
 +
-+	public PlayerLoadsProjectileEvent(@NotNull Player player, @NotNull ItemStack weapon, @Nullable ItemStack projectile) {
-+		super(player);
-+		this.weapon = weapon;
-+		this.projectile = projectile;
-+		this.firingAllowed = isAllowed(projectile);
-+	}
++    public PlayerLoadsProjectileEvent(@NotNull Player player, @NotNull ItemStack weapon, @Nullable ItemStack projectile) {
++        super(player);
++        this.weapon = weapon;
++        this.projectile = projectile;
++        this.firingAllowed = isAllowed(projectile);
++    }
 +
-+	/**
-+	 * Returns the weapon requesting the projectile
-+	 *
-+	 * @return weapon
-+	 */
-+	public @NotNull ItemStack getWeapon() {
-+		return weapon;
-+	}
++    /**
++     * Returns the weapon requesting the projectile
++     *
++     * @return weapon
++     */
++    public @NotNull ItemStack getWeapon() {
++        return weapon;
++    }
 +
-+	/**
-+	 * Returns the projectile that will be submitted to the weapon.
-+	 * <p>If projectile is null and {@link #isFiringAllowed()} is true,
-+	 * then the {@link Material#ARROW} will be used in the end, and
-+	 * no player's items will be consumed.
-+	 * <p>Alternatively, no projectile will be used if
-+	 * {@link #isFiringAllowed()} is false.
-+	 *
-+	 * @return projectile, if present
-+	 */
-+	public @Nullable ItemStack getProjectile() {
-+		return projectile;
-+	}
++    /**
++     * Returns the projectile that will be submitted to the weapon.
++     * <p>If projectile is null and {@link #isFiringAllowed()} is true,
++     * then the {@link Material#ARROW} will be used in the end, and
++     * no player's items will be consumed.
++     * <p>Alternatively, no projectile will be used if
++     * {@link #isFiringAllowed()} is false.
++     *
++     * @return projectile, if present
++     */
++    public @Nullable ItemStack getProjectile() {
++        return projectile;
++    }
 +
-+	/**
-+	 * Sets the projectile that will be used by the weapon.
-+	 * <p>Note: Changing the projectile updates the
-+	 * {@link #isFiringAllowed()} value too.
-+	 *
-+	 * @param projectile projectile
-+	 */
-+	public void setProjectile(@Nullable ItemStack projectile) {
-+		this.projectile = projectile;
-+		this.firingAllowed = isAllowed(projectile);
-+	}
++    /**
++     * Sets the projectile that will be used by the weapon.
++     * <p>Note: Changing the projectile updates the
++     * {@link #isFiringAllowed()} value too.
++     *
++     * @param projectile projectile
++     */
++    public void setProjectile(@Nullable ItemStack projectile) {
++        this.projectile = projectile;
++        this.firingAllowed = isAllowed(projectile);
++    }
 +
-+	/**
-+	 * Checks whether firing the weapon is allowed
-+	 *
-+	 * @return whether firing regardless of projectile is allowed or not
-+	 */
-+	public boolean isFiringAllowed() {
-+		return firingAllowed;
-+	}
++    /**
++     * Checks whether firing the weapon is allowed
++     *
++     * @return whether firing regardless of projectile is allowed or not
++     */
++    public boolean isFiringAllowed() {
++        return firingAllowed;
++    }
 +
-+	/**
-+	 * Sets whether firing the weapon is allowed
-+	 *
-+	 * @param firingAllowed whether firing regardless of projectile is allowed or not
-+	 */
-+	public void setFiringAllowed(boolean firingAllowed) {
-+		this.firingAllowed = firingAllowed;
-+	}
++    /**
++     * Sets whether firing the weapon is allowed
++     *
++     * @param firingAllowed whether firing regardless of projectile is allowed or not
++     */
++    public void setFiringAllowed(boolean firingAllowed) {
++        this.firingAllowed = firingAllowed;
++    }
 +
-+	private boolean isAllowed(@Nullable ItemStack projectile) {
-+		return projectile != null && projectile.getType() != Material.AIR && projectile.getAmount() > 0;
-+	}
++    private boolean isAllowed(@Nullable ItemStack projectile) {
++        return projectile != null && projectile.getType() != Material.AIR && projectile.getAmount() > 0;
++    }
 +
-+	@NotNull
-+	@Override
-+	public HandlerList getHandlers() {
-+		return handlers;
-+	}
++    @NotNull
++    @Override
++    public HandlerList getHandlers() {
++        return handlers;
++    }
 +
-+	@NotNull
-+	public static HandlerList getHandlerList() {
-+		return handlers;
-+	}
++    @NotNull
++    public static HandlerList getHandlerList() {
++        return handlers;
++    }
 +
 +}

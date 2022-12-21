@@ -17,21 +17,17 @@ index 09d0ced75b0bea1fbc629befdbc4d50c50619e80..4d491a3ea0158837467f6263844f6beb
              return stack;
          }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 21ca8e387a971b2b9fe918fe316bdb174da6138e..1b1fa1217a73f6aff650bc868096eae020d934d8 100644
+index 7e5498242bc4d525c2b380e434b59dfc8f89ede7..2d323a0f0611a973b8171c01fd0925a03b2204cb 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -486,10 +486,10 @@ public class PurpurConfig {
+@@ -486,8 +486,8 @@ public class PurpurConfig {
      }
  
      public static boolean loggerSuppressInitLegacyMaterialError = false;
 -    public static boolean loggerSuppressIgnoredAdvancementWarnings = false;
 -    public static boolean loggerSuppressUnrecognizedRecipeErrors = false;
--    public static boolean loggerSuppressSetBlockFarChunk = false;
--    public static boolean loggerSuppressSentExpiredChat = false;
 +    public static boolean loggerSuppressIgnoredAdvancementWarnings = true; // Kiterino - true by default
 +    public static boolean loggerSuppressUnrecognizedRecipeErrors = true; // Kiterino - true by default
-+    public static boolean loggerSuppressSetBlockFarChunk = true; // Kiterino - true by default
-+    public static boolean loggerSuppressSentExpiredChat = true; // Kiterino - true by default
+     public static boolean loggerSuppressSetBlockFarChunk = false;
      public static boolean loggerSuppressLibraryLoader = false;
      private static void loggerSettings() {
-         loggerSuppressInitLegacyMaterialError = getBoolean("settings.logger.suppress-init-legacy-material-errors", loggerSuppressInitLegacyMaterialError);

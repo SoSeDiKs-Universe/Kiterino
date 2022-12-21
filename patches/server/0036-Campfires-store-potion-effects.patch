@@ -5,18 +5,18 @@ Subject: [PATCH] Campfires store potion effects
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-index 4f276b2a86735a2c664738450ae0fbdd82031d4e..611ca71db76bf0c83a74994d84a501cd089580d6 100644
+index 1f1519c1b33d16eba59546c86f20a099486441d7..0208a3369cbf442b8b9192ecd3bf986d9fba2ea4 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-@@ -117,6 +117,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -120,6 +120,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
                  } else {
-                     this.applySplash(list, hitResult != null && hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null); // Paper - nullable hitResult
+                     showParticles = this.applySplash(list, hitResult != null && hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null); // Paper - nullable hitResult
                  }
 +                splashCampfires(list); // Kiterino
              }
  
-             int i = potionregistry.hasInstantEffects() ? 2007 : 2002;
-@@ -126,6 +127,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+             if (showParticles) { // Paper
+@@ -131,6 +132,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
          }
      }
  
@@ -43,11 +43,11 @@ index 4f276b2a86735a2c664738450ae0fbdd82031d4e..611ca71db76bf0c83a74994d84a501cd
 +    }
 +    // Kiterino end
 +
-     private static final Predicate<net.minecraft.world.entity.LivingEntity> APPLY_WATER_GET_ENTITIES_PREDICATE = ThrownPotion.WATER_SENSITIVE.or(Axolotl.class::isInstance); // Paper
-     private void applyWater() {
+     private static final Predicate<net.minecraft.world.entity.LivingEntity> APPLY_WATER_GET_ENTITIES_PREDICATE = ThrownPotion.WATER_SENSITIVE_OR_ON_FIRE.or(Axolotl.class::isInstance); // Paper
+     private boolean applyWater() { // Paper
          AABB axisalignedbb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index 122b3eaabb02b207bfb9d0b03905e0702dc8aead..34fe81e24edfef1ac6422ad5d1eeb0854580ec12 100644
+index aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff..def3a3d68600bd7a95830214c16e0ddc2ee72f6a 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 @@ -40,6 +40,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
@@ -73,7 +73,7 @@ index 122b3eaabb02b207bfb9d0b03905e0702dc8aead..34fe81e24edfef1ac6422ad5d1eeb085
          }
          if (campfire.checkGravity(world, pos, state)) return;
          // Kiterino end
-@@ -118,6 +127,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -120,6 +129,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      }
  
      public static void cooldownTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
@@ -81,19 +81,30 @@ index 122b3eaabb02b207bfb9d0b03905e0702dc8aead..34fe81e24edfef1ac6422ad5d1eeb085
          if (campfire.checkGravity(world, pos, state)) return; // Kiterino
          boolean flag = false;
  
-@@ -203,6 +213,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -205,6 +215,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
              System.arraycopy(cookingState, 0, this.stopCooking, 0, Math.min(this.stopCooking.length, abyte.length));
          }
          // Paper end
-+        if (nbt.contains("Kiterino.Effect")) effect = net.minecraft.core.Registry.MOB_EFFECT.getOptional(net.minecraft.resources.ResourceLocation.tryParse(nbt.getString("Kiterino.Effect"))).orElse(net.minecraft.world.effect.MobEffects.REGENERATION); // Kiterino
++        // Kiterino start
++        if (nbt.contains("Kiterino.Effect")) {
++            effect = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getOptional(net.minecraft.resources.ResourceLocation.tryParse(nbt.getString("Kiterino.Effect"))).orElse(net.minecraft.world.effect.MobEffects.REGENERATION);
++        }
++        // Kiterino end
      }
  
      @Override
-@@ -218,6 +229,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -220,6 +235,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
          }
          nbt.putByteArray("Paper.StopCooking", cookingState);
          // Paper end
-+        if (effect != null) nbt.putString("Kiterino.Effect", net.minecraft.core.Registry.MOB_EFFECT.getKey(effect).getPath()); // Kiterino
++        // Kiterino start
++        if (effect != null) {
++            net.minecraft.resources.ResourceLocation resourceLocation = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(effect);
++            if (resourceLocation != null) {
++                nbt.putString("Kiterino.Effect", resourceLocation.getPath());
++            }
++        }
++        // Kiterino end
      }
  
      @Override

@@ -6,7 +6,7 @@ Subject: [PATCH] Patina - Completely remove Metrics
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 deleted file mode 100644
-index 2697535e2cc2e3a5f39d6fd7eae7dc78b8dee61d..0000000000000000000000000000000000000000
+index 7a631c8817dd5f5f3e4a755d77d0ae619d4c8d7f..0000000000000000000000000000000000000000
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ /dev/null
 @@ -1,675 +0,0 @@
@@ -615,7 +615,7 @@ index 2697535e2cc2e3a5f39d6fd7eae7dc78b8dee61d..00000000000000000000000000000000
 -
 -                metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
 -                metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
--                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (Metrics.class.getPackage().getImplementationVersion() != null) ? Metrics.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino
+-                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino
 -
 -                metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
 -                    Map<String, Map<String, Integer>> map = new HashMap<>();
@@ -686,10 +686,10 @@ index 2697535e2cc2e3a5f39d6fd7eae7dc78b8dee61d..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 67b79349363e7149a603c2396d40dda31c4435ed..2df21becf305906bcf52177e74741b7288561575 100644
+index 22acd8b6a396ccc0641a63dc8467ca05b91150d9..c24b13b6bcb17b75c189e9a0a184c944e8f8c4ca 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -222,7 +222,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -217,7 +217,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          org.spigotmc.WatchdogThread.doStart(org.spigotmc.SpigotConfig.timeoutTime, org.spigotmc.SpigotConfig.restartOnCrash);
          thread.start(); // Paper - start console thread after MinecraftServer.console & PaperConfig are initialized
          io.papermc.paper.command.PaperCommands.registerCommands(this);
@@ -1346,7 +1346,7 @@ index 8f15af52d2ed734732134bf011ccdd4b7856a284..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index 5d162f59fc5ef9adf7fa762b137bbcfca745d9c5..1a6edf004b7616e39ea5944e10ca6d0ff02e9b2e 100644
+index 612c3169c3463d702b85975e1db79ae6e47d60d0..3899ab895723e3bdd662698ee07295654e00799c 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
 @@ -48,7 +48,7 @@ public class SpigotConfig
@@ -1354,7 +1354,7 @@ index 5d162f59fc5ef9adf7fa762b137bbcfca745d9c5..1a6edf004b7616e39ea5944e10ca6d0f
      static Map<String, Command> commands;
      /*========================================================================*/
 -    private static Metrics metrics;
-+    //private static Metrics metrics; // Patina - remove metrics
++    // private static Metrics metrics; // Patina - remove metrics
  
      public static void init(File configFile)
      {

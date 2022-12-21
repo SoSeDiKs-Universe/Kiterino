@@ -81,7 +81,7 @@ index 5d99fbdc2460d77f0ee4d39fe9e52276076f987d..68b4e0aae03bbe938c4a5e9d99d7d372
                  }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
-index c2715a576d2b36188da2e2e472b22a3ea2f9d7d3..ba6be12c250fce23b4e40c5a9ad53d7c37e3d4bf 100644
+index fe7daa57119af137eeb76ca2c0e54bf7903ebbca..3c94d6863f11048afd4eea0517a40df1fa986859 100644
 --- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 @@ -145,16 +145,28 @@ public class BeehiveBlock extends BaseEntityBlock {
@@ -94,7 +94,7 @@ index c2715a576d2b36188da2e2e472b22a3ea2f9d7d3..ba6be12c250fce23b4e40c5a9ad53d7c
 +                if (event.callEvent()) {
 +                    result = ItemStack.fromBukkitCopy(event.getNewItem());
                  itemstack.shrink(1);
-                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
                  if (itemstack.isEmpty()) {
 -                    player.setItemInHand(hand, new ItemStack(Items.HONEY_BOTTLE));
 -                } else if (!player.getInventory().add(new ItemStack(Items.HONEY_BOTTLE))) {

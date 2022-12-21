@@ -5,7 +5,7 @@ Subject: [PATCH] Support recipe grid for AItems
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
-index 0331830815f14779e578e3fe94c400e4ab55c6a0..4dac5eec25c0b0795a830b2e9eb13a63bacc2dee 100644
+index 842b921799111789b37a34b76644c9217bc85794..12c84c6973842a5f7234895be95d7cc1b717848e 100644
 --- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 +++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 @@ -57,6 +57,21 @@ public class StackedContents {
@@ -31,10 +31,10 @@ index 0331830815f14779e578e3fe94c400e4ab55c6a0..4dac5eec25c0b0795a830b2e9eb13a63
              }
          });
 diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-index 6e86850f1f70fee51774f708d04ca2fb2ce1b1d7..71d0d6ba57da9a2aab896ccf120d31c095c74778 100644
+index 07218093a085293f87d8e562f100688580bdd343..ed643bd24c1cf3baf74e19f6ccff3581badba503 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-@@ -58,7 +58,7 @@ public final class Ingredient implements Predicate<ItemStack> {
+@@ -54,7 +54,7 @@ public final class Ingredient implements Predicate<ItemStack> {
                  return recipeitemstack_provider.getItems().stream();
                  // PaperPR start
              }).distinct().peek(stack -> {

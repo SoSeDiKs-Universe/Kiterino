@@ -5,14 +5,14 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 8e64ccdb928bc38cb703e60c8ec31339a6f6d894..c977946c32fe324adb3bffb949711641589419ec 100644
+index 5c8dd4d3313a791d1fee00ec5d4bc595b76b7d6d..6f8f8e0c45ee5ba4ca9aa778efc5a39086e1606b 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:2.17.1")
      api("org.slf4j:slf4j-api:1.8.0-beta4")
      api("io.sentry:sentry:5.4.0") // Pufferfish
-+    api("de.tr7zw:item-nbt-api:2.11.0-SNAPSHOT") // Kiterino
++    api("de.tr7zw:item-nbt-api:2.11.1") // Kiterino
  
      implementation("org.ow2.asm:asm:9.2")
      implementation("org.ow2.asm:asm-commons:9.2")
@@ -38,10 +38,10 @@ index e1e1bc868019f715370490719ef887e0eee3ddec..ee1487c7ed5ff8694dda6c4dcc7c566e
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 9930ebe7a23d306c602840fd43652fbdaba481b3..86b30a5509bd6905eb68b8cd8e78771e0e4adefd 100644
+index aba40431c5a1ae43106a678445483e0653e130d1..18e4afd2aef75d9e23c6661cfcd0351495ab8027 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -760,4 +760,27 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -786,4 +786,27 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
      @NotNull
      float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants);
      // Paper end
@@ -91,10 +91,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 3959765b110b6fed91348c11ff85e302a885776c..376bf40e0a22703eef5a1b8f872c3ee0e2c95866 100644
+index 8a980916176b2179168833f1d14872176837154e..b2147ad46adc70dd3d5b13863983a1f462a9e4e2 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1002,4 +1002,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1021,4 +1021,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end

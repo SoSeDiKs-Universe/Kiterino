@@ -5,10 +5,10 @@ Subject: [PATCH] Increase manual minecart speed
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 4e8afc80d7c8eff684562aebf6c7a4a04c9e942c..3eae6366853b544e3f6992ce42e1d054556a35fc 100644
+index 522fee5213d4b0e2fdd200663fa41cb7ad524b34..517f0b5d4fa8736975a1db806fcd7025358fabc1 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -741,8 +741,8 @@ public abstract class AbstractMinecart extends Entity {
+@@ -740,8 +740,8 @@ public abstract class AbstractMinecart extends Entity {
              double d9 = vec3d2.horizontalDistanceSqr();
              double d10 = this.getDeltaMovement().horizontalDistanceSqr();
  

@@ -5,10 +5,10 @@ Subject: [PATCH] Extended Location API
 
 
 diff --git a/src/main/java/org/bukkit/Location.java b/src/main/java/org/bukkit/Location.java
-index ef0cb00ca4cb7d2f5e4ec1c950cce036566d1ae4..7cb41a3a4da935db76a6ae2cd6d40a8ab94de8bd 100644
+index 6bbf8468bc47e82b0aeb164e49cdb73d93bae87b..215de44bf467ac1fd5bf81a2368d516eb03652ec 100644
 --- a/src/main/java/org/bukkit/Location.java
 +++ b/src/main/java/org/bukkit/Location.java
-@@ -451,6 +451,219 @@ public class Location implements Cloneable, ConfigurationSerializable {
+@@ -451,6 +451,219 @@ public class Location implements Cloneable, ConfigurationSerializable, io.paperm
          return this;
      }
  

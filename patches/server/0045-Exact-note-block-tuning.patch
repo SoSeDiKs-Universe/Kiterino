@@ -5,10 +5,10 @@ Subject: [PATCH] Exact note block tuning
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index bd1d04e80073ccf4e757836cd5fae6d66e7f8c58..b0f72f0f08832ac9f765d00adb1daa4541e5cdd4 100644
+index 0f9f62e39b52aeee1655161740574e59be49b960..a39144f03a6c2c35804203e6dcc5a967e02aa082 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-@@ -96,8 +96,17 @@ public class NoteBlock extends Block {
+@@ -122,8 +122,17 @@ public class NoteBlock extends Block {
          if (world.isClientSide) {
              return InteractionResult.SUCCESS;
          } else {
@@ -24,5 +24,5 @@ index bd1d04e80073ccf4e757836cd5fae6d66e7f8c58..b0f72f0f08832ac9f765d00adb1daa45
              state = (BlockState) state.cycle(NoteBlock.NOTE);
 +            } // Kiterino end
              world.setBlock(pos, state, 3);
-             this.playNote(player, world, pos, state); // CraftBukkit
+             this.playNote(player, state, world, pos);
              player.awardStat(Stats.TUNE_NOTEBLOCK);

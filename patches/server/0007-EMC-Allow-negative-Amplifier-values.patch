@@ -5,10 +5,10 @@ Subject: [PATCH] EMC - Allow negative Amplifier values
 
 
 diff --git a/src/main/java/net/minecraft/world/effect/MobEffectInstance.java b/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
-index 3aecf016ce182391e20c8d31b9399a9855ceb3e6..cee441c5f1c0a1a97708b204d5f76182280bc326 100644
+index 6d5080ba244daf3b93d61d28ee0b88eb56bac723..5bfc414ecadfdb70a4c18e33a617a16a6629fc5b 100644
 --- a/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
 +++ b/src/main/java/net/minecraft/world/effect/MobEffectInstance.java
-@@ -348,7 +348,7 @@ public class MobEffectInstance implements Comparable<MobEffectInstance> {
+@@ -347,7 +347,7 @@ public class MobEffectInstance implements Comparable<MobEffectInstance> {
              optional = Optional.empty();
          }
  
@@ -16,4 +16,4 @@ index 3aecf016ce182391e20c8d31b9399a9855ceb3e6..cee441c5f1c0a1a97708b204d5f76182
 +        return new MobEffectInstance(type, j, i, bl, bl2, bl3, mobEffectInstance, optional, key); // Purpur - add key // EMC - always use Amplifier, don't check > 0
      }
  
-     public void setNoCounter(boolean permanent) {
+     @Override

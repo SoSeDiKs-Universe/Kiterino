@@ -5,10 +5,10 @@ Subject: [PATCH] New liquid physics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index 432b10ec21ce5dfe8f99c3af29d19292bbcf39cd..da37ec82a62f35b0805ee3f5f7ee15f9816620b2 100644
+index 22be22265081ba8972cd27089b9f05c4f4953beb..4084b3b7d0f7f57b62da607376bda9e237276b3d 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -630,7 +630,7 @@ public class Boat extends Entity {
+@@ -644,7 +644,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
          int i = Mth.floor(axisalignedbb.minX);
          int j = Mth.ceil(axisalignedbb.maxX);
          int k = Mth.floor(axisalignedbb.minY);
@@ -17,7 +17,7 @@ index 432b10ec21ce5dfe8f99c3af29d19292bbcf39cd..da37ec82a62f35b0805ee3f5f7ee15f9
          int i1 = Mth.floor(axisalignedbb.minZ);
          int j1 = Mth.ceil(axisalignedbb.maxZ);
          boolean flag = false;
-@@ -678,7 +678,7 @@ public class Boat extends Entity {
+@@ -692,7 +692,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
                      if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level, blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {
@@ -113,7 +113,7 @@ index f456ad8a74464414f69b616a48ee9a2c1cee4d90..4f4f12c6fd728fa13ff6b6961be6bb3e
              int k;
              BlockState iblockdata1;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
-index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..858c6d7c56e677a4f1f13024f57af711755395e2 100644
+index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f461e0a94f 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
 @@ -69,7 +69,26 @@ public class SpringFeature extends Feature<SpringConfiguration> {
@@ -124,7 +124,7 @@ index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..858c6d7c56e677a4f1f13024f57af711
 +                    // Kiterino start - make water springs out of corals and spawn magma block next to lava, so they could persist the fluid physics changes
 +                    BlockState springState;
 +                    if (springConfiguration.state.is(net.minecraft.world.level.material.Fluids.WATER)) {
-+                        java.util.Optional<net.minecraft.world.level.block.Block> optional = net.minecraft.core.Registry.BLOCK.getTag(net.minecraft.tags.BlockTags.CORAL_PLANTS)
++                        java.util.Optional<net.minecraft.world.level.block.Block> optional = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getTag(net.minecraft.tags.BlockTags.CORAL_PLANTS)
 +                                .flatMap((blocks) -> blocks.getRandomElement(context.random()))
 +                                .map(net.minecraft.core.Holder::value);
 +                        springState = optional.map(net.minecraft.world.level.block.Block::defaultBlockState).orElseGet(springConfiguration.state::createLegacyBlock);
@@ -145,7 +145,7 @@ index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..858c6d7c56e677a4f1f13024f57af711
                      ++i;
                  }
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index a1d0329401dbb9e5f0fd27bd42d1c5a7c40d1c03..c56e948d88ef50409d284eafb0af98970ffd2c8a 100644
+index 93f31a99363e73a24571b66cd5bbaf7b5b9084b2..1935e498ae3fa804e14350c637980b86aace3e3e 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 @@ -226,7 +226,7 @@ public abstract class FlowingFluid extends Fluid {
@@ -185,24 +185,22 @@ index a1d0329401dbb9e5f0fd27bd42d1c5a7c40d1c03..c56e948d88ef50409d284eafb0af9897
          /*
          if (object2bytelinkedopenhashmap != null) {
              if (object2bytelinkedopenhashmap.size() == 200) {
-@@ -332,9 +353,16 @@ public abstract class FlowingFluid extends Fluid {
+@@ -330,7 +351,14 @@ public abstract class FlowingFluid extends Fluid {
      }
      // Purpur end
  
 +    // Kiterino start
-+    protected boolean canConvertToSource(LevelReader world, BlockPos pos) {
++    protected boolean canConvertToSource(Level world, BlockPos pos) {
 +        return canConvertToSource(world);
 +    }
 +    // Kiterino end
 +
-     protected abstract boolean canConvertToSource();
- 
      protected void spreadTo(LevelAccessor world, BlockPos pos, BlockState state, Direction direction, FluidState fluidState) {
 +        if (flowTo(world, pos, state, direction)) return; // Kiterino
          if (state.getBlock() instanceof LiquidBlockContainer) {
              ((LiquidBlockContainer) state.getBlock()).placeLiquid(world, pos, state, fluidState);
          } else {
-@@ -347,6 +375,172 @@ public abstract class FlowingFluid extends Fluid {
+@@ -343,6 +371,172 @@ public abstract class FlowingFluid extends Fluid {
  
      }
  
@@ -375,7 +373,7 @@ index a1d0329401dbb9e5f0fd27bd42d1c5a7c40d1c03..c56e948d88ef50409d284eafb0af9897
      protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state, BlockPos source) { beforeDestroyingBlock(world, pos, state); } // Paper - add source parameter
      protected abstract void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state);
  
-@@ -508,9 +702,70 @@ public abstract class FlowingFluid extends Fluid {
+@@ -504,9 +698,70 @@ public abstract class FlowingFluid extends Fluid {
      }
  
      protected boolean canSpreadTo(BlockGetter world, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid) {
@@ -447,32 +445,20 @@ index a1d0329401dbb9e5f0fd27bd42d1c5a7c40d1c03..c56e948d88ef50409d284eafb0af9897
  
      protected int getSpreadDelay(Level world, BlockPos pos, FluidState oldState, FluidState newState) {
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-index 29068ca2df90ab0351b91cd0aa3e224c71cbec40..1321e4a1e0833292982b282c78d94beebfc1432f 100644
+index ec6c63075306f9e5389e83641d2c8a82369ddc6b..4eeb199f5c25d082f4b16c77b4c33ff44a7308af 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-@@ -60,13 +60,13 @@ public abstract class WaterFluid extends FlowingFluid {
+@@ -61,9 +61,32 @@ public abstract class WaterFluid extends FlowingFluid {
  
      @Override
-     protected boolean canConvertToSource() {
--        return true;
-+        return false; // Kiterino
+     protected boolean canConvertToSource(Level world) {
+-        return world.getGameRules().getBoolean(GameRules.RULE_WATER_SOURCE_CONVERSION);
++        return false && world.getGameRules().getBoolean(GameRules.RULE_WATER_SOURCE_CONVERSION); // Kiterino
      }
- 
-     // Purpur start
-     @Override
-     protected boolean canConvertToSource(LevelReader world) {
--        return world.getWorldBorder().world.purpurConfig.waterInfinite;
-+        return false && world.getWorldBorder().world.purpurConfig.waterInfinite; // Kiterino
-     }
- 
-     @Override
-@@ -75,6 +75,29 @@ public abstract class WaterFluid extends FlowingFluid {
-     }
-     // Purpur end
  
 +    // Kiterino start
 +    @Override
-+    protected boolean canConvertToSource(LevelReader world, BlockPos pos) {
++    protected boolean canConvertToSource(Level world, BlockPos pos) {
 +        return isInInfiniteBiome(world, pos) || canConvertToSource(world);
 +    }
 +
@@ -493,6 +479,6 @@ index 29068ca2df90ab0351b91cd0aa3e224c71cbec40..1321e4a1e0833292982b282c78d94bee
 +    }
 +    // Kiterino end
 +
-     // Paper start
+     // Purpur start
      @Override
-     protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state,  BlockPos source) {
+     protected int getRequiredSources(Level level) {

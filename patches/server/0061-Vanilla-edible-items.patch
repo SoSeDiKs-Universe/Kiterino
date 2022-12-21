@@ -5,20 +5,20 @@ Subject: [PATCH] Vanilla edible items
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..3463db3a30cc7a2449fd7e76b723c257b30c9572 100644
+index 6cf1762cafa628dd88c89c5df7b400758e054401..b38c986d79ae9face1ed8e2993c04fef9debb2c5 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
-@@ -66,7 +66,7 @@ public class Item implements ItemLike {
+@@ -67,7 +67,7 @@ public class Item implements FeatureElement, ItemLike {
      @Nullable
      private String descriptionId;
      @Nullable
 -    private final FoodProperties foodProperties;
 +    private FoodProperties foodProperties; // Kiterino - remove final
+     private final FeatureFlagSet requiredFeatures;
  
      public static int getId(Item item) {
-         return item == null ? 0 : Registry.ITEM.getId(item);
-@@ -368,6 +368,13 @@ public class Item implements ItemLike {
-         return SoundEvents.GENERIC_DRINK;
+@@ -349,6 +349,12 @@ public class Item implements FeatureElement, ItemLike {
+         return this.foodProperties;
      }
  
 +    // Kiterino start
@@ -27,15 +27,14 @@ index 3397486368134e7ab69f7793468b3ab5c4a1fb4b..3463db3a30cc7a2449fd7e76b723c257
 +    }
 +    // Kiterino end
 +
-+
-     public SoundEvent getEatingSound() {
-         return SoundEvents.GENERIC_EAT;
+     public SoundEvent getDrinkingSound() {
+         return SoundEvents.GENERIC_DRINK;
      }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 1b1fa1217a73f6aff650bc868096eae020d934d8..05ecfd455aeaa8d301fd1c63a041842b0e0ed9c4 100644
+index 2d323a0f0611a973b8171c01fd0925a03b2204cb..8d9121fe2d422faec92563c1be4fdb3e95de410c 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -529,12 +529,23 @@ public class PurpurConfig {
+@@ -527,12 +527,23 @@ public class PurpurConfig {
              return;
          }
          properties.getKeys(false).forEach(foodKey -> {
@@ -64,7 +63,7 @@ index 1b1fa1217a73f6aff650bc868096eae020d934d8..05ecfd455aeaa8d301fd1c63a041842b
              food.setNutrition(properties.getInt(foodKey + ".nutrition", foodDefaults.getNutrition()));
              food.setSaturationModifier((float) properties.getDouble(foodKey + ".saturation-modifier", foodDefaults.getSaturationModifier()));
              food.setIsMeat(properties.getBoolean(foodKey + ".is-meat", foodDefaults.isMeat()));
-@@ -571,6 +582,7 @@ public class PurpurConfig {
+@@ -569,6 +580,7 @@ public class PurpurConfig {
                      food.getEffects().add(Pair.of(new MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon), chance));
                  });
              }

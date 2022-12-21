@@ -5,19 +5,19 @@ Subject: [PATCH] Max stack size API
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index 8b250dab8f3cb788ae1cfad43737afda31b72c0f..3397486368134e7ab69f7793468b3ab5c4a1fb4b 100644
+index 253d3c1b83d1e8f5d1afbdb5fb7007196ed94436..6cf1762cafa628dd88c89c5df7b400758e054401 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
-@@ -58,7 +58,7 @@ public class Item implements ItemLike {
-     @Nullable
-     protected final CreativeModeTab category;
+@@ -59,7 +59,7 @@ public class Item implements FeatureElement, ItemLike {
+     public static final int MAX_BAR_WIDTH = 13;
+     private final Holder.Reference<Item> builtInRegistryHolder = BuiltInRegistries.ITEM.createIntrusiveHolder(this);
      public final Rarity rarity;
 -    private final int maxStackSize;
 +    private int maxStackSize; // Kiterino - remove final
      private final int maxDamage;
      private final boolean isFireResistant;
      @Nullable
-@@ -153,6 +153,12 @@ public class Item implements ItemLike {
+@@ -155,6 +155,12 @@ public class Item implements FeatureElement, ItemLike {
          return this.maxStackSize;
      }
  
@@ -31,19 +31,19 @@ index 8b250dab8f3cb788ae1cfad43737afda31b72c0f..3397486368134e7ab69f7793468b3ab5
          return this.maxDamage;
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index fe68bc18687af1b0ed8a5703d7d9874a6b8e5557..9c103e5e585a343613e088daefb90c8d0e83cc7b 100644
+index abe90af285a9dc31f102c5cbccef93eb46f65a07..c9f55951dd24d376227722ecefd067645b1cd8e5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3044,4 +3044,12 @@ public final class CraftServer implements Server {
+@@ -3074,4 +3074,12 @@ public final class CraftServer implements Server {
          return getServer().lagging;
      }
      // Purpur end
 +
-+	// Kiterino start
-+	@Override
-+	public void setMaxStackSize(org.bukkit.Material material, int maxStackSize) {
-+		Server.super.setMaxStackSize(material, maxStackSize);
-+		CraftItemStack.asCraftCopy(new ItemStack(material)).handle.getItem().setMaxStackSize(maxStackSize);
-+	}
-+	// Kiterino end
++    // Kiterino start
++    @Override
++    public void setMaxStackSize(org.bukkit.Material material, int maxStackSize) {
++        Server.super.setMaxStackSize(material, maxStackSize);
++        CraftItemStack.asCraftCopy(new ItemStack(material)).handle.getItem().setMaxStackSize(maxStackSize);
++    }
++    // Kiterino end
  }

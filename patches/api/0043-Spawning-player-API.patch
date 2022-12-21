@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index da851cf9db56b1072707c4a260829eca8756bc19..ba8d81197a6c414d771b02d20519fb74438b5597 100644
+index 341995cf68cd45e4b45f3f6b318103239d70c546..4428d9b892586fb3c4e1ed8e8746a01053703031 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1116,5 +1116,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1135,5 +1135,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default Item dropItemNaturally(@NotNull org.bukkit.inventory.ItemStack item, @Nullable org.bukkit.util.Consumer<Item> function) {
          return getWorld().dropItem(getLocation(), item, function);
      }

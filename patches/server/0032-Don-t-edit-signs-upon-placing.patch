@@ -5,10 +5,10 @@ Subject: [PATCH] Don't edit signs upon placing
 
 
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 7616333aafc42bccd84fe881515549d7e5f8c874..274d17ff74ac9b36f97b41a71792d87e375c4c25 100644
+index 7222ff43de1b570458f2513fe1a44d97a09d0799..2e05b1a4c5be46c4184bba1027d8d43babf92220 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -469,7 +469,7 @@ public final class ItemStack {
+@@ -477,7 +477,7 @@ public final class ItemStack {
                      // SPIGOT-4678
                      if (this.item instanceof SignItem && SignItem.openSign != null) {
                          try {

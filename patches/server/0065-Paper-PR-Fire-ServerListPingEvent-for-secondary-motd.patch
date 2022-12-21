@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
-index 4c2351b03b58511b80017b58ee9b20ab5193adc9..ecd3522d3e9fa77fc8d5869daa671a98e89de994 100644
+index 4c2351b03b58511b80017b58ee9b20ab5193adc9..5844cfc5ea8481133e9706c06ff440089495fc01 100644
 --- a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 +++ b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 @@ -74,13 +74,24 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
@@ -35,14 +35,13 @@ index 4c2351b03b58511b80017b58ee9b20ab5193adc9..ecd3522d3e9fa77fc8d5869daa671a98
          }
  
          // Setup response
-@@ -103,8 +114,11 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
+@@ -103,8 +114,10 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
              ping.setFavicon(event.getServerIcon().getData());
          }
  
 -        // Send response
 -        networkManager.send(new ClientboundStatusResponsePacket(ping));
 +        // Other
-+        ping.setPreviewsChat(event.shouldSendChatPreviews());
 +        ping.setEnforcesSecureChat(server.enforceSecureProfile());
 +
 +        return ping;
@@ -50,21 +49,21 @@ index 4c2351b03b58511b80017b58ee9b20ab5193adc9..ecd3522d3e9fa77fc8d5869daa671a98
  
  }
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 82634bd0ab2792f637573c2ee7d9d00ba1104900..1ac6a8ad649a2b0bc6b1d53d82f9be7bebde3d81 100644
+index 7d5ba99a674855967256b74fd9fd21749dcde8a3..82e40408ec9c874e3b1966f32676f482ca0e8c82 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -418,7 +418,13 @@ public abstract class PlayerList {
-         this.server.getServerResourcePack().ifPresent((minecraftserver_serverresourcepackinfo) -> {
-             player.sendTexturePack(minecraftserver_serverresourcepackinfo.url(), minecraftserver_serverresourcepackinfo.hash(), minecraftserver_serverresourcepackinfo.isRequired(), minecraftserver_serverresourcepackinfo.prompt());
-         });
+@@ -296,7 +296,13 @@ public abstract class PlayerList {
+         Component joinMessage = ichatmutablecomponent; // Paper - Adventure
+ 
+         playerconnection.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
 -        player.sendServerStatus(this.server.getStatus());
 +        // Paper start - fire ServerListPingEvent
 +        io.papermc.paper.util.MCUtil.scheduleAsyncTask(() -> {
 +            if (player.hasDisconnected()) return;
-+            net.minecraft.network.protocol.status.ServerStatus status = com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl.getEventResponse(this.server, player.networkManager);
++            net.minecraft.network.protocol.status.ServerStatus status = com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl.getEventResponse(this.server, player.connection.connection);
 +            if (status != null) player.sendServerStatus(status);
 +        });
 +        // Paper end
-         Iterator iterator = player.getActiveEffects().iterator();
- 
-         while (iterator.hasNext()) {
+         player.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players));
+         this.players.add(player);
+         this.playersByName.put(player.getScoreboardName().toLowerCase(java.util.Locale.ROOT), player); // Spigot

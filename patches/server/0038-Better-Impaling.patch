@@ -5,10 +5,10 @@ Subject: [PATCH] Better Impaling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index bc18c166ca776b0ef6e816eb034e410c391258b6..5cd8fbb900aeca707973084a8734f44514669034 100644
+index 7bd4e95fcaf3855a4fe412b5898a97d7992caad3..72ae5b60afe22cc170d1ed8e0480b55f0c5801b0 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1634,6 +1634,12 @@ public abstract class Mob extends LivingEntity {
+@@ -1660,6 +1660,12 @@ public abstract class Mob extends LivingEntity {
  
          if (target instanceof LivingEntity) {
              f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
@@ -22,10 +22,10 @@ index bc18c166ca776b0ef6e816eb034e410c391258b6..5cd8fbb900aeca707973084a8734f445
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index ed250df83a3f1d68bb602bdcdc0da4be259f5c50..248fa294cb2ec53f920a66dfa1183535f1f281b5 100644
+index 44029f0bf78e873888fa4a369f25f361e8a4be61..af020bcaf2f6254f7c00994c5d67753f02800423 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -1308,6 +1308,12 @@ public abstract class Player extends LivingEntity {
+@@ -1290,6 +1290,12 @@ public abstract class Player extends LivingEntity {
  
                  if (target instanceof LivingEntity) {
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
@@ -39,7 +39,7 @@ index ed250df83a3f1d68bb602bdcdc0da4be259f5c50..248fa294cb2ec53f920a66dfa1183535
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), MobType.UNDEFINED);
                  }
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
-index d49d66e28e757ba126aa84355fc56d92b53cd509..2f714caa146294fc92bcf6c0e9016ddde96e205e 100644
+index 8e41faaa9610a31415c7c89c266c22f26f7e0bc6..c638998e74dbdf06feca97177bc82d8538118d76 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
 @@ -134,6 +134,12 @@ public class ThrownTrident extends AbstractArrow {

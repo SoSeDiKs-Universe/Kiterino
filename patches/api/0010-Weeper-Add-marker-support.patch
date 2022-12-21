@@ -5,7 +5,7 @@ Subject: [PATCH] Weeper - Add marker support
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
-index ce7d35d0fda07bd36ac5538c4b2b2b4ee52c00ac..eeac698d5dc1d6a10bc922c2944666f085646bde 100644
+index 035047fca57658c4c9a76da4eae488308f86325d..e4db4fa403a1fec235d33b6e16c9bb1d21e09f46 100644
 --- a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 @@ -18,7 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
@@ -18,7 +18,7 @@ index ce7d35d0fda07bd36ac5538c4b2b2b4ee52c00ac..eeac698d5dc1d6a10bc922c2944666f0
  import java.util.Collection;
  import java.util.Set;
  import java.util.UUID;
-@@ -91,6 +93,9 @@ public interface PacketStepBuilder {
+@@ -99,6 +101,9 @@ public interface PacketStepBuilder {
      @NotNull
      PacketStepBuilder playerAbilities(@NotNull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier);
  

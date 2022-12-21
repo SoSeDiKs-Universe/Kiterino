@@ -5,10 +5,10 @@ Subject: [PATCH] Dynamic minecart speed
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index db4492d550a381935ae91ac4808d5a66084cdaf8..4e8afc80d7c8eff684562aebf6c7a4a04c9e942c 100644
+index 9ce08633464a6f787b1573aea6823bd63d3cca9d..522fee5213d4b0e2fdd200663fa41cb7ad524b34 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -629,7 +629,108 @@ public abstract class AbstractMinecart extends Entity {
+@@ -628,7 +628,108 @@ public abstract class AbstractMinecart extends Entity {
              d5 = -d5;
          }
  
@@ -118,7 +118,7 @@ index db4492d550a381935ae91ac4808d5a66084cdaf8..4e8afc80d7c8eff684562aebf6c7a4a0
  
          vec3d1 = new Vec3(d8 * d4 / d6, vec3d1.y, d8 * d5 / d6);
          this.setDeltaMovement(vec3d1);
-@@ -666,7 +767,13 @@ public abstract class AbstractMinecart extends Entity {
+@@ -665,7 +766,13 @@ public abstract class AbstractMinecart extends Entity {
              if (d11 < 0.03D) {
                  this.setDeltaMovement(Vec3.ZERO);
              } else {
@@ -133,7 +133,7 @@ index db4492d550a381935ae91ac4808d5a66084cdaf8..4e8afc80d7c8eff684562aebf6c7a4a0
              }
          }
  
-@@ -695,9 +802,10 @@ public abstract class AbstractMinecart extends Entity {
+@@ -694,9 +801,10 @@ public abstract class AbstractMinecart extends Entity {
          d2 = d12 + d5 * d15;
          this.setPos(d0, d1, d2);
          d16 = this.isVehicle() ? 0.75D : 1.0D;
@@ -146,7 +146,7 @@ index db4492d550a381935ae91ac4808d5a66084cdaf8..4e8afc80d7c8eff684562aebf6c7a4a0
          if (baseblockposition.getY() != 0 && Mth.floor(this.getX()) - pos.getX() == baseblockposition.getX() && Mth.floor(this.getZ()) - pos.getZ() == baseblockposition.getZ()) {
              this.setPos(this.getX(), this.getY() + (double) baseblockposition.getY(), this.getZ());
          } else if (baseblockposition1.getY() != 0 && Mth.floor(this.getX()) - pos.getX() == baseblockposition1.getX() && Mth.floor(this.getZ()) - pos.getZ() == baseblockposition1.getZ()) {
-@@ -727,26 +835,52 @@ public abstract class AbstractMinecart extends Entity {
+@@ -726,26 +834,52 @@ public abstract class AbstractMinecart extends Entity {
          if (i != pos.getX() || j != pos.getZ()) {
              vec3d4 = this.getDeltaMovement();
              d18 = vec3d4.horizontalDistance();
@@ -203,7 +203,7 @@ index db4492d550a381935ae91ac4808d5a66084cdaf8..4e8afc80d7c8eff684562aebf6c7a4a0
                      }
                  } else {
                      if (blockpropertytrackposition != RailShape.NORTH_SOUTH) {
-@@ -754,9 +888,9 @@ public abstract class AbstractMinecart extends Entity {
+@@ -753,9 +887,9 @@ public abstract class AbstractMinecart extends Entity {
                      }
  
                      if (this.isRedstoneConductor(pos.north())) {

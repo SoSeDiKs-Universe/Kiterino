@@ -92,10 +92,10 @@ index 0000000000000000000000000000000000000000..b9e036645e35ea07cf70e9e67b182cf9
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ce7d35d0fda07bd36ac5538c4b2b2b4ee52c00ac
+index 0000000000000000000000000000000000000000..035047fca57658c4c9a76da4eae488308f86325d
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
-@@ -0,0 +1,99 @@
+@@ -0,0 +1,107 @@
 +package com.github.weepingmc.packet;
 +
 +import com.destroystokyo.paper.profile.PlayerProfile;
@@ -125,7 +125,15 @@ index 0000000000000000000000000000000000000000..ce7d35d0fda07bd36ac5538c4b2b2b4e
 +public interface PacketStepBuilder {
 +
 +    @NotNull
-+    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction);
++    default PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction){
++        return sendPlayerProfile(playerProfile, profileAction, true);
++    }
++
++    @NotNull
++    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, boolean listed);
++
++    @NotNull
++    PacketStepBuilder removePlayerProfile(@NotNull PlayerProfile playerProfile);
 +
 +    @NotNull
 +    PacketStepBuilder spawnPlayer(int entityId, @NotNull UUID uuid, @NotNull Location location);
@@ -269,17 +277,25 @@ index 0000000000000000000000000000000000000000..4006afbec75cefb42f5722249f65ab2a
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java b/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ad2398e817783f9e77b12c2beb3a1271564001bb
+index 0000000000000000000000000000000000000000..ae8aeda04ca7e02d2cf28eb07258ff7039248948
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,17 @@
 +package com.github.weepingmc.packet.options;
++
++import com.destroystokyo.paper.profile.PlayerProfile;
 +
 +public enum ProfileAction {
 +    ADD_PLAYER,
++    INITIALIZE_CHAT,
 +    UPDATE_GAME_MODE,
++    UPDATE_LISTED,
 +    UPDATE_LATENCY,
 +    UPDATE_DISPLAY_NAME,
++    /**
++     * @deprecated there is a separate packet now use {@link com.github.weepingmc.packet.PacketStepBuilder#removePlayerProfile(PlayerProfile)}
++     */
++    @Deprecated(forRemoval = true, since = "1.19.3")
 +    REMOVE_PLAYER;
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/TeamMode.java b/src/main/java/com/github/weepingmc/packet/options/TeamMode.java
@@ -298,10 +314,10 @@ index 0000000000000000000000000000000000000000..aafa50f0809a03dcdd3a8fcf914d04e7
 +    REMOVE_PLAYERS_FROM_TEAM
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index e5943f1313f97dd6a353873d54424ae70d46dcef..c868976751c8d317297c89575ea99982a472dc20 100644
+index 83571abfe9a2eb8736b481de35dfd7fd4c663f5a..7312c9c556c237af3d4d6de872a9355fbc018f5a 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2456,6 +2456,15 @@ public final class Bukkit {
+@@ -2458,6 +2458,15 @@ public final class Bukkit {
      public static @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer() {
          return server.getPotionBrewer();
      }
@@ -318,10 +334,10 @@ index e5943f1313f97dd6a353873d54424ae70d46dcef..c868976751c8d317297c89575ea99982
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index a21d6c276a7a162bef937de5167c674de73f54ea..faf2964bbba9123d4347f1bd3ee28fabab154c55 100644
+index 588624e8ae40f5e707bc370a2e17c17e2398af9c..62319d068ecbb0f357f34bf69518f985035c6670 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2155,6 +2155,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2157,6 +2157,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       * @return the potion brewer
       */
      @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer();

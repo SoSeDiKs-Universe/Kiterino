@@ -5,10 +5,10 @@ Subject: [PATCH] Non-solid coral fans
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index ad0ee0d333ffd862fe74ac3a097c51d5550803df..eff1a80636d7fc9ab22050d2ff3996fd0bae8b0e 100644
+index c75404ddcb36105b84ff8c21545549bee5b4cb8e..067aa4a4e513f81f39fe557161c008b8a9dc7b33 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
-@@ -730,31 +730,31 @@ public class Blocks {
+@@ -770,31 +770,31 @@ public class Blocks {
      public static final Block BUBBLE_CORAL_BLOCK = register("bubble_coral_block", new CoralBlock(DEAD_BUBBLE_CORAL_BLOCK, BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK)));
      public static final Block FIRE_CORAL_BLOCK = register("fire_coral_block", new CoralBlock(DEAD_FIRE_CORAL_BLOCK, BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_RED).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK)));
      public static final Block HORN_CORAL_BLOCK = register("horn_coral_block", new CoralBlock(DEAD_HORN_CORAL_BLOCK, BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_YELLOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK)));
