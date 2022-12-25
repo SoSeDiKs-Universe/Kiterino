@@ -5,7 +5,7 @@ Subject: [PATCH] Parchment - Expose EntityType Ordinals
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 7ba73edc37d14eca0fee178cf576e115689010b6..894f78a73d07c8a11ea6a407473c9224143f2ccb 100644
+index 7ba73edc37d14eca0fee178cf576e115689010b6..fb97c3dec55d14fe7e701e0dafcb42d58d21291d 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -161,6 +161,8 @@ import org.slf4j.Logger;
@@ -17,13 +17,22 @@ index 7ba73edc37d14eca0fee178cf576e115689010b6..894f78a73d07c8a11ea6a407473c9224
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final String ENTITY_TAG = "EntityTag";
      private final Holder.Reference<EntityType<?>> builtInRegistryHolder;
-@@ -306,9 +308,30 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -299,6 +301,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private String descriptionId;
+     @Nullable
+     private Component description;
++    private String registeredId; // Kiterino
+     @Nullable
+     private ResourceLocation lootTable;
+     private EntityDimensions dimensions; // Purpur - remove final
+@@ -306,9 +309,31 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
      private final FeatureFlagSet requiredFeatures;
  
      private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
 -        return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, id, (EntityType<T>) type.build(id)); // CraftBukkit - decompile error
 +        // Parchment start
 +        EntityType<T> build = type.build(id);
++        build.registeredId = id; // Kiterino - use registered id for comparing
 +        ordinals.put(build, ordinal++);
 +        return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, id, (EntityType<T>) build); // CraftBukkit - decompile error
      }
@@ -37,12 +46,12 @@ index 7ba73edc37d14eca0fee178cf576e115689010b6..894f78a73d07c8a11ea6a407473c9224
 +        if (this == o) return true;
 +        if (o == null || getClass() != o.getClass()) return false;
 +        EntityType<?> that = (EntityType<?>) o;
-+        return descriptionId != null && descriptionId.equals(that.descriptionId);
++        return registeredId.equals(that.registeredId);
 +    }
 +
 +    @Override
 +    public int hashCode() {
-+        return descriptionId == null ? -1 : java.util.Objects.hash(descriptionId);
++        return java.util.Objects.hash(registeredId);
 +    }
 +    // Parchment end
 +
