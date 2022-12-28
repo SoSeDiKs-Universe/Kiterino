@@ -1,0 +1,83 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 28 Dec 2022 19:31:55 +0200
+Subject: [PATCH] Allow damaged and enchanted items in recipe book grid
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
+index 004091f2026f3c58d9bce49f1b07f6441df8da8a..7108ffccd88e17f06ce3bd99da8051b9b6b7dd5d 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
++++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
+@@ -198,7 +198,7 @@ public class Inventory implements Container, Nameable {
+         for (int i = 0; i < this.items.size(); ++i) {
+             ItemStack itemstack1 = (ItemStack) this.items.get(i);
+ 
+-            if (!((ItemStack) this.items.get(i)).isEmpty() && ItemStack.isSameItemSameTags(stack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).isDamaged() && !itemstack1.isEnchanted() && !itemstack1.hasCustomHoverName()) {
++            if (!itemstack1.isEmpty() && itemstack1.getItem() == stack.getItem() && ItemStack.recipesTagsMatch(itemstack1, stack)) { // Kiterino - less limited items in the crafting grid
+                 return i;
+             }
+         }
+diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
+index 12c84c6973842a5f7234895be95d7cc1b717848e..d4b1115f9d8a59bdb2d28840f10e42b0990464ac 100644
+--- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
++++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
+@@ -22,7 +22,7 @@ public class StackedContents {
+     public final Int2IntMap contents = new Int2IntOpenHashMap();
+ 
+     public void accountSimpleStack(ItemStack stack) {
+-        if (!stack.isDamaged() && !stack.isEnchanted() && !stack.hasCustomHoverName()) {
++        if (/*!stack.isDamaged() && !stack.isEnchanted() && */!stack.hasCustomHoverName()) { // Kiterino - allow damaged and enchanted items
+             this.accountStack(stack);
+         }
+ 
+@@ -72,13 +72,21 @@ public class StackedContents {
+                     }
+                 }
+                 // Kiterino end
+-                return ItemStack.tagMatches(a, b);
++                return ItemStack.recipesTagsMatch(a, b); // Kiterino - less strict check
+             }
+         });
+         private final it.unimi.dsi.fastutil.ints.Int2ObjectMap<net.minecraft.world.item.ItemStack> idToItemstack = new it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap<>();
+ 
+         @Override
+         public int getId(ItemStack value) {
++            // Kiterino start
++            if (!this.itemstackToId.containsKey(value)) {
++                final ItemStack copy = value.copy();
++                copy.setTag(ItemStack.getStripped(copy.getTag()));
++                if (!copy.hasTag()) return getStackingIndex(copy);
++                value = copy;
++            }
++            // Kiterino end
+             if (!this.itemstackToId.containsKey(value)) {
+                 final int id = this.idCounter.incrementAndGet();
+                 final ItemStack copy = value.copy();
+diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
+index 2e05b1a4c5be46c4184bba1027d8d43babf92220..46ffd35f5cee1a58245a7181963c1bc3beeb107d 100644
+--- a/src/main/java/net/minecraft/world/item/ItemStack.java
++++ b/src/main/java/net/minecraft/world/item/ItemStack.java
+@@ -747,6 +747,23 @@ public final class ItemStack {
+         return stack.is(otherStack.getItem()) && ItemStack.tagMatches(stack, otherStack);
+     }
+ 
++    // Kiterino start
++    public static boolean recipesTagsMatch(@javax.annotation.Nullable ItemStack a, @javax.annotation.Nullable ItemStack b) {
++        if (a == null || b == null) return false;
++        if (a.isEmpty()) return b.isEmpty();
++        if (b.isEmpty()) return false;
++        return java.util.Objects.equals(getStripped(a.getTag()), getStripped(b.getTag()));
++    }
++
++    public static @javax.annotation.Nullable CompoundTag getStripped(@javax.annotation.Nullable CompoundTag nbt) {
++        if (nbt == null) return null;
++        nbt = nbt.copy();
++        nbt.remove(ItemStack.TAG_ENCH);
++        nbt.remove(ItemStack.TAG_DAMAGE);
++        return nbt;
++    }
++    // Kiterino end
++
+     public String getDescriptionId() {
+         return this.getItem().getDescriptionId(this);
+     }
