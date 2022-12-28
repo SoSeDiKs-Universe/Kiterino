@@ -28,10 +28,10 @@ index 5c183107df821b67e175bba81f4dbe13d1e316bf..ec23de1229337a636f650782205ff221
          // Paper end
          NoteBlockInstrument blockpropertyinstrument = (NoteBlockInstrument) state.getValue(NoteBlock.INSTRUMENT);
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index a728a2603311afb4ac2c3af9d2f0f34b2d145d0a..1f35434768976baa9f53a942795999ed0329e922 100644
+index 270f541d177d3dd1eb48aa678f680d6a3e0a336e..0280050dddd1074e6fef222bbd398794c83ba772 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1425,7 +1425,12 @@ public class CraftEventFactory {
+@@ -1433,7 +1433,12 @@ public class CraftEventFactory {
      }
  
      public static NotePlayEvent callNotePlayEvent(Level world, BlockPos pos, NoteBlockInstrument instrument, int note) {

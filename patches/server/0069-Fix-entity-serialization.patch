@@ -5,10 +5,10 @@ Subject: [PATCH] Fix entity serialization
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f2d28e5da1bb1ed9aec5299277f1fee4c938521d..41af2d10417a36cf4fb5d781806eae01ed451d01 100644
+index cdf0a055e872cbe3a760d16064701d5497dbb81c..8af60c9875e7c2942a3b9b18f1ac0130c32ebe21 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2192,15 +2192,6 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2201,15 +2201,6 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          }
      }
  

@@ -133,7 +133,7 @@ index 0000000000000000000000000000000000000000..9dbade8d387fb92b4749bc24b7b7522d
 +
 +}
 diff --git a/src/main/java/net/minecraft/world/damagesource/DamageSource.java b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
-index eac1351ef29d4c05d665e7bceea4cc72ce10e943..4122247ea35e05192e1e4b4f717a349f620a302a 100644
+index 2e1c34d37b4371fcd7f5616ad5cd5876014ebc9d..857999a26d0b12664416557a22f30b1e49ebb8c2 100644
 --- a/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 +++ b/src/main/java/net/minecraft/world/damagesource/DamageSource.java
 @@ -11,6 +11,8 @@ import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -145,7 +145,7 @@ index eac1351ef29d4c05d665e7bceea4cc72ce10e943..4122247ea35e05192e1e4b4f717a349f
  
  public class DamageSource {
  
-@@ -328,4 +330,60 @@ public class DamageSource {
+@@ -337,4 +339,60 @@ public class DamageSource {
      public Vec3 getSourcePosition() {
          return null;
      }
@@ -207,10 +207,10 @@ index eac1351ef29d4c05d665e7bceea4cc72ce10e943..4122247ea35e05192e1e4b4f717a349f
 +    // Paper - end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 55485039b103d7ee8dbe7dbf9552abdc0269b5ba..548f6b50284c616fcd33403a673eed82d725b059 100644
+index add95e63596a381f533c6351243fdf6c627a4010..ebc4701b204ea28abeb8fa2bf20d6ec2e38dfcb0 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2029,7 +2029,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2038,7 +2038,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          this.hurtMarked = true;
      }
  
@@ -273,7 +273,7 @@ index 8079a5f0db670cdb55fc5ab6b6090d0cb0084c97..a696ba2373c5ec0097814b5746dfb69b
      public Location getEyeLocation() {
          Location loc = getLocation();
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 3f16c75e72649ece41683cde98382253c3aae3aa..b4fa0e9ab74d6f42dec45f530a14393add8806bd 100644
+index ddea53ab21c4bbd5fc0b016b5fbb36b0b3fa4e74..699829585eb536ba3d2697fac6eb164b405191c8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 @@ -985,9 +985,12 @@ public class CraftEventFactory {

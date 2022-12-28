@@ -5,7 +5,7 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 41af2d10417a36cf4fb5d781806eae01ed451d01..23473f089779b8bddf9bbb14599a839632b3d285 100644
+index 8af60c9875e7c2942a3b9b18f1ac0130c32ebe21..ed50ffbba77e195b0a496c27623e376f8d9c8e1e 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -421,6 +421,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -36,7 +36,7 @@ index 41af2d10417a36cf4fb5d781806eae01ed451d01..23473f089779b8bddf9bbb14599a8396
      public float getBukkitYaw() {
          return this.yRot;
      }
-@@ -2343,6 +2364,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2352,6 +2373,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -49,7 +49,7 @@ index 41af2d10417a36cf4fb5d781806eae01ed451d01..23473f089779b8bddf9bbb14599a8396
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2516,6 +2543,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2525,6 +2552,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
              // Purpur end
  

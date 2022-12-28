@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 37e8ad90155fdb2a078c19481a436599f22a22c7..f2d28e5da1bb1ed9aec5299277f1fee4c938521d 100644
+index 66609d96ffe8a4a261282399f1e09546a026dcc6..cdf0a055e872cbe3a760d16064701d5497dbb81c 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2852,6 +2852,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2861,6 +2861,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return true; // CraftBukkit
      }
  
