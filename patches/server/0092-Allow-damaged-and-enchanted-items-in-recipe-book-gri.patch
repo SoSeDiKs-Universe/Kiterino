@@ -54,10 +54,10 @@ index 12c84c6973842a5f7234895be95d7cc1b717848e..d4b1115f9d8a59bdb2d28840f10e42b0
                  final int id = this.idCounter.incrementAndGet();
                  final ItemStack copy = value.copy();
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 2e05b1a4c5be46c4184bba1027d8d43babf92220..46ffd35f5cee1a58245a7181963c1bc3beeb107d 100644
+index 2e05b1a4c5be46c4184bba1027d8d43babf92220..02d173df485e9ff2b9b57079991c47aa5dff1cdc 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -747,6 +747,23 @@ public final class ItemStack {
+@@ -747,6 +747,35 @@ public final class ItemStack {
          return stack.is(otherStack.getItem()) && ItemStack.tagMatches(stack, otherStack);
      }
  
@@ -74,6 +74,18 @@ index 2e05b1a4c5be46c4184bba1027d8d43babf92220..46ffd35f5cee1a58245a7181963c1bc3
 +        nbt = nbt.copy();
 +        nbt.remove(ItemStack.TAG_ENCH);
 +        nbt.remove(ItemStack.TAG_DAMAGE);
++        // Only keep custom item ID
++        String namespace = org.bukkit.Bukkit.getName();
++        if (nbt.contains(namespace, Tag.TAG_COMPOUND)) {
++            var knbt = nbt.getCompound(namespace);
++            nbt.remove(namespace);
++            if (knbt.contains("Id", Tag.TAG_STRING)) {
++                String id = knbt.getString("Id");
++                knbt = new CompoundTag();
++                knbt.putString("Id", id);
++                nbt.put(namespace, knbt);
++            }
++        }
 +        return nbt;
 +    }
 +    // Kiterino end
