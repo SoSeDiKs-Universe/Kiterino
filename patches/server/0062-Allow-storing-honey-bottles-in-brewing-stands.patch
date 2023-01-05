@@ -5,7 +5,7 @@ Subject: [PATCH] Allow storing honey bottles in brewing stands
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
-index c6dbd248488d4a61fb9bcb9ef7afe87f7961265f..83c5e5d211d23a4e9cfbb5bde7f262c85131e44e 100644
+index a398554a1c944ae9adb8722fa1412d7d90a48614..f606b29ebc911a12e2fdaf8bd9245a323d04423c 100644
 --- a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
 @@ -168,7 +168,7 @@ public class BrewingStandMenu extends AbstractContainerMenu {

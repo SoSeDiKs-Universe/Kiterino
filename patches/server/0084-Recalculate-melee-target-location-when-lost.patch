@@ -5,7 +5,7 @@ Subject: [PATCH] Recalculate melee target location when lost
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java
-index e6cf828a267f694d3f23e578b62c8f8146f22afb..9dcfb9906b0bc6c43cd55a93991ae423a6207e36 100644
+index 1875f9f4ab4ebd182e10f17b89d493a4584db87e..31baac28910bed0ac96f757195b75d7a9ec746e4 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java
 @@ -60,7 +60,13 @@ public class MeleeAttackGoal extends Goal {

@@ -5,7 +5,7 @@ Subject: [PATCH] Campfires burn out in rain
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index 8e198941b4ad7845d73ab1cfea5ac07b0014fe22..4de94aa3e9058e97f992e6083652e500a9ce7374 100644
+index 830326496e2f961682daadc7a7859247042b4cdd..36f33df5a2c29600c0d4c5da2301fb45748a8f45 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 @@ -53,6 +53,20 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {

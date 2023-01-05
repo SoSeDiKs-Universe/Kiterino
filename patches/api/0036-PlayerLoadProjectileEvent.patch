@@ -6,7 +6,7 @@ Subject: [PATCH] PlayerLoadProjectileEvent
 
 diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerLoadsProjectileEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerLoadsProjectileEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8ba823dacabdee481a11fc4bf13b2223453c6483
+index 0000000000000000000000000000000000000000..996eabe8609fdfebfa7a89588992aaeec82202dc
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerLoadsProjectileEvent.java
 @@ -0,0 +1,97 @@

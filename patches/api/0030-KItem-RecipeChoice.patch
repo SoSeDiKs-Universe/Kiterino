@@ -6,7 +6,7 @@ Subject: [PATCH] KItem RecipeChoice
 
 diff --git a/src/main/java/me/sosedik/kiterino/inventory/ItemChoice.java b/src/main/java/me/sosedik/kiterino/inventory/ItemChoice.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..2f44350020ec85f8902ec8b33ee259088ac9cf71
+index 0000000000000000000000000000000000000000..f2acd31bc04e0df27a6c4f681b11c7f6df9ba262
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/inventory/ItemChoice.java
 @@ -0,0 +1,83 @@

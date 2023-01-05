@@ -5,7 +5,7 @@ Subject: [PATCH] Add PlayerStartUsingItemEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 95e672cba6860a23beebf0225439fce5950ee49f..a7a7007f84f2c32ad9d66a33367b8706c098f372 100644
+index dcc9f1f0d5879ef5cdd09e2ec6316a8c83428596..661ead674eebf2284579823a02e0bef178acc94f 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3967,7 +3967,18 @@ public abstract class LivingEntity extends Entity {

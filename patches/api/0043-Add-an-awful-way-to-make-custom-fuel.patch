@@ -6,7 +6,7 @@ Subject: [PATCH] Add an awful way to make custom fuel
 
 diff --git a/src/main/java/me/sosedik/kiterino/event/block/FuelCheckEvent.java b/src/main/java/me/sosedik/kiterino/event/block/FuelCheckEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..dd939065a8196eaf60de11e67aff0a43c2460b00
+index 0000000000000000000000000000000000000000..6a73c7fbf9cd7b07cba92821a0f134d1e6dbcba3
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/event/block/FuelCheckEvent.java
 @@ -0,0 +1,57 @@

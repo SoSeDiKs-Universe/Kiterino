@@ -5,7 +5,7 @@ Subject: [PATCH] Include vehicle's height in collision
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 023c2ab9e798425e18467d26cd7552d228e70e6d..c9e59d23f24fb7761100f3c244cd6ba2691c4586 100644
+index efbc0e05b870fb6e1f22304a70c3307ca89f31eb..4e13c1bc352eb6ae48e3dd31da645df734b374fe 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -1439,7 +1439,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {

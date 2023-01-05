@@ -5,7 +5,7 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 8af60c9875e7c2942a3b9b18f1ac0130c32ebe21..ed50ffbba77e195b0a496c27623e376f8d9c8e1e 100644
+index b0c8e6f314c4247cdda0683633ea78a21ab6148f..27bd961d01819b59e7a19823f2d2fd8156b61845 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -421,6 +421,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
