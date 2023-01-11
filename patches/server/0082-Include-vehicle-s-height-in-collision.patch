@@ -5,7 +5,7 @@ Subject: [PATCH] Include vehicle's height in collision
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index efbc0e05b870fb6e1f22304a70c3307ca89f31eb..4e13c1bc352eb6ae48e3dd31da645df734b374fe 100644
+index efbc0e05b870fb6e1f22304a70c3307ca89f31eb..fc1314cf14cfa47eeaf4d08a84e98422751a7226 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -1439,7 +1439,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -22,7 +22,7 @@ index efbc0e05b870fb6e1f22304a70c3307ca89f31eb..4e13c1bc352eb6ae48e3dd31da645df7
  
          if (io.papermc.paper.util.CollisionUtil.isEmpty(currBoundingBox)) {
              return movement;
-@@ -1495,11 +1500,18 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1495,11 +1500,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  if (vec3d2.horizontalDistanceSqr() > limitedMoveVector.horizontalDistanceSqr()) {
                      return vec3d2.add(io.papermc.paper.util.CollisionUtil.performCollisions(new Vec3(0.0D, -vec3d2.y + movement.y, 0.0D), currBoundingBox.move(vec3d2), potentialCollisions));
                  }
@@ -31,6 +31,7 @@ index efbc0e05b870fb6e1f22304a70c3307ca89f31eb..4e13c1bc352eb6ae48e3dd31da645df7
 -            } else {
 -                return limitedMoveVector;
              }
++            // Kiterino start - include vehicle's height in collision
 +            for (Entity passenger : getPassengers()) {
 +                BlockState state = world.getBlockState(new BlockPos(passenger.position().add(0, passenger.getBbHeight(), 0).add(movement.normalize())));
 +                if (!state.is(BlockTags.LEAVES)) {
@@ -42,6 +43,7 @@ index efbc0e05b870fb6e1f22304a70c3307ca89f31eb..4e13c1bc352eb6ae48e3dd31da645df7
 +                }
 +            }
 +            return limitedMoveVector;
++            // Kiterino end
          } finally {
              io.papermc.paper.util.CachedLists.returnTempCollisionList(potentialCollisions);
          }

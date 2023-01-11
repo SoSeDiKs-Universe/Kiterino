@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 10 Jan 2023 00:50:12 +0200
+Subject: [PATCH] Make boats buoyancy under flowing water to workaround
+ MC-91206
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+index 22f525a32444b395510ac16ebae998a23bd930f7..a390cc79effa64c7db17127d596dd5fb48e9f4b9 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+@@ -439,6 +439,14 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+             }
+         }
+ 
++        // Kiterino start - Workaround MC-91206; make boats buoyancy under flowing water
++        if (isUnderWater() && hasControllingPassenger()) {
++            FluidState fluidAbove = this.level.getFluidState(blockPosition().above());
++            if (fluidAbove.is(FluidTags.WATER) && !fluidAbove.isSource() && fluidAbove.getAmount() != 8) {
++                setDeltaMovement(getDeltaMovement().add(0, 0.5, 0));
++            }
++        }
++        // Kiterino end
+     }
+ 
+     private void tickBubbleColumn() {
+@@ -692,7 +700,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+ 
+                     if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level, blockposition_mutableblockposition))) {
+                         if (!fluid.isSource()) {
+-                            return fluid.getAmount() == 8 ? Boat.Status.UNDER_FLOWING_WATER : Boat.Status.IN_WATER; // Kiterino - Do not sink boats in running water
++                            return Boat.Status.UNDER_FLOWING_WATER; // Kiterino - Do not sink boats in running water
+                         }
+ 
+                         flag = true;

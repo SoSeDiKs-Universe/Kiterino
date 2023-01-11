@@ -5,7 +5,7 @@ Subject: [PATCH] New liquid physics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index 22be22265081ba8972cd27089b9f05c4f4953beb..4084b3b7d0f7f57b62da607376bda9e237276b3d 100644
+index 22be22265081ba8972cd27089b9f05c4f4953beb..22f525a32444b395510ac16ebae998a23bd930f7 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 @@ -644,7 +644,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
@@ -22,7 +22,7 @@ index 22be22265081ba8972cd27089b9f05c4f4953beb..4084b3b7d0f7f57b62da607376bda9e2
                      if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level, blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {
 -                            return Boat.Status.UNDER_FLOWING_WATER;
-+                            return fluid.getAmount() == 8 ? Status.UNDER_FLOWING_WATER : Boat.Status.IN_WATER; // Kiterino - Do not sink boats in running water
++                            return fluid.getAmount() == 8 ? Boat.Status.UNDER_FLOWING_WATER : Boat.Status.IN_WATER; // Kiterino - Do not sink boats in running water
                          }
  
                          flag = true;
