@@ -5,7 +5,7 @@ Subject: [PATCH] Update goal target when changing target
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
-index c9e6c2d0976bde92a94ae912e488ec30f250df55..8761f6cb6d59a78f77faaa1e18e52c6615eb59d0 100644
+index c9e6c2d0976bde92a94ae912e488ec30f250df55..66c43ee46c5433a698ab4196389e5a657cf002d7 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
 @@ -144,4 +144,10 @@ public abstract class TargetGoal extends Goal {
@@ -14,26 +14,27 @@ index c9e6c2d0976bde92a94ae912e488ec30f250df55..8761f6cb6d59a78f77faaa1e18e52c66
      }
 +
 +    // Kiterino start
-+    public void setTargetMob(LivingEntity targetMob) {
++    public void setTargetMob(@Nullable LivingEntity targetMob) {
 +        this.targetMob = targetMob;
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
-index 620d918e302a00d5a6640648e3096988d15535a0..98d0d342629c2edc66a99caa66ac114f82709528 100644
+index 620d918e302a00d5a6640648e3096988d15535a0..98050c9dbfe2f799dae07b87f56ed0dc3f7482a8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
-@@ -30,6 +30,16 @@ public abstract class CraftMob extends CraftLivingEntity implements Mob {
+@@ -30,6 +30,17 @@ public abstract class CraftMob extends CraftLivingEntity implements Mob {
          } else if (target instanceof CraftLivingEntity) {
              entity.setTarget(((CraftLivingEntity) target).getHandle(), null, false);
          }
 +        // Kiterino start
 +        entity.targetSelector.getRunningGoals().forEach(goal -> {
 +            if (goal.getGoal() instanceof net.minecraft.world.entity.ai.goal.target.TargetGoal targetGoal) {
-+                if (target == null)
++                if (target == null) {
 +                    targetGoal.setTargetMob(null);
-+                else if (target instanceof CraftLivingEntity craftLivingEntity)
++                } else if (target instanceof CraftLivingEntity craftLivingEntity) {
 +                    targetGoal.setTargetMob(craftLivingEntity.getHandle());
++                }
 +            }
 +        });
 +        // Kiterino end
