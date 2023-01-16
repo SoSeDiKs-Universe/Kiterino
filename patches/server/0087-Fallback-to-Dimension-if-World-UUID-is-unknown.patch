@@ -5,7 +5,7 @@ Subject: [PATCH] Fallback to Dimension if World UUID is unknown
 
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index d20f598593a1c3b1b60daf9bf727c68ab2917e4d..94d2a1c8ab353cec28d01f66f171557fc191ed9b 100644
+index bc2bd10b396761566545f29252971dc7ac84f1d3..c26af904210308f6f883de3039b5c76eaa59795a 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -209,7 +209,10 @@ public abstract class PlayerList {

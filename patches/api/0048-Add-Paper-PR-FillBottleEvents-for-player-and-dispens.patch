@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Jake Potrebic <jake.m.potrebic@gmail.com>
 Date: Sat, 26 Feb 2022 16:43:33 -0800
-Subject: [PATCH] Paper PR - Add FillBottleEvents for player and dispenser
+Subject: [PATCH] Add Paper PR - FillBottleEvents for player and dispenser
 
 Adds 2 events, PlayerFillBottleEvent and BlockFillBottleEvent. These
 events do not have a common superclass due to needing to extend
