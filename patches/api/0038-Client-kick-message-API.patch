@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 9432e523ab126c397cf8715d4e280f7c59cd3b5b..52f9d80711b60a4d83fba512717408a086b5723c 100644
+index fb2a7857d8dbf7373d77455cdba3a43f015e1f86..3eadb6facdd70e3c0fa0b5d50aff24d5e438f51a 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3113,5 +3113,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3131,5 +3131,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * @return true, if placed successfully
       */
      boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);

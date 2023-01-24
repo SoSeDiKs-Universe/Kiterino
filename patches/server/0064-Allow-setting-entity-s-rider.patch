@@ -30,19 +30,19 @@ index 8eec827d70d8e42029b72c56ded2dc594d25076f..5dd2f56ef1de54637add0e29325c996b
      protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
      protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 72ae5b60afe22cc170d1ed8e0480b55f0c5801b0..435fdbd165a95677b59a37eb2a63b850be0d1bca 100644
+index 1cc1a2aa075818504ab3e6325183a9c5f3e33657..71e2e1d9c7f2b0c7e546df5098aef338d9e430ee 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1768,7 +1768,7 @@ public abstract class Mob extends LivingEntity {
+@@ -1772,7 +1772,7 @@ public abstract class Mob extends LivingEntity {
      }
  
-     public InteractionResult tryRide(Player player, InteractionHand hand) {
+     public InteractionResult tryRide(Player player, InteractionHand hand, InteractionResult result) {
 -        if (!isRidable()) {
 +        if (!hasRider()) { // Kiterino
-             return InteractionResult.PASS;
+             return result;
          }
          if (hand != InteractionHand.MAIN_HAND) {
-@@ -1796,7 +1796,7 @@ public abstract class Mob extends LivingEntity {
+@@ -1800,7 +1800,7 @@ public abstract class Mob extends LivingEntity {
                  return InteractionResult.PASS;
              }
          }
