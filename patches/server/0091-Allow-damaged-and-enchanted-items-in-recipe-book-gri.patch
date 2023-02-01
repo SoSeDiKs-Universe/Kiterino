@@ -54,10 +54,10 @@ index 12c84c6973842a5f7234895be95d7cc1b717848e..d4b1115f9d8a59bdb2d28840f10e42b0
                  final int id = this.idCounter.incrementAndGet();
                  final ItemStack copy = value.copy();
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 2e05b1a4c5be46c4184bba1027d8d43babf92220..02d173df485e9ff2b9b57079991c47aa5dff1cdc 100644
+index 2b69a6026b7f6ad104a8d741bbfb2494effe2528..444c18e6c6461c347e320a4d60beab484439b8c8 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -747,6 +747,35 @@ public final class ItemStack {
+@@ -748,6 +748,35 @@ public final class ItemStack {
          return stack.is(otherStack.getItem()) && ItemStack.tagMatches(stack, otherStack);
      }
  
