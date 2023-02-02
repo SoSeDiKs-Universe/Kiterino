@@ -72,7 +72,7 @@ index 8bb388c6898aeffdb0061d9f65b278a114647a94..0d454be0fcb809d784f9b0f8cd965865
      }
 +
 +    /**
-+     * Drops an item at the location of the block.
++     * Drops an item at the location of the entity.
 +     *
 +     * @param item ItemStack to drop
 +     * @return ItemDrop entity created as a result of this method
@@ -83,7 +83,7 @@ index 8bb388c6898aeffdb0061d9f65b278a114647a94..0d454be0fcb809d784f9b0f8cd965865
 +    }
 +
 +    /**
-+     * Drops an item at the location of the block.
++     * Drops an item at the location of the entity.
 +     * Note that functions will run before the entity is spawned
 +     *
 +     * @param item ItemStack to drop
@@ -96,7 +96,7 @@ index 8bb388c6898aeffdb0061d9f65b278a114647a94..0d454be0fcb809d784f9b0f8cd965865
 +    }
 +
 +    /**
-+     * Drops an item at the location of the block with a random offset
++     * Drops an item at the location of the entity with a random offset
 +     *
 +     * @param item ItemStack to drop
 +     * @return ItemDrop entity created as a result of this method
@@ -107,7 +107,7 @@ index 8bb388c6898aeffdb0061d9f65b278a114647a94..0d454be0fcb809d784f9b0f8cd965865
 +    }
 +
 +    /**
-+     * Drops an item at the location of the block with a random offset
++     * Drops an item at the location of the entity with a random offset
 +     * Note that functions will run before the entity is spawned
 +     *
 +     * @param item ItemStack to drop

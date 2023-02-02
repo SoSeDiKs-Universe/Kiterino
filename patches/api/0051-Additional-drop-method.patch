@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 2 Feb 2023 04:21:43 +0200
+Subject: [PATCH] Additional drop method
+
+
+diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
+index 8ef807d85b9ab3d213a384dd21d1dc2bfa8119c0..9b57fde0ddced750e27c42db4eaba1c71f355fce 100644
+--- a/src/main/java/org/bukkit/entity/HumanEntity.java
++++ b/src/main/java/org/bukkit/entity/HumanEntity.java
+@@ -808,5 +808,13 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+      * @return current active container state id
+      */
+     int getActiveContainerStateId();
++
++    /**
++     * Make the entity drop the item.
++     * <p>This will call the {@link org.bukkit.event.player.PlayerDropItemEvent} event.
++     *
++     * @param item item to drop
++     */
++    @Nullable Item drop(@NotNull ItemStack item);
+     // Kiterino start
+ }
