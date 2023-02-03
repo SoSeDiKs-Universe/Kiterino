@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 3 Feb 2023 13:06:17 +0200
+Subject: [PATCH] Add Age to AxolotlBucketMeta
+
+
+diff --git a/src/main/java/org/bukkit/inventory/meta/AxolotlBucketMeta.java b/src/main/java/org/bukkit/inventory/meta/AxolotlBucketMeta.java
+index f7d457ab1e67d702e8332876fc98d3b503a65eaf..d25fdcf2dd43323aac55ad263a72fea22003cf6c 100644
+--- a/src/main/java/org/bukkit/inventory/meta/AxolotlBucketMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/AxolotlBucketMeta.java
+@@ -36,4 +36,43 @@ public interface AxolotlBucketMeta extends ItemMeta {
+     @Override
+     @NotNull
+     AxolotlBucketMeta clone();
++
++    // Kiterino start
++    /**
++     * Gets the age of this axolotl
++     *
++     * @return the age of this axolotl
++     */
++    int getAge();
++
++    /**
++     * Sets the age of this axolotl
++     *
++     * @param age the age of this axolotl
++     */
++    void setAge(int age);
++
++    /**
++     * Checks whether this axolotl is an adult
++     *
++     * @return whether this axolotl is an adult
++     */
++    default boolean isAdult() {
++        return getAge() >= 0;
++    }
++
++    /**
++     * Makes this axolotl an adult
++     */
++    default void setAdult() {
++        setAge(0);
++    }
++
++    /**
++     * Makes this axolotl a baby
++     */
++    default void setBaby() {
++        setAge(-24000);
++    }
++    // Kiterino end
+ }
