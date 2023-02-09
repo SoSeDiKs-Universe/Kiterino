@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index d1379d8eee19bcef3b9ffa7c86961f9ce57f76ad..7018e96602a03fe50ff7f25607af0538893949de 100644
+index ebc42a0ed4b24564a5055fef50468142529aed2f..f1f21d51aebe3ce5114c04a46e0ab2d5c1413ca8 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1106,6 +1106,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1125,6 +1125,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       * @param amount the amount of damage to do
       */
      void damageItemStack(org.bukkit.inventory.@NotNull EquipmentSlot slot, int amount);

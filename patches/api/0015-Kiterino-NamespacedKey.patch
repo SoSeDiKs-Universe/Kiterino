@@ -5,10 +5,10 @@ Subject: [PATCH] Kiterino NamespacedKey
 
 
 diff --git a/src/main/java/org/bukkit/NamespacedKey.java b/src/main/java/org/bukkit/NamespacedKey.java
-index 236c9aea9ffc36269e5c32eacc9f1fd6bd039c88..5b9894cceb7750af832736e04ca19fee792a3a09 100644
+index 32479109d90571368fd66da7dcb45ddf54eb404e..f6df2988b3d8fcdd4ec58e7577d1a03173c3320c 100644
 --- a/src/main/java/org/bukkit/NamespacedKey.java
 +++ b/src/main/java/org/bukkit/NamespacedKey.java
-@@ -30,6 +30,12 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
+@@ -29,6 +29,12 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
       * compatibility measures.
       */
      public static final String BUKKIT = "bukkit";
@@ -19,9 +19,9 @@ index 236c9aea9ffc36269e5c32eacc9f1fd6bd039c88..5b9894cceb7750af832736e04ca19fee
 +    public static final String KITERINO = "kiterino";
 +    // Kiterino end
      //
-     private static final Pattern VALID_NAMESPACE = Pattern.compile("[a-z0-9._-]+");
-     private static final Pattern VALID_KEY = Pattern.compile("[a-z0-9/._-]+");
-@@ -145,6 +151,19 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
+     private final String namespace;
+     private final String key;
+@@ -179,6 +185,19 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
          return new NamespacedKey(MINECRAFT, key);
      }
  

@@ -17,13 +17,13 @@ index 5c8dd4d3313a791d1fee00ec5d4bc595b76b7d6d..6f8f8e0c45ee5ba4ca9aa778efc5a390
      implementation("org.ow2.asm:asm:9.2")
      implementation("org.ow2.asm:asm-commons:9.2")
 diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
-index e1e1bc868019f715370490719ef887e0eee3ddec..ee1487c7ed5ff8694dda6c4dcc7c566e6a4dcd38 100644
+index eccc357cabd8317afc5666c3347936d50eb34015..ab3f163ebeb9e3c5af3f7d6aab90a7fc2d703295 100644
 --- a/src/main/java/org/bukkit/Chunk.java
 +++ b/src/main/java/org/bukkit/Chunk.java
-@@ -284,4 +284,16 @@ public interface Chunk extends PersistentDataHolder {
-      * @return if the block is contained within
+@@ -291,4 +291,16 @@ public interface Chunk extends PersistentDataHolder {
+      * @return if the biome is contained within
       */
-     boolean contains(@NotNull BlockData block);
+     boolean contains(@NotNull Biome biome);
 +
 +    // Kiterino start
 +    /**

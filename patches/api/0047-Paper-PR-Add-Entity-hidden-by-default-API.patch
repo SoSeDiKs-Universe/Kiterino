@@ -14,7 +14,7 @@ If no plugin had previously hidden the entity before the entity was hidden by de
 plugin that attempts to show the entity to a player will succeed in doing so.
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index c43f46f411fd24349e85d9c6fb1f49a1bbd03173..05d6cfa7f88c597dcc64a4b7bdbaa77148fb1d9a 100644
+index fcfef31e6cf6b435bd8736e3cebd8ffd6228a723..df0b418677ed7ab4d399f62b6dfa5c07bd675071 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
 @@ -971,6 +971,27 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
@@ -46,10 +46,10 @@ index c43f46f411fd24349e85d9c6fb1f49a1bbd03173..05d6cfa7f88c597dcc64a4b7bdbaa771
      /**
       * Get the riding player
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 3eadb6facdd70e3c0fa0b5d50aff24d5e438f51a..c4a9f4b9f04cf07c556a29cc02cd91273287d674 100644
+index 8e7fe29298996e8965d16837e35c9d5f75db5cfc..6bcf223a312cc852dca911e3f048821fd349b825 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -1491,9 +1491,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -1516,9 +1516,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
  
      /**
       * Allows this player to see an entity that was previously hidden. If

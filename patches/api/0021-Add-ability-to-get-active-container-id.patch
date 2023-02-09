@@ -5,14 +5,13 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index dd6db7819af5c4c8b3508cc63229035a727eccfe..8ef807d85b9ab3d213a384dd21d1dc2bfa8119c0 100644
+index a7dce01c260e483336dd238f074dc178f737cef0..09aa0a31833cd80af632cfbfd3b1383196f85415 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -793,4 +793,20 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
-      */
+@@ -814,4 +814,19 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
      @Nullable
      public Firework fireworkBoost(@NotNull ItemStack fireworkItemStack);
-+
+ 
 +    // Kiterino start
 +    /**
 +     * Get current active container id

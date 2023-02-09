@@ -207,7 +207,7 @@ index 2e1c34d37b4371fcd7f5616ad5cd5876014ebc9d..857999a26d0b12664416557a22f30b1e
 +    // Paper - end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index add95e63596a381f533c6351243fdf6c627a4010..ebc4701b204ea28abeb8fa2bf20d6ec2e38dfcb0 100644
+index a15826b07b9173d40add0a33252c321c72b6bd92..f74f8a97bca725880964a23c4dd2ef12ce38824b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -2038,7 +2038,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -242,10 +242,10 @@ index a407e802164603c74ec1f4ad3c98bc50398954bc..03ab833ede5ba4622752e5c4f241d0bd
      public double getHealth() {
          return this.getParent().getHealth();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 8079a5f0db670cdb55fc5ab6b6090d0cb0084c97..a696ba2373c5ec0097814b5746dfb69b7f223829 100644
+index 257156505d76b9577d19ad2a2441a4f18c66fb9d..cebbd618f453c19ea8a0c3bcdc24a2b970a4fb36 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -358,7 +358,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -364,7 +364,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      // Paper End - Bee Stinger API
      @Override
      public void damage(double amount) {
@@ -254,7 +254,7 @@ index 8079a5f0db670cdb55fc5ab6b6090d0cb0084c97..a696ba2373c5ec0097814b5746dfb69b
      }
  
      @Override
-@@ -376,6 +376,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -382,6 +382,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          entity.hurt(reason, (float) amount);
      }
  
