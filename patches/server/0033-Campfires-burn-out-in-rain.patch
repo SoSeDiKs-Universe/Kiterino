@@ -5,10 +5,10 @@ Subject: [PATCH] Campfires burn out in rain
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index 830326496e2f961682daadc7a7859247042b4cdd..36f33df5a2c29600c0d4c5da2301fb45748a8f45 100644
+index 01d8f1c985223eec83beb4a84a710d1bf8d70849..42cd469dd3449fc7cec1644b07c3b9fb168969c3 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-@@ -53,6 +53,20 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -55,6 +55,20 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      public static void cookTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
          boolean flag = false;
  

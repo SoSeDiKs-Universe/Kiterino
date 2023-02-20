@@ -5,10 +5,10 @@ Subject: [PATCH] More Sound API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 335e8601cd57991e405dbbe17a02fb38891e092c..709c0dcb708a89a7b64f6a816c732a430e7f7455 100644
+index 392a28a6ad12bb321e4c8ff6a5947a454324118f..aef157fdef1355ee0c0392b1b7837fd595034619 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -819,5 +819,32 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -817,5 +817,32 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
      default de.tr7zw.changeme.nbtapi.NBTCompound getKNBT() {
          return getNBTC().getOrCreateCompound(org.bukkit.Bukkit.getName());
      }

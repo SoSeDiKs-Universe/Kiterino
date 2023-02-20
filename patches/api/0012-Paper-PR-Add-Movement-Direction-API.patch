@@ -5,13 +5,13 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index ebc42a0ed4b24564a5055fef50468142529aed2f..f1f21d51aebe3ce5114c04a46e0ab2d5c1413ca8 100644
+index 127bf9621cca12327ac06becdd921a5f843b888d..35cc864b5a64fb71483d1364430a91efee8b33b7 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1125,6 +1125,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
-      * @param amount the amount of damage to do
+@@ -1141,6 +1141,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+      * @see Location#setYaw(float)
       */
-     void damageItemStack(org.bukkit.inventory.@NotNull EquipmentSlot slot, int amount);
+     void setBodyYaw(float bodyYaw);
 +
 +    /**
 +     * This number represents how much the entity is trying to move sideways.

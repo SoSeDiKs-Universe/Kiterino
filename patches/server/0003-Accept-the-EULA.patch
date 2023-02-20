@@ -5,10 +5,10 @@ Subject: [PATCH] Accept the EULA
 
 
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 31faf2d6492696f7d0c99a48edbc0d6f15db1209..d671827cc0a880d9c94ac1937bd3e3cdf80c58b1 100644
+index 066b18444e92508908dd823c8d928721e338d06d..59cbf086c6cdbf5a984ab2c3125cd8110dcca5fd 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -153,6 +153,20 @@ public class Main {
+@@ -165,6 +165,20 @@ public class Main {
                  System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
              }
              // Spigot End

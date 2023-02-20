@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 5c8dd4d3313a791d1fee00ec5d4bc595b76b7d6d..6f8f8e0c45ee5ba4ca9aa778efc5a39086e1606b 100644
+index bfc777b5c27a870fa252ea667bdaaf636d7550e4..8e434c83c5b009fe2232dc00c8a14b265200c19c 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
@@ -38,10 +38,10 @@ index eccc357cabd8317afc5666c3347936d50eb34015..ab3f163ebeb9e3c5af3f7d6aab90a7fc
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index aba40431c5a1ae43106a678445483e0653e130d1..18e4afd2aef75d9e23c6661cfcd0351495ab8027 100644
+index 390a2a2611df35a9ea6f1eb996b47e2aa4597ff0..7fe0d711104d4ab2d80e41ee47ff68bc8154de6c 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -786,4 +786,27 @@ public interface Block extends Metadatable, net.kyori.adventure.translation.Tran
+@@ -784,4 +784,27 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
      @NotNull
      float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants);
      // Paper end
@@ -112,10 +112,10 @@ index 8a980916176b2179168833f1d14872176837154e..b2147ad46adc70dd3d5b13863983a1f4
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 2cd247a315586b35b73e4396d850ca1d347eea92..fca5d2fcf3e09e2b6341a32d52dc979cd526d35d 100644
+index 11261c659e3a378f468f4a19e2c24c1bb1f95a2b..4f6af6da52fa5406f8a527e6f5c7683284bea389 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1626,4 +1626,42 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, net.kyor
+@@ -1620,4 +1620,42 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end

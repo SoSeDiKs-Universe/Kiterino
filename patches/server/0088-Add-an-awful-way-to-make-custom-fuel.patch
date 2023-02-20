@@ -23,16 +23,16 @@ index e69e08cb10b33ff965797100e9ef4fd17344f975..ff664d8fd7aa60faaf143ffb8367c6a8
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index e5553a8d5bd045e9573b2041d6830d5e38551df4..269d1ad591906211b7b61d3658ea9a68904c7ec4 100644
+index 46740bbf609c7f761ec9299a562669e8aaff9c90..d943ac18e9f6636837f45d98d2113a6cffb24d97 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1517,6 +1517,13 @@ public final class CraftServer implements Server {
+@@ -1462,6 +1462,13 @@ public final class CraftServer implements Server {
          net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.removeFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(new ItemStack(material)));
      }
  
 +    // Kiterino start
 +    @Override
-+    public boolean isFuel(@NotNull ItemStack item) {
++    public boolean isFuel(ItemStack item) {
 +        return net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.isFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(item));
 +    }
 +    // Kiterino end

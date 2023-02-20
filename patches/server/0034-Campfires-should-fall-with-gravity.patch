@@ -5,10 +5,10 @@ Subject: [PATCH] Campfires should fall with gravity
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index 36f33df5a2c29600c0d4c5da2301fb45748a8f45..aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff 100644
+index 42cd469dd3449fc7cec1644b07c3b9fb168969c3..e90f089f8b4a48923afd114fd56a2f471b45f090 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-@@ -65,6 +65,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -67,6 +67,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
                  return;
              }
          }
@@ -16,7 +16,7 @@ index 36f33df5a2c29600c0d4c5da2301fb45748a8f45..aaf4f7ca60e98e054ce9273978a5abc3
          // Kiterino end
  
          for (int i = 0; i < campfire.items.size(); ++i) {
-@@ -119,6 +120,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -121,6 +122,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      }
  
      public static void cooldownTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
@@ -24,7 +24,7 @@ index 36f33df5a2c29600c0d4c5da2301fb45748a8f45..aaf4f7ca60e98e054ce9273978a5abc3
          boolean flag = false;
  
          for (int i = 0; i < campfire.items.size(); ++i) {
-@@ -134,6 +136,16 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -136,6 +138,16 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
  
      }
  

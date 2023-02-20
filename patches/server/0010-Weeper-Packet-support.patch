@@ -819,10 +819,10 @@ index b2e4b5c463ceb19356da18e7fc52d20801b674cd..5fa27ecbe28d13fdae2ed0164e027c30
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 525ce48d35bde3f05a6d2807475d6a5f597fbda6..1e0d55af92a06e2422a316595a687bf6e69c96fd 100644
+index f6903e1b483844f20d030a22b8ffbc625bea23d5..bdb25cba758572f673eb25d66edb92e02c674966 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3061,6 +3061,14 @@ public final class CraftServer implements Server {
+@@ -3006,6 +3006,14 @@ public final class CraftServer implements Server {
  
      // Paper end
  

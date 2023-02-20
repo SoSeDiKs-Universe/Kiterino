@@ -5,7 +5,7 @@ Subject: [PATCH] PlayerLoadProjectileEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index ed3252af5c6aa67c8078013bacd9d411cf25b2d0..0d527fac50fada055bd05105d9206b80748a2677 100644
+index ec0b5ac733bced59cdd7db7039ed78c164d271a2..df1459c857d7c32db7b3560592036617e6617d6a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -2344,7 +2344,7 @@ public abstract class Player extends LivingEntity {
@@ -15,12 +15,12 @@ index ed3252af5c6aa67c8078013bacd9d411cf25b2d0..0d527fac50fada055bd05105d9206b80
 -                return itemstack1;
 +                return getProjectile(stack, itemstack1); // Kiterino
              } else {
-                 predicate = ((ProjectileWeaponItem) stack.getItem()).getAllSupportedProjectiles();
+                 predicate = ((ProjectileWeaponItem) stack.getItem()).getAllSupportedProjectiles().and(item -> tryReadyArrow(stack, item)); // Paper
  
 @@ -2352,15 +2352,27 @@ public abstract class Player extends LivingEntity {
                      ItemStack itemstack2 = this.inventory.getItem(i);
  
-                     if (predicate.test(itemstack2) && tryReadyArrow(stack, itemstack2)) { // Paper
+                     if (predicate.test(itemstack2)) {
 -                        return itemstack2;
 +                        return getProjectile(stack, itemstack2); // Kiterino
                      }

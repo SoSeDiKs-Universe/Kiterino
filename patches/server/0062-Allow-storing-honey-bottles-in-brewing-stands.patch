@@ -18,10 +18,10 @@ index a398554a1c944ae9adb8722fa1412d7d90a48614..f606b29ebc911a12e2fdaf8bd9245a32
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-index 55006724ccec9f3de828ec18693728e9741ff65f..049d86f4b9f53bda4509271b75b5fb08ed2671cf 100644
+index 0bab2693b91d5bab222c7db8bc6965ccde954003..528110f46565e31e2f3bbd1d95faea1d1042dc47 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-@@ -335,7 +335,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
+@@ -340,7 +340,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
  
      @Override
      public boolean canPlaceItem(int slot, ItemStack stack) {

@@ -47,10 +47,10 @@ index 1f1519c1b33d16eba59546c86f20a099486441d7..0208a3369cbf442b8b9192ecd3bf986d
      private boolean applyWater() { // Paper
          AABB axisalignedbb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff..def3a3d68600bd7a95830214c16e0ddc2ee72f6a 100644
+index e90f089f8b4a48923afd114fd56a2f471b45f090..015296e4d8663ddd331feb1172cb21c60e887a76 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-@@ -40,6 +40,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -42,6 +42,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      public final int[] cookingTime;
      private final RecipeManager.CachedCheck<Container, CampfireCookingRecipe> quickCheck;
      public final boolean[] stopCooking; // Paper
@@ -58,7 +58,7 @@ index aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff..def3a3d68600bd7a95830214c16e0ddc
  
      public CampfireBlockEntity(BlockPos pos, BlockState state) {
          super(BlockEntityType.CAMPFIRE, pos, state);
-@@ -64,6 +65,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -66,6 +67,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
                  setChanged(world, pos, state);
                  return;
              }
@@ -73,7 +73,7 @@ index aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff..def3a3d68600bd7a95830214c16e0ddc
          }
          if (campfire.checkGravity(world, pos, state)) return;
          // Kiterino end
-@@ -120,6 +129,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -122,6 +131,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      }
  
      public static void cooldownTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
@@ -81,7 +81,7 @@ index aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff..def3a3d68600bd7a95830214c16e0ddc
          if (campfire.checkGravity(world, pos, state)) return; // Kiterino
          boolean flag = false;
  
-@@ -205,6 +215,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -207,6 +217,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
              System.arraycopy(cookingState, 0, this.stopCooking, 0, Math.min(this.stopCooking.length, abyte.length));
          }
          // Paper end
@@ -93,7 +93,7 @@ index aaf4f7ca60e98e054ce9273978a5abc3a8efc1ff..def3a3d68600bd7a95830214c16e0ddc
      }
  
      @Override
-@@ -220,6 +235,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -222,6 +237,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
          }
          nbt.putByteArray("Paper.StopCooking", cookingState);
          // Paper end
