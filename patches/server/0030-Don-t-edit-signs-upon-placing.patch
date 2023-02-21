@@ -5,7 +5,7 @@ Subject: [PATCH] Don't edit signs upon placing
 
 
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 39a62d1dd85dbee349b05ac16ef4ee5572ddb1d6..2b69a6026b7f6ad104a8d741bbfb2494effe2528 100644
+index e2b341ecddb946e9c1e546b9706d86dd030db865..f243af1ab02558f58f1184c5bbbc8697f762ede5 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
 @@ -478,7 +478,7 @@ public final class ItemStack {

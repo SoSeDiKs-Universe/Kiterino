@@ -5,7 +5,7 @@ Subject: [PATCH] Call BlockDestroyEvent for breakNaturally
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-index 350cbf64c17938021002d5fd67176c44b398231e..c9592f6e73901d11c64c0b6e152869784902a144 100644
+index 962c950ca9c7e047a3aec215d4faa73676049d36..151ac70e02f65473255699f1fb76040b20739f7b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 @@ -527,9 +527,21 @@ public class CraftBlock implements Block {

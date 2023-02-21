@@ -445,7 +445,7 @@ index 93f31a99363e73a24571b66cd5bbaf7b5b9084b2..1935e498ae3fa804e14350c637980b86
  
      protected int getSpreadDelay(Level world, BlockPos pos, FluidState oldState, FluidState newState) {
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-index ec6c63075306f9e5389e83641d2c8a82369ddc6b..4eeb199f5c25d082f4b16c77b4c33ff44a7308af 100644
+index 0f16deddd8cbb506ef7886f57ae640a42e841703..8997234894d1e70d58269ab6d33aafb9a57e9c50 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 @@ -61,9 +61,32 @@ public abstract class WaterFluid extends FlowingFluid {

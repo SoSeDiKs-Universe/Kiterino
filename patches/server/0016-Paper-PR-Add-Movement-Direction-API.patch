@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index ce333ed345420d11102776cab36462adff5f2b8c..257156505d76b9577d19ad2a2441a4f18c66fb9d 100644
+index 78ac748859e21a61140e9bff67e4527a8d35b4b6..8cb1586a90c9e797a3daed449d2580045c69050e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -979,6 +979,23 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {

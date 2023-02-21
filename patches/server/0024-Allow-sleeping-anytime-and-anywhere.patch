@@ -37,7 +37,7 @@ index 19f3598ed1786a2b6ac58e509f8fe7746b81b5b9..162fead0247a8eca3e668893343af386
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index d62bf95fb067c2e2a4fc9b2757c636bd4ee75bea..90b5450302b5ac42bc54488c7aaf9ccf314ba2e7 100644
+index 8664b5cfc739fc6b57643210cac3d03b279a59a1..62b30a2eca2d3d5f01105c219682c97b763ebf9a 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1370,6 +1370,7 @@ public class ServerPlayer extends Player {
@@ -49,7 +49,7 @@ index d62bf95fb067c2e2a4fc9b2757c636bd4ee75bea..90b5450302b5ac42bc54488c7aaf9ccf
                      return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
                  } else {
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 5a482f4c2a86d3f93fbbe8fc8fd29b07ebd50dc8..44029f0bf78e873888fa4a369f25f361e8a4be61 100644
+index 0c632cd0cb932a4cfaf2288c9d109325d5287537..dfd2c617478eb36311795a653b42f8dc6d20020e 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -288,7 +288,7 @@ public abstract class Player extends LivingEntity {

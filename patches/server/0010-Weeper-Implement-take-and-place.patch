@@ -5,7 +5,7 @@ Subject: [PATCH] Weeper - Implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 8b198d31578c4618f730d572844292ae3bdda2c7..b1b94084b95511b7f8c99dbfc71b0f6b5ddeb06d 100644
+index cbec8dbc06dfc05150c345246bfd63c8001071d0..cb62866a069eaa2820fe040d63375c1627d58818 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -158,6 +158,12 @@ public abstract class AbstractContainerMenu {
@@ -58,7 +58,7 @@ index 52d555af415277d8d1f30d8b46855d4b05867597..f530ebd781260be7f836a2f2af841a95
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index e4afb366ba6f03c1e852e31ca14b58e21abe99d8..3cd90a28320864bf993618a837b31a2e96e4b400 100644
+index 33cf1e70b22eca54a245987b12f37efaccf7d1e8..849ad51602983b4c8f7956337643c682c307d781 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -308,6 +308,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {

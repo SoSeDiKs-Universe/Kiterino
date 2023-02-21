@@ -5,7 +5,7 @@ Subject: [PATCH] All mobs have default attack damage
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 32fc23e4b850f0564cdb834d314fde5e469b22a2..21f7e764b336effb293359bcc3972db0f9a0f34c 100644
+index 5fa27ecbe28d13fdae2ed0164e027c30ded6d8a4..e8d70bb546a2fe0a9b15b926027ff2f06df007b5 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -343,7 +343,7 @@ public abstract class LivingEntity extends Entity {

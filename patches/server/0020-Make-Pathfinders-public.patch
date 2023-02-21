@@ -85,7 +85,7 @@ index 360ad0ffd25c5d42d8d50060be40cab304c8fb32..9f7579cf27e80cf2f1b4d2184c175b77
          private final Slime slime;
  
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Spider.java b/src/main/java/net/minecraft/world/entity/monster/Spider.java
-index 62996f5e65cc04744852897ecca0c83a8a2e13f2..cce0305b1d66647ed2ef94f3f4e2e8d6aae81bde 100644
+index 1f0ab16f718f2d499187949c5a25819120fe86f5..beb45f2ae4c503dd08d70363ab60413932e1d8ee 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Spider.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Spider.java
 @@ -225,7 +225,7 @@ public class Spider extends Monster {

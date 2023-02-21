@@ -5,7 +5,7 @@ Subject: [PATCH] Better Impaling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 7bd4e95fcaf3855a4fe412b5898a97d7992caad3..72ae5b60afe22cc170d1ed8e0480b55f0c5801b0 100644
+index 43cc8e8f07adecef21c70954918b8945a7c3ef62..1cc1a2aa075818504ab3e6325183a9c5f3e33657 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1660,6 +1660,12 @@ public abstract class Mob extends LivingEntity {
@@ -22,7 +22,7 @@ index 7bd4e95fcaf3855a4fe412b5898a97d7992caad3..72ae5b60afe22cc170d1ed8e0480b55f
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index c08a01e557d24f72101b07527b3dd062525d4733..ed3252af5c6aa67c8078013bacd9d411cf25b2d0 100644
+index dfd2c617478eb36311795a653b42f8dc6d20020e..ec0b5ac733bced59cdd7db7039ed78c164d271a2 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -1290,6 +1290,12 @@ public abstract class Player extends LivingEntity {

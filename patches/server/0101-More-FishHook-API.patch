@@ -5,7 +5,7 @@ Subject: [PATCH] More FishHook API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
-index 7f3a7a769afec8449547c26453112064b9bcb04a..941aba06419f24b9f0003164d1448d63015763f4 100644
+index 15fb5ee374b19366ebb23181896fb943e95819f0..23e09f11451245e521513cd05fc9a16f001d0fef 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
 @@ -63,7 +63,7 @@ public class FishingHook extends Projectile {

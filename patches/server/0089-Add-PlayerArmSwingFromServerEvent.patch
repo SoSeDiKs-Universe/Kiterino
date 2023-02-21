@@ -5,7 +5,7 @@ Subject: [PATCH] Add PlayerArmSwingFromServerEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 661ead674eebf2284579823a02e0bef178acc94f..cfc1f8e485c49e224365e76ee0cd0ecb10f26beb 100644
+index 5f83522ca19320d2e142518746c794481ebfd7c6..1703416a315b2abf502253e6d339ba9b81b1ac8f 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -2402,6 +2402,7 @@ public abstract class LivingEntity extends Entity {

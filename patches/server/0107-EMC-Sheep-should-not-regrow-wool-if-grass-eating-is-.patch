@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: chickeneer <emcchickeneer@gmail.com>
+Date: Fri, 1 Jul 2022 20:15:55 -0500
+Subject: [PATCH] EMC - Sheep should not regrow wool if grass eating is
+ cancelled
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
+index c55118a4d2237a33039b63dc797ccdb86b63344f..672fc29ecfcc46a06fac295fc2121b8ec76d1a54 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
+@@ -77,9 +77,10 @@ public class EatBlockGoal extends Goal {
+                 // CraftBukkit
+                 if (!CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockposition, Blocks.AIR.defaultBlockState(), !this.level.purpurConfig.sheepBypassMobGriefing && !this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)).isCancelled()) { // Purpur
+                     this.level.destroyBlock(blockposition, false);
++                    this.mob.ate(); // EMC - moved from below
+                 }
+ 
+-                this.mob.ate();
++                //this.mob.ate(); // EMC - move up
+             } else {
+                 BlockPos blockposition1 = blockposition.below();
+ 
+@@ -88,9 +89,10 @@ public class EatBlockGoal extends Goal {
+                     if (!CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockposition1, Blocks.DIRT.defaultBlockState(), !this.level.purpurConfig.sheepBypassMobGriefing && !this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)).isCancelled()) { // Paper - Fix wrong block state // Purpur
+                         this.level.levelEvent(2001, blockposition1, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()));
+                         this.level.setBlock(blockposition1, Blocks.DIRT.defaultBlockState(), 2);
++                        this.mob.ate(); // EMC - moved from below
+                     }
+ 
+-                    this.mob.ate();
++                    //this.mob.ate(); // EMC - move up
+                 }
+             }
+ 

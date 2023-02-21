@@ -18,7 +18,7 @@ index e254b2d04e4fc1dc76c26f61ea38aeb27755143f..3f9b2e870a788c833fcf78c578e163b8
          this.locX = pos.x; this.locZ = pos.z; // Paper - reduce need for field lookups
          this.chunkPos = pos; this.coordinateKey = ChunkPos.asLong(locX, locZ); // Paper - cache long key
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-index 4eeb199f5c25d082f4b16c77b4c33ff44a7308af..cfa1c0818442749ed97066bcaa51467e45e925b9 100644
+index 8997234894d1e70d58269ab6d33aafb9a57e9c50..2b86e08f2fc9d28bfb0050c625a7109f84e413e3 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 @@ -67,19 +67,27 @@ public abstract class WaterFluid extends FlowingFluid {

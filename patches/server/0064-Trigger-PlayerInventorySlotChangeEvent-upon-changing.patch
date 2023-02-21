@@ -6,7 +6,7 @@ Subject: [PATCH] Trigger PlayerInventorySlotChangeEvent upon changing player's
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 90b5450302b5ac42bc54488c7aaf9ccf314ba2e7..93e50761b40bfb16b9be84e0cda7b36fbdcd1712 100644
+index 62b30a2eca2d3d5f01105c219682c97b763ebf9a..858445ca646ad2cc0429013d424a8c79096aa5df 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -343,7 +343,7 @@ public class ServerPlayer extends Player {
@@ -19,7 +19,7 @@ index 90b5450302b5ac42bc54488c7aaf9ccf314ba2e7..93e50761b40bfb16b9be84e0cda7b36f
                          if (event.shouldTriggerAdvancements()) {
                              CriteriaTriggers.INVENTORY_CHANGED.trigger(ServerPlayer.this, ServerPlayer.this.getInventory(), stack);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 1b925ae42608bceddfe9c536146c211d3f37a8c2..d425464ef0f5b7f1effa6d43ee69a5612aea4af7 100644
+index cd7ba5cf4e862220ba2fa459c405595b52891c47..bb377d40f8b788a8904d8fd6b3793616b4cf0a4f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -118,11 +118,21 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
