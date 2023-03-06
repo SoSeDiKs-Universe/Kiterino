@@ -5,10 +5,10 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 849ad51602983b4c8f7956337643c682c307d781..cd7ba5cf4e862220ba2fa459c405595b52891c47 100644
+index 5319f44027c018394bd8e45c5d4c2482dcd01693..5b7ab34adc08cc8696397321742f4eb42f6d5a24 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -853,4 +853,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -860,4 +860,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          boolean success = this.getHandle().level.addFreshEntity(fireworks, SpawnReason.CUSTOM);
          return success ? (Firework) fireworks.getBukkitEntity() : null;
      }

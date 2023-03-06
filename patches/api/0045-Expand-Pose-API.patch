@@ -5,10 +5,10 @@ Subject: [PATCH] Expand Pose API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 4428d9b892586fb3c4e1ed8e8746a01053703031..c43f46f411fd24349e85d9c6fb1f49a1bbd03173 100644
+index 632aba80db3e00bcec1dc9c658f0a4bca0642a57..3242a0aad21e0f54cc45fc7f00043cff45a53b00 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1146,5 +1146,44 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1103,5 +1103,44 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      @Nullable
      UUID getSpawningPlayerUuid();

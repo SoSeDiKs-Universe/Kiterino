@@ -14,10 +14,10 @@ If no plugin had previously hidden the entity before the entity was hidden by de
 plugin that attempts to show the entity to a player will succeed in doing so.
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index fcfef31e6cf6b435bd8736e3cebd8ffd6228a723..df0b418677ed7ab4d399f62b6dfa5c07bd675071 100644
+index 3242a0aad21e0f54cc45fc7f00043cff45a53b00..96e79ee7247b73bdf4df834f1c12138b6728cd16 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -971,6 +971,27 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -928,6 +928,27 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      boolean wouldCollideUsing(@NotNull BoundingBox boundingBox);
      // Paper End - Collision API
  
@@ -46,7 +46,7 @@ index fcfef31e6cf6b435bd8736e3cebd8ffd6228a723..df0b418677ed7ab4d399f62b6dfa5c07
      /**
       * Get the riding player
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 69297dbc127ebebf83d133563ffaa796f85d35ab..9df4001c2c86b00a93521ff9af018c4c8cfc3b36 100644
+index 9236863140c9406174614299977beb4314cd49f4..a03d7d5eca06f2ede4aa308f06a8a8af15336513 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -1545,9 +1545,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM

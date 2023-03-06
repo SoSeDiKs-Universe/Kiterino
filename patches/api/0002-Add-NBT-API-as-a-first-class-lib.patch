@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index bfc777b5c27a870fa252ea667bdaaf636d7550e4..8e434c83c5b009fe2232dc00c8a14b265200c19c 100644
+index 754c700cbdf0e775d0c12ebe468d9f2bdcc22cc2..14ec48fa48dd7da1f4d38d34f203523c608fc0fc 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
@@ -91,10 +91,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 8a980916176b2179168833f1d14872176837154e..b2147ad46adc70dd3d5b13863983a1f462a9e4e2 100644
+index 649babbfdd495e8c9471c2f6518d2eb9d9568ba4..89c7d105423216cd6ae8439f0db77c6e5813fea5 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1021,4 +1021,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -978,4 +978,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end

@@ -29,10 +29,10 @@ index c87350f5d88eeae62e804c686a453d25cadafcca..537a7b5b902adf9fedad2215162a96e3
          if (pose == this.getPose()) {
              return;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 5afd6080dc4ab5f3b9cceabaf8cfa03588c2a567..80fb575ca17356198542f4d380c9b489ca90dfb3 100644
+index 4d1496b571149fdab4bbf3c1e5762eba6ed7a051..3e415f9fe282d3edde6b84b0a66e7852d2551fbd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1465,5 +1465,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1468,5 +1468,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public UUID getSpawningPlayerUuid() {
          return getHandle().spawningPlayerUuid;
      }

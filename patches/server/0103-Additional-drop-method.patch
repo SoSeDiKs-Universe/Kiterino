@@ -5,10 +5,10 @@ Subject: [PATCH] Additional drop method
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index bb377d40f8b788a8904d8fd6b3793616b4cf0a4f..16e7c4ccee14c288d9cfda8503766232599ff71b 100644
+index b49ebec22df16c9e7defffebd01328539841934b..bca6790bd15c0b4b8ed339a100a46db4850b62f1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -874,5 +874,14 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -881,5 +881,14 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      public int getActiveContainerStateId() {
          return getHandle().containerMenu.getStateId();
      }
