@@ -46,10 +46,10 @@ index 3242a0aad21e0f54cc45fc7f00043cff45a53b00..96e79ee7247b73bdf4df834f1c12138b
      /**
       * Get the riding player
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 9236863140c9406174614299977beb4314cd49f4..a03d7d5eca06f2ede4aa308f06a8a8af15336513 100644
+index ceda6a73bf885a21170f0645fc1a49129fffdd97..b6c243e888b18a378fdcd252536c22cc93e51390 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -1545,9 +1545,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -1538,9 +1538,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
  
      /**
       * Allows this player to see an entity that was previously hidden. If

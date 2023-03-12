@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 754c700cbdf0e775d0c12ebe468d9f2bdcc22cc2..14ec48fa48dd7da1f4d38d34f203523c608fc0fc 100644
+index e7c5f7eabaf4f2af07dd987a7879f45c4f66658d..edc35043e3acd18c604328713890573388cf66d4 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
@@ -14,8 +14,8 @@ index 754c700cbdf0e775d0c12ebe468d9f2bdcc22cc2..14ec48fa48dd7da1f4d38d34f203523c
      api("io.sentry:sentry:5.4.0") // Pufferfish
 +    api("de.tr7zw:item-nbt-api:2.11.1") // Kiterino
  
-     implementation("org.ow2.asm:asm:9.2")
-     implementation("org.ow2.asm:asm-commons:9.2")
+     implementation("org.ow2.asm:asm:9.4")
+     implementation("org.ow2.asm:asm-commons:9.4")
 diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
 index eccc357cabd8317afc5666c3347936d50eb34015..ab3f163ebeb9e3c5af3f7d6aab90a7fc2d703295 100644
 --- a/src/main/java/org/bukkit/Chunk.java

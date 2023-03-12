@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 6f51c3af44adf709bb3f0a50c23bef28768a93f1..9236863140c9406174614299977beb4314cd49f4 100644
+index 30c894ce14fdcc0885e623d0d09f825e03ac9655..ceda6a73bf885a21170f0645fc1a49129fffdd97 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3163,5 +3163,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3154,5 +3154,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * @return true, if placed successfully
       */
      boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
@@ -28,7 +28,7 @@ index 6f51c3af44adf709bb3f0a50c23bef28768a93f1..9236863140c9406174614299977beb43
 +     * @param message kick message
 +     * @param cause kick cause
 +     */
-+    void kick(final @Nullable Component reason, final @Nullable net.kyori.adventure.text.Component message, @NotNull org.bukkit.event.player.PlayerKickEvent.Cause cause);
++    void kick(final @Nullable net.kyori.adventure.text.Component reason, final @Nullable net.kyori.adventure.text.Component message, @NotNull org.bukkit.event.player.PlayerKickEvent.Cause cause);
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java

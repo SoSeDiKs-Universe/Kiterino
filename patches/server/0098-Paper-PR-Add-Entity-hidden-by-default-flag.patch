@@ -82,10 +82,10 @@ index 3e415f9fe282d3edde6b84b0a66e7852d2551fbd..512028fec57d4003b22d348941636894
      @Override
      public org.bukkit.entity.Player getRider() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 8787b76d0b258de319401b47045984b9d0d4b014..ee4b96fc4e05ac0a4ffceb01d38f9aac68b87c92 100644
+index 9610aa0d573b29f8198b64c0f83b4f42207e757c..3c807b7eb1c2b97033b2558d96f31eddac4da8f6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1777,6 +1777,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1783,6 +1783,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          ChunkMap tracker = ((ServerLevel) this.getHandle().level).getChunkSource().chunkMap;
          ChunkMap.TrackedEntity entry = tracker.entityMap.get(other.getId());
          if (entry != null) {
@@ -93,7 +93,7 @@ index 8787b76d0b258de319401b47045984b9d0d4b014..ee4b96fc4e05ac0a4ffceb01d38f9aac
              entry.removePlayer(this.getHandle());
          }
  
-@@ -1814,13 +1815,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1820,13 +1821,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          if (this.equals(entity)) return;
  
          Set<WeakReference<Plugin>> hidingPlugins = this.hiddenEntities.get(entity.getUniqueId());
@@ -122,7 +122,7 @@ index 8787b76d0b258de319401b47045984b9d0d4b014..ee4b96fc4e05ac0a4ffceb01d38f9aac
          this.hiddenEntities.remove(entity.getUniqueId());
  
          // Paper start
-@@ -1839,9 +1849,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1845,9 +1855,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
  
          ChunkMap.TrackedEntity entry = tracker.entityMap.get(other.getId());
@@ -139,12 +139,12 @@ index 8787b76d0b258de319401b47045984b9d0d4b014..ee4b96fc4e05ac0a4ffceb01d38f9aac
 +        // Paper end
      }
      // Paper start
-     private void reregisterPlayer(ServerPlayer player) {
-@@ -1899,7 +1915,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     @Override
+@@ -1916,7 +1932,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public boolean canSee(org.bukkit.entity.Entity entity) {
--        return !this.hiddenEntities.containsKey(entity.getUniqueId());
+-        return this.canSee(entity.getUniqueId());
 +        // Paper start - Entity hiddenByDefault
 +        boolean shownWhenHiddenByDefault = true;
 +
@@ -153,12 +153,12 @@ index 8787b76d0b258de319401b47045984b9d0d4b014..ee4b96fc4e05ac0a4ffceb01d38f9aac
 +            shownWhenHiddenByDefault = tracker == null || tracker.showToEvenWhenHiddenByDefault.contains(this.getHandle().connection);
 +        }
 +
-+        return !this.hiddenEntities.containsKey(entity.getUniqueId()) && shownWhenHiddenByDefault;
++        return this.canSee(entity.getUniqueId()) && shownWhenHiddenByDefault;
 +        // Paper end
      }
  
-     // Paper start
-@@ -3092,6 +3117,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public boolean canSee(UUID uuid) {
+@@ -3107,6 +3132,29 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
      // Paper end
  
