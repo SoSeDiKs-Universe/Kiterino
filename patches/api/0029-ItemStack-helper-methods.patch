@@ -55,7 +55,7 @@ index 835f07478ab12a94e558f4f38a66418fabddc4ea..af581137b6a12816fbd179b17f866b08
 +     */
 +    public @NotNull ItemStack asColor(@NotNull org.bukkit.Color color) {
 +        ItemStack clone = clone();
-+        if (meta instanceof org.bukkit.inventory.meta.LeatherArmorMeta leatherMeta) {
++        if (clone.getItemMeta() instanceof org.bukkit.inventory.meta.LeatherArmorMeta leatherMeta) {
 +            leatherMeta.setColor(color);
 +            clone.setItemMeta(leatherMeta);
 +        }
