@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 12 Jul 2021 19:26:22 +0300
+Subject: [PATCH] Add ability to get active container id
+
+
+diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
+index bcdfc8e1d4affd298384c38af9b18f64033285d5..624e7180e7645ae103a1d7519b37c517d78ddff4 100644
+--- a/src/main/java/org/bukkit/entity/HumanEntity.java
++++ b/src/main/java/org/bukkit/entity/HumanEntity.java
+@@ -824,4 +824,19 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+     @Nullable
+     public Firework fireworkBoost(@NotNull ItemStack fireworkItemStack);
+ 
++    // Kiterino start
++    /**
++     * Get current active container id
++     *
++     * @return current active container id
++     */
++    int getActiveContainerId();
++
++    /**
++     * Get current active container state id
++     *
++     * @return current active container state id
++     */
++    int getActiveContainerStateId();
++    // Kiterino start
+ }

@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 20 Feb 2021 02:05:32 +0200
+Subject: [PATCH] Don't edit signs upon placing
+
+
+diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
+index 234d992206f34febc7aff24b78cb3e526254e35f..0e063b887292772cab378fc633dbbb82c6b34a60 100644
+--- a/src/main/java/net/minecraft/world/item/ItemStack.java
++++ b/src/main/java/net/minecraft/world/item/ItemStack.java
+@@ -492,7 +492,7 @@ public final class ItemStack {
+                     // SPIGOT-4678
+                     if (this.item instanceof SignItem && SignItem.openSign != null) {
+                         try {
+-                            entityhuman.openTextEdit((SignBlockEntity) world.getBlockEntity(SignItem.openSign));
++                            //entityhuman.openTextEdit((SignBlockEntity) world.getBlockEntity(SignItem.openSign)); // Kiterino
+                         } finally {
+                             SignItem.openSign = null;
+                         }

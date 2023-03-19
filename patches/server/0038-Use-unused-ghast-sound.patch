@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 13:13:03 +0100
+Subject: [PATCH] Use unused ghast sound
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Ghast.java b/src/main/java/net/minecraft/world/entity/monster/Ghast.java
+index db7d67ce0366ce5e4eb3b5af3092be0c2e6d839f..3cf71b32dc5f0c61c562ec1420b606059a154912 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Ghast.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Ghast.java
+@@ -164,6 +164,7 @@ public class Ghast extends FlyingMob implements Enemy {
+ 
+     @Override
+     protected SoundEvent getAmbientSound() {
++        if (!level.dimensionType().ultraWarm() && random.nextInt(8) == 0) return SoundEvents.GHAST_SCREAM; // Kiterino
+         return SoundEvents.GHAST_AMBIENT;
+     }
+ 

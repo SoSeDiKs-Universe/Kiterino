@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 19 Feb 2021 23:28:54 +0200
+Subject: [PATCH] Flammable cobwebs
+
+
+diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
+index bcfbd67f157d31096eaa7d45ef17a21866328b14..1e12fd9a219db496d3c746811cc53fcd1c8bd4fc 100644
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -7116,6 +7116,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+             return false;
+         }
+         switch (this) {
++            case COBWEB: // Kiterino - isFlammable
+             //<editor-fold defaultstate="collapsed" desc="isFlammable">
+             case ACACIA_DOOR:
+             case ACACIA_FENCE:
+@@ -7466,6 +7467,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+             return false;
+         }
+         switch (this) {
++            case COBWEB: // Kiterino - isBurnable
+             //<editor-fold defaultstate="collapsed" desc="isBurnable">
+             case ACACIA_FENCE:
+             case ACACIA_FENCE_GATE:

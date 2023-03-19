@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 07:39:00 +0100
+Subject: [PATCH] Make silverfishes more annoying
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Silverfish.java b/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
+index e97ab55e19806bce1f5834f2b55863cd76ffa966..9eeaf779ae3972492ecd30c65d20ac0ded046603 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
+@@ -104,7 +104,7 @@ public class Silverfish extends Monster {
+ 
+     @Override
+     protected Entity.MovementEmission getMovementEmission() {
+-        return Entity.MovementEmission.EVENTS;
++        return Entity.MovementEmission.ALL; // Kiterino - EVENT -> ALL
+     }
+ 
+     @Override

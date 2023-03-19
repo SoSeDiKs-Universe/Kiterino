@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 20 Feb 2023 15:31:35 +0200
+Subject: [PATCH] Don't dismount ArmorStands from entities unless forced
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index e5c4e1df5f6b137c0ad1ffd7b6b8d6c04ec204b9..1b20df713b2998fb0345950397a49cf84859a193 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -3666,6 +3666,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+     }
+     @Override
+     public void stopRiding(boolean suppressCancellation) {
++        if (!suppressCancellation && isAlive() && valid && this instanceof net.minecraft.world.entity.decoration.ArmorStand) return; // Kiterino - don't dismount ArmorStands from entities unless forced
+         // Paper end
+         Entity entity = this.getVehicle();
+ 

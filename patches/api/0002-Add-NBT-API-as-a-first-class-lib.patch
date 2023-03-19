@@ -5,14 +5,14 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index e7c5f7eabaf4f2af07dd987a7879f45c4f66658d..edc35043e3acd18c604328713890573388cf66d4 100644
+index ae6d92ad75610baeb279a24e0849aa34761325bf..30c50cff5dbaba7dccceb18ecc6f93d967e10091 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -42,6 +42,7 @@ dependencies {
+     apiAndDocs("net.kyori:adventure-text-logger-slf4j")
      api("org.apache.logging.log4j:log4j-api:2.17.1")
      api("org.slf4j:slf4j-api:1.8.0-beta4")
-     api("io.sentry:sentry:5.4.0") // Pufferfish
-+    api("de.tr7zw:item-nbt-api:2.11.1") // Kiterino
++    api("de.tr7zw:item-nbt-api:2.11.2") // Kiterino
  
      implementation("org.ow2.asm:asm:9.4")
      implementation("org.ow2.asm:asm-commons:9.4")
@@ -91,10 +91,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 649babbfdd495e8c9471c2f6518d2eb9d9568ba4..89c7d105423216cd6ae8439f0db77c6e5813fea5 100644
+index 47f644b9cb615e2feeacb810898cf567f1cf04fc..8fc1bb058d44507fba0c1978377ff41c97d58e70 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -978,4 +978,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1004,4 +1004,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end

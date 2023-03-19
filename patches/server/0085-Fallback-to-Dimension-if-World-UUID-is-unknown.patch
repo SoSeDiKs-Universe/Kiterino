@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 9 Dec 2022 22:21:40 +0200
+Subject: [PATCH] Fallback to Dimension if World UUID is unknown
+
+
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 9d96965d7940fdfe1087ce61c076001bf4d11b4a..93434da9baf8340d4a10dbcd7e37eeb71fee09f8 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -210,7 +210,10 @@ public abstract class PlayerList {
+             if (bWorld != null) {
+                 resourcekey = ((CraftWorld) bWorld).getHandle().dimension();
+             } else {
+-                resourcekey = Level.OVERWORLD;
++                // Kiterino start
++                DataResult<ResourceKey<Level>> dataResult = Level.RESOURCE_KEY_CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, nbttagcompound.get("Dimension")));
++                resourcekey = dataResult.result().orElse(Level.OVERWORLD);
++                // Kiterino end
+             }
+         } else if (nbttagcompound != null) {
+             // Vanilla migration support

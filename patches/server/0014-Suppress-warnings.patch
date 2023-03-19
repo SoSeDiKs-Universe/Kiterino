@@ -5,7 +5,7 @@ Subject: [PATCH] Suppress warnings
 
 
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
-index 09d0ced75b0bea1fbc629befdbc4d50c50619e80..4d491a3ea0158837467f6263844f6bebbda02674 100644
+index e50e8ff021fa7b670c8d990241337cc6d5ee300c..0493b44626f5fb2adfd17bab8d71b4a515871cc9 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
 +++ b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
 @@ -39,6 +39,7 @@ public class SmeltItemFunction extends LootItemConditionalFunction {
@@ -17,10 +17,10 @@ index 09d0ced75b0bea1fbc629befdbc4d50c50619e80..4d491a3ea0158837467f6263844f6beb
              return stack;
          }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 40c6ea5d2ee57ed4cf6d85fab016310ff9bb7adc..4440fa6938ba7838cc728b3b2d59123d4c8228a3 100644
+index bbcdc08c1b59a34a50c28b6fb834d4fa828f8e8a..935edb4ddea9831e1c55bff67d34f9d9a0e08016 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -469,8 +469,8 @@ public class PurpurConfig {
+@@ -467,8 +467,8 @@ public class PurpurConfig {
      }
  
      public static boolean loggerSuppressInitLegacyMaterialError = false;

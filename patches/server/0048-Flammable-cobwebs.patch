@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 19 Feb 2021 22:48:24 +0200
+Subject: [PATCH] Flammable cobwebs
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/FireBlock.java b/src/main/java/net/minecraft/world/level/block/FireBlock.java
+index 2713fe3e118640dba73bdf4048ec707a43278991..616f55b864a043abb368acd112ac74eb687e7118 100644
+--- a/src/main/java/net/minecraft/world/level/block/FireBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/FireBlock.java
+@@ -556,5 +556,6 @@ public class FireBlock extends BaseFireBlock {
+         blockfire.setFlammable(Blocks.SMALL_DRIPLEAF, 60, 100);
+         blockfire.setFlammable(Blocks.HANGING_ROOTS, 30, 60);
+         blockfire.setFlammable(Blocks.GLOW_LICHEN, 15, 100);
++        blockfire.setFlammable(Blocks.COBWEB, 60, 100); // Kiterino
+     }
+ }
+diff --git a/src/main/java/net/minecraft/world/level/material/Material.java b/src/main/java/net/minecraft/world/level/material/Material.java
+index 70197862911ad7ea3ba99c297f716286c3ff951d..e6d03fd3da9f89c19cf1fd0d0d52683e2bf67be4 100644
+--- a/src/main/java/net/minecraft/world/level/material/Material.java
++++ b/src/main/java/net/minecraft/world/level/material/Material.java
+@@ -16,7 +16,7 @@ public final class Material {
+     public static final Material TOP_SNOW = (new Material.Builder(MaterialColor.SNOW)).noCollider().notSolidBlocking().nonSolid().destroyOnPush().replaceable().build();
+     public static final Material FIRE = (new Material.Builder(MaterialColor.NONE)).noCollider().notSolidBlocking().nonSolid().destroyOnPush().replaceable().build();
+     public static final Material DECORATION = (new Material.Builder(MaterialColor.NONE)).noCollider().notSolidBlocking().nonSolid().destroyOnPush().build();
+-    public static final Material WEB = (new Material.Builder(MaterialColor.WOOL)).noCollider().notSolidBlocking().destroyOnPush().build();
++    public static final Material WEB = (new Material.Builder(MaterialColor.WOOL)).noCollider().notSolidBlocking().destroyOnPush().flammable().build(); // Kiterino - flammable cobweb
+     public static final Material SCULK = (new Material.Builder(MaterialColor.COLOR_BLACK)).build();
+     public static final Material BUILDABLE_GLASS = (new Material.Builder(MaterialColor.NONE)).build();
+     public static final Material CLAY = (new Material.Builder(MaterialColor.CLAY)).build();

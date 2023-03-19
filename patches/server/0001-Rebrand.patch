@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index f25c0557cf984b97e0ab361f579eccbf46f82170..c47f27cf42d74968ac9edfdf686b91b7f813358b 100644
+index 761bee802da0d3616ba0739434261b14a030805d..9686aa4a84d81da325f68addd2cba5b93fce52c7 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -7,7 +7,7 @@ plugins {
@@ -14,10 +14,10 @@ index f25c0557cf984b97e0ab361f579eccbf46f82170..c47f27cf42d74968ac9edfdf686b91b7
  dependencies {
 -    implementation(project(":purpur-api")) // Purpur
 +    implementation(project(":kiterino-api")) // Kiterino
-     // Pufferfish start
-     implementation("io.papermc.paper:paper-mojangapi:1.19.3-R0.1-SNAPSHOT") {
-         exclude("io.papermc.paper", "paper-api")
-@@ -84,7 +84,7 @@ tasks.jar {
+     implementation("io.papermc.paper:paper-mojangapi:1.19.4-R0.1-SNAPSHOT") // Purpur
+     // Paper start
+     implementation("org.jline:jline-terminal-jansi:3.21.0")
+@@ -66,7 +66,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -62,10 +62,10 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index e5b5510806d183944f0ac926604e86f3b3dc1d7a..f6903e1b483844f20d030a22b8ffbc625bea23d5 100644
+index fd51c0dcd6c56311fb5cea5fdcb2bbb730bc6571..09739d75f843cdd4a7d8aea517676e2233023e38 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -261,7 +261,7 @@ import javax.annotation.Nullable; // Paper
+@@ -256,7 +256,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -88,7 +88,7 @@ index fb87620c742ff7912f5e8ccd2a7930dd605576d9..170682ee941b8e500877922bf13230cd
  
          if (stream != null) {
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index c7c0ed8dfe58c841faf684a1fe228eeda6cd57b7..40c6ea5d2ee57ed4cf6d85fab016310ff9bb7adc 100644
+index 0bcbe1f07ff8e552d2abd6e432af5710005acc04..bbcdc08c1b59a34a50c28b6fb834d4fa828f8e8a 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 @@ -227,7 +227,7 @@ public class PurpurConfig {
@@ -100,3 +100,25 @@ index c7c0ed8dfe58c841faf684a1fe228eeda6cd57b7..40c6ea5d2ee57ed4cf6d85fab016310f
      private static void serverModName() {
          serverModName = getString("settings.server-mod-name", serverModName);
      }
+diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
+index a810bfd3b8d6bd4d8f2ef8797e4281ae4fe8a67f..16a7cab9a35eb41243944d0701c029adc6b78274 100644
+--- a/src/main/java/org/spigotmc/WatchdogThread.java
++++ b/src/main/java/org/spigotmc/WatchdogThread.java
+@@ -185,7 +185,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                 // Paper end
+                 } else
+                 {
+-                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // Kiterino
+                     log.log(Level.SEVERE, "The server has not responded for " + (currentTime - lastTick) / 1000 + " seconds! Creating thread dump");
+                 }
+                 // Paper end - Different message for short timeout
+@@ -206,7 +206,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                     WatchdogThread.dumpThread( thread, log );
+                 }
+                 } else {
+-                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH ---"); // Purpur
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH ---"); // Purpur // Kiterino
+                 }
+ 
+                 log.log( Level.SEVERE, "------------------------------" );

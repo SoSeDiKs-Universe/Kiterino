@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 10 Sep 2020 19:28:30 +0300
+Subject: [PATCH] Reset fire ticks when having fire resistance
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 6e8ea283126ac7600d7b36422fdc9e250d7b4494..a2c2e5adef2a498bac86e811e3c9f6db3e715cfa 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -928,6 +928,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+                 } else if (mobeffect.getDuration() % 600 == 0) {
+                     this.onEffectUpdated(mobeffect, false, (Entity) null);
+                 }
++                if (mobeffect.getEffect() == MobEffects.FIRE_RESISTANCE && getRemainingFireTicks() > 0) setRemainingFireTicks(0); // Kiterino
+             }
+         } catch (ConcurrentModificationException concurrentmodificationexception) {
+             ;

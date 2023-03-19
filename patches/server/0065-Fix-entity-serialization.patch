@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 22 Oct 2022 21:34:57 +0300
+Subject: [PATCH] Fix entity serialization
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index a351cfb7c5381b5fe9628942c90fe04f70afb62c..379cb4c703367429c8d40a1b47ecb2ef00738a6c 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -2171,15 +2171,6 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         }
+     }
+ 
+-    // Paper start - Entity serialization api
+-    public boolean serializeEntity(CompoundTag compound) {
+-        List<Entity> pass = new java.util.ArrayList<>(this.getPassengers());
+-        this.passengers = ImmutableList.of();
+-        boolean result = save(compound);
+-        this.passengers = ImmutableList.copyOf(pass);
+-        return result;
+-    }
+-    // Paper end
+     public boolean save(CompoundTag nbt) {
+         return this.isPassenger() ? false : this.saveAsPassenger(nbt);
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index d7d8be1ef64a1ff178b95cd3d84f85e64ca012a8..42c9c418f91fa90a5085ac3baeb67b6fd3327aeb 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -492,8 +492,13 @@ public final class CraftMagicNumbers implements UnsafeValues {
+         Preconditions.checkNotNull(entity, "null cannot be serialized");
+         Preconditions.checkArgument(entity instanceof org.bukkit.craftbukkit.entity.CraftEntity, "only CraftEntities can be serialized");
+ 
++        net.minecraft.world.entity.Entity nmsEntity = ((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandle();
+         CompoundTag compound = new CompoundTag();
+-        ((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandle().serializeEntity(compound);
++        compound.putString("id", net.minecraft.world.entity.EntityType.getKey(nmsEntity.getType()).toString());
++        List<net.minecraft.world.entity.Entity> pass = new java.util.ArrayList<>(nmsEntity.getPassengers());
++        nmsEntity.passengers = com.google.common.collect.ImmutableList.of();
++        nmsEntity.saveWithoutId(compound);
++        nmsEntity.passengers = com.google.common.collect.ImmutableList.copyOf(pass);
+         return serializeNbtToBytes(compound);
+     }
+ 

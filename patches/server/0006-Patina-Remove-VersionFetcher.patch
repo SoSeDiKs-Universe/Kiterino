@@ -6,7 +6,7 @@ Subject: [PATCH] Patina - Remove VersionFetcher
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 deleted file mode 100644
-index fba5dbdb7bcbb55400ef18342c9b54612972a718..0000000000000000000000000000000000000000
+index 462a6eed350fd660ddaf25d567bb6e97b77d0b2b..0000000000000000000000000000000000000000
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ /dev/null
 @@ -1,147 +0,0 @@
@@ -84,7 +84,7 @@ index fba5dbdb7bcbb55400ef18342c9b54612972a718..00000000000000000000000000000000
 -            case 0:
 -                return Component.text("* You are running the latest version", NamedTextColor.GREEN); // Purpur
 -            case -2:
--                return Component.text("* Unknown version", NamedTextColor.RED); // Purpur
+-                return Component.text("* Unknown version", NamedTextColor.YELLOW); // Purpur
 -            default:
 -                return Component.text("* You are " + distance + " version(s) behind", NamedTextColor.YELLOW) // Purpur
 -                        .append(Component.newline())
@@ -158,7 +158,7 @@ index fba5dbdb7bcbb55400ef18342c9b54612972a718..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 2d53d30d603a4627ad96dfff659ad04012aaf7f9..22296596ab3ecba0d318135991cb296f96f595cf 100644
+index 64c50c52c11214740de7903e5592b8b6b2c170b3..24c877bce35cad9fbf114e8858ca75e43965f3dc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -462,10 +462,12 @@ public final class CraftMagicNumbers implements UnsafeValues {
@@ -168,7 +168,7 @@ index 2d53d30d603a4627ad96dfff659ad04012aaf7f9..22296596ab3ecba0d318135991cb296f
 +    /* // Patina start
      @Override
      public com.destroystokyo.paper.util.VersionFetcher getVersionFetcher() {
-         return new com.destroystokyo.paper.PaperVersionFetcher(); // Purpur
+         return new com.destroystokyo.paper.PaperVersionFetcher();
      }
 +    */ // Patina end
  

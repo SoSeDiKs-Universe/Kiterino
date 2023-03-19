@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 44246068b51e47342d767f15af6881f29461589c..d880fea5ec42bb9a59043313de1b57fdfb4720ae 100644
+index 216ad2cf780cc432e85cd59a8cd8deb33b701a70..cb8b2e998cecd29d797f6444e3e2b05995a72810 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1145,6 +1145,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1147,6 +1147,44 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       * @see Location#setYaw(float)
       */
      void setBodyYaw(float bodyYaw);

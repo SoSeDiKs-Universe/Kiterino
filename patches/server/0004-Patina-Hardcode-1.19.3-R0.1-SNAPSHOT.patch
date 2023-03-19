@@ -5,7 +5,7 @@ Subject: [PATCH] Patina - Hardcode 1.19.3-R0.1-SNAPSHOT
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 170682ee941b8e500877922bf13230cdc37463d4..e855bbd4590c41a8386a7302037708ce2dc1f17e 100644
+index 170682ee941b8e500877922bf13230cdc37463d4..26b6eb0877f88bbdd530abced23f55df0fd3b990 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -9,21 +9,6 @@ import org.bukkit.Bukkit;
@@ -28,6 +28,6 @@ index 170682ee941b8e500877922bf13230cdc37463d4..e855bbd4590c41a8386a7302037708ce
 -        }
 -
 -        return result;
-+        return "1.19.3-R0.1-SNAPSHOT"; // Patina
++        return "1.19.4-R0.1-SNAPSHOT"; // Patina
      }
  }

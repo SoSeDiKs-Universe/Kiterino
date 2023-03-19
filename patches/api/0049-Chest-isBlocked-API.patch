@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 2 Feb 2023 03:42:49 +0200
+Subject: [PATCH] Chest isBlocked API
+
+
+diff --git a/src/main/java/org/bukkit/block/Chest.java b/src/main/java/org/bukkit/block/Chest.java
+index db6affbc78106b2d93b41953b624a0bca0ca1d72..08aa17f3e124940279b6970e8a454444b6a59658 100644
+--- a/src/main/java/org/bukkit/block/Chest.java
++++ b/src/main/java/org/bukkit/block/Chest.java
+@@ -27,4 +27,13 @@ public interface Chest extends Container, LootableBlockInventory, Lidded { // Pa
+      */
+     @NotNull
+     Inventory getBlockInventory();
++
++    // Kiterino start
++    /**
++     * Checks whether this chest is blocked
++     *
++     * @return whether this chest is blocked
++     */
++    boolean isBlocked();
++    // Kiterino end
+ }

@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 14:36:07 +0100
+Subject: [PATCH] Reverse note block playing
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+index 3b809c8db3630fce5dcdbf9cc9475aec3285d193..abdf3ed4f48c011b9e08ca63b88e338393dcec9e 100644
+--- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+@@ -132,6 +132,7 @@ public class NoteBlock extends Block {
+         if (world.isClientSide) {
+             return InteractionResult.SUCCESS;
+         } else {
++            if (player.isShiftKeyDown()) state = state.cycleBackwards(NOTE); else // Kiterino
+             state = (BlockState) state.cycle(NoteBlock.NOTE);
+             world.setBlock(pos, state, 3);
+             this.playNote(player, state, world, pos);
+diff --git a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
+index 170f5cb3f01a57ad76e3bbeacd5b7c7e52f29959..021c8924f7ddb77e0a413d748bb91347667a101d 100644
+--- a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
++++ b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
+@@ -68,6 +68,22 @@ public abstract class StateHolder<O, S> {
+         return iterator.next();
+     }
+ 
++    // Kiterino start
++    public <T extends Comparable<T>> S cycleBackwards(Property<T> property) {
++        return this.setValue(property, findPreviousInCollection(property.getPossibleValues(), this.getValue(property)));
++    }
++
++    protected static <T> T findPreviousInCollection(Collection<T> values, T value) {
++        T previous = null;
++        for (T next : values) {
++            if (next.equals(value) && previous != null)
++                return previous;
++            previous = next;
++        }
++        return previous == null ? value : previous;
++    }
++    // Kiterino end
++
+     @Override
+     public String toString() {
+         StringBuilder stringBuilder = new StringBuilder();

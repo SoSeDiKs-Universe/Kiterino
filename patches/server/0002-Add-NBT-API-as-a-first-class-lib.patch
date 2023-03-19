@@ -5,10 +5,10 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 46858fb57f122033a68aeb4ad3943132a677fb46..22acd8b6a396ccc0641a63dc8467ca05b91150d9 100644
+index bd09e2a96590a78c98a48833023d09e731545aaf..029b26c11fa4505446d5f29e87f6f9a8d95ec44c 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -304,6 +304,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -301,6 +301,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          }
          // Purpur end
  

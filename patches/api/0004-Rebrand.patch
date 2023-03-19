@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/src/main/java/org/bukkit/command/defaults/VersionCommand.java b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
-index aba57d1a3e1e20210538a6ea02066f2907309f48..ccca3f1a893b6a5572c8d11ba76e6d1e63efa90d 100644
+index aba57d1a3e1e20210538a6ea02066f2907309f48..10acab08c70a6a3c9307f37ee3b1608672683c59 100644
 --- a/src/main/java/org/bukkit/command/defaults/VersionCommand.java
 +++ b/src/main/java/org/bukkit/command/defaults/VersionCommand.java
 @@ -43,7 +43,7 @@ public class VersionCommand extends BukkitCommand {
@@ -13,7 +13,7 @@ index aba57d1a3e1e20210538a6ea02066f2907309f48..ccca3f1a893b6a5572c8d11ba76e6d1e
  
          if (args.length == 0) {
 -            sender.sendMessage("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")"); // Patina
-+            sender.sendMessage("This server is running Kiterino (a custom Purpur-based fork for SoSeDiK's Universe; MC: 1.19.3)."); // Patina // Kiterino
++            sender.sendMessage("This server is running Kiterino (a custom Purpur-based fork for SoSeDiK's Universe; MC: 1.19.4)."); // Patina // Kiterino
              //sendVersion(sender); // Patina
          } else {
              StringBuilder name = new StringBuilder();
