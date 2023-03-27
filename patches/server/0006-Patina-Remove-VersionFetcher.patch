@@ -158,7 +158,7 @@ index 462a6eed350fd660ddaf25d567bb6e97b77d0b2b..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 64c50c52c11214740de7903e5592b8b6b2c170b3..24c877bce35cad9fbf114e8858ca75e43965f3dc 100644
+index 1dd7f923dd6adb41eafc3ea0c063e3aae6670124..582b17f61deb9ac83520fd5e53e40d516c049e88 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -462,10 +462,12 @@ public final class CraftMagicNumbers implements UnsafeValues {
@@ -168,7 +168,7 @@ index 64c50c52c11214740de7903e5592b8b6b2c170b3..24c877bce35cad9fbf114e8858ca75e4
 +    /* // Patina start
      @Override
      public com.destroystokyo.paper.util.VersionFetcher getVersionFetcher() {
-         return new com.destroystokyo.paper.PaperVersionFetcher();
+         return new com.destroystokyo.paper.PaperVersionFetcher(); // Purpur
      }
 +    */ // Patina end
  

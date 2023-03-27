@@ -145,10 +145,10 @@ index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f4
                      ++i;
                  }
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index d12f2745ef9a9b2ba28ce996f1ab6e593c90fc05..28112d39b36f8fca5fddea59a46b09de6ea5342c 100644
+index 5536b9e36b4ea99e2aaa62690b5bf00208291a58..ff13d140975e0294069f79549bd8ee02d6b7e1d3 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-@@ -216,7 +216,7 @@ public abstract class FlowingFluid extends Fluid {
+@@ -226,7 +226,7 @@ public abstract class FlowingFluid extends Fluid {
              }
          }
  
@@ -157,7 +157,7 @@ index d12f2745ef9a9b2ba28ce996f1ab6e593c90fc05..28112d39b36f8fca5fddea59a46b09de
              BlockState iblockdata2 = world.getBlockState(pos.below());
              FluidState fluid1 = iblockdata2.getFluidState();
  
-@@ -264,6 +264,26 @@ public abstract class FlowingFluid extends Fluid {
+@@ -293,6 +293,26 @@ public abstract class FlowingFluid extends Fluid {
          VoxelShape voxelshape1 = fromState.getCollisionShape(world, fromPos);
          boolean flag = !Shapes.mergedFaceOccludes(voxelshape, voxelshape1, face);
  
@@ -181,10 +181,10 @@ index d12f2745ef9a9b2ba28ce996f1ab6e593c90fc05..28112d39b36f8fca5fddea59a46b09de
 +        }
 +        // Kiterino end
 +
+         /*
          if (object2bytelinkedopenhashmap != null) {
              if (object2bytelinkedopenhashmap.size() == 200) {
-                 object2bytelinkedopenhashmap.removeLastByte();
-@@ -295,7 +315,14 @@ public abstract class FlowingFluid extends Fluid {
+@@ -330,7 +350,14 @@ public abstract class FlowingFluid extends Fluid {
      }
      // Purpur end
  
@@ -199,7 +199,7 @@ index d12f2745ef9a9b2ba28ce996f1ab6e593c90fc05..28112d39b36f8fca5fddea59a46b09de
          if (state.getBlock() instanceof LiquidBlockContainer) {
              ((LiquidBlockContainer) state.getBlock()).placeLiquid(world, pos, state, fluidState);
          } else {
-@@ -308,6 +335,172 @@ public abstract class FlowingFluid extends Fluid {
+@@ -343,6 +370,172 @@ public abstract class FlowingFluid extends Fluid {
  
      }
  
@@ -372,7 +372,7 @@ index d12f2745ef9a9b2ba28ce996f1ab6e593c90fc05..28112d39b36f8fca5fddea59a46b09de
      protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state, BlockPos source) { beforeDestroyingBlock(world, pos, state); } // Paper - add source parameter
      protected abstract void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state);
  
-@@ -469,9 +662,70 @@ public abstract class FlowingFluid extends Fluid {
+@@ -504,9 +697,70 @@ public abstract class FlowingFluid extends Fluid {
      }
  
      protected boolean canSpreadTo(BlockGetter world, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid) {

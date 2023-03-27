@@ -5,10 +5,10 @@ Subject: [PATCH] Include vehicle's height in collision
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index c0de4a34bde3c5a6d13c47d00e26529b61ce8e12..8301c425e556fe5c618ae646c4cc150478ec2daf 100644
+index fe69e96bb383bcb6ac0291bfaa0374b13ce6cfc4..b07fb0e302e889bb889f5b48becfc2cc177450b0 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1406,7 +1406,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1440,7 +1440,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          }
  
          final Level world = this.level;
@@ -22,7 +22,7 @@ index c0de4a34bde3c5a6d13c47d00e26529b61ce8e12..8301c425e556fe5c618ae646c4cc1504
  
          if (io.papermc.paper.util.CollisionUtil.isEmpty(currBoundingBox)) {
              return movement;
-@@ -1463,10 +1468,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1497,10 +1502,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                      return vec3d2.add(io.papermc.paper.util.CollisionUtil.performCollisions(new Vec3(0.0D, -vec3d2.y + movement.y, 0.0D), currBoundingBox.move(vec3d2), potentialCollisions));
                  }
  

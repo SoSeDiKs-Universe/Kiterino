@@ -5,10 +5,10 @@ Subject: [PATCH] Super dumb liquid ticks limiter
 
 
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index 28112d39b36f8fca5fddea59a46b09de6ea5342c..77da473a4605ece7639d23754b63f5ff7213fc45 100644
+index ff13d140975e0294069f79549bd8ee02d6b7e1d3..db064c602af1248ce453b3dcb3dd88b419152006 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-@@ -761,6 +761,14 @@ public abstract class FlowingFluid extends Fluid {
+@@ -796,6 +796,14 @@ public abstract class FlowingFluid extends Fluid {
                  world.updateNeighborsAt(pos, iblockdata.getBlock());
              }
          }

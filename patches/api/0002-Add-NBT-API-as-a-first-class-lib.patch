@@ -5,13 +5,13 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ae6d92ad75610baeb279a24e0849aa34761325bf..30c50cff5dbaba7dccceb18ecc6f93d967e10091 100644
+index b5835fa536f90b7f88a5ee4df78733cf43e1cb23..427f60ae7f375265bd29b9ff48f7b8b9991d16f2 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -42,6 +42,7 @@ dependencies {
-     apiAndDocs("net.kyori:adventure-text-logger-slf4j")
+@@ -43,6 +43,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:2.17.1")
      api("org.slf4j:slf4j-api:1.8.0-beta4")
+     api("io.sentry:sentry:5.4.0") // Pufferfish
 +    api("de.tr7zw:item-nbt-api:2.11.2") // Kiterino
  
      implementation("org.ow2.asm:asm:9.4")
@@ -91,7 +91,7 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 47f644b9cb615e2feeacb810898cf567f1cf04fc..8fc1bb058d44507fba0c1978377ff41c97d58e70 100644
+index dc16fd3f342994dc3ea88b0980e4b3f56621ddf3..c20f6102b60a59ff97f2100c14449cbae4cd2a73 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
 @@ -1004,4 +1004,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
@@ -112,7 +112,7 @@ index 47f644b9cb615e2feeacb810898cf567f1cf04fc..8fc1bb058d44507fba0c1978377ff41c
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 11261c659e3a378f468f4a19e2c24c1bb1f95a2b..4f6af6da52fa5406f8a527e6f5c7683284bea389 100644
+index 8216b53724bfad3c29bf6b75e17f4640e4915a00..64795d7aa80bbda9067a7a26490c8edf8fab5e0c 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1620,4 +1620,42 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat

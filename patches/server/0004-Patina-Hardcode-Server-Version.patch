@@ -1,11 +1,11 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: foss-mc <69294560+foss-mc@users.noreply.github.com>
 Date: Thu, 8 Jul 2021 15:08:50 +0300
-Subject: [PATCH] Patina - Hardcode 1.19.3-R0.1-SNAPSHOT
+Subject: [PATCH] Patina - Hardcode Server Version
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 170682ee941b8e500877922bf13230cdc37463d4..26b6eb0877f88bbdd530abced23f55df0fd3b990 100644
+index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..26b6eb0877f88bbdd530abced23f55df0fd3b990 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -9,21 +9,6 @@ import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ index 170682ee941b8e500877922bf13230cdc37463d4..26b6eb0877f88bbdd530abced23f55df
      public static String getBukkitVersion() {
 -        String result = "Unknown-Version";
 -
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Kiterino
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Pufferfish // Purpur // Kiterino
 -        Properties properties = new Properties();
 -
 -        if (stream != null) {

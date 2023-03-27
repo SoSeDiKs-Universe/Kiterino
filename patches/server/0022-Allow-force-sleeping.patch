@@ -5,7 +5,7 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 74238a87d1ff3391aac5812b24b84af228baeaa4..3c55295cd5e33135d06f2dddbd77416731210187 100644
+index e5cf1bf76094b9b4e2ee9608276e0361b48ef1b4..02e3ec820d850e9e8b2d13f7389f273c94140b28 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1892,7 +1892,7 @@ public class ServerPlayer extends Player {
@@ -18,10 +18,10 @@ index 74238a87d1ff3391aac5812b24b84af228baeaa4..3c55295cd5e33135d06f2dddbd774167
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 0fce6be161d698de024e2a2cb864916d21b8eed1..6e8ea283126ac7600d7b36422fdc9e250d7b4494 100644
+index e9f39d01bb71bb98c07bd03086bc9e9a24ce34f2..5795a12815e01f9e951d66a1ed59bf7803bfb2e4 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3036,7 +3036,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3058,7 +3058,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -30,7 +30,7 @@ index 0fce6be161d698de024e2a2cb864916d21b8eed1..6e8ea283126ac7600d7b36422fdc9e25
                  this.stopSleeping();
              }
          }
-@@ -4307,7 +4307,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4332,7 +4332,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  
@@ -40,7 +40,7 @@ index 0fce6be161d698de024e2a2cb864916d21b8eed1..6e8ea283126ac7600d7b36422fdc9e25
              return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 350905a8353cbd5bad9dbb05c8d222bfb5f55ae5..d178a3d4830d819d0a370b6fe02b1b740616461b 100644
+index 2b647aeb75e2207186bf9506fba0d92a745cfae8..6512e2ee65c7d1d91688a8c45a09fc3c56f71a14 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1365,7 +1365,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
