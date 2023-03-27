@@ -5,7 +5,7 @@ Subject: [PATCH] Support recipe grid for AItems
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index 27c028ab6b1edb6e413af3bbaa27bf30f2d85540..6f0752d004c67e30e7288890ae4569d557be5db4 100644
+index 302ca7391109c10e81a7745504b3c530bc3be6ad..874f83b9eb774d7618d1e8fb1d6584094d30ba2b 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
 @@ -199,7 +199,7 @@ public class Inventory implements Container, Nameable {
@@ -57,10 +57,10 @@ index 842b921799111789b37a34b76644c9217bc85794..1b0bb36df3e662125b29a2da28200175
                  final int id = this.idCounter.incrementAndGet();
                  final ItemStack copy = value.copy();
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 0e063b887292772cab378fc633dbbb82c6b34a60..e8147b66c04461ecee51e59c1251a6dafeb1618a 100644
+index b380fc87b9093e8596ae3f02964523152dae4f0e..d1142c32ac195edf074be903b1f2d77ceee38e24 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -767,6 +767,54 @@ public final class ItemStack {
+@@ -768,6 +768,54 @@ public final class ItemStack {
          return stack.is(otherStack.getItem()) && ItemStack.tagMatches(stack, otherStack);
      }
  

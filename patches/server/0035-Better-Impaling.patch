@@ -22,10 +22,10 @@ index 8e2274f7dce34e0997356205cf96e46f8d41cca1..6b321ef29abe5d9670cf5f55b1e1671b
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 136c39573c0df704095c8c8c6d4851c74aa3fefa..ad3169a50e9a97740a2a53bc174a66210ad0e706 100644
+index 7904cf6181f8b67de0e01cd6eebf2e2f445ddaca..f708f3dde4435a7e0eec14860356343aba61db25 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -1289,6 +1289,12 @@ public abstract class Player extends LivingEntity {
+@@ -1295,6 +1295,12 @@ public abstract class Player extends LivingEntity {
  
                  if (target instanceof LivingEntity) {
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index e5cf1bf76094b9b4e2ee9608276e0361b48ef1b4..02e3ec820d850e9e8b2d13f7389f273c94140b28 100644
+index 8a4be66f967dfd6b57ab542ae9b06c840647486d..9d6bb1eab8c7dd718830fc2248f099e960a4db45 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1892,7 +1892,7 @@ public class ServerPlayer extends Player {
+@@ -1903,7 +1903,7 @@ public class ServerPlayer extends Player {
  
          worldserver.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 1, this.getId());
          this.stopRiding();
@@ -40,7 +40,7 @@ index e9f39d01bb71bb98c07bd03086bc9e9a24ce34f2..5795a12815e01f9e951d66a1ed59bf78
              return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 2b647aeb75e2207186bf9506fba0d92a745cfae8..6512e2ee65c7d1d91688a8c45a09fc3c56f71a14 100644
+index f81b320ef330d03b68cf8b4af04b7c991ce9636b..3bd6c7033e6c631fe66c3fd3bb262df3d5e6ac88 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1365,7 +1365,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
