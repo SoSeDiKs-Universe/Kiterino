@@ -6,19 +6,19 @@ Subject: [PATCH] Parchment - Expanded Adventure support
 Adds support for Adventure in a few places where it was previously missing.
 
 diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
-index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda46781fb9 100644
+index 82052e714e996568a46c2e91b32f30155b33e10d..286e780c6cbb3da66788061232b0e429cd0cdb12 100644
 --- a/src/main/java/org/bukkit/ChatColor.java
 +++ b/src/main/java/org/bukkit/ChatColor.java
-@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
- /**
+@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
   * All supported color values for chat
   */
+ @Deprecated // Paper
 -public enum ChatColor {
 +public enum ChatColor implements net.kyori.adventure.text.format.StyleBuilderApplicable, net.kyori.adventure.text.format.TextFormat { // Parchment
      /**
       * Represents black
       */
-@@ -182,6 +182,13 @@ public enum ChatColor {
+@@ -183,6 +183,13 @@ public enum ChatColor {
          public net.md_5.bungee.api.ChatColor asBungee() {
              return net.md_5.bungee.api.ChatColor.MAGIC;
          }
@@ -32,7 +32,7 @@ index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda
      },
      /**
       * Makes the text bold.
-@@ -192,6 +199,13 @@ public enum ChatColor {
+@@ -193,6 +200,13 @@ public enum ChatColor {
          public net.md_5.bungee.api.ChatColor asBungee() {
              return net.md_5.bungee.api.ChatColor.BOLD;
          }
@@ -46,7 +46,7 @@ index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda
      },
      /**
       * Makes a line appear through the text.
-@@ -202,6 +216,13 @@ public enum ChatColor {
+@@ -203,6 +217,13 @@ public enum ChatColor {
          public net.md_5.bungee.api.ChatColor asBungee() {
              return net.md_5.bungee.api.ChatColor.STRIKETHROUGH;
          }
@@ -60,7 +60,7 @@ index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda
      },
      /**
       * Makes the text appear underlined.
-@@ -212,6 +233,13 @@ public enum ChatColor {
+@@ -213,6 +234,13 @@ public enum ChatColor {
          public net.md_5.bungee.api.ChatColor asBungee() {
              return net.md_5.bungee.api.ChatColor.UNDERLINE;
          }
@@ -74,7 +74,7 @@ index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda
      },
      /**
       * Makes the text italic.
-@@ -222,6 +250,13 @@ public enum ChatColor {
+@@ -223,6 +251,13 @@ public enum ChatColor {
          public net.md_5.bungee.api.ChatColor asBungee() {
              return net.md_5.bungee.api.ChatColor.ITALIC;
          }
@@ -88,7 +88,7 @@ index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda
      },
      /**
       * Resets all previous chat colors or formats.
-@@ -232,6 +267,16 @@ public enum ChatColor {
+@@ -233,6 +268,16 @@ public enum ChatColor {
          public net.md_5.bungee.api.ChatColor asBungee() {
              return net.md_5.bungee.api.ChatColor.RESET;
          }
@@ -105,7 +105,7 @@ index ada3c57f0429e2a98e6ac5d8d126501a2e668635..491b86a006ab663730ad3849899b9dda
      };
  
      /**
-@@ -264,6 +309,13 @@ public enum ChatColor {
+@@ -265,6 +310,13 @@ public enum ChatColor {
          return net.md_5.bungee.api.ChatColor.RESET;
      };
  

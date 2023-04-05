@@ -40,10 +40,10 @@ index e9f39d01bb71bb98c07bd03086bc9e9a24ce34f2..5795a12815e01f9e951d66a1ed59bf78
              return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index f81b320ef330d03b68cf8b4af04b7c991ce9636b..3bd6c7033e6c631fe66c3fd3bb262df3d5e6ac88 100644
+index b7f1382d48a66f78c4492b0f8b90c16116a90220..57220eb4ffc54ddbba9bf3afb3f2600bf9816f70 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1365,7 +1365,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1368,7 +1368,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          if (dismount) entity.stopRiding(); // Paper - Teleport API
  
          // SPIGOT-5509: Wakeup, similar to riding

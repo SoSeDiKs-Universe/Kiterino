@@ -6,10 +6,10 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 3cb47f9714283b9d93c1181a1bacf2114491ce9e..23d659c95fa6ca958a24ec7477d895b852b738e9 100644
+index 26af6ec89d6942550090da6f4fcbfc1441c44326..ff3ea5caac1275e36cdbfd98e7df629f4a12aa8e 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -790,7 +790,7 @@ public abstract class PlayerList {
+@@ -794,7 +794,7 @@ public abstract class PlayerList {
  
      public ServerPlayer respawn(ServerPlayer entityplayer, ServerLevel worldserver, boolean flag, Location location, boolean avoidSuffocation, org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag...respawnFlags) {
          // Paper end
@@ -161,10 +161,10 @@ index c18a7394d218a6e6e93e5c143bce1252cb49f653..852bc4a7f550e2f4537a141e4af3f2d2
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 65933c214a920a2b3bff4579f3a640b44de4ac6b..917259751b74aaf11ebe07f48624c102cded7be5 100644
+index 42ee6fea63835654f59b8322845d78b2dee27a67..f04bf2672f69a90f076b0805fafa8a6690502f02 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1319,12 +1319,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1322,12 +1322,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          Preconditions.checkArgument(location.getWorld() != null, "location.world");
          // Paper start - Teleport passenger API
          // Don't allow teleporting between worlds while keeping passengers
@@ -179,7 +179,7 @@ index 65933c214a920a2b3bff4579f3a640b44de4ac6b..917259751b74aaf11ebe07f48624c102
              return false;
          }
          // Paper end
-@@ -1340,7 +1340,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1343,7 +1343,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             return false;
          }
  
@@ -188,7 +188,7 @@ index 65933c214a920a2b3bff4579f3a640b44de4ac6b..917259751b74aaf11ebe07f48624c102
              // Purpur start
              if (new org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent(entity.getBukkitEntity(), org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent())
                  return teleport(location, cause);
-@@ -1382,15 +1382,30 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1385,15 +1385,30 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              this.getHandle().closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.TELEPORT); // Paper
          }
  

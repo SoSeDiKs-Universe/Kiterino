@@ -1,9 +1,22 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: SoSeDiK <mrsosedik@gmail.com>
 Date: Sat, 11 Jul 2020 20:57:52 +0300
-Subject: [PATCH] Rework Spigot Deprecations
+Subject: [PATCH] Rework Some Deprecations
 
 
+diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
+index 286e780c6cbb3da66788061232b0e429cd0cdb12..55e96bdbfba7673018a9d2c32baed1bfd7b54e16 100644
+--- a/src/main/java/org/bukkit/ChatColor.java
++++ b/src/main/java/org/bukkit/ChatColor.java
+@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
+ /**
+  * All supported color values for chat
+  */
+-@Deprecated // Paper
++// @Deprecated // Paper // Kiterino
+ public enum ChatColor implements net.kyori.adventure.text.format.StyleBuilderApplicable, net.kyori.adventure.text.format.TextFormat { // Parchment
+     /**
+      * Represents black
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
 index 3578ab0c3a413d56bc39af43b5d3201d20d7d13a..0181d4868b99b5b5f1cf3c18a037e838cab31fa1 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
@@ -59,7 +72,7 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 9c03265a9e932b3c9b5f0f7ffb4c9e9094f813ec..51763e2f20eae3345f92fdec4c53cc5442e60e38 100644
+index 85c5987758b1d5145843705205dc99164c5f9f44..9dc2479220125d30192319dee55c488c203f7d57 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -278,14 +278,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
