@@ -5,7 +5,6 @@ Subject: [PATCH] Preserve waterfalls
 
 Makes waterfalls still somewhat possible with the custom liquid physics
 
-
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 index db064c602af1248ce453b3dcb3dd88b419152006..472d21b3d66f56648f854c7075f55e093cc52b51 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
