@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index b5835fa536f90b7f88a5ee4df78733cf43e1cb23..427f60ae7f375265bd29b9ff48f7b8b9991d16f2 100644
+index 417c4324af22c870de669e338a1eee5d540184a4..ff9eb8a4e9cdebe3b89173a87251d1b18235d013 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -43,6 +43,7 @@ dependencies {
@@ -17,10 +17,10 @@ index b5835fa536f90b7f88a5ee4df78733cf43e1cb23..427f60ae7f375265bd29b9ff48f7b8b9
      implementation("org.ow2.asm:asm:9.4")
      implementation("org.ow2.asm:asm-commons:9.4")
 diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
-index eccc357cabd8317afc5666c3347936d50eb34015..ab3f163ebeb9e3c5af3f7d6aab90a7fc2d703295 100644
+index 2f6142b6bfaa3b523478eccd6ad13ce922e81da9..78f8f8500b6ab427462104f3820483493b7a6e96 100644
 --- a/src/main/java/org/bukkit/Chunk.java
 +++ b/src/main/java/org/bukkit/Chunk.java
-@@ -291,4 +291,16 @@ public interface Chunk extends PersistentDataHolder {
+@@ -302,4 +302,16 @@ public interface Chunk extends PersistentDataHolder {
       * @return if the biome is contained within
       */
      boolean contains(@NotNull Biome biome);
@@ -38,7 +38,7 @@ index eccc357cabd8317afc5666c3347936d50eb34015..ab3f163ebeb9e3c5af3f7d6aab90a7fc
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 390a2a2611df35a9ea6f1eb996b47e2aa4597ff0..7fe0d711104d4ab2d80e41ee47ff68bc8154de6c 100644
+index 1c3f54382d66549dc881d4577c7104be6673a274..0f5b1f641016d2a92d2efca4765f2b2ba2f51dfd 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
 @@ -784,4 +784,27 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
@@ -91,10 +91,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index dc16fd3f342994dc3ea88b0980e4b3f56621ddf3..c20f6102b60a59ff97f2100c14449cbae4cd2a73 100644
+index cc78ce7de88a9a404ed20d5bc61b98d3107f29b3..28b6147374f89567fb016a5cd5366f3a0e26afcc 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1004,4 +1004,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1005,4 +1005,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
@@ -112,7 +112,7 @@ index dc16fd3f342994dc3ea88b0980e4b3f56621ddf3..c20f6102b60a59ff97f2100c14449cba
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 8216b53724bfad3c29bf6b75e17f4640e4915a00..64795d7aa80bbda9067a7a26490c8edf8fab5e0c 100644
+index 64055402076b62d32ba947830d935b79bae12d95..0937342a3f08856f391ed166fe4c8810ce6cc7d1 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1620,4 +1620,42 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
@@ -159,7 +159,7 @@ index 8216b53724bfad3c29bf6b75e17f4640e4915a00..64795d7aa80bbda9067a7a26490c8edf
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index d30ad7cae1dfbb47ab1a6e3e2fcd6fb76163fe78..6f7fdf516f22631a5d3dd14949ff3acafbe71267 100644
+index 57609b7793122e135fa0c3b926500849379637b2..d0d06aeecf72e0241d373cd4f7cc53eae984f630 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 @@ -198,4 +198,16 @@ public interface PersistentDataContainer {

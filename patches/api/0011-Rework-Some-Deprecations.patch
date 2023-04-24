@@ -72,10 +72,10 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 85c5987758b1d5145843705205dc99164c5f9f44..9dc2479220125d30192319dee55c488c203f7d57 100644
+index 43cef54d355c8a1b6a8cd6be89a6a805e9f88566..01973fe6938c2e0a5abc7a693dc8f322279d7006 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -278,14 +278,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -279,14 +279,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * Returns true if the entity is supported by a block.
       *
       * This value is a state updated by the client after each movement.

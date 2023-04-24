@@ -5,7 +5,7 @@ Subject: [PATCH] Add an awful way to make custom fuel
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index 5148dde373a82db07ebac438cd8646cee2d969c7..fe741967e0fc989195cb5735d6a9975d5857946c 100644
+index 32a64222d7ba9518abf1c1adf651703781fdc3fd..e814a5fcff80a0012cf20df6b8787e71c5180f91 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 @@ -535,7 +535,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
@@ -23,10 +23,10 @@ index 5148dde373a82db07ebac438cd8646cee2d969c7..fe741967e0fc989195cb5735d6a9975d
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 60544351f2d0ef9000c5fad4b5e321316dca683d..72417e12e8b4250f68c702623fd31041df6c3eb5 100644
+index 14d7e97e8807b0c3117700331bb0c96ba34b1f04..449cf6116cff708a6aed42c388c7b672f915ebdf 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1461,6 +1461,13 @@ public final class CraftServer implements Server {
+@@ -1457,6 +1457,13 @@ public final class CraftServer implements Server {
          net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.removeFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(new ItemStack(material)));
      }
  

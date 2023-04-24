@@ -5,10 +5,10 @@ Subject: [PATCH] Get destroy speed from BlockData
 
 
 diff --git a/src/main/java/org/bukkit/block/data/BlockData.java b/src/main/java/org/bukkit/block/data/BlockData.java
-index e65b7d1cf7b0655a3f31949f94f2f4a12e662c94..3f6f1104d0c8f2695545c78cb817badf72db3f0a 100644
+index 40ddf8909636ab3cdd78f4e66123358c6a3850f7..ebe5eaf7d923017306492a0abd3bedeccb8c7920 100644
 --- a/src/main/java/org/bukkit/block/data/BlockData.java
 +++ b/src/main/java/org/bukkit/block/data/BlockData.java
-@@ -225,4 +225,28 @@ public interface BlockData extends Cloneable {
+@@ -245,4 +245,28 @@ public interface BlockData extends Cloneable {
       */
      boolean isRandomlyTicked();
      // Paper end

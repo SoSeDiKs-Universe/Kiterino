@@ -5,7 +5,7 @@ Subject: [PATCH] More Sound API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 392a28a6ad12bb321e4c8ff6a5947a454324118f..aef157fdef1355ee0c0392b1b7837fd595034619 100644
+index ac1534c601b79446075c46fc476f9aa2dbcc6f53..dc157fb4dbe88b9d025b1e3da154ad9246857a2c 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
 @@ -817,5 +817,32 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
@@ -42,10 +42,10 @@ index 392a28a6ad12bb321e4c8ff6a5947a454324118f..aef157fdef1355ee0c0392b1b7837fd5
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 8fc1bb058d44507fba0c1978377ff41c97d58e70..eb4b341b656cd67fb66fb7165c8eeafc0bf39f57 100644
+index 28b6147374f89567fb016a5cd5366f3a0e26afcc..c2828a70a37f09001d39bc2a3b4ccccc00b9d5e2 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1015,5 +1015,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1016,5 +1016,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default de.tr7zw.changeme.nbtapi.NBTEntity getNBT() {
          return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
      }

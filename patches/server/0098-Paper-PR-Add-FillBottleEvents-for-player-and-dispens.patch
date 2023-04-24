@@ -123,7 +123,7 @@ index 17ae8ebe3f72d54efef5c73ec0901e24a89651e8..e5b923ceac117bb06a1ed583df1337b9
                  }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
-index 7867333757c300cd52110c2cf5d0a5bb19f9505d..e8efbe393d93f95958e1eb6623607535482de429 100644
+index ca6cf92b96d68ba8b34e90edda2a93e11214c91b..dacb12e7d5b7ad45a5717a06971ae97d5e6fbcff 100644
 --- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 @@ -145,12 +145,22 @@ public class BeehiveBlock extends BaseEntityBlock {
@@ -153,10 +153,10 @@ index 7867333757c300cd52110c2cf5d0a5bb19f9505d..e8efbe393d93f95958e1eb6623607535
  
                  flag = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 7d340c80246f5b060290dc05a2d366c7c5c954ff..5a425fba90de89966fcaee426ad64a71fb6c4ba1 100644
+index 701d38a2027ce7c10d5de9111426ef981233f65e..8d1d8d757e5efa2feb1695e6c02f422468071116 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1976,5 +1976,17 @@ public class CraftEventFactory {
+@@ -1993,5 +1993,17 @@ public class CraftEventFactory {
          io.papermc.paper.event.block.BlockPreDispenseEvent event = new io.papermc.paper.event.block.BlockPreDispenseEvent(block, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack), slot);
          return event.callEvent();
      }
