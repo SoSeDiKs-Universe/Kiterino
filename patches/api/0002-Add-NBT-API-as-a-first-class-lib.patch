@@ -5,14 +5,14 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 417c4324af22c870de669e338a1eee5d540184a4..ff9eb8a4e9cdebe3b89173a87251d1b18235d013 100644
+index 417c4324af22c870de669e338a1eee5d540184a4..08b76f76e6cf6e2196c7e723bea928e42562cc45 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -43,6 +43,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:2.17.1")
      api("org.slf4j:slf4j-api:1.8.0-beta4")
      api("io.sentry:sentry:5.4.0") // Pufferfish
-+    api("de.tr7zw:item-nbt-api:2.11.2") // Kiterino
++    api("de.tr7zw:item-nbt-api:2.11.3-SNAPSHOT") // Kiterino
  
      implementation("org.ow2.asm:asm:9.4")
      implementation("org.ow2.asm:asm-commons:9.4")
