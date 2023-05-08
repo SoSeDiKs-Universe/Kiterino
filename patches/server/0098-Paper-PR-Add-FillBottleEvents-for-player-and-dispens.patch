@@ -153,10 +153,10 @@ index ca6cf92b96d68ba8b34e90edda2a93e11214c91b..dacb12e7d5b7ad45a5717a06971ae97d
  
                  flag = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 701d38a2027ce7c10d5de9111426ef981233f65e..8d1d8d757e5efa2feb1695e6c02f422468071116 100644
+index 3f43a39b66b486ae2042ff43a52cde83717f22c2..bbc2325787c1ea3b8a57204f1ba1335861689977 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1993,5 +1993,17 @@ public class CraftEventFactory {
+@@ -1998,5 +1998,17 @@ public class CraftEventFactory {
          io.papermc.paper.event.block.BlockPreDispenseEvent event = new io.papermc.paper.event.block.BlockPreDispenseEvent(block, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack), slot);
          return event.callEvent();
      }
