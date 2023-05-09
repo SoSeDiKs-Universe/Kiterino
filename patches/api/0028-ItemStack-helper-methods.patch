@@ -5,10 +5,10 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 835f07478ab12a94e558f4f38a66418fabddc4ea..6dcab29f0bda24fdf3c971df5e5afcaf9a43340a 100644
+index 65570ed544994c9b753df9519e59fabc79b8242b..6f5dc25a60e3ebb701dfde86a594b2fa4a41b296 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1681,4 +1681,75 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1681,4 +1681,78 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return getNBT(directApply).getOrCreateCompound(Bukkit.getName());
      }
      // Kiterino end
@@ -23,7 +23,7 @@ index 835f07478ab12a94e558f4f38a66418fabddc4ea..6dcab29f0bda24fdf3c971df5e5afcaf
 +    public String subtractId() {
 +        if (isEmpty(this)) return null;
 +        de.tr7zw.changeme.nbtapi.NBTCompound nbt = getKNBT();
-+        return nbt.hasKey("Id") ? nbt.getString("Id") : null;
++        return nbt.hasTag("Id") ? nbt.getString("Id") : null;
 +    }
 +
 +    /**
@@ -58,6 +58,9 @@ index 835f07478ab12a94e558f4f38a66418fabddc4ea..6dcab29f0bda24fdf3c971df5e5afcaf
 +        if (clone.getItemMeta() instanceof org.bukkit.inventory.meta.LeatherArmorMeta leatherMeta) {
 +            leatherMeta.setColor(color);
 +            clone.setItemMeta(leatherMeta);
++        } else if (clone.getItemMeta() instanceof org.bukkit.inventory.meta.PotionMeta potionMeta) {
++            potionMeta.setColor(color);
++            clone.setItemMeta(potionMeta);
 +        }
 +        return clone;
 +    }
