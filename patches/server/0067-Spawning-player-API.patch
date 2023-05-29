@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 6a68981f1504edcde28083b9ab12cd3935850b02..5415e8675eb18ddb63ba3f7bde8d3cb13dc30222 100644
+index 9a33c3298c7e260bbe924dad63f161f715bc4303..e0c16c7ce6a3d123160ae0afb18bf46739ca4a6d 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -426,6 +426,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -427,6 +427,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return this.yRot;
      }
  
@@ -36,7 +36,7 @@ index 6a68981f1504edcde28083b9ab12cd3935850b02..5415e8675eb18ddb63ba3f7bde8d3cb1
      public boolean isChunkLoaded() {
          return this.level.hasChunk((int) Math.floor(this.getX()) >> 4, (int) Math.floor(this.getZ()) >> 4);
      }
-@@ -2359,6 +2380,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2360,6 +2381,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -49,7 +49,7 @@ index 6a68981f1504edcde28083b9ab12cd3935850b02..5415e8675eb18ddb63ba3f7bde8d3cb1
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2533,6 +2560,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2534,6 +2561,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
              // Purpur end
  
@@ -75,7 +75,7 @@ index 132041362b2707946bd386c88bbdf871a317afb7..1254a62adf467d21955bbb365df9a4bf
                                              // CraftBukkit start
                                              // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 916cac2bb36f3c017f082a13ca63d57c4f343449..e09787c851c4da39877b1cab51df7ead019b16de 100644
+index 3a624b107efff2aeb61bebf705841f621874cee4..d8543cf79698a80b2aa86ba8b1d9675f256c403e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -1497,4 +1497,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {

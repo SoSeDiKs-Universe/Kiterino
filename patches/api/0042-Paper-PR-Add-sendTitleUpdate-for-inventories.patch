@@ -5,13 +5,13 @@ Subject: [PATCH] Paper PR - Add sendTitleUpdate for inventories
 
 
 diff --git a/src/main/java/org/bukkit/inventory/InventoryView.java b/src/main/java/org/bukkit/inventory/InventoryView.java
-index daca40b63e95ea33178bcb54ad45911da591ca54..957e2d091e40ecc283343b7b07b813406d75e852 100644
+index 002acfbdce1db10f7ba1b6a013e678f504ac6e69..6dfd517d1eacc59c4d6e6ebe8ab385622b12b6f2 100644
 --- a/src/main/java/org/bukkit/inventory/InventoryView.java
 +++ b/src/main/java/org/bukkit/inventory/InventoryView.java
-@@ -468,4 +468,16 @@ public abstract class InventoryView {
-     @Deprecated // Paper
-     @NotNull
-     public abstract String getTitle();
+@@ -489,4 +489,16 @@ public abstract class InventoryView {
+      * @param title The new title.
+      */
+     public abstract void setTitle(@NotNull String title);
 +
 +    // Paper start
 +    /**

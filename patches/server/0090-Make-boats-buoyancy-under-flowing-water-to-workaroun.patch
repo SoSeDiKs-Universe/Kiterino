@@ -6,10 +6,10 @@ Subject: [PATCH] Make boats buoyancy under flowing water to workaround
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index ea41d9ddb5a69e38e340eaab87b5dbed3caef2df..798b9a9eb78dfe0caff1ee8b62c25d2001c2defc 100644
+index db89419b9779995b333b6f160055811ebb163e8b..641170407c8c487b6faf66497cc9f2b08090c958 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -442,6 +442,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -443,6 +443,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
              }
          }
  
@@ -25,7 +25,7 @@ index ea41d9ddb5a69e38e340eaab87b5dbed3caef2df..798b9a9eb78dfe0caff1ee8b62c25d20
      }
  
      private void tickBubbleColumn() {
-@@ -695,7 +704,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -696,7 +705,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
                      if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level, blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {

@@ -18,10 +18,10 @@ index 286e780c6cbb3da66788061232b0e429cd0cdb12..55e96bdbfba7673018a9d2c32baed1bf
      /**
       * Represents black
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 3578ab0c3a413d56bc39af43b5d3201d20d7d13a..0181d4868b99b5b5f1cf3c18a037e838cab31fa1 100644
+index df642a55003517040be795b44a8bf107dd88810b..485fb988a89b923d68077313946ff1db38f1bb7c 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
-@@ -160,9 +160,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
+@@ -165,9 +165,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
       * UTC.
       *
       * @return Date of last log-in for this player, or 0
@@ -72,10 +72,10 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 43cef54d355c8a1b6a8cd6be89a6a805e9f88566..01973fe6938c2e0a5abc7a693dc8f322279d7006 100644
+index 838f32eb3397d847071f54648dbac02c35d621cf..d184cfbed8a2016f92ae65a81de98fd8cd16b44c 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -279,14 +279,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -280,14 +280,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * Returns true if the entity is supported by a block.
       *
       * This value is a state updated by the client after each movement.

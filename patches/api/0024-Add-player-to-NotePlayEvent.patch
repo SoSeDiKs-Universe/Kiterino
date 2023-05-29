@@ -5,7 +5,7 @@ Subject: [PATCH] Add player to NotePlayEvent
 
 
 diff --git a/src/main/java/org/bukkit/event/block/NotePlayEvent.java b/src/main/java/org/bukkit/event/block/NotePlayEvent.java
-index 676b31f6f38d4e85cd4bd16ccf42cbc39a5d8423..48e1ddb533e2134212f6233bc1f6d58e0704b08d 100644
+index ea7cb75ba3ecbe40e0390fd5568db77de56c4f16..5cb30c3848034a17f79dff04e0af636e05c85427 100644
 --- a/src/main/java/org/bukkit/event/block/NotePlayEvent.java
 +++ b/src/main/java/org/bukkit/event/block/NotePlayEvent.java
 @@ -17,12 +17,20 @@ public class NotePlayEvent extends BlockEvent implements Cancellable {
@@ -29,7 +29,7 @@ index 676b31f6f38d4e85cd4bd16ccf42cbc39a5d8423..48e1ddb533e2134212f6233bc1f6d58e
  
      @Override
      public boolean isCancelled() {
-@@ -76,6 +84,18 @@ public class NotePlayEvent extends BlockEvent implements Cancellable {
+@@ -80,6 +88,18 @@ public class NotePlayEvent extends BlockEvent implements Cancellable {
          }
      }
  

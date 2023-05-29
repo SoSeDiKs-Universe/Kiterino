@@ -5,10 +5,10 @@ Subject: [PATCH] Fallback to Dimension if World UUID is unknown
 
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 9679cce1a836add4aee343087370a2fc4d2d132e..f29ceb5394e846b7f3fcc70f4ec0c29ed8f779aa 100644
+index 1a90a7d91288b9a8ab3539785de2616a6f24aa48..6c571f05db61c63eca26e9570d255c7553c5a35d 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -211,7 +211,10 @@ public abstract class PlayerList {
+@@ -213,7 +213,10 @@ public abstract class PlayerList {
              if (bWorld != null) {
                  resourcekey = ((CraftWorld) bWorld).getHandle().dimension();
              } else {

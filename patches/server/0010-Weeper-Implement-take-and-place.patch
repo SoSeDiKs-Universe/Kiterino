@@ -58,10 +58,10 @@ index 75d71b0b8a1f5b0712b76e52c8afded103f16b7b..81a1a0fd71a6adb9754e6c428c891461
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index d27916575c5cd380711e7ce1709d8fac429c39e2..670a957f596ee97cce92d65e20420253ad97f7f5 100644
+index 468023414b4a9119a3418b8e8a5e38375bbd2407..477ccdc6d9ac86678841435fedf73258b4792a67 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -315,6 +315,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -316,6 +316,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -73,7 +73,7 @@ index d27916575c5cd380711e7ce1709d8fac429c39e2..670a957f596ee97cce92d65e20420253
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -344,7 +349,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -345,7 +350,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          if (iinventory instanceof MenuProvider) {
              this.getHandle().openMenu(iinventory);
          } else {
@@ -82,7 +82,7 @@ index d27916575c5cd380711e7ce1709d8fac429c39e2..670a957f596ee97cce92d65e20420253
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -355,9 +360,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -356,9 +361,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {

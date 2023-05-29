@@ -35,10 +35,10 @@ index c9cd5fe3e942d1ce0133c17d6dd2747b70878d4e..ea21b630aebe858b9db1d670aec0e4fe
                  entityhuman.awardStat(Stats.ITEM_USED.get(item));
                  // LayeredCauldronBlock.lowerFillLevel(iblockdata, world, blockposition); // CraftBukkit
 diff --git a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index 2db46452d374f9b53db7bd80be5fbd9c8fce2c3e..24c1e23693678eb50f9965bfbc8484646eb213c1 100644
+index da9cc93f560269a00f0093ad76aba3a05eedb046..4e77b184bed0fdc527bd588815b806b98b52ca1f 100644
 --- a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -1043,9 +1043,11 @@ public interface DispenseItemBehavior {
+@@ -1044,9 +1044,11 @@ public interface DispenseItemBehavior {
                      pointer.getLevel().gameEvent((Entity) null, GameEvent.FLUID_PICKUP, pointer.getPos());
                      return filledBottleStack.copy();
                  } else {
@@ -50,7 +50,7 @@ index 2db46452d374f9b53db7bd80be5fbd9c8fce2c3e..24c1e23693678eb50f9965bfbc848464
  
                      return emptyBottleStack;
                  }
-@@ -1085,12 +1087,24 @@ public interface DispenseItemBehavior {
+@@ -1086,12 +1088,24 @@ public interface DispenseItemBehavior {
                  if (iblockdata.is(BlockTags.BEEHIVES, (blockbase_blockdata) -> {
                      return blockbase_blockdata.hasProperty(BeehiveBlock.HONEY_LEVEL) && blockbase_blockdata.getBlock() instanceof BeehiveBlock;
                  }) && (Integer) iblockdata.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
@@ -153,10 +153,10 @@ index ca6cf92b96d68ba8b34e90edda2a93e11214c91b..dacb12e7d5b7ad45a5717a06971ae97d
  
                  flag = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 3f43a39b66b486ae2042ff43a52cde83717f22c2..bbc2325787c1ea3b8a57204f1ba1335861689977 100644
+index 2cf38f6aba34116df539d47fb337809da76126ce..e7b55f4e74e6255f027f696fe5310129d3498c07 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1998,5 +1998,17 @@ public class CraftEventFactory {
+@@ -2017,5 +2017,17 @@ public class CraftEventFactory {
          io.papermc.paper.event.block.BlockPreDispenseEvent event = new io.papermc.paper.event.block.BlockPreDispenseEvent(block, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack), slot);
          return event.callEvent();
      }

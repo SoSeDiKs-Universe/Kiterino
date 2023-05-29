@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 7254d62f3713113027eba29853e9d975eab15f7f..aa3b33a48acc8751d59c6c478fe18acebf58ea90 100644
+index af8cb1f1f0c128923495f51e4828003133ce766b..17b14a4fb460d25c2c9218c154cbc4e82b1ba7b9 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -519,6 +519,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+@@ -520,6 +520,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
      }
  
      public void disconnect(net.kyori.adventure.text.Component reason, org.bukkit.event.player.PlayerKickEvent.Cause cause) {
@@ -21,7 +21,7 @@ index 7254d62f3713113027eba29853e9d975eab15f7f..aa3b33a48acc8751d59c6c478fe18ace
          // Paper end
          // CraftBukkit start - fire PlayerKickEvent
          if (this.processedDisconnect) {
-@@ -547,7 +553,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+@@ -548,7 +554,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
  
          net.kyori.adventure.text.Component leaveMessage = net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.format.NamedTextColor.YELLOW, io.papermc.paper.configuration.GlobalConfiguration.get().messages.useDisplayNameInQuitMessage ? this.player.getBukkitEntity().displayName() : net.kyori.adventure.text.Component.text(this.player.getScoreboardName())); // Paper - Adventure
  
@@ -30,7 +30,7 @@ index 7254d62f3713113027eba29853e9d975eab15f7f..aa3b33a48acc8751d59c6c478fe18ace
  
          if (this.cserver.getServer().isRunning()) {
              this.cserver.getPluginManager().callEvent(event);
-@@ -558,14 +564,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+@@ -559,14 +565,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
              return;
          }
          // Send the possibly modified leave message
@@ -48,10 +48,10 @@ index 7254d62f3713113027eba29853e9d975eab15f7f..aa3b33a48acc8751d59c6c478fe18ace
          MinecraftServer minecraftserver = this.server;
          Connection networkmanager = this.connection;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 16c055b347d6cb2cabb2487b591064bb6bb5d75c..6b9b021c68086691eb6a3b5d67d6ab67413623b8 100644
+index 370d2326b4e977e6ef073ae5313ddede182f8d7c..0ffeea803d4201e395b7d9581280bf9a8b4c096b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3344,5 +3344,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3352,5 +3352,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          return true;
      }

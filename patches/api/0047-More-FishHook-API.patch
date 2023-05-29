@@ -5,10 +5,10 @@ Subject: [PATCH] More FishHook API
 
 
 diff --git a/src/main/java/org/bukkit/entity/FishHook.java b/src/main/java/org/bukkit/entity/FishHook.java
-index e94c7e279356c510f60508b26277d4891a4258fa..15300cbfb56c8b2ceff0c1d16a80df92bb859545 100644
+index 6ed83d3e4d23e0dc0e1b156a1ee221aaba5c7210..0981cfd1e4b3f0b07432bc61418ef997b921fc9a 100644
 --- a/src/main/java/org/bukkit/entity/FishHook.java
 +++ b/src/main/java/org/bukkit/entity/FishHook.java
-@@ -178,4 +178,20 @@ public interface FishHook extends Projectile {
+@@ -338,4 +338,20 @@ public interface FishHook extends Projectile {
       */
      void setWaitTime(int ticks);
      // Paper end

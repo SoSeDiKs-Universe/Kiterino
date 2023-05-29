@@ -5,10 +5,10 @@ Subject: [PATCH] Flammable cobwebs
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/FireBlock.java b/src/main/java/net/minecraft/world/level/block/FireBlock.java
-index 2713fe3e118640dba73bdf4048ec707a43278991..616f55b864a043abb368acd112ac74eb687e7118 100644
+index c33dab52dc73da5f510ea5eed7785bf68e06605e..12574f760dd9583207073e0c61556743e62ba983 100644
 --- a/src/main/java/net/minecraft/world/level/block/FireBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/FireBlock.java
-@@ -556,5 +556,6 @@ public class FireBlock extends BaseFireBlock {
+@@ -560,5 +560,6 @@ public class FireBlock extends BaseFireBlock {
          blockfire.setFlammable(Blocks.SMALL_DRIPLEAF, 60, 100);
          blockfire.setFlammable(Blocks.HANGING_ROOTS, 30, 60);
          blockfire.setFlammable(Blocks.GLOW_LICHEN, 15, 100);
