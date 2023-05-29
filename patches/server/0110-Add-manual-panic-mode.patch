@@ -1,0 +1,77 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 24 May 2023 17:13:25 +0300
+Subject: [PATCH] Add manual panic mode
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 48795914e79099ace7d78f62dc9024ac4d74aaae..cc8a025c7bd89ad20700bb9e1c38225781176d5d 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -324,6 +324,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     protected final RandomSource random;
+     public int tickCount;
+     public int remainingFireTicks;
++    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino
+     public boolean wasTouchingWater;
+     protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+     protected boolean wasEyeInWater;
+@@ -897,6 +898,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+             }
+         }
+ 
++        // Kiterino start
++        if (this.forcePanicTicks > 0) {
++            this.forcePanicTicks--;
++        }
++        // Kiterino end
++
+         if (this.isInLava()) {
+             this.lavaHurt();
+             this.fallDistance *= 0.5F;
+diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
+index ecda30f738e782d4fbb8ba097a14f81425eea2b8..cd1fdadf83214474619b31774db5e995a812c50b 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
++++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
+@@ -23,7 +23,7 @@ public class AnimalPanic extends Behavior<PathfinderMob> {
+     private static final int PANIC_DISTANCE_HORIZONTAL = 5;
+     private static final int PANIC_DISTANCE_VERTICAL = 4;
+     private static final Predicate<PathfinderMob> DEFAULT_SHOULD_PANIC_PREDICATE = (entity) -> {
+-        return entity.getLastHurtByMob() != null || entity.isFreezing() || entity.isOnFire();
++        return entity.getLastHurtByMob() != null || entity.isFreezing() || entity.isOnFire() || entity.isForcePanicking(); // Kiterino - manual panic
+     };
+     private final float speedMultiplier;
+     private final Predicate<PathfinderMob> shouldPanic;
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
+index 268b7457c2a93af6d36c1c5f623c5856f94a7af1..7dcc44466643d169b9bd2f9e5cbbbcd3408de122 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
+@@ -48,7 +48,7 @@ public class PanicGoal extends Goal {
+     }
+ 
+     protected boolean shouldPanic() {
+-        return this.mob.getLastHurtByMob() != null || this.mob.isFreezing() || this.mob.isOnFire();
++        return this.mob.getLastHurtByMob() != null || this.mob.isFreezing() || this.mob.isOnFire() || this.mob.isForcePanicking(); // Kiterino - manual panic
+     }
+ 
+     protected boolean findRandomPosition() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index 852bc4a7f550e2f4537a141e4af3f2d2cbd588ee..6070b612b57b35d5d32c788e3e38ee13f2c1d8a0 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1599,5 +1599,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     public boolean hasFixedPose() {
+         return getHandle().fixedPose;
+     }
++
++    @Override
++    public int getPanicTicks() {
++        return getHandle().forcePanicTicks;
++    }
++
++    @Override
++    public void setPanicTicks(int ticks) {
++        getHandle().forcePanicTicks = Math.max(0, ticks);
++    }
+     // Kiterino end
+ }

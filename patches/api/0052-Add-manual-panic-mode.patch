@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 24 May 2023 17:13:26 +0300
+Subject: [PATCH] Add manual panic mode
+
+
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index d8d0a52e71f29c9e679c480c9477f7be59c0cc8b..8b9ad6611551d297e771e137611fa8a86ba04a3f 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -1169,5 +1169,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      * @return whether the entity has a fixed {@link Pose}
+      */
+     boolean hasFixedPose();
++
++    /**
++     * Gets the amount of manually set panic ticks left
++     *
++     * @return the amount of panic ticks
++     */
++    int getPanicTicks();
++
++    /**
++     * Sets the amount of panic ticks
++     *
++     * @param ticks ticks
++     */
++    void setPanicTicks(int ticks);
+     // Kiterino end
+ }
