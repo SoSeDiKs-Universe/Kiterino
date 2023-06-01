@@ -123,10 +123,10 @@ index 17ae8ebe3f72d54efef5c73ec0901e24a89651e8..e5b923ceac117bb06a1ed583df1337b9
                  }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
-index ca6cf92b96d68ba8b34e90edda2a93e11214c91b..dacb12e7d5b7ad45a5717a06971ae97d5e6fbcff 100644
+index 8e0ef957aad8228fa3f7b50725e4f549a98b27ce..aa7b7c4d543a316f42b8da5b07661b19c758cd32 100644
 --- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
-@@ -145,12 +145,22 @@ public class BeehiveBlock extends BaseEntityBlock {
+@@ -150,12 +150,22 @@ public class BeehiveBlock extends BaseEntityBlock {
                  flag = true;
                  world.gameEvent((Entity) player, GameEvent.SHEAR, pos);
              } else if (itemstack.is(Items.GLASS_BOTTLE)) {
