@@ -5,22 +5,23 @@ Subject: [PATCH] Add PlayerSaddleEntityEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/item/SaddleItem.java b/src/main/java/net/minecraft/world/item/SaddleItem.java
-index 0c975875f1f2d0236d42a291486a7e78e1702802..1ab26d3a485fc7d737d9d39d479283344d560ef1 100644
+index 7234010d81078d357ab9bca422e44864a9e269bb..8d4cfaeda434393ac933d0072ce75a1616458792 100644
 --- a/src/main/java/net/minecraft/world/item/SaddleItem.java
 +++ b/src/main/java/net/minecraft/world/item/SaddleItem.java
-@@ -18,9 +18,14 @@ public class SaddleItem extends Item {
+@@ -18,9 +18,15 @@ public class SaddleItem extends Item {
          if (entity instanceof Saddleable saddleable && entity.isAlive()) {
              if (!saddleable.isSaddled() && saddleable.isSaddleable()) {
-                 if (!user.level.isClientSide) {
+                 if (!user.level().isClientSide) {
 -                    saddleable.equipSaddle(SoundSource.NEUTRAL, stack.copyWithCount(1)); // Paper - Fix saddles losing nbt data - MC-191591
 +                    // Kiterino start
 +                    var event = new me.sosedik.kiterino.event.player.PlayerSaddleEntityEvent((org.bukkit.entity.Player) user.getBukkitEntity(), (org.bukkit.entity.Steerable) entity.getBukkitEntity(), stack.asBukkitMirror());
 +                    if (!event.callEvent()) return InteractionResult.PASS;
 +                    saddleable.equipSaddle(event.isPlaySound() ? SoundSource.NEUTRAL : null, stack.copyWithCount(1)); // Paper - Fix saddles losing nbt data - MC-191591
-                     entity.level.gameEvent(entity, GameEvent.EQUIP, entity.position());
-+                    if (event.isConsumeItem())
+                     entity.level().gameEvent(entity, GameEvent.EQUIP, entity.position());
++                    if (event.isConsumeItem()) {
                      stack.shrink(1);
++                    }
 +                    // Kiterino end
                  }
  
-                 return InteractionResult.sidedSuccess(user.level.isClientSide);
+                 return InteractionResult.sidedSuccess(user.level().isClientSide);

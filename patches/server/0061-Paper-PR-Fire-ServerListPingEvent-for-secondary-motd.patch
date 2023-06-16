@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
-index 6b0bdc266109cdfb874f08bf74323603921d2260..2dc2f792e936eca88a80e50c9ff1236d111aacef 100644
+index 6b0bdc266109cdfb874f08bf74323603921d2260..2229173653694a083dd3274878da3db03f62d15e 100644
 --- a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 +++ b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 @@ -75,13 +75,24 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
@@ -35,23 +35,21 @@ index 6b0bdc266109cdfb874f08bf74323603921d2260..2dc2f792e936eca88a80e50c9ff1236d
          }
  
          // Setup response
-@@ -107,10 +118,7 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
-         } else {
-             favicon = Optional.empty();
+@@ -109,8 +120,7 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
          }
--        final ServerStatus ping = new ServerStatus(description, players, Optional.of(version), favicon, server.enforceSecureProfile());
--
+         final ServerStatus ping = new ServerStatus(description, players, Optional.of(version), favicon, server.enforceSecureProfile());
+ 
 -        // Send response
 -        networkManager.send(new ClientboundStatusResponsePacket(ping));
-+        return new ServerStatus(description, players, Optional.of(version), favicon, server.enforceSecureProfile());
++        return ping;
      }
  
  }
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index c27e455321951e76e4818fec0e64301f5620dbf6..1a90a7d91288b9a8ab3539785de2616a6f24aa48 100644
+index fb3a59fda3d4f5b2bca665b5665df2a355c61a15..706c2b2dbc3fc7ec19020469d248b0fe39aaa209 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -304,11 +304,13 @@ public abstract class PlayerList {
+@@ -311,11 +311,13 @@ public abstract class PlayerList {
          Component joinMessage = ichatmutablecomponent; // Paper - Adventure
  
          playerconnection.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
@@ -68,5 +66,5 @@ index c27e455321951e76e4818fec0e64301f5620dbf6..1a90a7d91288b9a8ab3539785de2616a
 +        });
 +        // Paper end
  
-         // player.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players)); // Paper
+         // entityplayer.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players)); // CraftBukkit - replaced with loop below
          this.players.add(player);

@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 20ad8ed85fd2014fdcfafaea981b1e2b8714bd76..ccd742f25f8f19eff8a4fad5c9bd1298b9be9e50 100644
+index d66915f5bcf3c59ae51f549691a09b17cde12335..805cd7496ca52a8cc065cf1351aad036f3e8f22e 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -428,6 +428,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -432,6 +432,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return this.yRot;
      }
  
@@ -16,8 +16,8 @@ index 20ad8ed85fd2014fdcfafaea981b1e2b8714bd76..ccd742f25f8f19eff8a4fad5c9bd1298
 +    public @Nullable UUID spawningPlayerUuid;
 +
 +    public void updateSpawningPlayer() {
-+        if (!this.level.paperConfig().entities.spawning.perPlayerMobSpawns) return;
-+        if (!(getLevel() instanceof ServerLevel level)) return;
++        if (!(this.level() instanceof ServerLevel level)) return;
++        if (!level.paperConfig().entities.spawning.perPlayerMobSpawns) return;
 +        if (this.spawningPlayerUuid != null) return;
 +
 +        var inRange = level.getChunkSource().chunkMap.playerMobDistanceMap.getObjectsInRange(chunkPosition());
@@ -36,11 +36,10 @@ index 20ad8ed85fd2014fdcfafaea981b1e2b8714bd76..ccd742f25f8f19eff8a4fad5c9bd1298
      public boolean isChunkLoaded() {
          return this.level.hasChunk((int) Math.floor(this.getX()) >> 4, (int) Math.floor(this.getZ()) >> 4);
      }
-@@ -2361,6 +2382,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2499,6 +2520,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
-+
 +            // Kiterino start
 +            if (spawningPlayerUuid != null) {
 +                nbt.putUUID("Kiterino.SpawningPlayerUUID", spawningPlayerUuid);
@@ -49,21 +48,20 @@ index 20ad8ed85fd2014fdcfafaea981b1e2b8714bd76..ccd742f25f8f19eff8a4fad5c9bd1298
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2535,6 +2562,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2672,6 +2698,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                 immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
              // Purpur end
- 
 +            // Kiterino start
 +            if (nbt.contains("Kiterino.SpawningPlayerUUID")) {
 +                spawningPlayerUuid = nbt.getUUID("Kiterino.SpawningPlayerUUID");
 +            }
 +            // Kiterino end
-+
+ 
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
-             CrashReportCategory crashreportsystemdetails = crashreport.addCategory("Entity being loaded");
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 132041362b2707946bd386c88bbdf871a317afb7..1254a62adf467d21955bbb365df9a4bf7ddaf897 100644
+index 327a3d5cd5ea4db98e6bad90fc0bb1464033c71e..6573380c9a50c9148afa10599e397d20a541160d 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -292,6 +292,7 @@ public final class NaturalSpawner {
@@ -75,11 +73,11 @@ index 132041362b2707946bd386c88bbdf871a317afb7..1254a62adf467d21955bbb365df9a4bf
                                              // CraftBukkit start
                                              // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 3a624b107efff2aeb61bebf705841f621874cee4..d8543cf79698a80b2aa86ba8b1d9675f256c403e 100644
+index ea26cd48b6eb83d7af8be186994006fae5bc1251..c942ced95959fef8374878460dfeaaa4eb2472ec 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1497,4 +1497,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
-         getHandle().immuneToFire = fireImmune;
+@@ -1490,4 +1490,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return !getHandle().dismountsUnderwater();
      }
      // Purpur end
 +

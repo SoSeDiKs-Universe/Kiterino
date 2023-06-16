@@ -5,12 +5,15 @@ Subject: [PATCH] Rework Some Deprecations
 
 
 diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
-index 286e780c6cbb3da66788061232b0e429cd0cdb12..55e96bdbfba7673018a9d2c32baed1bfd7b54e16 100644
+index dc79c2eaff88d16439da226a64c4d7712c47b63a..379e5b2dd31bf008211b319538e1b7d3e2562a3b 100644
 --- a/src/main/java/org/bukkit/ChatColor.java
 +++ b/src/main/java/org/bukkit/ChatColor.java
-@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
+@@ -11,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
+ 
  /**
   * All supported color values for chat
+- * @deprecated ChatColor has been deprecated in favor of <a href="https://docs.advntr.dev/text.html">Adventure</a> API. See {@link net.kyori.adventure.text.format.NamedTextColor} for the adventure equivalent of pre-defined text colors
++ * <p>Note: ChatColor is now obsolete due to <a href="https://docs.advntr.dev/text.html">Adventure</a> API. See {@link net.kyori.adventure.text.format.NamedTextColor} for the adventure equivalent of pre-defined text colors
   */
 -@Deprecated // Paper
 +// @Deprecated // Paper // Kiterino
@@ -18,7 +21,7 @@ index 286e780c6cbb3da66788061232b0e429cd0cdb12..55e96bdbfba7673018a9d2c32baed1bf
      /**
       * Represents black
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index df642a55003517040be795b44a8bf107dd88810b..485fb988a89b923d68077313946ff1db38f1bb7c 100644
+index df642a55003517040be795b44a8bf107dd88810b..79c90ce1c1fb0661ba729d16c966e029bb660bcd 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
 @@ -165,9 +165,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
@@ -31,7 +34,7 @@ index df642a55003517040be795b44a8bf107dd88810b..485fb988a89b923d68077313946ff1db
 +     * @see #getLastSeen()
       */
 -    @Deprecated
-+    //@Deprecated // Kiterino - undeprecate
++    //@Deprecated // Kiterino
      public long getLastPlayed();
  
      /**
@@ -72,14 +75,13 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index dc437885404ae147a06cac653e519a4674a9a951..7f0396e927b22625ef56cd9411ff357e1a4e4b6d 100644
+index 84bd594baa2d72033b08ca79309b004d3c6807a2..7d1086ccb7b3643f6ab6c4f42962d480ce8d85ca 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -281,14 +281,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
-      * Returns true if the entity is supported by a block.
+@@ -295,13 +295,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       *
       * This value is a state updated by the client after each movement.
--     *
+      *
 -     * @return True if entity is on ground.
 -     * @deprecated This value is controlled only by the client and is therefore
 +     * <p>
@@ -93,5 +95,25 @@ index dc437885404ae147a06cac653e519a4674a9a951..7f0396e927b22625ef56cd9411ff357e
 -    @Deprecated
 +    // @Deprecated // Kiterino
      public boolean isOnGround();
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/inventory/meta/MapMeta.java b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
+index 26a336dade83baee97d20eb39a058925659f5777..e9a5ae1b2c6a7dbc656e3ea51c186c875adc90fe 100644
+--- a/src/main/java/org/bukkit/inventory/meta/MapMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
+@@ -38,13 +38,13 @@ public interface MapMeta extends ItemMeta {
+      *
+      * @param id the map id to set
+      * @see #setMapView(org.bukkit.map.MapView)
+-     * @deprecated These methods are poor API: They rely on the caller to pass
++     * Note: These methods are poor API: They rely on the caller to pass
+      * in an only an integer property, and have poorly defined implementation
+      * behavior if that integer is not a valid map (the current implementation
+      * for example will generate a new map with a different ID). The xxxMapView
+      * family of methods should be used instead.
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino
+     void setMapId(int id);
  
      /**

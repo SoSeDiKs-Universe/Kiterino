@@ -5,29 +5,28 @@ Subject: [PATCH] Lower minecarts rail sticking height
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index eb28d663aba42080cfcf2f90cb33a990c02f02df..a3fde5156fa517db0bb9c6b19b152d785e37f056 100644
+index c5bbe0f0137bf875d8b74a68ccfb4866ce45a7cb..cd5e8f5f976fe96add09415fd21fe9ab221fe9c4 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -392,14 +392,19 @@ public abstract class AbstractMinecart extends Entity {
-             int j = Mth.floor(this.getY());
-             int k = Mth.floor(this.getZ());
+@@ -1018,12 +1018,19 @@ public abstract class AbstractMinecart extends Entity {
+         int k = Mth.floor(z);
  
--            if (this.level.getBlockState(new BlockPos(i, j - 1, k)).is(BlockTags.RAILS)) {
--                --j;
+         if (this.level().getBlockState(new BlockPos(i, j - 1, k)).is(BlockTags.RAILS)) {
+-            --j;
 +            // Kiterino start
 +            if (getY() - i < 0.2) {
-+                BlockState belowState = this.level.getBlockState(new BlockPos(i, j - 1, k));
++                BlockState belowState = this.level().getBlockState(new BlockPos(i, j - 1, k));
 +                if (belowState.getBlock() instanceof BaseRailBlock railBlock && belowState.getValue(railBlock.getShapeProperty()).isAscending()) {
 +                    --j;
 +                }
-             }
++            }
 +            // Kiterino end
+         }
  
-             BlockPos blockposition = new BlockPos(i, j, k);
-             BlockState iblockdata = this.level.getBlockState(blockposition);
+         BlockState iblockdata = this.level().getBlockState(new BlockPos(i, j, k));
  
--            if (BaseRailBlock.isRail(iblockdata)) {
-+            if (iblockdata.is(BlockTags.RAILS) && iblockdata.getBlock() instanceof BaseRailBlock railBlock && (iblockdata.getValue(railBlock.getShapeProperty()).isAscending() || getY() < getBlockY() + 0.1)) { // Kiterino
-                 this.moveAlongTrack(blockposition, iblockdata);
-                 if (iblockdata.is(Blocks.ACTIVATOR_RAIL)) {
-                     this.activateMinecart(i, j, k, (Boolean) iblockdata.getValue(PoweredRailBlock.POWERED));
+-        if (BaseRailBlock.isRail(iblockdata)) {
++        if (iblockdata.is(BlockTags.RAILS) && iblockdata.getBlock() instanceof BaseRailBlock railBlock && (iblockdata.getValue(railBlock.getShapeProperty()).isAscending() || getY() < getBlockY() + 0.1)) { // Kiterino
+             RailShape blockpropertytrackposition = (RailShape) iblockdata.getValue(((BaseRailBlock) iblockdata.getBlock()).getShapeProperty());
+ 
+             y = (double) j;

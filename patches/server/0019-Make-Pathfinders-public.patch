@@ -5,10 +5,10 @@ Subject: [PATCH] Make Pathfinders public
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
-index a9f05181fe391703bb78f2ec8fdcb7c3a63de5b6..a1c751a88f3d4f61c245b835da8480188b3d8df1 100644
+index 2bd8f6d05728b48e184f4835d6acb3a00cf66153..94c1177a18621a2c9f0564a8e7a04e207b181bf4 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
-@@ -595,7 +595,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -602,7 +602,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -17,7 +17,7 @@ index a9f05181fe391703bb78f2ec8fdcb7c3a63de5b6..a1c751a88f3d4f61c245b835da848018
  
          private final Rabbit rabbit;
  
-@@ -611,7 +611,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -618,7 +618,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -26,7 +26,7 @@ index a9f05181fe391703bb78f2ec8fdcb7c3a63de5b6..a1c751a88f3d4f61c245b835da848018
  
          private final Rabbit rabbit;
  
-@@ -626,7 +626,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -633,7 +633,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -35,7 +35,7 @@ index a9f05181fe391703bb78f2ec8fdcb7c3a63de5b6..a1c751a88f3d4f61c245b835da848018
  
          private final Rabbit rabbit;
          private boolean wantsToRaid;
-@@ -744,7 +744,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -751,7 +751,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -45,7 +45,7 @@ index a9f05181fe391703bb78f2ec8fdcb7c3a63de5b6..a1c751a88f3d4f61c245b835da848018
          public EvilRabbitAttackGoal(Rabbit rabbit) {
              super(rabbit, 1.4D, true);
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Slime.java b/src/main/java/net/minecraft/world/entity/monster/Slime.java
-index 9a2f59748004538d45f362f8eacb07217a0b1e89..43a7dc1a45dba17d6b1742e4ef885244d61f423b 100644
+index 467337542551dedc05d922bb3a37b811aeef4d7b..c7c70ac827d36ec7a40f5611e17f0fb70ce803c8 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Slime.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Slime.java
 @@ -554,7 +554,7 @@ public class Slime extends Mob implements Enemy {
@@ -85,7 +85,7 @@ index 9a2f59748004538d45f362f8eacb07217a0b1e89..43a7dc1a45dba17d6b1742e4ef885244
          private final Slime slime;
  
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Spider.java b/src/main/java/net/minecraft/world/entity/monster/Spider.java
-index b335c4d224dcf1dbb698a6eef133a68c4104cf93..0e8ab57b06e1e160f11af8b4077ec8f021750779 100644
+index b3ab0f8cdbd678970e39e89c2062772374466b67..a42a92a7be8929b2e7c62d982d00ae5343879358 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Spider.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Spider.java
 @@ -226,7 +226,7 @@ public class Spider extends Monster {

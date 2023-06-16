@@ -5,16 +5,16 @@ Subject: [PATCH] Directional powered rails
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index ddcd7ada9f4bf5653bd8bf7c6cdb35d7243367d9..6c36b98c0543b69c10a31a3c7c61495f34ae834b 100644
+index b99b94c6ec4767aba16d82eaca8b2761d779b226..f5b24b678c177cd0dc29798f0fa1838140ed5bff 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -646,6 +646,19 @@ public abstract class AbstractMinecart extends Entity {
+@@ -647,6 +647,19 @@ public abstract class AbstractMinecart extends Entity {
              }
          }
  
 +        // Kiterino start - directional powered rails
 +        if (flag1) {
-+            BlockState belowState = level.getBlockState(pos.below());
++            BlockState belowState = level().getBlockState(pos.below());
 +            if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
 +                Direction dir = belowState.getValue(net.minecraft.world.level.block.GlazedTerracottaBlock.FACING).getOpposite();
 +                Vec3 vel = getDeltaMovement();
@@ -28,13 +28,13 @@ index ddcd7ada9f4bf5653bd8bf7c6cdb35d7243367d9..6c36b98c0543b69c10a31a3c7c61495f
          double d11;
  
          if (flag1) {
-@@ -751,6 +764,44 @@ public abstract class AbstractMinecart extends Entity {
+@@ -752,6 +765,44 @@ public abstract class AbstractMinecart extends Entity {
              }
          }
  
 +        // Kiterino start - directional powered rails
 +        if (state.is(Blocks.POWERED_RAIL)) {
-+            BlockState belowState = level.getBlockState(pos.below());
++            BlockState belowState = level().getBlockState(pos.below());
 +            if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
 +                Direction dir = belowState.getValue(net.minecraft.world.level.block.GlazedTerracottaBlock.FACING).getOpposite();
 +                Vec3 vel = getDeltaMovement();
@@ -72,4 +72,4 @@ index ddcd7ada9f4bf5653bd8bf7c6cdb35d7243367d9..6c36b98c0543b69c10a31a3c7c61495f
 +
      }
  
-     private boolean isRedstoneConductor(BlockPos pos) {
+     @Override

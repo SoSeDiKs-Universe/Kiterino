@@ -5,10 +5,10 @@ Subject: [PATCH] Max stack size API
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index fab3e6500cc9357dcc8e49710c53eca9c1b98c30..7ebe090188568b89052e0df5247b566e6510136f 100644
+index 90cb2f4877f408618f28af822882891374dbd1f9..c1864b278ceda5d2bd59db9a112ed7a75f2864d2 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2615,4 +2615,16 @@ public final class Bukkit {
+@@ -2632,4 +2632,16 @@ public final class Bukkit {
          server.clearBlockHighlights();
      }
      // Purpur end
@@ -26,10 +26,10 @@ index fab3e6500cc9357dcc8e49710c53eca9c1b98c30..7ebe090188568b89052e0df5247b566e
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 3c427c58318c1d3f592a3dccf5e0cbabe650554c..8e63a7c51357f05c89d6f3425dcca37853a413b1 100644
+index 57beb955d4153128a0b43278b313c38b4d2801c9..a58d8d458ef207d74dd05542b413bcf3623548ca 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -4524,7 +4524,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4389,7 +4389,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
      private final int id;
      private final Constructor<? extends MaterialData> ctor;
      private static final Map<String, Material> BY_NAME = Maps.newHashMap();
@@ -39,10 +39,10 @@ index 3c427c58318c1d3f592a3dccf5e0cbabe650554c..8e63a7c51357f05c89d6f3425dcca378
      public final Class<?> data;
      private final boolean legacy;
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 5e2b20f2c5eebce2c8f7e63e251763c94d716ea3..1d3099e3dc7763aed71f0f09689ccac57ed5bc19 100644
+index fbd20c5499158723c9eb678728ae2ee1adfc2910..28902f3bb83d78348e6f623fccd5cce7a618bb08 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2289,4 +2289,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2302,4 +2302,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void clearBlockHighlights();
      // Purpur end

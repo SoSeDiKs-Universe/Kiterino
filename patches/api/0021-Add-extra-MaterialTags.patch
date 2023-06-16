@@ -5,10 +5,10 @@ Subject: [PATCH] Add extra MaterialTags
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/MaterialTags.java b/src/main/java/com/destroystokyo/paper/MaterialTags.java
-index 7836ca97d2aa3a9c08e2ce69936bd801c857ad85..793f000c7eabaa18f740a6bbc66f8e44999f9a92 100644
+index 0b92f3279fe5dcbea77b22803447b7ad21ef999f..6676bed1a158ee47bb5b705739703a03c79d9f9a 100644
 --- a/src/main/java/com/destroystokyo/paper/MaterialTags.java
 +++ b/src/main/java/com/destroystokyo/paper/MaterialTags.java
-@@ -702,4 +702,21 @@ public class MaterialTags {
+@@ -701,4 +701,21 @@ public class MaterialTags {
          .add(Material.NETHERITE_AXE, Material.NETHERITE_HOE, Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_SWORD)
          .ensureSize("NETHERITE_TOOLS", 5).lock();
  

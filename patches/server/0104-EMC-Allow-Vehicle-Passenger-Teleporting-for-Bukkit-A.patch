@@ -6,10 +6,10 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index b8a256fc84d9b7d8e64492bd96267b694c1bb8e8..b524340283826c943bc32a4fcd428c9dc5c3d321 100644
+index bd0a398057b3504bfa2ba04080c1537485c98ee7..ee870cad1292e873630d6ab8ddbb8236e23abd72 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -797,7 +797,7 @@ public abstract class PlayerList {
+@@ -803,7 +803,7 @@ public abstract class PlayerList {
  
      public ServerPlayer respawn(ServerPlayer entityplayer, ServerLevel worldserver, boolean flag, Location location, boolean avoidSuffocation, RespawnReason reason, org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag...respawnFlags) {
          // Paper end
@@ -17,25 +17,25 @@ index b8a256fc84d9b7d8e64492bd96267b694c1bb8e8..b524340283826c943bc32a4fcd428c9d
 +        //entityplayer.stopRiding(); // CraftBukkit // EMC - remove stop riding
          this.players.remove(entityplayer);
          this.playersByName.remove(entityplayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Spigot
-         entityplayer.getLevel().removePlayerImmediately(entityplayer, Entity.RemovalReason.DISCARDED);
+         entityplayer.serverLevel().removePlayerImmediately(entityplayer, Entity.RemovalReason.DISCARDED);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 16b2c60949bef8fd099b8df30d9bae1512228c02..50df09caee95c26d4e8c9d060e0684a037b9e0d4 100644
+index 0a566c8fc084a1b659424e7819e6c1d4fc5262dc..c6658a353173f961aa23bd4d5e8179709ab69bf3 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -286,7 +286,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -288,7 +288,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public ImmutableList<Entity> passengers;
      protected int boardingCooldown;
      @Nullable
 -    private Entity vehicle;
 +    public Entity vehicle; // EMC - make public
-     public Level level;
+     private Level level;
      public double xo;
      public double yo;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index efc6fe5e937c0e897bcc1c25a6049a8130ab3b8d..adb0c699616e91863f2c7adf6c1035dd5975d147 100644
+index bcb4abb2265a52d55d22c89ca4e1a1d8fdb9a1a7..40de7dba46faf562b27852614ff2d52f23797c09 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -564,6 +564,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -574,6 +574,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.teleport(location, TeleportCause.PLUGIN);
      }
  
@@ -89,7 +89,7 @@ index efc6fe5e937c0e897bcc1c25a6049a8130ab3b8d..adb0c699616e91863f2c7adf6c1035dd
 +                this.entity.setYHeadRot(location.getYaw());
 +            } else {
 +                // This section has code from TeleportCommand class
-+                ServerLevel world = (ServerLevel) this.entity.level;
++                ServerLevel world = (ServerLevel) this.entity.level();
 +                Entity entity1 = this.entity;
 +                Entity target = entity1.getType().create(world);
 +                if (target == null) {
@@ -122,7 +122,7 @@ index efc6fe5e937c0e897bcc1c25a6049a8130ab3b8d..adb0c699616e91863f2c7adf6c1035dd
      @Override
      public boolean teleport(Location location, TeleportCause cause) {
          // Paper start - Teleport passenger API
-@@ -580,12 +660,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -590,12 +670,12 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          boolean dismount = !flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_VEHICLE);
          boolean ignorePassengers = flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS);
          // Don't allow teleporting between worlds while keeping passengers
@@ -137,7 +137,7 @@ index efc6fe5e937c0e897bcc1c25a6049a8130ab3b8d..adb0c699616e91863f2c7adf6c1035dd
              return false;
          }
          // Paper end
-@@ -600,12 +680,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -610,12 +690,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
  
          // If this entity is riding another entity, we must dismount before teleporting.
          if (dismount) this.entity.stopRiding(); // Paper - Teleport passenger API
@@ -152,7 +152,7 @@ index efc6fe5e937c0e897bcc1c25a6049a8130ab3b8d..adb0c699616e91863f2c7adf6c1035dd
              return true;
          }
  
-@@ -614,6 +696,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -624,6 +706,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          // SPIGOT-619: Force sync head rotation also
          this.entity.setYHeadRot(location.getYaw());
  
@@ -161,10 +161,10 @@ index efc6fe5e937c0e897bcc1c25a6049a8130ab3b8d..adb0c699616e91863f2c7adf6c1035dd
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 65cf3a232109e2eb8013f79993ea4e9615e0d06e..23e42200f0a3129a7886459dcfe2146c87ccf995 100644
+index b9af33baae7a469b988c1077bc819640cd234133..91233d698d9195579404aef5839148d01c695182 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1341,12 +1341,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1305,12 +1305,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          Preconditions.checkArgument(location.getWorld() != null, "location.world");
          // Paper start - Teleport passenger API
          // Don't allow teleporting between worlds while keeping passengers
@@ -179,7 +179,7 @@ index 65cf3a232109e2eb8013f79993ea4e9615e0d06e..23e42200f0a3129a7886459dcfe2146c
              return false;
          }
          // Paper end
-@@ -1362,7 +1362,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1326,7 +1326,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
             return false;
          }
  
@@ -188,7 +188,7 @@ index 65cf3a232109e2eb8013f79993ea4e9615e0d06e..23e42200f0a3129a7886459dcfe2146c
              // Purpur start
              if (new org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent(entity.getBukkitEntity(), org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent())
                  return teleport(location, cause);
-@@ -1404,6 +1404,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1368,6 +1368,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              this.getHandle().closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.TELEPORT); // Paper
          }
  
@@ -196,7 +196,7 @@ index 65cf3a232109e2eb8013f79993ea4e9615e0d06e..23e42200f0a3129a7886459dcfe2146c
          // Check if the fromWorld and toWorld are the same.
          if (fromWorld == toWorld) {
              entity.connection.internalTeleport(to.getX(), to.getY(), to.getZ(), to.getYaw(), to.getPitch(), relativeArguments); // Paper - Teleport API
-@@ -1411,9 +1412,23 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1375,9 +1376,23 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              // The respawn reason should never be used if the passed location is non null.
              server.getHandle().respawn(entity, toWorld, true, to, !toWorld.paperConfig().environment.disableTeleportationSuffocationCheck, null); // Paper
          }

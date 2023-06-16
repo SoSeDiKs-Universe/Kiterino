@@ -5,10 +5,10 @@ Subject: [PATCH] Additional drop method
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 624e7180e7645ae103a1d7519b37c517d78ddff4..da82bf09bee8bce33203f0677b8fb1f63cda1250 100644
+index 3ac7f0a134b706b9b50b7ff76c658968d692c5fe..df7a17dd08e10eba886f6f3b51226ffe2bacd1b0 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -838,5 +838,13 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -850,5 +850,13 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
       * @return current active container state id
       */
      int getActiveContainerStateId();

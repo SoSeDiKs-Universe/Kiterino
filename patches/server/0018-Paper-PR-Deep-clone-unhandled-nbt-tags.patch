@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - Deep clone unhandled nbt tags
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-index 936f8babf74b2be6240e5dbc2d0a84f8badada2e..4a3507143054a8352e513732d1be9da901ddaa88 100644
+index ac9fb7cf96ed36162c4f6c2a834b627d0120f3cc..2f0f460d2fff97f3cfe0a2b0690d1b0e17932fb5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 @@ -344,8 +344,10 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
@@ -21,7 +21,7 @@ index 936f8babf74b2be6240e5dbc2d0a84f8badada2e..4a3507143054a8352e513732d1be9da9
  
          this.internalTag = meta.internalTag;
          if (this.internalTag != null) {
-@@ -1388,7 +1390,10 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+@@ -1386,7 +1388,10 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
              if (this.hasAttributeModifiers()) {
                  clone.attributeModifiers = LinkedHashMultimap.create(this.attributeModifiers);
              }
@@ -34,7 +34,7 @@ index 936f8babf74b2be6240e5dbc2d0a84f8badada2e..4a3507143054a8352e513732d1be9da9
              clone.unbreakable = this.unbreakable;
              clone.damage = this.damage;
 diff --git a/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java b/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
-index 20c7144307ecf1eb5c600f3b84df7bc15fa941d6..ae94fd71b8ea8cdbf6fb0420d826ae24c246d43b 100644
+index 65013fd2ca24c4bf1cfd67e314927e72542d3e68..fca5b42b4dc6ff2b5871001bca1cbffb4a24f99f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
 @@ -189,5 +189,13 @@ public class CraftPersistentDataContainer implements PersistentDataContainer {

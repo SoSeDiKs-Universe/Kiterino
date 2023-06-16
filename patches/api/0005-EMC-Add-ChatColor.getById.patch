@@ -6,10 +6,10 @@ Subject: [PATCH] EMC - Add ChatColor.getById
 Bukkit has had a map of this for years and it was totally unused...
 
 diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
-index 3b8395dcb73e3fb251adf7438cbc7e95c4185a3a..82052e714e996568a46c2e91b32f30155b33e10d 100644
+index 687d11619379aead7f665d4a5f8f8bcc857cb8e9..354c9aff7aabc5d58d600b709cef9793a9c0402e 100644
 --- a/src/main/java/org/bukkit/ChatColor.java
 +++ b/src/main/java/org/bukkit/ChatColor.java
-@@ -265,6 +265,15 @@ public enum ChatColor {
+@@ -266,6 +266,15 @@ public enum ChatColor {
          return net.md_5.bungee.api.ChatColor.RESET;
      };
  
@@ -25,7 +25,7 @@ index 3b8395dcb73e3fb251adf7438cbc7e95c4185a3a..82052e714e996568a46c2e91b32f3015
      /**
       * Gets the char value associated with this color
       *
-@@ -298,6 +307,18 @@ public enum ChatColor {
+@@ -299,6 +308,18 @@ public enum ChatColor {
          return !isFormat && this != RESET;
      }
  

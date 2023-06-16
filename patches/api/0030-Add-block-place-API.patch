@@ -5,12 +5,12 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 7f0396e927b22625ef56cd9411ff357e1a4e4b6d..530cd6c3198e09119fa692f604b4c162cc96a72c 100644
+index 7d1086ccb7b3643f6ab6c4f42962d480ce8d85ca..73db1873063b1820804a464061e380a7f30524b5 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3204,4 +3204,54 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
-      */
-     void sendDeathScreen(@NotNull net.kyori.adventure.text.Component message, @Nullable Entity killer);
+@@ -3228,4 +3228,54 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+         sendDeathScreen(message);
+     }
      // Purpur end
 +
 +    // Kiterino end

@@ -5,10 +5,10 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index bcdfc8e1d4affd298384c38af9b18f64033285d5..624e7180e7645ae103a1d7519b37c517d78ddff4 100644
+index a3c59027f2a90eade112afc8dd24fbec6b944967..3ac7f0a134b706b9b50b7ff76c658968d692c5fe 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -824,4 +824,19 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -836,4 +836,19 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
      @Nullable
      public Firework fireworkBoost(@NotNull ItemStack fireworkItemStack);
  

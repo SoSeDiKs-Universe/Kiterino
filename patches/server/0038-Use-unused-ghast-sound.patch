@@ -12,7 +12,7 @@ index db7d67ce0366ce5e4eb3b5af3092be0c2e6d839f..3cf71b32dc5f0c61c562ec1420b60605
  
      @Override
      protected SoundEvent getAmbientSound() {
-+        if (!level.dimensionType().ultraWarm() && random.nextInt(8) == 0) return SoundEvents.GHAST_SCREAM; // Kiterino
++        if (!this.level().dimensionType().ultraWarm() && random.nextInt(8) == 0) return SoundEvents.GHAST_SCREAM; // Kiterino
          return SoundEvents.GHAST_AMBIENT;
      }
  

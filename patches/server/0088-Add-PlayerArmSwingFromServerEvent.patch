@@ -5,11 +5,11 @@ Subject: [PATCH] Add PlayerArmSwingFromServerEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index cab6c083ddad132d1b2bfda48835895b3d0e7391..b12acce71a39357fb8bb7acf251f843168a862a8 100644
+index e08dedca834adc85980962b28a4c02a077d55666..691f88d2e58c0d88a7f74ab4e54a6cbcc1777077 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -2404,6 +2404,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
-                 ServerChunkCache chunkproviderserver = ((ServerLevel) this.level).getChunkSource();
+@@ -2448,6 +2448,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+                 ServerChunkCache chunkproviderserver = ((ServerLevel) this.level()).getChunkSource();
  
                  if (fromServerPlayer) {
 +                    if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino

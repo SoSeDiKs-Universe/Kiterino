@@ -5,10 +5,10 @@ Subject: [PATCH] Don't count Purpur's riding towards distance statistics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index d4abe4e1320c1944076d996d7ce33e97b2347517..2d755f9a0b39c33e015142cc3571893b37540629 100644
+index 096fc4d0c5ccd3e09625c2ccd31d1662e9660671..19e5e114137675b1bb6093b1bc6391c02131af9a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -1787,6 +1787,11 @@ public abstract class Player extends LivingEntity {
+@@ -1790,6 +1790,11 @@ public abstract class Player extends LivingEntity {
  
              if (i > 0) {
                  Entity entity = this.getVehicle();

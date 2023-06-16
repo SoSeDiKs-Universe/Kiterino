@@ -5,10 +5,10 @@ Subject: [PATCH] Flammable cobwebs
 
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index cd31aca47e55131c2ba971df1b940143afb41073..1cf58f69b1e50a29c48e214f4b50a5c9ed3a0c40 100644
+index 08fa8fc8333bec24c8d206b11cf6c894a1929c4b..57beb955d4153128a0b43278b313c38b4d2801c9 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -7206,6 +7206,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -7080,6 +7080,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              return false;
          }
          switch (this) {
@@ -16,7 +16,7 @@ index cd31aca47e55131c2ba971df1b940143afb41073..1cf58f69b1e50a29c48e214f4b50a5c9
              //<editor-fold defaultstate="collapsed" desc="isFlammable">
              case ACACIA_DOOR:
              case ACACIA_FENCE:
-@@ -7556,6 +7557,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -7428,6 +7429,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              return false;
          }
          switch (this) {

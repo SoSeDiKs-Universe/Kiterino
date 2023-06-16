@@ -4,27 +4,27 @@ Date: Fri, 19 Feb 2021 22:48:24 +0200
 Subject: [PATCH] Flammable cobwebs
 
 
+diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
+index 9ef4c20d12c03ccbe29a4ea7158a0255ebb4a36c..0e1b9ea96f45c512ec251f5dbc7130043c27ccdf 100644
+--- a/src/main/java/net/minecraft/world/level/block/Blocks.java
++++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
+@@ -166,7 +166,7 @@ public class Blocks {
+     public static final Block POWERED_RAIL = register("powered_rail", new PoweredRailBlock(BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL)));
+     public static final Block DETECTOR_RAIL = register("detector_rail", new DetectorRailBlock(BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL)));
+     public static final Block STICKY_PISTON = register("sticky_piston", pistonBase(true));
+-    public static final Block COBWEB = register("cobweb", new WebBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).forceSolidOn().noCollission().requiresCorrectToolForDrops().strength(4.0F).pushReaction(PushReaction.DESTROY)));
++    public static final Block COBWEB = register("cobweb", new WebBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).forceSolidOn().noCollission().requiresCorrectToolForDrops().strength(4.0F).pushReaction(PushReaction.DESTROY).ignitedByLava())); // Kiterino - flammable cobweb
+     public static final Block GRASS = register("grass", new TallGrassBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+     public static final Block FERN = register("fern", new TallGrassBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+     public static final Block DEAD_BUSH = register("dead_bush", new DeadBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).replaceable().noCollission().instabreak().sound(SoundType.GRASS).ignitedByLava().pushReaction(PushReaction.DESTROY)));
 diff --git a/src/main/java/net/minecraft/world/level/block/FireBlock.java b/src/main/java/net/minecraft/world/level/block/FireBlock.java
-index c33dab52dc73da5f510ea5eed7785bf68e06605e..12574f760dd9583207073e0c61556743e62ba983 100644
+index 4002e0fffb60556e7af1aeff71b4be244f02b0f5..66ba2fc145fde8926dc9fa3c045e9fbf02696101 100644
 --- a/src/main/java/net/minecraft/world/level/block/FireBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/FireBlock.java
-@@ -560,5 +560,6 @@ public class FireBlock extends BaseFireBlock {
+@@ -562,5 +562,6 @@ public class FireBlock extends BaseFireBlock {
          blockfire.setFlammable(Blocks.SMALL_DRIPLEAF, 60, 100);
          blockfire.setFlammable(Blocks.HANGING_ROOTS, 30, 60);
          blockfire.setFlammable(Blocks.GLOW_LICHEN, 15, 100);
 +        blockfire.setFlammable(Blocks.COBWEB, 60, 100); // Kiterino
      }
  }
-diff --git a/src/main/java/net/minecraft/world/level/material/Material.java b/src/main/java/net/minecraft/world/level/material/Material.java
-index 70197862911ad7ea3ba99c297f716286c3ff951d..e6d03fd3da9f89c19cf1fd0d0d52683e2bf67be4 100644
---- a/src/main/java/net/minecraft/world/level/material/Material.java
-+++ b/src/main/java/net/minecraft/world/level/material/Material.java
-@@ -16,7 +16,7 @@ public final class Material {
-     public static final Material TOP_SNOW = (new Material.Builder(MaterialColor.SNOW)).noCollider().notSolidBlocking().nonSolid().destroyOnPush().replaceable().build();
-     public static final Material FIRE = (new Material.Builder(MaterialColor.NONE)).noCollider().notSolidBlocking().nonSolid().destroyOnPush().replaceable().build();
-     public static final Material DECORATION = (new Material.Builder(MaterialColor.NONE)).noCollider().notSolidBlocking().nonSolid().destroyOnPush().build();
--    public static final Material WEB = (new Material.Builder(MaterialColor.WOOL)).noCollider().notSolidBlocking().destroyOnPush().build();
-+    public static final Material WEB = (new Material.Builder(MaterialColor.WOOL)).noCollider().notSolidBlocking().destroyOnPush().flammable().build(); // Kiterino - flammable cobweb
-     public static final Material SCULK = (new Material.Builder(MaterialColor.COLOR_BLACK)).build();
-     public static final Material BUILDABLE_GLASS = (new Material.Builder(MaterialColor.NONE)).build();
-     public static final Material CLAY = (new Material.Builder(MaterialColor.CLAY)).build();

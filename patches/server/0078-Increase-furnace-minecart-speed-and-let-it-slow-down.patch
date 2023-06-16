@@ -6,10 +6,10 @@ Subject: [PATCH] Increase furnace minecart speed and let it slow down on
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index a3fde5156fa517db0bb9c6b19b152d785e37f056..bd318066f63b3cb59c46d0a8f38f506566314b6c 100644
+index cd5e8f5f976fe96add09415fd21fe9ab221fe9c4..7c81e17e1fc005a0a96ae87c51e3ccc061f8f9bc 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -693,7 +693,7 @@ public abstract class AbstractMinecart extends Entity {
+@@ -689,7 +689,7 @@ public abstract class AbstractMinecart extends Entity {
              final double fallbackSpeedFactor = 1.15D;
              double fallback = this.getMaxSpeed();
  
@@ -18,7 +18,7 @@ index a3fde5156fa517db0bb9c6b19b152d785e37f056..bd318066f63b3cb59c46d0a8f38f5065
                  return fallback;
  
              if (horizontalMomentumPerTick < vanillaMaxHorizontalMovementPerTick)
-@@ -900,7 +900,7 @@ public abstract class AbstractMinecart extends Entity {
+@@ -896,7 +896,7 @@ public abstract class AbstractMinecart extends Entity {
              final double basisAccelerationPerTick = 0.021D; // Kiterino - dynamic minecart speed
              if (d18 > 0.01D) {
                  // Kiterino start - dynamic minecart speed
@@ -28,7 +28,7 @@ index a3fde5156fa517db0bb9c6b19b152d785e37f056..bd318066f63b3cb59c46d0a8f38f5065
                      // due to spending less ticks per powered block on higher speeds (and even skipping blocks)
                      final double basisTicksPerSecond = 10D;
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java b/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java
-index b100b00b4706b168ee005eff28507ca4d8787057..7b3a451a73c19bcaf425f5828d22b9e4f4269157 100644
+index 72da2fa1525356fe5abbe982379e5b2f09920e28..27369c49647cb212eebe96f88771bacc98e72a97 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java
 @@ -27,6 +27,11 @@ public class MinecartFurnace extends AbstractMinecart {
@@ -45,7 +45,7 @@ index b100b00b4706b168ee005eff28507ca4d8787057..7b3a451a73c19bcaf425f5828d22b9e4
          super(type, world);
 @@ -52,7 +57,7 @@ public class MinecartFurnace extends AbstractMinecart {
          super.tick();
-         if (!this.level.isClientSide()) {
+         if (!this.level().isClientSide()) {
              if (this.fuel > 0) {
 -                --this.fuel;
 +                this.fuel = Math.max(0, fuel - 4); // Kiterino - burn fuel 4x faster

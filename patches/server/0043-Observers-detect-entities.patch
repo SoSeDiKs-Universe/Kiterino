@@ -5,12 +5,12 @@ Subject: [PATCH] Observers detect entities
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index ba2d72de27b8472ac0a2746f73cb1af7dd85efe3..72fe1c555b043ea64cee9dec2948ea7e8c664022 100644
+index 1ca416a4769367ec5f4d9b5153862ea72c2668a2..b323bc0c635766c0c245d694260e41e90ee35efe 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1255,6 +1255,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1322,6 +1322,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
  
-                 //this.level.getProfiler().pop(); // Purpur
+                 //this.level().getProfiler().pop(); // Purpur
              }
 +            // Kiterino start
 +            if (this instanceof net.minecraft.world.entity.LivingEntity && movement.lengthSqr() > 0.00615D) {
@@ -22,7 +22,7 @@ index ba2d72de27b8472ac0a2746f73cb1af7dd85efe3..72fe1c555b043ea64cee9dec2948ea7e
 +                    for (Direction direction : Direction.Plane.HORIZONTAL) {
 +                        BlockPos relative = base.relative(direction);
 +                        BlockState blockState = level.getBlockState(relative);
-+                        if (blockState.getBlock() == Blocks.OBSERVER && !level.getBlockState(base).getMaterial().isSolid()
++                        if (blockState.getBlock() == Blocks.OBSERVER && !level.getBlockState(base).isSolid()
 +                                && !blockState.getValue(net.minecraft.world.level.block.ObserverBlock.POWERED)
 +                                && blockState.getValue(net.minecraft.world.level.block.ObserverBlock.FACING) == direction.getOpposite()) {
 +                            blockState.tick((ServerLevel) level, relative.immutable(), level.random);

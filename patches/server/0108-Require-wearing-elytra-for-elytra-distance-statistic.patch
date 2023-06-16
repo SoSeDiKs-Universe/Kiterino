@@ -5,10 +5,10 @@ Subject: [PATCH] Require wearing elytra for elytra distance statistics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 25a8e712f1b31d9ea684dfa64f881addc8953c91..d4abe4e1320c1944076d996d7ce33e97b2347517 100644
+index 01c1363a9a9c2c21eac1a9fee6b487552cdeea70..096fc4d0c5ccd3e09625c2ccd31d1662e9660671 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -1764,8 +1764,13 @@ public abstract class Player extends LivingEntity {
+@@ -1767,8 +1767,13 @@ public abstract class Player extends LivingEntity {
                      }
                  }
              } else if (this.isFallFlying()) {

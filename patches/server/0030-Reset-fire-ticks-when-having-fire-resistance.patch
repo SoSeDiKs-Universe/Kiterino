@@ -5,10 +5,10 @@ Subject: [PATCH] Reset fire ticks when having fire resistance
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 5795a12815e01f9e951d66a1ed59bf7803bfb2e4..ea2974c344f84dde4396a1a21fefd9b7faed03b1 100644
+index cc1358e0aa6df446630ec663e2309e6ec4642e6d..9eba99aa50ed7a499425d47b96061f58563a62e3 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -927,6 +927,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -945,6 +945,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
                  } else if (mobeffect.getDuration() % 600 == 0) {
                      this.onEffectUpdated(mobeffect, false, (Entity) null);
                  }

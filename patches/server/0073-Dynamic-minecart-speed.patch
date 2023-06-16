@@ -5,10 +5,10 @@ Subject: [PATCH] Dynamic minecart speed
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee27c673c37 100644
+index f5b24b678c177cd0dc29798f0fa1838140ed5bff..cbca9e835f5cae3d10971f2a0220b31011e6b75a 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -629,7 +629,108 @@ public abstract class AbstractMinecart extends Entity {
+@@ -630,7 +630,108 @@ public abstract class AbstractMinecart extends Entity {
              d5 = -d5;
          }
  
@@ -49,7 +49,7 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
 +                BlockPos n1Pos = cPos.offset(cAdjPosDiff.getFirst());
 +
 +                if (!checkedPositions.contains(n1Pos)) {
-+                    BlockState n1State = this.level.getBlockState(n1Pos);
++                    BlockState n1State = this.level().getBlockState(n1Pos);
 +                    boolean n1HasEligibleType = n1State.is(Blocks.RAIL) || (n1State.is(Blocks.POWERED_RAIL) && n1State.getValue(PoweredRailBlock.POWERED));
 +                    if (!n1HasEligibleType)
 +                        return new java.util.ArrayList<>();
@@ -65,7 +65,7 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
 +
 +                BlockPos n2Pos = cPos.offset(cAdjPosDiff.getSecond());
 +                if (!checkedPositions.contains(n2Pos)) {
-+                    BlockState n2State = this.level.getBlockState(n2Pos);
++                    BlockState n2State = this.level().getBlockState(n2Pos);
 +                    boolean n2HasEligibleType = n2State.is(Blocks.RAIL) || (n2State.is(Blocks.POWERED_RAIL) && n2State.getValue(PoweredRailBlock.POWERED));
 +                    if (!n2HasEligibleType)
 +                        return new java.util.ArrayList<>();
@@ -118,7 +118,7 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
  
          vec3d1 = new Vec3(d8 * d4 / d6, vec3d1.y, d8 * d5 / d6);
          this.setDeltaMovement(vec3d1);
-@@ -666,7 +767,13 @@ public abstract class AbstractMinecart extends Entity {
+@@ -667,7 +768,13 @@ public abstract class AbstractMinecart extends Entity {
              if (d11 < 0.03D) {
                  this.setDeltaMovement(Vec3.ZERO);
              } else {
@@ -133,7 +133,7 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
              }
          }
  
-@@ -695,9 +802,10 @@ public abstract class AbstractMinecart extends Entity {
+@@ -696,9 +803,10 @@ public abstract class AbstractMinecart extends Entity {
          d2 = d12 + d5 * d15;
          this.setPos(d0, d1, d2);
          d16 = this.isVehicle() ? 0.75D : 1.0D;
@@ -146,7 +146,7 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
          if (baseblockposition.getY() != 0 && Mth.floor(this.getX()) - pos.getX() == baseblockposition.getX() && Mth.floor(this.getZ()) - pos.getZ() == baseblockposition.getZ()) {
              this.setPos(this.getX(), this.getY() + (double) baseblockposition.getY(), this.getZ());
          } else if (baseblockposition1.getY() != 0 && Mth.floor(this.getX()) - pos.getX() == baseblockposition1.getX() && Mth.floor(this.getZ()) - pos.getZ() == baseblockposition1.getZ()) {
-@@ -727,26 +835,52 @@ public abstract class AbstractMinecart extends Entity {
+@@ -728,26 +836,52 @@ public abstract class AbstractMinecart extends Entity {
          if (i != pos.getX() || j != pos.getZ()) {
              vec3d4 = this.getDeltaMovement();
              d18 = vec3d4.horizontalDistance();
@@ -185,8 +185,8 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
 +                // Kiterino end
                  double d20 = 0.06D;
  
--                this.setDeltaMovement(vec3d4.add(vec3d4.x / d18 * this.level.purpurConfig.poweredRailBoostModifier, 0.0D, vec3d4.z / d18 * this.level.purpurConfig.poweredRailBoostModifier)); // Purpur
-+                //this.setDeltaMovement(vec3d4.add(vec3d4.x / d18 * this.level.purpurConfig.poweredRailBoostModifier, 0.0D, vec3d4.z / d18 * this.level.purpurConfig.poweredRailBoostModifier)); // Purpur // Kiterino - dynamic minecart speed
+-                this.setDeltaMovement(vec3d4.add(vec3d4.x / d18 * this.level().purpurConfig.poweredRailBoostModifier, 0.0D, vec3d4.z / d18 * this.level().purpurConfig.poweredRailBoostModifier)); // Purpur
++                //this.setDeltaMovement(vec3d4.add(vec3d4.x / d18 * this.level().purpurConfig.poweredRailBoostModifier, 0.0D, vec3d4.z / d18 * this.level().purpurConfig.poweredRailBoostModifier)); // Purpur // Kiterino - dynamic minecart speed
              } else {
                  Vec3 vec3d5 = this.getDeltaMovement();
                  double d21 = vec3d5.x;
@@ -203,7 +203,7 @@ index 6c36b98c0543b69c10a31a3c7c61495f34ae834b..e09759584c99bfabd51e770d18917ee2
                      }
                  } else {
                      if (blockpropertytrackposition != RailShape.NORTH_SOUTH) {
-@@ -754,9 +888,9 @@ public abstract class AbstractMinecart extends Entity {
+@@ -755,9 +889,9 @@ public abstract class AbstractMinecart extends Entity {
                      }
  
                      if (this.isRedstoneConductor(pos.north())) {

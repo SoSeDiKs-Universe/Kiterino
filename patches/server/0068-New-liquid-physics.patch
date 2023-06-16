@@ -5,7 +5,7 @@ Subject: [PATCH] New liquid physics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index d1bf644d78ec0fc1667e53ac3fe4c951b22e333d..db89419b9779995b333b6f160055811ebb163e8b 100644
+index f283abd5686ef02785d6039788d80487b55369b4..741a6a2f5ea12d04ca249a8e3cbaecfc35e41124 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 @@ -648,7 +648,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
@@ -19,36 +19,31 @@ index d1bf644d78ec0fc1667e53ac3fe4c951b22e333d..db89419b9779995b333b6f160055811e
          boolean flag = false;
 @@ -696,7 +696,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
-                     if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level, blockposition_mutableblockposition))) {
+                     if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level(), blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {
 -                            return Boat.Status.UNDER_FLOWING_WATER;
 +                            return fluid.getAmount() == 8 ? Boat.Status.UNDER_FLOWING_WATER : Boat.Status.IN_WATER; // Kiterino - Do not sink boats in flowing water
                          }
  
                          flag = true;
-diff --git a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-index 9c22a730772f71b34c63d1e43d48943f71e9990b..021521f8a8c695d26ae2b0ff80504838ab84fba6 100644
---- a/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-+++ b/src/main/java/net/minecraft/world/level/block/LiquidBlock.java
-@@ -201,4 +201,13 @@ public class LiquidBlock extends Block implements BucketPickup {
-     public Optional<SoundEvent> getPickupSound() {
-         return this.fluid.getPickupSound();
-     }
-+
-+    // Kiterino start - movable water by pistons
-+    @Override
-+    public net.minecraft.world.level.material.PushReaction getPistonPushReaction(BlockState state) {
-+        FluidState fluidState = state.getFluidState();
-+        if (!fluidState.isEmpty() && fluidState.isSourceOfType(net.minecraft.world.level.material.Fluids.WATER)) return net.minecraft.world.level.material.PushReaction.PUSH_ONLY;
-+        return super.getPistonPushReaction(state);
-+    }
-+    // Kiterino end
- }
+diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
+index 0e1b9ea96f45c512ec251f5dbc7130043c27ccdf..218680ec1597111829fd488e31e583a192c9325a 100644
+--- a/src/main/java/net/minecraft/world/level/block/Blocks.java
++++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
+@@ -74,7 +74,7 @@ public class Blocks {
+     public static final Block DARK_OAK_SAPLING = register("dark_oak_sapling", new SaplingBlock(new DarkOakTreeGrower(), BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+     public static final Block MANGROVE_PROPAGULE = register("mangrove_propagule", new MangrovePropaguleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
+     public static final Block BEDROCK = register("bedrock", new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(Blocks::never)));
+-    public static final Block WATER = register("water", new LiquidBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
++    public static final Block WATER = register("water", new LiquidBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.PUSH_ONLY).noLootTable().liquid().sound(SoundType.EMPTY))); // Kiterino - pushable water
+     public static final Block LAVA = register("lava", new LiquidBlock(Fluids.LAVA, BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().randomTicks().strength(100.0F).lightLevel((state) -> {
+         return 15;
+     }).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-index f456ad8a74464414f69b616a48ee9a2c1cee4d90..4f4f12c6fd728fa13ff6b6961be6bb3ed34f3731 100644
+index ee316f2474e43c1e644632772e9eb9cc181756c6..e7c75dbdd3bd5aaf4b67c1bbaebb1dfcc094db53 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-@@ -298,6 +298,18 @@ public class PistonBaseBlock extends DirectionalBlock {
+@@ -299,6 +299,18 @@ public class PistonBaseBlock extends DirectionalBlock {
      }
  
      public static boolean isPushable(BlockState state, Level world, BlockPos pos, Direction direction, boolean canBreak, Direction pistonDir) {
@@ -67,7 +62,7 @@ index f456ad8a74464414f69b616a48ee9a2c1cee4d90..4f4f12c6fd728fa13ff6b6961be6bb3e
          if (pos.getY() >= world.getMinBuildHeight() && pos.getY() <= world.getMaxBuildHeight() - 1 && world.getWorldBorder().isWithinBounds(pos)) {
              if (state.isAir()) {
                  return true;
-@@ -405,6 +417,44 @@ public class PistonBaseBlock extends DirectionalBlock {
+@@ -406,6 +418,44 @@ public class PistonBaseBlock extends DirectionalBlock {
              }
              // CraftBukkit end
  
@@ -145,10 +140,10 @@ index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f4
                      ++i;
                  }
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index 5536b9e36b4ea99e2aaa62690b5bf00208291a58..ff13d140975e0294069f79549bd8ee02d6b7e1d3 100644
+index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e22287d4b868 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-@@ -226,7 +226,7 @@ public abstract class FlowingFluid extends Fluid {
+@@ -227,7 +227,7 @@ public abstract class FlowingFluid extends Fluid {
              }
          }
  
@@ -157,7 +152,7 @@ index 5536b9e36b4ea99e2aaa62690b5bf00208291a58..ff13d140975e0294069f79549bd8ee02
              BlockState iblockdata2 = world.getBlockState(pos.below());
              FluidState fluid1 = iblockdata2.getFluidState();
  
-@@ -293,6 +293,26 @@ public abstract class FlowingFluid extends Fluid {
+@@ -294,6 +294,26 @@ public abstract class FlowingFluid extends Fluid {
          VoxelShape voxelshape1 = fromState.getCollisionShape(world, fromPos);
          boolean flag = !Shapes.mergedFaceOccludes(voxelshape, voxelshape1, face);
  
@@ -184,7 +179,7 @@ index 5536b9e36b4ea99e2aaa62690b5bf00208291a58..ff13d140975e0294069f79549bd8ee02
          /*
          if (object2bytelinkedopenhashmap != null) {
              if (object2bytelinkedopenhashmap.size() == 200) {
-@@ -330,7 +350,14 @@ public abstract class FlowingFluid extends Fluid {
+@@ -331,7 +351,14 @@ public abstract class FlowingFluid extends Fluid {
      }
      // Purpur end
  
@@ -199,7 +194,7 @@ index 5536b9e36b4ea99e2aaa62690b5bf00208291a58..ff13d140975e0294069f79549bd8ee02
          if (state.getBlock() instanceof LiquidBlockContainer) {
              ((LiquidBlockContainer) state.getBlock()).placeLiquid(world, pos, state, fluidState);
          } else {
-@@ -343,6 +370,172 @@ public abstract class FlowingFluid extends Fluid {
+@@ -344,6 +371,172 @@ public abstract class FlowingFluid extends Fluid {
  
      }
  
@@ -372,7 +367,7 @@ index 5536b9e36b4ea99e2aaa62690b5bf00208291a58..ff13d140975e0294069f79549bd8ee02
      protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state, BlockPos source) { beforeDestroyingBlock(world, pos, state); } // Paper - add source parameter
      protected abstract void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state);
  
-@@ -504,9 +697,70 @@ public abstract class FlowingFluid extends Fluid {
+@@ -497,9 +690,70 @@ public abstract class FlowingFluid extends Fluid {
      }
  
      protected boolean canSpreadTo(BlockGetter world, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid) {

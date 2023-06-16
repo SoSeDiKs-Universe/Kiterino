@@ -5,7 +5,7 @@ Subject: [PATCH] Patina - Hardcode Server Version
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..26b6eb0877f88bbdd530abced23f55df0fd3b990 100644
+index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..b3197e58806a8a2101f4682c11ab7232d5382e0f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -9,21 +9,6 @@ import org.bukkit.Bukkit;
@@ -28,6 +28,6 @@ index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..26b6eb0877f88bbdd530abced23f55df
 -        }
 -
 -        return result;
-+        return "1.19.4-R0.1-SNAPSHOT"; // Patina
++        return "1.20.1-R0.1-SNAPSHOT"; // Patina
      }
  }

@@ -5,18 +5,18 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 50df09caee95c26d4e8c9d060e0684a037b9e0d4..64f60bd84d72740780bffba76cc0d8005e043460 100644
+index c6658a353173f961aa23bd4d5e8179709ab69bf3..85077134bbc5c79d48be6b4baeb15bc45e490dd5 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -325,6 +325,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -327,6 +327,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected final RandomSource random;
      public int tickCount;
-     public int remainingFireTicks;
+     private int remainingFireTicks;
 +    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
      protected boolean wasEyeInWater;
-@@ -899,6 +900,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -924,6 +925,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
          }
  
@@ -30,10 +30,10 @@ index 50df09caee95c26d4e8c9d060e0684a037b9e0d4..64f60bd84d72740780bffba76cc0d800
              this.lavaHurt();
              this.fallDistance *= 0.5F;
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
-index ecda30f738e782d4fbb8ba097a14f81425eea2b8..cd1fdadf83214474619b31774db5e995a812c50b 100644
+index eee92ab1b4072a5b72559dd21dc590cce7d8bca9..7a728a08cda941bb7d873af526a1d48d032dceb8 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
-@@ -23,7 +23,7 @@ public class AnimalPanic extends Behavior<PathfinderMob> {
+@@ -24,7 +24,7 @@ public class AnimalPanic extends Behavior<PathfinderMob> {
      private static final int PANIC_DISTANCE_HORIZONTAL = 5;
      private static final int PANIC_DISTANCE_VERTICAL = 4;
      private static final Predicate<PathfinderMob> DEFAULT_SHOULD_PANIC_PREDICATE = (entity) -> {
@@ -43,7 +43,7 @@ index ecda30f738e782d4fbb8ba097a14f81425eea2b8..cd1fdadf83214474619b31774db5e995
      private final float speedMultiplier;
      private final Predicate<PathfinderMob> shouldPanic;
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
-index 268b7457c2a93af6d36c1c5f623c5856f94a7af1..7dcc44466643d169b9bd2f9e5cbbbcd3408de122 100644
+index 744b8246a79e0119734c44ce485536ddac8b190c..4934b9f3dfa91e8b32b1a7da7fa854d2523ecef6 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
 @@ -48,7 +48,7 @@ public class PanicGoal extends Goal {
@@ -56,10 +56,10 @@ index 268b7457c2a93af6d36c1c5f623c5856f94a7af1..7dcc44466643d169b9bd2f9e5cbbbcd3
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index adb0c699616e91863f2c7adf6c1035dd5975d147..e7885e7f110deb24f4c213706f8863bb2d75fbbe 100644
+index 40de7dba46faf562b27852614ff2d52f23797c09..b04baab7cbcefb11fcc50899a983053b77fb6207 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1599,5 +1599,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1592,5 +1592,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public boolean hasFixedPose() {
          return getHandle().fixedPose;
      }

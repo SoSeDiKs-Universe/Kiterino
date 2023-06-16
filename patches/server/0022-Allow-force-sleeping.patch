@@ -5,23 +5,23 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 852266234cf3d63e3b23a71639e40defca91c1b8..421b7db878dcca4529e85adc17418276f249d0b4 100644
+index e0e133ab39548b8e671441e3383a6f4df6f6997e..66fa52b6a57f7d6bfb1ab4d9404ece93ff27ba8f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1905,7 +1905,7 @@ public class ServerPlayer extends Player {
+@@ -537,7 +537,7 @@ public class ServerPlayer extends Player {
+         }
+         this.getBukkitEntity().readExtraData(nbt); // CraftBukkit
  
-         worldserver.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkcoordintpair, 1, this.getId());
-         this.stopRiding();
 -        if (this.isSleeping()) {
 +        if (this.isSleeping() && this.checkBedExists()) { // Kiterino - wake up only if bed exists
-             this.stopSleepInBed(true, true);
+             this.stopSleeping();
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 23d7c95bd5c859a60107b4a9a25717cf95f9e8f7..de1afd0c124a391b68ff63da21f08e4f423060b3 100644
+index cc544956282e97a99d8947f621270dab285a0b70..cc1358e0aa6df446630ec663e2309e6ec4642e6d 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3058,7 +3058,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3099,7 +3099,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -30,20 +30,20 @@ index 23d7c95bd5c859a60107b4a9a25717cf95f9e8f7..de1afd0c124a391b68ff63da21f08e4f
                  this.stopSleeping();
              }
          }
-@@ -4332,7 +4332,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4384,7 +4384,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  
 -    private boolean checkBedExists() {
 +    public boolean checkBedExists() { // Kiterino - private -> public
          return (Boolean) this.getSleepingPos().map((blockposition) -> {
-             return this.level.getBlockState(blockposition).getBlock() instanceof BedBlock;
+             return this.level().getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index e363891e8ab872ed24c557e3f94110f36c6fb277..ec1a3684e2d21658fd12d00a6d88c58a53543e94 100644
+index a1bd3231001a57dd247d7e3fbb5b7e0bc590e58d..42f250d0f4e6396c666d81ccc4e6efe501e94b3e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1387,7 +1387,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1351,7 +1351,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          if (dismount) entity.stopRiding(); // Paper - Teleport API
  
          // SPIGOT-5509: Wakeup, similar to riding

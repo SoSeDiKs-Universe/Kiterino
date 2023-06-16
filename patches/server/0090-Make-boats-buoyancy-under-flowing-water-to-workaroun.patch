@@ -6,7 +6,7 @@ Subject: [PATCH] Make boats buoyancy under flowing water to workaround
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index db89419b9779995b333b6f160055811ebb163e8b..641170407c8c487b6faf66497cc9f2b08090c958 100644
+index 741a6a2f5ea12d04ca249a8e3cbaecfc35e41124..9557ab64ad1d92c3f487e49f0dd493407823bf32 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 @@ -443,6 +443,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
@@ -15,7 +15,7 @@ index db89419b9779995b333b6f160055811ebb163e8b..641170407c8c487b6faf66497cc9f2b0
  
 +        // Kiterino start - Workaround MC-91206; make boats buoyancy under flowing water
 +        if (isUnderWater() && hasControllingPassenger()) {
-+            FluidState fluidAbove = this.level.getFluidState(blockPosition().above());
++            FluidState fluidAbove = this.level().getFluidState(blockPosition().above());
 +            if (fluidAbove.is(FluidTags.WATER) && !fluidAbove.isSource() && fluidAbove.getAmount() != 8) {
 +                setDeltaMovement(getDeltaMovement().add(0, 0.5, 0));
 +            }
@@ -27,7 +27,7 @@ index db89419b9779995b333b6f160055811ebb163e8b..641170407c8c487b6faf66497cc9f2b0
      private void tickBubbleColumn() {
 @@ -696,7 +705,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
-                     if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level, blockposition_mutableblockposition))) {
+                     if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level(), blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {
 -                            return fluid.getAmount() == 8 ? Boat.Status.UNDER_FLOWING_WATER : Boat.Status.IN_WATER; // Kiterino - Do not sink boats in flowing water
 +                            return Boat.Status.UNDER_FLOWING_WATER; // Kiterino - Do not sink boats in flowing water

@@ -5,16 +5,16 @@ Subject: [PATCH] Simple water biome cache
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index e254b2d04e4fc1dc76c26f61ea38aeb27755143f..3f9b2e870a788c833fcf78c578e163b88dfe6c5a 100644
+index 8b96d1b7548d354fbcabe6d1b5e9d6c3e2a5cb9d..e17e453cbd91047aa586d62d6ef310153746b3a7 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-@@ -123,6 +123,8 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
+@@ -128,6 +128,8 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
      }
      // Paper end - rewrite light engine
  
 +    public @Nullable Boolean infiniteWater; // Kiterino
 +
-     public ChunkAccess(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biome, long inhabitedTime, @Nullable LevelChunkSection[] sectionArrayInitializer, @Nullable BlendingData blendingData) {
+     public ChunkAccess(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biomeRegistry, long inhabitedTime, @Nullable LevelChunkSection[] sectionArray, @Nullable BlendingData blendingData) {
          this.locX = pos.x; this.locZ = pos.z; // Paper - reduce need for field lookups
          this.chunkPos = pos; this.coordinateKey = ChunkPos.asLong(locX, locZ); // Paper - cache long key
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java

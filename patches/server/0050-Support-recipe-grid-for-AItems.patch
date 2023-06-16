@@ -5,7 +5,7 @@ Subject: [PATCH] Support recipe grid for AItems
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index 302ca7391109c10e81a7745504b3c530bc3be6ad..874f83b9eb774d7618d1e8fb1d6584094d30ba2b 100644
+index 089166d9e6121df3069b2b71d6b556ae37520a26..1782c85e2ce55bb338fe79670aeacb3eb84d6810 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
 @@ -199,7 +199,7 @@ public class Inventory implements Container, Nameable {
@@ -18,7 +18,7 @@ index 302ca7391109c10e81a7745504b3c530bc3be6ad..874f83b9eb774d7618d1e8fb1d658409
              }
          }
 diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
-index 842b921799111789b37a34b76644c9217bc85794..1b0bb36df3e662125b29a2da2820017599b73c90 100644
+index 862972afa333422592a25b854cec191e02c10734..1b0bb36df3e662125b29a2da2820017599b73c90 100644
 --- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 +++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 @@ -22,7 +22,7 @@ public class StackedContents {
@@ -37,7 +37,7 @@ index 842b921799111789b37a34b76644c9217bc85794..1b0bb36df3e662125b29a2da28200175
 -                if (a == null || b == null) {
 -                    return false;
 -                }
--                return ItemStack.tagMatches(a, b);
+-                return ItemStack.matches(a, b);
 +                return ItemStack.recipesTagsMatch(a, b); // Kiterino - less strict check
              }
          });
@@ -57,15 +57,15 @@ index 842b921799111789b37a34b76644c9217bc85794..1b0bb36df3e662125b29a2da28200175
                  final int id = this.idCounter.incrementAndGet();
                  final ItemStack copy = value.copy();
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index dcbc275d788268340f2aaf5c8fc4861a62e709f1..90a627163f46d008e22ac7ec957c4e379f472928 100644
+index 0764ae126dd8f2e4e0d13384207051088eb5706a..00a41c2067b92b62c7baf88a9e5735e7533bac86 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -775,6 +775,54 @@ public final class ItemStack {
-         return stack.is(otherStack.getItem()) && ItemStack.tagMatches(stack, otherStack);
+@@ -779,6 +779,54 @@ public final class ItemStack {
+         return !stack.is(otherStack.getItem()) ? false : (stack.isEmpty() && otherStack.isEmpty() ? true : Objects.equals(stack.tag, otherStack.tag));
      }
  
 +    // Kiterino start
-+    public static boolean recipesTagsMatch(@javax.annotation.Nullable ItemStack comparing, @javax.annotation.Nullable ItemStack expected) {
++    public static boolean recipesTagsMatch(@Nullable ItemStack comparing, @Nullable ItemStack expected) {
 +        if (comparing == null || expected == null) return false;
 +        if (comparing.isEmpty()) return expected.isEmpty();
 +        if (expected.isEmpty()) return false;
@@ -91,7 +91,7 @@ index dcbc275d788268340f2aaf5c8fc4861a62e709f1..90a627163f46d008e22ac7ec957c4e37
 +        return comparing.is(expected.getItem());
 +    }
 +
-+    public static @javax.annotation.Nullable CompoundTag getStripped(@javax.annotation.Nullable CompoundTag nbt) {
++    public static @Nullable CompoundTag getStripped(@Nullable CompoundTag nbt) {
 +        if (nbt == null) return null;
 +        nbt = nbt.copy();
 +        nbt.remove(ItemStack.TAG_ENCH);
@@ -116,7 +116,7 @@ index dcbc275d788268340f2aaf5c8fc4861a62e709f1..90a627163f46d008e22ac7ec957c4e37
          return this.getItem().getDescriptionId(this);
      }
 diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-index 07218093a085293f87d8e562f100688580bdd343..ed643bd24c1cf3baf74e19f6ccff3581badba503 100644
+index 5e8f5f020165c46d7bfd1c333c7060b142e6e5cd..966ac6acffe7729e06f3983528573bcc98d51a9a 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 @@ -54,7 +54,7 @@ public final class Ingredient implements Predicate<ItemStack> {

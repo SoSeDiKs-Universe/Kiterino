@@ -5,7 +5,7 @@ Subject: [PATCH] More FishHook API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
-index bcb0f3fd09ed064b64dc6495302b40828d906837..2c05428c6f67192959a52315413545182681b8a3 100644
+index b8c238287e0639b578170c6fec0d4db5a1a59fe7..9dbf755ae26de4206a3846902c7c86d06e1051fd 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
 @@ -63,7 +63,7 @@ public class FishingHook extends Projectile {
@@ -35,10 +35,10 @@ index bcb0f3fd09ed064b64dc6495302b40828d906837..2c05428c6f67192959a5231541354518
              } else {
                  // CraftBukkit start - logic to modify fishing wait time
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java
-index f4591dfe799538ba8aea104793ceb9995dad0bb6..fc61ec95400f1d07e1bc5ac19aa44133baed171b 100644
+index 41e8167766383a6fcb1e9fb78933d74784caddbb..6d40e8124f9ea2540962ebd2711f218a9e0b7160 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java
-@@ -214,4 +214,16 @@ public class CraftFishHook extends CraftProjectile implements FishHook {
+@@ -213,4 +213,16 @@ public class CraftFishHook extends CraftProjectile implements FishHook {
          this.getHandle().timeUntilLured = ticks;
      }
      // Paper end

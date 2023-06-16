@@ -667,20 +667,9 @@ index 0000000000000000000000000000000000000000..3e4f6e0cf840bbaa1ff29103d2ff002f
 +	}
 +}
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundAddPlayerPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundAddPlayerPacket.java
-index ab823de3fe0eb4870cd7fec543730d6d17060940..946b76a04bdde4c12a655602286f9dbc716aab50 100644
+index ab823de3fe0eb4870cd7fec543730d6d17060940..a9baed17730c0ea9ab9490f99fc36318cd598765 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundAddPlayerPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundAddPlayerPacket.java
-@@ -20,8 +20,8 @@ public class ClientboundAddPlayerPacket implements Packet<ClientGamePacketListen
-         this.x = player.getX();
-         this.y = player.getY();
-         this.z = player.getZ();
--        this.yRot = (byte)((int)(player.getYRot() * 256.0F / 360.0F));
--        this.xRot = (byte)((int)(player.getXRot() * 256.0F / 360.0F));
-+        this.yRot = (byte) ((int) (player.getYRot() * 256.0F / 360.0F));
-+        this.xRot = (byte) ((int) (player.getXRot() * 256.0F / 360.0F));
-     }
- 
-     public ClientboundAddPlayerPacket(FriendlyByteBuf buf) {
 @@ -34,6 +34,18 @@ public class ClientboundAddPlayerPacket implements Packet<ClientGamePacketListen
          this.xRot = buf.readByte();
      }
@@ -755,7 +744,7 @@ index 15ebf22e9ca11870e5f24ff5ab8bcbee8c571ee3..24cb08563e9b6f93f6a8f4921134e081
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.entityId);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
-index ee8f6838d774fd316178a10db5101102963c1847..8e1a295ea7b70c62843ec8b23a3fffefb13091a8 100644
+index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..90fb9b576ed74a9063574f7bc3926668e7ee0612 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
 @@ -35,6 +35,18 @@ public class ClientboundTeleportEntityPacket implements Packet<ClientGamePacketL
@@ -778,10 +767,10 @@ index ee8f6838d774fd316178a10db5101102963c1847..8e1a295ea7b70c62843ec8b23a3fffef
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e71eca3ddbbeb3168dd73433b6d6ffe9f6755f77..ba2d72de27b8472ac0a2746f73cb1af7dd85efe3 100644
+index 2197c3289f021c85e6e00fd16dcf12cc052ba023..1ca416a4769367ec5f4d9b5153862ea72c2668a2 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -332,7 +332,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -334,7 +334,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -790,7 +779,7 @@ index e71eca3ddbbeb3168dd73433b6d6ffe9f6755f77..ba2d72de27b8472ac0a2746f73cb1af7
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -341,11 +341,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -343,11 +343,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -806,10 +795,10 @@ index e71eca3ddbbeb3168dd73433b6d6ffe9f6755f77..ba2d72de27b8472ac0a2746f73cb1af7
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index b67660cda74a4754d1701e746aca99bde868c150..76907a6d7a6e04f901494e4e7800b242249b2d57 100644
+index ba975b2fae383863ec731211f99d66731fa922c5..2b24f8ba091b708eaa21cd0722ef2b5af1947b9a 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -173,7 +173,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
@@ -819,10 +808,10 @@ index b67660cda74a4754d1701e746aca99bde868c150..76907a6d7a6e04f901494e4e7800b242
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 8588ff4effc7d2b28c31af69a3cdf83a02ebe900..020e73efdc494de87600a16228478747cbb3ac0f 100644
+index 1f57eb13269016e99cf872a5cca655c88f2a7418..cfcdac74aa0d93923a1baaf1ed2913743e0653bc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3061,6 +3061,14 @@ public final class CraftServer implements Server {
+@@ -3074,6 +3074,14 @@ public final class CraftServer implements Server {
  
      // Paper end
  
@@ -838,10 +827,10 @@ index 8588ff4effc7d2b28c31af69a3cdf83a02ebe900..020e73efdc494de87600a16228478747
      @Override
      public String getServerName() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index fe57437155ff9471738d3b85e787350601b79584..62e9873be158d151e46a9f5c99797f4e19565c07 100644
+index 13190c4265bb83e682dede7e982ebcd19d80e334..ebc955787559f4b2edab6b1c8f5873aa1e1fbe9a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-@@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
+@@ -20,7 +20,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
      final Scoreboard board;
      boolean registeredGlobally = false; // Paper
  
@@ -851,12 +840,12 @@ index fe57437155ff9471738d3b85e787350601b79584..62e9873be158d151e46a9f5c99797f4e
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index 67efb0d38ae369ff5254f7b1ec85d32d4eee8291..bacf657038c30e58c3d5ea4a7efd909f8d194895 100644
+index 7098b77fe4275e39694ed7d8fb031b9397302b9f..296d963c48aa997332674525b60028219af5748c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-@@ -14,14 +14,20 @@ import org.bukkit.scoreboard.Team;
- import org.bukkit.scoreboard.Team.Option;
- import org.bukkit.scoreboard.Team.OptionStatus;
+@@ -12,14 +12,20 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
+ import org.bukkit.scoreboard.NameTagVisibility;
+ import org.bukkit.scoreboard.Team;
  
 -final class CraftTeam extends CraftScoreboardComponent implements Team {
 +public final class CraftTeam extends CraftScoreboardComponent implements Team { // Weeper package private -> public
@@ -876,4 +865,4 @@ index 67efb0d38ae369ff5254f7b1ec85d32d4eee8291..bacf657038c30e58c3d5ea4a7efd909f
 +
      @Override
      public String getName() throws IllegalStateException {
-         CraftScoreboard scoreboard = this.checkState();
+         this.checkState();

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index cfc5e9a4149ad71ecfa22ae8afc01c0eaf0cc274..bfbe8bfaf02cb861b1cae34b32e6af9a372baaf9 100644
+index 8a58c29429b730ee7bbd5330c10a225e66172608..9dd554f02d833aee01270beed4b97f335b3256d3 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -673,8 +673,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -814,8 +814,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
                  if (!event.isCancelled()) {
                      this.setDayTime(this.getDayTime() + event.getSkipAmount());
                  }
@@ -28,7 +28,7 @@ index cfc5e9a4149ad71ecfa22ae8afc01c0eaf0cc274..bfbe8bfaf02cb861b1cae34b32e6af9a
              if (!event.isCancelled()) {
                  this.wakeUpAllPlayers();
              }
-@@ -682,6 +693,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -823,6 +834,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
              if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && this.isRaining()) {
                  this.resetWeatherCycle();
              }
@@ -37,27 +37,27 @@ index cfc5e9a4149ad71ecfa22ae8afc01c0eaf0cc274..bfbe8bfaf02cb861b1cae34b32e6af9a
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 9407e775e0ed1441d3266df71e18dcc433fb1dff..e7f96cf657a4a1566178ea27b4083851617e2e58 100644
+index 66fa52b6a57f7d6bfb1ab4d9404ece93ff27ba8f..1efbcd0e16234fadab56a15b5235e510e1696c84 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1385,6 +1385,7 @@ public class ServerPlayer extends Player {
+@@ -1425,6 +1425,7 @@ public class ServerPlayer extends Player {
                  return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
              } else {
-                 this.setRespawnPosition(this.level.dimension(), blockposition, this.getYRot(), false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - PlayerSetSpawnEvent
+                 this.setRespawnPosition(this.level().dimension(), blockposition, this.getYRot(), false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - PlayerSetSpawnEvent
 +                if (true) return Either.right(Unit.INSTANCE); // Kiterino - allow sleeping anytime
-                 if (this.level.isDay()) {
+                 if (this.level().isDay()) {
                      return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
                  } else {
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index 7edcb5b86f27d05a0526229262e0d3a3e160362b..3c20d188f4fe5933582f18172a946de22ac2cb95 100644
+index d00035e31cf4773a418d1cc6a6018d08e6b558f0..80526827de4ef169008f831f6203fc43963d4791 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
 @@ -291,7 +291,7 @@ public abstract class Player extends LivingEntity {
                  this.sleepCounter = 100;
              }
  
--            if (!this.level.isClientSide && this.level.isDay()) {
-+            if (false && !this.level.isClientSide && this.level.isDay()) { // Kiterino - allow sleeping anytime and anywhere
+-            if (!this.level().isClientSide && this.level().isDay()) {
++            if (false && !this.level().isClientSide && this.level().isDay()) { // Kiterino - allow sleeping anytime and anywhere
                  this.stopSleepInBed(false, true);
              }
          } else if (this.sleepCounter > 0) {
