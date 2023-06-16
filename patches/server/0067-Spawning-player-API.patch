@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 9a33c3298c7e260bbe924dad63f161f715bc4303..e0c16c7ce6a3d123160ae0afb18bf46739ca4a6d 100644
+index 20ad8ed85fd2014fdcfafaea981b1e2b8714bd76..ccd742f25f8f19eff8a4fad5c9bd1298b9be9e50 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -427,6 +427,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -428,6 +428,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return this.yRot;
      }
  
@@ -36,7 +36,7 @@ index 9a33c3298c7e260bbe924dad63f161f715bc4303..e0c16c7ce6a3d123160ae0afb18bf467
      public boolean isChunkLoaded() {
          return this.level.hasChunk((int) Math.floor(this.getX()) >> 4, (int) Math.floor(this.getZ()) >> 4);
      }
-@@ -2360,6 +2381,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2361,6 +2382,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -49,7 +49,7 @@ index 9a33c3298c7e260bbe924dad63f161f715bc4303..e0c16c7ce6a3d123160ae0afb18bf467
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2534,6 +2561,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2535,6 +2562,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
              // Purpur end
  

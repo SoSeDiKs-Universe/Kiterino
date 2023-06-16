@@ -5,10 +5,10 @@ Subject: [PATCH] Max stack size API
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 77b1eb1eaa9b06c7ce1b576cda31d6c4e042b3d6..8d3f636a78db8f45bd79f99ca722037c9870a003 100644
+index fab3e6500cc9357dcc8e49710c53eca9c1b98c30..7ebe090188568b89052e0df5247b566e6510136f 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2592,4 +2592,16 @@ public final class Bukkit {
+@@ -2615,4 +2615,16 @@ public final class Bukkit {
          server.clearBlockHighlights();
      }
      // Purpur end
@@ -26,7 +26,7 @@ index 77b1eb1eaa9b06c7ce1b576cda31d6c4e042b3d6..8d3f636a78db8f45bd79f99ca722037c
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 1cf58f69b1e50a29c48e214f4b50a5c9ed3a0c40..60120cceb71a8e4df14ad369886b460b5c5de397 100644
+index 3c427c58318c1d3f592a3dccf5e0cbabe650554c..8e63a7c51357f05c89d6f3425dcca37853a413b1 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
 @@ -4524,7 +4524,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
@@ -39,10 +39,10 @@ index 1cf58f69b1e50a29c48e214f4b50a5c9ed3a0c40..60120cceb71a8e4df14ad369886b460b
      public final Class<?> data;
      private final boolean legacy;
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 0be62f886273799d46fef657bfcf2acd2b740fdb..5250370ed19b4fb01b777678307032cd59e9f344 100644
+index 5e2b20f2c5eebce2c8f7e63e251763c94d716ea3..1d3099e3dc7763aed71f0f09689ccac57ed5bc19 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2262,4 +2262,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2289,4 +2289,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void clearBlockHighlights();
      // Purpur end

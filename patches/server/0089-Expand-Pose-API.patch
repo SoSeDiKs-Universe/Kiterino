@@ -5,10 +5,10 @@ Subject: [PATCH] Expand Pose API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 9a87c6033c80596c1acecccff54cc22d8273caf0..76ca7daa948707931a04004d89a222c436991867 100644
+index e8f728418c310ae829eb567da4aabbaf47b6f821..219cf934c3d9d0fbb0e38e676593f3bb2dc6c4c5 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -401,6 +401,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -402,6 +402,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
      public boolean collidingWithWorldBorder; // Paper
      public @Nullable Boolean immuneToFire = null; // Purpur - Fire immune API
@@ -16,7 +16,7 @@ index 9a87c6033c80596c1acecccff54cc22d8273caf0..76ca7daa948707931a04004d89a222c4
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -732,6 +733,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -733,6 +734,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public void onClientRemoval() {}
  
      public void setPose(net.minecraft.world.entity.Pose pose) {

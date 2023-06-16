@@ -48,10 +48,10 @@ index af8cb1f1f0c128923495f51e4828003133ce766b..17b14a4fb460d25c2c9218c154cbc4e8
          MinecraftServer minecraftserver = this.server;
          Connection networkmanager = this.connection;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 60b6e0921bcc6a4b2b4af28894119dbb71658e60..1e59497a6d31b65352c36ba47b49126145ed6c09 100644
+index 09eed638fbc9272ac76184ee1ab8eed408016915..65cf3a232109e2eb8013f79993ea4e9615e0d06e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3330,5 +3330,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3336,5 +3336,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          return true;
      }
