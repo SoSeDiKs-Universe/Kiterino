@@ -75,10 +75,10 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 84bd594baa2d72033b08ca79309b004d3c6807a2..7d1086ccb7b3643f6ab6c4f42962d480ce8d85ca 100644
+index c6a8068fc9c2a2b9b53363578c2c57abc4f8abb2..a6db05367882a6d34a99818bfebb97d79ef72a39 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -295,13 +295,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -296,13 +296,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       *
       * This value is a state updated by the client after each movement.
       *
