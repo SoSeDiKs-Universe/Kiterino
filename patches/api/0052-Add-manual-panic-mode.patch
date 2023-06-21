@@ -5,10 +5,10 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index d8d0a52e71f29c9e679c480c9477f7be59c0cc8b..8b9ad6611551d297e771e137611fa8a86ba04a3f 100644
+index 7db0e8b12fe93802400a3b8f0bd08b88c3ff304b..6f1754be340b757abd6478a014ff22a60f4ff05a 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1169,5 +1169,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1180,5 +1180,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       * @return whether the entity has a fixed {@link Pose}
       */
      boolean hasFixedPose();

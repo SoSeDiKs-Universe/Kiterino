@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 110a491c5fd6188c19bdbbfbe6005802d92d8272..a6b8677f6122ffcd5a3fb2cc2dc2ebf78cff881e 100644
+index c352928a63e0f544ac8866bcecdc3002715f65c9..4bd737bd92a59b65890e9ffbb9cc5a4196efbf35 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -964,6 +964,29 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -975,6 +975,29 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      @Nullable
      Player getRider();
  

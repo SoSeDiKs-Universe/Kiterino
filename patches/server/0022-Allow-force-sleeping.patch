@@ -18,7 +18,7 @@ index e0e133ab39548b8e671441e3383a6f4df6f6997e..66fa52b6a57f7d6bfb1ab4d9404ece93
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index cc544956282e97a99d8947f621270dab285a0b70..cc1358e0aa6df446630ec663e2309e6ec4642e6d 100644
+index 7ed0e7c8e3600c0c29ac84d46c725e0575a7d174..3ef7a7bf62f2b19cbbefd863395ebf79318a880b 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3099,7 +3099,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -30,7 +30,7 @@ index cc544956282e97a99d8947f621270dab285a0b70..cc1358e0aa6df446630ec663e2309e6e
                  this.stopSleeping();
              }
          }
-@@ -4384,7 +4384,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4390,7 +4390,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow modifying vanilla block drops
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index bfb8039a65fbfdb6d2fa6fc4fdeb146fbc4e147f..cda19cd8d9e1beda1553337e9989c8839b75040e 100644
+index 420ba2f8adcf15a32598c39c88439a4bd55c89fc..180d119dab19b1ee920c2f8841336d574b59e921 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -428,6 +428,21 @@ public class CraftEventFactory {
+@@ -429,6 +429,21 @@ public class CraftEventFactory {
          Bukkit.getPluginManager().callEvent(event);
  
          if (!event.isCancelled()) {
@@ -20,7 +20,7 @@ index bfb8039a65fbfdb6d2fa6fc4fdeb146fbc4e147f..cda19cd8d9e1beda1553337e9989c883
 +                    }
 +                }
 +                org.bukkit.World world = block.getWorld();
-+                Location loc = block.getLocation();
++                org.bukkit.Location loc = block.getLocation();
 +                for (org.bukkit.inventory.ItemStack drop : event.getDrops()) {
 +                    world.dropItemNaturally(loc, drop);
 +                }

@@ -28,10 +28,10 @@ index 244857755f269eedd57d1c8d4657b4b4b75de2e5..56b1eb258f324cfe922f85302cb4397e
          // Paper end
          float f;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index b5512726ec3c03ba3711064b19001ee0418da6fa..35fcb2b4281ec850b75330c2583a1eccf15e757b 100644
+index 180d119dab19b1ee920c2f8841336d574b59e921..14993a32e57e876dcb4ced3e694bb7eba930c11f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1515,7 +1515,12 @@ public class CraftEventFactory {
+@@ -1512,7 +1512,12 @@ public class CraftEventFactory {
      }
  
      public static NotePlayEvent callNotePlayEvent(Level world, BlockPos pos, NoteBlockInstrument instrument, int note) {

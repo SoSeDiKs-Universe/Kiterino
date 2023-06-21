@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index b323bc0c635766c0c245d694260e41e90ee35efe..602ff0c8d353ade59ad1b9061953d6469e311f6b 100644
+index c020f1dcd10b1237d5dc24233dba20bfe7c117f1..686ee4ad78e4100575933725d05b2a067a34487f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3010,6 +3010,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -3023,6 +3023,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return true; // CraftBukkit
      }
  
@@ -52,10 +52,10 @@ index 3f7a431abbf1b817911a10355c9e241ea38d3292..251fb0561902a553f9c8110d1b868f33
              return InteractionResult.PASS;
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 37739d0a58fa60f79462c577531d3e4b5e47b2ba..ea26cd48b6eb83d7af8be186994006fae5bc1251 100644
+index edd9fb7154d1082b3fe6d7b6e470f4f4c5459e4b..b78f8db7fc89dacffefe57f973b872f867e4861b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1462,6 +1462,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1477,6 +1477,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return rider != null ? (org.bukkit.entity.Player) rider.getBukkitEntity() : null;
      }
  

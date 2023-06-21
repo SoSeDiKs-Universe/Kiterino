@@ -63,10 +63,10 @@ index dc157fb4dbe88b9d025b1e3da154ad9246857a2c..45395429886b458b444267498e21ea07
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index c2828a70a37f09001d39bc2a3b4ccccc00b9d5e2..110a491c5fd6188c19bdbbfbe6005802d92d8272 100644
+index fad00a380625505cb273f30d8905c076d48ec8b5..c352928a63e0f544ac8866bcecdc3002715f65c9 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1048,5 +1048,53 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1059,5 +1059,53 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
          getWorld().playSound(getLocation(), sound, category, volume, pitch);
      }

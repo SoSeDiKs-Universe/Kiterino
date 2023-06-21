@@ -42,10 +42,10 @@ index ac1534c601b79446075c46fc476f9aa2dbcc6f53..dc157fb4dbe88b9d025b1e3da154ad92
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 28b6147374f89567fb016a5cd5366f3a0e26afcc..c2828a70a37f09001d39bc2a3b4ccccc00b9d5e2 100644
+index 7e5c20eb00127e9bc107b59a7e319ce18682c08e..fad00a380625505cb273f30d8905c076d48ec8b5 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1016,5 +1016,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1027,5 +1027,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default de.tr7zw.changeme.nbtapi.NBTEntity getNBT() {
          return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
      }

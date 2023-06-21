@@ -314,7 +314,7 @@ index 0000000000000000000000000000000000000000..aafa50f0809a03dcdd3a8fcf914d04e7
 +    REMOVE_PLAYERS_FROM_TEAM
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 7d759a4725dbea992f078b6c1a60d9822bb268a3..90cb2f4877f408618f28af822882891374dbd1f9 100644
+index e26e0c6bc3d8e735f489cdcd0a5b93d6688c2c5f..97d0fa4ff0c34613df88da90bc6eae1ee735879e 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -2494,6 +2494,15 @@ public final class Bukkit {
@@ -332,9 +332,9 @@ index 7d759a4725dbea992f078b6c1a60d9822bb268a3..90cb2f4877f408618f28af8228828913
 +    }
      // Paper end
  
-     @NotNull
+     // Paper start - Folia region threading API
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 7528e2fc2283af39c55601bce206c63467a1d511..fbd20c5499158723c9eb678728ae2ee1adfc2910 100644
+index 967b210e2fab660b32d63aaca4da0e8a91437341..5860fd01dfd92e6d7120a846021984a85caf91d9 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -2193,6 +2193,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
@@ -350,4 +350,4 @@ index 7528e2fc2283af39c55601bce206c63467a1d511..fbd20c5499158723c9eb678728ae2ee1
 +    com.github.weepingmc.packet.PacketPipeline getPacketPipeline();
      // Paper end
  
-     // Purpur start
+     // Paper start - Folia region threading API

@@ -5,10 +5,10 @@ Subject: [PATCH] Expand Pose API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5098766735c059de2d74aa92c9559a534a132ad6..9843494748cec6d0174f49f20d84806b61574609 100644
+index 5b9f7d6e7749241bef1f10c3437e8969c4d33c88..55c8250b4bd963e5a50238d1fa44d49a229ba163 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -406,6 +406,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -418,6 +418,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public boolean freezeLocked = false; // Paper - Freeze Tick Lock API
      public boolean collidingWithWorldBorder; // Paper
      public @Nullable Boolean immuneToFire = null; // Purpur - Fire immune API
@@ -16,7 +16,7 @@ index 5098766735c059de2d74aa92c9559a534a132ad6..9843494748cec6d0174f49f20d84806b
  
      public void setOrigin(@javax.annotation.Nonnull Location location) {
          this.origin = location.toVector();
-@@ -758,6 +759,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -771,6 +772,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public void onClientRemoval() {}
  
      public void setPose(net.minecraft.world.entity.Pose pose) {
@@ -29,10 +29,10 @@ index 5098766735c059de2d74aa92c9559a534a132ad6..9843494748cec6d0174f49f20d84806b
          if (pose == this.getPose()) {
              return;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index c942ced95959fef8374878460dfeaaa4eb2472ec..bcb4abb2265a52d55d22c89ca4e1a1d8fdb9a1a7 100644
+index 123a3395a69c7093f3a9ef023cfb5b325b236850..646aed0ee6b8f6ad17414d1eb7644c5741ca9298 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1496,5 +1496,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1511,5 +1511,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public UUID getSpawningPlayerUuid() {
          return getHandle().spawningPlayerUuid;
      }
