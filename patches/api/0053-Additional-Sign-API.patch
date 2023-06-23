@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 22 Jun 2023 09:10:02 +0300
+Subject: [PATCH] Additional Sign API
+
+
+diff --git a/src/main/java/org/bukkit/block/Sign.java b/src/main/java/org/bukkit/block/Sign.java
+index dd4d8f24e684a9c3cb1e41e8d0bf615111a17ba3..b38bebcb42db4e184063ed87cbc05a0953a5c383 100644
+--- a/src/main/java/org/bukkit/block/Sign.java
++++ b/src/main/java/org/bukkit/block/Sign.java
+@@ -174,4 +174,28 @@ public interface Sign extends TileState, Colorable {
+      */
+     @NotNull
+     public SignSide getSide(@NotNull Side side);
++
++    // Kiterino start
++    /**
++     * Get the side of the sing that the player is facing
++     *
++     * @param player player
++     * @return sign side
++     */
++    @NotNull Side getFacingSide(@NotNull org.bukkit.entity.Player player);
++
++    /**
++     * Gets the {@link java.util.UUID} of the player who may edit this sign
++     *
++     * @return uuid
++     */
++    @org.jetbrains.annotations.Nullable java.util.UUID getWhoMayEditUuid();
++
++    /**
++     * Sets the player as the one who may edit this sign
++     *
++     * @param uuid player's uuid
++     */
++    void setWhoMayEditUuid(@NotNull java.util.UUID uuid);
++    // Kiterino end
+ }

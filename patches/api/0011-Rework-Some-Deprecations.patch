@@ -97,6 +97,24 @@ index c6a8068fc9c2a2b9b53363578c2c57abc4f8abb2..a6db05367882a6d34a99818bfebb97d7
      public boolean isOnGround();
  
      /**
+diff --git a/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java b/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
+index ddea08e4de2198a0a7565e2fd7a05571ed48f27b..27a5e759e8e3589f347f810e7825457653b85750 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
+@@ -235,11 +235,11 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
+      * <p>
+      * All vector components are between 0.0 and 1.0 inclusive.
+      *
+-     * @deprecated misleading, use {@link #getInteractionPoint()}
++     * @see #getInteractionPoint()
+      * @return the clicked position. May be null.
+      */
+     @Nullable
+-    @Deprecated // Paper
++    //@Deprecated // Paper // Kiterino
+     public Vector getClickedPosition() {
+         return clickedPosistion;
+     }
 diff --git a/src/main/java/org/bukkit/inventory/meta/MapMeta.java b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
 index 26a336dade83baee97d20eb39a058925659f5777..e9a5ae1b2c6a7dbc656e3ea51c186c875adc90fe 100644
 --- a/src/main/java/org/bukkit/inventory/meta/MapMeta.java
