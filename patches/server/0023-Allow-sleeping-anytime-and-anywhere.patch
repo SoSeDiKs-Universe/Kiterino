@@ -37,10 +37,10 @@ index 8a58c29429b730ee7bbd5330c10a225e66172608..9dd554f02d833aee01270beed4b97f33
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 66fa52b6a57f7d6bfb1ab4d9404ece93ff27ba8f..1efbcd0e16234fadab56a15b5235e510e1696c84 100644
+index 1403db4f224007382c3c81a0791cb4278a7ef55f..3553f197122556d2b339b35dc0029f553f36c827 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1425,6 +1425,7 @@ public class ServerPlayer extends Player {
+@@ -1426,6 +1426,7 @@ public class ServerPlayer extends Player {
                  return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
              } else {
                  this.setRespawnPosition(this.level().dimension(), blockposition, this.getYRot(), false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - PlayerSetSpawnEvent
