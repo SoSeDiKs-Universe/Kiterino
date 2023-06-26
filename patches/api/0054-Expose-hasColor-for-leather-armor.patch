@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 26 Jun 2023 05:57:35 +0300
+Subject: [PATCH] Expose hasColor for leather armor
+
+
+diff --git a/src/main/java/org/bukkit/inventory/meta/LeatherArmorMeta.java b/src/main/java/org/bukkit/inventory/meta/LeatherArmorMeta.java
+index c1676991c3cc5f8d6e3f97d8cb356d6e2aa52809..fc13aeb4f014f708d4d812cc58e82cb8ee809921 100644
+--- a/src/main/java/org/bukkit/inventory/meta/LeatherArmorMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/LeatherArmorMeta.java
+@@ -33,4 +33,13 @@ public interface LeatherArmorMeta extends ItemMeta {
+     @Override
+     @NotNull
+     LeatherArmorMeta clone();
++
++    // Kiterino start
++    /**
++     * Checks whether this armor has custom color
++     *
++     * @return whether this armor has custom color
++     */
++    boolean hasColor();
++    // Kiterino end
+ }

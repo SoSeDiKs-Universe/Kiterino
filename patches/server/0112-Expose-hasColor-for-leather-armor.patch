@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 26 Jun 2023 05:57:34 +0300
+Subject: [PATCH] Expose hasColor for leather armor
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaColorableArmor.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaColorableArmor.java
+index 28f32dafcaecc387d5ec763ad9afa615eec73fc7..e3c5fc7cf7a79c9a88b20bd49f048dbf52098432 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaColorableArmor.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaColorableArmor.java
+@@ -75,7 +75,7 @@ public class CraftMetaColorableArmor extends CraftMetaArmor implements Colorable
+         this.color = color == null ? DEFAULT_LEATHER_COLOR : color;
+     }
+ 
+-    boolean hasColor() {
++    public boolean hasColor() { // Kiterino - public
+         return CraftMetaLeatherArmor.hasColor(this);
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaLeatherArmor.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaLeatherArmor.java
+index 3a8002e8ea51dcb3ab345306813fef972e09c945..1f4f28ccf1b8f9842f12b7fdc113ce05f5ac6dd0 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaLeatherArmor.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaLeatherArmor.java
+@@ -78,7 +78,7 @@ class CraftMetaLeatherArmor extends CraftMetaItem implements LeatherArmorMeta {
+         this.color = color == null ? DEFAULT_LEATHER_COLOR : color;
+     }
+ 
+-    boolean hasColor() {
++    public boolean hasColor() { // Kiterino - public
+         return CraftMetaLeatherArmor.hasColor(this);
+     }
+ 
