@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 27 Jun 2023 20:28:13 +0300
+Subject: [PATCH] Add missing EntityBlockChange
+
+
+diff --git a/src/main/java/net/minecraft/world/item/HoeItem.java b/src/main/java/net/minecraft/world/item/HoeItem.java
+index c4aec1e5135a79837918b692e75a7b55d5cffeb0..681049be8481b3265c473e78ab5ddf574be96a2b 100644
+--- a/src/main/java/net/minecraft/world/item/HoeItem.java
++++ b/src/main/java/net/minecraft/world/item/HoeItem.java
+@@ -50,6 +50,11 @@ public class HoeItem extends DiggerItem {
+             // Purpur end
+             if (predicate.test(context)) {
+                 Player player = context.getPlayer();
++                // Kiterino start
++                if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, blockPos, tillable.into().defaultBlockState()).isCancelled()) {
++                    return InteractionResult.PASS;
++                }
++                // Kiterino end
+                 if (!TILLABLES.containsKey(clickedBlock)) level.playSound(null, blockPos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F); // Purpur - force sound
+                 if (!level.isClientSide) {
+                     consumer.accept(context);
