@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 27 Jun 2023 16:52:18 +0300
+Subject: [PATCH] Expose checkBedExists
+
+
+diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
+index 2f9c53d6e2149fb53262d17d67b733feaf629ce6..3f6a8353292e15275169510a05c2b2b549e57e2d 100644
+--- a/src/main/java/org/bukkit/entity/LivingEntity.java
++++ b/src/main/java/org/bukkit/entity/LivingEntity.java
+@@ -1234,4 +1234,14 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+      */
+     void setShouldBurnInDay(boolean shouldBurnInDay);
+     // Purpur end
++
++    // Kiterino start
++
++    /**
++     * Checks whether this entity's bed exists as a physical bed
++     *
++     * @return whether this entity's bed exists
++     */
++    boolean bedExists();
++    // Kiterino end
+ }

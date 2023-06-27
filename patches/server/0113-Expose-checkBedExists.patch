@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 27 Jun 2023 16:52:18 +0300
+Subject: [PATCH] Expose checkBedExists
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 4c7ce0acc67740307483a25d0b7cbd86459766c1..4940d3fc270869a8b9f27f75af443c92c1a63f1e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -1117,4 +1117,11 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         getHandle().setShouldBurnInDay(shouldBurnInDay);
+     }
+     // Purpur end
++
++    // Kiterino start
++    @Override
++    public boolean bedExists() {
++        return getHandle().checkBedExists();
++    }
++    // Kiterino end
+ }
