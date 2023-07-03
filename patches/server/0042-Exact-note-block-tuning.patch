@@ -5,24 +5,29 @@ Subject: [PATCH] Exact note block tuning
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index c35b0dcb21b75ac1825b1384f56c328e284a119e..b0dec8764455959ff23f7be84eee6343192ddf01 100644
+index cc5c42261c25741d33e163de57a83648331ccc0c..d5c9d17846e1f97e0cfb800d2cd840ed9e77524d 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-@@ -124,8 +124,17 @@ public class NoteBlock extends Block {
-         } else if (world.isClientSide) {
-             return InteractionResult.SUCCESS;
+@@ -126,10 +126,19 @@ public class NoteBlock extends Block {
          } else {
-+            // Kiterino start
-+            var itemInHand = player.getItemInHand(hand);
-+            if (itemInHand.getItem() == net.minecraft.world.item.Items.STICK) {
-+                int currentNote = state.getValue(NOTE);
-+                int newNote = Math.min(24, itemInHand.getCount() - 1);
-+                if (currentNote != newNote)
-+                    state = state.setValue(NOTE, newNote);
-+            } else {
-             if (player.isShiftKeyDown()) state = state.cycleBackwards(NOTE); else // Kiterino
-             state = (BlockState) state.cycle(NoteBlock.NOTE);
-+            } // Kiterino end
-             world.setBlock(pos, state, 3);
-             this.playNote(player, state, world, pos);
-             player.awardStat(Stats.TUNE_NOTEBLOCK);
+             // Kiterino start
+             if (!io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableNoteblockUpdates) {
+-                if (player.isShiftKeyDown()) {
+-                    state = state.cycleBackwards(NOTE);
++                var itemInHand = player.getItemInHand(hand);
++                if (itemInHand.getItem() == net.minecraft.world.item.Items.STICK) {
++                    int currentNote = state.getValue(NOTE);
++                    int newNote = Math.min(24, itemInHand.getCount() - 1);
++                    if (currentNote != newNote) {
++                        state = state.setValue(NOTE, newNote);
++                    }
+                 } else {
+-                    state = (BlockState) state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
++                    if (player.isShiftKeyDown()) {
++                        state = state.cycleBackwards(NOTE);
++                    } else {
++                        state = (BlockState) state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
++                    }
+                 }
+             }
+             // Kiterino end

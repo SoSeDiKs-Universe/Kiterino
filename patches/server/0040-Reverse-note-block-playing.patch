@@ -5,17 +5,26 @@ Subject: [PATCH] Reverse note block playing
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index 0fc2b7e8302316201ea76e2237657e68e958c4c9..c35b0dcb21b75ac1825b1384f56c328e284a119e 100644
+index 6a970e293a31962faaab545f368ae02c4b20e42d..cc5c42261c25741d33e163de57a83648331ccc0c 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-@@ -124,6 +124,7 @@ public class NoteBlock extends Block {
+@@ -124,7 +124,15 @@ public class NoteBlock extends Block {
          } else if (world.isClientSide) {
              return InteractionResult.SUCCESS;
          } else {
-+            if (player.isShiftKeyDown()) state = state.cycleBackwards(NOTE); else // Kiterino
-             state = (BlockState) state.cycle(NoteBlock.NOTE);
+-            if (!io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableNoteblockUpdates) state = (BlockState) state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
++            // Kiterino start
++            if (!io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableNoteblockUpdates) {
++                if (player.isShiftKeyDown()) {
++                    state = state.cycleBackwards(NOTE);
++                } else {
++                    state = (BlockState) state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
++                }
++            }
++            // Kiterino end
              world.setBlock(pos, state, 3);
              this.playNote(player, state, world, pos);
+             player.awardStat(Stats.TUNE_NOTEBLOCK);
 diff --git a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
 index 5f285d190186a2ff5a61d05070593e1d633dd79a..12c5625366f5845b996d8e75d8a9a018e76ec2d7 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java

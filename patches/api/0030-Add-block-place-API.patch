@@ -5,10 +5,10 @@ Subject: [PATCH] Add block place API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index a6db05367882a6d34a99818bfebb97d79ef72a39..416e74f67a867125cbbe3dd1c4fc41d43f75161f 100644
+index d72caa749e6bb75db09a6726c1aefe8d82338060..75a3d375feff89841a718df2df9101f71ee77444 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3258,4 +3258,54 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3262,4 +3262,54 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          sendDeathScreen(message);
      }
      // Purpur end

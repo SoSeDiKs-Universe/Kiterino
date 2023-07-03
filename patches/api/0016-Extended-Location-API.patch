@@ -5,10 +5,10 @@ Subject: [PATCH] Extended Location API
 
 
 diff --git a/src/main/java/org/bukkit/Location.java b/src/main/java/org/bukkit/Location.java
-index 6bbf8468bc47e82b0aeb164e49cdb73d93bae87b..215de44bf467ac1fd5bf81a2368d516eb03652ec 100644
+index 1a60a18e15780128a1914826daa952ffacb92e9e..fdc6f38ce370ca8eac7341d2307563b54ce27106 100644
 --- a/src/main/java/org/bukkit/Location.java
 +++ b/src/main/java/org/bukkit/Location.java
-@@ -451,6 +451,219 @@ public class Location implements Cloneable, ConfigurationSerializable, io.paperm
+@@ -451,6 +451,255 @@ public class Location implements Cloneable, ConfigurationSerializable, io.paperm
          return this;
      }
  
@@ -134,6 +134,42 @@ index 6bbf8468bc47e82b0aeb164e49cdb73d93bae87b..215de44bf467ac1fd5bf81a2368d516e
 +    @NotNull
 +    public Location addZ(double z) {
 +        this.z += z;
++        return this;
++    }
++
++    /**
++     * Sets location's X coordinate to {@link #getBlockX()} plus the provided offset
++     *
++     * @param x adding value to X coordinate
++     * @return the same location
++     */
++    @NotNull
++    public Location localX(double x) {
++        setX(getBlockX() + x);
++        return this;
++    }
++
++    /**
++     * Sets location's Y coordinate to {@link #getBlockY()} plus the provided offset
++     *
++     * @param y adding value to Y coordinate
++     * @return the same location
++     */
++    @NotNull
++    public Location localY(double y) {
++        setY(getBlockY() + y);
++        return this;
++    }
++
++    /**
++     * Sets location's Z coordinate to {@link #getBlockZ()} plus the provided offset
++     *
++     * @param z adding value to Z coordinate
++     * @return the same location
++     */
++    @NotNull
++    public Location localZ(double z) {
++        setZ(getBlockZ() + z);
 +        return this;
 +    }
 +

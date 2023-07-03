@@ -4,6 +4,19 @@ Date: Sat, 11 Jul 2020 20:57:52 +0300
 Subject: [PATCH] Rework Some Deprecations
 
 
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 97d0fa4ff0c34613df88da90bc6eae1ee735879e..a15659820d5eddd747dea580894ecebe9fb6113e 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2312,7 +2312,7 @@ public final class Bukkit {
+      * @return the unsafe values instance
+      * @see UnsafeValues
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino
+     @NotNull
+     public static UnsafeValues getUnsafe() {
+         return server.getUnsafe();
 diff --git a/src/main/java/org/bukkit/ChatColor.java b/src/main/java/org/bukkit/ChatColor.java
 index dc79c2eaff88d16439da226a64c4d7712c47b63a..379e5b2dd31bf008211b319538e1b7d3e2562a3b 100644
 --- a/src/main/java/org/bukkit/ChatColor.java
@@ -75,7 +88,7 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index c6a8068fc9c2a2b9b53363578c2c57abc4f8abb2..a6db05367882a6d34a99818bfebb97d79ef72a39 100644
+index 5b0035bf5edf15a5ee4528d0933f78d9d586fa2f..d72caa749e6bb75db09a6726c1aefe8d82338060 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -296,13 +296,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -97,6 +110,19 @@ index c6a8068fc9c2a2b9b53363578c2c57abc4f8abb2..a6db05367882a6d34a99818bfebb97d7
      public boolean isOnGround();
  
      /**
+@@ -2534,10 +2536,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      * they wish.
+      *
+      * @return the player's locale
+-     * @deprecated in favour of {@link #locale()}
++     * @see #locale()
+      */
+     @NotNull
+-    @Deprecated // Paper
++    //@Deprecated // Paper // Kiterino
+     public String getLocale();
+ 
+     // Paper start
 diff --git a/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java b/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
 index ddea08e4de2198a0a7565e2fd7a05571ed48f27b..27a5e759e8e3589f347f810e7825457653b85750 100644
 --- a/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
