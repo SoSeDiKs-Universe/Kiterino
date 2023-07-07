@@ -5,7 +5,7 @@ Subject: [PATCH] Add PlayerSaddleEntityEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/item/SaddleItem.java b/src/main/java/net/minecraft/world/item/SaddleItem.java
-index 7234010d81078d357ab9bca422e44864a9e269bb..8d4cfaeda434393ac933d0072ce75a1616458792 100644
+index 7234010d81078d357ab9bca422e44864a9e269bb..abac309ac3c1ba14100ce247547a7fb42d738674 100644
 --- a/src/main/java/net/minecraft/world/item/SaddleItem.java
 +++ b/src/main/java/net/minecraft/world/item/SaddleItem.java
 @@ -18,9 +18,15 @@ public class SaddleItem extends Item {
@@ -14,7 +14,7 @@ index 7234010d81078d357ab9bca422e44864a9e269bb..8d4cfaeda434393ac933d0072ce75a16
                  if (!user.level().isClientSide) {
 -                    saddleable.equipSaddle(SoundSource.NEUTRAL, stack.copyWithCount(1)); // Paper - Fix saddles losing nbt data - MC-191591
 +                    // Kiterino start
-+                    var event = new me.sosedik.kiterino.event.player.PlayerSaddleEntityEvent((org.bukkit.entity.Player) user.getBukkitEntity(), (org.bukkit.entity.Steerable) entity.getBukkitEntity(), stack.asBukkitMirror());
++                    var event = new me.sosedik.kiterino.event.player.PlayerSaddleEntityEvent((org.bukkit.entity.Player) user.getBukkitEntity(), (org.bukkit.entity.LivingEntity) entity.getBukkitEntity(), stack.asBukkitMirror());
 +                    if (!event.callEvent()) return InteractionResult.PASS;
 +                    saddleable.equipSaddle(event.isPlaySound() ? SoundSource.NEUTRAL : null, stack.copyWithCount(1)); // Paper - Fix saddles losing nbt data - MC-191591
                      entity.level().gameEvent(entity, GameEvent.EQUIP, entity.position());

@@ -5,10 +5,10 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 65570ed544994c9b753df9519e59fabc79b8242b..6f5dc25a60e3ebb701dfde86a594b2fa4a41b296 100644
+index 65570ed544994c9b753df9519e59fabc79b8242b..04b721388899778dbb3dad46df7d71d63e09b141 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1681,4 +1681,78 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1681,4 +1681,102 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return getNBT(directApply).getOrCreateCompound(Bukkit.getName());
      }
      // Kiterino end
@@ -37,7 +37,18 @@ index 65570ed544994c9b753df9519e59fabc79b8242b..6f5dc25a60e3ebb701dfde86a594b2fa
 +
 +    /**
 +     * Returns clone of this item with colored
-+     * {@link org.bukkit.inventory.meta.LeatherArmorMeta}.
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
++     *
++     * @param hex hex string starting with #
++     * @return colored item
++     */
++    public @NotNull ItemStack asColor(@NotNull String hex) {
++        return asColor(net.kyori.adventure.text.format.TextColor.fromHexString(hex));
++    }
++
++    /**
++     * Returns clone of this item with colored
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
 +     *
 +     * @param color color
 +     * @return colored item
@@ -48,7 +59,18 @@ index 65570ed544994c9b753df9519e59fabc79b8242b..6f5dc25a60e3ebb701dfde86a594b2fa
 +
 +    /**
 +     * Returns clone of this item with colored
-+     * {@link org.bukkit.inventory.meta.LeatherArmorMeta}.
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
++     *
++     * @param color color
++     * @return colored item
++     */
++    public @NotNull ItemStack asColor(@NotNull net.kyori.adventure.util.RGBLike color) {
++        return asColor(org.bukkit.Color.fromRGB(color.red(), color.green(), color.blue()));
++    }
++
++    /**
++     * Returns clone of this item with colored
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
 +     *
 +     * @param color color
 +     * @return colored item
@@ -71,6 +93,7 @@ index 65570ed544994c9b753df9519e59fabc79b8242b..6f5dc25a60e3ebb701dfde86a594b2fa
 +     * @param item item to check
 +     * @return whether item is null or AIR
 +     */
++    @org.jetbrains.annotations.Contract("null -> true")
 +    public static boolean isEmpty(@Nullable ItemStack item) {
 +        return item == null || item.getType() == Material.AIR;
 +    }
@@ -82,6 +105,7 @@ index 65570ed544994c9b753df9519e59fabc79b8242b..6f5dc25a60e3ebb701dfde86a594b2fa
 +     * @param type required type
 +     * @return whether item is the same type
 +     */
++    @org.jetbrains.annotations.Contract("null -> false")
 +    public static boolean isType(@Nullable ItemStack item, @NotNull Material type) {
 +        return item != null && item.getType() == type;
 +    }
