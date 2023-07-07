@@ -5,10 +5,10 @@ Subject: [PATCH] Update goal target when changing target
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
-index c9e6c2d0976bde92a94ae912e488ec30f250df55..66c43ee46c5433a698ab4196389e5a657cf002d7 100644
+index 606357b6e8aa363123b28c3d7188348ff6e9192e..406bd807361759638513336b3d7322f0ad07d56e 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
-@@ -144,4 +144,10 @@ public abstract class TargetGoal extends Goal {
+@@ -146,4 +146,10 @@ public abstract class TargetGoal extends Goal {
          this.unseenMemoryTicks = time;
          return this;
      }
@@ -20,7 +20,7 @@ index c9e6c2d0976bde92a94ae912e488ec30f250df55..66c43ee46c5433a698ab4196389e5a65
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
-index 620d918e302a00d5a6640648e3096988d15535a0..98050c9dbfe2f799dae07b87f56ed0dc3f7482a8 100644
+index 18b9b0dc70f6872a9d71c120bcd2edca531b0ac4..53c27d8ee2e7c76f5cfb1f6564be25dd50fc5ac7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
 @@ -30,6 +30,17 @@ public abstract class CraftMob extends CraftLivingEntity implements Mob {

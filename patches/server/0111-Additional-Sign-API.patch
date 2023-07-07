@@ -5,10 +5,10 @@ Subject: [PATCH] Additional Sign API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
-index d00e3627a4da6369e08f3495f04af342ae28e71f..9025d1eb55922234eab02fdaaede09d47b6ad07f 100644
+index f48b5204e59ab0c840fc08ecb9abf5facbae9be1..4fb7996e5b2e6d0f0c2d358c49a121fe8e466eeb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
-@@ -173,4 +173,21 @@ public class CraftSign<T extends SignBlockEntity> extends CraftBlockEntityState<
+@@ -171,4 +171,21 @@ public class CraftSign<T extends SignBlockEntity> extends CraftBlockEntityState<
      private static String revertComponent(Component component) {
          return CraftChatMessage.fromComponent(component);
      }

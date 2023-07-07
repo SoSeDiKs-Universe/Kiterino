@@ -5,7 +5,7 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index e76eaa121f73cc56b0e3445eb976546daef87f99..9a921437d17d3216b3f9fa824c42803e9f42bc5a 100644
+index aef4c298961ac4ff4757ff87c1fdbe78f1f872bd..139956745fa1f821d30dab708345ebea1c7956dd 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -520,6 +520,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
@@ -48,10 +48,10 @@ index e76eaa121f73cc56b0e3445eb976546daef87f99..9a921437d17d3216b3f9fa824c42803e
          MinecraftServer minecraftserver = this.server;
          Connection networkmanager = this.connection;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 596fb1a8f4ba0961f525d74c0fcdd5eb4cdd9544..759c85c755116585719e936d001dfcd19ccee2fc 100644
+index 44fb3b1e29be0f2fa609712f3c19b6a61fcae896..fb7ada441cbc2f40127b64ce03da59e21928eccb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3300,5 +3300,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3329,5 +3329,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          return true;
      }

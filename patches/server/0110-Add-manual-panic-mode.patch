@@ -5,7 +5,7 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 4b787e249fab7bf88132c144a34148b8f30f38bc..f57d98dc5b84ad566688749f92b9203c2ed57c5b 100644
+index c1d2bc263fcf831903c7c38ef3765ae67ea4b3e0..2284e5873131fff9991fe031d38a22cc0fa4a4fe 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -339,6 +339,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -43,10 +43,10 @@ index eee92ab1b4072a5b72559dd21dc590cce7d8bca9..7a728a08cda941bb7d873af526a1d48d
      private final float speedMultiplier;
      private final Predicate<PathfinderMob> shouldPanic;
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
-index 744b8246a79e0119734c44ce485536ddac8b190c..4934b9f3dfa91e8b32b1a7da7fa854d2523ecef6 100644
+index 3263c816e82285ff943270be21049432ac7f55e9..da2cc383231175c7d0739f5a7169219bc8875a37 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
-@@ -48,7 +48,7 @@ public class PanicGoal extends Goal {
+@@ -45,7 +45,7 @@ public class PanicGoal extends Goal {
      }
  
      protected boolean shouldPanic() {

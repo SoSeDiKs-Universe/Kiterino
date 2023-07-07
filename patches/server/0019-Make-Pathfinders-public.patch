@@ -5,10 +5,10 @@ Subject: [PATCH] Make Pathfinders public
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
-index 2bd8f6d05728b48e184f4835d6acb3a00cf66153..94c1177a18621a2c9f0564a8e7a04e207b181bf4 100644
+index b8e099ef68b7ce1e779e17a7fec05198ec350276..b6d2dc89bd3d9beb3f69ba451c712da82f8fc12e 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
-@@ -602,7 +602,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -598,7 +598,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -17,7 +17,7 @@ index 2bd8f6d05728b48e184f4835d6acb3a00cf66153..94c1177a18621a2c9f0564a8e7a04e20
  
          private final Rabbit rabbit;
  
-@@ -618,7 +618,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -614,7 +614,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -26,7 +26,7 @@ index 2bd8f6d05728b48e184f4835d6acb3a00cf66153..94c1177a18621a2c9f0564a8e7a04e20
  
          private final Rabbit rabbit;
  
-@@ -633,7 +633,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -629,7 +629,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  
@@ -35,7 +35,7 @@ index 2bd8f6d05728b48e184f4835d6acb3a00cf66153..94c1177a18621a2c9f0564a8e7a04e20
  
          private final Rabbit rabbit;
          private boolean wantsToRaid;
-@@ -751,7 +751,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+@@ -743,7 +743,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
          }
      }
  

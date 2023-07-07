@@ -5,7 +5,7 @@ Subject: [PATCH] Add missing EntityBlockChange
 
 
 diff --git a/src/main/java/net/minecraft/world/item/HoeItem.java b/src/main/java/net/minecraft/world/item/HoeItem.java
-index c4aec1e5135a79837918b692e75a7b55d5cffeb0..681049be8481b3265c473e78ab5ddf574be96a2b 100644
+index c4aec1e5135a79837918b692e75a7b55d5cffeb0..caad571f82b05d18907fca2eec6d7cb5fbef156c 100644
 --- a/src/main/java/net/minecraft/world/item/HoeItem.java
 +++ b/src/main/java/net/minecraft/world/item/HoeItem.java
 @@ -50,6 +50,11 @@ public class HoeItem extends DiggerItem {
@@ -13,7 +13,7 @@ index c4aec1e5135a79837918b692e75a7b55d5cffeb0..681049be8481b3265c473e78ab5ddf57
              if (predicate.test(context)) {
                  Player player = context.getPlayer();
 +                // Kiterino start
-+                if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, blockPos, tillable.into().defaultBlockState()).isCancelled()) {
++                if (!org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, blockPos, tillable.into().defaultBlockState())) {
 +                    return InteractionResult.PASS;
 +                }
 +                // Kiterino end

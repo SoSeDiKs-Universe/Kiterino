@@ -5,10 +5,10 @@ Subject: [PATCH] Don't edit signs upon placing
 
 
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 5e77294baace4c1e7f8f47bdb9ca362324511496..0764ae126dd8f2e4e0d13384207051088eb5706a 100644
+index 9e78c913da090d351d3dbaff3eff7d19fb18c8e4..5e773c76045358b4b97df3aad6b232b54761845f 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -495,7 +495,7 @@ public final class ItemStack {
+@@ -496,7 +496,7 @@ public final class ItemStack {
                          try {
                              if (world.getBlockEntity(SignItem.openSign) instanceof SignBlockEntity tileentitysign) {
                                  if (world.getBlockState(SignItem.openSign).getBlock() instanceof SignBlock blocksign) {

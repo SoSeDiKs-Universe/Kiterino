@@ -5,10 +5,10 @@ Subject: [PATCH] Fix MC-93826
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Animal.java b/src/main/java/net/minecraft/world/entity/animal/Animal.java
-index 15feb1baed21b2ed3fb90d68aa9b2b97aa664b15..a3bec1c4d83e0232460a913db61882d6daaf737e 100644
+index 8773b1072016a3bbf025959e9ab827704ec17fc6..ba87368cd4e94c51af9952018a8bb98c45f44ec9 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Animal.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Animal.java
-@@ -71,7 +71,11 @@ public abstract class Animal extends AgeableMob {
+@@ -73,7 +73,11 @@ public abstract class Animal extends AgeableMob {
                  double d1 = this.random.nextGaussian() * 0.02D;
                  double d2 = this.random.nextGaussian() * 0.02D;
  

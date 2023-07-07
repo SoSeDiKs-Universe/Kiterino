@@ -5,7 +5,7 @@ Subject: [PATCH] Add player to NotePlayEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index 244857755f269eedd57d1c8d4657b4b4b75de2e5..56b1eb258f324cfe922f85302cb4397e0589578e 100644
+index 6343cd0c33cafb30225cfae17ea1cf15859073b1..6e9ff01266fcb3936169782e9c4063a50ce41769 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 @@ -38,6 +38,8 @@ public class NoteBlock extends Block {
@@ -28,10 +28,10 @@ index 244857755f269eedd57d1c8d4657b4b4b75de2e5..56b1eb258f324cfe922f85302cb4397e
          // Paper end
          float f;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 180d119dab19b1ee920c2f8841336d574b59e921..14993a32e57e876dcb4ced3e694bb7eba930c11f 100644
+index 32a95d06ccc8b5624d5d3f9f0b623c75da615d41..e8f3dc385fa9c9ecedd27962558a98c49555faa0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1512,7 +1512,12 @@ public class CraftEventFactory {
+@@ -1517,7 +1517,12 @@ public class CraftEventFactory {
      }
  
      public static NotePlayEvent callNotePlayEvent(Level world, BlockPos pos, NoteBlockInstrument instrument, int note) {
