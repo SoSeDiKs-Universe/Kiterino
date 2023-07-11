@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 10 Jul 2023 03:29:38 +0300
+Subject: [PATCH] Preserve original message for UnknownCommandEvent
+
+
+diff --git a/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java b/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java
+index e4f8a0d14ae66468bbb0a5d6bf9c1ee417dc866c..1e458218ddbe01b3da7b2757a19fdc02490f4b87 100644
+--- a/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java
++++ b/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java
+@@ -17,12 +17,14 @@ public class UnknownCommandEvent extends Event {
+     @NotNull private CommandSender sender;
+     @NotNull private String commandLine;
+     @Nullable private Component message;
++    @Nullable private final Component originalMessage; // Kiterino
+ 
+     public UnknownCommandEvent(@NotNull final CommandSender sender, @NotNull final String commandLine, @Nullable final Component message) {
+         super(false);
+         this.sender = sender;
+         this.commandLine = commandLine;
+         this.message = message;
++        this.originalMessage = message; // Kiterino
+     }
+ 
+     /**
+@@ -85,6 +87,29 @@ public class UnknownCommandEvent extends Event {
+         return this.message;
+     }
+ 
++    // Kiterino start
++    /**
++     * Gets message that was meant to be sent originally
++     * <p>
++     *
++     * @return Unknown command message
++     */
++    @Nullable
++    @Contract(pure = true)
++    public Component originalMessage() {
++        return this.originalMessage;
++    }
++
++    /**
++     * Checks whether the message was changes
++     *
++     * @return whether the message was changed
++     */
++    public boolean hasChangedMessage() {
++        return this.originalMessage != this.message;
++    }
++    // Kiterino end
++
+     /**
+      * Sets message that will be returned
+      * <p>

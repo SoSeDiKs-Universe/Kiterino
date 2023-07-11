@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 10 Jul 2023 03:30:25 +0300
+Subject: [PATCH] Allow getting opposite hand
+
+
+diff --git a/src/main/java/org/bukkit/inventory/EquipmentSlot.java b/src/main/java/org/bukkit/inventory/EquipmentSlot.java
+index 8f793982d0ceeb949422fe3f125fb08229d3266a..8b960f254dd277696149277dcc97493187122b15 100644
+--- a/src/main/java/org/bukkit/inventory/EquipmentSlot.java
++++ b/src/main/java/org/bukkit/inventory/EquipmentSlot.java
+@@ -32,4 +32,11 @@ public enum EquipmentSlot {
+         return this == HEAD || this == CHEST || this == LEGS || this == FEET;
+     }
+     // Paper end
++
++    // Kiterino start
++    public @org.jetbrains.annotations.NotNull EquipmentSlot getOppositeHand() {
++        com.google.common.base.Preconditions.checkArgument(isHand(), "Can't get opposite hand for not a hand");
++        return this == HAND ? OFF_HAND : HAND;
++    }
++    // Kiterino end
+ }

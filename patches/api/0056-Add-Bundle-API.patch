@@ -1,0 +1,287 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 9 Jul 2023 01:50:03 +0300
+Subject: [PATCH] Add Bundle API
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerEmptyBundleEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerEmptyBundleEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..e40d8311bccd09cb81fa0b13de216f28ab1fecb5
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerEmptyBundleEvent.java
+@@ -0,0 +1,63 @@
++package me.sosedik.kiterino.event.player;
++
++import com.google.common.base.Preconditions;
++import org.bukkit.entity.Player;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.HandlerList;
++import org.bukkit.inventory.EquipmentSlot;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Called when the player tries to empty the bundle's contents
++ */
++public class PlayerEmptyBundleEvent extends PlayerInteractBundleEvent implements Cancellable {
++
++	private static final HandlerList handlers = new HandlerList();
++
++	private final EquipmentSlot hand;
++	private boolean cancelled;
++
++	public PlayerEmptyBundleEvent(@NotNull Player who, @NotNull ItemStack bundle, @NotNull EquipmentSlot hand) {
++		super(who, bundle);
++		Preconditions.checkArgument(hand.isHand(), "EquipmentSlot must be a hand");
++		this.hand = hand;
++	}
++
++	/**
++	 * Gets the hand in which the bundle is
++	 *
++	 * @return the hand in which the bundle is
++	 */
++	public @NotNull EquipmentSlot getHand() {
++		return hand;
++	}
++
++	/**
++	 * @return if cancelled, the bundle won't drop its contents
++	 */
++	@Override
++	public boolean isCancelled() {
++		return cancelled;
++	}
++
++	/**
++	 * Set whether to deny emptying bundle's contents
++	 *
++	 * @param cancel true if you wish to cancel this event
++	 */
++	@Override
++	public void setCancelled(boolean cancel) {
++		this.cancelled = cancel;
++	}
++
++	@Override
++	public @NotNull HandlerList getHandlers() {
++		return handlers;
++	}
++
++	public static @NotNull HandlerList getHandlerList() {
++		return handlers;
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerInteractBundleEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerInteractBundleEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..f27b18e422f8ca94c9bf4aa880c1b5fa77d47f6d
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerInteractBundleEvent.java
+@@ -0,0 +1,29 @@
++package me.sosedik.kiterino.event.player;
++
++import org.bukkit.entity.Player;
++import org.bukkit.event.player.PlayerEvent;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Represents an event of player interacting with a bundle item
++ */
++public abstract class PlayerInteractBundleEvent extends PlayerEvent {
++
++	private final ItemStack bundle;
++
++	protected PlayerInteractBundleEvent(@NotNull Player who, @NotNull ItemStack bundle) {
++		super(who);
++		this.bundle = bundle;
++	}
++
++	/**
++	 * Returns the bundle involved in this event
++	 *
++	 * @return bundle item
++	 */
++	public @NotNull ItemStack getBundle() {
++		return bundle;
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerPutsItemInBundleEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerPutsItemInBundleEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..b770e03e3e7b9f6a66f6c31f1fe3b2f63658162f
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerPutsItemInBundleEvent.java
+@@ -0,0 +1,82 @@
++package me.sosedik.kiterino.event.player;
++
++import org.bukkit.entity.Player;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.HandlerList;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Called when the player tries to put an item into a bundle
++ */
++public class PlayerPutsItemInBundleEvent extends PlayerInteractBundleEvent implements Cancellable {
++
++	private static final HandlerList handlers = new HandlerList();
++
++	private final ItemStack item;
++	private final int slot;
++	private final boolean itemOnCursor;
++	private boolean cancelled;
++
++	public PlayerPutsItemInBundleEvent(@NotNull Player who, @NotNull ItemStack bundle, @NotNull ItemStack item, int slot, boolean itemOnCursor) {
++		super(who, bundle);
++		this.item = item;
++		this.slot = slot;
++		this.itemOnCursor = itemOnCursor;
++	}
++
++	/**
++	 * Gets the item that the player tries to put into the bundle
++	 *
++	 * @return the item involved in the event
++	 */
++	public @NotNull ItemStack getItem() {
++		return item;
++	}
++
++	/**
++	 * Gets the slot the item or bundle is placed in
++	 *
++	 * @return item's or bundle's slot
++	 */
++	public int getSlot() {
++		return slot;
++	}
++
++	/**
++	 * Checks whether the item's placed from the cursor or the slot under cursor
++	 *
++	 * @return whether the item is put on top of the bundle
++	 */
++	public boolean isItemOnCursor() {
++		return itemOnCursor;
++	}
++
++	/**
++	 * @return if cancelled, the item won't try to be put into the bundle
++	 */
++	@Override
++	public boolean isCancelled() {
++		return cancelled;
++	}
++
++	/**
++	 * Set whether to deny trying to put the item into the bundle
++	 *
++	 * @param cancel true if you wish to cancel this event
++	 */
++	@Override
++	public void setCancelled(boolean cancel) {
++		this.cancelled = cancel;
++	}
++
++	@Override
++	public @NotNull HandlerList getHandlers() {
++		return handlers;
++	}
++
++	public static @NotNull HandlerList getHandlerList() {
++		return handlers;
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerRemovesItemFromBundleEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerRemovesItemFromBundleEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..f484a272df0f825ce0d9f4e6e404914994ade13c
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerRemovesItemFromBundleEvent.java
+@@ -0,0 +1,83 @@
++package me.sosedik.kiterino.event.player;
++
++import org.bukkit.entity.Player;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.HandlerList;
++import org.bukkit.inventory.ItemStack;
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Called when the player tries to put an item into a bundle
++ */
++public class PlayerRemovesItemFromBundleEvent extends PlayerInteractBundleEvent implements Cancellable {
++
++	private static final HandlerList handlers = new HandlerList();
++
++	private final ItemStack item;
++	private final int slot;
++	private final boolean puttingOnCursor;
++	private boolean cancelled;
++
++	public PlayerRemovesItemFromBundleEvent(@NotNull Player who, @NotNull ItemStack bundle, @NotNull ItemStack item, int slot, boolean puttingOnCursor) {
++		super(who, bundle);
++		this.item = item;
++		this.slot = slot;
++		this.puttingOnCursor = puttingOnCursor;
++	}
++
++	/**
++	 * Gets the item that the player tries to remove from the bundle
++	 *
++	 * @return the item involved in the event
++	 */
++	public @NotNull ItemStack getItem() {
++		return item;
++	}
++
++	/**
++	 * Gets the slot the item or bundle is placed in
++	 *
++	 * @return resulting item slot
++	 */
++	public int getSlot() {
++		return slot;
++	}
++
++	/**
++	 * Checks whether the item's being removed into the cursor
++	 * or a slot under cursor
++	 *
++	 * @return whether the item is being remove into the cursor
++	 */
++	public boolean isPuttingOnCursor() {
++		return puttingOnCursor;
++	}
++
++	/**
++	 * @return if cancelled, the item won't be removed from the bundle
++	 */
++	@Override
++	public boolean isCancelled() {
++		return cancelled;
++	}
++
++	/**
++	 * Set whether to deny removing the item from the bundle
++	 *
++	 * @param cancel true if you wish to cancel this event
++	 */
++	@Override
++	public void setCancelled(boolean cancel) {
++		this.cancelled = cancel;
++	}
++
++	@Override
++	public @NotNull HandlerList getHandlers() {
++		return handlers;
++	}
++
++	public static @NotNull HandlerList getHandlerList() {
++		return handlers;
++	}
++
++}
