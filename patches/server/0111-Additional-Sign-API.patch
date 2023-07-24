@@ -5,20 +5,15 @@ Subject: [PATCH] Additional Sign API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
-index f48b5204e59ab0c840fc08ecb9abf5facbae9be1..4fb7996e5b2e6d0f0c2d358c49a121fe8e466eeb 100644
+index d34ed7d5abc53c1a09a5fe8050f6c54e27697e76..20094643a35614e6c709508694f38b7a20afa465 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
-@@ -171,4 +171,21 @@ public class CraftSign<T extends SignBlockEntity> extends CraftBlockEntityState<
+@@ -179,4 +179,16 @@ public class CraftSign<T extends SignBlockEntity> extends CraftBlockEntityState<
      private static String revertComponent(Component component) {
          return CraftChatMessage.fromComponent(component);
      }
 +
 +    // Kiterino start
-+    @Override
-+    public Side getFacingSide(org.bukkit.entity.Player player) {
-+        return getTileEntity().isFacingFrontText(((CraftPlayer) player).getHandle()) ? Side.FRONT : Side.BACK;
-+    }
-+
 +    @Override
 +    public java.util.UUID getWhoMayEditUuid() {
 +        return getTileEntity().getPlayerWhoMayEdit();

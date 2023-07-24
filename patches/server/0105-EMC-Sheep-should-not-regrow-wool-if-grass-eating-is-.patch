@@ -6,12 +6,12 @@ Subject: [PATCH] EMC - Sheep should not regrow wool if grass eating is
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
-index 2cad6b2dc4fd3470806f91f66f2b2c8786d69f06..dbd0953e7f06d475e79fe15b6f434d471000b4d0 100644
+index 63f9e5e2490e5b2fec6f2395077e21e601804ca5..b47266a7992872f163ee9a736f6124077e9506e7 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
 @@ -76,9 +76,10 @@ public class EatBlockGoal extends Goal {
-             if (EatBlockGoal.IS_TALL_GRASS.test(this.level.getBlockState(blockposition))) {
-                 if (CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockposition, Blocks.AIR.defaultBlockState(), !this.level.purpurConfig.sheepBypassMobGriefing && !this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))) { // CraftBukkit // Purpur
+             if (EatBlockGoal.IS_TALL_GRASS.test(blockState)) { // Paper - fix wrong block state
+                 if (CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockposition, blockState.getFluidState().createLegacyBlock(), !this.level.purpurConfig.sheepBypassMobGriefing && !this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))) { // CraftBukkit // Paper - fix wrong block state // Purpur
                      this.level.destroyBlock(blockposition, false);
 +                    this.mob.ate(); // EMC - moved from below
                  }

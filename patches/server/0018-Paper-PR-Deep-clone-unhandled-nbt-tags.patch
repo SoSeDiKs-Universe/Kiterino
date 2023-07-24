@@ -5,7 +5,7 @@ Subject: [PATCH] Paper PR - Deep clone unhandled nbt tags
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-index ac9fb7cf96ed36162c4f6c2a834b627d0120f3cc..2f0f460d2fff97f3cfe0a2b0690d1b0e17932fb5 100644
+index 076e06908a0cf97f86a64a15ca0231c5b0f06fec..52220cb1b08d5c14e7155f5bbb7ea561d9a13132 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 @@ -344,8 +344,10 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
@@ -21,7 +21,7 @@ index ac9fb7cf96ed36162c4f6c2a834b627d0120f3cc..2f0f460d2fff97f3cfe0a2b0690d1b0e
  
          this.internalTag = meta.internalTag;
          if (this.internalTag != null) {
-@@ -1386,7 +1388,10 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+@@ -1393,7 +1395,10 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
              if (this.hasAttributeModifiers()) {
                  clone.attributeModifiers = LinkedHashMultimap.create(this.attributeModifiers);
              }

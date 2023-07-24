@@ -34,7 +34,7 @@ index dc79c2eaff88d16439da226a64c4d7712c47b63a..379e5b2dd31bf008211b319538e1b7d3
      /**
       * Represents black
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 8cb7000bc5e4e3c987cb0ac73d113eedb141e178..8d38aec60fc5645636f632a1e062a12d28ca7945 100644
+index e2c3271c4b7b8eb5ac14ffd1c4492a4d3c17123c..a52206735b0060ee47e3dc7ccd691faab13b171b 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
 @@ -181,9 +181,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
@@ -88,7 +88,7 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 0c7b2434d7ae0314f9603e04f1bedd67f3b22b66..59b0a1f45de8677d0b57d8bbb38b9e7678968d20 100644
+index 74a9e27b8d3147876483743e1107632e332b0571..7566533f50f3bb6619e837c265393908ba3598db 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -334,13 +334,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -110,7 +110,7 @@ index 0c7b2434d7ae0314f9603e04f1bedd67f3b22b66..59b0a1f45de8677d0b57d8bbb38b9e76
      public boolean isOnGround();
  
      /**
-@@ -2566,10 +2568,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -2588,10 +2590,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale
