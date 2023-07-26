@@ -1,0 +1,94 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jason Penilla <11360596+jpenilla@users.noreply.github.com>
+Date: Tue, 25 Jul 2023 00:17:55 +0300
+Subject: [PATCH] Paper PR - Fix delay player chunk unloads
+
+
+diff --git a/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java b/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java
+index 924539d4ac50c70178ba220424ffacd6ff277c8b..92ecacb45101630f570aa01c53bea49324f63bb2 100644
+--- a/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java
++++ b/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java
+@@ -528,7 +528,7 @@ public class RegionizedPlayerChunkLoader {
+ 
+                 parameter.pushDelayedTicketOp(ChunkHolderManager.TicketOperation.addAndRemove(
+                     chunk,
+-                    TicketType.UNKNOWN, level, new ChunkPos(chunkX, chunkZ),
++                    PlayerChunkLoaderData.this.delayDowngradeTicketType(), level, new ChunkPos(chunkX, chunkZ),
+                     REGION_PLAYER_TICKET, level, parameter.idBoxed
+                 ));
+             }
+@@ -548,11 +548,11 @@ public class RegionizedPlayerChunkLoader {
+                     return;
+                 }
+ 
+-                // Since we are possibly downgrading the ticket level, we add an unknown ticket so that
++                // Since we are possibly downgrading the ticket level, we add an UNKNOWN ticket so that
+                 // the level is kept until tick().
+                 parameter.pushDelayedTicketOp(ChunkHolderManager.TicketOperation.addAndRemove(
+                     chunk,
+-                    TicketType.UNKNOWN, TICK_TICKET_LEVEL, new ChunkPos(chunkX, chunkZ),
++                    PlayerChunkLoaderData.this.delayDowngradeTicketType(), TICK_TICKET_LEVEL, new ChunkPos(chunkX, chunkZ),
+                     REGION_PLAYER_TICKET, TICK_TICKET_LEVEL, parameter.idBoxed
+                 ));
+                 // keep chunk at new generated level
+@@ -563,6 +563,11 @@ public class RegionizedPlayerChunkLoader {
+             }
+         };
+ 
++        private TicketType<ChunkPos> delayDowngradeTicketType() {
++            // Delay unload chunk patch - see comment in ChunkHolderManager#addTicketAtLevel
++            return PlayerChunkLoaderData.this.world.paperConfig().chunks.delayChunkUnloadsBy.seconds() > 0 ? TicketType.DELAY_UNLOAD : TicketType.UNKNOWN;
++        }
++
+         private static boolean wantChunkLoaded(final int centerX, final int centerZ, final int chunkX, final int chunkZ,
+                                                final int sendRadius) {
+             // expect sendRadius to be = 1 + target viewable radius
+diff --git a/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java b/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java
+index 2519ad2884b6c09b312432b933c31476b369e599..229198010de1cbefa465a07e023b60fba6c61573 100644
+--- a/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java
++++ b/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java
+@@ -517,10 +517,18 @@ public final class ChunkHolderManager {
+     }
+ 
+     <T> boolean addTicketAtLevel(final TicketType<T> type, final long chunk, final int level, final T identifier, final boolean lock) {
+-        final long removeDelay = type.timeout <= 0 ? NO_TIMEOUT_MARKER : type.timeout;
+         if (level > MAX_TICKET_LEVEL) {
+             return false;
+         }
++        final long removeDelay;
++        // Delay unload chunk patch originally by Aikar, updated to 1.20 by jpenilla
++        // these days, the patch is mostly useful to keep chunks ticking when players teleport
++        // so that their pets can teleport with them as well.
++        if (type == TicketType.DELAY_UNLOAD) {
++            removeDelay = Math.max(1, this.world.paperConfig().chunks.delayChunkUnloadsBy.ticks()); // should always be >1 at this point, but just to be sure
++        } else {
++            removeDelay = type.timeout <= 0 ? NO_TIMEOUT_MARKER : type.timeout;
++        }
+ 
+         final int chunkX = CoordinateUtils.getChunkX(chunk);
+         final int chunkZ = CoordinateUtils.getChunkZ(chunk);
+@@ -604,21 +612,9 @@ public final class ChunkHolderManager {
+             final int newLevel = getTicketLevelAt(ticketsAtChunk);
+             // we should not change the ticket levels while the target region may be ticking
+             if (oldLevel != newLevel) {
+-                // Delay unload chunk patch originally by Aikar, updated to 1.20 by jpenilla
+-                // these days, the patch is mostly useful to keep chunks ticking when players teleport
+-                // so that their pets can teleport with them as well.
+-                final long delayTimeout = this.world.paperConfig().chunks.delayChunkUnloadsBy.ticks();
+-                final TicketType<ChunkPos> toAdd;
+-                final long timeout;
+-                if (type == RegionizedPlayerChunkLoader.REGION_PLAYER_TICKET && delayTimeout > 0) {
+-                    toAdd = TicketType.DELAY_UNLOAD;
+-                    timeout = delayTimeout;
+-                } else {
+-                    toAdd = TicketType.UNKNOWN;
+-                    // always expect UNKNOWN to be > 1, but just in case
+-                    timeout = Math.max(1, toAdd.timeout);
+-                }
+-                final Ticket<ChunkPos> unknownTicket = new Ticket<>(toAdd, level, new ChunkPos(chunk), timeout);
++                // always expect UNKNOWN to be > 1, but just in case
++                final long timeout = Math.max(1, TicketType.UNKNOWN.timeout);
++                final Ticket<ChunkPos> unknownTicket = new Ticket<>(TicketType.UNKNOWN, level, new ChunkPos(chunk), timeout);
+                 if (ticketsAtChunk.add(unknownTicket)) {
+                     this.addExpireCount(chunkX, chunkZ);
+                 } else {
