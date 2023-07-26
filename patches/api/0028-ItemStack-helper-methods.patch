@@ -5,36 +5,15 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 65570ed544994c9b753df9519e59fabc79b8242b..04b721388899778dbb3dad46df7d71d63e09b141 100644
+index d038d6910691e1c2c5066dc40234a4147e9770a9..03aa9f01c660c312133c8713e64a83c02c39acb9 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1681,4 +1681,102 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
-         return getNBT(directApply).getOrCreateCompound(Bukkit.getName());
+@@ -1729,4 +1729,81 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+         return subtractId() != null;
      }
      // Kiterino end
 +
 +    // Kiterino start
-+    /**
-+     * Returns custom item ID if present.
-+     *
-+     * @return ID if present
-+     */
-+    @Nullable
-+    public String subtractId() {
-+        if (isEmpty(this)) return null;
-+        de.tr7zw.changeme.nbtapi.NBTCompound nbt = getKNBT();
-+        return nbt.hasTag("Id") ? nbt.getString("Id") : null;
-+    }
-+
-+    /**
-+     * Checks whether this item has Kiterino ID tag.
-+     *
-+     * @return true if item has Kiterino tag
-+     */
-+    public boolean isKItem() {
-+        return subtractId() != null;
-+    }
-+
 +    /**
 +     * Returns clone of this item with colored
 +     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
@@ -105,7 +84,7 @@ index 65570ed544994c9b753df9519e59fabc79b8242b..04b721388899778dbb3dad46df7d71d6
 +     * @param type required type
 +     * @return whether item is the same type
 +     */
-+    @org.jetbrains.annotations.Contract("null -> false")
++    @org.jetbrains.annotations.Contract("null, _ -> false")
 +    public static boolean isType(@Nullable ItemStack item, @NotNull Material type) {
 +        return item != null && item.getType() == type;
 +    }

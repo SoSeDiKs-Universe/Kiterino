@@ -112,49 +112,53 @@ index af421c1e9ad155e190dc3fe67ed24e96857d9e33..7e5c20eb00127e9bc107b59a7e319ce1
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 64055402076b62d32ba947830d935b79bae12d95..0937342a3f08856f391ed166fe4c8810ce6cc7d1 100644
+index 64055402076b62d32ba947830d935b79bae12d95..62ed2930d5b4db3bddbc08f57d4676af8630ec78 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1620,4 +1620,42 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1620,4 +1620,46 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end
 +
 +    // Kiterino start
 +    /**
-+     * Returns NBT representation of this item. The ItemStack will be cloned!
++     * Returns read-only nbt of the item
 +     *
 +     * @return item's NBT tags container
 +     */
-+    @NotNull
-+    public de.tr7zw.changeme.nbtapi.NBTItem getNBT() {
-+        return getNBT(false);
++    public @NotNull de.tr7zw.changeme.nbtapi.iface.ReadableNBT readNbt() {
++        return de.tr7zw.changeme.nbtapi.NBT.get(this, nbt -> nbt);
 +    }
 +
 +    /**
-+     * Returns NBT representation of this item. If directApply is true,
-+     * all changes will be mapped to the original item. Changes to the NBTItem will
-+     * overwrite changes done to the original item in that case.
++     * Gets data from item's nbt
 +     *
-+     * @param directApply if true, changes to NBTItem will affect this ItemStack
-+     * @return item's NBT tags container
++     * @param function function that will be applied to the item's tag container
++     * @return return value of the function
++     * @param <T> parameter
 +     */
-+    @NotNull
-+    public de.tr7zw.changeme.nbtapi.NBTItem getNBT(boolean directApply) {
-+        return new de.tr7zw.changeme.nbtapi.NBTItem(this, directApply);
++    public <T> @UndefinedNullability T getNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.get(this, function);
 +    }
 +
 +    /**
-+     * Applies NBT data from the provided NBT item.
++     * Modifies tag container of the item
 +     *
-+     * @param nbt ItemStack's NBT container
++     * @param function function that will be applied to the item's tag container
++     * @return return value of the function
++     * @param <T> parameter
 +     */
-+    public void setNBT(@NotNull de.tr7zw.changeme.nbtapi.NBTItem nbt) {
-+        ItemStack nbtItem = nbt.getItem();
-+        setType(nbtItem.getType());
-+        setAmount(nbtItem.getAmount());
-+        setData(nbtItem.getData());
-+        setItemMeta(nbtItem.getItemMeta());
++    public <T> @UndefinedNullability T modifyAndGetNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteItemNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++    }
++
++    /**
++     * Modifies tag container of the item
++     *
++     * @param consumer consumer that will be used to modify the item's tag container
++     */
++    public void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteItemNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
 +    }
 +    // Kiterino end
  }
