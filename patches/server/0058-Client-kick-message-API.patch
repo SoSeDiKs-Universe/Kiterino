@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 2 Feb 2022 05:09:40 +0100
+Subject: [PATCH] Client kick message API
+
+
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index 87ba51562d9c513dbe6e662020fcbc80e24055ba..5567a00316baacb532a380813b3d8f8f94ec87ad 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -520,6 +520,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+     }
+ 
+     public void disconnect(net.kyori.adventure.text.Component reason, org.bukkit.event.player.PlayerKickEvent.Cause cause) {
++        // Kiterino start
++        disconnect(reason, reason, cause);
++    }
++
++    public void disconnect(net.kyori.adventure.text.Component reason, net.kyori.adventure.text.Component clientMessage, org.bukkit.event.player.PlayerKickEvent.Cause cause) { // Kiterino - add client message
++        // Kiterino end
+         // Paper end
+         // CraftBukkit start - fire PlayerKickEvent
+         if (this.processedDisconnect) {
+@@ -548,7 +554,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+ 
+         net.kyori.adventure.text.Component leaveMessage = net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.format.NamedTextColor.YELLOW, io.papermc.paper.configuration.GlobalConfiguration.get().messages.useDisplayNameInQuitMessage ? this.player.getBukkitEntity().displayName() : net.kyori.adventure.text.Component.text(this.player.getScoreboardName())); // Paper - Adventure
+ 
+-        PlayerKickEvent event = new PlayerKickEvent(this.player.getBukkitEntity(), reason, leaveMessage, cause); // Paper - Adventure & kick event reason
++        PlayerKickEvent event = new PlayerKickEvent(this.player.getBukkitEntity(), reason, leaveMessage, clientMessage, cause); // Paper - Adventure & kick event reason // Kiterino - add client message
+ 
+         if (this.cserver.getServer().isRunning()) {
+             this.cserver.getPluginManager().callEvent(event);
+@@ -559,14 +565,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+             return;
+         }
+         // Send the possibly modified leave message
+-        final Component ichatbasecomponent = PaperAdventure.asVanilla(event.reason()); // Paper - Adventure
++        final Component ichatbasecomponent = PaperAdventure.asVanilla(event.clientMessage()); // Paper - Adventure // Kiterino - add client message
+         // CraftBukkit end
+ 
+         this.player.quitReason = org.bukkit.event.player.PlayerQuitEvent.QuitReason.KICKED; // Paper
+         this.connection.send(new ClientboundDisconnectPacket(ichatbasecomponent), PacketSendListener.thenRun(() -> {
+             this.connection.disconnect(ichatbasecomponent);
+         }));
+-        this.onDisconnect(ichatbasecomponent, event.leaveMessage()); // CraftBukkit - fire quit instantly // Paper - use kick event leave message
++        this.onDisconnect(PaperAdventure.asVanilla(event.reason()), event.leaveMessage()); // CraftBukkit - fire quit instantly // Paper - use kick event leave message // Kiterino - add client message
+         this.connection.setReadOnly();
+         MinecraftServer minecraftserver = this.server;
+         Connection networkmanager = this.connection;
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index e159181c862e3ca16529761df64988d2f93e5988..64a71998821fbbaf3185d4ba2dbd1aae04428423 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -3329,5 +3329,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+ 
+         return true;
+     }
++
++    @Override
++    public void kick(net.kyori.adventure.text.Component reason, net.kyori.adventure.text.Component message) {
++        kick(reason, message, org.bukkit.event.player.PlayerKickEvent.Cause.PLUGIN);
++    }
++
++    @Override
++    public void kick(net.kyori.adventure.text.Component reason, net.kyori.adventure.text.Component message, org.bukkit.event.player.PlayerKickEvent.Cause cause) {
++        org.spigotmc.AsyncCatcher.catchOp("player kick");
++        final ServerGamePacketListenerImpl connection = this.getHandle().connection;
++        if (connection != null) {
++            connection.disconnect(reason == null ? net.kyori.adventure.text.Component.empty() : reason, message == null ? net.kyori.adventure.text.Component.empty() : message, cause);
++        }
++    }
+     // Kiterino end
+ }

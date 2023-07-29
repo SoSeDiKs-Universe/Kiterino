@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 3 Mar 2023 20:03:50 +0200
+Subject: [PATCH] Additional pathfinding API
+
+
+diff --git a/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java b/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java
+index 064712e7b27a200b29c72076a82f4f5611fa507f..e68baed19da6e1b65b0623690a0ee890123465a7 100644
+--- a/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java
++++ b/src/main/java/com/destroystokyo/paper/entity/PaperPathfinder.java
+@@ -135,6 +135,13 @@ public class PaperPathfinder implements com.destroystokyo.paper.entity.Pathfinde
+             }
+             return toLoc(path.nodes.get(path.getNextNodeIndex()));
+         }
++
++        // Kiterino start
++        @Override
++        public boolean canReachFinalPoint() {
++            return path.canReach();
++        }
++        // Kiterino end
+     }
+ 
+     private Location toLoc(Node point) {
