@@ -1,0 +1,121 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 4 Dec 2022 23:02:10 +0200
+Subject: [PATCH] Tweak minecart off rail velocity
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index c379e1f56126dcbf9eade7dd62dd25d3d9aeacb9..bc2ad30881ef41827744af4e3cf3b37e4553861f 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1543,7 +1543,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         return offsetFactor;
+     }
+ 
+-    private Vec3 collide(Vec3 movement) {
++    protected Vec3 collide(Vec3 movement) { // Kiterino - private -> protected
+         // Paper start - optimise collisions
+         // This is a copy of vanilla's except that it uses strictly AABB math
+         if (movement.x == 0.0 && movement.y == 0.0 && movement.z == 0.0) {
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
+index a74d329656f9e15db5c3a2b1d537c64f1db80e80..c5bbe0f0137bf875d8b74a68ccfb4866ce45a7cb 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
+@@ -110,6 +110,9 @@ public abstract class AbstractMinecart extends Entity {
+     public double maxSpeed = 0.4D;
+     public double storedMaxSpeed; // Purpur
+     // CraftBukkit end
++    // Kiterino start
++    public @Nullable BlockState lastRailBlockState;
++    // Kiterino end
+ 
+     protected AbstractMinecart(EntityType<?> type, Level world) {
+         super(type, world);
+@@ -527,10 +530,31 @@ public abstract class AbstractMinecart extends Entity {
+     // Purpur end
+ 
+     protected void comeOffTrack() {
+-        double d0 = this.getMaxSpeed();
++        double d0 = this.getMaxSpeed() * 1.4; // Kiterino
+         Vec3 vec3d = this.getDeltaMovement();
+ 
+-        this.setDeltaMovement(Mth.clamp(vec3d.x, -d0, d0), vec3d.y, Mth.clamp(vec3d.z, -d0, d0));
++        // Kiterino start
++        if (lastRailBlockState == null) {
++            this.setDeltaMovement(Mth.clamp(vec3d.x, -d0, d0), vec3d.y, Mth.clamp(vec3d.z, -d0, d0));
++        } else {
++            RailShape railShape = lastRailBlockState.getValue(((BaseRailBlock) lastRailBlockState.getBlock()).getShapeProperty());
++
++            double multiplier = 0.316;
++            double power = vec3d.horizontalDistance() * multiplier;
++            power = Math.min(power, 0.7D);
++
++            double yVel = switch (railShape) {
++                case ASCENDING_EAST -> vec3d.x() > 0 ? power : -power;
++                case ASCENDING_WEST -> vec3d.x() < 0 ? power : -power;
++                case ASCENDING_NORTH -> vec3d.z() < 0 ? power : -power;
++                case ASCENDING_SOUTH -> vec3d.z() > 0 ? power : -power;
++                default -> 0;
++            };
++
++            setDeltaMovement(Mth.clamp(vec3d.x() * multiplier, -d0, d0), vec3d.y() + yVel, Mth.clamp(vec3d.z() * multiplier, -d0, d0));
++            lastRailBlockState = null;
++        }
++        // Kiterino end
+ 
+         // Purpur start
+         if (level().purpurConfig.minecartControllable && !isInWater() && !isInLava() && !passengers.isEmpty()) {
+@@ -556,16 +580,42 @@ public abstract class AbstractMinecart extends Entity {
+             maxUpStep = 0.0F;
+         }
+         // Purpur end
+-        
+-        if (this.onGround()) {
++
++        if (false && this.onGround()) { // Kiterino
+             // CraftBukkit start - replace magic numbers with our variables
+             this.setDeltaMovement(new Vec3(this.getDeltaMovement().x * this.derailedX, this.getDeltaMovement().y * this.derailedY, this.getDeltaMovement().z * this.derailedZ));
+             // CraftBukkit end
+         }
+         else if (level().purpurConfig.minecartControllable) setDeltaMovement(new Vec3(getDeltaMovement().x * derailedX, getDeltaMovement().y, getDeltaMovement().z * derailedZ)); // Purpur
++        // Kiterino start
++        else {
++            setDeltaMovement(getDeltaMovement().scale(onGround ? 0.85D : 0.995D));
++        }
++
++        Vec3 ad = collide(getDeltaMovement());
++        BlockPos pos = getOnPos();
++        double deltaX = pos.getX() + ad.x();
++        double deltaY = pos.getY() + ad.y();
++        double deltaZ = pos.getZ() + ad.z();
++
++
++        if (ad.x() != vec3d.x()) {
++            BlockState state = level().getBlockState(new BlockPos((int) deltaX, (int) deltaY, pos.getZ()).relative(getMotionDirection()));
++            if (state.getBlock() == Blocks.SLIME_BLOCK) {
++                setDeltaMovement(getDeltaMovement().multiply(-0.9, 1, 1));
++            }
++        }
++
++        if (ad.z() != vec3d.z()) {
++            BlockState state = level().getBlockState(new BlockPos(pos.getX(), (int) deltaY, (int) deltaZ).relative(getMotionDirection()));
++            if (state.getBlock() == Blocks.SLIME_BLOCK) {
++                setDeltaMovement(getDeltaMovement().multiply(1, 1, -0.9));
++            }
++        }
++        // Kiterino end
+ 
+         this.move(MoverType.SELF, this.getDeltaMovement());
+-        if (!this.onGround()) {
++        if (false && !this.onGround()) { // Kiterino
+             // CraftBukkit start - replace magic numbers with our variables
+             this.setDeltaMovement(new Vec3(this.getDeltaMovement().x * this.flyingX, this.getDeltaMovement().y * this.flyingY, this.getDeltaMovement().z * this.flyingZ));
+             // CraftBukkit end
+@@ -574,6 +624,7 @@ public abstract class AbstractMinecart extends Entity {
+     }
+ 
+     protected void moveAlongTrack(BlockPos pos, BlockState state) {
++        lastRailBlockState = state; // Kiterino
+         this.resetFallDistance();
+         double d0 = this.getX();
+         double d1 = this.getY();

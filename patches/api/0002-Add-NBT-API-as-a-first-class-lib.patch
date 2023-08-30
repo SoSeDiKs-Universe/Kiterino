@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 6b28af0e26ab2fc99f684414e2701486f68a6c41..fdf312bf708d17b251092d3a90cf3a31f55d574a 100644
+index 0c557f34ed438980c6fd9d6a8bce7c1152468735..40002687eef02ae4c677c269fa69e04e3596f1e8 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -47,6 +47,7 @@ dependencies {
@@ -17,7 +17,7 @@ index 6b28af0e26ab2fc99f684414e2701486f68a6c41..fdf312bf708d17b251092d3a90cf3a31
      implementation("org.ow2.asm:asm:9.4")
      implementation("org.ow2.asm:asm-commons:9.4")
 diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
-index 4418c41f75e9a190dd77abdd6048b0a4fb2a57ed..acdec9b4ef0be2471ebe754f4a81054a36024075 100644
+index 4418c41f75e9a190dd77abdd6048b0a4fb2a57ed..5d46376c99fdc6510274cdaf7acb091f5cc37750 100644
 --- a/src/main/java/org/bukkit/Chunk.java
 +++ b/src/main/java/org/bukkit/Chunk.java
 @@ -338,4 +338,16 @@ public interface Chunk extends PersistentDataHolder {
@@ -31,20 +31,20 @@ index 4418c41f75e9a190dd77abdd6048b0a4fb2a57ed..acdec9b4ef0be2471ebe754f4a81054a
 +     *
 +     * @return vanilla NBT tags container
 +     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTChunk getNBT() {
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTChunk getNbt() {
 +        return new de.tr7zw.changeme.nbtapi.NBTChunk(this);
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 1c3f54382d66549dc881d4577c7104be6673a274..0f5b1f641016d2a92d2efca4765f2b2ba2f51dfd 100644
+index 41b7310a514bf4d42c501e4bffe04008bda2541f..3a308e3552950348f5d559a6e7e1a0ea8d759b50 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -784,4 +784,27 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
-     @NotNull
-     float getDestroySpeed(@NotNull ItemStack itemStack, boolean considerEnchants);
-     // Paper end
+@@ -787,4 +787,26 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+         return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
+     }
+     // Paper end - destroy speed API
 +
 +    // Kiterino start
 +    /**
@@ -52,82 +52,232 @@ index 1c3f54382d66549dc881d4577c7104be6673a274..0f5b1f641016d2a92d2efca4765f2b2b
 +     *
 +     * @return vanilla NBT tags container
 +     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTBlock getNBT() {
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTBlock getNbt() {
 +        return new de.tr7zw.changeme.nbtapi.NBTBlock(this);
 +    }
 +
 +    /**
 +     * Returns a custom tag container of this block.
-+     * <p>Block's custom data is stored within its {@link Chunk}'s nbt data.
++     * <p>Block's custom data is stored within its {@link Chunk}'s persistent nbt data.
 +     *
 +     * @return custom NBT tags container
 +     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTCompound getNBTC() {
-+        return getNBT().getData();
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getPersistentData() {
++        return getNbt().getData();
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
-index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..febe6049bc156229c4c6fabdcc7a0a7a2e0ad974 100644
+index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..526fe6c8079b2efcc8f9139d89e98b48ee8a615b 100644
 --- a/src/main/java/org/bukkit/block/TileState.java
 +++ b/src/main/java/org/bukkit/block/TileState.java
-@@ -50,4 +50,16 @@ public interface TileState extends BlockState, PersistentDataHolder {
+@@ -50,4 +50,87 @@ public interface TileState extends BlockState, PersistentDataHolder {
       */
      boolean isSnapshot();
      // Paper end
 +
 +    // Kiterino start
 +    /**
-+     * Returns NBT representation of this tile entity.
++     * Reads nbt data of this tile state
++     *
++     * @param consumer consumer that will be used to read the tile state's tag container
++     */
++    default void readNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.get(this, consumer);
++    }
++
++    /**
++     * Returns NBT representation of this tile state.
 +     *
 +     * @return vanilla NBT tags container
 +     */
 +    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTTileEntity getNBT() {
++    default de.tr7zw.changeme.nbtapi.NBTTileEntity getNbt() {
 +        return new de.tr7zw.changeme.nbtapi.NBTTileEntity(this);
++    }
++
++    /**
++     * Gets data from tile state's nbt
++     *
++     * @param function function that will be applied to the tile state's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T getNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @org.jetbrains.annotations.Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.get(this, function);
++    }
++
++    /**
++     * Modifies tag container of the tile state and returns some value
++     *
++     * @param function function that will be applied to the tile state's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T modifyAndGetNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @org.jetbrains.annotations.Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++    }
++
++    /**
++     * Modifies tag container of the tile state
++     *
++     * @param consumer consumer that will be used to modify the tile state's tag container
++     */
++    default void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
++    }
++
++    /**
++     * Gets data from tile state's persistent nbt
++     *
++     * @param function function that will be applied to the tile state's persistent tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T getPersistentData(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @org.jetbrains.annotations.Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.getPersistentData(this, function);
++    }
++
++    /**
++     * Modifies persistent tag container of the tile state and returns some value
++     *
++     * @param function function that will be applied to the tile state's persistent tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T modifyAndGetPersistentData(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @org.jetbrains.annotations.Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++    }
++
++    /**
++     * Modifies persistent tag container of the tile state
++     *
++     * @param consumer consumer that will be used to modify the tile state's persistent tag container
++     */
++    default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index af421c1e9ad155e190dc3fe67ed24e96857d9e33..7e5c20eb00127e9bc107b59a7e319ce18682c08e 100644
+index 98de85d1382fe84cdc2e2c9db04bf1b4f157291c..f17afcbc7820d79cc7a8a555c7e0543d8ce1f672 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1016,4 +1016,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1100,4 +1100,87 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
 +
 +    // Kiterino start
 +    /**
++     * Reads nbt data of this entity
++     *
++     * @param consumer consumer that will be used to read the entity's tag container
++     */
++    default void readNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.get(this, consumer);
++    }
++
++    /**
 +     * Returns NBT representation of this entity.
 +     *
 +     * @return vanilla NBT tags container
 +     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTEntity getNBT() {
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTEntity getNbt() {
 +        return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
++    }
++
++    /**
++     * Gets data from entity's nbt
++     *
++     * @param function function that will be applied to the entity's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T getNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.get(this, function);
++    }
++
++    /**
++     * Modifies tag container of the entity and returns some value
++     *
++     * @param function function that will be applied to the entity's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T modifyAndGetNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++    }
++
++    /**
++     * Modifies tag container of the entity
++     *
++     * @param consumer consumer that will be used to modify the entity's tag container
++     */
++    default void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
++    }
++
++    /**
++     * Gets data from entity's persistent nbt
++     *
++     * @param function function that will be applied to the entity's persistent tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T getPersistentData(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.getPersistentData(this, function);
++    }
++
++    /**
++     * Modifies persistent tag container of the entity and returns some value
++     *
++     * @param function function that will be applied to the entity's persistent tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T modifyAndGetPersistentData(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++    }
++
++    /**
++     * Modifies persistent tag container of the entity
++     *
++     * @param consumer consumer that will be used to modify the entity's persistent tag container
++     */
++    default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 64055402076b62d32ba947830d935b79bae12d95..62ed2930d5b4db3bddbc08f57d4676af8630ec78 100644
+index 64055402076b62d32ba947830d935b79bae12d95..21f066f5d52d99ec0a469b18d7388328c24e895c 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1620,4 +1620,46 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1620,4 +1620,55 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end
 +
 +    // Kiterino start
 +    /**
-+     * Returns read-only nbt of the item
++     * Reads nbt data of this item
 +     *
-+     * @return item's NBT tags container
++     * @return read-only nbt container of this item
 +     */
-+    public @NotNull de.tr7zw.changeme.nbtapi.iface.ReadableNBT readNbt() {
-+        return de.tr7zw.changeme.nbtapi.NBT.get(this, nbt -> nbt);
++    public de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT readNbt() {
++        return de.tr7zw.changeme.nbtapi.NBT.readNbt(this);
++    }
++
++    /**
++     * Reads nbt data of this item
++     *
++     * @param consumer consumer that will be used to read the item's tag container
++     */
++    public void readNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableItemNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.get(this, consumer);
 +    }
 +
 +    /**
@@ -137,12 +287,12 @@ index 64055402076b62d32ba947830d935b79bae12d95..62ed2930d5b4db3bddbc08f57d4676af
 +     * @return return value of the function
 +     * @param <T> parameter
 +     */
-+    public <T> @UndefinedNullability T getNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @Nullable T> function) {
++    public <T> @UndefinedNullability T getNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableItemNBT, @Nullable T> function) {
 +        return de.tr7zw.changeme.nbtapi.NBT.get(this, function);
 +    }
 +
 +    /**
-+     * Modifies tag container of the item
++     * Modifies tag container of the item and returns some value
 +     *
 +     * @param function function that will be applied to the item's tag container
 +     * @return return value of the function
@@ -163,7 +313,7 @@ index 64055402076b62d32ba947830d935b79bae12d95..62ed2930d5b4db3bddbc08f57d4676af
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index 57609b7793122e135fa0c3b926500849379637b2..d0d06aeecf72e0241d373cd4f7cc53eae984f630 100644
+index 57609b7793122e135fa0c3b926500849379637b2..70fce7933d4282fdac1c2aca8c5bf3b45f74daab 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 @@ -198,4 +198,16 @@ public interface PersistentDataContainer {
@@ -177,14 +327,14 @@ index 57609b7793122e135fa0c3b926500849379637b2..d0d06aeecf72e0241d373cd4f7cc53ea
 +     *
 +     * @return custom NBT tags container
 +     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getNBTC() {
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
 +        return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-index 80b277cc57f092f04fbf7810ac78d250b207b775..b20272a346937763e78a13369f925e56d46ae4ac 100644
+index 80b277cc57f092f04fbf7810ac78d250b207b775..789f0f63df03ca890dd77005270595bfe5167efe 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 @@ -20,4 +20,16 @@ public interface PersistentDataHolder {
@@ -197,9 +347,9 @@ index 80b277cc57f092f04fbf7810ac78d250b207b775..b20272a346937763e78a13369f925e56
 +     *
 +     * @return custom NBT tags container
 +     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getNBTC() {
-+        return getPersistentDataContainer().getNBTC();
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
++        return getPersistentDataContainer().getPersistentData();
 +    }
 +    // Kiterino end
 +

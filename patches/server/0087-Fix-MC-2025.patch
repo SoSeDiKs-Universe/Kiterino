@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 10 Jan 2023 01:04:02 +0200
+Subject: [PATCH] Fix MC-2025
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index e79ba330dc007e87b926b98a37157328be82de00..3e883b106fd0cc460f9807a3890ac3fd85b547bb 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -2566,6 +2566,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                 nbt.putUUID("Kiterino.SpawningPlayerUUID", spawningPlayerUuid);
+             }
+             // Kiterino end
++
++            // Kiterino start - Fix MC-2025
++            // See: https://redd.it/8pgd4q
++            AABB boundingBox = getBoundingBox();
++            var boundingBoxList = new ListTag();
++            boundingBoxList.add(DoubleTag.valueOf(boundingBox.minX));
++            boundingBoxList.add(DoubleTag.valueOf(boundingBox.minY));
++            boundingBoxList.add(DoubleTag.valueOf(boundingBox.minZ));
++            boundingBoxList.add(DoubleTag.valueOf(boundingBox.maxX));
++            boundingBoxList.add(DoubleTag.valueOf(boundingBox.maxY));
++            boundingBoxList.add(DoubleTag.valueOf(boundingBox.maxZ));
++            nbt.put("Kiterino.BoundingBox", boundingBoxList);
++            // Kiterino end
+             return nbt;
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
+@@ -2643,6 +2656,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                         this.reapplyPosition();
+                     }
+ 
++                    // Kiterino start - Fix MC-2025
++                    // See: https://redd.it/8pgd4q
++                    if (nbt.contains("Kiterino.BoundingBox", net.minecraft.nbt.Tag.TAG_LIST)) {
++                        ListTag boundingBoxList = nbt.getList("Kiterino.BoundingBox", net.minecraft.nbt.Tag.TAG_DOUBLE);
++                        setBoundingBox(new AABB(
++                                boundingBoxList.getDouble(0),
++                                boundingBoxList.getDouble(1),
++                                boundingBoxList.getDouble(2),
++                                boundingBoxList.getDouble(3),
++                                boundingBoxList.getDouble(4),
++                                boundingBoxList.getDouble(5)
++                        ));
++                    }
++                    // Kiterino end
++
+                 } else {
+                     throw new IllegalStateException("Entity has invalid rotation");
+                 }

@@ -1,0 +1,57 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 21 Jan 2023 20:26:44 +0200
+Subject: [PATCH] More FishHook API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
+index b8c238287e0639b578170c6fec0d4db5a1a59fe7..9dbf755ae26de4206a3846902c7c86d06e1051fd 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
+@@ -63,7 +63,7 @@ public class FishingHook extends Projectile {
+     private int life;
+     private int nibble;
+     public int timeUntilLured;
+-    private int timeUntilHooked;
++    public int timeUntilHooked; // Kiterino
+     private float fishAngle;
+     private boolean openWater;
+     @Nullable
+@@ -409,6 +409,16 @@ public class FishingHook extends Projectile {
+                     this.fishAngle = Mth.nextFloat(this.random, this.minLureAngle, this.maxLureAngle);
+                     this.timeUntilHooked = Mth.nextInt(this.random, this.minLureTime, this.maxLureTime);
+                     // CraftBukkit end
++                    // Kiterino start
++                    if (this.getPlayerOwner() != null) {
++                        var playerFishEvent = new PlayerFishEvent((Player) this.getPlayerOwner().getBukkitEntity(), null, (FishHook) this.getBukkitEntity(), PlayerFishEvent.State.LURED);
++                        if (!playerFishEvent.callEvent()) {
++                            this.fishAngle = 0F;
++                            this.timeUntilHooked = 0;
++                            return;
++                        }
++                    }
++                    // Kiterino end
+                 }
+             } else {
+                 // CraftBukkit start - logic to modify fishing wait time
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java
+index 96b6e537ec4493a0cdd98ccfe7816f7ffb69c7dd..44cff733cec4bc34befed423e07ca926b000a342 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftFishHook.java
+@@ -207,4 +207,16 @@ public class CraftFishHook extends CraftProjectile implements FishHook {
+         this.getHandle().timeUntilLured = ticks;
+     }
+     // Paper end
++
++    // Kiterino start
++    @Override
++    public int getTimeUntilHooked() {
++        return getHandle().timeUntilHooked;
++    }
++
++    @Override
++    public void setTimeUntilHooked(int ticks) {
++        getHandle().timeUntilHooked = ticks;
++    }
++    // Kiterino end
+ }

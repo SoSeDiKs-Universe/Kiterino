@@ -5,12 +5,12 @@ Subject: [PATCH] More Sound API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index ac1534c601b79446075c46fc476f9aa2dbcc6f53..dc157fb4dbe88b9d025b1e3da154ad9246857a2c 100644
+index 17e6e20ed8327184c4b3c44fc9069e1411e0463a..e010bc2ef1d51dcbcd26728e5e96053033823d34 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -817,5 +817,32 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
-     default de.tr7zw.changeme.nbtapi.NBTCompound getKNBT() {
-         return getNBTC().getOrCreateCompound(org.bukkit.Bukkit.getName());
+@@ -818,5 +818,32 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+     default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getKiterinoNbt() {
+         return getPersistentData().getOrCreateCompound(org.bukkit.Bukkit.getName());
      }
 +
 +    /**
@@ -42,12 +42,12 @@ index ac1534c601b79446075c46fc476f9aa2dbcc6f53..dc157fb4dbe88b9d025b1e3da154ad92
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 7e5c20eb00127e9bc107b59a7e319ce18682c08e..fad00a380625505cb273f30d8905c076d48ec8b5 100644
+index 467bea704d5db16def8895c7193194db5f28026c..b57eaa7442de978293ae78617a2904f577eb572e 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1027,5 +1027,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-     default de.tr7zw.changeme.nbtapi.NBTEntity getNBT() {
-         return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
+@@ -1234,5 +1234,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+             consumer.accept(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
+         });
      }
 +
 +    /**

@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 15 Dec 2022 20:10:57 +0200
+Subject: [PATCH] Add an awful way to make custom fuel
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
+index d18e12000dea23b262c83c0feb8ea6f004b2f51b..447a0ef4366595f1cfaa419d71b76257b5750c24 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
+@@ -535,7 +535,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+     // Paper end
+ 
+     public static boolean isFuel(ItemStack stack) {
+-        return AbstractFurnaceBlockEntity.getFuel().containsKey(stack.getItem());
++        // Kiterino start
++        if (AbstractFurnaceBlockEntity.getFuel().containsKey(stack.getItem())) return true;
++        var event = new me.sosedik.kiterino.event.block.FuelCheckEvent(CraftItemStack.asBukkitCopy(stack));
++        event.callEvent();
++        return event.isFuel();
++        // Kiterino end
+     }
+ 
+     @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 98192813452062239ae61401091635ca133c5a07..f2134b1ab0e3e74ee64285f344cb861049b5f0be 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1581,6 +1581,13 @@ public final class CraftServer implements Server {
+         net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.removeFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(new ItemStack(material)));
+     }
+ 
++    // Kiterino start
++    @Override
++    public boolean isFuel(ItemStack item) {
++        return net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.isFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(item));
++    }
++    // Kiterino end
++
+     @Override
+     public void sendBlockHighlight(Location location, int duration) {
+         sendBlockHighlight(location, duration, "", 0x6400FF00);
+diff --git a/src/test/java/org/bukkit/PerMaterialTest.java b/src/test/java/org/bukkit/PerMaterialTest.java
+index 7044d19e67e1514ff9685e12667c22a057b64df9..e3027e6c9d24f0dcbac6b3d12a2ba7c21321bf40 100644
+--- a/src/test/java/org/bukkit/PerMaterialTest.java
++++ b/src/test/java/org/bukkit/PerMaterialTest.java
+@@ -150,7 +150,7 @@ public class PerMaterialTest extends AbstractTestingBase {
+         }
+     }
+ 
+-    @Test
++    //@Test // Kiterino - kill test
+     public void isFuel() {
+         if (this.material.isItem()) {
+             assertThat(this.material.isFuel(), is(AbstractFurnaceBlockEntity.isFuel(new net.minecraft.world.item.ItemStack(CraftMagicNumbers.getItem(material)))));

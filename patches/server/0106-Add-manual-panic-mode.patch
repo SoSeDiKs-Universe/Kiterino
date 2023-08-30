@@ -1,0 +1,77 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 24 May 2023 17:13:25 +0300
+Subject: [PATCH] Add manual panic mode
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index c88f57b4bd6c7cc6a146263f47cef004fe4fad0d..15ff6504525c35ea95af00c470f14cdc7ad35029 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -339,6 +339,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+     protected final RandomSource random;
+     public int tickCount;
+     private int remainingFireTicks;
++    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino
+     public boolean wasTouchingWater;
+     protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+     protected boolean wasEyeInWater;
+@@ -932,6 +933,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+             }
+         }
+ 
++        // Kiterino start
++        if (this.forcePanicTicks > 0) {
++            this.forcePanicTicks--;
++        }
++        // Kiterino end
++
+         if (this.isInLava()) {
+             this.lavaHurt();
+             this.fallDistance *= 0.5F;
+diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
+index eee92ab1b4072a5b72559dd21dc590cce7d8bca9..7a728a08cda941bb7d873af526a1d48d032dceb8 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
++++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
+@@ -24,7 +24,7 @@ public class AnimalPanic extends Behavior<PathfinderMob> {
+     private static final int PANIC_DISTANCE_HORIZONTAL = 5;
+     private static final int PANIC_DISTANCE_VERTICAL = 4;
+     private static final Predicate<PathfinderMob> DEFAULT_SHOULD_PANIC_PREDICATE = (entity) -> {
+-        return entity.getLastHurtByMob() != null || entity.isFreezing() || entity.isOnFire();
++        return entity.getLastHurtByMob() != null || entity.isFreezing() || entity.isOnFire() || entity.isForcePanicking(); // Kiterino - manual panic
+     };
+     private final float speedMultiplier;
+     private final Predicate<PathfinderMob> shouldPanic;
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
+index 3263c816e82285ff943270be21049432ac7f55e9..da2cc383231175c7d0739f5a7169219bc8875a37 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
+@@ -45,7 +45,7 @@ public class PanicGoal extends Goal {
+     }
+ 
+     protected boolean shouldPanic() {
+-        return this.mob.getLastHurtByMob() != null || this.mob.isFreezing() || this.mob.isOnFire();
++        return this.mob.getLastHurtByMob() != null || this.mob.isFreezing() || this.mob.isOnFire() || this.mob.isForcePanicking(); // Kiterino - manual panic
+     }
+ 
+     protected boolean findRandomPosition() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index f0e737de1e8f463e512bc0d6d534ec370139f94c..9c46af1865318eb1cc924a550625e49867947941 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1651,5 +1651,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     public UUID getSpawningPlayerUuid() {
+         return getHandle().spawningPlayerUuid;
+     }
++
++    @Override
++    public int getPanicTicks() {
++        return getHandle().forcePanicTicks;
++    }
++
++    @Override
++    public void setPanicTicks(int ticks) {
++        getHandle().forcePanicTicks = Math.max(0, ticks);
++    }
+     // Kiterino end
+ }

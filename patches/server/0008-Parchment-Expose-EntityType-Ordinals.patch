@@ -59,10 +59,10 @@ index a8ffa403ac48041e17aa4ce057be0539e5468fd4..e55680803f4b0e95d1cc7c680d83042c
      public static EntityType<?> getFromBukkitType(org.bukkit.entity.EntityType bukkitType) {
          return getFromKey(new ResourceLocation(bukkitType.getKey().toString()));
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 0c1a664e9ff9374aaff95f51c18c428e7e123032..47d3bd0c29409e2ae22bc928fd117334f9a4955d 100644
+index 35659486757387b891b31177accc8bb2dca681b2..7086d8642f688d78f38575ae5606a34c8f5dc898 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -626,6 +626,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -632,6 +632,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
      }
      // Paper end
  

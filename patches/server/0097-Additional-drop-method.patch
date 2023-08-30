@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 2 Feb 2023 04:21:42 +0200
+Subject: [PATCH] Additional drop method
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index 60ab45dab94005e8476ed43a7a27f70d12035210..6f133fe1ef65c89a70b62cd231c05b7a893c7885 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -895,5 +895,14 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+     public int getActiveContainerStateId() {
+         return getHandle().containerMenu.getStateId();
+     }
++
++    @Override
++    public org.bukkit.entity.Item drop(ItemStack item) {
++        if (!(getHandle() instanceof ServerPlayer player)) {
++            return dropItemNaturally(item);
++        }
++        var drop = player.drop(CraftItemStack.asNMSCopy(item), false, true);
++        return drop != null && drop.getBukkitEntity() instanceof org.bukkit.entity.Item droppedItem ? droppedItem : null;
++    }
+     // Kiterino end
+ }

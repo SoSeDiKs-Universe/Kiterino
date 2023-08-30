@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 18:16:41 +0300
+Subject: [PATCH] All mobs have default attack damage
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 19cb66334110aef2c1bf8de6e05aa93995fe6fd6..4fec14b871e7a375176abe6eebfb9cb1d21f95a3 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -340,7 +340,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+     }
+ 
+     public static AttributeSupplier.Builder createLivingAttributes() {
+-        return AttributeSupplier.builder().add(Attributes.MAX_HEALTH).add(Attributes.KNOCKBACK_RESISTANCE).add(Attributes.MOVEMENT_SPEED).add(Attributes.ARMOR).add(Attributes.ARMOR_TOUGHNESS);
++        return AttributeSupplier.builder().add(Attributes.MAX_HEALTH).add(Attributes.KNOCKBACK_RESISTANCE).add(Attributes.MOVEMENT_SPEED).add(Attributes.ARMOR).add(Attributes.ARMOR_TOUGHNESS).add(Attributes.ATTACK_DAMAGE); // Kiterino - add ATTACK_DAMAGE
+     }
+     public boolean shouldSendAttribute(Attribute attribute) { return true; } // Purpur
+ 
+@@ -3049,7 +3049,12 @@ public abstract class LivingEntity extends Entity implements Attackable {
+ 
+     public boolean doHurtTarget(Entity target) {
+         this.setLastHurtMob(target);
+-        return false;
++        // Kiterino start - make all mobs able to attack
++        boolean flag = target.hurt(this.damageSources().mobAttack(this), (float) ((int) getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
++        if (flag)
++            doEnchantDamageEffects(this, target);
++        return flag;
++        // Kiterino end
+     }
+ 
+     @Override

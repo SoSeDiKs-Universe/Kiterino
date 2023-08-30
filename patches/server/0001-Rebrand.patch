@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 240394b1d9dd1449674a299aa73fa155be2d3d82..499c9a4300db069b5880eacf2b5a022ebfc0db3c 100644
+index 139e2b17b899da6f0147bb8b4412e2e54e817be4..421efff89e50420ce6a1908dee4ad09c7d8747f0 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -14,7 +14,7 @@ val alsoShade: Configuration by configurations.creating
@@ -62,10 +62,10 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 81aee45085a29ceb8e36d7948432e2ca688978c0..ec5d4148cd283ba50fc479f00d0791d1296d3b07 100644
+index b08d4a2a74392b1d59b1eeeab3108103d83ad96c..8d4b81241d9d66e2bda3a467c317d7782ed93e5c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
+@@ -265,7 +265,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -88,10 +88,10 @@ index 99597258e8e88cd9e2c901c4ac3ff7faeeabee2b..6bc6969d76e715a73f702bbdaf05e0a8
  
          if (stream != null) {
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index b974b59d421cf97bc9547ea75fe4643d89639bc1..deb536b8769eb9f5e21f6bb15d0b9c23e36d7c24 100644
+index 3633574e112f217b412217dd243a631dc4e9c40c..8404b29db47d8c3ada2dd2b4de061bddd4c4ac46 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -229,7 +229,7 @@ public class PurpurConfig {
+@@ -231,7 +231,7 @@ public class PurpurConfig {
          deathMessageOnlyBroadcastToAffectedPlayer = getBoolean("settings.broadcasts.death.only-broadcast-to-affected-player", deathMessageOnlyBroadcastToAffectedPlayer);
      }
  

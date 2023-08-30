@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 17 Oct 2022 15:33:07 +0300
+Subject: [PATCH] Trigger PlayerInventorySlotChangeEvent upon changing player's
+ cursor
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 0b04fd9ad4d5097d93a3111857b841a5d3e3e48d..21ba270da5d1a53712026f3f5c9ea8b80448f894 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -394,7 +394,7 @@ public class ServerPlayer extends Player {
+                             CriteriaTriggers.INVENTORY_CHANGED.trigger(ServerPlayer.this, ServerPlayer.this.getInventory(), stack);
+                             return;
+                         }
+-                        io.papermc.paper.event.player.PlayerInventorySlotChangeEvent event = new io.papermc.paper.event.player.PlayerInventorySlotChangeEvent(ServerPlayer.this.getBukkitEntity(), slotId, CraftItemStack.asBukkitCopy(oldStack), CraftItemStack.asBukkitCopy(stack));
++                        io.papermc.paper.event.player.PlayerInventorySlotChangeEvent event = new io.papermc.paper.event.player.PlayerInventorySlotChangeEvent(ServerPlayer.this.getBukkitEntity(), slotId, CraftItemStack.asBukkitCopy(oldStack), CraftItemStack.asCraftMirror(stack)); // Kiterino - mirror to allow live changes
+                         event.callEvent();
+                         if (event.shouldTriggerAdvancements()) {
+                             CriteriaTriggers.INVENTORY_CHANGED.trigger(ServerPlayer.this, ServerPlayer.this.getInventory(), stack);
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index 67dd263a7a29055e254a817de37dbeb7bd087d01..60ab45dab94005e8476ed43a7a27f70d12035210 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -119,11 +119,21 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+ 
+     @Override
+     public void setItemOnCursor(ItemStack item) {
++        var oldStack = getItemOnCursor(); // Kiterino
+         net.minecraft.world.item.ItemStack stack = CraftItemStack.asNMSCopy(item);
+         this.getHandle().containerMenu.setCarried(stack);
+         if (this instanceof CraftPlayer) {
+             this.getHandle().containerMenu.broadcastCarriedItem(); // Send set slot for cursor
+         }
++        // Kiterino start
++        if (this instanceof CraftPlayer player) {
++            var event = new io.papermc.paper.event.player.PlayerInventorySlotChangeEvent(player, -1, oldStack, CraftItemStack.asCraftMirror(stack));
++            event.callEvent();
++            if (event.shouldTriggerAdvancements()) {
++                net.minecraft.advancements.CriteriaTriggers.INVENTORY_CHANGED.trigger(player.getHandle(), player.getHandle().getInventory(), stack);
++            }
++        }
++        // Kiterino end
+     }
+ 
+     // Paper start

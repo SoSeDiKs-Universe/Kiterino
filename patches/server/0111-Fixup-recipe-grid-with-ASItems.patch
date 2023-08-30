@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 5 Jul 2023 19:06:27 +0300
+Subject: [PATCH] Fixup recipe grid with ASItems
+
+
+diff --git a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
+index 86cc516a6d4e8c64497479ec128d4e8d73667cfa..f94a642440fc16871c9a30def6052e5243793eb8 100644
+--- a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
++++ b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
+@@ -152,6 +152,11 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
+         if (i != -1) {
+             ItemStack itemStack = this.inventory.getItem(i);
+             if (!itemStack.isEmpty()) {
++                // Kiterino start
++                if (!slot.getItem().isEmpty() && !ItemStack.isSameItemSameTags(stack, itemStack)) {
++                    return;
++                }
++                // Kiterino end
+                 if (itemStack.getCount() > 1) {
+                     this.inventory.removeItem(i, 1);
+                 } else {
