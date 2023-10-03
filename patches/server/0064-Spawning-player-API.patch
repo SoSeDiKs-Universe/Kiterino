@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 26764d97283923d30eca97e42477cd551c692444..c379e1f56126dcbf9eade7dd62dd25d3d9aeacb9 100644
+index 2de54da93b3de0c780483755930afcaf0ad08af0..348013a93a7cef1bf7b7df18d1c2f5684f0e61e9 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -445,6 +445,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -438,6 +438,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return this.yRot;
      }
  
@@ -20,7 +20,7 @@ index 26764d97283923d30eca97e42477cd551c692444..c379e1f56126dcbf9eade7dd62dd25d3
 +        if (!level.paperConfig().entities.spawning.perPlayerMobSpawns) return;
 +        if (this.spawningPlayerUuid != null) return;
 +
-+        var inRange = level.getChunkSource().chunkMap.playerMobDistanceMap.getObjectsInRange(chunkPosition());
++        var inRange = level.getChunkSource().chunkMap.playerMobSpawnMap.getObjectsInRange(chunkPosition());
 +        if (inRange == null) return;
 +
 +        final Object[] backingSet = inRange.getBackingSet();
@@ -36,7 +36,7 @@ index 26764d97283923d30eca97e42477cd551c692444..c379e1f56126dcbf9eade7dd62dd25d3
      public boolean isChunkLoaded() {
          return this.level.hasChunk((int) Math.floor(this.getX()) >> 4, (int) Math.floor(this.getZ()) >> 4);
      }
-@@ -2513,6 +2534,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2462,6 +2483,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -48,7 +48,7 @@ index 26764d97283923d30eca97e42477cd551c692444..c379e1f56126dcbf9eade7dd62dd25d3
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2686,6 +2712,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2635,6 +2661,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
              // Purpur end
@@ -61,10 +61,10 @@ index 26764d97283923d30eca97e42477cd551c692444..c379e1f56126dcbf9eade7dd62dd25d3
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 1f9994f4b0b736f64a8676d9431469527c6484df..1df2b49dfdbc4ff91b63e28fa320e1fe4f7330d2 100644
+index 51a4d0b212278a20363fd0d3cb253f0e3047e961..a3474cf694ce887cdfe93c7bc83f1318f387e905 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-@@ -297,6 +297,7 @@ public final class NaturalSpawner {
+@@ -295,6 +295,7 @@ public final class NaturalSpawner {
  
                                          entityinsentient.moveTo(d0, (double) i, d1, world.random.nextFloat() * 360.0F, 0.0F);
                                          if (NaturalSpawner.isValidPositionForMob(world, entityinsentient, d2)) {
@@ -73,10 +73,10 @@ index 1f9994f4b0b736f64a8676d9431469527c6484df..1df2b49dfdbc4ff91b63e28fa320e1fe
                                              // CraftBukkit start
                                              // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 31690b6c446c138fb8160703f54923b6539e86ee..17726d81c0d214c70da7d96ff292509a1e406756 100644
+index 8da0cc15be22fdc24ac177193c758163f1ade080..f637894a6d3007d6f104fe0dc5207c92c91bc3ec 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1562,4 +1562,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1561,4 +1561,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return !getHandle().dismountsUnderwater();
      }
      // Purpur end

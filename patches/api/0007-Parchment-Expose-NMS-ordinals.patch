@@ -5,10 +5,10 @@ Subject: [PATCH] Parchment - Expose NMS ordinals
 
 
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index de36dab37d3af249cf51573d163731c12346066a..ed3462a957a3fb6b4b573603df95aaa93521141b 100644
+index 9237e2fca0557890b718de9029207a552396e45a..a4943edbaed09d555918482b7ddf85fce51eab88 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -252,4 +252,13 @@ public interface UnsafeValues {
+@@ -251,4 +251,13 @@ public interface UnsafeValues {
  
      String getStatisticCriteriaKey(@NotNull org.bukkit.Statistic statistic);
      // Paper end

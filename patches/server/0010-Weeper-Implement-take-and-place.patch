@@ -5,7 +5,7 @@ Subject: [PATCH] Weeper - Implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 9ca261c9f21279558961649cb4849ac379d67573..625493f9794ae1d34e9dff4655316a4d53833ef9 100644
+index 29f301bde378bd320d5c44f2c1b6bf9dc185e286..6117f36669ef2d339f8b32087743a436976080e1 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -158,6 +158,12 @@ public abstract class AbstractContainerMenu {
@@ -22,7 +22,7 @@ index 9ca261c9f21279558961649cb4849ac379d67573..625493f9794ae1d34e9dff4655316a4d
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index 92699f79f19b4dcd7d349976cedc0408836263a6..424909c5acedcae0834d3a4f628f279c5849edd1 100644
+index a43b85b82fc83d0e5e3fd589bede0b279927a989..43b9198df20b914eece134361afb89de44f4c957 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -14,6 +14,13 @@ public class Slot {
@@ -48,7 +48,7 @@ index 92699f79f19b4dcd7d349976cedc0408836263a6..424909c5acedcae0834d3a4f628f279c
      }
  
      public ItemStack getItem() {
-@@ -86,7 +93,7 @@ public class Slot {
+@@ -90,7 +97,7 @@ public class Slot {
      }
  
      public boolean mayPickup(Player playerEntity) {
@@ -58,7 +58,7 @@ index 92699f79f19b4dcd7d349976cedc0408836263a6..424909c5acedcae0834d3a4f628f279c
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 05ab5d0ae25f154d16c7bf107e93ed8e31e1f992..8f7e6a4a952a59a2ed608d2321450d4e09bfc49c 100644
+index cf124ad445fd5e8adb1114aca5113e274d950a4a..20abee6fa4d5e1f49af69d73f1b84324fb99547f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -314,6 +314,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {

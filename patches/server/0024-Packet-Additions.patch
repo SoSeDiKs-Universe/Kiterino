@@ -5,7 +5,7 @@ Subject: [PATCH] Packet Additions
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index 2849c1e55884c91eb67222940f10f01ec08b9acc..409a48a1ce2cc38a4a4e2c821f1c3cd7c546b8be 100644
+index 34c1a862d7dd8b710dd253047b34790bc20a8c5a..e78beb67a0c87862bf496d1e995b71a68e8e1412 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -102,6 +102,25 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
@@ -34,14 +34,3 @@ index 2849c1e55884c91eb67222940f10f01ec08b9acc..409a48a1ce2cc38a4a4e2c821f1c3cd7
  	@Override
  	@Nonnull
  	public PacketStepBuilder spawnPlayer(int entityId, @Nonnull UUID uuid, @Nonnull Location location) {
-@@ -280,8 +299,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
- 	@Override
- 	public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time) {
- 		var friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
--		friendlyByteBuf.writeBlockPos(BlockPos.of(location.toBlockKey()));
--		friendlyByteBuf.writeInt(ColorUtil.toARGB(color));
-+		friendlyByteBuf.writeBlockPos(new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
-+		friendlyByteBuf.writeInt(color.getRGB());
- 		friendlyByteBuf.writeUtf(text==null?"": text);
- 		friendlyByteBuf.writeInt(time);
- 		initial.setNext(of(new ClientboundCustomPayloadPacket(ClientboundCustomPayloadPacket.DEBUG_GAME_TEST_ADD_MARKER, friendlyByteBuf)));

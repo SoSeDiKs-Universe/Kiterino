@@ -5,10 +5,10 @@ Subject: [PATCH] Don't eject players from boat underwater automatically
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index e379248a6d823e7f05e124cc375e22bd22aebd82..bdee59674214ccf9d029d16790b042ab7386a9a3 100644
+index 37fe23aa70810bed3865887d4146288c7c3832d2..c4943e30a95c63c42bf68ba72a86ad0e88043110 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -357,7 +357,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -401,7 +401,15 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
          }
  
          if (!this.level().isClientSide && this.outOfControlTicks >= 60.0F) {

@@ -5,7 +5,7 @@ Subject: [PATCH] Support recipe grid for AItems
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index b1c24a02b87aca7b180a6efbce177f2300db49c1..c15c7eeaa1f2bafbba6f46fe42ad6cfe31a3f79e 100644
+index 96d664c28738d6090f7067761c2978dd1aa0fd0e..2ae95160838426677a25405365a2069db89afc51 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
 @@ -205,7 +205,7 @@ public class Inventory implements Container, Nameable {
@@ -18,10 +18,10 @@ index b1c24a02b87aca7b180a6efbce177f2300db49c1..c15c7eeaa1f2bafbba6f46fe42ad6cfe
              }
          }
 diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
-index 63fc6074082b579c3f88316008cbeb2a2d7f5841..491aaf05c50e30d2894e64616db0df7b097293da 100644
+index 6bc60ea5249cca9f4c1d029a2b7460fe3476e05a..b6067134a8e59bcc3a04bb02e317332502c04481 100644
 --- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 +++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
-@@ -24,7 +24,7 @@ public class StackedContents {
+@@ -25,7 +25,7 @@ public class StackedContents {
  
      public void accountSimpleStack(ItemStack stack) {
          if (this.extrasMap != null && stack.hasTag() && this.extrasMap.accountStack(stack, Math.min(64, stack.getCount()))) return; // Paper - max of 64 due to accountStack method below
@@ -30,7 +30,7 @@ index 63fc6074082b579c3f88316008cbeb2a2d7f5841..491aaf05c50e30d2894e64616db0df7b
              this.accountStack(stack);
          }
  
-@@ -57,16 +57,21 @@ public class StackedContents {
+@@ -58,16 +58,21 @@ public class StackedContents {
  
              @Override
              public boolean equals(@Nullable ItemStack a, @Nullable ItemStack b) {
@@ -57,10 +57,10 @@ index 63fc6074082b579c3f88316008cbeb2a2d7f5841..491aaf05c50e30d2894e64616db0df7b
                  final int id = this.idCounter.incrementAndGet();
                  final ItemStack copy = value.copy();
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 50ea2bc3f785dabc686162c895590b7d7f15a93d..aba883a60e1f78e911766b03eb06f457eb7fde09 100644
+index 4d99e7db4e9e56caead5ea177b79aaca8e1d20da..0d82377c0d0a424179993b2fe307fdf9ef3df356 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -785,6 +785,54 @@ public final class ItemStack {
+@@ -790,6 +790,54 @@ public final class ItemStack {
          return !stack.is(otherStack.getItem()) ? false : (stack.isEmpty() && otherStack.isEmpty() ? true : Objects.equals(stack.tag, otherStack.tag));
      }
  
@@ -116,10 +116,10 @@ index 50ea2bc3f785dabc686162c895590b7d7f15a93d..aba883a60e1f78e911766b03eb06f457
          return this.getItem().getDescriptionId(this);
      }
 diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-index 5e8f5f020165c46d7bfd1c333c7060b142e6e5cd..966ac6acffe7729e06f3983528573bcc98d51a9a 100644
+index 14f1063f717eb8c74afc03c2f982325c44c27bd9..d2b3530217e32663f0060fb8ad81589e30ba5e48 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-@@ -54,7 +54,7 @@ public final class Ingredient implements Predicate<ItemStack> {
+@@ -60,7 +60,7 @@ public final class Ingredient implements Predicate<ItemStack> {
                  return recipeitemstack_provider.getItems().stream();
                  // PaperPR start
              }).distinct().peek(stack -> {

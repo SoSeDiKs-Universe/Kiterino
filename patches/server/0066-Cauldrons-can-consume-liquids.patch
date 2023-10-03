@@ -5,7 +5,7 @@ Subject: [PATCH] Cauldrons can consume liquids
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/CauldronBlock.java b/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
-index 3ee012a9ef8cada0b2203e53b2f731f60f697cb1..8523399eafa531a9feee82b9340bd51c8a56754d 100644
+index 3ee012a9ef8cada0b2203e53b2f731f60f697cb1..1ce5cf581a3b05f492b93a81f0be3bf71355e108 100644
 --- a/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
 @@ -14,7 +14,7 @@ import net.minecraft.world.level.material.Fluids;
@@ -24,7 +24,7 @@ index 3ee012a9ef8cada0b2203e53b2f731f60f697cb1..8523399eafa531a9feee82b9340bd51c
 +
 +    // Kiterino start
 +    @Override
-+    public boolean canPlaceLiquid(net.minecraft.world.level.BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
++    public boolean canPlaceLiquid(@javax.annotation.Nullable net.minecraft.world.entity.player.Player player, net.minecraft.world.level.BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
 +        return (fluid == Fluids.FLOWING_WATER || fluid == Fluids.FLOWING_LAVA) && state.getFluidState().getAmount() == 0;
 +    }
 +

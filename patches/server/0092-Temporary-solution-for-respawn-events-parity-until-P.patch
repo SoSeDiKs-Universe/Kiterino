@@ -6,10 +6,10 @@ Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
 
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 6735f4daadb71a6cbc87a71414c39b109dcc9c49..d7a84a535ed3204ee16351f953923bd2e86ebf90 100644
+index 8c359f70c268a8f3069ba21a9da469cf86e709f9..cd658e7f39da134213ddc94eb96a0dca36718a3d 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -988,7 +988,7 @@ public abstract class PlayerList {
+@@ -982,7 +982,7 @@ public abstract class PlayerList {
  
          // Paper start
          if (isRespawn) {

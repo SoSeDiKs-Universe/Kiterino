@@ -5,23 +5,23 @@ Subject: [PATCH] Tweak minecart off rail velocity
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index c379e1f56126dcbf9eade7dd62dd25d3d9aeacb9..bc2ad30881ef41827744af4e3cf3b37e4553861f 100644
+index 348013a93a7cef1bf7b7df18d1c2f5684f0e61e9..d15dd7906e280b85354e69419c723a076fe32894 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1543,7 +1543,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1476,7 +1476,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return offsetFactor;
      }
  
 -    private Vec3 collide(Vec3 movement) {
 +    protected Vec3 collide(Vec3 movement) { // Kiterino - private -> protected
          // Paper start - optimise collisions
-         // This is a copy of vanilla's except that it uses strictly AABB math
-         if (movement.x == 0.0 && movement.y == 0.0 && movement.z == 0.0) {
+         final boolean xZero = movement.x == 0.0;
+         final boolean yZero = movement.y == 0.0;
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index a74d329656f9e15db5c3a2b1d537c64f1db80e80..c5bbe0f0137bf875d8b74a68ccfb4866ce45a7cb 100644
+index 40beba567e61bfb664541985b526cef3cd9d2420..f5f09bcfe85b7cf3bc1ae101d26ba234e82db5b9 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -110,6 +110,9 @@ public abstract class AbstractMinecart extends Entity {
+@@ -114,6 +114,9 @@ public abstract class AbstractMinecart extends Entity {
      public double maxSpeed = 0.4D;
      public double storedMaxSpeed; // Purpur
      // CraftBukkit end

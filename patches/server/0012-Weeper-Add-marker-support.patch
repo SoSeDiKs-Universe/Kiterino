@@ -5,7 +5,7 @@ Subject: [PATCH] Weeper - Add marker support
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index 2f519ffbd7ff1d28982774c1d5e4f719dc273795..c75ac9076c1ad6c384af9df6887a864873f6a110 100644
+index f902a4e7d37da89c8d4fe2915715f556d49ee253..34c1a862d7dd8b710dd253047b34790bc20a8c5a 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -4,14 +4,35 @@ import com.destroystokyo.paper.profile.CraftPlayerProfile;
@@ -27,11 +27,11 @@ index 2f519ffbd7ff1d28982774c1d5e4f719dc273795..c75ac9076c1ad6c384af9df6887a8648
 +import net.minecraft.network.FriendlyByteBuf;
  import net.minecraft.network.protocol.Packet;
 -import net.minecraft.network.protocol.game.*;
++import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
++import net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload;
 +import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-+import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
 +import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 +import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 +import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
 +import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 +import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
@@ -65,18 +65,19 @@ index 2f519ffbd7ff1d28982774c1d5e4f719dc273795..c75ac9076c1ad6c384af9df6887a8648
  import java.util.concurrent.TimeUnit;
  import java.util.stream.Collectors;
  
-@@ -248,6 +277,17 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -261,6 +290,18 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
  		return this;
  	}
  
 +	@Override
 +	public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time) {
-+		var friendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
-+		friendlyByteBuf.writeBlockPos(BlockPos.of(location.toBlockKey()));
-+		friendlyByteBuf.writeInt(ColorUtil.toARGB(color));
-+		friendlyByteBuf.writeUtf(text==null?"": text);
-+		friendlyByteBuf.writeInt(time);
-+		initial.setNext(of(new ClientboundCustomPayloadPacket(ClientboundCustomPayloadPacket.DEBUG_GAME_TEST_ADD_MARKER, friendlyByteBuf)));
++		var payload = new GameTestAddMarkerDebugPayload(
++			new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
++			ColorUtil.toARGB(color),
++			text == null ? "" : text,
++			time
++		);
++		initial.setNext(of(new ClientboundCustomPayloadPacket(payload)));
 +		return this;
 +	}
 +

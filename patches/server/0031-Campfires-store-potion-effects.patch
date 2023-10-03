@@ -5,10 +5,10 @@ Subject: [PATCH] Campfires store potion effects
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-index 29ea746b6df87e996081149000c6db0b562f7e97..28972cbd3294b567fdaefd8571e0a3c081dd20d5 100644
+index 06f44946e6cfb7da83a65850e06a9093712e24f9..887ffa54d7abdfd7c6ada49536c1fc109e4d0d0f 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-@@ -119,6 +119,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -120,6 +120,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
                  } else {
                      showParticles = this.applySplash(list, hitResult != null && hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null); // Paper - nullable hitResult
                  }
@@ -16,7 +16,7 @@ index 29ea746b6df87e996081149000c6db0b562f7e97..28972cbd3294b567fdaefd8571e0a3c0
              }
  
              if (showParticles) { // Paper
-@@ -130,6 +131,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -131,6 +132,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
          }
      }
  
@@ -47,10 +47,10 @@ index 29ea746b6df87e996081149000c6db0b562f7e97..28972cbd3294b567fdaefd8571e0a3c0
      private boolean applyWater() { // Paper
          AABB axisalignedbb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index 8a001581606e460f20ccd721643302c6729e83eb..8fbd8a984a0441beebddc1c43fe1d2572c9353c3 100644
+index b0110a6f26064b506ae5402f1e5c9cefdb428653..0e4844a6e6601d6fc432b7d36a217c215e5b7fae 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-@@ -42,6 +42,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -43,6 +43,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      public final int[] cookingTime;
      private final RecipeManager.CachedCheck<Container, CampfireCookingRecipe> quickCheck;
      public final boolean[] stopCooking; // Paper
@@ -58,7 +58,7 @@ index 8a001581606e460f20ccd721643302c6729e83eb..8fbd8a984a0441beebddc1c43fe1d257
  
      public CampfireBlockEntity(BlockPos pos, BlockState state) {
          super(BlockEntityType.CAMPFIRE, pos, state);
-@@ -66,6 +67,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -67,6 +68,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
                  setChanged(world, pos, state);
                  return;
              }
@@ -73,7 +73,7 @@ index 8a001581606e460f20ccd721643302c6729e83eb..8fbd8a984a0441beebddc1c43fe1d257
          }
          if (campfire.checkGravity(world, pos, state)) return;
          // Kiterino end
-@@ -122,6 +131,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -123,6 +132,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      }
  
      public static void cooldownTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
@@ -81,7 +81,7 @@ index 8a001581606e460f20ccd721643302c6729e83eb..8fbd8a984a0441beebddc1c43fe1d257
          if (campfire.checkGravity(world, pos, state)) return; // Kiterino
          boolean flag = false;
  
-@@ -208,6 +218,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -209,6 +219,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
              System.arraycopy(cookingState, 0, this.stopCooking, 0, Math.min(this.stopCooking.length, abyte.length));
          }
          // Paper end
@@ -93,7 +93,7 @@ index 8a001581606e460f20ccd721643302c6729e83eb..8fbd8a984a0441beebddc1c43fe1d257
      }
  
      @Override
-@@ -223,6 +238,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -224,6 +239,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
          }
          nbt.putByteArray("Paper.StopCooking", cookingState);
          // Paper end

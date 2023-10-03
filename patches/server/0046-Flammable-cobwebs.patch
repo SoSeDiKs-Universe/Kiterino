@@ -5,10 +5,10 @@ Subject: [PATCH] Flammable cobwebs
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index 9ef4c20d12c03ccbe29a4ea7158a0255ebb4a36c..0e1b9ea96f45c512ec251f5dbc7130043c27ccdf 100644
+index 186c45e897cc044752f932c500420e2e2c1e5994..68b22a2e0f45a87aec0b31cfe0c29cff3db67944 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
-@@ -166,7 +166,7 @@ public class Blocks {
+@@ -167,7 +167,7 @@ public class Blocks {
      public static final Block POWERED_RAIL = register("powered_rail", new PoweredRailBlock(BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL)));
      public static final Block DETECTOR_RAIL = register("detector_rail", new DetectorRailBlock(BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL)));
      public static final Block STICKY_PISTON = register("sticky_piston", pistonBase(true));

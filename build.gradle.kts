@@ -1,6 +1,6 @@
+import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 
 plugins {
     java
@@ -90,6 +90,7 @@ paperweight {
 }
 
 tasks.generateDevelopmentBundle {
+    ignoreUnsupportedEnvironment.set(true)
     apiCoordinates.set("me.sosedik:kiterino-api")
     mojangApiCoordinates.set("io.papermc.paper:paper-mojangapi")
     libraryRepositories.set(

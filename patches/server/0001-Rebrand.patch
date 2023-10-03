@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 139e2b17b899da6f0147bb8b4412e2e54e817be4..421efff89e50420ce6a1908dee4ad09c7d8747f0 100644
+index ffee77918e7390c810010e057d088c2967d1e7b0..e532fd5d55bb1bd638d0b7936387ed1c11bdec4d 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -14,7 +14,7 @@ val alsoShade: Configuration by configurations.creating
@@ -17,25 +17,25 @@ index 139e2b17b899da6f0147bb8b4412e2e54e817be4..421efff89e50420ce6a1908dee4ad09c
      implementation("io.papermc.paper:paper-mojangapi:${project.version}") {
          exclude("io.papermc.paper", "paper-api")
      }
-@@ -95,7 +95,7 @@ tasks.jar {
+@@ -80,7 +80,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
--            "Implementation-Version" to "git-Purpur-$implementationVersion", // Pufferfish // Purpur
-+            "Implementation-Version" to "git-Kiterino-$implementationVersion", // Pufferfish // Purpur // Kiterino
+-            "Implementation-Version" to "git-Purpur-$implementationVersion", // Purpur
++            "Implementation-Version" to "git-Kiterino-$implementationVersion", // Kiterino
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..02e90c072f3e525fa70a0cdaaa51b873e385681c 100644
+index 07665c89af795d76fab5fb70b4ecc7e8be68cab2..0e62469e1c5578c4362c5290fdad42cbe77a925a 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -593,7 +593,7 @@ public class Metrics {
              boolean logFailedRequests = config.getBoolean("logFailedRequests", false);
              // Only start Metrics, if it's enabled in the config
              if (config.getBoolean("enabled", true)) {
--                Metrics metrics = new Metrics("Purpur", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur
-+                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur // Kiterino
+-                Metrics metrics = new Metrics("Purpur", serverUUID, logFailedRequests, Bukkit.getLogger()); // Purpur
++                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Kiterino
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
@@ -45,9 +45,9 @@ index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..02e90c072f3e525fa70a0cdaaa51b873
                  metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
 -                metrics.addCustomChart(new Metrics.SimplePie("purpur_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur
 +                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino
- 
-                 metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
-                     Map<String, Map<String, Integer>> map = new HashMap<>();
+                 final String paperVersion;
+                 final String implVersion = org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion();
+                 if (implVersion != null) {
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270580f4890 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
@@ -62,28 +62,28 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b08d4a2a74392b1d59b1eeeab3108103d83ad96c..8d4b81241d9d66e2bda3a467c317d7782ed93e5c 100644
+index b02b0bd6aa9243e84b172203533762860840b1b8..527d697531d38a81e6662851100dbb9c978bf829 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -265,7 +265,7 @@ import javax.annotation.Nullable; // Paper
+@@ -267,7 +267,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
--    private final String serverName = "Purpur"; // Paper // Pufferfish // Purpur
-+    private final String serverName = "Kiterino"; // Paper // Pufferfish // Purpur // Kiterino
+-    private final String serverName = "Purpur"; // Paper // Purpur
++    private final String serverName = "Kiterino"; // Paper // Purpur // Kiterino
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 99597258e8e88cd9e2c901c4ac3ff7faeeabee2b..6bc6969d76e715a73f702bbdaf05e0a828672ff5 100644
+index fb87620c742ff7912f5e8ccd2a7930dd605576d9..170682ee941b8e500877922bf13230cdc37463d4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
      public static String getBukkitVersion() {
          String result = "Unknown-Version";
  
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Pufferfish // Purpur // Kiterino
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Purpur
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Kiterino
          Properties properties = new Properties();
  
          if (stream != null) {
@@ -101,10 +101,28 @@ index 3633574e112f217b412217dd243a631dc4e9c40c..8404b29db47d8c3ada2dd2b4de061bdd
          serverModName = getString("settings.server-mod-name", serverModName);
      }
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index 0801dea155048ac5383295f4fef9bd597b678535..022041372b1480cb77fcbe84fdca4423c96a2954 100644
+index dbd502761ff6e6efb252bb41376a7ff028c73895..4bd6c170305d5961196f0ccf26f94860e01821c3 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
-@@ -185,7 +185,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+@@ -155,14 +155,14 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                 if (isLongTimeout) {
+                 // Paper end
+                 log.log( Level.SEVERE, "------------------------------" );
+-                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Purpur bug." ); // Paper // Purpur
++                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Kiterino bug." ); // Paper // Purpur // Kiterino
+                 log.log( Level.SEVERE, "If you see a plugin in the Server thread dump below, then please report it to that author" );
+                 log.log( Level.SEVERE, "\t *Especially* if it looks like HTTP or MySQL operations are occurring" );
+                 log.log( Level.SEVERE, "If you see a world save or edit, then it means you did far more than your server can handle at once" );
+                 log.log( Level.SEVERE, "\t If this is the case, consider increasing timeout-time in spigot.yml but note that this will replace the crash with LARGE lag spikes" );
+-                log.log( Level.SEVERE, "If you are unsure or still think this is a Purpur bug, please report this to https://github.com/PurpurMC/Purpur/issues" ); // Purpur
++                log.log( Level.SEVERE, "If you are unsure or still think this is a Kiterino bug, please report this to https://github.com/SoSeDiKs-Universe/Kiterino/issues" ); // Purpur // Kiterino
+                 log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
+-                log.log( Level.SEVERE, "Purpur version: " + Bukkit.getServer().getVersion() ); // Purpur
++                log.log( Level.SEVERE, "Kiterino version: " + Bukkit.getServer().getVersion() ); // Purpur // Kiterino
+                 //
+                 if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
+                 {
+@@ -185,12 +185,12 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
                  // Paper end
                  } else
                  {
@@ -113,6 +131,12 @@ index 0801dea155048ac5383295f4fef9bd597b678535..022041372b1480cb77fcbe84fdca4423
                      log.log(Level.SEVERE, "The server has not responded for " + (currentTime - lastTick) / 1000 + " seconds! Creating thread dump");
                  }
                  // Paper end - Different message for short timeout
+                 log.log( Level.SEVERE, "------------------------------" );
+-                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):" ); // Paper // Purpur
++                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Paper // Purpur // Kiterino
+                 io.papermc.paper.chunk.system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper // Paper - rewrite chunk system
+                 this.dumpTickingInfo(); // Paper - log detailed tick information
+                 WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE ), log );
 @@ -206,7 +206,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
                      WatchdogThread.dumpThread( thread, log );
                  }

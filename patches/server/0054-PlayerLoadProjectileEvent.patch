@@ -5,10 +5,10 @@ Subject: [PATCH] PlayerLoadProjectileEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index c202fbabb4799c1beff66cbcd8a10c729a34096e..01c1363a9a9c2c21eac1a9fee6b487552cdeea70 100644
+index 69d2aa706512b575beade15fe9f270e5908aa9ec..1c130e64fbe514b1b070bb8fa1399d718e80f298 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -2378,7 +2378,7 @@ public abstract class Player extends LivingEntity {
+@@ -2380,7 +2380,7 @@ public abstract class Player extends LivingEntity {
              ItemStack itemstack1 = ProjectileWeaponItem.getHeldProjectile(this, predicate);
  
              if (!itemstack1.isEmpty()) {
@@ -17,7 +17,7 @@ index c202fbabb4799c1beff66cbcd8a10c729a34096e..01c1363a9a9c2c21eac1a9fee6b48755
              } else {
                  predicate = ((ProjectileWeaponItem) stack.getItem()).getAllSupportedProjectiles().and(item -> tryReadyArrow(stack, item)); // Paper
  
-@@ -2386,15 +2386,27 @@ public abstract class Player extends LivingEntity {
+@@ -2388,15 +2388,27 @@ public abstract class Player extends LivingEntity {
                      ItemStack itemstack2 = this.inventory.getItem(i);
  
                      if (predicate.test(itemstack2)) {

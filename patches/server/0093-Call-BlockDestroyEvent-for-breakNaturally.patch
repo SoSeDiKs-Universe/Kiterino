@@ -5,10 +5,10 @@ Subject: [PATCH] Call BlockDestroyEvent for breakNaturally
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-index f3ac362b7b65a5273ff5fdad1d8065c5f654a53a..d7acae8336dec5067ac2ba5534836c7a5b60c349 100644
+index 24ba4e1fd80d8effc8e70224103d3b93d69cb2ac..dc56c3c5514b0b4ec00981a87c83751164b185ce 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-@@ -527,9 +527,21 @@ public class CraftBlock implements Block {
+@@ -500,9 +500,21 @@ public class CraftBlock implements Block {
          net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
          boolean result = false;
  

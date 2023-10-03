@@ -5,10 +5,10 @@ Subject: [PATCH] Always allow to enter the boat
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index bdee59674214ccf9d029d16790b042ab7386a9a3..7fbd452f4ee66348f20242e941ae9ca361417ff3 100644
+index c4943e30a95c63c42bf68ba72a86ad0e88043110..0d0340f0cc4ebc0a85153cfa10c89c74c3da003c 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -915,7 +915,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -931,7 +931,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
      @Override
      public InteractionResult interact(Player player, InteractionHand hand) {
@@ -17,7 +17,7 @@ index bdee59674214ccf9d029d16790b042ab7386a9a3..7fbd452f4ee66348f20242e941ae9ca3
      }
  
      @Override
-@@ -1011,7 +1011,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -1027,7 +1027,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
      @Override
      protected boolean canAddPassenger(Entity passenger) {

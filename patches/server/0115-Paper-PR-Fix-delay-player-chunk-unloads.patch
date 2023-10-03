@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - Fix delay player chunk unloads
 
 
 diff --git a/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java b/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java
-index 924539d4ac50c70178ba220424ffacd6ff277c8b..92ecacb45101630f570aa01c53bea49324f63bb2 100644
+index 1b090f1e79b996e52097afc49c1cec85936653e6..9ba8ac05ac7d700be7fb43dbcdf2d8b26f9bdf81 100644
 --- a/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java
 +++ b/src/main/java/io/papermc/paper/chunk/system/RegionizedPlayerChunkLoader.java
-@@ -528,7 +528,7 @@ public class RegionizedPlayerChunkLoader {
+@@ -525,7 +525,7 @@ public class RegionizedPlayerChunkLoader {
  
                  parameter.pushDelayedTicketOp(ChunkHolderManager.TicketOperation.addAndRemove(
                      chunk,
@@ -17,7 +17,7 @@ index 924539d4ac50c70178ba220424ffacd6ff277c8b..92ecacb45101630f570aa01c53bea493
                      REGION_PLAYER_TICKET, level, parameter.idBoxed
                  ));
              }
-@@ -548,11 +548,11 @@ public class RegionizedPlayerChunkLoader {
+@@ -545,11 +545,11 @@ public class RegionizedPlayerChunkLoader {
                      return;
                  }
  
@@ -31,7 +31,7 @@ index 924539d4ac50c70178ba220424ffacd6ff277c8b..92ecacb45101630f570aa01c53bea493
                      REGION_PLAYER_TICKET, TICK_TICKET_LEVEL, parameter.idBoxed
                  ));
                  // keep chunk at new generated level
-@@ -563,6 +563,11 @@ public class RegionizedPlayerChunkLoader {
+@@ -560,6 +560,11 @@ public class RegionizedPlayerChunkLoader {
              }
          };
  

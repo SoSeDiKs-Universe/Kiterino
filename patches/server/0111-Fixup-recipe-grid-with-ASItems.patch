@@ -5,10 +5,10 @@ Subject: [PATCH] Fixup recipe grid with ASItems
 
 
 diff --git a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
-index 86cc516a6d4e8c64497479ec128d4e8d73667cfa..f94a642440fc16871c9a30def6052e5243793eb8 100644
+index a65d07cb3d2dae85225921498d1721dc3c6a6bf3..3aad6a85f43548d97af520918aea896e250d9144 100644
 --- a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
 +++ b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
-@@ -152,6 +152,11 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
+@@ -153,6 +153,11 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
          if (i != -1) {
              ItemStack itemStack = this.inventory.getItem(i);
              if (!itemStack.isEmpty()) {

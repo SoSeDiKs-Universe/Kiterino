@@ -5,10 +5,10 @@ Subject: [PATCH] Suppress warnings
 
 
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
-index 1d4631da2aadfc578c65efb15d560bcd17ea70bb..c17694d30989cafab588df02ed9725057d30919d 100644
+index a6d95fc20e18c0aa34ef956d792fc7d019842ce7..79a38eb20da8c3c1ccb2a6de422587d8b05283ec 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
 +++ b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
-@@ -37,6 +37,7 @@ public class SmeltItemFunction extends LootItemConditionalFunction {
+@@ -42,6 +42,7 @@ public class SmeltItemFunction extends LootItemConditionalFunction {
                  }
              }
  

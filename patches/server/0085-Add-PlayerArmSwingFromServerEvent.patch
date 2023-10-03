@@ -5,10 +5,10 @@ Subject: [PATCH] Add PlayerArmSwingFromServerEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 3d6369199b4b33022e0f046ec6dd88b355f9d298..e628f63192bf5561df17b4be715b44c8db319b7f 100644
+index 74b0050d39d43977a8da926b5c11e033dca7518e..6cc5fac8283f96d69ee98f083e9db4b864ff2fe3 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -2442,6 +2442,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -2454,6 +2454,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
                  ServerChunkCache chunkproviderserver = ((ServerLevel) this.level()).getChunkSource();
  
                  if (fromServerPlayer) {

@@ -5,10 +5,10 @@ Subject: [PATCH] Non-solid coral fans
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index ed35878fdb9dffcd46c27d26ee8379401207cef5..9ef4c20d12c03ccbe29a4ea7158a0255ebb4a36c 100644
+index 6425bc42bb8024aa7936b841d6c2ee2c892eb329..186c45e897cc044752f932c500420e2e2c1e5994 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
-@@ -799,31 +799,31 @@ public class Blocks {
+@@ -800,31 +800,31 @@ public class Blocks {
      public static final Block BUBBLE_CORAL_BLOCK = register("bubble_coral_block", new CoralBlock(DEAD_BUBBLE_CORAL_BLOCK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK)));
      public static final Block FIRE_CORAL_BLOCK = register("fire_coral_block", new CoralBlock(DEAD_FIRE_CORAL_BLOCK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK)));
      public static final Block HORN_CORAL_BLOCK = register("horn_coral_block", new CoralBlock(DEAD_HORN_CORAL_BLOCK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.CORAL_BLOCK)));

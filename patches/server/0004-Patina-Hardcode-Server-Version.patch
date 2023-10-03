@@ -5,7 +5,7 @@ Subject: [PATCH] Patina - Hardcode Server Version
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..b3197e58806a8a2101f4682c11ab7232d5382e0f 100644
+index 170682ee941b8e500877922bf13230cdc37463d4..96b4d99898f13c0840192f28a785a34e4b56d26f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -9,21 +9,6 @@ import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..b3197e58806a8a2101f4682c11ab7232
      public static String getBukkitVersion() {
 -        String result = "Unknown-Version";
 -
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Pufferfish // Purpur // Kiterino
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Kiterino
 -        Properties properties = new Properties();
 -
 -        if (stream != null) {
@@ -28,6 +28,6 @@ index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..b3197e58806a8a2101f4682c11ab7232
 -        }
 -
 -        return result;
-+        return "1.20.1-R0.1-SNAPSHOT"; // Patina
++        return "1.20.2-R0.1-SNAPSHOT"; // Patina
      }
  }

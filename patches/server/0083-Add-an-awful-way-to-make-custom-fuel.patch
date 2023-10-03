@@ -5,11 +5,11 @@ Subject: [PATCH] Add an awful way to make custom fuel
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index d18e12000dea23b262c83c0feb8ea6f004b2f51b..447a0ef4366595f1cfaa419d71b76257b5750c24 100644
+index aa9220ae2c79b9f6b8aedd806b12a2868c6e7c22..d7689d7101b186777cd35a95b50e7e895aa7ad87 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 @@ -535,7 +535,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
-     // Paper end
+     }
  
      public static boolean isFuel(ItemStack stack) {
 -        return AbstractFurnaceBlockEntity.getFuel().containsKey(stack.getItem());
@@ -23,10 +23,10 @@ index d18e12000dea23b262c83c0feb8ea6f004b2f51b..447a0ef4366595f1cfaa419d71b76257
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 68ace95578411c8ac772f10469f405641a335430..644ff55c1a21f2be5f5c534deba44fe82cb7aea3 100644
+index 31c3446b2ece66b45ffd5d88e045a79cdf7ed829..607aa2da1ed57ba9787625fed784c022c98f76b2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1561,6 +1561,13 @@ public final class CraftServer implements Server {
+@@ -1558,6 +1558,13 @@ public final class CraftServer implements Server {
          net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.removeFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(new ItemStack(material)));
      }
  
@@ -41,15 +41,15 @@ index 68ace95578411c8ac772f10469f405641a335430..644ff55c1a21f2be5f5c534deba44fe8
      public void sendBlockHighlight(Location location, int duration) {
          sendBlockHighlight(location, duration, "", 0x6400FF00);
 diff --git a/src/test/java/org/bukkit/PerMaterialTest.java b/src/test/java/org/bukkit/PerMaterialTest.java
-index 7044d19e67e1514ff9685e12667c22a057b64df9..e3027e6c9d24f0dcbac6b3d12a2ba7c21321bf40 100644
+index 9dab4e713b9bc628872867c218fe0ebeca0b958f..33a34319f9e51d4aedc166f52b41f4a1b3b4fd92 100644
 --- a/src/test/java/org/bukkit/PerMaterialTest.java
 +++ b/src/test/java/org/bukkit/PerMaterialTest.java
-@@ -150,7 +150,7 @@ public class PerMaterialTest extends AbstractTestingBase {
+@@ -141,7 +141,7 @@ public class PerMaterialTest extends AbstractTestingBase {
          }
      }
  
--    @Test
-+    //@Test // Kiterino - kill test
-     public void isFuel() {
-         if (this.material.isItem()) {
-             assertThat(this.material.isFuel(), is(AbstractFurnaceBlockEntity.isFuel(new net.minecraft.world.item.ItemStack(CraftMagicNumbers.getItem(material)))));
+-    @ParameterizedTest
++    // @ParameterizedTest // Kiterino - kill test
+     @EnumSource(value = Material.class, names = "LEGACY_.*", mode = EnumSource.Mode.MATCH_NONE)
+     public void isFuel(Material material) {
+         if (material.isItem()) {

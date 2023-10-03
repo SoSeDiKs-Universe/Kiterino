@@ -5,10 +5,10 @@ Subject: [PATCH] Mob possessing mechanic compatibility
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 6609a2b905fba894ac79b9682c89a6ebbb61295c..a7222bbc346e3b0bc21057859ac22e7da44fecf7 100644
+index 50fce9c59addc33f4735fbf88adb03e0b227ea70..4eb0bb63e4071a631c4b028899d3844744240ab2 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1553,7 +1553,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1488,7 +1488,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          final Level world = this.level;
          // Kiterino start - include vehicle's height in collision
          AABB currBoundingBox = this.getBoundingBox();
@@ -17,13 +17,13 @@ index 6609a2b905fba894ac79b9682c89a6ebbb61295c..a7222bbc346e3b0bc21057859ac22e7d
              currBoundingBox = new AABB(currBoundingBox.minX, getVehicle().getBoundingBox().minY + 0.1, currBoundingBox.minZ, currBoundingBox.maxX, currBoundingBox.maxY, currBoundingBox.maxZ);
          }
          // Kiterino end
-@@ -1616,6 +1616,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
-             }
-             // Kiterino start - include vehicle's height in collision
-             for (Entity passenger : getPassengers()) {
+@@ -1560,6 +1560,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         }
+         // Kiterino start - include vehicle's height in collision
+         for (Entity passenger : getPassengers()) {
 +                if (passenger.isInvisible() && passenger.isInvulnerable()) {
 +                    continue;
 +                }
-                 Vec3 blockPos = passenger.position().add(0, passenger.getBbHeight(), 0).add(movement.normalize());
-                 BlockState state = world.getBlockState(new BlockPos((int) blockPos.x(), (int) blockPos.y(), (int) blockPos.z()));
-                 if (!state.is(BlockTags.LEAVES)) {
+             Vec3 blockPos = passenger.position().add(0, passenger.getBbHeight(), 0).add(movement.normalize());
+             BlockState state = world.getBlockState(new BlockPos((int) blockPos.x(), (int) blockPos.y(), (int) blockPos.z()));
+             if (!state.is(BlockTags.LEAVES)) {

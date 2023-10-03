@@ -5,10 +5,10 @@ Subject: [PATCH] Make silverfishes more annoying
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Silverfish.java b/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
-index 83641c7cf51453e98809900e23f44a68018555ff..f4feb5f70ca3071274fe4b596403ebd4e532d46b 100644
+index dbc27afbccb027963ae3f035c268835adedbb933..27c76a937fae3c52e62c0ba2ea688d1ea5fbc75e 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Silverfish.java
-@@ -107,7 +107,7 @@ public class Silverfish extends Monster {
+@@ -104,7 +104,7 @@ public class Silverfish extends Monster {
  
      @Override
      protected Entity.MovementEmission getMovementEmission() {

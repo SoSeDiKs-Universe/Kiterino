@@ -5,12 +5,12 @@ Subject: [PATCH] Add PlayerSaddleEntityEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/item/SaddleItem.java b/src/main/java/net/minecraft/world/item/SaddleItem.java
-index 7234010d81078d357ab9bca422e44864a9e269bb..abac309ac3c1ba14100ce247547a7fb42d738674 100644
+index 43129ecefcc8beccbcf2978f262b1ce8cf49ca43..38f4b6d2225bf0890895184183696d8dafaefae5 100644
 --- a/src/main/java/net/minecraft/world/item/SaddleItem.java
 +++ b/src/main/java/net/minecraft/world/item/SaddleItem.java
 @@ -18,9 +18,15 @@ public class SaddleItem extends Item {
-         if (entity instanceof Saddleable saddleable && entity.isAlive()) {
-             if (!saddleable.isSaddled() && saddleable.isSaddleable()) {
+         if (entity instanceof Saddleable saddleable) {
+             if (entity.isAlive() && !saddleable.isSaddled() && saddleable.isSaddleable()) {
                  if (!user.level().isClientSide) {
 -                    saddleable.equipSaddle(SoundSource.NEUTRAL, stack.copyWithCount(1)); // Paper - Fix saddles losing nbt data - MC-191591
 +                    // Kiterino start

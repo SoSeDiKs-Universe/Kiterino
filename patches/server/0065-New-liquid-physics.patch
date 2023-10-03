@@ -5,10 +5,10 @@ Subject: [PATCH] New liquid physics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index 714bd32f5f2cea4c50791f6308448b1c34f85202..e9dd6deef7a70188f36b3976d36005b89f60437a 100644
+index 71df79e7921642e87cad5a2d9d8907a4424037aa..419563470c7f7b337a4703643a64361f142004ed 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -648,7 +648,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -685,7 +685,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
          int i = Mth.floor(axisalignedbb.minX);
          int j = Mth.ceil(axisalignedbb.maxX);
          int k = Mth.floor(axisalignedbb.minY);
@@ -17,7 +17,7 @@ index 714bd32f5f2cea4c50791f6308448b1c34f85202..e9dd6deef7a70188f36b3976d36005b8
          int i1 = Mth.floor(axisalignedbb.minZ);
          int j1 = Mth.ceil(axisalignedbb.maxZ);
          boolean flag = false;
-@@ -696,7 +696,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -733,7 +733,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
  
                      if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level(), blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {
@@ -27,10 +27,10 @@ index 714bd32f5f2cea4c50791f6308448b1c34f85202..e9dd6deef7a70188f36b3976d36005b8
  
                          flag = true;
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index 0e1b9ea96f45c512ec251f5dbc7130043c27ccdf..218680ec1597111829fd488e31e583a192c9325a 100644
+index 68b22a2e0f45a87aec0b31cfe0c29cff3db67944..b047d72c35d5e25ada722b37f581e9a5c2a52b22 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
-@@ -74,7 +74,7 @@ public class Blocks {
+@@ -75,7 +75,7 @@ public class Blocks {
      public static final Block DARK_OAK_SAPLING = register("dark_oak_sapling", new SaplingBlock(new DarkOakTreeGrower(), BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
      public static final Block MANGROVE_PROPAGULE = register("mangrove_propagule", new MangrovePropaguleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
      public static final Block BEDROCK = register("bedrock", new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(Blocks::never)));
@@ -40,7 +40,7 @@ index 0e1b9ea96f45c512ec251f5dbc7130043c27ccdf..218680ec1597111829fd488e31e583a1
          return 15;
      }).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-index 58d1f76544d7a8d196f75438579266664e5d7404..fdfd51b2d05699f1e7ac6323f44cbf5e7968e755 100644
+index 5acf0e1fba2967e67bdb208ef73ae8fa84ffe35d..be3ca67dd78397001bd2b96de6c5716aabb7d3bb 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 @@ -299,6 +299,18 @@ public class PistonBaseBlock extends DirectionalBlock {
@@ -62,7 +62,7 @@ index 58d1f76544d7a8d196f75438579266664e5d7404..fdfd51b2d05699f1e7ac6323f44cbf5e
          if (pos.getY() >= world.getMinBuildHeight() && pos.getY() <= world.getMaxBuildHeight() - 1 && world.getWorldBorder().isWithinBounds(pos)) {
              if (state.isAir()) {
                  return true;
-@@ -406,6 +418,44 @@ public class PistonBaseBlock extends DirectionalBlock {
+@@ -407,6 +419,44 @@ public class PistonBaseBlock extends DirectionalBlock {
              }
              // CraftBukkit end
  
@@ -105,7 +105,7 @@ index 58d1f76544d7a8d196f75438579266664e5d7404..fdfd51b2d05699f1e7ac6323f44cbf5e
 +            // Kiterino end
 +
              BlockPos blockposition3;
-             int k;
+             int j;
              BlockState iblockdata1;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
 index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f461e0a94f 100644
@@ -140,10 +140,10 @@ index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f4
                      ++i;
                  }
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e22287d4b868 100644
+index ad077179fe5cf4acbfbe7572470201ab91817996..2cc1b1583f668537a9c2772a689ca0582e6c79ec 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-@@ -227,7 +227,7 @@ public abstract class FlowingFluid extends Fluid {
+@@ -218,7 +218,7 @@ public abstract class FlowingFluid extends Fluid {
              }
          }
  
@@ -152,7 +152,7 @@ index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e222
              BlockState iblockdata2 = world.getBlockState(pos.below());
              FluidState fluid1 = iblockdata2.getFluidState();
  
-@@ -294,6 +294,26 @@ public abstract class FlowingFluid extends Fluid {
+@@ -277,6 +277,26 @@ public abstract class FlowingFluid extends Fluid {
          VoxelShape voxelshape1 = fromState.getCollisionShape(world, fromPos);
          boolean flag = !Shapes.mergedFaceOccludes(voxelshape, voxelshape1, face);
  
@@ -176,10 +176,10 @@ index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e222
 +        }
 +        // Kiterino end
 +
-         /*
          if (object2bytelinkedopenhashmap != null) {
              if (object2bytelinkedopenhashmap.size() == 200) {
-@@ -331,7 +351,14 @@ public abstract class FlowingFluid extends Fluid {
+                 object2bytelinkedopenhashmap.removeLastByte();
+@@ -308,7 +328,14 @@ public abstract class FlowingFluid extends Fluid {
      }
      // Purpur end
  
@@ -194,7 +194,7 @@ index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e222
          if (state.getBlock() instanceof LiquidBlockContainer) {
              ((LiquidBlockContainer) state.getBlock()).placeLiquid(world, pos, state, fluidState);
          } else {
-@@ -344,6 +371,172 @@ public abstract class FlowingFluid extends Fluid {
+@@ -321,6 +348,172 @@ public abstract class FlowingFluid extends Fluid {
  
      }
  
@@ -342,7 +342,7 @@ index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e222
 +        // Drain source block
 +        BlockState srcState = world.getBlockState(srcPos);
 +        if (srcState.getBlock() instanceof net.minecraft.world.level.block.BucketPickup bucketPickup && !(bucketPickup instanceof net.minecraft.world.level.block.LiquidBlock)) {
-+            bucketPickup.pickupBlock(world, srcPos, srcState);
++            bucketPickup.pickupBlock(null, world, srcPos, srcState);
 +        } else {
 +            if (!srcState.isAir())
 +                fluid.beforeDestroyingBlock(world, srcPos, srcState);
@@ -367,7 +367,7 @@ index 485bbec4b52f126393332d5cad2d97c2a220f91a..f41116784cd4304d2eb5509761f8e222
      protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state, BlockPos source) { beforeDestroyingBlock(world, pos, state); } // Paper - add source parameter
      protected abstract void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state);
  
-@@ -497,9 +690,70 @@ public abstract class FlowingFluid extends Fluid {
+@@ -480,9 +673,70 @@ public abstract class FlowingFluid extends Fluid {
      }
  
      protected boolean canSpreadTo(BlockGetter world, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid) {
