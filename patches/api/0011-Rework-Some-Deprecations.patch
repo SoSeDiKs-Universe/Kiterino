@@ -88,7 +88,7 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 9193288438671409cc3cf92033ef7cb60d798b69..2e875a1a2a4496b4a310a695cdb95f9deacdfc47 100644
+index d3d5d2c78cc4ee36beaa355ef7e61ef13332abab..4070908e5c298bbfc6fe24acd7f70ee58ed72ca1 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -400,13 +400,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -110,7 +110,7 @@ index 9193288438671409cc3cf92033ef7cb60d798b69..2e875a1a2a4496b4a310a695cdb95f9d
      public boolean isOnGround();
  
      /**
-@@ -2680,10 +2682,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -2682,10 +2684,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale

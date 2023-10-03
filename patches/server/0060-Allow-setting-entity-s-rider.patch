@@ -30,10 +30,10 @@ index 6f08a94e9373d01880af0285939fea2250498b8d..555a1b394f8c85d4a32e27a06e488dee
      protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
      protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 3f7a431abbf1b817911a10355c9e241ea38d3292..251fb0561902a553f9c8110d1b868f3329e8d59a 100644
+index af461265593c9c36706e99c9462089f830518061..91c463b2b84f25025fde47e0142b1f7b3e177e9d 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1803,7 +1803,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1810,7 +1810,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
      }
  
      public InteractionResult tryRide(Player player, InteractionHand hand, InteractionResult result) {
@@ -42,7 +42,7 @@ index 3f7a431abbf1b817911a10355c9e241ea38d3292..251fb0561902a553f9c8110d1b868f33
              return result;
          }
          if (hand != InteractionHand.MAIN_HAND) {
-@@ -1831,7 +1831,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1838,7 +1838,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
                  return InteractionResult.PASS;
              }
          }

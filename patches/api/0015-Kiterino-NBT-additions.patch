@@ -149,10 +149,10 @@ index f17afcbc7820d79cc7a8a555c7e0543d8ce1f672..467bea704d5db16def8895c7193194db
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 21f066f5d52d99ec0a469b18d7388328c24e895c..e03652ba6d244e10a3fbbfc70ffadf8075446bfd 100644
+index 50563ddd93155078c22ee93007f2b268989fbc55..92d28e76771d7def887d43e2187be7e54640ebdf 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1670,5 +1670,91 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1689,5 +1689,91 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
      public void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteItemNBT> consumer) {
          de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
      }

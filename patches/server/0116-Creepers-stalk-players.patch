@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 1 Sep 2023 11:22:09 +0300
+Subject: [PATCH] Creepers stalk players
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/SwellGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/SwellGoal.java
+index 7b99c3446b50939241d3e220d93e05649f72a6df..b56bb25f8dd1661ffed36b9a103b32c2417d076b 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/SwellGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/SwellGoal.java
+@@ -18,9 +18,26 @@ public class SwellGoal extends Goal {
+     @Override
+     public boolean canUse() {
+         LivingEntity livingEntity = this.creeper.getTarget();
+-        return this.creeper.getSwellDir() > 0 || livingEntity != null && this.creeper.distanceToSqr(livingEntity) < 9.0D;
++        return this.creeper.getSwellDir() > 0 || livingEntity != null && this.creeper.distanceToSqr(livingEntity) < 9.0D && canTargetSeeCreeper(livingEntity); // Kiterino - Target check
+     }
+ 
++    // Kiterino start
++    private boolean canTargetSeeCreeper(LivingEntity target) {
++        if (!(target instanceof net.minecraft.world.entity.player.Player player)) return true;
++        // Slightly tweaked from EnderMan's isLookingAtMe
++        net.minecraft.world.phys.Vec3 visionVec = player.getViewVector(1.0F).normalize();
++        var targetVec = new net.minecraft.world.phys.Vec3(
++                creeper.getX() - player.getX(),
++                creeper.getBoundingBox().minY + (player.getBbHeight() / 2F) - (player.getY() + player.getEyeHeight()),
++                creeper.getZ() - player.getZ());
++
++        targetVec = targetVec.normalize();
++        double dotProduct = visionVec.dot(targetVec);
++
++        return dotProduct > 0.1 && player.hasLineOfSight(creeper);
++    }
++    // Kiterino end
++
+     // Paper start - Fix MC-179072
+     @Override
+     public boolean canContinueToUse() {

@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - Add Movement Direction API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 99dd93c066d4acc177de7f03ae45e491b535f4d1..f461a1972fbeaa313ac89c1af3798f7b7a73a6a4 100644
+index b473f89c59c0fc080fadd0d4db320895e917fd41..2fa024aa2668fd5f0ec8939ab36550f59d18a3fa 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1003,6 +1003,23 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1008,6 +1008,23 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          throw new UnsupportedOperationException("Cannot set the hurt direction on a non player");
      }
  

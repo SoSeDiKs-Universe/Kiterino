@@ -5,10 +5,10 @@ Subject: [PATCH] Expose checkBedExists
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index f461a1972fbeaa313ac89c1af3798f7b7a73a6a4..62cf58db2fe7ff9a92805cf5af9d2cea96895d09 100644
+index 2fa024aa2668fd5f0ec8939ab36550f59d18a3fa..d2c9fed4137fa1a568085f58f6aa82a880ba21b3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1139,4 +1139,11 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -1144,4 +1144,11 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end

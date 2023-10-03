@@ -35,10 +35,10 @@ index 11c044bd99d5de0d76dba2551aa410e7cc74f409..ff236029034db2ee5cf61bd132c0a8ad
                  entityhuman.awardStat(Stats.ITEM_USED.get(item));
                  // LayeredCauldronBlock.lowerFillLevel(iblockdata, world, blockposition); // CraftBukkit
 diff --git a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index d44fde7e44cc862253fe577eb0753524ab7a39dc..6d37411b56d0724b0ff16956c361397832e5d8a4 100644
+index 7961a69d3e70a8ae1d74c732cd97a9cbd824a8d0..9d887fa339891ee4219e628820fa04734b34aa6d 100644
 --- a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -1041,9 +1041,11 @@ public interface DispenseItemBehavior {
+@@ -1042,9 +1042,11 @@ public interface DispenseItemBehavior {
                      pointer.getLevel().gameEvent((Entity) null, GameEvent.FLUID_PICKUP, pointer.getPos());
                      return filledBottleStack.copy();
                  } else {
@@ -50,7 +50,7 @@ index d44fde7e44cc862253fe577eb0753524ab7a39dc..6d37411b56d0724b0ff16956c3613978
  
                      return emptyBottleStack;
                  }
-@@ -1083,12 +1085,24 @@ public interface DispenseItemBehavior {
+@@ -1084,12 +1086,24 @@ public interface DispenseItemBehavior {
                  if (iblockdata.is(BlockTags.BEEHIVES, (blockbase_blockdata) -> {
                      return blockbase_blockdata.hasProperty(BeehiveBlock.HONEY_LEVEL) && blockbase_blockdata.getBlock() instanceof BeehiveBlock;
                  }) && (Integer) iblockdata.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
