@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerCommonPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
-index 6f6228edfe77668552a40a814ab3cebd74c4cb5a..e5ba9f6a611a2382d977ab8bf853003f77826fa4 100644
+index fa7f85303f9fe80a2e51740c376d9daedfaa60b4..980289b9345157f807496978b54bf87bbb464377 100644
 --- a/src/main/java/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerCommonPacketListenerImpl.java
-@@ -316,6 +316,11 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
+@@ -308,6 +308,11 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
      }
  
      public void disconnect(net.kyori.adventure.text.Component reason, org.bukkit.event.player.PlayerKickEvent.Cause cause) { // Paper - kick event cause
@@ -20,7 +20,7 @@ index 6f6228edfe77668552a40a814ab3cebd74c4cb5a..e5ba9f6a611a2382d977ab8bf853003f
          // Paper end
          // CraftBukkit start - fire PlayerKickEvent
          if (this.processedDisconnect) {
-@@ -344,7 +349,7 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
+@@ -336,7 +341,7 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
  
          net.kyori.adventure.text.Component leaveMessage = net.kyori.adventure.text.Component.translatable("multiplayer.player.left", net.kyori.adventure.text.format.NamedTextColor.YELLOW, io.papermc.paper.configuration.GlobalConfiguration.get().messages.useDisplayNameInQuitMessage ? this.player.getBukkitEntity().displayName() : net.kyori.adventure.text.Component.text(this.player.getScoreboardName())); // Paper - Adventure
  
@@ -29,7 +29,7 @@ index 6f6228edfe77668552a40a814ab3cebd74c4cb5a..e5ba9f6a611a2382d977ab8bf853003f
  
          if (this.cserver.getServer().isRunning()) {
              this.cserver.getPluginManager().callEvent(event);
-@@ -355,14 +360,14 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
+@@ -347,14 +352,14 @@ public abstract class ServerCommonPacketListenerImpl implements ServerCommonPack
              return;
          }
          // Send the possibly modified leave message
@@ -47,7 +47,7 @@ index 6f6228edfe77668552a40a814ab3cebd74c4cb5a..e5ba9f6a611a2382d977ab8bf853003f
          MinecraftServer minecraftserver = this.server;
          Connection networkmanager = this.connection;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 08a890043da381db83f131cc5cb047c6596d0986..439350cb1ab05cb398ad9725c310859b6bed7a01 100644
+index 8d553be152bc76f042b240aa4a47034c22758481..92b6b45fbfa8a3dde5896b2ccc5ce9cc9a18ca4f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -3412,5 +3412,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

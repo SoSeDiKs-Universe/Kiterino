@@ -6,10 +6,10 @@ Subject: [PATCH] Trigger PlayerInventorySlotChangeEvent upon changing player's
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index acc14078c52ac74e8fc3d161a6b890a40c486d90..cb4cca762d849a382a08ed7ab9c4b3914330714b 100644
+index ce939f09dff1084acadc03d76e5fbb758e578960..8a30dc5427350d1eb24917f22eec6c7f2ea1dbd0 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -396,7 +396,7 @@ public class ServerPlayer extends Player {
+@@ -397,7 +397,7 @@ public class ServerPlayer extends Player {
                              CriteriaTriggers.INVENTORY_CHANGED.trigger(ServerPlayer.this, ServerPlayer.this.getInventory(), stack);
                              return;
                          }

@@ -5,7 +5,7 @@ Subject: [PATCH] Kiterino NBT additions
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 3a308e3552950348f5d559a6e7e1a0ea8d759b50..17e6e20ed8327184c4b3c44fc9069e1411e0463a 100644
+index 5a2380e0608604b05a05f2f0fc94bc6040991d18..40f5cdd4a5cc26dee3a559082f617a48a872c802 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
 @@ -808,5 +808,15 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
@@ -87,10 +87,10 @@ index 526fe6c8079b2efcc8f9139d89e98b48ee8a615b..69058b0ba9e37810c114e40bee966b8b
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index f17afcbc7820d79cc7a8a555c7e0543d8ce1f672..467bea704d5db16def8895c7193194db5f28026c 100644
+index e3bf208514b5b0b249d98d2996b3ae7b8c684527..5093ee7d4cbe79904be8bd4bc428870cba634555 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1182,5 +1182,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1198,5 +1198,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
          de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
      }
@@ -149,10 +149,10 @@ index f17afcbc7820d79cc7a8a555c7e0543d8ce1f672..467bea704d5db16def8895c7193194db
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 50563ddd93155078c22ee93007f2b268989fbc55..92d28e76771d7def887d43e2187be7e54640ebdf 100644
+index 6f1494a1b7fe7aae536fbd1fb5a3726ebff81ce1..53658c1a66c278997bcccc0fa6cc06841b4bef0f 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1689,5 +1689,91 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1698,5 +1698,91 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
      public void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteItemNBT> consumer) {
          de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
      }

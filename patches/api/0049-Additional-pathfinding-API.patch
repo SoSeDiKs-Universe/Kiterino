@@ -5,7 +5,7 @@ Subject: [PATCH] Additional pathfinding API
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java b/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java
-index 43f062257472a06e9e64c2feef6c3b1012aee00e..7bed44d168bf4743bb4ea6eb5b76c9249bc73de2 100644
+index 43f062257472a06e9e64c2feef6c3b1012aee00e..07f6cdc2068a9a04861dc234e14ce7dc728e5899 100644
 --- a/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java
 +++ b/src/main/java/com/destroystokyo/paper/entity/Pathfinder.java
 @@ -208,5 +208,14 @@ public interface Pathfinder {
@@ -15,9 +15,9 @@ index 43f062257472a06e9e64c2feef6c3b1012aee00e..7bed44d168bf4743bb4ea6eb5b76c924
 +
 +        // Kiterino start
 +        /**
-+         * Checks whether the final point if this path can be reached
++         * Checks whether the final point of this path can be reached
 +         *
-+         * @return whether the final point if this path can be reached
++         * @return whether the final point of this path can be reached
 +         */
 +        boolean canReachFinalPoint();
 +        // Kiterino end

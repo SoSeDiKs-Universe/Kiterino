@@ -5,10 +5,10 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 99cf8ce63316e127a5ee84cdd96df80d440dc0c3..94b8d44af25379f4cf9f310335c02947a143beb4 100644
+index 8d6adc26ee59c1e7e9403731032f5dc11be80b9d..3f424c4312a0cb7ba788a34923c805e10f00e5b1 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -539,7 +539,7 @@ public class ServerPlayer extends Player {
+@@ -540,7 +540,7 @@ public class ServerPlayer extends Player {
          }
          this.getBukkitEntity().readExtraData(nbt); // CraftBukkit
  
@@ -40,7 +40,7 @@ index fbba9404d85c104e23062ad20f526c1b1379be09..f550d3d6265f2bfb267836c8b194a7d4
              return this.level().getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 28910943e5efcdf24865b961fba161b7d1e4a8f5..feb12c9e7322e1474ce0778660b5a154049ea111 100644
+index b6515c469ae3ff06daf631f0d5e5f792b41f8e48..9e526469416ee3eede82ee9f4d50379cacbdea57 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1381,7 +1381,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

@@ -158,10 +158,10 @@ index 462a6eed350fd660ddaf25d567bb6e97b77d0b2b..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 17c09c532838aeeb014b6884b6907151f6c82d13..20bdc26f71dea9836922a045a45f5ae4935ded59 100644
+index 717b1f797d28129a0f5c7c9c7b01691aa4f14317..5ecd3bd49c1c36a5b234d43803d1d4009d7f34fc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -450,10 +450,12 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -460,10 +460,12 @@ public final class CraftMagicNumbers implements UnsafeValues {
          return io.papermc.paper.configuration.GlobalConfiguration.get().timings.serverName;
      }
  
