@@ -5,10 +5,10 @@ Subject: [PATCH] Origami - Keep weather clear after sleep
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index db3c7b914a301005ba7fa92c7c042777b2fbda72..a105f6237a8176747e734afade6a581011ad47d4 100644
+index f86d6d6625f2ea6c4fce02fd19ffb9ac7cd64925..bf646342af2aa80333f247873631b341391cca86 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1360,6 +1360,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1376,6 +1376,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
      }
  
      private void resetWeatherCycle() {

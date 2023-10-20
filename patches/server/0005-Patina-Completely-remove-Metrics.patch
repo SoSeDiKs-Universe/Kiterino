@@ -6,10 +6,10 @@ Subject: [PATCH] Patina - Completely remove Metrics
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 deleted file mode 100644
-index 0e62469e1c5578c4362c5290fdad42cbe77a925a..0000000000000000000000000000000000000000
+index b81cfd6dd04dc1fcb61c26877d9e38b05a00be59..0000000000000000000000000000000000000000
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ /dev/null
-@@ -1,684 +0,0 @@
+@@ -1,675 +0,0 @@
 -package com.destroystokyo.paper;
 -
 -import net.minecraft.server.MinecraftServer;
@@ -605,7 +605,7 @@ index 0e62469e1c5578c4362c5290fdad42cbe77a925a..00000000000000000000000000000000
 -            boolean logFailedRequests = config.getBoolean("logFailedRequests", false);
 -            // Only start Metrics, if it's enabled in the config
 -            if (config.getBoolean("enabled", true)) {
--                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Kiterino
+-                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur // Kiterino
 -
 -                metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
 -                    String minecraftVersion = Bukkit.getVersion();
@@ -615,16 +615,7 @@ index 0e62469e1c5578c4362c5290fdad42cbe77a925a..00000000000000000000000000000000
 -
 -                metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
 -                metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
--                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino
--                final String paperVersion;
--                final String implVersion = org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion();
--                if (implVersion != null) {
--                    final String buildOrHash = implVersion.substring(implVersion.lastIndexOf('-') + 1);
--                    paperVersion = "git-Paper-%s-%s".formatted(Bukkit.getServer().getMinecraftVersion(), buildOrHash);
--                } else {
--                    paperVersion = "unknown";
--                }
--                metrics.addCustomChart(new Metrics.SimplePie("paper_version", () -> paperVersion));
+-                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur // Kiterino
 -
 -                metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
 -                    Map<String, Map<String, Integer>> map = new HashMap<>();
@@ -695,7 +686,7 @@ index 0e62469e1c5578c4362c5290fdad42cbe77a925a..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index d164789e27975fbce411e7dcdc7676e33788cbbb..9c29012a8780235ddddf3bc528b1985deb2c7bec 100644
+index 86033a7ece7f83f280b38ff6845bca9d45bc22bb..83bff752e6eb3b1b5c976dae185e76d06ce922da 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -218,7 +218,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface

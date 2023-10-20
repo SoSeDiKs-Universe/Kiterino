@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 20 Oct 2023 23:58:50 +0300
+Subject: [PATCH] Cache Server Version
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index 6bc6969d76e715a73f702bbdaf05e0a828672ff5..bbc082c8ca33a944203eda7932436e788335c739 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -8,7 +8,9 @@ import java.util.logging.Logger;
+ import org.bukkit.Bukkit;
+ 
+ public final class Versioning {
++    private static String version = null; // Kiterino
+     public static String getBukkitVersion() {
++        if (version != null) return version; // Kiterino
+         String result = "Unknown-Version";
+ 
+         InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Pufferfish // Purpur // Kiterino
+@@ -24,6 +26,7 @@ public final class Versioning {
+             }
+         }
+ 
++        version = result; // Kiterino
+         return result;
+     }
+ }

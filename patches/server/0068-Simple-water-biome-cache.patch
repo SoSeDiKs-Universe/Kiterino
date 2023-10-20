@@ -5,7 +5,7 @@ Subject: [PATCH] Simple water biome cache
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index 8b96d1b7548d354fbcabe6d1b5e9d6c3e2a5cb9d..e17e453cbd91047aa586d62d6ef310153746b3a7 100644
+index f7e5e016a7028a9196e689e950805b0d5b31fe38..5abbbc19ebbd2e9606df3112da464f89f6610cdd 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 @@ -128,6 +128,8 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
@@ -15,8 +15,8 @@ index 8b96d1b7548d354fbcabe6d1b5e9d6c3e2a5cb9d..e17e453cbd91047aa586d62d6ef31015
 +    public @Nullable Boolean infiniteWater; // Kiterino
 +
      public ChunkAccess(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biomeRegistry, long inhabitedTime, @Nullable LevelChunkSection[] sectionArray, @Nullable BlendingData blendingData) {
-         this.locX = pos.x; this.locZ = pos.z; // Paper - reduce need for field lookups
-         this.chunkPos = pos; this.coordinateKey = ChunkPos.asLong(locX, locZ); // Paper - cache long key
+         // Paper start - rewrite light engine
+         if (!(this instanceof ImposterProtoChunk)) {
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 index 7cd79caa9174ed079efae872bdde54980f55c11e..50dc7b5c9c0f78e8ec2a568f687b75a62e6c31ad 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java

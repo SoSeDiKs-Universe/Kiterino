@@ -757,7 +757,7 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..90fb9b576ed74a9063574f7bc3926668
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 84643f0dd71530a5f18557f299d7725a8f53666e..02672dcc1b636c122c710b2ad1992100370686b2 100644
+index 0e192a128c87124956fcec552362ab763bac5e55..5d3710db0a174fff3c618f9bf9064ee7808c45b3 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -345,7 +345,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -785,10 +785,10 @@ index 84643f0dd71530a5f18557f299d7725a8f53666e..02672dcc1b636c122c710b2ad1992100
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 9bb693aa505eae2236d8b37e4d42a11445227643..9f3a3508b849c0e151f56e2af50083e9c97c0cef 100644
+index aa7ef9bcd6caffa9b987ae4ae759f89358e3001d..4d6619787cfaeea28de8db4a8897ca1aa428063c 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
@@ -798,10 +798,10 @@ index 9bb693aa505eae2236d8b37e4d42a11445227643..9f3a3508b849c0e151f56e2af50083e9
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f50a6b6fac732a1fec8bebd572f0859182195974..f4c66d4a97178df5bea3d000aca48e88ccb04482 100644
+index 2a9fe3a7998a0c361302150d2385b04446c156d9..710f348b2b522103baf8f62a12f22de25082b80d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3212,6 +3212,14 @@ public final class CraftServer implements Server {
+@@ -3217,6 +3217,14 @@ public final class CraftServer implements Server {
  
      // Paper end
  

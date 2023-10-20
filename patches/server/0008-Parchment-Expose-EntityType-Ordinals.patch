@@ -5,7 +5,7 @@ Subject: [PATCH] Parchment - Expose EntityType Ordinals
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index a9f69e4f880711c21ef28bd079960ef8f12da25c..2eed75b3c0b1f083e8dd885c53c28b4a3e6416ce 100644
+index 5930e45bae5aa86b3cedb811c4c9bb92099bc1b5..f3db235b67502040fcbd9292ad41be684223b597 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
 @@ -163,6 +163,8 @@ import org.slf4j.Logger;
@@ -17,7 +17,7 @@ index a9f69e4f880711c21ef28bd079960ef8f12da25c..2eed75b3c0b1f083e8dd885c53c28b4a
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final String ENTITY_TAG = "EntityTag";
      private final Holder.Reference<EntityType<?>> builtInRegistryHolder;
-@@ -305,6 +307,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -307,6 +309,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
      private String descriptionId;
      @Nullable
      private Component description;
@@ -25,7 +25,7 @@ index a9f69e4f880711c21ef28bd079960ef8f12da25c..2eed75b3c0b1f083e8dd885c53c28b4a
      @Nullable
      private ResourceLocation lootTable;
      private EntityDimensions dimensions; // Purpur - remove final
-@@ -312,9 +315,31 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -314,9 +317,31 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
      private final FeatureFlagSet requiredFeatures;
  
      private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
@@ -59,7 +59,7 @@ index a9f69e4f880711c21ef28bd079960ef8f12da25c..2eed75b3c0b1f083e8dd885c53c28b4a
      public static EntityType<?> getFromBukkitType(org.bukkit.entity.EntityType bukkitType) {
          return getFromKey(new ResourceLocation(bukkitType.getKey().toString()));
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 5ecd3bd49c1c36a5b234d43803d1d4009d7f34fc..00089c1bccc74b547e5b5382a7e6e155d416a7f9 100644
+index 29cedce2f19afb8518337c6f6547b16db25b9bc7..b7177dce324d3572ccc529d1af0e57bc6b3b0502 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 @@ -624,6 +624,19 @@ public final class CraftMagicNumbers implements UnsafeValues {

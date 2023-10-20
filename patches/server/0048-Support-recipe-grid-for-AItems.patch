@@ -4,8 +4,78 @@ Date: Wed, 8 Jun 2022 13:03:53 +0300
 Subject: [PATCH] Support recipe grid for AItems
 
 
+diff --git a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
+index 2a2f8327a5bd3983a3a13fd663beb98906f27312..951b8bc1011fbf8718454e3ca96658db9e404020 100644
+--- a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
++++ b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
+@@ -15,7 +15,7 @@ public abstract class RecipeBookExactChoiceRecipe<C extends Container> implement
+             return;
+         }
+         for (final Ingredient ingredient : this.getIngredients()) {
+-            if (!ingredient.isEmpty() && ingredient.exact) {
++            if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino
+                 this.hasExactIngredients = true;
+                 return;
+             }
+diff --git a/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java b/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
+index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..64f1a6c2858cf19c6318acffb49a8512f55f09fa 100644
+--- a/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
++++ b/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
+@@ -34,7 +34,7 @@ public final class StackedContentsExtraMap {
+     private void initialize(final Recipe<?> recipe) {
+         if (recipe.hasExactIngredients()) {
+             for (final Ingredient ingredient : recipe.getIngredients()) {
+-                if (!ingredient.isEmpty() && ingredient.exact) {
++                if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino
+                     final net.minecraft.world.item.ItemStack[] items = ingredient.getItems();
+                     final IntList idList = new IntArrayList(items.length);
+                     for (final ItemStack item : items) {
+@@ -51,7 +51,13 @@ public final class StackedContentsExtraMap {
+         }
+     }
+ 
+-    private int registerExact(final ItemStack exactChoice) {
++    private int registerExact(ItemStack exactChoice) { // Kiterino - remove final
++        // Kiterino start
++        if (exactChoice.hasTag()) {
++            exactChoice = exactChoice.copy();
++            exactChoice.setTag(ItemStack.getStripped(exactChoice.getTag())); // Kiterino
++        }
++        // Kiterino end
+         final int existing = this.exactChoiceIds.getInt(exactChoice);
+         if (existing > -1) {
+             return existing;
+@@ -66,8 +72,14 @@ public final class StackedContentsExtraMap {
+         return this.idToExactChoice.get(id);
+     }
+ 
+-    public boolean accountStack(final ItemStack stack, final int count) {
++    public boolean accountStack(ItemStack stack, final int count) { // Kiterino - remove final
+         if (!this.exactChoiceIds.isEmpty()) {
++            // Kiterino start
++            if (stack.hasTag()) {
++                stack = stack.copy();
++                stack.setTag(ItemStack.getStripped(stack.getTag()));
++            }
++            // Kiterino end
+             final int id = this.exactChoiceIds.getInt(stack);
+             if (id >= 0) {
+                 this.contents.put(id, count);
+diff --git a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
+index a65d07cb3d2dae85225921498d1721dc3c6a6bf3..6b3ba91461561eb6116e43ba31ac01471d111414 100644
+--- a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
++++ b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
+@@ -148,7 +148,7 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
+         this.moveItemToGrid(slot, stack, false);
+     }
+     protected void moveItemToGrid(Slot slot, ItemStack stack, final boolean isExact) {
+-        int i = isExact ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack);
++        int i = /*isExact*/ !slot.getItem().isEmpty() ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack); // Kiterino
+         // Paper end
+         if (i != -1) {
+             ItemStack itemStack = this.inventory.getItem(i);
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index 96d664c28738d6090f7067761c2978dd1aa0fd0e..2ae95160838426677a25405365a2069db89afc51 100644
+index b1c24a02b87aca7b180a6efbce177f2300db49c1..c15c7eeaa1f2bafbba6f46fe42ad6cfe31a3f79e 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
 @@ -205,7 +205,7 @@ public class Inventory implements Container, Nameable {
@@ -18,7 +88,7 @@ index 96d664c28738d6090f7067761c2978dd1aa0fd0e..2ae95160838426677a25405365a2069d
              }
          }
 diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
-index 6bc60ea5249cca9f4c1d029a2b7460fe3476e05a..b6067134a8e59bcc3a04bb02e317332502c04481 100644
+index 26b236a764177ac16d53f5cbaf83d3e21d015ebc..b950f3d52f2e47bc08b3d4cc0cf3142ff52c985a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 +++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 @@ -25,7 +25,7 @@ public class StackedContents {
@@ -30,37 +100,11 @@ index 6bc60ea5249cca9f4c1d029a2b7460fe3476e05a..b6067134a8e59bcc3a04bb02e3173325
              this.accountStack(stack);
          }
  
-@@ -58,16 +58,21 @@ public class StackedContents {
- 
-             @Override
-             public boolean equals(@Nullable ItemStack a, @Nullable ItemStack b) {
--                if (a == null || b == null) {
--                    return false;
--                }
--                return ItemStack.matches(a, b);
-+                return ItemStack.recipesTagsMatch(a, b); // Kiterino - less strict check
-             }
-         });
-         private final it.unimi.dsi.fastutil.ints.Int2ObjectMap<net.minecraft.world.item.ItemStack> idToItemstack = new it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap<>();
- 
-         @Override
-         public int getId(ItemStack value) {
-+            // Kiterino start
-+            if (!this.itemstackToId.containsKey(value)) {
-+                final ItemStack copy = value.copy();
-+                copy.setTag(ItemStack.getStripped(copy.getTag()));
-+                if (!copy.hasTag()) return getStackingIndex(copy);
-+                value = copy;
-+            }
-+            // Kiterino end
-             if (!this.itemstackToId.containsKey(value)) {
-                 final int id = this.idCounter.incrementAndGet();
-                 final ItemStack copy = value.copy();
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 4d99e7db4e9e56caead5ea177b79aaca8e1d20da..0d82377c0d0a424179993b2fe307fdf9ef3df356 100644
+index fc481f26368f4d823379921573a05ac5b91f39e6..42e9b41d6acf761c56e097f568d1161822b028bd 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -790,6 +790,54 @@ public final class ItemStack {
+@@ -789,6 +789,54 @@ public final class ItemStack {
          return !stack.is(otherStack.getItem()) ? false : (stack.isEmpty() && otherStack.isEmpty() ? true : Objects.equals(stack.tag, otherStack.tag));
      }
  
@@ -115,16 +159,3 @@ index 4d99e7db4e9e56caead5ea177b79aaca8e1d20da..0d82377c0d0a424179993b2fe307fdf9
      public String getDescriptionId() {
          return this.getItem().getDescriptionId(this);
      }
-diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-index 14f1063f717eb8c74afc03c2f982325c44c27bd9..d2b3530217e32663f0060fb8ad81589e30ba5e48 100644
---- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-+++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-@@ -60,7 +60,7 @@ public final class Ingredient implements Predicate<ItemStack> {
-                 return recipeitemstack_provider.getItems().stream();
-                 // PaperPR start
-             }).distinct().peek(stack -> {
--                stack.isExactRecipeIngredient = this.exact;
-+                stack.isExactRecipeIngredient = this.exact || this.kItem; // Kiterino
-             }).toArray((i) -> {
-                 // PaperPR end
-                 return new ItemStack[i];

@@ -5,10 +5,10 @@ Subject: [PATCH] Fix MC-2025
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index fcc30a81e237c25ceeac1a2bb6771f9ed21be316..119ff585e8b970d37a3531095e2b50d1a8391ac1 100644
+index 92119df5971f4dd1d715515ad5a7f1584c13c8d6..6a67abe4f4fb1e445e7e4c9b3cec483ea41ba051 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2515,6 +2515,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2527,6 +2527,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putUUID("Kiterino.SpawningPlayerUUID", spawningPlayerUuid);
              }
              // Kiterino end
@@ -28,7 +28,7 @@ index fcc30a81e237c25ceeac1a2bb6771f9ed21be316..119ff585e8b970d37a3531095e2b50d1
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2592,6 +2605,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2604,6 +2617,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                          this.reapplyPosition();
                      }
  

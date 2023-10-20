@@ -5,7 +5,7 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 8d6adc26ee59c1e7e9403731032f5dc11be80b9d..3f424c4312a0cb7ba788a34923c805e10f00e5b1 100644
+index 6b5bcc87e96619877737fc8200075bdb99d59230..402ed695f50f3fae3543a2fc8cd29a485a9c8894 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -540,7 +540,7 @@ public class ServerPlayer extends Player {
@@ -18,10 +18,10 @@ index 8d6adc26ee59c1e7e9403731032f5dc11be80b9d..3f424c4312a0cb7ba788a34923c805e1
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index fbba9404d85c104e23062ad20f526c1b1379be09..f550d3d6265f2bfb267836c8b194a7d4aed996e7 100644
+index 5e7abc64996bb8b4827e3df687b9b4502e789da4..7b00cb0da457149d7406834fbee6f25a1d5ba665 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3102,7 +3102,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3128,7 +3128,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -30,7 +30,7 @@ index fbba9404d85c104e23062ad20f526c1b1379be09..f550d3d6265f2bfb267836c8b194a7d4
                  this.stopSleeping();
              }
          }
-@@ -4418,7 +4418,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4451,7 +4451,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  

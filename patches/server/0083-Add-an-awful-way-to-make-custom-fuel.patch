@@ -23,10 +23,10 @@ index aa9220ae2c79b9f6b8aedd806b12a2868c6e7c22..d7689d7101b186777cd35a95b50e7e89
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 31c3446b2ece66b45ffd5d88e045a79cdf7ed829..607aa2da1ed57ba9787625fed784c022c98f76b2 100644
+index 0573d1257708c4fdfd767b455fe0e139ef900e6c..52fcfd8c22be10def71d471e07aaf02a427bcd3e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1558,6 +1558,13 @@ public final class CraftServer implements Server {
+@@ -1563,6 +1563,13 @@ public final class CraftServer implements Server {
          net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.removeFuel(net.minecraft.world.item.ItemStack.fromBukkitCopy(new ItemStack(material)));
      }
  

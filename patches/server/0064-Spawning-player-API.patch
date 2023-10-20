@@ -5,10 +5,10 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2de54da93b3de0c780483755930afcaf0ad08af0..348013a93a7cef1bf7b7df18d1c2f5684f0e61e9 100644
+index 66f3ebf012717e75ba3e593854d052694989fbb1..fc77e3b9f33bbbe96bba59ba5317a915d0e77294 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -438,6 +438,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -444,6 +444,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return this.yRot;
      }
  
@@ -36,7 +36,7 @@ index 2de54da93b3de0c780483755930afcaf0ad08af0..348013a93a7cef1bf7b7df18d1c2f568
      public boolean isChunkLoaded() {
          return this.level.hasChunk((int) Math.floor(this.getX()) >> 4, (int) Math.floor(this.getZ()) >> 4);
      }
-@@ -2462,6 +2483,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2474,6 +2495,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  nbt.putBoolean("Purpur.FireImmune", immuneToFire);
              }
              // Purpur end
@@ -48,7 +48,7 @@ index 2de54da93b3de0c780483755930afcaf0ad08af0..348013a93a7cef1bf7b7df18d1c2f568
              return nbt;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2635,6 +2661,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2647,6 +2673,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
                  immuneToFire = nbt.getBoolean("Purpur.FireImmune");
              }
              // Purpur end
@@ -61,7 +61,7 @@ index 2de54da93b3de0c780483755930afcaf0ad08af0..348013a93a7cef1bf7b7df18d1c2f568
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 51a4d0b212278a20363fd0d3cb253f0e3047e961..a3474cf694ce887cdfe93c7bc83f1318f387e905 100644
+index a2a59dd2e515bf4dca84a442703c122fd36f05e0..d8246fc22c4fef2f80988daddb80204d7a40aeea 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -295,6 +295,7 @@ public final class NaturalSpawner {

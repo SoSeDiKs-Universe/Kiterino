@@ -5,7 +5,7 @@ Subject: [PATCH] KItem RecipeChoice
 
 
 diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
-index ae98a5b49b5eb7b9b2846d1e41b5665c725198a2..14f1063f717eb8c74afc03c2f982325c44c27bd9 100644
+index 3532db21cee82c18f95c540d24b2071585d71c4e..dc101a4bee1420a628e76d442232a0d878adfa12 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
 @@ -40,6 +40,7 @@ public final class Ingredient implements Predicate<ItemStack> {
@@ -16,7 +16,7 @@ index ae98a5b49b5eb7b9b2846d1e41b5665c725198a2..14f1063f717eb8c74afc03c2f982325c
      public static final Codec<Ingredient> CODEC = Ingredient.codec(true);
      public static final Codec<Ingredient> CODEC_NONEMPTY = Ingredient.codec(false);
  
-@@ -87,6 +88,25 @@ public final class Ingredient implements Predicate<ItemStack> {
+@@ -83,6 +84,25 @@ public final class Ingredient implements Predicate<ItemStack> {
              for (int j = 0; j < i; ++j) {
                  ItemStack itemstack1 = aitemstack[j];
  
@@ -43,20 +43,22 @@ index ae98a5b49b5eb7b9b2846d1e41b5665c725198a2..14f1063f717eb8c74afc03c2f982325c
                  if (this.exact) {
                      if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameTags(itemstack, itemstack1)) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
-index 553ecc9b5631ffc0848a798bb3295f16d1722c1f..92f69578b349fc00f9d224101b5380933e481b1e 100644
+index 553ecc9b5631ffc0848a798bb3295f16d1722c1f..81586754772b8952daf2444e5eca9927c9577ffe 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
-@@ -31,6 +31,9 @@ public interface CraftRecipe extends Recipe {
+@@ -31,6 +31,11 @@ public interface CraftRecipe extends Recipe {
              stack = new Ingredient(((RecipeChoice.ExactChoice) bukkit).getChoices().stream().map((mat) -> new net.minecraft.world.item.crafting.Ingredient.ItemValue(CraftItemStack.asNMSCopy(mat))));
              stack.exact = true;
              stack.predicate = ((RecipeChoice.ExactChoice) bukkit).getPredicate(); // Purpur
++        // Kiterino start
 +        } else if (bukkit instanceof me.sosedik.kiterino.inventory.ItemChoice itemChoice) {
 +            stack = new Ingredient(itemChoice.getChoices().stream().map(mat -> new net.minecraft.world.item.crafting.Ingredient.ItemValue(CraftItemStack.asNMSCopy(mat))));
 +            stack.kItem = true;
++        // Kiterino end
          } else {
              throw new IllegalArgumentException("Unknown recipe stack instance " + bukkit);
          }
-@@ -50,6 +53,16 @@ public interface CraftRecipe extends Recipe {
+@@ -50,6 +55,16 @@ public interface CraftRecipe extends Recipe {
              return null;
          }
  
