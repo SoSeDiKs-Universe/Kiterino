@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 19 Feb 2021 22:48:24 +0200
+Subject: [PATCH] Flammable cobwebs
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
+index 186c45e897cc044752f932c500420e2e2c1e5994..68b22a2e0f45a87aec0b31cfe0c29cff3db67944 100644
+--- a/src/main/java/net/minecraft/world/level/block/Blocks.java
++++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
+@@ -167,7 +167,7 @@ public class Blocks {
+     public static final Block POWERED_RAIL = register("powered_rail", new PoweredRailBlock(BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL)));
+     public static final Block DETECTOR_RAIL = register("detector_rail", new DetectorRailBlock(BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL)));
+     public static final Block STICKY_PISTON = register("sticky_piston", pistonBase(true));
+-    public static final Block COBWEB = register("cobweb", new WebBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).forceSolidOn().noCollission().requiresCorrectToolForDrops().strength(4.0F).pushReaction(PushReaction.DESTROY)));
++    public static final Block COBWEB = register("cobweb", new WebBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOL).forceSolidOn().noCollission().requiresCorrectToolForDrops().strength(4.0F).pushReaction(PushReaction.DESTROY).ignitedByLava())); // Kiterino - flammable cobweb
+     public static final Block GRASS = register("grass", new TallGrassBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+     public static final Block FERN = register("fern", new TallGrassBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+     public static final Block DEAD_BUSH = register("dead_bush", new DeadBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).replaceable().noCollission().instabreak().sound(SoundType.GRASS).ignitedByLava().pushReaction(PushReaction.DESTROY)));
+diff --git a/src/main/java/net/minecraft/world/level/block/FireBlock.java b/src/main/java/net/minecraft/world/level/block/FireBlock.java
+index 2c7847aebabe14da44b9a42f5ecae77858fb9dd3..f8180fb1178beb4d556a2cd95fc3dd08f1e84552 100644
+--- a/src/main/java/net/minecraft/world/level/block/FireBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/FireBlock.java
+@@ -562,5 +562,6 @@ public class FireBlock extends BaseFireBlock {
+         blockfire.setFlammable(Blocks.SMALL_DRIPLEAF, 60, 100);
+         blockfire.setFlammable(Blocks.HANGING_ROOTS, 30, 60);
+         blockfire.setFlammable(Blocks.GLOW_LICHEN, 15, 100);
++        blockfire.setFlammable(Blocks.COBWEB, 60, 100); // Kiterino
+     }
+ }

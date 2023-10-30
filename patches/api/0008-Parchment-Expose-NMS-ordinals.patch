@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lexikiq <noellekiq@gmail.com>
+Date: Sun, 20 Jun 2021 18:47:01 -0400
+Subject: [PATCH] Parchment - Expose NMS ordinals
+
+
+diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
+index a4b38f284d4fea7df7f9df9bf44e4f68fefaf20f..d090c0632f7add4e63b97ac78a79df5854360307 100644
+--- a/src/main/java/org/bukkit/UnsafeValues.java
++++ b/src/main/java/org/bukkit/UnsafeValues.java
+@@ -260,4 +260,13 @@ public interface UnsafeValues {
+ 
+     String getStatisticCriteriaKey(@NotNull org.bukkit.Statistic statistic);
+     // Paper end
++
++    // Parchment start
++    /**
++     * Gets the ID/ordinal of an entity according to NMS.
++     * @param type entity to get
++     * @return entity's ID
++     */
++    int entityID(org.bukkit.entity.EntityType type);
++    // Parchment end
+ }

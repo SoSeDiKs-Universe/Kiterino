@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 22 Jun 2023 09:10:01 +0300
+Subject: [PATCH] Additional Sign API
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
+index 2a70c68af92967851f5caf8e67e433355ff48d44..5a075f6692524e5f1942ac0e63698a72690a92f9 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
+@@ -202,4 +202,16 @@ public class CraftSign<T extends SignBlockEntity> extends CraftBlockEntityState<
+     private static String revertComponent(Component component) {
+         return CraftChatMessage.fromComponent(component);
+     }
++
++    // Kiterino start
++    @Override
++    public java.util.UUID getWhoMayEditUuid() {
++        return getTileEntity().getPlayerWhoMayEdit();
++    }
++
++    @Override
++    public void setWhoMayEditUuid(@NotNull java.util.UUID uuid) {
++        getTileEntity().setAllowedPlayerEditor(uuid);
++    }
++    // Kiterino end
+ }

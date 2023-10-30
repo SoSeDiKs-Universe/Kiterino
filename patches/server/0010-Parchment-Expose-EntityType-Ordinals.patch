@@ -1,0 +1,84 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lexikiq <noellekiq@gmail.com>
+Date: Sun, 20 Jun 2021 23:15:44 -0400
+Subject: [PATCH] Parchment - Expose EntityType Ordinals
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
+index 5930e45bae5aa86b3cedb811c4c9bb92099bc1b5..f3db235b67502040fcbd9292ad41be684223b597 100644
+--- a/src/main/java/net/minecraft/world/entity/EntityType.java
++++ b/src/main/java/net/minecraft/world/entity/EntityType.java
+@@ -163,6 +163,8 @@ import org.slf4j.Logger;
+ 
+ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeTest<Entity, T> {
+ 
++    private static int ordinal = 0; // Parchment
++    private static final java.util.Map<EntityType<?>, Integer> ordinals = new java.util.HashMap<>(); // Parchment
+     private static final Logger LOGGER = LogUtils.getLogger();
+     public static final String ENTITY_TAG = "EntityTag";
+     private final Holder.Reference<EntityType<?>> builtInRegistryHolder;
+@@ -307,6 +309,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private String descriptionId;
+     @Nullable
+     private Component description;
++    private String registeredId; // Kiterino
+     @Nullable
+     private ResourceLocation lootTable;
+     private EntityDimensions dimensions; // Purpur - remove final
+@@ -314,9 +317,31 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+     private final FeatureFlagSet requiredFeatures;
+ 
+     private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
+-        return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, id, (EntityType<T>) type.build(id)); // CraftBukkit - decompile error
++        // Parchment start
++        EntityType<T> build = type.build(id);
++        build.registeredId = id; // Kiterino - use registered id for comparing
++        ordinals.put(build, ordinal++);
++        return (EntityType) Registry.register(BuiltInRegistries.ENTITY_TYPE, id, (EntityType<T>) build); // CraftBukkit - decompile error
+     }
+ 
++    public int ordinal() {
++        return ordinals.get(this);
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        if (this == o) return true;
++        if (o == null || getClass() != o.getClass()) return false;
++        EntityType<?> that = (EntityType<?>) o;
++        return registeredId.equals(that.registeredId);
++    }
++
++    @Override
++    public int hashCode() {
++        return java.util.Objects.hash(registeredId);
++    }
++    // Parchment end
++
+     // Purpur start
+     public static EntityType<?> getFromBukkitType(org.bukkit.entity.EntityType bukkitType) {
+         return getFromKey(new ResourceLocation(bukkitType.getKey().toString()));
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 02c2a913b25b2ed1d008469025e11af882632070..ac21d70b81abcb5b7c3db5f7990db2ef065ab425 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -647,6 +647,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
+     }
+     // Paper end
+ 
++    // Parchment start
++    @Override
++    public int entityID(org.bukkit.entity.EntityType type) {
++        String name = type.getName();
++        if (name == null) {
++            throw new IllegalArgumentException("Entity name is undefined");
++        }
++        return net.minecraft.world.entity.EntityType.byString(name)
++                .orElseThrow(() -> new IllegalArgumentException("Could not find corresponding NMS entity"))
++                .ordinal();
++    }
++    // Parchment end
++
+     /**
+      * This helper class represents the different NBT Tags.
+      * <p>

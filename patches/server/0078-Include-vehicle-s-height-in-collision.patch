@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 2 Dec 2022 23:04:07 +0200
+Subject: [PATCH] Include vehicle's height in collision
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index adcdac7ca1c20473172af99f9b5d4f299f9c4619..b99736faf1add52e3d9231b7084be2db60f703e2 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1498,7 +1498,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         }
+ 
+         final Level world = this.level;
+-        final AABB currBoundingBox = this.getBoundingBox();
++        // Kiterino start - include vehicle's height in collision
++        AABB currBoundingBox = this.getBoundingBox();
++        if (getVehicle() != null) {
++            currBoundingBox = new AABB(currBoundingBox.minX, getVehicle().getBoundingBox().minY + 0.1, currBoundingBox.minZ, currBoundingBox.maxX, currBoundingBox.maxY, currBoundingBox.maxZ);
++        }
++        // Kiterino end
+ 
+         if (io.papermc.paper.util.CollisionUtil.isEmpty(currBoundingBox)) {
+             return movement;
+@@ -1564,10 +1569,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+                 return vec3d2.add(io.papermc.paper.util.CollisionUtil.performCollisions(new Vec3(0.0D, -vec3d2.y + movement.y, 0.0D), currBoundingBox.move(vec3d2), potentialCollisionsVoxel, potentialCollisionsBB));
+             }
+ 
+-            return limitedMoveVector;
+-        } else {
+-            return limitedMoveVector;
+         }
++        // Kiterino start - include vehicle's height in collision
++        for (Entity passenger : getPassengers()) {
++            Vec3 blockPos = passenger.position().add(0, passenger.getBbHeight(), 0).add(movement.normalize());
++            BlockState state = world.getBlockState(new BlockPos((int) blockPos.x(), (int) blockPos.y(), (int) blockPos.z()));
++            if (!state.is(BlockTags.LEAVES)) {
++                Vec3 passengerCollision = passenger.collide(movement);
++                double x = limitedMoveVector.x() > 0 ? Math.min(passengerCollision.x(), limitedMoveVector.x()) : limitedMoveVector.x() < 0 ? Math.max(passengerCollision.x(), limitedMoveVector.x()) : limitedMoveVector.x();
++                double y = limitedMoveVector.y() > 0 ? Math.min(passengerCollision.y(), limitedMoveVector.y()) : Math.max(passengerCollision.y(), limitedMoveVector.y());
++                double z = limitedMoveVector.z() > 0 ? Math.min(passengerCollision.z(), limitedMoveVector.z()) : limitedMoveVector.z() < 0 ? Math.max(passengerCollision.z(), limitedMoveVector.z()) : limitedMoveVector.z();
++                return new Vec3(x, y, z);
++            }
++        }
++        return limitedMoveVector;
++        // Kiterino end
+         // Paper end - optimise collisions
+     }
+ 

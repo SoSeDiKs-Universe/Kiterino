@@ -1,0 +1,105 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 12 Oct 2021 21:10:47 +0200
+Subject: [PATCH] Weeper - Implement take and place
+
+
+diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+index 29f301bde378bd320d5c44f2c1b6bf9dc185e286..6117f36669ef2d339f8b32087743a436976080e1 100644
+--- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+@@ -158,6 +158,12 @@ public abstract class AbstractContainerMenu {
+         return slot;
+     }
+ 
++    // Weeper start - inventoryItemStackMoveStrategy
++    public void setItemStackMoveStrategy(com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) {
++        this.slots.forEach(slot -> slot.setInventoryItemstackMoveStrategy(inventoryItemStackMoveStrategy));
++    }
++    // Weeper end - inventoryItemStackMoveStrategy
++
+     protected DataSlot addDataSlot(DataSlot property) {
+         this.dataSlots.add(property);
+         this.remoteDataSlots.add(0);
+diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
+index a43b85b82fc83d0e5e3fd589bede0b279927a989..43b9198df20b914eece134361afb89de44f4c957 100644
+--- a/src/main/java/net/minecraft/world/inventory/Slot.java
++++ b/src/main/java/net/minecraft/world/inventory/Slot.java
+@@ -14,6 +14,13 @@ public class Slot {
+     public int index;
+     public final int x;
+     public final int y;
++    private @Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy;
++
++    // Weeper start - inventoryItemStackMoveStrategy
++    public void setInventoryItemstackMoveStrategy(@Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
++        this.inventoryItemStackMoveStrategy = inventoryItemStackMoveStrategy;
++    }
++    // Weeper end - inventoryItemStackMoveStrategy
+ 
+     public Slot(Container inventory, int index, int x, int y) {
+         this.container = inventory;
+@@ -44,7 +51,7 @@ public class Slot {
+     }
+ 
+     public boolean mayPlace(ItemStack stack) {
+-        return true;
++        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canPlace(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(stack), slot));
+     }
+ 
+     public ItemStack getItem() {
+@@ -90,7 +97,7 @@ public class Slot {
+     }
+ 
+     public boolean mayPickup(Player playerEntity) {
+-        return true;
++        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot));
+     }
+ 
+     public boolean isActive() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index 2a534391e49c0653fd98fe5c22e474ae7e82feef..a063069b3cae509c3dfc8f262c9abd4d4a2803ea 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -314,6 +314,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+ 
+     @Override
+     public InventoryView openInventory(Inventory inventory) {
++        return openInventory(inventory, (com.github.weepingmc.inventory.InventoryItemStackMoveStrategy) null);
++    }
++
++    @Override
++    public InventoryView openInventory(Inventory inventory, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) {
+         if (!(this.getHandle() instanceof ServerPlayer)) return null;
+         ServerPlayer player = (ServerPlayer) this.getHandle();
+         AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
+@@ -343,7 +348,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+         if (iinventory instanceof MenuProvider) {
+             this.getHandle().openMenu(iinventory);
+         } else {
+-            CraftHumanEntity.openCustomInventory(inventory, player, container);
++            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy);
+         }
+ 
+         if (this.getHandle().containerMenu == formerContainer) {
+@@ -354,9 +359,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+     }
+ 
+     private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
++        // Weeper start - InventoryItemStackMoveStrategy
++        openCustomInventory( inventory, player, windowType, null);
++    }
++
++    private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType, @javax.annotation.Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) {
++        // Weeper end - InventoryItemStackMoveStrategy
+         if (player.connection == null) return;
+         Preconditions.checkArgument(windowType != null, "Unknown windowType");
+         AbstractContainerMenu container = new CraftContainer(inventory, player, player.nextContainerCounter());
++        // Weeper start - InventoryItemStackMoveStrategy
++        if (inventoryItemStackMoveStrategy != null){
++            container.setItemStackMoveStrategy(inventoryItemStackMoveStrategy);
++        }
++        // Weeper end - InventoryItemStackMoveStrategy
+ 
+         // Paper start
+         final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);

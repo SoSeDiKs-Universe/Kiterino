@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 11 Jan 2023 20:01:10 +0200
+Subject: [PATCH] Mob possessing mechanic compatibility
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index b99736faf1add52e3d9231b7084be2db60f703e2..c11143860f5b9084eaa46da231b1015db9747010 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1500,7 +1500,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         final Level world = this.level;
+         // Kiterino start - include vehicle's height in collision
+         AABB currBoundingBox = this.getBoundingBox();
+-        if (getVehicle() != null) {
++        if (getVehicle() != null && !isInvisible() && !isInvulnerable()) {
+             currBoundingBox = new AABB(currBoundingBox.minX, getVehicle().getBoundingBox().minY + 0.1, currBoundingBox.minZ, currBoundingBox.maxX, currBoundingBox.maxY, currBoundingBox.maxZ);
+         }
+         // Kiterino end
+@@ -1572,6 +1572,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         }
+         // Kiterino start - include vehicle's height in collision
+         for (Entity passenger : getPassengers()) {
++                if (passenger.isInvisible() && passenger.isInvulnerable()) {
++                    continue;
++                }
+             Vec3 blockPos = passenger.position().add(0, passenger.getBbHeight(), 0).add(movement.normalize());
+             BlockState state = world.getBlockState(new BlockPos((int) blockPos.x(), (int) blockPos.y(), (int) blockPos.z()));
+             if (!state.is(BlockTags.LEAVES)) {

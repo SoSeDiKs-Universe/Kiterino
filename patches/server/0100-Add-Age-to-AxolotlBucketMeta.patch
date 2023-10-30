@@ -1,0 +1,116 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 3 Feb 2023 13:06:16 +0200
+Subject: [PATCH] Add Age to AxolotlBucketMeta
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaAxolotlBucket.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaAxolotlBucket.java
+index f9dcdedc31505b13eb9b2c641f28e62cc916614e..ae9eac55ccf5d642e78f9986eda5849cb7731084 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaAxolotlBucket.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaAxolotlBucket.java
+@@ -14,9 +14,11 @@ import org.bukkit.inventory.meta.AxolotlBucketMeta;
+ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBucketMeta {
+ 
+     static final ItemMetaKey VARIANT = new ItemMetaKey("Variant", "axolotl-variant");
++    static final ItemMetaKey AGE = new ItemMetaKey("Age", "axolotl-age"); // Kiterino
+     static final ItemMetaKey ENTITY_TAG = new ItemMetaKey("EntityTag", "entity-tag");
+ 
+     private Integer variant;
++    private Integer age; // Kiterino
+     private CompoundTag entityTag;
+ 
+     CraftMetaAxolotlBucket(CraftMetaItem meta) {
+@@ -29,6 +31,7 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+         CraftMetaAxolotlBucket bucket = (CraftMetaAxolotlBucket) meta;
+         this.variant = bucket.variant;
+         this.entityTag = bucket.entityTag;
++        this.age = bucket.age; // Kiterino
+     }
+ 
+     CraftMetaAxolotlBucket(CompoundTag tag) {
+@@ -41,6 +44,12 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+         if (tag.contains(CraftMetaAxolotlBucket.ENTITY_TAG.NBT)) {
+             this.entityTag = tag.getCompound(CraftMetaAxolotlBucket.ENTITY_TAG.NBT).copy();
+         }
++
++        // Kiterino start
++        if (tag.contains(AGE.NBT, CraftMagicNumbers.NBT.TAG_INT)) {
++            this.age = tag.getInt(AGE.NBT);
++        }
++        // Kiterino end
+     }
+ 
+     CraftMetaAxolotlBucket(Map<String, Object> map) {
+@@ -50,6 +59,13 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+         if (variant != null) {
+             this.variant = variant;
+         }
++
++        // Kiterino start
++        Integer age = SerializableMeta.getObject(Integer.class, map, AGE.BUKKIT, true);
++        if (age != null) {
++            this.age = age;
++        }
++        // Kiterino end
+     }
+ 
+     @Override
+@@ -79,6 +95,12 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+         if (this.entityTag != null) {
+             tag.put(CraftMetaAxolotlBucket.ENTITY_TAG.NBT, this.entityTag);
+         }
++
++        // Kiterino start
++        if (age != null) {
++            tag.putInt(AGE.NBT, age);
++        }
++        // Kiterino end
+     }
+ 
+     @Override
+@@ -122,7 +144,7 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+             CraftMetaAxolotlBucket that = (CraftMetaAxolotlBucket) meta;
+ 
+             return (this.hasVariant() ? that.hasVariant() && this.variant.equals(that.variant) : !that.hasVariant())
+-                    && (this.entityTag != null ? that.entityTag != null && this.entityTag.equals(that.entityTag) : that.entityTag == null);
++                    && (this.entityTag != null ? that.entityTag != null && this.entityTag.equals(that.entityTag) : that.entityTag == null) && (this.getAge() == that.getAge()); // Kiterino
+         }
+         return true;
+     }
+@@ -143,6 +165,11 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+         if (this.entityTag != null) {
+             hash = 61 * hash + this.entityTag.hashCode();
+         }
++        // Kiterino start
++        if (this.age != null) {
++            hash = 61 * hash + this.age;
++        }
++        // Kiterino end
+ 
+         return original != hash ? CraftMetaAxolotlBucket.class.hashCode() ^ hash : hash;
+     }
+@@ -166,6 +193,24 @@ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBuck
+             builder.put(CraftMetaAxolotlBucket.VARIANT.BUKKIT, this.variant);
+         }
+ 
++        // Kiterino start
++        if (this.age != null) {
++            builder.put(AGE.BUKKIT, this.age);
++        }
++        // Kiterino end
++
+         return builder;
+     }
++
++    // Kiterino start
++    @Override
++    public int getAge() {
++        return age == null ? 0 : age;
++    }
++
++    @Override
++    public void setAge(int age) {
++        this.age = age;
++    }
++    // Kiterino end
+ }

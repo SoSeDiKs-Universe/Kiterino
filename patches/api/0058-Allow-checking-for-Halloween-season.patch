@@ -1,0 +1,62 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 21 Oct 2023 00:20:10 +0300
+Subject: [PATCH] Allow checking for Halloween season
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 154f0e924a6036fffeab3a04f22e5ebd58762d69..ef0b1b84cd620c21ed24a26b390f935b3acaabe4 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2921,5 +2921,14 @@ public final class Bukkit {
+     public static void setMaxStackSize(@NotNull Material material, int maxStackSize) {
+         server.setMaxStackSize(material, maxStackSize);
+     }
++
++    /**
++     * Checks whether it's currently Halloween season
++     *
++     * @return whether it's currently Halloween season
++     */
++    public static boolean isHalloweenSeason() {
++        return server.isHalloweenSeason();
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 1b4296e9859d8bb449827fc44fcc4c7c742ea270..3f32ebe938ebca970eb000125b2c42f81119805a 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2562,5 +2562,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+     default void setMaxStackSize(@NotNull Material material, int maxStackSize) {
+         material.maxStack = maxStackSize;
+     }
++
++    /**
++     * Checks whether it's currently Halloween season
++     *
++     * @return whether it's currently Halloween season
++     */
++    default boolean isHalloweenSeason() {
++        return getWorlds().get(0).isHalloweenSeason();
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
+index 187db385f5c0fa241469d236274670d17604fac6..e96ffa34e2a8aa08c0decb18e191b90bc15f9e9d 100644
+--- a/src/main/java/org/bukkit/World.java
++++ b/src/main/java/org/bukkit/World.java
+@@ -4234,4 +4234,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+      */
+     boolean applyBoneMeal(@NotNull Location location, @NotNull org.bukkit.block.BlockFace face, boolean showParticles, @Nullable Predicate<org.bukkit.block.BlockState> predicate);
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Checks whether it's currently Halloween season
++     *
++     * @return whether it's currently Halloween season
++     */
++    boolean isHalloweenSeason();
++    // Kiterino end
+ }

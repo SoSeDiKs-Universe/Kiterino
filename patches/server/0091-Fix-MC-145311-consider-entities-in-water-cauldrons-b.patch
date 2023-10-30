@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 10 Jan 2023 01:34:53 +0200
+Subject: [PATCH] Fix MC-145311 - consider entities in water cauldrons being
+ wet
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index f496ad03e5700b30c2a034991d8ee10f89cd1de6..e8595b08cfde92864996ba2929c73372032664b5 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1903,6 +1903,18 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+         return this.isInWaterOrBubble() || this.isInLava();
+     }
+ 
++    // Kiterino start
++    public boolean isInCauldronFilledWithWater() {
++        BlockState state = getFeetBlockState();
++        if (!state.is(Blocks.WATER_CAULDRON)) {
++            return false;
++        }
++        BlockPos pos = blockPosition();
++        double contentHeight = (6.0D + (double) state.getValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL) * 3.0D) / 16.0D; // Copypaste from LayeredCauldronBlock#getContentHeight
++        return getY() < pos.getY() + contentHeight && getBoundingBox().maxY > pos.getY() + 0.25D; // Copypaste from AbstractCauldronBlock#isEntityInsideContent
++    }
++    // Kiterino end
++
+     public boolean isUnderWater() {
+         return this.wasEyeInWater && this.isInWater();
+     }
+@@ -1937,7 +1949,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+             }
+         }
+ 
+-        if (this.updateFluidHeightAndDoFluidPushing(FluidTags.WATER, 0.014D)) {
++        if (this.updateFluidHeightAndDoFluidPushing(FluidTags.WATER, 0.014D) || isInCauldronFilledWithWater()) { // Kiterino
+             if (!this.wasTouchingWater && !this.firstTick) {
+                 this.doWaterSplashEffect();
+             }

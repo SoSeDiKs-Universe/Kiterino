@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 2 Feb 2023 03:42:48 +0200
+Subject: [PATCH] Chest isBlocked API
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java b/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java
+index b5d9e750965b21c27ec4aa12b0997176adbad527..7b8289b85739df30a9b55d71f4e554df79297fb3 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java
+@@ -94,4 +94,11 @@ public class CraftChest extends CraftLootable<ChestBlockEntity> implements Chest
+         return getTileEntity().openersCounter.opened;
+     }
+     // Paper end - More Lidded Block API
++
++    // Kiterino start
++    @Override
++    public boolean isBlocked() {
++        return ChestBlock.isChestBlockedAt(getWorldHandle(), getPosition());
++    }
++    // Kiterino end
+ }

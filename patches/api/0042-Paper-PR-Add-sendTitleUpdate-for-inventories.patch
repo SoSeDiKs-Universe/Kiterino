@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: nopjar <code.nopjar@gmail.com>
+Date: Mon, 13 Jun 2022 11:29:23 +0200
+Subject: [PATCH] Paper PR - Add sendTitleUpdate for inventories
+
+
+diff --git a/src/main/java/org/bukkit/inventory/InventoryView.java b/src/main/java/org/bukkit/inventory/InventoryView.java
+index ae2abcb63ac10c20c5bf5c2497806faf380dd2da..c594b4af5563124ead10161be47d4de722f77307 100644
+--- a/src/main/java/org/bukkit/inventory/InventoryView.java
++++ b/src/main/java/org/bukkit/inventory/InventoryView.java
+@@ -489,4 +489,16 @@ public abstract class InventoryView {
+      * @param title The new title.
+      */
+     public abstract void setTitle(@NotNull String title);
++
++    // Paper start
++    /**
++     * Sends a packet to the client to open a new inventory with the new title.
++     * <p>
++     * The ID of the inventory and the contents stay the same. This does not affect the title on the
++     * server. Methods like {@link #title()} will still return the old title.
++     *
++     * @param title the new title
++     */
++    public abstract void sendTitleUpdate(@NotNull net.kyori.adventure.text.Component title);
++    // Paper end
+ }

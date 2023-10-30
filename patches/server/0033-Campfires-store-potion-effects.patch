@@ -1,0 +1,110 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 17:41:30 +0300
+Subject: [PATCH] Campfires store potion effects
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
+index 2f80d484ad523860322483cebe92cf7cd8cfad22..352a9da4f141f4a0166b5b62730e2eeff892fce4 100644
+--- a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
++++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
+@@ -120,6 +120,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+                 } else {
+                     showParticles = this.applySplash(list, hitResult != null && hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null, hitResult); // CraftBukkit - Pass MovingObjectPosition // Paper - nullable hitResult
+                 }
++                splashCampfires(list); // Kiterino
+             }
+ 
+             if (showParticles) { // Paper
+@@ -131,6 +132,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+         }
+     }
+ 
++    // Kiterino start
++    private void splashCampfires(List<MobEffectInstance> list) {
++        if (list.isEmpty()) return;
++        var aabb = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
++        for (int x = (int) aabb.minX; x <= aabb.maxX; x++) {
++            for (int z = (int) aabb.minZ; z <= aabb.maxZ; z++) {
++                for (int y = (int) aabb.minY; y <= aabb.maxY; y++) {
++                    var pos = new BlockPos(x, y, z);
++                    var te = this.level().getBlockEntity(pos);
++                    if (te instanceof net.minecraft.world.level.block.entity.CampfireBlockEntity campfire) {
++                        if (!campfire.getBlockState().getValue(CampfireBlock.LIT)) continue;
++                        campfire.effect = list.get(0).getEffect();
++                        for (var i = 0; i < 6 ; i++) {
++                            var position = te.getBlockPos();
++                            ((net.minecraft.server.level.ServerLevel) this.level()).sendParticles(null, net.minecraft.core.particles.ParticleTypes.HEART, position.getX() + 0.5, position.getY() + 1D, position.getZ() + 0.5, 1, 0.5, 0.5, 0.5, 0, true);
++                        }
++                    }
++                }
++            }
++        }
++    }
++    // Kiterino end
++
+     private static final Predicate<net.minecraft.world.entity.LivingEntity> APPLY_WATER_GET_ENTITIES_PREDICATE = ThrownPotion.WATER_SENSITIVE_OR_ON_FIRE.or(Axolotl.class::isInstance); // Paper
+     private boolean applyWater() { // Paper
+         AABB axisalignedbb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
+index b0110a6f26064b506ae5402f1e5c9cefdb428653..0e4844a6e6601d6fc432b7d36a217c215e5b7fae 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
+@@ -43,6 +43,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+     public final int[] cookingTime;
+     private final RecipeManager.CachedCheck<Container, CampfireCookingRecipe> quickCheck;
+     public final boolean[] stopCooking; // Paper
++    public @org.jetbrains.annotations.Nullable net.minecraft.world.effect.MobEffect effect; // Kiterino
+ 
+     public CampfireBlockEntity(BlockPos pos, BlockState state) {
+         super(BlockEntityType.CAMPFIRE, pos, state);
+@@ -67,6 +68,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+                 setChanged(world, pos, state);
+                 return;
+             }
++            if (campfire.effect != null) {
++                boolean signalBoost = state.getValue(CampfireBlock.SIGNAL_FIRE);
++                int duration = signalBoost ? 180 : 80;
++                int amp = signalBoost ? 1 : 0;
++                int range = signalBoost ? 10 : 5;
++                var effect = new net.minecraft.world.effect.MobEffectInstance(campfire.effect, duration, amp, true, true);
++                world.getEntitiesOfClass(net.minecraft.world.entity.player.Player.class, new net.minecraft.world.phys.AABB(pos).inflate(range)).forEach(player -> player.addEffect(effect));
++            }
+         }
+         if (campfire.checkGravity(world, pos, state)) return;
+         // Kiterino end
+@@ -123,6 +132,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+     }
+ 
+     public static void cooldownTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
++        if (campfire.effect != null) campfire.effect = null; // Kiterino - reset effect if unlit
+         if (campfire.checkGravity(world, pos, state)) return; // Kiterino
+         boolean flag = false;
+ 
+@@ -209,6 +219,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+             System.arraycopy(cookingState, 0, this.stopCooking, 0, Math.min(this.stopCooking.length, abyte.length));
+         }
+         // Paper end
++        // Kiterino start
++        if (nbt.contains("Kiterino.Effect")) {
++            effect = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getOptional(net.minecraft.resources.ResourceLocation.tryParse(nbt.getString("Kiterino.Effect"))).orElse(net.minecraft.world.effect.MobEffects.REGENERATION);
++        }
++        // Kiterino end
+     }
+ 
+     @Override
+@@ -224,6 +239,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+         }
+         nbt.putByteArray("Paper.StopCooking", cookingState);
+         // Paper end
++        // Kiterino start
++        if (effect != null) {
++            net.minecraft.resources.ResourceLocation resourceLocation = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(effect);
++            if (resourceLocation != null) {
++                nbt.putString("Kiterino.Effect", resourceLocation.getPath());
++            }
++        }
++        // Kiterino end
+     }
+ 
+     @Override

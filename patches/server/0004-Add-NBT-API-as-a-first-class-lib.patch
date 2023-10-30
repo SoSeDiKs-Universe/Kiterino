@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 31 Jul 2021 20:15:05 +0300
+Subject: [PATCH] Add NBT API as a first-class lib
+
+
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index a51306bb36d403ab627cd8b2fc8d8f7a3e6ca918..d4388593f56cc088d1ae4034f17657d766e7f03d 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -305,6 +305,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         }
+         // Purpur end
+ 
++        // Kiterino start
++        de.tr7zw.changeme.nbtapi.utils.MinecraftVersion.disablePackageWarning();
++        de.tr7zw.changeme.nbtapi.utils.MinecraftVersion.disableUpdateCheck();
++        // Kiterino end
++
+         // CraftBukkit start
+         // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up
+         this.server.loadPlugins();
