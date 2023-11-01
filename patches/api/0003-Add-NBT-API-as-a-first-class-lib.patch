@@ -69,7 +69,7 @@ index 49974558799830d827f9ccd65a8bafee3fb0376b..5a2380e0608604b05a05f2f0fc94bc60
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
-index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..526fe6c8079b2efcc8f9139d89e98b48ee8a615b 100644
+index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..985927cd1707116b99f1f547113048db77851416 100644
 --- a/src/main/java/org/bukkit/block/TileState.java
 +++ b/src/main/java/org/bukkit/block/TileState.java
 @@ -50,4 +50,87 @@ public interface TileState extends BlockState, PersistentDataHolder {
@@ -147,7 +147,7 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..526fe6c8079b2efcc8f9139d89e98b48
 +     * @param <T> parameter
 +     */
 +    default <T> @org.bukkit.UndefinedNullability T modifyAndGetPersistentData(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @org.jetbrains.annotations.Nullable T> function) {
-+        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++        return de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, function);
 +    }
 +
 +    /**
@@ -156,12 +156,12 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..526fe6c8079b2efcc8f9139d89e98b48
 +     * @param consumer consumer that will be used to modify the tile state's persistent tag container
 +     */
 +    default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
-+        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
++        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..e3bf208514b5b0b249d98d2996b3ae7b8c684527 100644
+index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..2a0ee4eb1264ea51c430b956732b5947ce60de18 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
 @@ -1116,4 +1116,87 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
@@ -239,7 +239,7 @@ index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..e3bf208514b5b0b249d98d2996b3ae7b
 +     * @param <T> parameter
 +     */
 +    default <T> @org.bukkit.UndefinedNullability T modifyAndGetPersistentData(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @Nullable T> function) {
-+        return de.tr7zw.changeme.nbtapi.NBT.modify(this, function);
++        return de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, function);
 +    }
 +
 +    /**
@@ -248,7 +248,7 @@ index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..e3bf208514b5b0b249d98d2996b3ae7b
 +     * @param consumer consumer that will be used to modify the entity's persistent tag container
 +     */
 +    default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
-+        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
++        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
 +    }
 +    // Kiterino end
  }
