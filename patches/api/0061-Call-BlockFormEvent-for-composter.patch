@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 3 Nov 2023 22:48:22 +0200
+Subject: [PATCH] Call BlockFormEvent for composter
+
+
+diff --git a/src/main/java/org/bukkit/event/block/BlockFormEvent.java b/src/main/java/org/bukkit/event/block/BlockFormEvent.java
+index 0106780414abf8cdacd07b8e1435d619bf96bdb3..ddeb8277e37fe3be0bc71b41b06961223d3ebba3 100644
+--- a/src/main/java/org/bukkit/event/block/BlockFormEvent.java
++++ b/src/main/java/org/bukkit/event/block/BlockFormEvent.java
+@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
+  * <li>Ice forming in a snowy Biome like Taiga or Tundra.
+  * <li> Obsidian / Cobblestone forming due to contact with water.
+  * <li> Concrete forming due to mixing of concrete powder and water.
++ * <li> Composter finishing composting.
+  * </ul>
+  * <p>
+  * If a Block Form event is cancelled, the block will not be formed.

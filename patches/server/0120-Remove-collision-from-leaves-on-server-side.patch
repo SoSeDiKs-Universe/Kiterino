@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 2 Nov 2023 15:45:58 +0200
+Subject: [PATCH] Remove collision from leaves on server-side
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
+index b047d72c35d5e25ada722b37f581e9a5c2a52b22..c4995a230f0195c6cc22a9507929c21165cc0d56 100644
+--- a/src/main/java/net/minecraft/world/level/block/Blocks.java
++++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
+@@ -132,9 +132,9 @@ public class Blocks {
+     public static final Block BIRCH_LEAVES = register("birch_leaves", leaves(SoundType.GRASS));
+     public static final Block JUNGLE_LEAVES = register("jungle_leaves", leaves(SoundType.GRASS));
+     public static final Block ACACIA_LEAVES = register("acacia_leaves", leaves(SoundType.GRASS));
+-    public static final Block CHERRY_LEAVES = register("cherry_leaves", new CherryLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).randomTicks().sound(SoundType.CHERRY_LEAVES).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never)));
++    public static final Block CHERRY_LEAVES = register("cherry_leaves", new CherryLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2F).randomTicks().sound(SoundType.CHERRY_LEAVES).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never).noCollission())); // Kiterino - no collision
+     public static final Block DARK_OAK_LEAVES = register("dark_oak_leaves", leaves(SoundType.GRASS));
+-    public static final Block MANGROVE_LEAVES = register("mangrove_leaves", new MangroveLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never)));
++    public static final Block MANGROVE_LEAVES = register("mangrove_leaves", new MangroveLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never).noCollission())); // Kiterino - no collision
+     public static final Block AZALEA_LEAVES = register("azalea_leaves", leaves(SoundType.AZALEA_LEAVES));
+     public static final Block FLOWERING_AZALEA_LEAVES = register("flowering_azalea_leaves", leaves(SoundType.AZALEA_LEAVES));
+     public static final Block SPONGE = register("sponge", new SpongeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.6F).sound(SoundType.SPONGE)));
+@@ -1200,7 +1200,7 @@ public class Blocks {
+     }
+ 
+     private static LeavesBlock leaves(SoundType soundGroup) {
+-        return new LeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(soundGroup).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never));
++        return new LeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(soundGroup).noOcclusion().isValidSpawn(Blocks::ocelotOrParrot).isSuffocating(Blocks::never).isViewBlocking(Blocks::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(Blocks::never).noCollission()); // Kiterino - no collision
+     }
+ 
+     private static ShulkerBoxBlock shulkerBox(DyeColor color, BlockBehaviour.Properties settings) {

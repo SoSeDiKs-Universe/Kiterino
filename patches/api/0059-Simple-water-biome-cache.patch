@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 1 Nov 2023 16:53:27 +0200
+Subject: [PATCH] Simple water biome cache
+
+
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index 467a9658c4f1cc80a485411425cf4273909017d3..51ccf420fc5218c51d949bbd2fd1080cf0891b10 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -893,5 +893,19 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+     default org.bukkit.entity.Item dropItemNaturally(@NotNull ItemStack item, @Nullable org.bukkit.util.Consumer<org.bukkit.entity.Item> function) {
+         return getWorld().dropItem(getLocation().toCenterLocation(), item, function);
+     }
++
++    /**
++     * Checks whether this chunk has infinite water
++     *
++     * @return whether this chunk has infinite water
++     */
++    boolean hasInfiniteWater();
++
++    /**
++     * Gets the nearest cached water biome
++     *
++     * @return the nearest cached water biome, if present
++     */
++    @org.jetbrains.annotations.Nullable Biome getCachedWaterBiome();
+     // Kiterino end
+ }
