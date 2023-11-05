@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 525d0d9777ca532c881df95a1d12dda54f44ea2f..4e7976ef639b23fd97360aa564c6b54049d76bd9 100644
+index 0d21262040b5033dafc986026dca69befd573232..8ef34d44c809b61317875a77e9d12ef4739da8e7 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3011,6 +3011,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -3023,6 +3023,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          }
      }
  
@@ -30,10 +30,10 @@ index 525d0d9777ca532c881df95a1d12dda54f44ea2f..4e7976ef639b23fd97360aa564c6b540
      protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
      protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 48849af29cbb3cc637ceb16f68e9f03711b9f4f3..2f36e8dd5a060c71fbf63427b52ae1dcaf87a16e 100644
+index c7cc379a594b1dcf13c334a0330a4e27fe0b5423..21c710f82f6df313a70dd7af91fd6646d9788569 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1819,7 +1819,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1817,7 +1817,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
      }
  
      public InteractionResult tryRide(Player player, InteractionHand hand, InteractionResult result) {
@@ -42,7 +42,7 @@ index 48849af29cbb3cc637ceb16f68e9f03711b9f4f3..2f36e8dd5a060c71fbf63427b52ae1dc
              return result;
          }
          if (hand != InteractionHand.MAIN_HAND) {
-@@ -1847,7 +1847,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1845,7 +1845,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
                  return InteractionResult.PASS;
              }
          }

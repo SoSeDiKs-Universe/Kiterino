@@ -46,10 +46,10 @@ index 6b0bdc266109cdfb874f08bf74323603921d2260..2229173653694a083dd3274878da3db0
  
  }
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 50720000069a4914c11ef5c402a39c469966196f..af411ea8e771e102449d024062b6e2350024a57c 100644
+index 182acaad79e14e5e120094916a0d295a4584de7a..91771e046420df952af2dd7176fcf97132a876e9 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -297,11 +297,13 @@ public abstract class PlayerList {
+@@ -318,11 +318,13 @@ public abstract class PlayerList {
          Component joinMessage = ichatmutablecomponent; // Paper - Adventure
  
          playerconnection.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());

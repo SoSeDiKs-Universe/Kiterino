@@ -38,10 +38,10 @@ index 8769e3cc4109bcc12d2758aa32db920f4dbae6e4..623dafe90fcbb384d6a5131deffd1657
                      world.levelEvent(1505, blockposition1, 0);
                  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 3b153d96b08c5591b4a322a2bbd5986257d4609a..2dc0b69a0f9e2f28c3cbde7f81ae1ee28f8caca9 100644
+index c2e9e44f7399ba7236ab30bfd1ab7f8a69cef4b8..ab4d4497a6a861776af2619a35da62c3f7bbcd89 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2489,5 +2489,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2509,5 +2509,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
  
          return this.adventure$pointers;
      }

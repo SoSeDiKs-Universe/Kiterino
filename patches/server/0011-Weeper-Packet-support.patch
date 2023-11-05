@@ -757,10 +757,10 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..90fb9b576ed74a9063574f7bc3926668
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 067302709a2291274eeecd1e4e04662b6914da12..c199f3a686b5be18d07951a973ab2b89cea7c647 100644
+index d61d7ae47285d9779221011212f871c4ef7de830..1b08374fd11aace2473806436c837fae3679deac 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -345,7 +345,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -346,7 +346,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -769,7 +769,7 @@ index 067302709a2291274eeecd1e4e04662b6914da12..c199f3a686b5be18d07951a973ab2b89
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -354,11 +354,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -355,11 +355,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -785,7 +785,7 @@ index 067302709a2291274eeecd1e4e04662b6914da12..c199f3a686b5be18d07951a973ab2b89
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 105770551539444c0872cb25b7be197389ad525e..7c5b7530cd9bc87c4f45e9cb54ec3f99e0ee8aa5 100644
+index 02f4a2a0bfd66a557f5167ac9ccd13ff9f3dd763..2755e59396655f7b5e0baae4e656c47ca8831d89 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -830,7 +830,7 @@ index a8c5bfc54ed2b8bd873f124c7080d73fe73a86ad..ddad998b9058e68724dd2be15e3cd7df
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index c25ab8baf2eb66f85a60280e32a134c99f21b40c..7fdbac9f4180e1bcf01487cffd31969689c1c27a 100644
+index fd86c1d43cccd036f60cb270b56fd33f95707720..f6c6fd8d62a79951d3a3dae8da1eff22169826a3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -12,14 +12,20 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;

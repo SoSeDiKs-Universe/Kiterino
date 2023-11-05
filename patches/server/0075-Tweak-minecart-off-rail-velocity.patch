@@ -5,10 +5,10 @@ Subject: [PATCH] Tweak minecart off rail velocity
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 26941817ea5d66fedea0518de7e18229f5a9d3f0..adcdac7ca1c20473172af99f9b5d4f299f9c4619 100644
+index f66acfb4c50af55a874e3c8e6db2de0b21ba804a..5ccf8fc6bf4dd46f097cebfa57c02fc248520a4b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1488,7 +1488,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1521,7 +1521,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
          return offsetFactor;
      }
  

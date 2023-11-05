@@ -5,10 +5,10 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index b6a734f57ba32f51fc37ea10f0754c0a2b42a4ff..93d13f46453a7c042b190b88fd6200d6846baaf5 100644
+index 7b157981064b834e5170e6c358354422d6428280..467f257240c8a37269f51746b91247a690b6c05f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -338,6 +338,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -339,6 +339,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected final RandomSource random;
      public int tickCount;
      private int remainingFireTicks;
@@ -16,7 +16,7 @@ index b6a734f57ba32f51fc37ea10f0754c0a2b42a4ff..93d13f46453a7c042b190b88fd6200d6
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
      protected boolean wasEyeInWater;
-@@ -877,6 +878,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -910,6 +911,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              }
          }
  

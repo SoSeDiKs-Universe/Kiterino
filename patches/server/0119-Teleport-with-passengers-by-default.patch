@@ -18,10 +18,10 @@ index 49685f4ee4882c3a643a3bd52d2a824f3dc3579b..6513bf3afe9c59667cf63996dbcbd028
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 9f0ee455147d9de6df2c140cfa7fff26234695ef..6e0a450d76210d210fab2918e8811a8644b16280 100644
+index 8a0500dd0196679bb2677fc14cf9fad65eb34ba3..e6085d7c82646047af8bb24f349af1cac290e5f0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1264,7 +1264,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1254,7 +1254,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      @Override
      public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
          // Paper start - Teleport API

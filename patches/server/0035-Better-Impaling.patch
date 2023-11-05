@@ -5,10 +5,10 @@ Subject: [PATCH] Better Impaling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 599094f231787db475882c38721b724a2e3bf41c..48849af29cbb3cc637ceb16f68e9f03711b9f4f3 100644
+index 80c03bd4e5d7e20bb8a4e14af5620f5c57a05fd4..c7cc379a594b1dcf13c334a0330a4e27fe0b5423 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1704,6 +1704,12 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1702,6 +1702,12 @@ public abstract class Mob extends LivingEntity implements Targeting {
  
          if (target instanceof LivingEntity) {
              f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
