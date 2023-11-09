@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 8 Nov 2023 03:56:07 +0200
+Subject: [PATCH] Set resource pack API
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index ef0b1b84cd620c21ed24a26b390f935b3acaabe4..3aa24ba1cc4087b8824db0bcc4b4f7823c35bfd9 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2930,5 +2930,17 @@ public final class Bukkit {
+     public static boolean isHalloweenSeason() {
+         return server.isHalloweenSeason();
+     }
++
++    /**
++     * Sets the server resource pack. The sha1 hash will be calculated automatically.
++     *
++     * @param url url
++     * @param hash sha1 hash
++     * @param required whether resource pack is required
++     * @param prompt prompt
++     */
++    public static void setResourcePack(@Nullable String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt) {
++        server.setResourcePack(url, hash, required, prompt);
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 3f32ebe938ebca970eb000125b2c42f81119805a..2aa85ab1cdde66f01b2c9b89a2087712a72beebf 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2571,5 +2571,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+     default boolean isHalloweenSeason() {
+         return getWorlds().get(0).isHalloweenSeason();
+     }
++
++    /**
++     * Sets the server resource pack. The sha1 hash will be calculated automatically.
++     *
++     * @param url url
++     * @param required whether resource pack is required
++     * @param prompt prompt
++     */
++    void setResourcePack(@Nullable String url, String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt);
+     // Kiterino end
+ }
