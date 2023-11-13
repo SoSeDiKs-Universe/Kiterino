@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 30 Jan 2021 18:55:38 +0200
+Subject: [PATCH] Allow modifying vanilla block drops
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index f33d6e9785acbd21a0b366587aa170cc1509bf58..0f5dbeb6c227dcd9fe360e3602ffbf77c7cec25b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -463,6 +463,21 @@ public class CraftEventFactory {
+         Bukkit.getPluginManager().callEvent(event);
+ 
+         if (!event.isCancelled()) {
++            // Kiterino start
++            if (event.changeDrops()) {
++                for (Item bukkit : list) {
++                    if (bukkit.isValid()) {
++                        bukkit.remove();
++                    }
++                }
++                org.bukkit.World world = block.getWorld();
++                org.bukkit.Location loc = block.getLocation();
++                for (org.bukkit.inventory.ItemStack drop : event.getDrops()) {
++                    world.dropItemNaturally(loc, drop);
++                }
++                return;
++            }
++            // Kiterino end
+             // Paper start
+             for (Item bukkit : list) {
+                 if (!bukkit.isValid()) {

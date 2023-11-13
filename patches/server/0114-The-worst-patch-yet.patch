@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 12 Jul 2023 00:11:11 +0300
+Subject: [PATCH] The worst patch yet
+
+Allows creating block data in async for use with packet APIs
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
+index 2a9dba6d4a94f1488ef9d86ee4f60b7fd06419fb..132a0312d98ffe90b837b8877807a97b02e28291 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
+@@ -152,7 +152,7 @@ public class CraftBlockData implements BlockData {
+         return exactMatch;
+     }
+ 
+-    private static final Map<Class<? extends Enum<?>>, Enum<?>[]> ENUM_VALUES = new HashMap<>();
++    private static final Map<Class<? extends Enum<?>>, Enum<?>[]> ENUM_VALUES = new java.util.concurrent.ConcurrentHashMap<>(); // Kiterino
+ 
+     /**
+      * Convert an NMS Enum (usually a BlockStateEnum) to its appropriate Bukkit

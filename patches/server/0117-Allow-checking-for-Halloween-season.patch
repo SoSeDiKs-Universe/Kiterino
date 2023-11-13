@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 21 Oct 2023 00:20:09 +0300
+Subject: [PATCH] Allow checking for Halloween season
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 41651ba46f438cb776eb78bd4435c0ba03fbe832..ff4eb153ace366bafe7ec63cd0cc615148106a1f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -2546,4 +2546,15 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+         return result == net.minecraft.world.InteractionResult.CONSUME;
+     }
+     // Paper end
++
++    // Kiterino start
++    /**
++     * Checks whether it's currently Halloween season
++     *
++     * @return whether it's currently Halloween season
++     */
++    public boolean isHalloweenSeason() {
++        return net.minecraft.world.entity.ambient.Bat.isHalloweenSeason(getHandle());
++    }
++    // Kiterino end
+ }

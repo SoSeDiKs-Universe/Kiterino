@@ -1,0 +1,65 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 18 Dec 2021 05:06:49 +0100
+Subject: [PATCH] Add block place API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 3f1a67770a68a9a5a8847c5d692ca3741b122352..963e3915ccf556db0af0c42530d7fdf4fb2ffacf 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -3428,4 +3428,54 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+         sendDeathScreen(message);
+     }
+     // Purpur end
++
++    // Kiterino end
++    /**
++     * Place block as if this player placed it
++     * <p>Item in hand will be consumed if placed successfully
++     *
++     * @param hand hand to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @return true, if placed successfully
++     */
++    default boolean placeBlock(@NotNull org.bukkit.inventory.EquipmentSlot hand, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace) {
++        return placeBlock(hand, location, blockFace, true);
++    }
++
++    /**
++     * Place block as if this player placed it
++     *
++     * @param hand hand to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @param consume whether item should be consumed or not upon successful placement
++     * @return true, if placed successfully
++     */
++    boolean placeBlock(@NotNull org.bukkit.inventory.EquipmentSlot hand, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
++
++    /**
++     * Place block as if this player placed it
++     * <p>Item in hand will be consumed if placed successfully
++     *
++     * @param block block item to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @return true, if placed successfully
++     */
++    default boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace) {
++        return placeBlock(block, location, blockFace, true);
++    }
++
++    /**
++     * Place block as if this player placed it
++     *
++     * @param block block item to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @param consume whether item should be consumed or not upon successful placement
++     * @return true, if placed successfully
++     */
++    boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
++    // Kiterino end
+ }

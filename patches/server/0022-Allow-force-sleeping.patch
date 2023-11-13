@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 14:32:55 +0300
+Subject: [PATCH] Allow force sleeping
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index a19c2d10385d3bc81061f188e2874fe118ddd425..332d513ec4b3fed82d5ee0aa8be2ef6148695bcc 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -540,7 +540,7 @@ public class ServerPlayer extends Player {
+         }
+         this.getBukkitEntity().readExtraData(nbt); // CraftBukkit
+ 
+-        if (this.isSleeping()) {
++        if (this.isSleeping() && this.checkBedExists()) { // Kiterino - wake up only if bed exists
+             this.stopSleeping();
+         }
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 1129cfd4c59f9ef83c69a70ce9155ef537610121..564a958ab09dd749197d331d03f88efe388c3113 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -3125,7 +3125,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+                 this.getCombatTracker().recheckStatus();
+             }
+ 
+-            if (this.isSleeping() && !this.checkBedExists()) {
++            if (false && this.isSleeping() && !this.checkBedExists()) { // Kiterino - do not wake up automatically even if no bed underneath
+                 this.stopSleeping();
+             }
+         }
+@@ -4448,7 +4448,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+         this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
+     }
+ 
+-    private boolean checkBedExists() {
++    public boolean checkBedExists() { // Kiterino - private -> public
+         return (Boolean) this.getSleepingPos().map((blockposition) -> {
+             return this.level().getBlockState(blockposition).getBlock() instanceof BedBlock;
+         }).orElse(false);
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 64aaea2b8c27c2b320f423b37dc0254bfe2fe015..2ded46bf6d62a6d6c011af5c0057a2d7cc3a5ba1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -1371,7 +1371,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         if (dismount) entity.stopRiding(); // Paper - Teleport API
+ 
+         // SPIGOT-5509: Wakeup, similar to riding
+-        if (this.isSleeping()) {
++        if (this.isSleeping() && getHandle().checkBedExists()) { // Kiterino - wake up only if bed exists
+             this.wakeup(false);
+         }
+ 

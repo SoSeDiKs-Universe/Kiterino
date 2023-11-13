@@ -5,14 +5,14 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4bac9590c4cb655e9139446e96431b42daf4f90c..4de01fddbc67d00a5b4d10b6a01096f5add2bea3 100644
+index 4bac9590c4cb655e9139446e96431b42daf4f90c..092a879506dd113a7bc9f46979a8c148b316f4ca 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -47,6 +47,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:$log4jVersion")
      api("org.slf4j:slf4j-api:$slf4jVersion")
      api("io.sentry:sentry:5.4.0") // Pufferfish
-+    api("de.tr7zw:item-nbt-api:2.12.0-SNAPSHOT") // Kiterino
++    api("de.tr7zw:item-nbt-api:2.12.1") // Kiterino
  
      implementation("org.ow2.asm:asm:9.4")
      implementation("org.ow2.asm:asm-commons:9.4")
@@ -253,17 +253,18 @@ index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..2a0ee4eb1264ea51c430b956732b5947
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index ed168cba3692f55ac976c6ef31525e83ae36f5f9..6f1494a1b7fe7aae536fbd1fb5a3726ebff81ce1 100644
+index ed168cba3692f55ac976c6ef31525e83ae36f5f9..91e3a7eec5bc32d07d2f8d9a28a0a6b0293675e5 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1648,4 +1648,55 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1648,4 +1648,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return Bukkit.getItemFactory().getHoverLines(this, advanced);
      }
      // Purpur end
 +
 +    // Kiterino start
 +    /**
-+     * Reads nbt data of this item
++     * Reads nbt data of this item.
++     * <p>Note: this will copy the item, but allows context-free access to the data.
 +     *
 +     * @return read-only nbt container of this item
 +     */

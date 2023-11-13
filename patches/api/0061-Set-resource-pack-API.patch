@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 8 Nov 2023 03:56:07 +0200
+Subject: [PATCH] Set resource pack API
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 5bda49bd590968e9c8aa38d1ca09fcb41fcb3d8d..36e499a876414001160d1f29f8c88886bcd589ec 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -3006,5 +3006,17 @@ public final class Bukkit {
+     public static boolean isHalloweenSeason() {
+         return server.isHalloweenSeason();
+     }
++
++    /**
++     * Sets the server resource pack. The sha1 hash will be calculated automatically.
++     *
++     * @param url url
++     * @param hash sha1 hash
++     * @param required whether resource pack is required
++     * @param prompt prompt
++     */
++    public static void setResourcePack(@Nullable String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt) {
++        server.setResourcePack(url, hash, required, prompt);
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 0962462496e7fc3097b17ab1a2c8e27a8774404d..44b461e3795ed9af235bce2d84ea30062f2aec04 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2640,5 +2640,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+     default boolean isHalloweenSeason() {
+         return getWorlds().get(0).isHalloweenSeason();
+     }
++
++    /**
++     * Sets the server resource pack. The sha1 hash will be calculated automatically.
++     *
++     * @param url url
++     * @param hash sha1 hash
++     * @param required whether resource pack is required
++     * @param prompt prompt
++     */
++    void setResourcePack(@Nullable String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt);
+     // Kiterino end
+ }

@@ -1,0 +1,276 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 13 Feb 2022 06:28:00 +0100
+Subject: [PATCH] Kiterino NBT additions
+
+
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index 5a2380e0608604b05a05f2f0fc94bc6040991d18..40f5cdd4a5cc26dee3a559082f617a48a872c802 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -808,5 +808,15 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+     default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getPersistentData() {
+         return getNbt().getData();
+     }
++
++    /**
++     * Returns a custom tag container of this block (in chunk's nbt) under
++     * Kiterino namespace.
++     *
++     * @return custom NBT tags container under Kiterino namespace
++     */
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getKiterinoNbt() {
++        return getPersistentData().getOrCreateCompound(org.bukkit.Bukkit.getName());
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
+index 985927cd1707116b99f1f547113048db77851416..454edc96f753bd5933ab1ecd7c3d063ac5de7c93 100644
+--- a/src/main/java/org/bukkit/block/TileState.java
++++ b/src/main/java/org/bukkit/block/TileState.java
+@@ -132,5 +132,57 @@ public interface TileState extends BlockState, PersistentDataHolder {
+     default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
+         de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
+     }
++
++    /**
++     * Reads nbt data of this tile state
++     *
++     * @param consumer consumer that will be used to read the tile state's tag container
++     */
++    default void readKNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, nbt -> {
++            String kiterinoTag = org.bukkit.Bukkit.getName();
++            // Still passing an empty nbt container in case passed function uses something like getOrDefault
++            consumer.accept(nbt.hasTag(kiterinoTag) ? nbt.getCompound(kiterinoTag) : de.tr7zw.changeme.nbtapi.NBT.createNBTObject());
++        });
++    }
++
++    /**
++     * Gets data from tile state's nbt under Kiterino namespace
++     *
++     * @param function function that will be applied to the entity's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T getKNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @org.jetbrains.annotations.Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.getPersistentData(this, nbt -> {
++            String kiterinoTag = org.bukkit.Bukkit.getName();
++            // Still passing an empty nbt container in case passed function uses something like getOrDefault
++            return function.apply(nbt.hasTag(kiterinoTag) ? nbt.getCompound(kiterinoTag) : de.tr7zw.changeme.nbtapi.NBT.createNBTObject());
++        });
++    }
++
++    /**
++     * Modifies tag container of the tile state under Kiterino namespace
++     *
++     * @param function function that will be applied to the tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T modifyAndGetKNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @org.jetbrains.annotations.Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, nbt -> {
++            return function.apply(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
++        });
++    }
++
++    /**
++     * Modifies tag container of the tile state under Kiterino namespace
++     *
++     * @param consumer consumer that will be used to modify the tile state's tag container
++     */
++    default void modifyKNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, nbt -> {
++            consumer.accept(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
++        });
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 2a0ee4eb1264ea51c430b956732b5947ce60de18..4600be3365fffab2865befc2f82727995569b90b 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -1198,5 +1198,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+     default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
+         de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
+     }
++
++    /**
++     * Reads nbt data of this entity
++     *
++     * @param consumer consumer that will be used to read the entity's tag container
++     */
++    default void readKNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, nbt -> {
++            String kiterinoTag = org.bukkit.Bukkit.getName();
++            // Still passing an empty nbt container in case passed function uses something like getOrDefault
++            consumer.accept(nbt.hasTag(kiterinoTag) ? nbt.getCompound(kiterinoTag) : de.tr7zw.changeme.nbtapi.NBT.createNBTObject());
++        });
++    }
++
++    /**
++     * Gets data from entity's nbt under Kiterino namespace
++     *
++     * @param function function that will be applied to the entity's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T getKNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, nbt -> {
++            String kiterinoTag = org.bukkit.Bukkit.getName();
++            // Still passing an empty nbt container in case passed function uses something like getOrDefault
++            return function.apply(nbt.hasTag(kiterinoTag) ? nbt.getCompound(kiterinoTag) : de.tr7zw.changeme.nbtapi.NBT.createNBTObject());
++        });
++    }
++
++    /**
++     * Modifies tag container of the entity under Kiterino namespace
++     *
++     * @param function function that will be applied to the tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    default <T> @org.bukkit.UndefinedNullability T modifyAndGetKNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, nbt -> {
++            return function.apply(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
++        });
++    }
++
++    /**
++     * Modifies tag container of the entity under Kiterino namespace
++     *
++     * @param consumer consumer that will be used to modify the entity's tag container
++     */
++    default void modifyKNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, nbt -> {
++            consumer.accept(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
++        });
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
+index 91e3a7eec5bc32d07d2f8d9a28a0a6b0293675e5..014c53779e776732a5c754b85fe506fd366b2cc2 100644
+--- a/src/main/java/org/bukkit/inventory/ItemStack.java
++++ b/src/main/java/org/bukkit/inventory/ItemStack.java
+@@ -1699,5 +1699,80 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+     public void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteItemNBT> consumer) {
+         de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
+     }
++
++    /**
++     * Reads nbt data of this items
++     *
++     * @param consumer consumer that will be used to read the item's tag container
++     */
++    public void readKNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.get(this, nbt -> {
++            String kiterinoTag = org.bukkit.Bukkit.getName();
++            // Still passing an empty nbt container in case passed function uses something like getOrDefault
++            consumer.accept(nbt.hasTag(kiterinoTag) ? nbt.getCompound(kiterinoTag) : de.tr7zw.changeme.nbtapi.NBT.createNBTObject());
++        });
++    }
++
++    /**
++     * Gets data from item's nbt under Kiterino namespace
++     *
++     * @param function function that will be applied to the item's tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    public <T> @UndefinedNullability T getKNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.get(this, nbt -> {
++            String kiterinoTag = Bukkit.getName();
++            // Still passing an empty nbt container in case passed function uses something like getOrDefault
++            return function.apply(nbt.hasTag(kiterinoTag) ? nbt.getCompound(kiterinoTag) : de.tr7zw.changeme.nbtapi.NBT.createNBTObject());
++        });
++    }
++
++    /**
++     * Modifies tag container of the item under Kiterino namespace
++     *
++     * @param function function that will be applied to the tag container
++     * @return return value of the function
++     * @param <T> parameter
++     */
++    public <T> @UndefinedNullability T modifyAndGetKNbt(@NotNull java.util.function.Function<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT, @Nullable T> function) {
++        return de.tr7zw.changeme.nbtapi.NBT.modify(this, nbt -> {
++            return function.apply(nbt.getOrCreateCompound(Bukkit.getName()));
++        });
++    }
++
++    /**
++     * Modifies tag container of the item under Kiterino namespace
++     *
++     * @param consumer consumer that will be used to modify the item's tag container
++     */
++    public void modifyKNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
++        de.tr7zw.changeme.nbtapi.NBT.modify(this, nbt -> {
++            consumer.accept(nbt.getOrCreateCompound(Bukkit.getName()));
++        });
++    }
++
++    /**
++     * Returns custom item ID, if present
++     *
++     * @return ID if present
++     */
++    public @Nullable String subtractId() {
++        if (isEmpty(this)) return null;
++        return getNbt(nbt -> {
++            String kiterinoTag = Bukkit.getName();
++            if (!nbt.hasTag(kiterinoTag, de.tr7zw.changeme.nbtapi.NBTType.NBTTagCompound)) return null;
++            return nbt.getCompound(kiterinoTag).getOrNull("Id", String.class);
++        });
++    }
++
++    /**
++     * Checks whether this item has Kiterino ID tag
++     *
++     * @return true if item has Kiterino tag
++     */
++    public boolean isKItem() {
++        return subtractId() != null;
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
+index 70fce7933d4282fdac1c2aca8c5bf3b45f74daab..eb2b122e63ed2ea621cc54232fc4129e8393942c 100644
+--- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
++++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
+@@ -209,5 +209,15 @@ public interface PersistentDataContainer {
+     default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
+         return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
+     }
++
++    /**
++     * Returns a custom tag container under Kiterino namespace.
++     *
++     * @return custom NBT tags container under Kiterino namespace
++     */
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getKiterinoNbt() {
++        return getPersistentData().getOrCreateCompound(org.bukkit.Bukkit.getName());
++    }
+     // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
+index 789f0f63df03ca890dd77005270595bfe5167efe..d266576c6de49402c96231271810b34cb01b0874 100644
+--- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
++++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
+@@ -30,6 +30,16 @@ public interface PersistentDataHolder {
+     default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
+         return getPersistentDataContainer().getPersistentData();
+     }
++
++    /**
++     * Returns a custom tag container under Kiterino namespace.
++     *
++     * @return custom NBT tags container under Kiterino namespace
++     */
++    @Deprecated
++    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getKiterinoNbt() {
++        return getPersistentData().getOrCreateCompound(org.bukkit.Bukkit.getName());
++    }
+     // Kiterino end
+ 
+ }
