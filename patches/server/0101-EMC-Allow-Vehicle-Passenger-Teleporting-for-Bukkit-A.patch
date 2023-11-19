@@ -32,7 +32,7 @@ index 1319e3ffd6bae049585d9504584bfe1d4fbd7fb5..f9282bc4a105e0c6463b86386c8e63b1
      public double xo;
      public double yo;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index f97966a018412d358d142bd7c2cc1442c0f4a861..faf89875c2c0711e25000d769fb361ce3e284f48 100644
+index 7dda89e7f5e5bc697f27e76df78e580611125fc4..d34ecd1efaf624707980a62855f8719c798a983e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -588,6 +588,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -137,7 +137,7 @@ index f97966a018412d358d142bd7c2cc1442c0f4a861..faf89875c2c0711e25000d769fb361ce
              return false;
          }
          // Paper end
-@@ -624,12 +704,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -635,12 +715,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
  
          // If this entity is riding another entity, we must dismount before teleporting.
          if (dismount) this.entity.stopRiding(); // Paper - Teleport passenger API
@@ -152,7 +152,7 @@ index f97966a018412d358d142bd7c2cc1442c0f4a861..faf89875c2c0711e25000d769fb361ce
              return true;
          }
  
-@@ -638,6 +720,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -649,6 +731,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          // SPIGOT-619: Force sync head rotation also
          this.entity.setYHeadRot(location.getYaw());
  

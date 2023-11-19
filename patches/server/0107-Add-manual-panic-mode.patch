@@ -56,10 +56,10 @@ index 3263c816e82285ff943270be21049432ac7f55e9..da2cc383231175c7d0739f5a7169219b
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index faf89875c2c0711e25000d769fb361ce3e284f48..949a2374c2173484b1f0744cd2160d24fdb3930e 100644
+index d34ecd1efaf624707980a62855f8719c798a983e..2a291ea5964bf5ee399a1a4c5166d5ce67f12945 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1671,5 +1671,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1682,5 +1682,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public UUID getSpawningPlayerUuid() {
          return getHandle().spawningPlayerUuid;
      }

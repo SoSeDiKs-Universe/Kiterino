@@ -73,10 +73,10 @@ index a2a59dd2e515bf4dca84a442703c122fd36f05e0..d8246fc22c4fef2f80988daddb80204d
                                              // CraftBukkit start
                                              // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index f97fbc00b474361a39275fdfdc4246be1ebc0d6b..f97966a018412d358d142bd7c2cc1442c0f4a861 100644
+index 40ab0ab4404b090d3f2fdb8a83f57389267a01d0..7dda89e7f5e5bc697f27e76df78e580611125fc4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1582,4 +1582,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1593,4 +1593,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return !getHandle().dismountsUnderwater();
      }
      // Purpur end

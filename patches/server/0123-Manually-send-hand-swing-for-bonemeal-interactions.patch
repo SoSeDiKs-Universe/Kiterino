@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 17 Nov 2023 04:07:09 +0200
+Subject: [PATCH] Manually send hand swing for bonemeal interactions
+
+
+diff --git a/src/main/java/net/minecraft/world/item/BoneMealItem.java b/src/main/java/net/minecraft/world/item/BoneMealItem.java
+index 1bffb34c88ebb472684f6b0cf04617e0b448556a..126293488ab84050f1657d9a5723e705e07a40e6 100644
+--- a/src/main/java/net/minecraft/world/item/BoneMealItem.java
++++ b/src/main/java/net/minecraft/world/item/BoneMealItem.java
+@@ -52,6 +52,7 @@ public class BoneMealItem extends Item {
+         if (BoneMealItem.growCrop(itemactioncontext.getItemInHand(), world, blockposition)) {
+             if (showParticles && !world.isClientSide) { // Paper - BoneMeal API
+                 if (itemactioncontext.getPlayer() != null) {
++                    itemactioncontext.getPlayer().swing(itemactioncontext.getHand(), true);
+                     itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
+                 }
+                 world.levelEvent(1505, blockposition, 0);
+@@ -65,6 +66,7 @@ public class BoneMealItem extends Item {
+             if (flag && BoneMealItem.growWaterPlant(itemactioncontext.getItemInHand(), world, blockposition1, itemactioncontext.getClickedFace())) {
+                 if (showParticles && !world.isClientSide) { // Paper - BoneMeal API
+                     if (itemactioncontext.getPlayer() != null) {
++                        itemactioncontext.getPlayer().swing(itemactioncontext.getHand(), true);
+                         itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
+                     }
+                     world.levelEvent(1505, blockposition1, 0);
