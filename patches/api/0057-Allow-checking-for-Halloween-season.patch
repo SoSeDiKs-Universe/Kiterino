@@ -5,7 +5,7 @@ Subject: [PATCH] Allow checking for Halloween season
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index af6e142f4a67728edfa992aece56376d6b43f566..5bda49bd590968e9c8aa38d1ca09fcb41fcb3d8d 100644
+index c105222de9eba4e010e0becc2cb61216b3e423c0..6f030f68c8473833e94bb9ab2fdc026b95929976 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -2997,5 +2997,14 @@ public final class Bukkit {
@@ -24,7 +24,7 @@ index af6e142f4a67728edfa992aece56376d6b43f566..5bda49bd590968e9c8aa38d1ca09fcb4
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index b3eff36b399343415b716d06cceb987c01ec4de6..0962462496e7fc3097b17ab1a2c8e27a8774404d 100644
+index 46bcef01174327930f0fecab57498bd15d3d9859..8699c3686c85bca7c5675f80dfced6a27d63e15f 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -2631,5 +2631,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
@@ -43,10 +43,10 @@ index b3eff36b399343415b716d06cceb987c01ec4de6..0962462496e7fc3097b17ab1a2c8e27a
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index 999fde8707280e0fa9d8c2cbbc992ecf5091abb6..e4672d466aa5996600b54323749a810d67558dba 100644
+index b1387858dbba666fe0941f58dcb6d20da7b8444a..e2f38bc501de1717bf69b1a844d4d2dc54c061d9 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4322,4 +4322,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4373,4 +4373,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
       */
      boolean applyBoneMeal(@NotNull Location location, @NotNull org.bukkit.block.BlockFace face, boolean showParticles, @Nullable Predicate<org.bukkit.block.BlockState> predicate);
      // Paper end

@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - BoneMeal API
 
 
 diff --git a/src/main/java/net/minecraft/world/item/BoneMealItem.java b/src/main/java/net/minecraft/world/item/BoneMealItem.java
-index 8769e3cc4109bcc12d2758aa32db920f4dbae6e4..1bffb34c88ebb472684f6b0cf04617e0b448556a 100644
+index 4bc5c7a68f5d2122864d30eee97d2550a73398f9..2cc68515addfc96cdf296a22f9d9896a8072108e 100644
 --- a/src/main/java/net/minecraft/world/item/BoneMealItem.java
 +++ b/src/main/java/net/minecraft/world/item/BoneMealItem.java
-@@ -39,14 +39,21 @@ public class BoneMealItem extends Item {
+@@ -39,6 +39,11 @@ public class BoneMealItem extends Item {
      }
  
      public static InteractionResult applyBonemeal(UseOnContext itemactioncontext) {
@@ -20,36 +20,29 @@ index 8769e3cc4109bcc12d2758aa32db920f4dbae6e4..1bffb34c88ebb472684f6b0cf04617e0
          // CraftBukkit end
          Level world = itemactioncontext.getLevel();
          BlockPos blockposition = itemactioncontext.getClickedPos();
-         BlockPos blockposition1 = blockposition.relative(itemactioncontext.getClickedFace());
- 
+@@ -47,7 +52,7 @@ public class BoneMealItem extends Item {
          if (BoneMealItem.growCrop(itemactioncontext.getItemInHand(), world, blockposition)) {
--            if (!world.isClientSide) {
--                itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-+            if (showParticles && !world.isClientSide) { // Paper - BoneMeal API
-+                if (itemactioncontext.getPlayer() != null) {
-+                    itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-+                }
-                 world.levelEvent(1505, blockposition, 0);
+             if (!world.isClientSide) {
+                 if (itemactioncontext.getPlayer() != null) itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH); // CraftBukkit - SPIGOT-7518
+-                world.levelEvent(1505, blockposition, 0);
++                if (showParticles) world.levelEvent(1505, blockposition, 0); // Paper - BoneMeal API
              }
  
-@@ -56,8 +63,10 @@ public class BoneMealItem extends Item {
-             boolean flag = iblockdata.isFaceSturdy(world, blockposition, itemactioncontext.getClickedFace());
- 
+             return InteractionResult.sidedSuccess(world.isClientSide);
+@@ -58,7 +63,7 @@ public class BoneMealItem extends Item {
              if (flag && BoneMealItem.growWaterPlant(itemactioncontext.getItemInHand(), world, blockposition1, itemactioncontext.getClickedFace())) {
--                if (!world.isClientSide) {
--                    itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-+                if (showParticles && !world.isClientSide) { // Paper - BoneMeal API
-+                    if (itemactioncontext.getPlayer() != null) {
-+                        itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-+                    }
-                     world.levelEvent(1505, blockposition1, 0);
+                 if (!world.isClientSide) {
+                     if (itemactioncontext.getPlayer() != null) itemactioncontext.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH); // CraftBukkit - SPIGOT-7518
+-                    world.levelEvent(1505, blockposition1, 0);
++                    if (showParticles) world.levelEvent(1505, blockposition1, 0); // Paper - BoneMeal API
                  }
  
+                 return InteractionResult.sidedSuccess(world.isClientSide);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index f93e63ae9952e409abf34ead9d46a909940af554..41651ba46f438cb776eb78bd4435c0ba03fbe832 100644
+index 8b32ed17c1511cfd313875d4c8d2d0e48a4c6e69..e4355e587bbe7c6b01d12f25b5e740e0def2abbc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2507,5 +2507,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2534,5 +2534,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
  
          return this.adventure$pointers;
      }
@@ -57,7 +50,7 @@ index f93e63ae9952e409abf34ead9d46a909940af554..41651ba46f438cb776eb78bd4435c0ba
 +    @Override
 +    public boolean applyBoneMeal(@org.jetbrains.annotations.NotNull Location location, org.bukkit.block.BlockFace face, boolean showParticles, @org.jetbrains.annotations.Nullable Predicate<BlockState> predicate) {
 +        BlockPos pos = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-+        net.minecraft.world.item.context.UseOnContext context = new net.minecraft.world.item.context.UseOnContext(this.getHandle(), null, net.minecraft.world.InteractionHand.MAIN_HAND, net.minecraft.world.item.Items.BONE_MEAL.getDefaultInstance(), new net.minecraft.world.phys.BlockHitResult(Vec3.ZERO, CraftBlock.blockFaceToNotch(face), pos, false));
++        var context = new net.minecraft.world.item.context.UseOnContext(this.getHandle(), null, net.minecraft.world.InteractionHand.MAIN_HAND, net.minecraft.world.item.Items.BONE_MEAL.getDefaultInstance(), new net.minecraft.world.phys.BlockHitResult(Vec3.ZERO, CraftBlock.blockFaceToNotch(face), pos, false));
 +
 +        // Save old capturing state
 +        boolean wasCapturingTrees = world.captureTreeGeneration;

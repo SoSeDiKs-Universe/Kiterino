@@ -5,10 +5,10 @@ Subject: [PATCH] Note color API
 
 
 diff --git a/src/main/java/org/bukkit/Note.java b/src/main/java/org/bukkit/Note.java
-index bd713f9f7d125998d4bc01aaf11d1605ff64a970..ea4b1338f270c11e6c461c60bf3699c3af1bc80c 100644
+index aff858346776386f1288b648b221404f7f412399..b3d91f0d65f540e6dd3d0e9f0bf7f853b32ff412 100644
 --- a/src/main/java/org/bukkit/Note.java
 +++ b/src/main/java/org/bukkit/Note.java
-@@ -119,6 +119,7 @@ public class Note {
+@@ -127,6 +127,7 @@ public class Note {
      }
  
      private final byte note;
@@ -16,7 +16,7 @@ index bd713f9f7d125998d4bc01aaf11d1605ff64a970..ea4b1338f270c11e6c461c60bf3699c3
  
      /**
       * Creates a new note.
-@@ -130,6 +131,7 @@ public class Note {
+@@ -138,6 +139,7 @@ public class Note {
          Preconditions.checkArgument(note >= 0 && note <= 24, "The note value has to be between 0 and 24.");
  
          this.note = (byte) note;
@@ -24,7 +24,7 @@ index bd713f9f7d125998d4bc01aaf11d1605ff64a970..ea4b1338f270c11e6c461c60bf3699c3
      }
  
      /**
-@@ -150,6 +152,7 @@ public class Note {
+@@ -158,6 +160,7 @@ public class Note {
          }
  
          this.note = (byte) (octave * Tone.TONES_COUNT + tone.getId(sharped));
@@ -32,7 +32,7 @@ index bd713f9f7d125998d4bc01aaf11d1605ff64a970..ea4b1338f270c11e6c461c60bf3699c3
      }
  
      /**
-@@ -280,4 +283,46 @@ public class Note {
+@@ -298,4 +301,46 @@ public class Note {
      public String toString() {
          return "Note{" + getTone().toString() + (isSharped() ? "#" : "") + "}";
      }

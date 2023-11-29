@@ -6,7 +6,7 @@ plugins {
     java
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
-    id("io.papermc.paperweight.patcher") version "1.5.9"
+    id("io.papermc.paperweight.patcher") version "1.5.10"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -63,7 +63,7 @@ allprojects {
         maven("https://hub.spigotmc.org/nexus/content/groups/public/")
         maven("https://nexus.velocitypowered.com/repository/velocity-artifacts-snapshots/")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://jitpack.io")
+        maven("https://jitpack.io") // Pufferfish stuff
     }
 }
 
@@ -104,7 +104,7 @@ tasks.generateDevelopmentBundle {
             "https://ci.emc.gs/nexus/content/groups/aikar/",
             "https://sonatype.projecteden.gg/repository/maven-public/",
             "https://nexus.velocitypowered.com/repository/velocity-artifacts-snapshots/", // Velocity stuff
-            "https://jitpack.io" // Airplane stuff
+            "https://jitpack.io" // Pufferfish stuff
         )
     )
 }
@@ -116,6 +116,18 @@ publishing {
                 artifactId = "dev-bundle"
             }
         }
+    }
+}
+
+tasks.register("printMinecraftVersion") {
+    doLast {
+        println(providers.gradleProperty("mcVersion").get().trim())
+    }
+}
+
+tasks.register("printKiterinoVersion") {
+    doLast {
+        println(project.version)
     }
 }
 

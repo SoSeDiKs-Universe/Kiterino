@@ -36,6 +36,3 @@ License
 [![MIT License](https://img.shields.io/badge/licence-MIT-brightgreen)](LICENSE)
 
 All of the original Kiterino patches are licensed under MIT found [here](LICENSE).
-
----
-##### [All The Forks](https://gist.github.com/SoSeDiK/1773ef2c239722f7083a25b2f78619ed)

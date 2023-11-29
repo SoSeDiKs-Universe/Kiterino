@@ -5,10 +5,10 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4bac9590c4cb655e9139446e96431b42daf4f90c..092a879506dd113a7bc9f46979a8c148b316f4ca 100644
+index 37815cfda843b167853716202572e2845b5faaf5..db1e4457056fe659e8cf97af559073013d10256f 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -47,6 +47,7 @@ dependencies {
+@@ -48,6 +48,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:$log4jVersion")
      api("org.slf4j:slf4j-api:$slf4jVersion")
      api("io.sentry:sentry:5.4.0") // Pufferfish
@@ -17,7 +17,7 @@ index 4bac9590c4cb655e9139446e96431b42daf4f90c..092a879506dd113a7bc9f46979a8c148
      implementation("org.ow2.asm:asm:9.4")
      implementation("org.ow2.asm:asm-commons:9.4")
 diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
-index 4418c41f75e9a190dd77abdd6048b0a4fb2a57ed..5d46376c99fdc6510274cdaf7acb091f5cc37750 100644
+index eca55d8d3464f0e13a3b7984f74559ccda87edba..acde94c808ec2072e4d5c6daf9b73b76913d04a2 100644
 --- a/src/main/java/org/bukkit/Chunk.java
 +++ b/src/main/java/org/bukkit/Chunk.java
 @@ -338,4 +338,16 @@ public interface Chunk extends PersistentDataHolder {
