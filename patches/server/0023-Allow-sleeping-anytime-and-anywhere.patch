@@ -5,7 +5,7 @@ Subject: [PATCH] Allow sleeping anytime and anywhere
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 7111bc42ff1f944a5a5e9f48b316f93e5ce19e90..7f733da4f46ba2e5ec7b934a9a93d83cc5e7266f 100644
+index 70770cf79f94905823f1abc5511d59a0308d9181..41726b5193470a37623b57be96c437a78f8f2c49 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -842,8 +842,19 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -37,10 +37,10 @@ index 7111bc42ff1f944a5a5e9f48b316f93e5ce19e90..7f733da4f46ba2e5ec7b934a9a93d83c
  
          this.updateSkyBrightness();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 332d513ec4b3fed82d5ee0aa8be2ef6148695bcc..81cdb4e43e8c46b3e16148019f543d6559747041 100644
+index 891e0cbf7dd3b90093ae481512cb4ef27091151d..ce23ae77cfa04650bcbb1b8c52ba297c0b05342a 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1421,6 +1421,7 @@ public class ServerPlayer extends Player {
+@@ -1419,6 +1419,7 @@ public class ServerPlayer extends Player {
                  return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
              } else {
                  this.setRespawnPosition(this.level().dimension(), blockposition, this.getYRot(), false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - PlayerSetSpawnEvent

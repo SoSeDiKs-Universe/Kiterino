@@ -101,10 +101,10 @@ index 26b236a764177ac16d53f5cbaf83d3e21d015ebc..b950f3d52f2e47bc08b3d4cc0cf3142f
          }
  
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index fc481f26368f4d823379921573a05ac5b91f39e6..42e9b41d6acf761c56e097f568d1161822b028bd 100644
+index 2776b124dd15e4c84edcfbf98ba44d53ef149e43..ec9fe51aa5ff50a6639eeeb8df0dcf6036016802 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -789,6 +789,54 @@ public final class ItemStack {
+@@ -791,6 +791,54 @@ public final class ItemStack {
          return !stack.is(otherStack.getItem()) ? false : (stack.isEmpty() && otherStack.isEmpty() ? true : Objects.equals(stack.tag, otherStack.tag));
      }
  

@@ -87,10 +87,10 @@ index 985927cd1707116b99f1f547113048db77851416..454edc96f753bd5933ab1ecd7c3d063a
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 2a0ee4eb1264ea51c430b956732b5947ce60de18..4600be3365fffab2865befc2f82727995569b90b 100644
+index 0c8f993364f6d21712e7ba9a2dde2b637824d71f..6701f3c85ff800224331f4f3c2bdf3e117247838 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1198,5 +1198,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1196,5 +1196,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
          de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
      }
@@ -149,7 +149,7 @@ index 2a0ee4eb1264ea51c430b956732b5947ce60de18..4600be3365fffab2865befc2f8272799
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 91e3a7eec5bc32d07d2f8d9a28a0a6b0293675e5..014c53779e776732a5c754b85fe506fd366b2cc2 100644
+index 8a85288573f929066001e1bf4db1e56c7cb817d7..675dc6400dda8ca31a35fe64c0da5825b6189532 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1699,5 +1699,80 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat

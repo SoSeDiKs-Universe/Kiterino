@@ -42,10 +42,10 @@ index 40f5cdd4a5cc26dee3a559082f617a48a872c802..3583cf4f13376052c8a479767efb1a08
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 4600be3365fffab2865befc2f82727995569b90b..b86575513f64f0fcd9ad6bbde74278fd8c2f5f42 100644
+index 6701f3c85ff800224331f4f3c2bdf3e117247838..1e87eee9ef430f00173959a00ff75121f9411b40 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1250,5 +1250,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1248,5 +1248,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
              consumer.accept(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
          });
      }

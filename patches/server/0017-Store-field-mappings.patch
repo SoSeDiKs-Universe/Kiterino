@@ -5,10 +5,10 @@ Subject: [PATCH] Store field mappings
 
 
 diff --git a/src/main/java/io/papermc/paper/util/ObfHelper.java b/src/main/java/io/papermc/paper/util/ObfHelper.java
-index b8b17d046f836c8652ab094db00ab1af84971b2c..c31ad0b3a9f238bd08889c4c158277621c3fc2eb 100644
+index e8ff684d8bd994c64ff34f20e1e0601b678244c1..28576d2c5fcd28d6fe909c697dfa1b840cdc189c 100644
 --- a/src/main/java/io/papermc/paper/util/ObfHelper.java
 +++ b/src/main/java/io/papermc/paper/util/ObfHelper.java
-@@ -110,10 +110,24 @@ public enum ObfHelper {
+@@ -111,10 +111,24 @@ public enum ObfHelper {
                      );
                  }
  
@@ -26,15 +26,15 @@ index b8b17d046f836c8652ab094db00ab1af84971b2c..c31ad0b3a9f238bd08889c4c15827762
 +                // Kiterino end
 +
                  final ClassMapping map = new ClassMapping(
-                     cls.getName(SPIGOT_NAMESPACE).replace('/', '.'),
-                     cls.getName(MOJANG_PLUS_YARN_NAMESPACE).replace('/', '.'),
+                     Objects.requireNonNull(cls.getName(SPIGOT_NAMESPACE)).replace('/', '.'),
+                     Objects.requireNonNull(cls.getName(MOJANG_PLUS_YARN_NAMESPACE)).replace('/', '.'),
 -                    Map.copyOf(methods)
 +                    Map.copyOf(methods),
 +                    Map.copyOf(fieldMappings) // Kiterino
                  );
                  classes.add(map);
              }
-@@ -141,6 +155,7 @@ public enum ObfHelper {
+@@ -142,6 +156,7 @@ public enum ObfHelper {
      public record ClassMapping(
          String obfName,
          String mojangName,

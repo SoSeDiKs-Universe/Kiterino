@@ -43,10 +43,10 @@ index 46bcef01174327930f0fecab57498bd15d3d9859..8699c3686c85bca7c5675f80dfced6a2
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index b1387858dbba666fe0941f58dcb6d20da7b8444a..e2f38bc501de1717bf69b1a844d4d2dc54c061d9 100644
+index 3d37311601b6ec25c2388ad1ac7c9e1c231d74a0..67a06a97508080f186a9ada08f4be8e250ce31ac 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4373,4 +4373,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4397,4 +4397,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
       */
      boolean applyBoneMeal(@NotNull Location location, @NotNull org.bukkit.block.BlockFace face, boolean showParticles, @Nullable Predicate<org.bukkit.block.BlockState> predicate);
      // Paper end

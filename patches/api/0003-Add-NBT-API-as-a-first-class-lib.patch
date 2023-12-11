@@ -161,10 +161,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..985927cd1707116b99f1f547113048db
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..2a0ee4eb1264ea51c430b956732b5947ce60de18 100644
+index ed9627dff9a33524da546c46e1d1be71ae1d1e0c..0c8f993364f6d21712e7ba9a2dde2b637824d71f 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1116,4 +1116,87 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1114,4 +1114,87 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
@@ -253,7 +253,7 @@ index f21a0fa8420b3fd0a3655a0af998da8f8a66c4b1..2a0ee4eb1264ea51c430b956732b5947
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index ed168cba3692f55ac976c6ef31525e83ae36f5f9..91e3a7eec5bc32d07d2f8d9a28a0a6b0293675e5 100644
+index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..8a85288573f929066001e1bf4db1e56c7cb817d7 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1648,4 +1648,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat

@@ -5,10 +5,10 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 361c932e6ccadb602ca8c02ce9f6d48bd91f0bec..a96ee45b91f0491f1ddefc0953b74a4d8daf4660 100644
+index dee9dc2c46fd397ed28fe706420c53d8737a4f5b..ccf9b3d31b8d84b78f914c391ab403be3c28216e 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1364,5 +1364,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1362,5 +1362,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      @Nullable
      UUID getSpawningPlayerUuid();

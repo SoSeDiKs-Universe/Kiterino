@@ -39,10 +39,10 @@ index 4bc5c7a68f5d2122864d30eee97d2550a73398f9..2cc68515addfc96cdf296a22f9d9896a
  
                  return InteractionResult.sidedSuccess(world.isClientSide);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 8b32ed17c1511cfd313875d4c8d2d0e48a4c6e69..e4355e587bbe7c6b01d12f25b5e740e0def2abbc 100644
+index bc9a049df648fa5a169219bb009c92a213df9ffd..4b9758ced7beb6890a33960879a14f5262fa6366 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2534,5 +2534,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2540,5 +2540,43 @@ public class CraftWorld extends CraftRegionAccessor implements World {
  
          return this.adventure$pointers;
      }
