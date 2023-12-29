@@ -5,10 +5,10 @@ Subject: [PATCH] Arrows work in water
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java b/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java
-index aa5e17e497bbc1d45b361de73cc7a181773dbd8b..cc09724b4068f9ade4bef235be924dc4cc5d85b7 100644
+index 0dad432fdff9156e09a57f5776fd3307b1577558..94663adac561858595e6776e02c3d928af83b7e3 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/AbstractArrow.java
-@@ -688,7 +688,7 @@ public abstract class AbstractArrow extends Projectile {
+@@ -717,7 +717,7 @@ public abstract class AbstractArrow extends Projectile {
      }
  
      protected float getWaterInertia() {

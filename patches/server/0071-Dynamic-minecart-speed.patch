@@ -5,10 +5,10 @@ Subject: [PATCH] Dynamic minecart speed
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index a778df0babbffcd7e42265baa8f977b5fc69c9da..7c0abf64f3fae9fefd1b542bf0a43cdd9e0dea7a 100644
+index 54475b5474fc86fa2abf56db233e65de7c60f9ae..aff775ec824839c0f36a3bb7705898dbec0b7071 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -630,7 +630,108 @@ public abstract class AbstractMinecart extends Entity {
+@@ -582,7 +582,108 @@ public abstract class AbstractMinecart extends VehicleEntity {
              d5 = -d5;
          }
  
@@ -118,7 +118,7 @@ index a778df0babbffcd7e42265baa8f977b5fc69c9da..7c0abf64f3fae9fefd1b542bf0a43cdd
  
          vec3d1 = new Vec3(d8 * d4 / d6, vec3d1.y, d8 * d5 / d6);
          this.setDeltaMovement(vec3d1);
-@@ -667,7 +768,13 @@ public abstract class AbstractMinecart extends Entity {
+@@ -619,7 +720,13 @@ public abstract class AbstractMinecart extends VehicleEntity {
              if (d11 < 0.03D) {
                  this.setDeltaMovement(Vec3.ZERO);
              } else {
@@ -133,7 +133,7 @@ index a778df0babbffcd7e42265baa8f977b5fc69c9da..7c0abf64f3fae9fefd1b542bf0a43cdd
              }
          }
  
-@@ -696,9 +803,10 @@ public abstract class AbstractMinecart extends Entity {
+@@ -648,9 +755,10 @@ public abstract class AbstractMinecart extends VehicleEntity {
          d2 = d12 + d5 * d15;
          this.setPos(d0, d1, d2);
          d16 = this.isVehicle() ? 0.75D : 1.0D;
@@ -146,7 +146,7 @@ index a778df0babbffcd7e42265baa8f977b5fc69c9da..7c0abf64f3fae9fefd1b542bf0a43cdd
          if (baseblockposition.getY() != 0 && Mth.floor(this.getX()) - pos.getX() == baseblockposition.getX() && Mth.floor(this.getZ()) - pos.getZ() == baseblockposition.getZ()) {
              this.setPos(this.getX(), this.getY() + (double) baseblockposition.getY(), this.getZ());
          } else if (baseblockposition1.getY() != 0 && Mth.floor(this.getX()) - pos.getX() == baseblockposition1.getX() && Mth.floor(this.getZ()) - pos.getZ() == baseblockposition1.getZ()) {
-@@ -728,26 +836,52 @@ public abstract class AbstractMinecart extends Entity {
+@@ -680,26 +788,52 @@ public abstract class AbstractMinecart extends VehicleEntity {
          if (i != pos.getX() || j != pos.getZ()) {
              vec3d4 = this.getDeltaMovement();
              d18 = vec3d4.horizontalDistance();
@@ -203,7 +203,7 @@ index a778df0babbffcd7e42265baa8f977b5fc69c9da..7c0abf64f3fae9fefd1b542bf0a43cdd
                      }
                  } else {
                      if (blockpropertytrackposition != RailShape.NORTH_SOUTH) {
-@@ -755,9 +889,9 @@ public abstract class AbstractMinecart extends Entity {
+@@ -707,9 +841,9 @@ public abstract class AbstractMinecart extends VehicleEntity {
                      }
  
                      if (this.isRedstoneConductor(pos.north())) {

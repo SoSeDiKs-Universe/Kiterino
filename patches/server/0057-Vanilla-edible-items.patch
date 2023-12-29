@@ -5,7 +5,7 @@ Subject: [PATCH] Vanilla edible items
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index e8a9447ac5560c925df0a3e7cfaaee15bdd5df52..a522216d4110b10bcfc805f0d9c5dc36e60743ad 100644
+index 4dd799d6fb1969f7bdfb8112431515b7477d7c9d..b353a5d669021b53fc5fd02c8209fdddc29b4534 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
 @@ -68,7 +68,7 @@ public class Item implements FeatureElement, ItemLike {
@@ -17,7 +17,7 @@ index e8a9447ac5560c925df0a3e7cfaaee15bdd5df52..a522216d4110b10bcfc805f0d9c5dc36
      private final FeatureFlagSet requiredFeatures;
  
      public static int getId(Item item) {
-@@ -350,6 +350,12 @@ public class Item implements FeatureElement, ItemLike {
+@@ -354,6 +354,12 @@ public class Item implements FeatureElement, ItemLike {
          return this.foodProperties;
      }
  
@@ -31,7 +31,7 @@ index e8a9447ac5560c925df0a3e7cfaaee15bdd5df52..a522216d4110b10bcfc805f0d9c5dc36
          return SoundEvents.GENERIC_DRINK;
      }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index 1267255a8612802081269e9868605b3fe9d8a288..3f7184642f053130f160846ec62d50975beef91e 100644
+index 35b3e2658a376769fa3b2127e68406b3285a09e5..b3b9956c8816372125d29dbb10fe72d1614fbbb6 100644
 --- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 +++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
 @@ -514,12 +514,23 @@ public class PurpurConfig {

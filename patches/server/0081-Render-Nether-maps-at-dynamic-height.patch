@@ -20,10 +20,10 @@ index a87f4d82d4f6678b7c060de129997809d5722512..c5d6fcc750a9b4387588ac5cbd6045ac
                  return InteractionResultHolder.consume(itemStack2);
              } else {
 diff --git a/src/main/java/net/minecraft/world/item/MapItem.java b/src/main/java/net/minecraft/world/item/MapItem.java
-index fed5bfb02ab7d6c1d1d9bf993fda5b3f411b9352..0ce7c9de2e70f00b72d508cbb44165060657ecad 100644
+index 6cfd169c2c32b644d70907358c2d4a2087c00a68..c09ba388dd3f7588830ada23cf5c95bd9838377b 100644
 --- a/src/main/java/net/minecraft/world/item/MapItem.java
 +++ b/src/main/java/net/minecraft/world/item/MapItem.java
-@@ -111,7 +111,7 @@ public class MapItem extends ComplexItem {
+@@ -103,7 +103,7 @@ public class MapItem extends ComplexItem {
              int i1 = Mth.floor(entity.getZ() - (double) k) / i + 64;
              int j1 = 128 / i;
  
@@ -32,7 +32,7 @@ index fed5bfb02ab7d6c1d1d9bf993fda5b3f411b9352..0ce7c9de2e70f00b72d508cbb4416506
                  j1 /= 2;
              }
  
-@@ -141,7 +141,7 @@ public class MapItem extends ComplexItem {
+@@ -133,7 +133,7 @@ public class MapItem extends ComplexItem {
                                  double d1 = 0.0D;
                                  int i3;
  
@@ -41,7 +41,7 @@ index fed5bfb02ab7d6c1d1d9bf993fda5b3f411b9352..0ce7c9de2e70f00b72d508cbb4416506
                                      i3 = j2 + k2 * 231871;
                                      i3 = i3 * i3 * 31287121 + i3 * 11;
                                      if ((i3 >> 20 & 1) == 0) {
-@@ -155,7 +155,7 @@ public class MapItem extends ComplexItem {
+@@ -147,7 +147,7 @@ public class MapItem extends ComplexItem {
                                      for (i3 = 0; i3 < i; ++i3) {
                                          for (int j3 = 0; j3 < i; ++j3) {
                                              blockposition_mutableblockposition.set(j2 + i3, 0, k2 + j3);
@@ -50,7 +50,7 @@ index fed5bfb02ab7d6c1d1d9bf993fda5b3f411b9352..0ce7c9de2e70f00b72d508cbb4416506
                                              BlockState iblockdata;
  
                                              if (k3 > world.getMinBuildHeight() + 1) {
-@@ -229,6 +229,19 @@ public class MapItem extends ComplexItem {
+@@ -221,6 +221,19 @@ public class MapItem extends ComplexItem {
          }
      }
  

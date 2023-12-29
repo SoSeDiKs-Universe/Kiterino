@@ -5,10 +5,10 @@ Subject: [PATCH] Tweak minecart off rail velocity
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index d61095eebd4a7dce29759e0369d717177a26c13f..03a62e91c0b9ba52588384b0add75a1f7fdb5f4d 100644
+index a45ade021825f7f6753eb4df200a0b516161e431..e66ad73e22a1dd2dff39bce155b0c07cfa485c52 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1521,7 +1521,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1525,7 +1525,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return offsetFactor;
      }
  
@@ -18,10 +18,10 @@ index d61095eebd4a7dce29759e0369d717177a26c13f..03a62e91c0b9ba52588384b0add75a1f
          final boolean xZero = movement.x == 0.0;
          final boolean yZero = movement.y == 0.0;
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 40beba567e61bfb664541985b526cef3cd9d2420..f5f09bcfe85b7cf3bc1ae101d26ba234e82db5b9 100644
+index 49b9d9a304e92b7075338b4cd5fc352a152b4b16..e95057450ca6b2ae92fc54e584967bcde93e907f 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -114,6 +114,9 @@ public abstract class AbstractMinecart extends Entity {
+@@ -107,6 +107,9 @@ public abstract class AbstractMinecart extends VehicleEntity {
      public double maxSpeed = 0.4D;
      public double storedMaxSpeed; // Purpur
      // CraftBukkit end
@@ -31,7 +31,7 @@ index 40beba567e61bfb664541985b526cef3cd9d2420..f5f09bcfe85b7cf3bc1ae101d26ba234
  
      protected AbstractMinecart(EntityType<?> type, Level world) {
          super(type, world);
-@@ -527,10 +530,31 @@ public abstract class AbstractMinecart extends Entity {
+@@ -479,10 +482,31 @@ public abstract class AbstractMinecart extends VehicleEntity {
      // Purpur end
  
      protected void comeOffTrack() {
@@ -65,7 +65,7 @@ index 40beba567e61bfb664541985b526cef3cd9d2420..f5f09bcfe85b7cf3bc1ae101d26ba234
  
          // Purpur start
          if (level().purpurConfig.minecartControllable && !isInWater() && !isInLava() && !passengers.isEmpty()) {
-@@ -556,16 +580,42 @@ public abstract class AbstractMinecart extends Entity {
+@@ -508,16 +532,42 @@ public abstract class AbstractMinecart extends VehicleEntity {
              maxUpStep = 0.0F;
          }
          // Purpur end
@@ -111,7 +111,7 @@ index 40beba567e61bfb664541985b526cef3cd9d2420..f5f09bcfe85b7cf3bc1ae101d26ba234
              // CraftBukkit start - replace magic numbers with our variables
              this.setDeltaMovement(new Vec3(this.getDeltaMovement().x * this.flyingX, this.getDeltaMovement().y * this.flyingY, this.getDeltaMovement().z * this.flyingZ));
              // CraftBukkit end
-@@ -574,6 +624,7 @@ public abstract class AbstractMinecart extends Entity {
+@@ -526,6 +576,7 @@ public abstract class AbstractMinecart extends VehicleEntity {
      }
  
      protected void moveAlongTrack(BlockPos pos, BlockState state) {

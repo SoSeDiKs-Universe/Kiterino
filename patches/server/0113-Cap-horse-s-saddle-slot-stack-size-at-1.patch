@@ -5,7 +5,7 @@ Subject: [PATCH] Cap horse's saddle slot stack size at 1
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
-index bab9e413bd55d48e3e54bee66a6cd5be19a8f415..b72f22691b60af6b4d369126afc5fd3b732dcb4c 100644
+index 27c86c474af331510b07eedc5aae430136235acc..c5f5dbfd1c17538c268037c17d4c9b5948617b9b 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
 @@ -306,7 +306,14 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
@@ -24,7 +24,7 @@ index bab9e413bd55d48e3e54bee66a6cd5be19a8f415..b72f22691b60af6b4d369126afc5fd3b
          // Paper end
      }
  
-@@ -1167,7 +1174,6 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+@@ -1164,7 +1171,6 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
                  if (!predicate.test(stack)) {
                      return false;
                  } else {

@@ -5,10 +5,10 @@ Subject: [PATCH] Reverse note block playing
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index 6a970e293a31962faaab545f368ae02c4b20e42d..cc5c42261c25741d33e163de57a83648331ccc0c 100644
+index 3053408a0fae533a6b8b5e493ca6b64de2f80bc3..9777cc298dd68606bb81c18b821bbba054fecf06 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-@@ -124,7 +124,15 @@ public class NoteBlock extends Block {
+@@ -131,7 +131,15 @@ public class NoteBlock extends Block {
          } else if (world.isClientSide) {
              return InteractionResult.SUCCESS;
          } else {

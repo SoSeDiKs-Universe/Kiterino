@@ -5,10 +5,10 @@ Subject: [PATCH] More item drop API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 3583cf4f13376052c8a479767efb1a082d2168f4..467a9658c4f1cc80a485411425cf4273909017d3 100644
+index 02dc2e4c6f5e0c797592dabcd73d589b09cbbe52..83993521b9ebc9035da78ef28704ed31e9f4bb02 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -845,5 +845,53 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -835,5 +835,53 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
      default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
          getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
      }
@@ -63,10 +63,10 @@ index 3583cf4f13376052c8a479767efb1a082d2168f4..467a9658c4f1cc80a485411425cf4273
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 1e87eee9ef430f00173959a00ff75121f9411b40..b7287760a0fa2287f78fd1d04e9a012892632bf3 100644
+index 0173100b423d1042715b2ab410a1fd8f5268d14b..a434a7d94707ca6b881c629a549ca0fdb78e6f25 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1280,5 +1280,53 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1314,5 +1314,53 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
          getWorld().playSound(getLocation(), sound, category, volume, pitch);
      }

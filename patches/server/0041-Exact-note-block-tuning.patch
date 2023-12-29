@@ -5,10 +5,10 @@ Subject: [PATCH] Exact note block tuning
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index cc5c42261c25741d33e163de57a83648331ccc0c..d5c9d17846e1f97e0cfb800d2cd840ed9e77524d 100644
+index 9777cc298dd68606bb81c18b821bbba054fecf06..00763c88274aaf99662f09be733a95ecd649a575 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-@@ -126,10 +126,19 @@ public class NoteBlock extends Block {
+@@ -133,10 +133,19 @@ public class NoteBlock extends Block {
          } else {
              // Kiterino start
              if (!io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableNoteblockUpdates) {

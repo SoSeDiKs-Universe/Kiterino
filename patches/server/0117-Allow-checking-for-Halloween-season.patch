@@ -5,10 +5,10 @@ Subject: [PATCH] Allow checking for Halloween season
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 4b9758ced7beb6890a33960879a14f5262fa6366..8d29c3f62eb00f52936214703f371b796ff17e49 100644
+index 70ab324d9576564a1b6e92ec5c51d4a6b0601d70..fb5cfdeff97f850895bdca038fb92b7d8cfd7eab 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2579,4 +2579,15 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2589,4 +2589,15 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return result == net.minecraft.world.InteractionResult.CONSUME;
      }
      // Paper end

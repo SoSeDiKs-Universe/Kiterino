@@ -5,10 +5,10 @@ Subject: [PATCH] Remove collision from leaves on server-side
 
 
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317aae21e24 100644
+index 511fafdaca147d37551f5ef598b763caa4a7e486..065d2b8a2fc4b46e05d0f01500fac1d8bcafffe1 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -5871,7 +5871,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6229,7 +6229,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case ACACIA_FENCE:
              case ACACIA_FENCE_GATE:
              case ACACIA_HANGING_SIGN:
@@ -17,7 +17,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case ACACIA_LOG:
              case ACACIA_PLANKS:
              case ACACIA_PRESSURE_PLATE:
-@@ -5890,7 +5890,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6248,7 +6248,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case ANDESITE_STAIRS:
              case ANDESITE_WALL:
              case ANVIL:
@@ -26,7 +26,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case BAMBOO:
              case BAMBOO_BLOCK:
              case BAMBOO_DOOR:
-@@ -5920,7 +5920,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6278,7 +6278,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case BIRCH_FENCE:
              case BIRCH_FENCE_GATE:
              case BIRCH_HANGING_SIGN:
@@ -35,7 +35,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case BIRCH_LOG:
              case BIRCH_PLANKS:
              case BIRCH_PRESSURE_PLATE:
-@@ -5999,7 +5999,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6357,7 +6357,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case CHERRY_FENCE:
              case CHERRY_FENCE_GATE:
              case CHERRY_HANGING_SIGN:
@@ -44,7 +44,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case CHERRY_LOG:
              case CHERRY_PLANKS:
              case CHERRY_PRESSURE_PLATE:
-@@ -6083,7 +6083,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6449,7 +6449,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case DARK_OAK_FENCE:
              case DARK_OAK_FENCE_GATE:
              case DARK_OAK_HANGING_SIGN:
@@ -53,7 +53,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case DARK_OAK_LOG:
              case DARK_OAK_PLANKS:
              case DARK_OAK_PRESSURE_PLATE:
-@@ -6168,7 +6168,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6539,7 +6539,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case FARMLAND:
              case FIRE_CORAL_BLOCK:
              case FLETCHING_TABLE:
@@ -62,7 +62,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case FROSTED_ICE:
              case FURNACE:
              case GILDED_BLACKSTONE:
-@@ -6234,7 +6234,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6605,7 +6605,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case JUNGLE_FENCE:
              case JUNGLE_FENCE_GATE:
              case JUNGLE_HANGING_SIGN:
@@ -71,7 +71,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case JUNGLE_LOG:
              case JUNGLE_PLANKS:
              case JUNGLE_PRESSURE_PLATE:
-@@ -6308,7 +6308,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6679,7 +6679,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case MANGROVE_FENCE:
              case MANGROVE_FENCE_GATE:
              case MANGROVE_HANGING_SIGN:
@@ -80,7 +80,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case MANGROVE_LOG:
              case MANGROVE_PLANKS:
              case MANGROVE_PRESSURE_PLATE:
-@@ -6355,7 +6355,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6726,7 +6726,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case OAK_FENCE:
              case OAK_FENCE_GATE:
              case OAK_HANGING_SIGN:
@@ -89,7 +89,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case OAK_LOG:
              case OAK_PLANKS:
              case OAK_PRESSURE_PLATE:
-@@ -6531,7 +6531,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -6911,7 +6911,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case SPRUCE_FENCE:
              case SPRUCE_FENCE_GATE:
              case SPRUCE_HANGING_SIGN:
@@ -98,7 +98,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case SPRUCE_LOG:
              case SPRUCE_PLANKS:
              case SPRUCE_PRESSURE_PLATE:
-@@ -6660,7 +6660,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -7073,7 +7073,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case LEGACY_IRON_ORE:
              case LEGACY_COAL_ORE:
              case LEGACY_LOG:
@@ -107,7 +107,7 @@ index 27f88bb7d11370f2ecd5517c46f95c33191b1082..2280a99e3799cf79e3a9243ab362d317
              case LEGACY_SPONGE:
              case LEGACY_GLASS:
              case LEGACY_LAPIS_ORE:
-@@ -6765,7 +6765,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -7178,7 +7178,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
              case LEGACY_HARD_CLAY:
              case LEGACY_COAL_BLOCK:
              case LEGACY_STAINED_GLASS_PANE:

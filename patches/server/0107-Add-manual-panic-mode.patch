@@ -5,10 +5,10 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f9282bc4a105e0c6463b86386c8e63b172c64a3c..04f11cef191c39f10d8a5aaa41c0ec222e7b7a31 100644
+index fb9b2cb90a39407cf0c6e1644b0e158faed2cdf4..fc6fda49fa466bfa113b217d17652af0c5f6ae60 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -339,6 +339,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -340,6 +340,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public final RandomSource random;
      public int tickCount;
      private int remainingFireTicks;
@@ -16,7 +16,7 @@ index f9282bc4a105e0c6463b86386c8e63b172c64a3c..04f11cef191c39f10d8a5aaa41c0ec22
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
      protected boolean wasEyeInWater;
-@@ -910,6 +911,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -914,6 +915,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
              }
          }
  
@@ -56,10 +56,10 @@ index 3263c816e82285ff943270be21049432ac7f55e9..da2cc383231175c7d0739f5a7169219b
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index d34ecd1efaf624707980a62855f8719c798a983e..2a291ea5964bf5ee399a1a4c5166d5ce67f12945 100644
+index 9140111c6d3e645e48b281f43ef138b4faa598b8..e29a56aac670f760e11608accaa5259a22ac7a60 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1682,5 +1682,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1371,5 +1371,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public UUID getSpawningPlayerUuid() {
          return getHandle().spawningPlayerUuid;
      }

@@ -5,10 +5,10 @@ Subject: [PATCH] Deny stacking potions in brewing stand
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index e31f338a9a02cd637627449170fba882347cc83c..1c99d9aff2177c3de9c2a40fe750ad16c768d872 100644
+index 99f404b1a40e3af80d924c19127ffdc284700542..9499e262cee810a6088436ab739536346505de02 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-@@ -775,6 +775,11 @@ public abstract class AbstractContainerMenu {
+@@ -779,6 +779,11 @@ public abstract class AbstractContainerMenu {
          return this.moveItemStackTo(stack, startIndex, endIndex, fromLast, false);
      }
      protected boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean fromLast, boolean isCheck) {
@@ -20,7 +20,7 @@ index e31f338a9a02cd637627449170fba882347cc83c..1c99d9aff2177c3de9c2a40fe750ad16
          if (isCheck) {
              stack = stack.copy();
          }
-@@ -789,7 +794,7 @@ public abstract class AbstractContainerMenu {
+@@ -793,7 +798,7 @@ public abstract class AbstractContainerMenu {
          Slot slot;
          ItemStack itemstack1;
  
@@ -30,10 +30,10 @@ index e31f338a9a02cd637627449170fba882347cc83c..1c99d9aff2177c3de9c2a40fe750ad16
                  if (fromLast) {
                      if (k < startIndex) {
 diff --git a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
-index 6f5246f3cfc6b6757fad2a634299921df9d10223..45cbfcefb9f480e658a82975cf72555dc3c38e9c 100644
+index 82311188348d673d83b70bf4d5357ecee562b6d6..5c79e3fae76ae2bda9e0edd5e8de4ab34434d6e0 100644
 --- a/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/BrewingStandMenu.java
-@@ -93,8 +93,8 @@ public class BrewingStandMenu extends AbstractContainerMenu {
+@@ -94,8 +94,8 @@ public class BrewingStandMenu extends AbstractContainerMenu {
                      if (!this.moveItemStackTo(itemstack1, 3, 4, false)) {
                          return ItemStack.EMPTY;
                      }

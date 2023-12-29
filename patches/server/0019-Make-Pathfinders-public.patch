@@ -36,10 +36,10 @@ index eae2488f2a46e543b496b7a2919aabbb55dcb825..b3d563285c45ef8e4468c6633d5d8818
          private final Rabbit rabbit;
          private boolean wantsToRaid;
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Slime.java b/src/main/java/net/minecraft/world/entity/monster/Slime.java
-index e2eb27a60fde8a937ad1101bbda54c89ef358826..52ab3088bc10148aa9e81b269fdba5606c5862bb 100644
+index 8b6f8fca8402c177c399824c6bf0bdef2c24ec55..273898269a5ae2b1bbd67fb3bf69e27503ec00d4 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Slime.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Slime.java
-@@ -561,7 +561,7 @@ public class Slime extends Mob implements Enemy {
+@@ -564,7 +564,7 @@ public class Slime extends Mob implements Enemy {
          }
      }
  
@@ -48,7 +48,7 @@ index e2eb27a60fde8a937ad1101bbda54c89ef358826..52ab3088bc10148aa9e81b269fdba560
  
          private final Slime slime;
  
-@@ -598,7 +598,7 @@ public class Slime extends Mob implements Enemy {
+@@ -601,7 +601,7 @@ public class Slime extends Mob implements Enemy {
          }
      }
  
@@ -57,7 +57,7 @@ index e2eb27a60fde8a937ad1101bbda54c89ef358826..52ab3088bc10148aa9e81b269fdba560
  
          private final Slime slime;
          private int growTiredTimer;
-@@ -675,7 +675,7 @@ public class Slime extends Mob implements Enemy {
+@@ -678,7 +678,7 @@ public class Slime extends Mob implements Enemy {
          // Paper end
      }
  
@@ -66,7 +66,7 @@ index e2eb27a60fde8a937ad1101bbda54c89ef358826..52ab3088bc10148aa9e81b269fdba560
  
          private final Slime slime;
          private float chosenDegrees;
-@@ -714,7 +714,7 @@ public class Slime extends Mob implements Enemy {
+@@ -717,7 +717,7 @@ public class Slime extends Mob implements Enemy {
          }
      }
  
@@ -76,7 +76,7 @@ index e2eb27a60fde8a937ad1101bbda54c89ef358826..52ab3088bc10148aa9e81b269fdba560
          private final Slime slime;
  
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Spider.java b/src/main/java/net/minecraft/world/entity/monster/Spider.java
-index 42252e86ca02955ba8cae913081795b57e04c934..cb78b2fcbfb354a5d9f7095c3ab9daf5e4637b77 100644
+index 241a6851179cfa566417a655bff7b06bdb7f9f4b..565ab1f6e452a6f883e343222f35a22e2a4825d8 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Spider.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Spider.java
 @@ -233,7 +233,7 @@ public class Spider extends Monster {

@@ -5,10 +5,10 @@ Subject: [PATCH] Client kick message API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 961859ce93347f4e6142712b1032b2302e8ae016..fa0e2de3b8a7a97a513b767d89386e75c41d961e 100644
+index 9c4854916579e95283e6a27ec904dca7d786e0e2..3560543b40249020aa228c2c11bd8f351c7cf886 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3536,5 +3536,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3744,5 +3744,22 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * @return true, if placed successfully
       */
      boolean placeBlock(@NotNull ItemStack block, @NotNull Location location, @NotNull org.bukkit.block.BlockFace blockFace, boolean consume);
@@ -32,7 +32,7 @@ index 961859ce93347f4e6142712b1032b2302e8ae016..fa0e2de3b8a7a97a513b767d89386e75
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
-index 2eb13c049fa917d41fa9ad17fdec9ec4c33701a8..2916d053ca3474ee6c0843016a3e7e10e6709b55 100644
+index f7f864a2b46129e4d61bc87f3e23c343417aa094..448b12b547fd4a74cdc76be76c3a5fbef4f4a06a 100644
 --- a/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
 +++ b/src/main/java/org/bukkit/event/player/PlayerKickEvent.java
 @@ -14,6 +14,7 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
@@ -43,7 +43,7 @@ index 2eb13c049fa917d41fa9ad17fdec9ec4c33701a8..2916d053ca3474ee6c0843016a3e7e10
  
      @Deprecated // Paper
      public PlayerKickEvent(@NotNull final Player playerKicked, @NotNull final String kickReason, @NotNull final String leaveMessage) {
-@@ -41,6 +42,13 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+@@ -42,6 +43,13 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
          this.cause = cause;
      }
  
@@ -57,7 +57,7 @@ index 2eb13c049fa917d41fa9ad17fdec9ec4c33701a8..2916d053ca3474ee6c0843016a3e7e10
      /**
       * Gets the leave message send to all online players
       *
-@@ -217,4 +225,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
+@@ -218,4 +226,25 @@ public class PlayerKickEvent extends PlayerEvent implements Cancellable {
          UNKNOWN,
      }
      // Paper end

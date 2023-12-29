@@ -5,10 +5,10 @@ Subject: [PATCH] Detecting Powered Rails
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java b/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
-index 10ffc2aef0699535c4d465cdda7b68ec288f763e..169cb9052de8acf77bcdb6c4e2b7a9cdb49b92de 100644
+index 587229763c51eef3fd43987fbcb148acb7f4a85b..ce2cef4126336b4e5785ee7e0cda8a1eafdb41db 100644
 --- a/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/DetectorRailBlock.java
-@@ -174,7 +174,7 @@ public class DetectorRailBlock extends BaseRailBlock {
+@@ -181,7 +181,7 @@ public class DetectorRailBlock extends BaseRailBlock {
          return 0;
      }
  
@@ -18,10 +18,10 @@ index 10ffc2aef0699535c4d465cdda7b68ec288f763e..169cb9052de8acf77bcdb6c4e2b7a9cd
          BlockState belowState = world.getBlockState(pos.below());
          if (belowState.is(Blocks.MAGENTA_GLAZED_TERRACOTTA)) {
 diff --git a/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java b/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java
-index 40893e71fe8447b695350273bef9623bd5accdcd..5e5034ca3adb42339c154ad63d7f9709e0b0c4fa 100644
+index e03125281767845564c48c98c3e6b6bbd269ade1..c6ee5f8c084c2e03a544231871c19aa3af93ebeb 100644
 --- a/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PoweredRailBlock.java
-@@ -258,4 +258,60 @@ public class PoweredRailBlock extends BaseRailBlock {
+@@ -265,4 +265,60 @@ public class PoweredRailBlock extends BaseRailBlock {
      protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
          builder.add(PoweredRailBlock.SHAPE, PoweredRailBlock.POWERED, PoweredRailBlock.WATERLOGGED);
      }

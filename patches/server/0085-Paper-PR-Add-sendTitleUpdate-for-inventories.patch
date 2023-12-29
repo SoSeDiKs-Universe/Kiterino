@@ -5,10 +5,10 @@ Subject: [PATCH] Paper PR - Add sendTitleUpdate for inventories
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftContainer.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftContainer.java
-index a35f60b01b371673023bd23f47a8ddafd38787f2..7a2ed7ba00dbc624af2a9f23a3aedd8bd947401b 100644
+index beae43e9b6fe447e7515d878ac175f461968768a..6084beb0ad2dc5c605a852b8a840c8a4020863f9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftContainer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftContainer.java
-@@ -95,6 +95,15 @@ public class CraftContainer extends AbstractContainerMenu {
+@@ -96,6 +96,15 @@ public class CraftContainer extends AbstractContainerMenu {
                  this.title = title;
              }
  

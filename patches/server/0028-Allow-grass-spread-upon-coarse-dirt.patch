@@ -5,10 +5,10 @@ Subject: [PATCH] Allow grass spread upon coarse dirt
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java b/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
-index 9bbb9f8e917288bb0d11661a1399a05631ebcce0..e8f37edb690ab502b672c423d0281cd3ade1823c 100644
+index 1acdf9dad2621a20b077c5f88dab5e0f8688a38f..5e0dd893e21d0e912139f30031b39e6682dc599b 100644
 --- a/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
-@@ -85,6 +85,11 @@ public abstract class SpreadingSnowyDirtBlock extends SnowyDirtBlock {
+@@ -89,6 +89,11 @@ public abstract class SpreadingSnowyDirtBlock extends SnowyDirtBlock {
                          org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(world, pos, blockposition1, (BlockState) iblockdata1.setValue(SpreadingSnowyDirtBlock.SNOWY, access.getBlockState(blockposition1.above()).is(Blocks.SNOW))); // CraftBukkit
                      // Paper end
                      }

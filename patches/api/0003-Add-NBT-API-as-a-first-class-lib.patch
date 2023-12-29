@@ -5,58 +5,27 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 37815cfda843b167853716202572e2845b5faaf5..db1e4457056fe659e8cf97af559073013d10256f 100644
+index d8138e13038bd7fc632df2aa19928b726f4f00d4..a849609810ed9a59bf9cb331056bd93352120a45 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -48,6 +48,7 @@ dependencies {
+@@ -52,6 +52,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:$log4jVersion")
      api("org.slf4j:slf4j-api:$slf4jVersion")
      api("io.sentry:sentry:5.4.0") // Pufferfish
-+    api("de.tr7zw:item-nbt-api:2.12.1") // Kiterino
++    api("de.tr7zw:item-nbt-api:2.12.2") // Kiterino
  
-     implementation("org.ow2.asm:asm:9.4")
-     implementation("org.ow2.asm:asm-commons:9.4")
-diff --git a/src/main/java/org/bukkit/Chunk.java b/src/main/java/org/bukkit/Chunk.java
-index eca55d8d3464f0e13a3b7984f74559ccda87edba..acde94c808ec2072e4d5c6daf9b73b76913d04a2 100644
---- a/src/main/java/org/bukkit/Chunk.java
-+++ b/src/main/java/org/bukkit/Chunk.java
-@@ -338,4 +338,16 @@ public interface Chunk extends PersistentDataHolder {
-          */
-         UNLOADED;
-     }
-+
-+    // Kiterino start
-+    /**
-+     * Returns NBT representation of this chunk.
-+     *
-+     * @return vanilla NBT tags container
-+     */
-+    @Deprecated
-+    default @NotNull de.tr7zw.changeme.nbtapi.NBTChunk getNbt() {
-+        return new de.tr7zw.changeme.nbtapi.NBTChunk(this);
-+    }
-+    // Kiterino end
- }
+     implementation("org.ow2.asm:asm:9.5")
+     implementation("org.ow2.asm:asm-commons:9.5")
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 49974558799830d827f9ccd65a8bafee3fb0376b..5a2380e0608604b05a05f2f0fc94bc6040991d18 100644
+index 49974558799830d827f9ccd65a8bafee3fb0376b..7c8a650189116c6e5840021ca0a4940c31f35096 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -787,4 +787,26 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -787,4 +787,16 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
      }
      // Paper end - destroy speed API
 +
 +    // Kiterino start
-+    /**
-+     * Returns NBT representation of this block.
-+     *
-+     * @return vanilla NBT tags container
-+     */
-+    @Deprecated
-+    default @NotNull de.tr7zw.changeme.nbtapi.NBTBlock getNbt() {
-+        return new de.tr7zw.changeme.nbtapi.NBTBlock(this);
-+    }
-+
 +    /**
 +     * Returns a custom tag container of this block.
 +     * <p>Block's custom data is stored within its {@link Chunk}'s persistent nbt data.
@@ -64,15 +33,15 @@ index 49974558799830d827f9ccd65a8bafee3fb0376b..5a2380e0608604b05a05f2f0fc94bc60
 +     * @return custom NBT tags container
 +     */
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getPersistentData() {
-+        return getNbt().getData();
++        return new de.tr7zw.changeme.nbtapi.NBTBlock(this).getData();
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
-index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..985927cd1707116b99f1f547113048db77851416 100644
+index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..92ee8d4b4252dd018f49b862fa2dd2026f7e869e 100644
 --- a/src/main/java/org/bukkit/block/TileState.java
 +++ b/src/main/java/org/bukkit/block/TileState.java
-@@ -50,4 +50,87 @@ public interface TileState extends BlockState, PersistentDataHolder {
+@@ -50,4 +50,77 @@ public interface TileState extends BlockState, PersistentDataHolder {
       */
      boolean isSnapshot();
      // Paper end
@@ -85,16 +54,6 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..985927cd1707116b99f1f547113048db
 +     */
 +    default void readNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
 +        de.tr7zw.changeme.nbtapi.NBT.get(this, consumer);
-+    }
-+
-+    /**
-+     * Returns NBT representation of this tile state.
-+     *
-+     * @return vanilla NBT tags container
-+     */
-+    @NotNull
-+    default de.tr7zw.changeme.nbtapi.NBTTileEntity getNbt() {
-+        return new de.tr7zw.changeme.nbtapi.NBTTileEntity(this);
 +    }
 +
 +    /**
@@ -161,10 +120,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..985927cd1707116b99f1f547113048db
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index ed9627dff9a33524da546c46e1d1be71ae1d1e0c..0c8f993364f6d21712e7ba9a2dde2b637824d71f 100644
+index 42b8de355855baecd0a435314909116c210d002d..713bb1a8ce3e55e68d731bb4758bd46e6cf479a0 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1114,4 +1114,87 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1158,4 +1158,77 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
@@ -177,16 +136,6 @@ index ed9627dff9a33524da546c46e1d1be71ae1d1e0c..0c8f993364f6d21712e7ba9a2dde2b63
 +     */
 +    default void readNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadableNBT> consumer) {
 +        de.tr7zw.changeme.nbtapi.NBT.get(this, consumer);
-+    }
-+
-+    /**
-+     * Returns NBT representation of this entity.
-+     *
-+     * @return vanilla NBT tags container
-+     */
-+    @Deprecated
-+    default @NotNull de.tr7zw.changeme.nbtapi.NBTEntity getNbt() {
-+        return new de.tr7zw.changeme.nbtapi.NBTEntity(this);
 +    }
 +
 +    /**
@@ -253,7 +202,7 @@ index ed9627dff9a33524da546c46e1d1be71ae1d1e0c..0c8f993364f6d21712e7ba9a2dde2b63
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..8a85288573f929066001e1bf4db1e56c7cb817d7 100644
+index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..7bbc182e4ea81de7dcba14b891eb1a0c4d65044a 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1648,4 +1648,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
@@ -264,7 +213,7 @@ index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..8a85288573f929066001e1bf4db1e56c
 +    // Kiterino start
 +    /**
 +     * Reads nbt data of this item.
-+     * <p>Note: this will copy the item, but allows context-free access to the data.
++     * <p>Note: this <b>will copy the item</b>, but allows context-free access to the data.
 +     *
 +     * @return read-only nbt container of this item
 +     */
@@ -314,13 +263,13 @@ index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..8a85288573f929066001e1bf4db1e56c
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index 57609b7793122e135fa0c3b926500849379637b2..70fce7933d4282fdac1c2aca8c5bf3b45f74daab 100644
+index da59e75267f43581bec6df73dda9f889347617d4..a53a983fc2b86bdb87e77329f9c537ad4a8c70c8 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-@@ -198,4 +198,16 @@ public interface PersistentDataContainer {
+@@ -219,4 +219,15 @@ public interface PersistentDataContainer {
          this.readFromBytes(bytes, true);
      }
-     // Paper end
+     // Paper end - byte array serialization
 +
 +    // Kiterino start
 +    /**
@@ -328,17 +277,16 @@ index 57609b7793122e135fa0c3b926500849379637b2..70fce7933d4282fdac1c2aca8c5bf3b4
 +     *
 +     * @return custom NBT tags container
 +     */
-+    @Deprecated
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
 +        return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
 +    }
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-index 80b277cc57f092f04fbf7810ac78d250b207b775..789f0f63df03ca890dd77005270595bfe5167efe 100644
+index 80b277cc57f092f04fbf7810ac78d250b207b775..3bba12d6855119ceb02d2a0ed96833a0ce41280a 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-@@ -20,4 +20,16 @@ public interface PersistentDataHolder {
+@@ -20,4 +20,15 @@ public interface PersistentDataHolder {
      @NotNull
      PersistentDataContainer getPersistentDataContainer();
  
@@ -348,7 +296,6 @@ index 80b277cc57f092f04fbf7810ac78d250b207b775..789f0f63df03ca890dd77005270595bf
 +     *
 +     * @return custom NBT tags container
 +     */
-+    @Deprecated
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
 +        return getPersistentDataContainer().getPersistentData();
 +    }

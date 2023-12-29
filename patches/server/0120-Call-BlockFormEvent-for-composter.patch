@@ -6,10 +6,10 @@ Subject: [PATCH] Call BlockFormEvent for composter
 Might not be the best event for it, but meh, it works
 
 diff --git a/src/main/java/net/minecraft/world/level/block/ComposterBlock.java b/src/main/java/net/minecraft/world/level/block/ComposterBlock.java
-index 596b77306f690a2298835f0f0fea1abee2a7c85d..9b71264158da82a7499cd2a5adcccfe91c6eddf4 100644
+index 27ff4a3de2253177a6f4a0dbf131d437eb24f2e8..62a222353695d6fbd44a97b9d0195a1106625815 100644
 --- a/src/main/java/net/minecraft/world/level/block/ComposterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/ComposterBlock.java
-@@ -387,7 +387,14 @@ public class ComposterBlock extends Block implements WorldlyContainerHolder {
+@@ -394,7 +394,14 @@ public class ComposterBlock extends Block implements WorldlyContainerHolder {
      @Override
      public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
          if ((Integer) state.getValue(ComposterBlock.LEVEL) == 7) {

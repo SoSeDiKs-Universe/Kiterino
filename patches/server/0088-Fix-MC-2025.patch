@@ -5,11 +5,11 @@ Subject: [PATCH] Fix MC-2025
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 8405f72de602abfbfc28a80f5b23bf6f57e4b0f9..f09348d111f670648d0c0ff2c2e417399ab04784 100644
+index 1ff2ee4d9064d20a469781a0f05fe9fd6ad592c8..50d6a838b223e9c0f678731d64d2483c616b642f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -2560,6 +2560,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
-                 nbt.putUUID("Kiterino.SpawningPlayerUUID", spawningPlayerUuid);
+@@ -2578,6 +2578,19 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+                 nbttagcompound.putUUID("Kiterino.SpawningPlayerUUID", spawningPlayerUuid);
              }
              // Kiterino end
 +
@@ -23,12 +23,12 @@ index 8405f72de602abfbfc28a80f5b23bf6f57e4b0f9..f09348d111f670648d0c0ff2c2e41739
 +            boundingBoxList.add(DoubleTag.valueOf(boundingBox.maxX));
 +            boundingBoxList.add(DoubleTag.valueOf(boundingBox.maxY));
 +            boundingBoxList.add(DoubleTag.valueOf(boundingBox.maxZ));
-+            nbt.put("Kiterino.BoundingBox", boundingBoxList);
++            nbttagcompound.put("Kiterino.BoundingBox", boundingBoxList);
 +            // Kiterino end
-             return nbt;
+             return nbttagcompound;
          } catch (Throwable throwable) {
              CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
-@@ -2637,6 +2650,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -2655,6 +2668,21 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
                          this.reapplyPosition();
                      }
  

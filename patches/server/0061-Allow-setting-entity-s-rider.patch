@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a8d94bbbf57ddfbff3e199dd7425799d6660fa08..99cffb9f45bf610346e3bc18901b4ea57439db9d 100644
+index 18945c86ef09313b34f9485267960a2166ef28bc..402778b86dff000aab145cb30a3d42ff041706f3 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3049,6 +3049,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -3073,6 +3073,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          }
      }
  
@@ -30,10 +30,10 @@ index a8d94bbbf57ddfbff3e199dd7425799d6660fa08..99cffb9f45bf610346e3bc18901b4ea5
      protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
      protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index c7cc379a594b1dcf13c334a0330a4e27fe0b5423..21c710f82f6df313a70dd7af91fd6646d9788569 100644
+index f364674b35bf22f50ada5931065faba287fa541d..ba67d69d1cda2b22431642c3c4e7efbd789d8b55 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1817,7 +1817,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1823,7 +1823,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
      }
  
      public InteractionResult tryRide(Player player, InteractionHand hand, InteractionResult result) {
@@ -42,7 +42,7 @@ index c7cc379a594b1dcf13c334a0330a4e27fe0b5423..21c710f82f6df313a70dd7af91fd6646
              return result;
          }
          if (hand != InteractionHand.MAIN_HAND) {
-@@ -1845,7 +1845,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1851,7 +1851,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
                  return InteractionResult.PASS;
              }
          }
@@ -52,10 +52,10 @@ index c7cc379a594b1dcf13c334a0330a4e27fe0b5423..21c710f82f6df313a70dd7af91fd6646
              return InteractionResult.PASS;
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index aa8efff39ca3b2c2ed69a19f1872a295b7103c6b..40ab0ab4404b090d3f2fdb8a83f57389267a01d0 100644
+index 315c9be5841d55910500fcc225b5e42f271cf2cb..be78915fd1a8cdd0b7f5109b45087fd1b2220f97 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1565,6 +1565,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1254,6 +1254,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return rider != null ? (org.bukkit.entity.Player) rider.getBukkitEntity() : null;
      }
  

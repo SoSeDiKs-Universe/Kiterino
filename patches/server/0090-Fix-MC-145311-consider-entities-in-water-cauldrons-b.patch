@@ -6,10 +6,10 @@ Subject: [PATCH] Fix MC-145311 - consider entities in water cauldrons being
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f09348d111f670648d0c0ff2c2e417399ab04784..1319e3ffd6bae049585d9504584bfe1d4fbd7fb5 100644
+index 50d6a838b223e9c0f678731d64d2483c616b642f..3f1e30330145dd688af21281a20fe6e143098cde 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1936,6 +1936,18 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1936,6 +1936,18 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          return this.isInWaterOrBubble() || this.isInLava();
      }
  
@@ -28,7 +28,7 @@ index f09348d111f670648d0c0ff2c2e417399ab04784..1319e3ffd6bae049585d9504584bfe1d
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -1970,7 +1982,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1970,7 +1982,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
              }
          }
  

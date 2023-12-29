@@ -5,19 +5,19 @@ Subject: [PATCH] Add player to NotePlayEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-index 6343cd0c33cafb30225cfae17ea1cf15859073b1..6e9ff01266fcb3936169782e9c4063a50ce41769 100644
+index 604053c7b5b2b7f2f1666baa3e0ce5acf3b37e46..ac05c60cb56768e5889a9352085738317c11f4fe 100644
 --- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
-@@ -38,6 +38,8 @@ public class NoteBlock extends Block {
+@@ -40,6 +40,8 @@ public class NoteBlock extends Block {
      public static final IntegerProperty NOTE = BlockStateProperties.NOTE;
      public static final int NOTE_VOLUME = 3;
  
 +    private @Nullable Player lastPlayedBy = null; // Kiterino
 +
-     public NoteBlock(BlockBehaviour.Properties settings) {
-         super(settings);
-         this.registerDefaultState((BlockState) ((BlockState) ((BlockState) ((BlockState) this.stateDefinition.any()).setValue(NoteBlock.INSTRUMENT, NoteBlockInstrument.HARP)).setValue(NoteBlock.NOTE, 0)).setValue(NoteBlock.POWERED, false));
-@@ -134,7 +136,8 @@ public class NoteBlock extends Block {
+     @Override
+     public MapCodec<NoteBlock> codec() {
+         return NoteBlock.CODEC;
+@@ -141,7 +143,8 @@ public class NoteBlock extends Block {
      public boolean triggerEvent(BlockState state, Level world, BlockPos pos, int type, int data) {
          NoteBlockInstrument blockpropertyinstrument = (NoteBlockInstrument) state.getValue(NoteBlock.INSTRUMENT);
          // Paper start - move NotePlayEvent call to fix instrument/note changes
@@ -28,10 +28,10 @@ index 6343cd0c33cafb30225cfae17ea1cf15859073b1..6e9ff01266fcb3936169782e9c4063a5
          // Paper end
          float f;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 512d2881d622420c47cba9e9684aeae0e840096e..a7bdcb010fdc97c8e11a7a0794a0c6a3061fd9a2 100644
+index a5668e4a8db06d661675f38beb43c269193e5273..013434af51b4b05e42d3abc0504657729cafd14a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1611,7 +1611,12 @@ public class CraftEventFactory {
+@@ -1610,7 +1610,12 @@ public class CraftEventFactory {
      }
  
      public static NotePlayEvent callNotePlayEvent(Level world, BlockPos pos, NoteBlockInstrument instrument, int note) {

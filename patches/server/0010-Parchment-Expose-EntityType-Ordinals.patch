@@ -5,10 +5,10 @@ Subject: [PATCH] Parchment - Expose EntityType Ordinals
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/EntityType.java b/src/main/java/net/minecraft/world/entity/EntityType.java
-index 5930e45bae5aa86b3cedb811c4c9bb92099bc1b5..f3db235b67502040fcbd9292ad41be684223b597 100644
+index 38845300ceb7092de4cd8e31ef8782728892f656..226dbccfb651f957b070a84d1a8fc58623101830 100644
 --- a/src/main/java/net/minecraft/world/entity/EntityType.java
 +++ b/src/main/java/net/minecraft/world/entity/EntityType.java
-@@ -163,6 +163,8 @@ import org.slf4j.Logger;
+@@ -165,6 +165,8 @@ import org.slf4j.Logger;
  
  public class EntityType<T extends Entity> implements FeatureElement, EntityTypeTest<Entity, T> {
  
@@ -17,7 +17,7 @@ index 5930e45bae5aa86b3cedb811c4c9bb92099bc1b5..f3db235b67502040fcbd9292ad41be68
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final String ENTITY_TAG = "EntityTag";
      private final Holder.Reference<EntityType<?>> builtInRegistryHolder;
-@@ -307,6 +309,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -311,6 +313,7 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
      private String descriptionId;
      @Nullable
      private Component description;
@@ -25,7 +25,7 @@ index 5930e45bae5aa86b3cedb811c4c9bb92099bc1b5..f3db235b67502040fcbd9292ad41be68
      @Nullable
      private ResourceLocation lootTable;
      private EntityDimensions dimensions; // Purpur - remove final
-@@ -314,9 +317,31 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
+@@ -318,9 +321,31 @@ public class EntityType<T extends Entity> implements FeatureElement, EntityTypeT
      private final FeatureFlagSet requiredFeatures;
  
      private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder type) { // CraftBukkit - decompile error
@@ -59,10 +59,10 @@ index 5930e45bae5aa86b3cedb811c4c9bb92099bc1b5..f3db235b67502040fcbd9292ad41be68
      public static EntityType<?> getFromBukkitType(org.bukkit.entity.EntityType bukkitType) {
          return getFromKey(new ResourceLocation(bukkitType.getKey().toString()));
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index 02c2a913b25b2ed1d008469025e11af882632070..ac21d70b81abcb5b7c3db5f7990db2ef065ab425 100644
+index 0705b076395c523992defab1188cab9887f47235..8d2813da568a5c940aa408d87a6e9b66953c5afd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -647,6 +647,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -644,6 +644,19 @@ public final class CraftMagicNumbers implements UnsafeValues {
      }
      // Paper end
  

@@ -6,10 +6,10 @@ Subject: [PATCH] Increase furnace minecart speed and let it slow down on
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-index 43394bb43874af9b36eb18e8b4a9ee65673a5a4c..46fb1ee7f05bb7d2132e9f808c8db5ad08c8cd24 100644
+index f88ed6812ac73dfa8ed1b2115cede8a6d4cbbcd0..a09414b89942220946a260af02feb254751017a4 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/AbstractMinecart.java
-@@ -689,7 +689,7 @@ public abstract class AbstractMinecart extends Entity {
+@@ -641,7 +641,7 @@ public abstract class AbstractMinecart extends VehicleEntity {
              final double fallbackSpeedFactor = 1.15D;
              double fallback = this.getMaxSpeed();
  
@@ -18,7 +18,7 @@ index 43394bb43874af9b36eb18e8b4a9ee65673a5a4c..46fb1ee7f05bb7d2132e9f808c8db5ad
                  return fallback;
  
              if (horizontalMomentumPerTick < vanillaMaxHorizontalMovementPerTick)
-@@ -896,7 +896,7 @@ public abstract class AbstractMinecart extends Entity {
+@@ -848,7 +848,7 @@ public abstract class AbstractMinecart extends VehicleEntity {
              final double basisAccelerationPerTick = 0.021D; // Kiterino - dynamic minecart speed
              if (d18 > 0.01D) {
                  // Kiterino start - dynamic minecart speed

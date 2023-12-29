@@ -47,7 +47,7 @@ index b34dbb083ecc3a6ead7721391a79e7061e098498..402d7b6bf44103e62af5f85f0c946820
      private boolean applyWater() { // Paper
          AABB axisalignedbb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
 diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
-index b0110a6f26064b506ae5402f1e5c9cefdb428653..0e4844a6e6601d6fc432b7d36a217c215e5b7fae 100644
+index 9e0a83197ef04e266c02f2b8967cafbf1e7612f1..00aaf01fe797fe6de7789bdb5d2cc2362794ebac 100644
 --- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
 @@ -43,6 +43,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
@@ -73,7 +73,7 @@ index b0110a6f26064b506ae5402f1e5c9cefdb428653..0e4844a6e6601d6fc432b7d36a217c21
          }
          if (campfire.checkGravity(world, pos, state)) return;
          // Kiterino end
-@@ -123,6 +132,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -126,6 +135,7 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
      }
  
      public static void cooldownTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
@@ -81,7 +81,7 @@ index b0110a6f26064b506ae5402f1e5c9cefdb428653..0e4844a6e6601d6fc432b7d36a217c21
          if (campfire.checkGravity(world, pos, state)) return; // Kiterino
          boolean flag = false;
  
-@@ -209,6 +219,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -212,6 +222,11 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
              System.arraycopy(cookingState, 0, this.stopCooking, 0, Math.min(this.stopCooking.length, abyte.length));
          }
          // Paper end
@@ -93,7 +93,7 @@ index b0110a6f26064b506ae5402f1e5c9cefdb428653..0e4844a6e6601d6fc432b7d36a217c21
      }
  
      @Override
-@@ -224,6 +239,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+@@ -227,6 +242,14 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
          }
          nbt.putByteArray("Paper.StopCooking", cookingState);
          // Paper end

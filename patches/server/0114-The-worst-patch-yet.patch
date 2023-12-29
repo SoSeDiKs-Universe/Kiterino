@@ -6,10 +6,10 @@ Subject: [PATCH] The worst patch yet
 Allows creating block data in async for use with packet APIs
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-index 2a9dba6d4a94f1488ef9d86ee4f60b7fd06419fb..132a0312d98ffe90b837b8877807a97b02e28291 100644
+index c7b93b8d4ed15db0803e2304e2da70ed3624f13f..eee779fca0d8bc1969d43f8178c02ece3f8d5121 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-@@ -152,7 +152,7 @@ public class CraftBlockData implements BlockData {
+@@ -153,7 +153,7 @@ public class CraftBlockData implements BlockData {
          return exactMatch;
      }
  

@@ -83,10 +83,10 @@ index 7cd79caa9174ed079efae872bdde54980f55c11e..4a6c26d03e9b11871aa91454ed729709
      }
      // Kiterino end
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-index bec8e6b62dba2bd0e4e85a7d1fb51287384f1290..eddcab8006fc29581b3bb51eee6f776b27317f9a 100644
+index e5506a7d074a9f89d41f4d5d7549a458779bef20..634774bfd8e87bd279a53c0d14382e03be8b9f5f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-@@ -726,4 +726,21 @@ public class CraftBlock implements Block {
+@@ -727,4 +727,21 @@ public class CraftBlock implements Block {
          blockData.getBlock().randomTick(blockData, level, this.position, level.random);
      }
      // Paper end

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow explosions underwater (/fluids)
 
 
 diff --git a/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java b/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
-index 44c3f0ceea4b4464873302ecdc53f7eb1cc83052..9f99fbad47409df18b75bd3bbfd3a786ffb2baad 100644
+index f529f5d0f28533ec89f3ee712e59745991d068ee..d77e2f92a2e4c0d73224f93876a209359bd01f33 100644
 --- a/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
 +++ b/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
-@@ -7,7 +7,12 @@ import net.minecraft.world.level.material.FluidState;
+@@ -9,7 +9,12 @@ import net.minecraft.world.phys.Vec3;
  
  public class ExplosionDamageCalculator {
      public Optional<Float> getBlockExplosionResistance(Explosion explosion, BlockGetter world, BlockPos pos, BlockState blockState, FluidState fluidState) {

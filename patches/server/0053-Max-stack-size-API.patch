@@ -5,7 +5,7 @@ Subject: [PATCH] Max stack size API
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index dd2f6c67533cc3344a171fe3ae9b3704796d8c50..e8a9447ac5560c925df0a3e7cfaaee15bdd5df52 100644
+index c072e3e9742f733aad0d13833fb700c42ca1c356..4dd799d6fb1969f7bdfb8112431515b7477d7c9d 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
 @@ -60,7 +60,7 @@ public class Item implements FeatureElement, ItemLike {
@@ -31,10 +31,10 @@ index dd2f6c67533cc3344a171fe3ae9b3704796d8c50..e8a9447ac5560c925df0a3e7cfaaee15
          return this.maxDamage;
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5fc162fdc70fa456d294bec473094680e1045692..d11980fc06e5ceb7ac12190bfca0a3657579a69f 100644
+index a02e117b03c7748080f3ebca778b716974672442..6cead2b1c906cffa9b1c66c22a1b9a0a9b5d4879 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3300,4 +3300,12 @@ public final class CraftServer implements Server {
+@@ -3337,4 +3337,12 @@ public final class CraftServer implements Server {
          return getServer().lagging;
      }
      // Purpur end

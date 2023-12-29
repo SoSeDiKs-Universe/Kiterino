@@ -5,19 +5,19 @@ Subject: [PATCH] Cauldrons can consume liquids
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/CauldronBlock.java b/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
-index 3ee012a9ef8cada0b2203e53b2f731f60f697cb1..1ce5cf581a3b05f492b93a81f0be3bf71355e108 100644
+index 028419d45c098baf5eab5d6e7a73189cb3e86622..6929a8e8ae1cf00a86e61afdec918d3ce0692f80 100644
 --- a/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
-@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.Fluids;
+@@ -15,7 +15,7 @@ import net.minecraft.world.level.material.Fluids;
  import org.bukkit.event.block.CauldronLevelChangeEvent;
  // CraftBukkit end
  
 -public class CauldronBlock extends AbstractCauldronBlock {
 +public class CauldronBlock extends AbstractCauldronBlock implements LiquidBlockContainer { // Kiterino - mark as liquid container
  
+     public static final MapCodec<CauldronBlock> CODEC = simpleCodec(CauldronBlock::new);
      private static final float RAIN_FILL_CHANCE = 0.05F;
-     private static final float POWDER_SNOW_FILL_CHANCE = 0.1F;
-@@ -82,4 +82,28 @@ public class CauldronBlock extends AbstractCauldronBlock {
+@@ -89,4 +89,28 @@ public class CauldronBlock extends AbstractCauldronBlock {
          }
  
      }

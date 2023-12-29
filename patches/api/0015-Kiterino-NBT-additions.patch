@@ -5,12 +5,12 @@ Subject: [PATCH] Kiterino NBT additions
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 5a2380e0608604b05a05f2f0fc94bc6040991d18..40f5cdd4a5cc26dee3a559082f617a48a872c802 100644
+index 7c8a650189116c6e5840021ca0a4940c31f35096..9c99b9e88d7bc61ebd1ad6c81511148e9bf2f019 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -808,5 +808,15 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -798,5 +798,15 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
      default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getPersistentData() {
-         return getNbt().getData();
+         return new de.tr7zw.changeme.nbtapi.NBTBlock(this).getData();
      }
 +
 +    /**
@@ -25,10 +25,10 @@ index 5a2380e0608604b05a05f2f0fc94bc6040991d18..40f5cdd4a5cc26dee3a559082f617a48
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
-index 985927cd1707116b99f1f547113048db77851416..454edc96f753bd5933ab1ecd7c3d063ac5de7c93 100644
+index 92ee8d4b4252dd018f49b862fa2dd2026f7e869e..0b0d079240601d9d1ab6548e62831803f6557952 100644
 --- a/src/main/java/org/bukkit/block/TileState.java
 +++ b/src/main/java/org/bukkit/block/TileState.java
-@@ -132,5 +132,57 @@ public interface TileState extends BlockState, PersistentDataHolder {
+@@ -122,5 +122,57 @@ public interface TileState extends BlockState, PersistentDataHolder {
      default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
          de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
      }
@@ -87,10 +87,10 @@ index 985927cd1707116b99f1f547113048db77851416..454edc96f753bd5933ab1ecd7c3d063a
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 0c8f993364f6d21712e7ba9a2dde2b637824d71f..6701f3c85ff800224331f4f3c2bdf3e117247838 100644
+index 713bb1a8ce3e55e68d731bb4758bd46e6cf479a0..cc032381020064baec057a7913352d1ee1eb9f4f 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1196,5 +1196,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1230,5 +1230,57 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
          de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
      }
@@ -149,7 +149,7 @@ index 0c8f993364f6d21712e7ba9a2dde2b637824d71f..6701f3c85ff800224331f4f3c2bdf3e1
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 8a85288573f929066001e1bf4db1e56c7cb817d7..675dc6400dda8ca31a35fe64c0da5825b6189532 100644
+index 7bbc182e4ea81de7dcba14b891eb1a0c4d65044a..c2732ebd350bc282a7266ea8ee88b888eb8e53b0 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1699,5 +1699,80 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
@@ -215,7 +215,7 @@ index 8a85288573f929066001e1bf4db1e56c7cb817d7..675dc6400dda8ca31a35fe64c0da5825
 +     * @return ID if present
 +     */
 +    public @Nullable String subtractId() {
-+        if (isEmpty(this)) return null;
++        if (isEmpty()) return null;
 +        return getNbt(nbt -> {
 +            String kiterinoTag = Bukkit.getName();
 +            if (!nbt.hasTag(kiterinoTag, de.tr7zw.changeme.nbtapi.NBTType.NBTTagCompound)) return null;
@@ -234,10 +234,10 @@ index 8a85288573f929066001e1bf4db1e56c7cb817d7..675dc6400dda8ca31a35fe64c0da5825
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index 70fce7933d4282fdac1c2aca8c5bf3b45f74daab..eb2b122e63ed2ea621cc54232fc4129e8393942c 100644
+index a53a983fc2b86bdb87e77329f9c537ad4a8c70c8..6cef9d882dca815c2a9fb61b43e35929da2a8ecc 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-@@ -209,5 +209,15 @@ public interface PersistentDataContainer {
+@@ -229,5 +229,15 @@ public interface PersistentDataContainer {
      default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
          return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
      }
@@ -254,10 +254,10 @@ index 70fce7933d4282fdac1c2aca8c5bf3b45f74daab..eb2b122e63ed2ea621cc54232fc4129e
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-index 789f0f63df03ca890dd77005270595bfe5167efe..d266576c6de49402c96231271810b34cb01b0874 100644
+index 3bba12d6855119ceb02d2a0ed96833a0ce41280a..c01a38068298733586c4101a377d78f448434221 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-@@ -30,6 +30,16 @@ public interface PersistentDataHolder {
+@@ -29,6 +29,16 @@ public interface PersistentDataHolder {
      default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
          return getPersistentDataContainer().getPersistentData();
      }
@@ -269,7 +269,7 @@ index 789f0f63df03ca890dd77005270595bfe5167efe..d266576c6de49402c96231271810b34c
 +     */
 +    @Deprecated
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getKiterinoNbt() {
-+        return getPersistentData().getOrCreateCompound(org.bukkit.Bukkit.getName());
++        return getPersistentDataContainer().getKiterinoNbt();
 +    }
      // Kiterino end
  

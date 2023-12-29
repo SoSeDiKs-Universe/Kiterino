@@ -5,12 +5,12 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index a063069b3cae509c3dfc8f262c9abd4d4a2803ea..4377ed6412882a015945faa9a9e1edf21f57ddfc 100644
+index 5fc40c8ee24eb4aa2ed81ebf1b6777c49239dadb..2061aacb44d57b7f06a213e9c47a7d596fe44058 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -874,4 +874,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
-         boolean success = this.getHandle().level().addFreshEntity(fireworks, SpawnReason.CUSTOM);
-         return success ? (Firework) fireworks.getBukkitEntity() : null;
+@@ -884,4 +884,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+     public org.bukkit.entity.Entity copy(Location location) {
+         throw new UnsupportedOperationException("Cannot copy human entities");
      }
 +
 +    // Kiterino start

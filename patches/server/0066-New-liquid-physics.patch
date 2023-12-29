@@ -5,10 +5,10 @@ Subject: [PATCH] New liquid physics
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-index 71df79e7921642e87cad5a2d9d8907a4424037aa..419563470c7f7b337a4703643a64361f142004ed 100644
+index b908e23cea5939312361d905875746ef65092d24..92795003b3f7a817d497eb01ac61efe9a5b27fa8 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
-@@ -685,7 +685,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -622,7 +622,7 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
          int i = Mth.floor(axisalignedbb.minX);
          int j = Mth.ceil(axisalignedbb.maxX);
          int k = Mth.floor(axisalignedbb.minY);
@@ -17,7 +17,7 @@ index 71df79e7921642e87cad5a2d9d8907a4424037aa..419563470c7f7b337a4703643a64361f
          int i1 = Mth.floor(axisalignedbb.minZ);
          int j1 = Mth.ceil(axisalignedbb.maxZ);
          boolean flag = false;
-@@ -733,7 +733,7 @@ public class Boat extends Entity implements VariantHolder<Boat.Type> {
+@@ -670,7 +670,7 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
  
                      if (fluid.is(FluidTags.WATER) && d0 < (double) ((float) blockposition_mutableblockposition.getY() + fluid.getHeight(this.level(), blockposition_mutableblockposition))) {
                          if (!fluid.isSource()) {
@@ -27,12 +27,12 @@ index 71df79e7921642e87cad5a2d9d8907a4424037aa..419563470c7f7b337a4703643a64361f
  
                          flag = true;
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index 68b22a2e0f45a87aec0b31cfe0c29cff3db67944..b047d72c35d5e25ada722b37f581e9a5c2a52b22 100644
+index 82a048c01505ad76f3818710f531d448c5974c90..2c4f9d584d67c0e4ecea381b203b318854c35e00 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
-@@ -75,7 +75,7 @@ public class Blocks {
-     public static final Block DARK_OAK_SAPLING = register("dark_oak_sapling", new SaplingBlock(new DarkOakTreeGrower(), BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
-     public static final Block MANGROVE_PROPAGULE = register("mangrove_propagule", new MangrovePropaguleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
+@@ -81,7 +81,7 @@ public class Blocks {
+     public static final Block DARK_OAK_SAPLING = register("dark_oak_sapling", new SaplingBlock(TreeGrower.DARK_OAK, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+     public static final Block MANGROVE_PROPAGULE = register("mangrove_propagule", new MangrovePropaguleBlock(TreeGrower.MANGROVE, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
      public static final Block BEDROCK = register("bedrock", new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(Blocks::never)));
 -    public static final Block WATER = register("water", new LiquidBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 +    public static final Block WATER = register("water", new LiquidBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.PUSH_ONLY).noLootTable().liquid().sound(SoundType.EMPTY))); // Kiterino - pushable water
@@ -40,10 +40,10 @@ index 68b22a2e0f45a87aec0b31cfe0c29cff3db67944..b047d72c35d5e25ada722b37f581e9a5
          return 15;
      }).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-index cdcf11fb9e4690d74b30fe0ade842d6574464624..108789e260ce2b2608a9b34262742ed37c33da5f 100644
+index b9025fcc6a4db9533cdc42034c9e77323d0785fa..b9fc022537cd4b67c72dbc0068c9a21c59b824ef 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-@@ -299,6 +299,18 @@ public class PistonBaseBlock extends DirectionalBlock {
+@@ -312,6 +312,18 @@ public class PistonBaseBlock extends DirectionalBlock {
      }
  
      public static boolean isPushable(BlockState state, Level world, BlockPos pos, Direction direction, boolean canBreak, Direction pistonDir) {
@@ -62,7 +62,7 @@ index cdcf11fb9e4690d74b30fe0ade842d6574464624..108789e260ce2b2608a9b34262742ed3
          if (pos.getY() >= world.getMinBuildHeight() && pos.getY() <= world.getMaxBuildHeight() - 1 && world.getWorldBorder().isWithinBounds(pos)) {
              if (state.isAir()) {
                  return true;
-@@ -407,6 +419,44 @@ public class PistonBaseBlock extends DirectionalBlock {
+@@ -420,6 +432,44 @@ public class PistonBaseBlock extends DirectionalBlock {
              }
              // CraftBukkit end
  
