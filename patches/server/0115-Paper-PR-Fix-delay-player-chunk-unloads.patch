@@ -44,10 +44,10 @@ index 1b090f1e79b996e52097afc49c1cec85936653e6..9ba8ac05ac7d700be7fb43dbcdf2d8b2
                                                 final int sendRadius) {
              // expect sendRadius to be = 1 + target viewable radius
 diff --git a/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java b/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java
-index 2519ad2884b6c09b312432b933c31476b369e599..229198010de1cbefa465a07e023b60fba6c61573 100644
+index e1ffd62f4ebceecb9bc5471df3da406cffea0483..6e5311b33453ef54d8f5dc7bbd2ca70c801772fd 100644
 --- a/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java
 +++ b/src/main/java/io/papermc/paper/chunk/system/scheduling/ChunkHolderManager.java
-@@ -517,10 +517,18 @@ public final class ChunkHolderManager {
+@@ -518,10 +518,18 @@ public final class ChunkHolderManager {
      }
  
      <T> boolean addTicketAtLevel(final TicketType<T> type, final long chunk, final int level, final T identifier, final boolean lock) {
@@ -67,7 +67,7 @@ index 2519ad2884b6c09b312432b933c31476b369e599..229198010de1cbefa465a07e023b60fb
  
          final int chunkX = CoordinateUtils.getChunkX(chunk);
          final int chunkZ = CoordinateUtils.getChunkZ(chunk);
-@@ -604,21 +612,9 @@ public final class ChunkHolderManager {
+@@ -605,21 +613,9 @@ public final class ChunkHolderManager {
              final int newLevel = getTicketLevelAt(ticketsAtChunk);
              // we should not change the ticket levels while the target region may be ticking
              if (oldLevel != newLevel) {

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 18945c86ef09313b34f9485267960a2166ef28bc..402778b86dff000aab145cb30a3d42ff041706f3 100644
+index 13db4b85ef0f7943f3c4dd3bc47b976494d26188..9f1a01220e25f8a0da2e4e5831806358607ee59e 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3073,6 +3073,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -3077,6 +3077,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          }
      }
  
@@ -30,7 +30,7 @@ index 18945c86ef09313b34f9485267960a2166ef28bc..402778b86dff000aab145cb30a3d42ff
      protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
      protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index f364674b35bf22f50ada5931065faba287fa541d..ba67d69d1cda2b22431642c3c4e7efbd789d8b55 100644
+index 8ca0d6f2a5565f83a7bc5ecc7ccd9ff5ae7079c5..49233d48c00c76ec5fa4391caa8668cfefcff05f 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
 @@ -1823,7 +1823,7 @@ public abstract class Mob extends LivingEntity implements Targeting {

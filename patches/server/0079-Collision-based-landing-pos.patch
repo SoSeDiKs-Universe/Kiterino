@@ -5,10 +5,10 @@ Subject: [PATCH] Collision based landing pos
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a0fbf68a47ab4a03ab9a5a7341be31eb8d4fda00..1ff2ee4d9064d20a469781a0f05fe9fd6ad592c8 100644
+index ddcdd055e552f35aa1117c71f98bd513b88127a4..44bbb2ae3f9c00dd22b649b226d31773531747b5 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1439,6 +1439,14 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -1443,6 +1443,14 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      /** @deprecated */
      @Deprecated
      public BlockPos getOnPosLegacy() {

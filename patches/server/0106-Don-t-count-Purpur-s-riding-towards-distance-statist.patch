@@ -5,10 +5,10 @@ Subject: [PATCH] Don't count Purpur's riding towards distance statistics
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 57fb8db33660c66b04f87789e3cca0ea89d67447..9dadded3adc82e36a93689547ac52fd45cbdea2f 100644
+index 165002a2bee25aebcb046ff7c29e2cf53b7ad6ab..f5d2d78c2be2542ac18796e5d9243de971f316d5 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-@@ -1843,6 +1843,11 @@ public class ServerPlayer extends Player {
+@@ -1844,6 +1844,11 @@ public class ServerPlayer extends Player {
          if (this.isPassenger() && !ServerPlayer.didNotMove(deltaX, deltaY, deltaZ)) {
              int i = Math.round((float) Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 100.0F);
              Entity entity = this.getVehicle();

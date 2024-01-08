@@ -15,7 +15,7 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
-index 4c9334dde0734a3550a810845cee53f474e9c96b..bd8bfb5bb21f79a491ff20ed79e14c4d0f0bfe9b 100644
+index ef7f1a871144f4a6897769f2459a4dd5eeffa5b4..46798e9ac9f54e31bd7b65285d3e85fe58b6e35a 100644
 --- a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
 +++ b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
 @@ -114,7 +114,14 @@ public interface CauldronInteraction {
@@ -35,10 +35,10 @@ index 4c9334dde0734a3550a810845cee53f474e9c96b..bd8bfb5bb21f79a491ff20ed79e14c4d
                  entityhuman.awardStat(Stats.ITEM_USED.get(item));
                  // LayeredCauldronBlock.lowerFillLevel(iblockdata, world, blockposition); // CraftBukkit
 diff --git a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index 5e3a3565ac71cd8b1ea95b1732e5a1ec26ef6adb..278e933e268a0c4e6bb7fd7cd29b30e4e9dc6eea 100644
+index 44df01054645deb99b8d2ae8ac9540f4f0035d1c..d1332cc80165301467ebf7e08637fe3c44068c3c 100644
 --- a/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/src/main/java/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -1050,9 +1050,11 @@ public interface DispenseItemBehavior {
+@@ -1049,9 +1049,11 @@ public interface DispenseItemBehavior {
                      pointer.level().gameEvent((Entity) null, GameEvent.FLUID_PICKUP, pointer.pos());
                      return filledBottleStack.copy();
                  } else {
@@ -50,7 +50,7 @@ index 5e3a3565ac71cd8b1ea95b1732e5a1ec26ef6adb..278e933e268a0c4e6bb7fd7cd29b30e4
  
                      return emptyBottleStack;
                  }
-@@ -1093,12 +1095,24 @@ public interface DispenseItemBehavior {
+@@ -1091,12 +1093,24 @@ public interface DispenseItemBehavior {
                  if (iblockdata.is(BlockTags.BEEHIVES, (blockbase_blockdata) -> {
                      return blockbase_blockdata.hasProperty(BeehiveBlock.HONEY_LEVEL) && blockbase_blockdata.getBlock() instanceof BeehiveBlock;
                  }) && (Integer) iblockdata.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
@@ -123,7 +123,7 @@ index 384da302bbf87d87352dad9cce841deae7faf0e9..126fc6b13f6bc6fe11666f411a05774e
                  }
  
 diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
-index 7d1f3c367efcf8def56b961993136e02e05ba59c..6d14b603cf4380685f271995b4463a4925ddd227 100644
+index 2594c8e233114b21e5b00acb5ad7012b004a0ef2..5bcd0665c9c3efb0c7847cfdbff9146eee587280 100644
 --- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 @@ -159,12 +159,22 @@ public class BeehiveBlock extends BaseEntityBlock {
@@ -153,7 +153,7 @@ index 7d1f3c367efcf8def56b961993136e02e05ba59c..6d14b603cf4380685f271995b4463a49
  
                  flag = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 013434af51b4b05e42d3abc0504657729cafd14a..f5b1a2031b8899d8694a4c13fc25f02c63403f67 100644
+index cb978aeb63d8074358e75302a92559ce8472551b..2e016321682ce4a5007bb08eef3ff0f7cc9aef81 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 @@ -2154,6 +2154,18 @@ public class CraftEventFactory {
