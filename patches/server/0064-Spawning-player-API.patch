@@ -1,0 +1,90 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 27 Oct 2022 15:47:27 +0300
+Subject: [PATCH] Spawning player API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 27dad6fa671531b8369ead4b883d507d4490bc4b..2d134283a835718c46c78e1eb8c785e6a47e109e 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -509,6 +509,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+         return this.yRot;
+     }
+ 
++    // Kiterino start
++    public @Nullable UUID spawningPlayerUuid;
++
++    public void updateSpawningPlayer() {
++        if (!(this.level() instanceof ServerLevel level)) return;
++        if (!level.paperConfig().entities.spawning.perPlayerMobSpawns) return;
++        if (this.spawningPlayerUuid != null) return;
++
++        var inRange = level.getChunkSource().chunkMap.playerMobSpawnMap.getObjectsInRange(chunkPosition());
++        if (inRange == null) return;
++
++        final Object[] backingSet = inRange.getBackingSet();
++        for (Object o : backingSet) {
++            if (o instanceof ServerPlayer player) {
++                this.spawningPlayerUuid = player.getUUID();
++                break;
++            }
++        }
++    }
++    // Kiterino end
++
+     public boolean isChunkLoaded() {
+         return this.level.hasChunk((int) Math.floor(this.getX()) >> 4, (int) Math.floor(this.getZ()) >> 4);
+     }
+@@ -2529,6 +2550,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+                 nbttagcompound.putBoolean("Purpur.FireImmune", immuneToFire);
+             }
+             // Purpur end
++            // Kiterino start
++            if (spawningPlayerUuid != null) {
++                nbttagcompound.putUUID("Kiterino.SpawningPlayerUUID", spawningPlayerUuid);
++            }
++            // Kiterino end
+             return nbttagcompound;
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.forThrowable(throwable, "Saving entity NBT");
+@@ -2681,6 +2707,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+                 immuneToFire = nbt.getBoolean("Purpur.FireImmune");
+             }
+             // Purpur end
++            // Kiterino start
++            if (nbt.contains("Kiterino.SpawningPlayerUUID")) {
++                spawningPlayerUuid = nbt.getUUID("Kiterino.SpawningPlayerUUID");
++            }
++            // Kiterino end
+ 
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.forThrowable(throwable, "Loading entity NBT");
+diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
+index a2026900948e9157cb35ba0183dc3af20c63214f..76fc644651b729eaefb5ede39aecb5c96599b4d5 100644
+--- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
++++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
+@@ -295,6 +295,7 @@ public final class NaturalSpawner {
+ 
+                                         entityinsentient.moveTo(d0, (double) i, d1, world.random.nextFloat() * 360.0F, 0.0F);
+                                         if (NaturalSpawner.isValidPositionForMob(world, entityinsentient, d2)) {
++                                            entityinsentient.updateSpawningPlayer(); // Kiterino
+                                             groupdataentity = entityinsentient.finalizeSpawn(world, world.getCurrentDifficultyAt(entityinsentient.blockPosition()), MobSpawnType.NATURAL, groupdataentity, (CompoundTag) null);
+                                             // CraftBukkit start
+                                             // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index 317983a4c2f7c0b6040a12ff1afa7c44a988e399..89411826bc48462330dd838bef361714841c92ec 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1282,4 +1282,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return !getHandle().dismountsUnderwater();
+     }
+     // Purpur end
++
++    // Kiterino start
++    @Override
++    public UUID getSpawningPlayerUuid() {
++        return getHandle().spawningPlayerUuid;
++    }
++    // Kiterino end
+ }

@@ -6,7 +6,7 @@ Subject: [PATCH] Patina - Completely remove Metrics
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
 deleted file mode 100644
-index b81cfd6dd04dc1fcb61c26877d9e38b05a00be59..0000000000000000000000000000000000000000
+index b36ce80b7940dd435783375a6bb9352e04d5a27e..0000000000000000000000000000000000000000
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ /dev/null
 @@ -1,675 +0,0 @@
@@ -617,7 +617,7 @@ index b81cfd6dd04dc1fcb61c26877d9e38b05a00be59..00000000000000000000000000000000
 -                metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
 -                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur // Kiterino
 -
--                metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
+-                        metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
 -                    Map<String, Map<String, Integer>> map = new HashMap<>();
 -                    String javaVersion = System.getProperty("java.version");
 -                    Map<String, Integer> entry = new HashMap<>();
@@ -686,15 +686,15 @@ index b81cfd6dd04dc1fcb61c26877d9e38b05a00be59..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index d4388593f56cc088d1ae4034f17657d766e7f03d..2808880dc7753f6bb0b0c38925af88f05f6697ba 100644
+index 20506d1a22ca4c40359b0ddf825716f873ee5709..8d009c56d4463bd6dee922e359b95201f1ad0e4a 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -218,7 +218,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
-         org.spigotmc.WatchdogThread.doStart(org.spigotmc.SpigotConfig.timeoutTime, org.spigotmc.SpigotConfig.restartOnCrash);
-         thread.start(); // Paper - start console thread after MinecraftServer.console & PaperConfig are initialized
-         io.papermc.paper.command.PaperCommands.registerCommands(this);
--        com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics();
-+        // com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Patina - remove metrics
+@@ -219,7 +219,7 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         org.spigotmc.WatchdogThread.doStart(org.spigotmc.SpigotConfig.timeoutTime, org.spigotmc.SpigotConfig.restartOnCrash); // Paper - start watchdog thread
+         thread.start(); // Paper - Enhance console tab completions for brigadier commands; start console thread after MinecraftServer.console & PaperConfig are initialized
+         io.papermc.paper.command.PaperCommands.registerCommands(this); // Paper - setup /paper command
+-        com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
++        // com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics // Patina - remove metrics
          // Purpur start
          try {
              org.purpurmc.purpur.PurpurConfig.init((java.io.File) options.valueOf("purpur-settings"));
@@ -1346,7 +1346,7 @@ index 0abb93bd40258aba50dfbaef834c50f4ade98694..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/spigotmc/SpigotConfig.java b/src/main/java/org/spigotmc/SpigotConfig.java
-index 68602dfb171d47e47fd0710b4324013ef05214d0..bd880457354e299cbbbb3caea1f526460132a686 100644
+index 6c260403d91d640da0473a3df56e1c5582459fde..6bb6d6fba987024f5d3301416f120257d0312926 100644
 --- a/src/main/java/org/spigotmc/SpigotConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotConfig.java
 @@ -48,7 +48,7 @@ public class SpigotConfig

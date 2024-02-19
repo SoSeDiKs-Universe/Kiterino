@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 16:16:24 +0100
+Subject: [PATCH] Observers detect entities
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index fc0935e5a8be4442735628483aa656fdb882a2f8..7a8224f0e6cb706beec3f1c3768c59b1a8c85f06 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1320,6 +1320,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+ 
+                 //this.level().getProfiler().pop(); // Purpur
+             }
++            // Kiterino start
++            if (this instanceof net.minecraft.world.entity.LivingEntity && movement.lengthSqr() > 0.00615D) {
++                //level.getProfiler().push("move");
++                //level.getProfiler().push("kiterino:observerCheck");
++                double height = Math.min(getBoundingBox().getYsize(), 3D);
++                BlockPos base = blockPosition();
++                do {
++                    for (Direction direction : Direction.Plane.HORIZONTAL) {
++                        BlockPos relative = base.relative(direction);
++                        BlockState blockState = level.getBlockState(relative);
++                        if (blockState.getBlock() == Blocks.OBSERVER && !level.getBlockState(base).isSolid()
++                                && !blockState.getValue(net.minecraft.world.level.block.ObserverBlock.POWERED)
++                                && blockState.getValue(net.minecraft.world.level.block.ObserverBlock.FACING) == direction.getOpposite()) {
++                            blockState.tick((ServerLevel) level, relative.immutable(), level.random);
++                        }
++                    }
++                    height--;
++                    base = base.above();
++                } while (height > 0);
++                //level.getProfiler().pop();
++                //level.getProfiler().pop();
++            }
++            // Kiterino end
+         }
+         // Paper start - detailed watchdog information
+         } finally {

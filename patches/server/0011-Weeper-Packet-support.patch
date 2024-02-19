@@ -351,12 +351,11 @@ index 0000000000000000000000000000000000000000..06fd39cfc97f884ed00a7952c7d9f7cd
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c5546d90455ee76c9fdfa1a459162237e1cf51a0
+index 0000000000000000000000000000000000000000..7ccc4f50f2f151799c647ecb5761a884d84f3ecf
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,45 @@
 +package com.github.weepingmc.packet;
-+
 +
 +import com.destroystokyo.paper.PaperSkinParts;
 +import com.destroystokyo.paper.SkinParts.Builder;
@@ -403,7 +402,7 @@ index 0000000000000000000000000000000000000000..c5546d90455ee76c9fdfa1a459162237
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556d49ee253
+index 0000000000000000000000000000000000000000..382a6ce7485e459cb94d79f0dfb86bf5a7334f7d
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,272 @@
@@ -459,15 +458,15 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +			removePlayerProfile(playerProfile);
 +		} else {
 +			ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
-+				new ClientboundPlayerInfoUpdatePacket.Entry(
-+					gameProfile.getId(),
-+					gameProfile,
-+					listed,
-+					0,
-+					GameType.DEFAULT_MODE,
-+					null,
-+					null
-+				);
++					new ClientboundPlayerInfoUpdatePacket.Entry(
++							gameProfile.getId(),
++							gameProfile,
++							listed,
++							0,
++							GameType.DEFAULT_MODE,
++							null,
++							null
++					);
 +			ClientboundPlayerInfoUpdatePacket clientboundPlayerInfoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(from(profileAction), Collections.singletonList(playerUpdate));
 +			initial.setNext(of(clientboundPlayerInfoUpdatePacket));
 +		}
@@ -486,17 +485,17 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +	@Nonnull
 +	public PacketStepBuilder spawnPlayer(int entityId, @Nonnull UUID uuid, @Nonnull Location location) {
 +		initial.setNext(of(new ClientboundAddEntityPacket(
-+			entityId,
-+			uuid,
-+			location.x(),
-+			location.y(),
-+			location.z(),
-+			location.getPitch(),
-+			location.getYaw(),
-+			net.minecraft.world.entity.EntityType.PLAYER,
-+			0,
-+			Vec3.ZERO,
-+			location.getYaw()
++				entityId,
++				uuid,
++				location.x(),
++				location.y(),
++				location.z(),
++				location.getPitch(),
++				location.getYaw(),
++				net.minecraft.world.entity.EntityType.PLAYER,
++				0,
++				Vec3.ZERO,
++				location.getYaw()
 +		)));
 +		return this;
 +	}
@@ -538,7 +537,7 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +		List<SynchedEntityData.DataValue<?>> dataWatcherItems = new ArrayList<>();
 +		dataWatcherItems.add(new SynchedEntityData.DataItem<>(Entity.DATA_POSE, Pose.SLEEPING).value());
 +		dataWatcherItems.add(new SynchedEntityData.DataItem<>(LivingEntity.SLEEPING_POS_ID,
-+			Optional.of(new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()))).value()
++				Optional.of(new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()))).value()
 +		);
 +		ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(entityId, dataWatcherItems);
 +		initial.setNext(of(meta));
@@ -549,8 +548,8 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +	@Nonnull
 +	public PacketStepBuilder rotateHead(int entityId, float yaw) {
 +		initial.setNext(of(new ClientboundRotateHeadPacket(
-+			entityId,
-+			(byte) ((int) (yaw * 256.0F / 360.0F))
++				entityId,
++				(byte) ((int) (yaw * 256.0F / 360.0F))
 +		)));
 +		return this;
 +	}
@@ -559,10 +558,10 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +	@Nonnull
 +	public PacketStepBuilder rotateFullHead(int entityId, float yaw, float pitch, boolean onGround) {
 +		initial.setNext(of(new ClientboundMoveEntityPacket.Rot(
-+			entityId,
-+			(byte) ((int) (yaw * 256.0F / 360.0F)),
-+			(byte) ((int) (pitch * 256.0F / 360.0F)),
-+			onGround
++				entityId,
++				(byte) ((int) (yaw * 256.0F / 360.0F)),
++				(byte) ((int) (pitch * 256.0F / 360.0F)),
++				onGround
 +		)));
 +		return this;
 +	}
@@ -571,13 +570,13 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +	@Nonnull
 +	public PacketStepBuilder movePositionAndRotateFullHead(int entityId, @Nonnull Vector direction, byte yaw, byte pitch, boolean onGround) {
 +		initial.setNext(of(new ClientboundMoveEntityPacket.PosRot(
-+			entityId,
-+			(short) direction.getX(),
-+			(short) direction.getY(),
-+			(short) direction.getZ(),
-+			(byte) ((int) (yaw * 256.0F / 360.0F)),
-+			(byte) ((int) (pitch * 256.0F / 360.0F)),
-+			onGround
++				entityId,
++				(short) direction.getX(),
++				(short) direction.getY(),
++				(short) direction.getZ(),
++				(byte) ((int) (yaw * 256.0F / 360.0F)),
++				(byte) ((int) (pitch * 256.0F / 360.0F)),
++				onGround
 +		)));
 +		return this;
 +	}
@@ -636,17 +635,17 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +	@Nonnull
 +	public PacketStepBuilder spawnEntity(int entityId, @Nonnull UUID uuid, @Nonnull Location location, @Nonnull org.bukkit.entity.EntityType entityType, @Nonnull Vector movementDirection) {
 +		initial.setNext(of(new ClientboundAddEntityPacket(
-+			entityId,
-+			uuid,
-+			location.getX(),
-+			location.getY(),
-+			location.getZ(),
-+			location.getYaw(),
-+			location.getPitch(),
-+			BuiltInRegistries.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityType.ARMOR_STAND),
-+			1,
-+			new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
-+			0
++				entityId,
++				uuid,
++				location.getX(),
++				location.getY(),
++				location.getZ(),
++				location.getYaw(),
++				location.getPitch(),
++				BuiltInRegistries.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityType.ARMOR_STAND),
++				1,
++				new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
++				0
 +		)));
 +		return this;
 +	}
@@ -655,8 +654,8 @@ index 0000000000000000000000000000000000000000..f902a4e7d37da89c8d4fe2915715f556
 +	@Nonnull
 +	public PacketStepBuilder withMeta(int entityId, @Nonnull EntityMetaBuilder metaBuilder) {
 +		initial.setNext(
-+			of(new ClientboundSetEntityDataPacket(entityId,
-+				((CraftEntityMetaBuilder) metaBuilder).build().stream().map(SynchedEntityData.DataItem::value).collect(Collectors.toList())))
++				of(new ClientboundSetEntityDataPacket(entityId,
++						((CraftEntityMetaBuilder) metaBuilder).build().stream().map(SynchedEntityData.DataItem::value).collect(Collectors.toList())))
 +		);
 +		return this;
 +	}
@@ -698,7 +697,7 @@ index 2dce930e691731781a6700610271dd549cf34fe8..7edd16dca725827bd38ba32b0bf6d27d
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 9810d62c99f5d7dfca61ddfbbc356aebad2f7001..b10bcc08083b0ceab2e5c354cd4ca260f24d2dbd 100644
+index 56eddd28429cf42c02d88b8bf79f8b616fa45289..d6926daaee6a1a533b54e1b33d0edf46f28f53f2 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 @@ -82,6 +82,13 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
@@ -757,10 +756,10 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..90fb9b576ed74a9063574f7bc3926668
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a9d5a9b9bff5631f3f458fba7d88c3fc642416b8..1e6a65970a64eed30a0917b9e30162dc7e2817c0 100644
+index f6c9bff8ef4e370dcb351490294181282ad156e3..fc0935e5a8be4442735628483aa656fdb882a2f8 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -347,7 +347,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -348,7 +348,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -769,7 +768,7 @@ index a9d5a9b9bff5631f3f458fba7d88c3fc642416b8..1e6a65970a64eed30a0917b9e30162dc
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -356,11 +356,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -357,11 +357,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -785,7 +784,7 @@ index a9d5a9b9bff5631f3f458fba7d88c3fc642416b8..1e6a65970a64eed30a0917b9e30162dc
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 8fd6e46882a1828abdf858c0b10f955c9f2718eb..920c2dd105af7dc3ece50e6cc6a6313f2c86169b 100644
+index 70d17e451c9e86373a8e0215a332bf939f65ae53..db16bab1bbce8f9b4635c73d88e291db312e5ece 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -798,10 +797,10 @@ index 8fd6e46882a1828abdf858c0b10f955c9f2718eb..920c2dd105af7dc3ece50e6cc6a6313f
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 34cb97bb466fab89e0073b1a1fc3828771d750ee..a02e117b03c7748080f3ebca778b716974672442 100644
+index fc692ba3983781e460e23c5009c7342a67cd123b..9faa44b275f4162a0855e3196f793a468338b16b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3318,6 +3318,14 @@ public final class CraftServer implements Server {
+@@ -3329,6 +3329,14 @@ public final class CraftServer implements Server {
  
      // Paper end
  
@@ -817,12 +816,12 @@ index 34cb97bb466fab89e0073b1a1fc3828771d750ee..a02e117b03c7748080f3ebca778b7169
      @Override
      public String getServerName() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index e7d3637927e92c181ecc2e21a3456918afb30822..f87512f1ae5f8b8d32d435ea5454e7bca6ec5032 100644
+index 253574890a9ed23d38a84680ba1eb221dc72b310..6da0393ae632bb1e8c718121b1392b2e92f86050 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -22,7 +22,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
      final Scoreboard board;
-     boolean registeredGlobally = false; // Paper
+     boolean registeredGlobally = false; // Paper - Lazily track plugin scoreboards by default
  
 -    CraftScoreboard(Scoreboard board) {
 +    public CraftScoreboard(Scoreboard board) { // Weeper package private -> public
@@ -830,7 +829,7 @@ index e7d3637927e92c181ecc2e21a3456918afb30822..f87512f1ae5f8b8d32d435ea5454e7bc
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index fd86c1d43cccd036f60cb270b56fd33f95707720..f6c6fd8d62a79951d3a3dae8da1eff22169826a3 100644
+index 2b335c750ce5f9ccc2651a8701497ca9b8f46704..452646e0ab662c829eb18b9eebe840f891d7231e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -12,14 +12,20 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;

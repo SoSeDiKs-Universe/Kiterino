@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 12 Dec 2021 23:00:31 +0100
+Subject: [PATCH] Fix MC-98160 and MC-105103
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+index 81e0930acccd014e977b88d22e10346627f0edb0..7e9fabd90bd5824a4b3607af979a6f3e1081f472 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+@@ -862,7 +862,7 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
+         if (!this.isPassenger()) {
+             if (onGround) {
+                 if (this.fallDistance > 3.0F) {
+-                    if (this.status != Boat.Status.ON_LAND) {
++                    if (this.status != Boat.Status.ON_LAND && this.status != Status.IN_AIR) { // Kiterino - Fix MC-98160 and MC-105103
+                         this.resetFallDistance();
+                         return;
+                     }

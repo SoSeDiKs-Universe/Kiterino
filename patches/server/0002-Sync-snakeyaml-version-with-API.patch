@@ -5,10 +5,10 @@ Subject: [PATCH] Sync snakeyaml version with API
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ea2c7608e07159d01db528369d32412f36f6db69..54c79dbb94f37565e3bec84015a660b9081c2dc5 100644
+index e832e23f237b99aaf2cf984e6e68d4e0576765ec..57fb1acd62a1f7a521057857731803ef1acea217 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -56,7 +56,7 @@ dependencies {
+@@ -55,7 +55,7 @@ dependencies {
      runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
      // Pufferfish start

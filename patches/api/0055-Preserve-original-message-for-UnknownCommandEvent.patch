@@ -5,17 +5,18 @@ Subject: [PATCH] Preserve original message for UnknownCommandEvent
 
 
 diff --git a/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java b/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java
-index e4f8a0d14ae66468bbb0a5d6bf9c1ee417dc866c..1e458218ddbe01b3da7b2757a19fdc02490f4b87 100644
+index 9bdeeecdb6021d61fd9141270011e56b06a58a76..a99c8530a848ad5f379f47dfb46afed05675bd33 100644
 --- a/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java
 +++ b/src/main/java/org/bukkit/event/command/UnknownCommandEvent.java
-@@ -17,12 +17,14 @@ public class UnknownCommandEvent extends Event {
-     @NotNull private CommandSender sender;
-     @NotNull private String commandLine;
+@@ -20,6 +20,7 @@ public class UnknownCommandEvent extends Event {
+     @NotNull private final CommandSender sender;
+     @NotNull private final String commandLine;
      @Nullable private Component message;
 +    @Nullable private final Component originalMessage; // Kiterino
  
+     @ApiStatus.Internal
      public UnknownCommandEvent(@NotNull final CommandSender sender, @NotNull final String commandLine, @Nullable final Component message) {
-         super(false);
+@@ -27,6 +28,7 @@ public class UnknownCommandEvent extends Event {
          this.sender = sender;
          this.commandLine = commandLine;
          this.message = message;

@@ -5,10 +5,18 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 54c79dbb94f37565e3bec84015a660b9081c2dc5..a42b15a4ed5e081758acedd1a6faefcd70e9871a 100644
+index 57fb1acd62a1f7a521057857731803ef1acea217..42d957c92bd8ac3479b23cf3f91c7c699980f252 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -14,7 +14,7 @@ val alsoShade: Configuration by configurations.creating
+@@ -1,4 +1,6 @@
+-import io.papermc.paperweight.util.*
++import io.papermc.paperweight.util.Git
++import io.papermc.paperweight.util.defaultJavaLauncher
++import io.papermc.paperweight.util.path
+ 
+ plugins {
+     java
+@@ -14,7 +16,7 @@ val alsoShade: Configuration by configurations.creating
  
  dependencies {
      // Purpur start
@@ -17,7 +25,7 @@ index 54c79dbb94f37565e3bec84015a660b9081c2dc5..a42b15a4ed5e081758acedd1a6faefcd
      implementation("io.papermc.paper:paper-mojangapi:${project.version}") {
          exclude("io.papermc.paper", "paper-api")
      }
-@@ -98,7 +98,7 @@ tasks.jar {
+@@ -98,7 +100,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -27,7 +35,7 @@ index 54c79dbb94f37565e3bec84015a660b9081c2dc5..a42b15a4ed5e081758acedd1a6faefcd
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..b81cfd6dd04dc1fcb61c26877d9e38b05a00be59 100644
+index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..b36ce80b7940dd435783375a6bb9352e04d5a27e 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -593,7 +593,7 @@ public class Metrics {
@@ -39,15 +47,18 @@ index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..b81cfd6dd04dc1fcb61c26877d9e38b0
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
-@@ -603,7 +603,7 @@ public class Metrics {
+@@ -603,9 +603,9 @@ public class Metrics {
  
                  metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
                  metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
 -                metrics.addCustomChart(new Metrics.SimplePie("purpur_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur
 +                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur // Kiterino
  
-                 metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
+-                metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
++                        metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
+                     String javaVersion = System.getProperty("java.version");
+                     Map<String, Integer> entry = new HashMap<>();
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270580f4890 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
@@ -62,10 +73,10 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index aef22db014c81332ba599ddb931afb264dc12a84..923026bffedc4e477b98aa9d28b2a4cbcc3ec30a 100644
+index 0a5867b01c1ebf21d9add1d4a2843d15b8e1acb7..fc692ba3983781e460e23c5009c7342a67cd123b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
+@@ -266,7 +266,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
@@ -101,7 +112,7 @@ index e9fc2b4661f5275b93db5d3fdf25a8bdc3b38920..07da0e222f0f3bed6810ec1bb1583a5d
          serverModName = getString("settings.server-mod-name", serverModName);
      }
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index 5fc8cc40ab627eba0b2110c73d31af213a935733..cfc3d6981be9913fe2c86805433e3ae741c180b9 100644
+index f7296691cb4af7814de1520347b307ff209082e4..8de5c6ede6ae9acf593be8d71f2b9fb8b8008f8f 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -155,14 +155,14 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
@@ -122,22 +133,22 @@ index 5fc8cc40ab627eba0b2110c73d31af213a935733..cfc3d6981be9913fe2c86805433e3ae7
                  //
                  if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
                  {
-@@ -185,12 +185,12 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+@@ -184,12 +184,12 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
                  // Paper end
                  } else
                  {
 -                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur
-+                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // Kiterino
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // KITERINO
                      log.log(Level.SEVERE, "The server has not responded for " + (currentTime - lastTick) / 1000 + " seconds! Creating thread dump");
                  }
                  // Paper end - Different message for short timeout
                  log.log( Level.SEVERE, "------------------------------" );
 -                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):" ); // Paper // Purpur
 +                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Paper // Purpur // Kiterino
-                 io.papermc.paper.chunk.system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper // Paper - rewrite chunk system
+                 io.papermc.paper.chunk.system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper - rewrite chunk system
                  this.dumpTickingInfo(); // Paper - log detailed tick information
                  WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE ), log );
-@@ -206,7 +206,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+@@ -205,7 +205,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
                      WatchdogThread.dumpThread( thread, log );
                  }
                  } else {

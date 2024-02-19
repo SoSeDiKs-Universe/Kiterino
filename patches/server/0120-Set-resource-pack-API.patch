@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 8 Nov 2023 03:56:05 +0200
+Subject: [PATCH] Set resource pack API
+
+
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+index ae75edfaa9e4c72f11fbb7ffc66294be47c206cc..da1cfbe01ad60a1a3a7238cc54538e7a8e969157 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServerProperties.java
+@@ -100,7 +100,7 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+     public final boolean hideOnlinePlayers;
+     public final int entityBroadcastRangePercentage;
+     public final String textFilteringConfig;
+-    public final Optional<MinecraftServer.ServerResourcePackInfo> serverResourcePackInfo;
++    public Optional<MinecraftServer.ServerResourcePackInfo> serverResourcePackInfo; // Kiterino - remive final
+     public final DataPackConfig initialDataPackConfiguration;
+     public final Settings<DedicatedServerProperties>.MutableValue<Integer> playerIdleTimeout;
+     public final Settings<DedicatedServerProperties>.MutableValue<Boolean> whiteList;
+@@ -199,7 +199,13 @@ public class DedicatedServerProperties extends Settings<DedicatedServerPropertie
+         return null;
+     }
+ 
+-    private static Optional<MinecraftServer.ServerResourcePackInfo> getServerPackInfo(String id, String url, String sha1, @Nullable String hash, boolean required, String prompt) {
++    // Kiterino start
++    public String getDefaultResourcePackId() {
++        return get("resource-pack-id", "");
++    }
++    // Kiterino end
++
++    public static Optional<MinecraftServer.ServerResourcePackInfo> getServerPackInfo(String id, String url, String sha1, @Nullable String hash, boolean required, String prompt) { // Kiterino - private -> public
+         if (url.isEmpty()) {
+             return Optional.empty();
+         } else {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 4318e044169f322ed4928acf8343be1f9bcba3cb..ce00a7b35af8eb1fa805bf10a6aa85329c9e4868 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -3362,5 +3362,14 @@ public final class CraftServer implements Server {
+         Server.super.setMaxStackSize(material, maxStackSize);
+         CraftItemStack.asNMSCopy(new ItemStack(material)).getItem().setMaxStackSize(maxStackSize);
+     }
++
++    @Override
++    public void setResourcePack(String url, String hash, boolean required, net.kyori.adventure.text.Component prompt) {
++        if (url == null || hash == null || url.isEmpty()) {
++            getServer().getProperties().serverResourcePackInfo = Optional.empty();
++            return;
++        }
++        getServer().getProperties().serverResourcePackInfo = DedicatedServerProperties.getServerPackInfo(getServer().getProperties().getDefaultResourcePackId(), url, hash, null, required, net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(prompt));
++    }
+     // Kiterino end
+ }

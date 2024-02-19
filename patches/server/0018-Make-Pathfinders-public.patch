@@ -1,0 +1,99 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 18 Jul 2020 17:46:23 +0300
+Subject: [PATCH] Make Pathfinders public
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
+index eae2488f2a46e543b496b7a2919aabbb55dcb825..b3d563285c45ef8e4468c6633d5d8818d1018bd8 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
++++ b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
+@@ -599,7 +599,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+         }
+     }
+ 
+-    private static class RabbitPanicGoal extends PanicGoal {
++    public static class RabbitPanicGoal extends PanicGoal { // Kiterino - private -> public
+ 
+         private final Rabbit rabbit;
+ 
+@@ -615,7 +615,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+         }
+     }
+ 
+-    private static class RabbitAvoidEntityGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
++    public static class RabbitAvoidEntityGoal<T extends LivingEntity> extends AvoidEntityGoal<T> { // Kiterino - private -> public
+ 
+         private final Rabbit rabbit;
+ 
+@@ -630,7 +630,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+         }
+     }
+ 
+-    private static class RaidGardenGoal extends MoveToBlockGoal {
++    public static class RaidGardenGoal extends MoveToBlockGoal { // Kiterino - private -> public
+ 
+         private final Rabbit rabbit;
+         private boolean wantsToRaid;
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Slime.java b/src/main/java/net/minecraft/world/entity/monster/Slime.java
+index 489c8cbec828318e5b84cb9eaf25733b39781927..b26f8bf32003a29066145428827ffc77a686d12c 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Slime.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Slime.java
+@@ -564,7 +564,7 @@ public class Slime extends Mob implements Enemy {
+         }
+     }
+ 
+-    private static class SlimeFloatGoal extends Goal {
++    public static class SlimeFloatGoal extends Goal { // Kiterino - private -> public
+ 
+         private final Slime slime;
+ 
+@@ -601,7 +601,7 @@ public class Slime extends Mob implements Enemy {
+         }
+     }
+ 
+-    private static class SlimeAttackGoal extends Goal {
++    public static class SlimeAttackGoal extends Goal { // Kiterino - private -> public
+ 
+         private final Slime slime;
+         private int growTiredTimer;
+@@ -678,7 +678,7 @@ public class Slime extends Mob implements Enemy {
+         // Paper end - Slime pathfinder events
+     }
+ 
+-    private static class SlimeRandomDirectionGoal extends Goal {
++    public static class SlimeRandomDirectionGoal extends Goal { // Kiterino - private -> public
+ 
+         private final Slime slime;
+         private float chosenDegrees;
+@@ -717,7 +717,7 @@ public class Slime extends Mob implements Enemy {
+         }
+     }
+ 
+-    private static class SlimeKeepOnJumpingGoal extends Goal {
++    public static class SlimeKeepOnJumpingGoal extends Goal { // Kiterino - private -> public
+ 
+         private final Slime slime;
+ 
+diff --git a/src/main/java/net/minecraft/world/entity/monster/Spider.java b/src/main/java/net/minecraft/world/entity/monster/Spider.java
+index b44ffeb4cc0ef63fdd25683f60c5a20fcdeb9135..45147e3fec01504aefb69b661ef31297971921c5 100644
+--- a/src/main/java/net/minecraft/world/entity/monster/Spider.java
++++ b/src/main/java/net/minecraft/world/entity/monster/Spider.java
+@@ -233,7 +233,7 @@ public class Spider extends Monster {
+         return vehicle.getBbWidth() <= this.getBbWidth() ? -0.3125F : 0.0F;
+     }
+ 
+-    private static class SpiderAttackGoal extends MeleeAttackGoal {
++    public static class SpiderAttackGoal extends MeleeAttackGoal { // Kiterino - private -> public
+ 
+         public SpiderAttackGoal(Spider spider) {
+             super(spider, 1.0D, true);
+@@ -257,7 +257,7 @@ public class Spider extends Monster {
+         }
+     }
+ 
+-    private static class SpiderTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
++    public static class SpiderTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> { // Kiterino - private -> public
+ 
+         public SpiderTargetGoal(Spider spider, Class<T> targetEntityClass) {
+             super(spider, targetEntityClass, true);

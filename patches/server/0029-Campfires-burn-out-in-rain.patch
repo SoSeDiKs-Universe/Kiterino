@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 29 Jun 2020 16:57:49 +0300
+Subject: [PATCH] Campfires burn out in rain
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
+index 9f7b49a6a50cb53d914c8f4b5132c035c5ab71da..05c673bbc21b43e94d5bf468b2215165798f5098 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
+@@ -56,6 +56,20 @@ public class CampfireBlockEntity extends BlockEntity implements Clearable {
+     public static void cookTick(Level world, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
+         boolean flag = false;
+ 
++        // Kiterino start
++        if (world.random.nextDouble() < 0.2) {
++            if (state.getValue(CampfireBlock.WATERLOGGED) || world.isRainingAt(pos.above())) {
++                world.setBlock(pos, state.setValue(CampfireBlock.LIT, false), 3);
++                world.playSound(null, pos.getX() + 0.5, pos.getY() + 1D, pos.getZ() + 0.5, net.minecraft.sounds.SoundEvents.FIRE_EXTINGUISH, net.minecraft.sounds.SoundSource.BLOCKS, 1F, 1F);
++                flag = true;
++            }
++            if (flag) {
++                setChanged(world, pos, state);
++                return;
++            }
++        }
++        // Kiterino end
++
+         for (int i = 0; i < campfire.items.size(); ++i) {
+             ItemStack itemstack = (ItemStack) campfire.items.get(i);
+ 

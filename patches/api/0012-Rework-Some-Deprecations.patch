@@ -5,10 +5,10 @@ Subject: [PATCH] Rework Some Deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 3a7253aaa022746202fe3d7ac281aa5d4cbe480f..5b0dbaa0a5e1392b9d83885d9e708859fab4a7e1 100644
+index f757d3a6d71ffd1693f72585692979465c6a0911..5686c26edbc3c91575a5bee306cf3b53a71906fc 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2519,7 +2519,7 @@ public final class Bukkit {
+@@ -2539,7 +2539,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -34,7 +34,7 @@ index dc79c2eaff88d16439da226a64c4d7712c47b63a..379e5b2dd31bf008211b319538e1b7d3
      /**
       * Represents black
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 4ef0fa4f1ef72bb784674671473c6a322acadecc..848836ba3932fe2085b0cefcceca46393545ed98 100644
+index 98308b759907e03b168f7e06704a91925ffcd3fd..55d39fb3add9de5f1221a52be39d75c1f5f4f9f1 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
 @@ -227,9 +227,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
@@ -52,10 +52,10 @@ index 4ef0fa4f1ef72bb784674671473c6a322acadecc..848836ba3932fe2085b0cefcceca4639
  
      /**
 diff --git a/src/main/java/org/bukkit/entity/Damageable.java b/src/main/java/org/bukkit/entity/Damageable.java
-index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f864752f3 100644
+index c4537080ee1875e984356eee42337a1342f4c9a3..aee52fc50d55d8e7b89d88de18030b4cb31335ec 100644
 --- a/src/main/java/org/bukkit/entity/Damageable.java
 +++ b/src/main/java/org/bukkit/entity/Damageable.java
-@@ -60,9 +60,9 @@ public interface Damageable extends Entity {
+@@ -77,9 +77,9 @@ public interface Damageable extends Entity {
       * Gets the maximum health this entity has.
       *
       * @return Maximum health
@@ -67,7 +67,7 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      double getMaxHealth();
  
      /**
-@@ -75,15 +75,15 @@ public interface Damageable extends Entity {
+@@ -92,15 +92,15 @@ public interface Damageable extends Entity {
       * {@link Wither}, etc...} will have their bar scaled accordingly.
       *
       * @param health amount of health to set the maximum to
@@ -88,10 +88,10 @@ index fc4d3bcd9b16097086fef7975274d825b65adb10..7b9394fcbfe608a6d05b89763bb0770f
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 3aa79be25d63f704170baaf799482ccdde6a2830..bbad0ebc7611225721e84424a23e3de1d7a5a51d 100644
+index 6dc63bfe85d83a7cff369f06c57ebe0aa04c63a3..e40b376a6c434e8c2a20d3196912496b44d13473 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -401,13 +401,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -403,13 +403,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       *
       * This value is a state updated by the client after each movement.
       *
@@ -110,7 +110,7 @@ index 3aa79be25d63f704170baaf799482ccdde6a2830..bbad0ebc7611225721e84424a23e3de1
      public boolean isOnGround();
  
      /**
-@@ -3062,10 +3064,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3171,10 +3173,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale

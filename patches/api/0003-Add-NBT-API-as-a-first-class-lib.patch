@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index d8138e13038bd7fc632df2aa19928b726f4f00d4..a849609810ed9a59bf9cb331056bd93352120a45 100644
+index fdea23beb4aee86e7080d54aa7d4ff74b0e9cf69..c8aa1a9442acfb94d72428390f063df56a165de0 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -52,6 +52,7 @@ dependencies {
@@ -17,10 +17,10 @@ index d8138e13038bd7fc632df2aa19928b726f4f00d4..a849609810ed9a59bf9cb331056bd933
      implementation("org.ow2.asm:asm:9.5")
      implementation("org.ow2.asm:asm-commons:9.5")
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 49974558799830d827f9ccd65a8bafee3fb0376b..7c8a650189116c6e5840021ca0a4940c31f35096 100644
+index 38cf77e32b76bc7d9db7523f7f21427ebb72f913..c5f7bb80deb581f8f7c9bf26c0ceb7d788688842 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -787,4 +787,16 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -796,4 +796,16 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
      }
      // Paper end - destroy speed API
@@ -120,10 +120,10 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..92ee8d4b4252dd018f49b862fa2dd202
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 42b8de355855baecd0a435314909116c210d002d..713bb1a8ce3e55e68d731bb4758bd46e6cf479a0 100644
+index a36fc32dd83339b6939cb4046538ec6285042397..b43efc0be59e05508c87085f05118a88d3559efd 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1158,4 +1158,77 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1155,4 +1155,77 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
@@ -202,10 +202,10 @@ index 42b8de355855baecd0a435314909116c210d002d..713bb1a8ce3e55e68d731bb4758bd46e
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..7bbc182e4ea81de7dcba14b891eb1a0c4d65044a 100644
+index 54dd0bd043a37f6519fc8a318856a4825d389669..0f346bceccedd4d5e7c5df7a0f8f65fc0fad44fb 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1648,4 +1648,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1676,4 +1676,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return Bukkit.getItemFactory().getHoverLines(this, advanced);
      }
      // Purpur end
@@ -263,7 +263,7 @@ index 9ecfc504df089a74add168cd5a8376d7d6b8ea0e..7bbc182e4ea81de7dcba14b891eb1a0c
 +    // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index da59e75267f43581bec6df73dda9f889347617d4..a53a983fc2b86bdb87e77329f9c537ad4a8c70c8 100644
+index decf3b1949d4653a9fb01684b93ff91048137076..158b13e02f17fe9608171f1faae6a7a43aa6739d 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 @@ -219,4 +219,15 @@ public interface PersistentDataContainer {

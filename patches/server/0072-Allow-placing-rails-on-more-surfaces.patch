@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 4 Dec 2022 21:57:07 +0200
+Subject: [PATCH] Allow placing rails on more surfaces
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java b/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java
+index 6bd4e4d173f34e0234f4474e49ce2d897f85386f..5fe6f24d8ac695a3e6c5ff4bc1dd12cdc08e8aa9 100644
+--- a/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java
+@@ -54,7 +54,7 @@ public abstract class BaseRailBlock extends Block implements SimpleWaterloggedBl
+ 
+     @Override
+     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+-        return canSupportRigidBlock(world, pos.below());
++        return canSupportCenter(world, pos.below(), Direction.UP); // Kiterino
+     }
+ 
+     @Override
+@@ -89,6 +89,7 @@ public abstract class BaseRailBlock extends Block implements SimpleWaterloggedBl
+     }
+ 
+     private static boolean shouldBeRemoved(BlockPos pos, Level world, RailShape shape) {
++        if (canSupportCenter(world, pos.below(), Direction.UP)) return false; // Kiterino
+         if (!canSupportRigidBlock(world, pos.below())) {
+             return true;
+         } else {

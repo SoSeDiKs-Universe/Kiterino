@@ -1,0 +1,77 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 14 Oct 2022 09:41:48 +0300
+Subject: [PATCH] Allow setting entity's rider
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 7a8224f0e6cb706beec3f1c3768c59b1a8c85f06..07a9a40758820411c10dd81ef958e6318c357159 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -3076,6 +3076,20 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+         }
+     }
+ 
++    // Kiterino start
++    public boolean setRider(Player rider) {
++        if (!new org.spigotmc.event.entity.EntityMountEvent(rider.getBukkitEntity(), this.getBukkitEntity()).callEvent()) return false;
++        if (!rider.startRiding(this, true)) return false;
++        onMount(rider);
++        this.rider = rider;
++        return true;
++    }
++
++    public boolean hasRider() {
++        return getRider() != null;
++    }
++    // Kiterino end
++
+     // Paper start - Force entity dismount during teleportation
+     protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
+     protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
+diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
+index f6cea207aa094124f71e93f92c31ba56175cf2fc..76a7c8ab6283017fbd20e1bf0cb44d91ec79c40d 100644
+--- a/src/main/java/net/minecraft/world/entity/Mob.java
++++ b/src/main/java/net/minecraft/world/entity/Mob.java
+@@ -1830,7 +1830,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+     }
+ 
+     public InteractionResult tryRide(Player player, InteractionHand hand, InteractionResult result) {
+-        if (!isRidable()) {
++        if (!hasRider()) { // Kiterino
+             return result;
+         }
+         if (hand != InteractionHand.MAIN_HAND) {
+@@ -1858,7 +1858,7 @@ public abstract class Mob extends LivingEntity implements Targeting {
+                 return InteractionResult.PASS;
+             }
+         }
+-        if (!player.getBukkitEntity().hasPermission("allow.ride." + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType()).getPath())) {
++        if (isRidable() && !player.getBukkitEntity().hasPermission("allow.ride." + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType()).getPath())) { // Kiterino
+             player.sendMiniMessage(org.purpurmc.purpur.PurpurConfig.cannotRideMob);
+             return InteractionResult.PASS;
+         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index aa6872290bcab8d7dc58f5714f5f5d4289759880..317983a4c2f7c0b6040a12ff1afa7c44a988e399 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1254,6 +1254,19 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return rider != null ? (org.bukkit.entity.Player) rider.getBukkitEntity() : null;
+     }
+ 
++    // Kiterino start
++    @Override
++    public boolean setRider(org.bukkit.entity.Player rider, boolean dismount) {
++        var currentRider = getRider();
++        if (rider == currentRider) return true;
++        if (currentRider != null) {
++            if (!dismount) return false;
++            currentRider.leaveVehicle();
++        }
++        return getHandle().setRider(((CraftPlayer) rider).getHandle());
++    }
++    // Kiterino end
++
+     @Override
+     public boolean hasRider() {
+         return getHandle().getRider() != null;

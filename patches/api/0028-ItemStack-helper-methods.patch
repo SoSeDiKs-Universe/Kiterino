@@ -5,10 +5,10 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 014c53779e776732a5c754b85fe506fd366b2cc2..42fbe97f4cba5f419aae1e442c0ee912c2bf65d0 100644
+index e713a5cd497b8cde8a3f37e084a24bbae04423e5..66c70dacbea2175a98f00f521e9c69232ab6b7a9 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1775,4 +1775,81 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1803,4 +1803,81 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return subtractId() != null;
      }
      // Kiterino end

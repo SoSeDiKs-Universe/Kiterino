@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 31 Jul 2021 22:21:04 +0300
+Subject: [PATCH] Packet Additions
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+index 7b0905729e5252e57371505d9af1d5f4811284d4..37105385927ab46b050057514482659359691cac 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+@@ -102,6 +102,25 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+ 		return this;
+ 	}
+ 
++	// Kiterino start
++	@Override
++	public @NotNull PacketStepBuilder sendPlayerProfile(@Nonnull PlayerProfile playerProfile, @Nonnull ProfileAction profileAction, @Nullable net.kyori.adventure.text.Component displayName, @Nullable org.bukkit.GameMode gameMode, boolean listed) {
++		GameProfile gameProfile = ((CraftPlayerProfile) playerProfile).getGameProfile();
++		var playerUpdate = new ClientboundPlayerInfoUpdatePacket.Entry(
++				gameProfile.getId(),
++				gameProfile,
++				listed,
++				0,
++				gameMode == null ? GameType.DEFAULT_MODE : GameType.byId(gameMode.getValue()),
++				displayName == null ? null : io.papermc.paper.adventure.PaperAdventure.asVanilla(displayName),
++				null
++		);
++		var clientboundPlayerInfoPacket = new ClientboundPlayerInfoUpdatePacket(from(profileAction), Collections.singletonList(playerUpdate));
++		initial.setNext(of(clientboundPlayerInfoPacket));
++		return this;
++	}
++	// Kiterino end
++
+ 	@Override
+ 	@Nonnull
+ 	public PacketStepBuilder spawnPlayer(int entityId, @Nonnull UUID uuid, @Nonnull Location location) {

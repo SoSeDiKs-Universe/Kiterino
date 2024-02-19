@@ -1,0 +1,77 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 13 Aug 2020 17:35:52 +0300
+Subject: [PATCH] KItem RecipeChoice
+
+
+diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+index e8e9a3370ba07dc0ca47c8352f6f04a449f2268f..b1eec7c19645a69db56469836b3e2c43d683e31a 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
++++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+@@ -37,6 +37,7 @@ public final class Ingredient implements Predicate<ItemStack> {
+     private IntList stackingIds;
+     public boolean exact; // CraftBukkit
+     public Predicate<org.bukkit.inventory.ItemStack> predicate; // Purpur
++    public boolean kItem; // Kiterino
+     public static final Codec<Ingredient> CODEC = Ingredient.codec(true);
+     public static final Codec<Ingredient> CODEC_NONEMPTY = Ingredient.codec(false);
+ 
+@@ -80,6 +81,25 @@ public final class Ingredient implements Predicate<ItemStack> {
+             for (int j = 0; j < i; ++j) {
+                 ItemStack itemstack1 = aitemstack[j];
+ 
++                // Kiterino start
++                if (kItem) {
++                    var compound = itemstack1.getTag();
++                    String namespace = org.bukkit.Bukkit.getName();
++                    if (compound != null && compound.contains(namespace)) {
++                        compound = compound.getCompound(namespace);
++                        if (compound.contains("Id")) {
++                            var compound1 = itemstack.getTag();
++                            if (compound1 == null) continue;
++                            if (!compound1.contains(namespace)) continue;
++                            compound1 = compound1.getCompound(namespace);
++                            if (!compound1.contains("Id")) continue;
++                            if (!compound.getString("Id").equals(compound1.getString("Id"))) continue;
++                            return true;
++                        }
++                    }
++                }
++                // Kiterino end
++
+                 // CraftBukkit start
+                 if (this.exact) {
+                     if (itemstack1.getItem() == itemstack.getItem() && ItemStack.isSameItemSameTags(itemstack, itemstack1)) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
+index 4afec4387971612f62b825e9e56c2ead7424a7c2..04fa18a845ee7a1c5df01fad178e127274d5fcfd 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
+@@ -30,6 +30,11 @@ public interface CraftRecipe extends Recipe {
+             stack = new Ingredient(((RecipeChoice.ExactChoice) bukkit).getChoices().stream().map((mat) -> new net.minecraft.world.item.crafting.Ingredient.ItemValue(CraftItemStack.asNMSCopy(mat))));
+             stack.exact = true;
+             stack.predicate = ((RecipeChoice.ExactChoice) bukkit).getPredicate(); // Purpur
++        // Kiterino start
++        } else if (bukkit instanceof me.sosedik.kiterino.inventory.ItemChoice itemChoice) {
++            stack = new Ingredient(itemChoice.getChoices().stream().map(mat -> new net.minecraft.world.item.crafting.Ingredient.ItemValue(CraftItemStack.asNMSCopy(mat))));
++            stack.kItem = true;
++        // Kiterino end
+         } else {
+             throw new IllegalArgumentException("Unknown recipe stack instance " + bukkit);
+         }
+@@ -49,6 +54,16 @@ public interface CraftRecipe extends Recipe {
+             return null;
+         }
+ 
++        // Kiterino start
++        if (list.kItem) {
++            List<org.bukkit.inventory.ItemStack> choices = new ArrayList<>(list.itemStacks.length);
++            for (net.minecraft.world.item.ItemStack i : list.itemStacks) {
++                choices.add(CraftItemStack.asBukkitCopy(i));
++            }
++            return new me.sosedik.kiterino.inventory.ItemChoice(choices);
++        }
++        // Kiterino end
++
+         if (list.exact) {
+             List<org.bukkit.inventory.ItemStack> choices = new ArrayList<>(list.itemStacks.length);
+             for (net.minecraft.world.item.ItemStack i : list.itemStacks) {

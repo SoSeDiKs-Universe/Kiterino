@@ -6,21 +6,23 @@ Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java b/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java
-index 31f34b54801f6699ce43355fa2a0a51f1ad0c997..f26977e949a5083b1a4b8a8e9950db03ea585027 100644
+index 16961aac061e78fb84029f8435ab5f7c493b1362..03b8ed071fbcf549bc72ab0492e3d23af036a1ea 100644
 --- a/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java
 +++ b/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java
-@@ -13,11 +13,22 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
-     private final static HandlerList handlers = new HandlerList();
+@@ -16,12 +16,24 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
+ 
      private final Location respawnedLocation;
      private final boolean isBedSpawn;
 +    private final boolean isAnchorSpawn;
 +    private final java.util.Set<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag> respawnFlags;
  
+     @ApiStatus.Internal
 +    @Deprecated
      public PlayerPostRespawnEvent(@NotNull final Player respawnPlayer, @NotNull final Location respawnedLocation, final boolean isBedSpawn) {
 +        this(respawnPlayer, respawnedLocation, isBedSpawn, false, com.google.common.collect.ImmutableSet.builder());
 +    }
 +
++    @ApiStatus.Internal
 +    public PlayerPostRespawnEvent(@NotNull final Player respawnPlayer, @NotNull final Location respawnedLocation, final boolean isBedSpawn, final boolean isAnchorSpawn, @NotNull com.google.common.collect.ImmutableSet.Builder<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag> respawnFlags) {
          super(respawnPlayer);
          this.respawnedLocation = respawnedLocation;
@@ -32,8 +34,8 @@ index 31f34b54801f6699ce43355fa2a0a51f1ad0c997..f26977e949a5083b1a4b8a8e9950db03
      }
  
      /**
-@@ -39,6 +50,25 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
-         return isBedSpawn;
+@@ -43,6 +55,25 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
+         return this.isBedSpawn;
      }
  
 +    /**

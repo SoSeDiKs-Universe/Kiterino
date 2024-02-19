@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 20 Oct 2022 15:55:19 +0300
+Subject: [PATCH] Update goal target when changing target
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
+index f09d7e5052ae0166a8f3363d4eff1c000af07a96..eb3abee4d89fc907c7c92e02bed37672282e20e3 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
+@@ -146,4 +146,10 @@ public abstract class TargetGoal extends Goal {
+         this.unseenMemoryTicks = time;
+         return this;
+     }
++
++    // Kiterino start
++    public void setTargetMob(@Nullable LivingEntity targetMob) {
++        this.targetMob = targetMob;
++    }
++    // Kiterino end
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
+index 31f62fbb54ec7b270fbd8afba7bd7c4bfafa09e3..135bae506144a528437709b394f3e543e8115950 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
+@@ -30,6 +30,17 @@ public abstract class CraftMob extends CraftLivingEntity implements Mob {
+         } else if (target instanceof CraftLivingEntity) {
+             entity.setTarget(((CraftLivingEntity) target).getHandle(), null, false);
+         }
++        // Kiterino start
++        entity.targetSelector.getRunningGoals().forEach(goal -> {
++            if (goal.getGoal() instanceof net.minecraft.world.entity.ai.goal.target.TargetGoal targetGoal) {
++                if (target == null) {
++                    targetGoal.setTargetMob(null);
++                } else if (target instanceof CraftLivingEntity craftLivingEntity) {
++                    targetGoal.setTargetMob(craftLivingEntity.getHandle());
++                }
++            }
++        });
++        // Kiterino end
+     }
+ 
+     @Override

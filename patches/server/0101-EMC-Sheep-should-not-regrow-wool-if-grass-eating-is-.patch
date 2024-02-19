@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: chickeneer <emcchickeneer@gmail.com>
+Date: Fri, 1 Jul 2022 20:15:55 -0500
+Subject: [PATCH] EMC - Sheep should not regrow wool if grass eating is
+ cancelled
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
+index 0da884a833f6c707fea512e826658c3bb73f7a77..2ed1759568f6ec7b0e93376d21b47462e8dd91a9 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
+@@ -76,9 +76,10 @@ public class EatBlockGoal extends Goal {
+             if (EatBlockGoal.IS_TALL_GRASS.test(blockState)) { // Paper - fix wrong block state
+                 if (CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockposition, blockState.getFluidState().createLegacyBlock(), !this.level.purpurConfig.sheepBypassMobGriefing && !this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))) { // CraftBukkit // Paper - fix wrong block state // Purpur
+                     this.level.destroyBlock(blockposition, false);
++                    this.mob.ate(); // EMC - moved from below
+                 }
+ 
+-                this.mob.ate();
++                //this.mob.ate(); // EMC - move up
+             } else {
+                 BlockPos blockposition1 = blockposition.below();
+ 
+@@ -86,9 +87,10 @@ public class EatBlockGoal extends Goal {
+                     if (CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockposition1, Blocks.DIRT.defaultBlockState(), !this.level.purpurConfig.sheepBypassMobGriefing && !this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))) { // CraftBukkit // Paper - Fix wrong block state // Purpur
+                         this.level.levelEvent(2001, blockposition1, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()));
+                         this.level.setBlock(blockposition1, Blocks.DIRT.defaultBlockState(), 2);
++                        this.mob.ate(); // EMC - moved from below
+                     }
+ 
+-                    this.mob.ate();
++                    //this.mob.ate(); // EMC - move up
+                 }
+             }
+ 

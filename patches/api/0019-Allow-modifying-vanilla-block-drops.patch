@@ -5,10 +5,10 @@ Subject: [PATCH] Allow modifying vanilla block drops
 
 
 diff --git a/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java b/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java
-index 3dd4bd38e72c04e74e5787fb38ca9abd10bad06b..5607f2688ab3570fa616951ee8320f21a74561ec 100644
+index 4c5ee91de162b202c2db8bf68259ad41a430125d..bc79866b3b96a3f754ed0d2dbc16f1d5abeefae8 100644
 --- a/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java
 +++ b/src/main/java/org/bukkit/event/block/BlockDropItemEvent.java
-@@ -31,6 +31,7 @@ public class BlockDropItemEvent extends BlockEvent implements Cancellable {
+@@ -35,6 +35,7 @@ public class BlockDropItemEvent extends BlockEvent implements Cancellable {
      private boolean cancel;
      private final BlockState blockState;
      private final List<Item> items;
@@ -16,7 +16,7 @@ index 3dd4bd38e72c04e74e5787fb38ca9abd10bad06b..5607f2688ab3570fa616951ee8320f21
  
      public BlockDropItemEvent(@NotNull Block block, @NotNull BlockState blockState, @NotNull Player player, @NotNull List<Item> items) {
          super(block);
-@@ -73,6 +74,54 @@ public class BlockDropItemEvent extends BlockEvent implements Cancellable {
+@@ -77,6 +78,54 @@ public class BlockDropItemEvent extends BlockEvent implements Cancellable {
          return items;
      }
  

@@ -5,7 +5,7 @@ Subject: [PATCH] Weeper - Implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 29f301bde378bd320d5c44f2c1b6bf9dc185e286..6117f36669ef2d339f8b32087743a436976080e1 100644
+index fa185a8145843edf44fc0aeedb6c36b2b13263ae..328fadf5a224b52212c0ee2e338882f988c7cc1b 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -158,6 +158,12 @@ public abstract class AbstractContainerMenu {
@@ -22,7 +22,7 @@ index 29f301bde378bd320d5c44f2c1b6bf9dc185e286..6117f36669ef2d339f8b32087743a436
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index a43b85b82fc83d0e5e3fd589bede0b279927a989..43b9198df20b914eece134361afb89de44f4c957 100644
+index e2fd415b69e0213688561e9a19aec2cdcd267211..4225298a21a65ceba02df9f0c305dd13eab4335f 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -14,6 +14,13 @@ public class Slot {
@@ -58,7 +58,7 @@ index a43b85b82fc83d0e5e3fd589bede0b279927a989..43b9198df20b914eece134361afb89de
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 2a534391e49c0653fd98fe5c22e474ae7e82feef..a063069b3cae509c3dfc8f262c9abd4d4a2803ea 100644
+index 6c2e91b986099027d83aba85f14ae69cbc358348..f8f5aa602853f420d527fa5e4706d47eafddd1c0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -314,6 +314,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
@@ -101,5 +101,5 @@ index 2a534391e49c0653fd98fe5c22e474ae7e82feef..a063069b3cae509c3dfc8f262c9abd4d
 +        }
 +        // Weeper end - InventoryItemStackMoveStrategy
  
-         // Paper start
+         // Paper start - Add titleOverride to InventoryOpenEvent
          final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);

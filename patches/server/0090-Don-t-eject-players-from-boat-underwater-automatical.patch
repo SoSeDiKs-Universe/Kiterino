@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 10 Jan 2023 06:05:12 +0200
+Subject: [PATCH] Don't eject players from boat underwater automatically
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+index cdbfac98cc6e9a2740c61fc1cc8ec7404bf373b9..7beea612bf92c46ca2f34a0ad577dadf419b4db9 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+@@ -338,7 +338,15 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
+         }
+ 
+         if (!this.level().isClientSide && this.outOfControlTicks >= 60.0F) {
+-            this.ejectPassengers();
++            // Kiterino start - Don't eject players
++            //this.ejectPassengers();
++            for (int i = this.passengers.size() - 1; i >= 0; --i) {
++                Entity passenger = this.passengers.get(i);
++                if (!(passenger instanceof Player)) {
++                    passenger.stopRiding();
++                }
++            }
++            // Kiterino end
+         }
+ 
+         if (this.getHurtTime() > 0) {

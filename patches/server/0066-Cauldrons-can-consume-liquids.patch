@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 29 Nov 2022 09:21:58 +0200
+Subject: [PATCH] Cauldrons can consume liquids
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/CauldronBlock.java b/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
+index b4d2499ae39fd3f14b2600a9663ea8a823bdfbe4..16895f1350a723c02b97d8743ed14efb1c1f2bdb 100644
+--- a/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/CauldronBlock.java
+@@ -15,7 +15,7 @@ import net.minecraft.world.level.material.Fluids;
+ import org.bukkit.event.block.CauldronLevelChangeEvent;
+ // CraftBukkit end
+ 
+-public class CauldronBlock extends AbstractCauldronBlock {
++public class CauldronBlock extends AbstractCauldronBlock implements LiquidBlockContainer { // Kiterino - mark as liquid container
+ 
+     public static final MapCodec<CauldronBlock> CODEC = simpleCodec(CauldronBlock::new);
+     private static final float RAIN_FILL_CHANCE = 0.05F;
+@@ -89,4 +89,28 @@ public class CauldronBlock extends AbstractCauldronBlock {
+         }
+ 
+     }
++
++    // Kiterino start
++    @Override
++    public boolean canPlaceLiquid(@javax.annotation.Nullable net.minecraft.world.entity.player.Player player, net.minecraft.world.level.BlockGetter world, BlockPos pos, BlockState state, Fluid fluid) {
++        return (fluid == Fluids.FLOWING_WATER || fluid == Fluids.FLOWING_LAVA) && state.getFluidState().getAmount() == 0;
++    }
++
++    @Override
++    public boolean placeLiquid(net.minecraft.world.level.LevelAccessor world, BlockPos pos, BlockState state, net.minecraft.world.level.material.FluidState fluidState) {
++        if (fluidState.getAmount() != 8) return false;
++
++        BlockState newState;
++        if (fluidState.getType() == Fluids.WATER)
++            newState = Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL);
++        else if (fluidState.getType() == Fluids.LAVA)
++            newState = Blocks.LAVA_CAULDRON.defaultBlockState();
++        else
++            return false;
++
++        world.setBlock(pos, newState, 3);
++        return true;
++    }
++    // Kiterino end
++
+ }

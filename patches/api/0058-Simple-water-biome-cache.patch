@@ -5,10 +5,10 @@ Subject: [PATCH] Simple water biome cache
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 83993521b9ebc9035da78ef28704ed31e9f4bb02..48890ee98310d87f8b2b4264d3cf17d8fb272b35 100644
+index 624a8643224f77fccb053a45f15347ccb431ce79..bc274f921c2fada8462f0fa6957b88b235fe1605 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -883,5 +883,19 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -892,5 +892,19 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
      default org.bukkit.entity.Item dropItemNaturally(@NotNull ItemStack item, @Nullable org.bukkit.util.Consumer<org.bukkit.entity.Item> function) {
          return getWorld().dropItem(getLocation().toCenterLocation(), item, function);
      }

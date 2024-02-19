@@ -1,0 +1,161 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 8 Jun 2022 13:03:53 +0300
+Subject: [PATCH] Support recipe grid for AItems
+
+
+diff --git a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
+index 2a2f8327a5bd3983a3a13fd663beb98906f27312..951b8bc1011fbf8718454e3ca96658db9e404020 100644
+--- a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
++++ b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
+@@ -15,7 +15,7 @@ public abstract class RecipeBookExactChoiceRecipe<C extends Container> implement
+             return;
+         }
+         for (final Ingredient ingredient : this.getIngredients()) {
+-            if (!ingredient.isEmpty() && ingredient.exact) {
++            if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino
+                 this.hasExactIngredients = true;
+                 return;
+             }
+diff --git a/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java b/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
+index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..64f1a6c2858cf19c6318acffb49a8512f55f09fa 100644
+--- a/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
++++ b/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
+@@ -34,7 +34,7 @@ public final class StackedContentsExtraMap {
+     private void initialize(final Recipe<?> recipe) {
+         if (recipe.hasExactIngredients()) {
+             for (final Ingredient ingredient : recipe.getIngredients()) {
+-                if (!ingredient.isEmpty() && ingredient.exact) {
++                if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino
+                     final net.minecraft.world.item.ItemStack[] items = ingredient.getItems();
+                     final IntList idList = new IntArrayList(items.length);
+                     for (final ItemStack item : items) {
+@@ -51,7 +51,13 @@ public final class StackedContentsExtraMap {
+         }
+     }
+ 
+-    private int registerExact(final ItemStack exactChoice) {
++    private int registerExact(ItemStack exactChoice) { // Kiterino - remove final
++        // Kiterino start
++        if (exactChoice.hasTag()) {
++            exactChoice = exactChoice.copy();
++            exactChoice.setTag(ItemStack.getStripped(exactChoice.getTag())); // Kiterino
++        }
++        // Kiterino end
+         final int existing = this.exactChoiceIds.getInt(exactChoice);
+         if (existing > -1) {
+             return existing;
+@@ -66,8 +72,14 @@ public final class StackedContentsExtraMap {
+         return this.idToExactChoice.get(id);
+     }
+ 
+-    public boolean accountStack(final ItemStack stack, final int count) {
++    public boolean accountStack(ItemStack stack, final int count) { // Kiterino - remove final
+         if (!this.exactChoiceIds.isEmpty()) {
++            // Kiterino start
++            if (stack.hasTag()) {
++                stack = stack.copy();
++                stack.setTag(ItemStack.getStripped(stack.getTag()));
++            }
++            // Kiterino end
+             final int id = this.exactChoiceIds.getInt(stack);
+             if (id >= 0) {
+                 this.contents.put(id, count);
+diff --git a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
+index 1534cbb5cb5da61fa7fa41bd503b01994877a01b..f066084478afa35e63aa51a39420d6756eea6684 100644
+--- a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
++++ b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
+@@ -148,7 +148,7 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
+         this.moveItemToGrid(slot, stack, false);
+     }
+     protected void moveItemToGrid(Slot slot, ItemStack stack, final boolean isExact) {
+-        int i = isExact ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack);
++        int i = /*isExact*/ !slot.getItem().isEmpty() ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack); // Kiterino
+         // Paper end - Improve exact choice recipe ingredients
+         if (i != -1) {
+             ItemStack itemStack = this.inventory.getItem(i);
+diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
+index deabb3400ee2406a8ec179a96d8cfd86f8edbbd6..48995a6b465090911f3b91f48b3b654d56940337 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
++++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
+@@ -205,7 +205,7 @@ public class Inventory implements Container, Nameable {
+         for (int i = 0; i < this.items.size(); ++i) {
+             ItemStack itemstack1 = (ItemStack) this.items.get(i);
+ 
+-            if (!((ItemStack) this.items.get(i)).isEmpty() && ItemStack.isSameItemSameTags(stack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).isDamaged() && !itemstack1.isEnchanted() && !itemstack1.hasCustomHoverName()) {
++            if (!itemstack1.isEmpty() && itemstack1.getItem() == stack.getItem() && ItemStack.recipesTagsMatch(itemstack1, stack)) { // Kiterino - less limited items in the crafting grid
+                 return i;
+             }
+         }
+diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
+index 9c7b05fec22a8b84c29d7210f1104030a20cc7aa..5f9e6b48ee8dd1849f88e8556b346c8c99f7d66b 100644
+--- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
++++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
+@@ -25,7 +25,7 @@ public class StackedContents {
+ 
+     public void accountSimpleStack(ItemStack stack) {
+         if (this.extrasMap != null && stack.hasTag() && this.extrasMap.accountStack(stack, Math.min(64, stack.getCount()))) return; // Paper - Improve exact choice recipe ingredients; max of 64 due to accountStack method below
+-        if (!stack.isDamaged() && !stack.isEnchanted() && !stack.hasCustomHoverName()) {
++        if (/*!stack.isDamaged() && !stack.isEnchanted() && */!stack.hasCustomHoverName()) { // Kiterino - allow damaged and enchanted items
+             this.accountStack(stack);
+         }
+ 
+diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
+index f6664447c45b1d6f3371af7bed8b1175b17f25e2..5eb4eaf5fdd0d16701daa0a39485cd05f3674157 100644
+--- a/src/main/java/net/minecraft/world/item/ItemStack.java
++++ b/src/main/java/net/minecraft/world/item/ItemStack.java
+@@ -813,6 +813,54 @@ public final class ItemStack {
+         return !stack.is(otherStack.getItem()) ? false : (stack.isEmpty() && otherStack.isEmpty() ? true : Objects.equals(stack.tag, otherStack.tag));
+     }
+ 
++    // Kiterino start
++    public static boolean recipesTagsMatch(@Nullable ItemStack comparing, @Nullable ItemStack expected) {
++        if (comparing == null || expected == null) return false;
++        if (comparing.isEmpty()) return expected.isEmpty();
++        if (expected.isEmpty()) return false;
++
++        var compund1 = getStripped(expected.getTag());
++        if (compund1 == null) { // Vanilla tagless item
++            return comparing.is(expected.getItem());
++        }
++
++        String namespace = org.bukkit.Bukkit.getName();
++        if (compund1.contains(namespace, Tag.TAG_COMPOUND)) {
++            compund1 = compund1.getCompound(namespace);
++            if (compund1.contains("Id", Tag.TAG_STRING)) { // Custom kItem
++                var compound2 = getStripped(comparing.getTag());
++                if (compound2 == null) return false;
++                if (!compound2.contains(namespace, Tag.TAG_COMPOUND)) return false;
++
++                compound2 = compound2.getCompound(namespace);
++                return compund1.getString("Id").equals(compound2.getString("Id"));
++            }
++        }
++
++        return comparing.is(expected.getItem());
++    }
++
++    public static @Nullable CompoundTag getStripped(@Nullable CompoundTag nbt) {
++        if (nbt == null) return null;
++        nbt = nbt.copy();
++        nbt.remove(ItemStack.TAG_ENCH);
++        nbt.remove(ItemStack.TAG_DAMAGE);
++        // Only keep custom item ID
++        String namespace = org.bukkit.Bukkit.getName();
++        if (nbt.contains(namespace, Tag.TAG_COMPOUND)) {
++            var knbt = nbt.getCompound(namespace);
++            nbt.remove(namespace);
++            if (knbt.contains("Id", Tag.TAG_STRING)) {
++                String id = knbt.getString("Id");
++                knbt = new CompoundTag();
++                knbt.putString("Id", id);
++                nbt.put(namespace, knbt);
++            }
++        }
++        return nbt.isEmpty() ? null : nbt;
++    }
++    // Kiterino end
++
+     public String getDescriptionId() {
+         return this.getItem().getDescriptionId(this);
+     }

@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 13 Dec 2021 15:17:04 +0100
+Subject: [PATCH] Exact note block tuning
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/NoteBlock.java b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+index d34845452ad8f3a4bf95603a9a00bc0cb0d4fd96..e73546cd75dbf3fab681ab20fc9ab7feef0c7429 100644
+--- a/src/main/java/net/minecraft/world/level/block/NoteBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/NoteBlock.java
+@@ -133,10 +133,19 @@ public class NoteBlock extends Block {
+         } else {
+             // Kiterino start
+             if (!io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableNoteblockUpdates) {
+-                if (player.isShiftKeyDown()) {
+-                    state = state.cycleBackwards(NOTE);
++                var itemInHand = player.getItemInHand(hand);
++                if (itemInHand.getItem() == net.minecraft.world.item.Items.STICK) {
++                    int currentNote = state.getValue(NOTE);
++                    int newNote = Math.min(24, itemInHand.getCount() - 1);
++                    if (currentNote != newNote) {
++                        state = state.setValue(NOTE, newNote);
++                    }
+                 } else {
+-                    state = (BlockState) state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
++                    if (player.isShiftKeyDown()) {
++                        state = state.cycleBackwards(NOTE);
++                    } else {
++                        state = (BlockState) state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
++                    }
+                 }
+             }
+             // Kiterino end

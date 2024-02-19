@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 12 Jan 2023 02:20:10 +0200
+Subject: [PATCH] Always allow to enter the boat
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+index 7beea612bf92c46ca2f34a0ad577dadf419b4db9..7eedb9741c5f3ec4cd9ad1f8a8a3cc1ca904c263 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/Boat.java
+@@ -870,7 +870,7 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
+ 
+     @Override
+     public InteractionResult interact(Player player, InteractionHand hand) {
+-        return player.isSecondaryUseActive() ? InteractionResult.PASS : (this.outOfControlTicks < 60.0F ? (!this.level().isClientSide ? (player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS) : InteractionResult.SUCCESS) : InteractionResult.PASS);
++        return player.isSecondaryUseActive() ? InteractionResult.PASS : (true || this.outOfControlTicks < 60.0F ? (!this.level().isClientSide ? (player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS) : InteractionResult.SUCCESS) : InteractionResult.PASS); // Kiterino - always allow to enter the boat
+     }
+ 
+     @Override
+@@ -942,7 +942,7 @@ public class Boat extends VehicleEntity implements VariantHolder<Boat.Type> {
+ 
+     @Override
+     protected boolean canAddPassenger(Entity passenger) {
+-        return this.getPassengers().size() < this.getMaxPassengers() && !this.isEyeInFluid(FluidTags.WATER);
++        return this.getPassengers().size() < this.getMaxPassengers()/* && !this.isEyeInFluid(FluidTags.WATER)*/; // Kiterino - always allow to enter the boat
+     }
+ 
+     protected int getMaxPassengers() {

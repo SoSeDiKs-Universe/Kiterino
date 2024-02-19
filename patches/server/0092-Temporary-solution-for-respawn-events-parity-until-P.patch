@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 12 Jan 2023 04:23:22 +0200
+Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
+ 8705 is merged
+
+
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index a5a0180a0d3d47b0bf90aed229d5ded7c5ff5bae..3e0cef458f02781ac6d13ea086cd7c12bf9f89a9 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -1004,7 +1004,7 @@ public abstract class PlayerList {
+ 
+         // Paper start - Add PlayerPostRespawnEvent
+         if (isRespawn) {
+-            cserver.getPluginManager().callEvent(new com.destroystokyo.paper.event.player.PlayerPostRespawnEvent(entityplayer.getBukkitEntity(), location, isBedSpawn));
++            cserver.getPluginManager().callEvent(new com.destroystokyo.paper.event.player.PlayerPostRespawnEvent(entityplayer.getBukkitEntity(), location, isBedSpawn && !isAnchorSpawn, isAnchorSpawn, com.google.common.collect.ImmutableSet.<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag>builder().add(respawnFlags))); // Kiterino
+         }
+         // Paper end - Add PlayerPostRespawnEvent
+ 

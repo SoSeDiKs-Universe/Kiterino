@@ -1,0 +1,110 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 7 Dec 2022 10:18:16 +0200
+Subject: [PATCH] Simple water biome cache
+
+
+diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
+index f7e5e016a7028a9196e689e950805b0d5b31fe38..0cca6b1851f92649a1d6b1f621e9a1840e5b8300 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
++++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
+@@ -128,6 +128,9 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
+     }
+     // Paper end - rewrite light engine
+ 
++    public @Nullable org.bukkit.block.Biome cachedWaterBiome; // Kiterino
++    public @Nullable Boolean infiniteWater; // Kiterino
++
+     public ChunkAccess(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biomeRegistry, long inhabitedTime, @Nullable LevelChunkSection[] sectionArray, @Nullable BlendingData blendingData) {
+         // Paper start - rewrite light engine
+         if (!(this instanceof ImposterProtoChunk)) {
+diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
+index b84c8a4db9383c448ab8f576bca3cb6bd053ee13..3514428888284b1b26c4c78eb2a462082d25885c 100644
+--- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
++++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
+@@ -67,22 +67,51 @@ public abstract class WaterFluid extends FlowingFluid {
+     // Kiterino start
+     @Override
+     protected boolean canConvertToSource(Level world, BlockPos pos) {
+-        return isInInfiniteBiome(world, pos) || canConvertToSource(world);
++        return isInInfiniteBiome(this, world, pos) || canConvertToSource(world);
+     }
+ 
+     @Override
+     protected boolean isUnfillableInBiome(Fluid fluid, LevelReader world, BlockPos flowTo) {
+-        return isInInfiniteBiome(world, flowTo);
++        return isInInfiniteBiome(fluid, world, flowTo);
++    }
++
++    private boolean isInInfiniteBiome(Fluid fluid, LevelReader world, BlockPos pos) {
++        net.minecraft.world.level.chunk.ChunkAccess chunk = world.getChunkIfLoadedImmediately(pos.getX() >> 4, pos.getZ() >> 4);
++        if (chunk == null) return isInfiniteBiome(world.getBiome(pos));
++        if (chunk.infiniteWater != null) return chunk.infiniteWater;
++        if (!(world instanceof net.minecraft.server.level.ServerLevel level)) return false;
++        if (org.bukkit.Bukkit.isLagging() || org.bukkit.Bukkit.getCurrentTick() % 20 > 6) {
++            cacheBiome(level, chunk, pos, false);
++            level.scheduleTick(pos, fluid, 15);
++        } else {
++            cacheBiome(level, chunk, pos, true);
++        }
++        return chunk.infiniteWater != null && chunk.infiniteWater;
+     }
+ 
+-    private boolean isInInfiniteBiome(LevelReader world, BlockPos pos) {
+-        if (isInfiniteBiome(world.getBiome(pos))) return true;
+-        if (true) return false; // ToDo: TPS killer, needs caching
+-        if (!((world instanceof net.minecraft.server.level.ServerLevel level))) return false;
+-        return level.findClosestBiome3d(this::isInfiniteBiome, pos, 18, 8, 8) != null;
++    public static void cacheBiome(net.minecraft.server.level.ServerLevel level, net.minecraft.world.level.chunk.ChunkAccess chunk, BlockPos pos, boolean checkNearby) {
++        var biome = level.getBiome(pos);
++        if (isInfiniteBiome(biome)) {
++            chunk.infiniteWater = true;
++            chunk.cachedWaterBiome = org.bukkit.craftbukkit.block.CraftBiome.minecraftHolderToBukkit(biome);
++            return;
++        }
++        if (!checkNearby) return;
++
++        net.minecraft.world.level.ChunkPos chunkPos = chunk.getPos();
++        pos = new BlockPos(chunkPos.getMiddleBlockX(), level.getSeaLevel(), chunkPos.getMiddleBlockZ());
++        var nearestBiome = level.findClosestBiome3d(WaterFluid::isInfiniteBiome, pos, 18, 8, 8);
++        if (nearestBiome == null) {
++            chunk.infiniteWater = false;
++            chunk.cachedWaterBiome = null;
++            return;
++        }
++
++        chunk.infiniteWater = true;
++        chunk.cachedWaterBiome = org.bukkit.craftbukkit.block.CraftBiome.minecraftHolderToBukkit(nearestBiome.getSecond());
+     }
+ 
+-    private boolean isInfiniteBiome(net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome) {
++    private static boolean isInfiniteBiome(net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome) {
+         return biome.is(net.minecraft.tags.BiomeTags.IS_OCEAN) || biome.is(net.minecraft.tags.BiomeTags.IS_RIVER);
+     }
+     // Kiterino end
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+index 4b42ef2a876ea210d948238e63fd7a2b7035bb5b..f327d1b3cfaf2b7902d5cfc12c88a2af18f68c5a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+@@ -727,4 +727,21 @@ public class CraftBlock implements Block {
+         blockData.getBlock().randomTick(blockData, level, this.position, level.random);
+     }
+     // Paper end
++
++    // Kiterino start
++    @Override
++    public boolean hasInfiniteWater() {
++        var chunk = getHandle().getChunk(position);
++        if (chunk.infiniteWater == null) net.minecraft.world.level.material.WaterFluid.cacheBiome(getCraftWorld().getHandle(), chunk, position, true);
++        Boolean infiniteWater = chunk.infiniteWater;
++        return infiniteWater != null && infiniteWater;
++    }
++
++    @Override
++    public Biome getCachedWaterBiome() {
++        var chunk = getHandle().getChunk(position);
++        if (chunk.infiniteWater == null) net.minecraft.world.level.material.WaterFluid.cacheBiome(getCraftWorld().getHandle(), chunk, position, true);
++        return chunk.cachedWaterBiome;
++    }
++    // Kiterino end
+ }

@@ -1,0 +1,103 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 6 Nov 2023 00:36:45 +0200
+Subject: [PATCH] Check for FarmBlock instead of FARMLAND
+
+Needed for server's custom blocks that extend FarmBlock
+
+diff --git a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
+index b3d563285c45ef8e4468c6633d5d8818d1018bd8..9b9176ccd9dd47e9d40f03a25b0b478fbd0e7a4f 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
++++ b/src/main/java/net/minecraft/world/entity/animal/Rabbit.java
+@@ -705,7 +705,7 @@ public class Rabbit extends Animal implements VariantHolder<Rabbit.Variant> {
+         protected boolean isValidTarget(LevelReader world, BlockPos pos) {
+             BlockState iblockdata = world.getBlockState(pos);
+ 
+-            if (iblockdata.is(Blocks.FARMLAND) && this.wantsToRaid && !this.canRaid) {
++            if (/*iblockdata.is(Blocks.FARMLAND)*/ iblockdata.getBlock() instanceof net.minecraft.world.level.block.FarmBlock && this.wantsToRaid && !this.canRaid) { // Kiterino
+                 iblockdata = world.getBlockState(pos.above());
+                 if (iblockdata.getBlock() instanceof CarrotBlock && ((CarrotBlock) iblockdata.getBlock()).isMaxAge(iblockdata)) {
+                     this.canRaid = true;
+diff --git a/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java b/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java
+index 983172699efc0a8e30d6d8a2aa1809026e85e573..6494514a6df663fb87857771a853dfb7173e4666 100644
+--- a/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java
+@@ -72,7 +72,7 @@ public class AttachedStemBlock extends BushBlock {
+ 
+     @Override
+     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+-        return floor.is(Blocks.FARMLAND);
++        return /*floor.is(Blocks.FARMLAND)*/ floor.getBlock() instanceof FarmBlock; // Kiterino
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/world/level/block/BushBlock.java b/src/main/java/net/minecraft/world/level/block/BushBlock.java
+index db1941ed32d141327a8b11e54b3ff9900072ad36..cccd89c8d9ca7952dc2eb3c475fbc50f0f68f904 100644
+--- a/src/main/java/net/minecraft/world/level/block/BushBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/BushBlock.java
+@@ -21,7 +21,7 @@ public abstract class BushBlock extends Block {
+     protected abstract MapCodec<? extends BushBlock> codec();
+ 
+     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+-        return floor.is(BlockTags.DIRT) || floor.is(Blocks.FARMLAND);
++        return floor.is(BlockTags.DIRT) || /*floor.is(Blocks.FARMLAND)*/ floor.getBlock() instanceof FarmBlock; // Kiterino
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/world/level/block/CropBlock.java b/src/main/java/net/minecraft/world/level/block/CropBlock.java
+index 2077cb5dcf2352c9d5b502744aeb9a66df256939..c823c08e6b2fd5cdadaca715dc006fe38ba85e75 100644
+--- a/src/main/java/net/minecraft/world/level/block/CropBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/CropBlock.java
+@@ -47,7 +47,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
+ 
+     @Override
+     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+-        return floor.is(Blocks.FARMLAND);
++        return /*floor.is(Blocks.FARMLAND)*/ floor.getBlock() instanceof FarmBlock; // Kiterino
+     }
+ 
+     protected IntegerProperty getAgeProperty() {
+@@ -132,7 +132,7 @@ public class CropBlock extends BushBlock implements BonemealableBlock {
+                 float f1 = 0.0F;
+                 BlockState iblockdata = world.getBlockState(blockposition1.offset(i, 0, j));
+ 
+-                if (iblockdata.is(Blocks.FARMLAND)) {
++                if (/*iblockdata.is(Blocks.FARMLAND)*/iblockdata.getBlock() instanceof FarmBlock) { // Kiterino
+                     f1 = 1.0F;
+                     if ((Integer) iblockdata.getValue(FarmBlock.MOISTURE) > 0) {
+                         f1 = 3.0F;
+diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
+index d20c009baf69d083bf8a14000028991b6518cd50..6bed72b5b74d0e162ca7fe2aee9bbdabb2c4fe5a 100644
+--- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
+@@ -83,7 +83,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+ 
+     @Override
+     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+-        return floor.is(Blocks.FARMLAND);
++        return /*floor.is(Blocks.FARMLAND)*/ floor.getBlock() instanceof FarmBlock; // Kiterino
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/world/level/block/StemBlock.java b/src/main/java/net/minecraft/world/level/block/StemBlock.java
+index 121a872cd750a87b779895687ae1abf5bb77b088..abcbec8a6c13f34b1f1b6198967dbe2c630e9f64 100644
+--- a/src/main/java/net/minecraft/world/level/block/StemBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/StemBlock.java
+@@ -67,7 +67,7 @@ public class StemBlock extends BushBlock implements BonemealableBlock {
+ 
+     @Override
+     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+-        return floor.is(Blocks.FARMLAND);
++        return /*floor.is(Blocks.FARMLAND)*/ floor.getBlock() instanceof FarmBlock; // Kiterino
+     }
+ 
+     @Override
+@@ -86,7 +86,7 @@ public class StemBlock extends BushBlock implements BonemealableBlock {
+                     BlockPos blockposition1 = pos.relative(enumdirection);
+                     BlockState iblockdata1 = world.getBlockState(blockposition1.below());
+ 
+-                    if (world.getBlockState(blockposition1).isAir() && (iblockdata1.is(Blocks.FARMLAND) || iblockdata1.is(BlockTags.DIRT))) {
++                    if (world.getBlockState(blockposition1).isAir() && (/*iblockdata1.is(Blocks.FARMLAND)*/ iblockdata1.getBlock() instanceof FarmBlock || iblockdata1.is(BlockTags.DIRT))) { // Kiterino
+                         Registry<Block> iregistry = world.registryAccess().registryOrThrow(Registries.BLOCK);
+                         Optional<Block> optional = iregistry.getOptional(this.fruit);
+                         Optional<Block> optional1 = iregistry.getOptional(this.attachedStem);

@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 9 Jul 2023 04:53:24 +0300
+Subject: [PATCH] Cap horse's saddle slot stack size at 1
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
+index 3170f9044f18b8c609433ddbd3ef9ac330644a0f..9bd69e3f80a5668c748ff04ebfd40efba3e40ea0 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
++++ b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
+@@ -306,7 +306,14 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+     }
+     @Override
+     public void equipSaddle(@Nullable SoundSource sound, @Nullable ItemStack stack) {
+-        this.inventory.setItem(0, stack != null ? stack : new ItemStack(Items.SADDLE));
++        // Kiterino start
++        if (stack == null) {
++            this.inventory.setItem(0, new ItemStack(Items.SADDLE));
++        } else {
++            this.inventory.setItem(0, stack.copyWithCount(1));
++            stack.shrink(1);
++        }
++        // Kiterino end
+         // Paper end
+     }
+ 
+@@ -1164,7 +1171,6 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+                 if (!predicate.test(stack)) {
+                     return false;
+                 } else {
+-                    AbstractHorse.this.inventory.setItem(slot, stack);
+                     AbstractHorse.this.updateContainerEquipment();
+                     return true;
+                 }
+diff --git a/src/main/java/net/minecraft/world/inventory/HorseInventoryMenu.java b/src/main/java/net/minecraft/world/inventory/HorseInventoryMenu.java
+index 9a0ca67ad2852aa95cde87b7ac332a036142bd94..186f2422ee63589a4ca99625b9ef64a16da095b8 100644
+--- a/src/main/java/net/minecraft/world/inventory/HorseInventoryMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/HorseInventoryMenu.java
+@@ -52,6 +52,13 @@ public class HorseInventoryMenu extends AbstractContainerMenu {
+             public boolean isActive() {
+                 return entity.isSaddleable();
+             }
++
++            // Kiterino start
++            @Override
++            public int getMaxStackSize() {
++                return 1;
++            }
++            // Kiterino end
+         });
+         this.addSlot(new Slot(inventory, 1, 8, 36) {
+             @Override

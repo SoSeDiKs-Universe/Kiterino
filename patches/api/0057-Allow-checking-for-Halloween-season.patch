@@ -5,10 +5,10 @@ Subject: [PATCH] Allow checking for Halloween season
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 30b240631c6158cc60978c78d58d2d974b8344f9..a5ebb2eef334449e9568137952bfb73aff0aa0b4 100644
+index 6e2a9ba6e09778bd77998264e625413e58af0ded..7391b66f3367fc98d9837b173304e8b3010c700c 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -3007,5 +3007,14 @@ public final class Bukkit {
+@@ -3027,5 +3027,14 @@ public final class Bukkit {
      public static void setMaxStackSize(@NotNull Material material, int maxStackSize) {
          server.setMaxStackSize(material, maxStackSize);
      }
@@ -24,10 +24,10 @@ index 30b240631c6158cc60978c78d58d2d974b8344f9..a5ebb2eef334449e9568137952bfb73a
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index d0701a506fd8b1347f1f646b7041d4299f29f013..5fd0965051190c52d244a85c2ff80eb63b0ef983 100644
+index 8a84fcb34f16f1a56ff458a33498229f119f9fc9..5773d99c6cbe0220d6508f718e8dc7328fbacfff 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2639,5 +2639,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2655,5 +2655,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      default void setMaxStackSize(@NotNull Material material, int maxStackSize) {
          material.maxStack = maxStackSize;
      }
@@ -43,10 +43,10 @@ index d0701a506fd8b1347f1f646b7041d4299f29f013..5fd0965051190c52d244a85c2ff80eb6
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index e147cdf188496e3ba038d204d3af79acedf111b0..4fe74ca7049a3a2b41be0e7d656807101f2ef7e8 100644
+index 6c0fe85588d223d92b6ec15afaf35db92f08f0a3..448a2b6cff49ded7bf69a920410ed04d3fb1abe6 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4392,4 +4392,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4462,4 +4462,13 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
       */
      boolean applyBoneMeal(@NotNull Location location, @NotNull org.bukkit.block.BlockFace face, boolean showParticles, @Nullable Predicate<org.bukkit.block.BlockState> predicate);
      // Paper end

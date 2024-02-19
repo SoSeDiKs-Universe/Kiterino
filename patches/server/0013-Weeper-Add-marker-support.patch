@@ -1,0 +1,131 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 8 Jul 2021 23:23:01 +0200
+Subject: [PATCH] Weeper - Add marker support
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+index 382a6ce7485e459cb94d79f0dfb86bf5a7334f7d..7b0905729e5252e57371505d9af1d5f4811284d4 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+@@ -4,14 +4,35 @@ import com.destroystokyo.paper.profile.CraftPlayerProfile;
+ import com.destroystokyo.paper.profile.PlayerProfile;
+ import com.github.weepingmc.packet.ChainablePacketStep.DelayPacketStep;
+ import com.github.weepingmc.packet.ChainablePacketStep.NmsPacketStep;
+-import com.github.weepingmc.packet.options.*;
++import com.github.weepingmc.packet.options.Animation;
++import com.github.weepingmc.packet.options.EntityMetaBuilder;
++import com.github.weepingmc.packet.options.PlayerAbility;
++import com.github.weepingmc.packet.options.ProfileAction;
++import com.github.weepingmc.packet.options.TeamMode;
++import com.github.weepingmc.util.ColorUtil;
+ import com.mojang.authlib.GameProfile;
+ import com.mojang.datafixers.util.Pair;
++import io.netty.buffer.Unpooled;
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.core.registries.BuiltInRegistries;
++import net.minecraft.network.FriendlyByteBuf;
+ import net.minecraft.network.protocol.Packet;
+-import net.minecraft.network.protocol.game.*;
++import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
++import net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload;
++import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
++import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
++import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
++import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
++import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
++import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
++import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
++import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
++import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
++import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
++import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
++import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
+ import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.Action;
++import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
+ import net.minecraft.network.syncher.SynchedEntityData;
+ import net.minecraft.world.entity.Entity;
+ import net.minecraft.world.entity.LivingEntity;
+@@ -28,9 +49,17 @@ import org.bukkit.plugin.java.JavaPlugin;
+ import org.bukkit.scoreboard.Team;
+ import org.bukkit.util.Vector;
+ import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
+ 
+ import javax.annotation.Nonnull;
+-import java.util.*;
++import java.awt.*;
++import java.util.ArrayList;
++import java.util.Collection;
++import java.util.Collections;
++import java.util.List;
++import java.util.Optional;
++import java.util.Set;
++import java.util.UUID;
+ import java.util.concurrent.TimeUnit;
+ import java.util.stream.Collectors;
+ 
+@@ -261,6 +290,18 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+ 		return this;
+ 	}
+ 
++	@Override
++	public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time) {
++		var payload = new GameTestAddMarkerDebugPayload(
++			new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
++			ColorUtil.toARGB(color),
++			text == null ? "" : text,
++			time
++		);
++		initial.setNext(of(new ClientboundCustomPayloadPacket(payload)));
++		return this;
++	}
++
+ 	@Override
+ 	public void send(@Nonnull Collection<? extends org.bukkit.entity.Player> players) {
+ 		initial.execute(players);
+diff --git a/src/main/java/com/github/weepingmc/util/ColorUtil.java b/src/main/java/com/github/weepingmc/util/ColorUtil.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..5640ac987222a1fb7bc30dd0fab47dece6a10ab4
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/util/ColorUtil.java
+@@ -0,0 +1,39 @@
++package com.github.weepingmc.util;
++
++import java.awt.Color;
++
++public class ColorUtil {
++
++	public static Color fromARGB(int argb){
++		return new Color(getR(argb), getG(argb), getB(argb), getA(argb));
++	}
++
++	public static int toARGB(Color color){
++		return getARGBInt(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
++	}
++
++	private static int getA(int argb) {
++		return (argb >> 24) & 0xFF;
++	}
++
++	private static int getR(int argb) {
++		return (argb >> 16) & 0xFF;
++	}
++
++	private static int getG(int argb) {
++		return (argb >> 8) & 0xFF;
++	}
++
++	private static int getB(int argb) {
++		return argb & 0xFF;
++	}
++
++	private static int getARGBInt(int a, int r, int g, int b) {
++		int encoded = 0;
++		encoded = encoded | b;
++		encoded = encoded | (g << 8);
++		encoded = encoded | (r << 16);
++		encoded = encoded | (a << 24);
++		return encoded;
++	}
++}

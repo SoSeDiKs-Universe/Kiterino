@@ -5,7 +5,7 @@ Subject: [PATCH] Kiterino NamespacedKey
 
 
 diff --git a/src/main/java/org/bukkit/NamespacedKey.java b/src/main/java/org/bukkit/NamespacedKey.java
-index 95bc1078e35a92624b6627e78ed80080832d1b57..9ba8224bafb35584650b6a467546f02df7b3cd58 100644
+index 97cf6b6acdd71740b75658f14ca5cabbacb108d4..3f127ffa7d7d49eb9e546f868f5765b6810526bc 100644
 --- a/src/main/java/org/bukkit/NamespacedKey.java
 +++ b/src/main/java/org/bukkit/NamespacedKey.java
 @@ -30,6 +30,12 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
@@ -21,7 +21,7 @@ index 95bc1078e35a92624b6627e78ed80080832d1b57..9ba8224bafb35584650b6a467546f02d
      //
      private final String namespace;
      private final String key;
-@@ -176,6 +182,19 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
+@@ -180,6 +186,19 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
          return new NamespacedKey(MINECRAFT, key);
      }
  
