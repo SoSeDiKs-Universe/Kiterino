@@ -5,10 +5,10 @@ Subject: [PATCH] Allow checking for Halloween season
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 6e2a9ba6e09778bd77998264e625413e58af0ded..7391b66f3367fc98d9837b173304e8b3010c700c 100644
+index 6e5f0e3d5cefea2fb63e36bb144dd2151ee1b2a8..5328759d6401ff1ad00bb333aeea66e23be0634d 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -3027,5 +3027,14 @@ public final class Bukkit {
+@@ -3043,5 +3043,14 @@ public final class Bukkit {
      public static void setMaxStackSize(@NotNull Material material, int maxStackSize) {
          server.setMaxStackSize(material, maxStackSize);
      }
@@ -24,10 +24,10 @@ index 6e2a9ba6e09778bd77998264e625413e58af0ded..7391b66f3367fc98d9837b173304e8b3
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 8a84fcb34f16f1a56ff458a33498229f119f9fc9..5773d99c6cbe0220d6508f718e8dc7328fbacfff 100644
+index d4dce4f1375892ddb42c0be0fb085282d7bcde92..1ec8119e98700ddcba197d7fd6fdfc7db0abe90a 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2655,5 +2655,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2670,5 +2670,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      default void setMaxStackSize(@NotNull Material material, int maxStackSize) {
          material.maxStack = maxStackSize;
      }

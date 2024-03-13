@@ -5,10 +5,10 @@ Subject: [PATCH] Mob possessing mechanic compatibility
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 75c85751fe9d753dcb69d33290b7b71406dd3eaa..2a542ee09deeec3828032e06205c2502cd61b973 100644
+index 786b752f38edf04a9cbd0a325ef9d77026c716af..808425e184f4c48ef07560b2a8bae5c72021fb8f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1539,7 +1539,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -1552,7 +1552,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          final Level world = this.level;
          // Kiterino start - include vehicle's height in collision
          AABB currBoundingBox = this.getBoundingBox();
@@ -17,7 +17,7 @@ index 75c85751fe9d753dcb69d33290b7b71406dd3eaa..2a542ee09deeec3828032e06205c2502
              currBoundingBox = new AABB(currBoundingBox.minX, getVehicle().getBoundingBox().minY + 0.1, currBoundingBox.minZ, currBoundingBox.maxX, currBoundingBox.maxY, currBoundingBox.maxZ);
          }
          // Kiterino end
-@@ -1607,6 +1607,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -1620,6 +1620,9 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
          }
          // Kiterino start - include vehicle's height in collision
          for (Entity passenger : getPassengers()) {

@@ -36,10 +36,10 @@ index eae2488f2a46e543b496b7a2919aabbb55dcb825..b3d563285c45ef8e4468c6633d5d8818
          private final Rabbit rabbit;
          private boolean wantsToRaid;
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Slime.java b/src/main/java/net/minecraft/world/entity/monster/Slime.java
-index 489c8cbec828318e5b84cb9eaf25733b39781927..b26f8bf32003a29066145428827ffc77a686d12c 100644
+index 0f77f00e9a02d1f982f285617604e7291b70a2a4..3b80bf13ea06f8ee942c38849c2fb021923a0d47 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Slime.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Slime.java
-@@ -564,7 +564,7 @@ public class Slime extends Mob implements Enemy {
+@@ -572,7 +572,7 @@ public class Slime extends Mob implements Enemy {
          }
      }
  
@@ -48,7 +48,7 @@ index 489c8cbec828318e5b84cb9eaf25733b39781927..b26f8bf32003a29066145428827ffc77
  
          private final Slime slime;
  
-@@ -601,7 +601,7 @@ public class Slime extends Mob implements Enemy {
+@@ -609,7 +609,7 @@ public class Slime extends Mob implements Enemy {
          }
      }
  
@@ -57,7 +57,7 @@ index 489c8cbec828318e5b84cb9eaf25733b39781927..b26f8bf32003a29066145428827ffc77
  
          private final Slime slime;
          private int growTiredTimer;
-@@ -678,7 +678,7 @@ public class Slime extends Mob implements Enemy {
+@@ -686,7 +686,7 @@ public class Slime extends Mob implements Enemy {
          // Paper end - Slime pathfinder events
      }
  
@@ -66,7 +66,7 @@ index 489c8cbec828318e5b84cb9eaf25733b39781927..b26f8bf32003a29066145428827ffc77
  
          private final Slime slime;
          private float chosenDegrees;
-@@ -717,7 +717,7 @@ public class Slime extends Mob implements Enemy {
+@@ -725,7 +725,7 @@ public class Slime extends Mob implements Enemy {
          }
      }
  

@@ -55,6 +55,7 @@ run/
 
 # Kiterino build files
 build-data/
+paper-api-generator
 Kiterino-API
 Kiterino-MojangAPI
 Kiterino-Server

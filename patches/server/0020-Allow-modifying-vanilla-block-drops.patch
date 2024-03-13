@@ -5,10 +5,10 @@ Subject: [PATCH] Allow modifying vanilla block drops
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index b30d0d4d453252d1f5774f5155fb1ab61294d6be..bda2980a79cd2e174ec9cee061c2eedb09aab1b3 100644
+index 94be4f367f4c6cb2386d0e59d0417f29fca1cec7..45b5c7c8c9e231ed02f32ff96fc609ee8e8ac2be 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -460,6 +460,21 @@ public class CraftEventFactory {
+@@ -461,6 +461,21 @@ public class CraftEventFactory {
          Bukkit.getPluginManager().callEvent(event);
  
          if (!event.isCancelled()) {

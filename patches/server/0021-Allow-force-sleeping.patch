@@ -18,10 +18,10 @@ index 36b7686fdfeaab13cb1be9610ddc76fc70f6f6e5..82e8c4aa56f348d46c910052fe697096
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 3389967727eb2d7e93558d44d51ebd1ac4348982..3e1627db00af60ac98c704c336cfef64c0532ca4 100644
+index 972c15ab70ebbd9cd6c5db3bdd4e1bd1ff618986..09c0c00915adca0afeb4bebf5ecc1e9ddcda26ab 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3145,7 +3145,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3153,7 +3153,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -30,7 +30,7 @@ index 3389967727eb2d7e93558d44d51ebd1ac4348982..3e1627db00af60ac98c704c336cfef64
                  this.stopSleeping();
              }
          }
-@@ -4474,7 +4474,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4482,7 +4482,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
          this.setPos((double) pos.getX() + 0.5D, (double) pos.getY() + 0.6875D, (double) pos.getZ() + 0.5D);
      }
  
@@ -40,7 +40,7 @@ index 3389967727eb2d7e93558d44d51ebd1ac4348982..3e1627db00af60ac98c704c336cfef64
              return this.level().getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index d6122c121d6e18d276fb78865c6a680e9afc3378..c61cfdc38da57344f1ba475621a4dc3fec19ca0f 100644
+index 988cc1290200de629a4c24cc67a03e69c2fcc727..1a07d4defdc2c8e23e457ce908a24cc14c98dc22 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1380,7 +1380,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

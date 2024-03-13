@@ -68,10 +68,10 @@ index 0000000000000000000000000000000000000000..6a73c7fbf9cd7b07cba92821a0f134d1
 +
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 2e8dc647ae7354506de293e6138a42d32d60782c..6e2a9ba6e09778bd77998264e625413e58af0ded 100644
+index 5042b8d96f812c1536aca8970034f5b7b16a8ad6..6e5f0e3d5cefea2fb63e36bb144dd2151ee1b2a8 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2910,6 +2910,28 @@ public final class Bukkit {
+@@ -2926,6 +2926,28 @@ public final class Bukkit {
          server.removeFuel(material);
      }
  
@@ -101,10 +101,10 @@ index 2e8dc647ae7354506de293e6138a42d32d60782c..6e2a9ba6e09778bd77998264e625413e
       * Creates debug block highlight on specified block location and show it to all players on the server.
       * <p>
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index b906d029c2849952f7ba517dfe906663fd9dd353..8a84fcb34f16f1a56ff458a33498229f119f9fc9 100644
+index 19231084f66547f7b95ce3a13a646fbca30b081f..d4dce4f1375892ddb42c0be0fb085282d7bcde92 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2554,6 +2554,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2569,6 +2569,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      public void removeFuel(@NotNull Material material);
  

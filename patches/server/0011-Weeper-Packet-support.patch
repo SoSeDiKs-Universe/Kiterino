@@ -756,10 +756,10 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..90fb9b576ed74a9063574f7bc3926668
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f6c9bff8ef4e370dcb351490294181282ad156e3..fc0935e5a8be4442735628483aa656fdb882a2f8 100644
+index a77878445a031c96ed77047fd0fbc30f42240ec4..ddee7541f67f412bbbf1b9f1b95b02ba4a689293 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -348,7 +348,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -349,7 +349,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -768,7 +768,7 @@ index f6c9bff8ef4e370dcb351490294181282ad156e3..fc0935e5a8be4442735628483aa656fd
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -357,11 +357,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -358,11 +358,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -784,10 +784,10 @@ index f6c9bff8ef4e370dcb351490294181282ad156e3..fc0935e5a8be4442735628483aa656fd
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 70d17e451c9e86373a8e0215a332bf939f65ae53..db16bab1bbce8f9b4635c73d88e291db312e5ece 100644
+index bfa69b2c37f07132f8b31c12d26f4ceb074901a5..a80f9d18bc9e21280500eca695903376b332e7d9 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
@@ -797,10 +797,10 @@ index 70d17e451c9e86373a8e0215a332bf939f65ae53..db16bab1bbce8f9b4635c73d88e291db
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index fc692ba3983781e460e23c5009c7342a67cd123b..9faa44b275f4162a0855e3196f793a468338b16b 100644
+index d3057618f5010d28c35c1cd8afa8fe887932b3fd..f1e73c507f556fd54013c902779c5b63b9ab5048 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3329,6 +3329,14 @@ public final class CraftServer implements Server {
+@@ -3344,6 +3344,14 @@ public final class CraftServer implements Server {
  
      // Paper end
  

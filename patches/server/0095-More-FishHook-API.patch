@@ -5,10 +5,10 @@ Subject: [PATCH] More FishHook API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
-index 90a5f6bd729148f2adc745273536e48d704fcd1e..f11c9135498558cc03933a128fc70690db05fe6a 100644
+index 91497f5e6c07fcf1b05eca6846c51e1a15ed3bc0..d4d959ed82258baa894475142c5b8374613826fb 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/FishingHook.java
-@@ -63,7 +63,7 @@ public class FishingHook extends Projectile {
+@@ -64,7 +64,7 @@ public class FishingHook extends Projectile {
      private int life;
      private int nibble;
      public int timeUntilLured;
@@ -17,7 +17,7 @@ index 90a5f6bd729148f2adc745273536e48d704fcd1e..f11c9135498558cc03933a128fc70690
      private float fishAngle;
      private boolean openWater;
      @Nullable
-@@ -409,6 +409,16 @@ public class FishingHook extends Projectile {
+@@ -410,6 +410,16 @@ public class FishingHook extends Projectile {
                      this.fishAngle = Mth.nextFloat(this.random, this.minLureAngle, this.maxLureAngle);
                      this.timeUntilHooked = Mth.nextInt(this.random, this.minLureTime, this.maxLureTime);
                      // CraftBukkit end

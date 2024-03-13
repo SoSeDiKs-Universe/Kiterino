@@ -5,10 +5,10 @@ Subject: [PATCH] Additional Sign API
 
 
 diff --git a/src/main/java/org/bukkit/block/Sign.java b/src/main/java/org/bukkit/block/Sign.java
-index 94e8f319fe0413a10496d7e5bba70633054765f4..14c69235f9b154707a0db934c2b59493e9781a4d 100644
+index 7983ccb54f5f358dea1ffb530b9cc5bd716fb9b1..60f6316a82f4c14f2827d9b503ad6925fad08dd8 100644
 --- a/src/main/java/org/bukkit/block/Sign.java
 +++ b/src/main/java/org/bukkit/block/Sign.java
-@@ -198,4 +198,20 @@ public interface Sign extends TileState, Colorable {
+@@ -217,4 +217,20 @@ public interface Sign extends TileState, Colorable {
       */
      @NotNull Side getInteractableSideFor(double x, double z);
      // Paper end

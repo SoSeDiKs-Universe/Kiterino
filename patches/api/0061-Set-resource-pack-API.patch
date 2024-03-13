@@ -5,10 +5,10 @@ Subject: [PATCH] Set resource pack API
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 7391b66f3367fc98d9837b173304e8b3010c700c..39ba2515493ac40d6bb82b666c03e8209bd7aa26 100644
+index 5328759d6401ff1ad00bb333aeea66e23be0634d..0d8a511aa6936b18dc145b6a91067caf0aa24c3e 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -3036,5 +3036,17 @@ public final class Bukkit {
+@@ -3052,5 +3052,17 @@ public final class Bukkit {
      public static boolean isHalloweenSeason() {
          return server.isHalloweenSeason();
      }
@@ -27,10 +27,10 @@ index 7391b66f3367fc98d9837b173304e8b3010c700c..39ba2515493ac40d6bb82b666c03e820
      // Kiterino end
  }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 5773d99c6cbe0220d6508f718e8dc7328fbacfff..c3ef953a2ef5bbf5e67753cca100224de440c85b 100644
+index 1ec8119e98700ddcba197d7fd6fdfc7db0abe90a..4367409e8000769aed6dc03d44c38d4376e16244 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2664,5 +2664,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2679,5 +2679,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      default boolean isHalloweenSeason() {
          return getWorlds().get(0).isHalloweenSeason();
      }

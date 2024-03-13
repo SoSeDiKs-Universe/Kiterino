@@ -5,10 +5,10 @@ Subject: [PATCH] Better Impaling
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Mob.java b/src/main/java/net/minecraft/world/entity/Mob.java
-index 94c43de94a7ec7982046cf1e110b8a2230a72b19..f6cea207aa094124f71e93f92c31ba56175cf2fc 100644
+index 1d1688fafc438a5957096118790d44fbd55476bb..cb20fa99e53a3817253e3348d8c02655474df8f0 100644
 --- a/src/main/java/net/minecraft/world/entity/Mob.java
 +++ b/src/main/java/net/minecraft/world/entity/Mob.java
-@@ -1710,6 +1710,12 @@ public abstract class Mob extends LivingEntity implements Targeting {
+@@ -1711,6 +1711,12 @@ public abstract class Mob extends LivingEntity implements Targeting {
  
          if (target instanceof LivingEntity) {
              f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
@@ -22,10 +22,10 @@ index 94c43de94a7ec7982046cf1e110b8a2230a72b19..f6cea207aa094124f71e93f92c31ba56
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
-index ceac478cabcc775527909d4ac7a12fea8a6fed88..6e164efb2cb4f0eb92278ea3a982f43067ec1011 100644
+index ea4f53e1cfe6126f44a5557a2284b6872c199a93..5169273b6feef2d284f220f2d47553cbc9b22efc 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Player.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Player.java
-@@ -1297,6 +1297,12 @@ public abstract class Player extends LivingEntity {
+@@ -1298,6 +1298,12 @@ public abstract class Player extends LivingEntity {
  
                  if (target instanceof LivingEntity) {
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) target).getMobType());
@@ -39,10 +39,10 @@ index ceac478cabcc775527909d4ac7a12fea8a6fed88..6e164efb2cb4f0eb92278ea3a982f430
                      f1 = EnchantmentHelper.getDamageBonus(this.getMainHandItem(), MobType.UNDEFINED);
                  }
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
-index 2e6817fc05fe92615842a29c3e0682306a6b3ec5..a7a8cf0c4097114c2c7cf5a7587db4781677e47a 100644
+index 2bd77524313ae7b32f710e7d197e81a2ddd12965..a59a9e43483a47550f0ce0b7fb2e9d64dabc130b 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownTrident.java
-@@ -129,6 +129,12 @@ public class ThrownTrident extends AbstractArrow {
+@@ -132,6 +132,12 @@ public class ThrownTrident extends AbstractArrow {
              LivingEntity entityliving = (LivingEntity) entity;
  
              f += EnchantmentHelper.getDamageBonus(this.getPickupItemStackOrigin(), entityliving.getMobType());

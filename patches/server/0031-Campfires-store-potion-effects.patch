@@ -5,10 +5,10 @@ Subject: [PATCH] Campfires store potion effects
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-index 0c5bac5d955b1e380103c9b51635010212c6526e..1a8966b1908b2e9bba06aa300c5469c185e02ecb 100644
+index 19af5552e36964996082226b4f77561d7deb99f6..e9e374656c28a6c003204e4c5da3b77f721c2f3d 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ThrownPotion.java
-@@ -120,6 +120,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -121,6 +121,7 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
                  } else {
                      showParticles = this.applySplash(list, hitResult != null && hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null, hitResult); // CraftBukkit - Pass MovingObjectPosition // Paper - More projectile API
                  }
@@ -16,7 +16,7 @@ index 0c5bac5d955b1e380103c9b51635010212c6526e..1a8966b1908b2e9bba06aa300c5469c1
              }
  
              if (showParticles) { // Paper - Fix potions splash events
-@@ -131,6 +132,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
+@@ -132,6 +133,29 @@ public class ThrownPotion extends ThrowableItemProjectile implements ItemSupplie
          }
      }
  

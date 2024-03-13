@@ -5,10 +5,10 @@ Subject: [PATCH] Accept the EULA
 
 
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 7573c12a77797146c51ef2dfe4b2a636df45e21a..3f80ec94282699c647e6e788f0350929b8b17ba9 100644
+index b4a009a1108758110181af3321a91b3ec9cf74dc..2f9c62f10b683643c533d684501ef2e04c0f940f 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -170,6 +170,20 @@ public class Main {
+@@ -174,6 +174,20 @@ public class Main {
                  System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
              }
              // Spigot End
@@ -17,7 +17,7 @@ index 7573c12a77797146c51ef2dfe4b2a636df45e21a..3f80ec94282699c647e6e788f0350929
 +            if (!eula.hasAgreedToEULA()) {
 +                Main.LOGGER.warn("Automatically accepting Mojang's EULA. Please, stop using this Software immediately if you do not agree with this.");
 +                Main.LOGGER.warn("Note: this is a persistent change and will be stored in eula.txt from now on.");
-+                try (java.io.OutputStream outputStream = java.nio.file.Files.newOutputStream(path1)) {
++                try (java.io.OutputStream outputStream = java.nio.file.Files.newOutputStream(path2)) {
 +                    var properties = new java.util.Properties();
 +                    properties.setProperty("eula", "true");
 +                    properties.store(outputStream, null);

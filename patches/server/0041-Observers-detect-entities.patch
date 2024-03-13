@@ -5,10 +5,10 @@ Subject: [PATCH] Observers detect entities
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index fc0935e5a8be4442735628483aa656fdb882a2f8..7a8224f0e6cb706beec3f1c3768c59b1a8c85f06 100644
+index ddee7541f67f412bbbf1b9f1b95b02ba4a689293..f691031700a1248b63d8d1b3e383ac9852edc56b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1320,6 +1320,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -1333,6 +1333,29 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
  
                  //this.level().getProfiler().pop(); // Purpur
              }

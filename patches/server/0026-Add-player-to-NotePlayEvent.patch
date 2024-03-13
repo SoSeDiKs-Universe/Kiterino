@@ -28,10 +28,10 @@ index ac88cb949808752a340637ffcb9d7256b7d09478..abb61fdcf4139c11e37efab1c270405d
          // Paper end - move NotePlayEvent call to fix instrument/note changes
          float f;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index bda2980a79cd2e174ec9cee061c2eedb09aab1b3..ea9a8a4b85de20511bc2c2d4be07843314428dd2 100644
+index 45b5c7c8c9e231ed02f32ff96fc609ee8e8ac2be..9fcf4976a1fad9c2517ebd06279d6973c1d620ac 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -1557,7 +1557,12 @@ public class CraftEventFactory {
+@@ -1558,7 +1558,12 @@ public class CraftEventFactory {
      }
  
      public static NotePlayEvent callNotePlayEvent(Level world, BlockPos pos, NoteBlockInstrument instrument, int note) {

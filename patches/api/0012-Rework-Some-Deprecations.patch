@@ -5,10 +5,10 @@ Subject: [PATCH] Rework Some Deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index f757d3a6d71ffd1693f72585692979465c6a0911..5686c26edbc3c91575a5bee306cf3b53a71906fc 100644
+index 79db344adaae0c1e8613594fa887be2275ba4b9f..7869148da0b6e7157900b2798fffd65deda03fec 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2539,7 +2539,7 @@ public final class Bukkit {
+@@ -2555,7 +2555,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -34,10 +34,10 @@ index dc79c2eaff88d16439da226a64c4d7712c47b63a..379e5b2dd31bf008211b319538e1b7d3
      /**
       * Represents black
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 98308b759907e03b168f7e06704a91925ffcd3fd..55d39fb3add9de5f1221a52be39d75c1f5f4f9f1 100644
+index ce00af9121de7a910aaea4e0685a06d4cf31b4e3..6fdd4b407341a00ec161b0d3d6ae90faf3d92e2f 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
-@@ -227,9 +227,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
+@@ -239,9 +239,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
       * UTC.
       *
       * @return Date of last log-in for this player, or 0
@@ -88,7 +88,7 @@ index c4537080ee1875e984356eee42337a1342f4c9a3..aee52fc50d55d8e7b89d88de18030b4c
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 6dc63bfe85d83a7cff369f06c57ebe0aa04c63a3..e40b376a6c434e8c2a20d3196912496b44d13473 100644
+index 5d22249f7bc98bc88ee798974f481c37807f7c5e..d104a3969475383513ec77413cb5b0ffac3af4bd 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -403,13 +403,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -110,7 +110,7 @@ index 6dc63bfe85d83a7cff369f06c57ebe0aa04c63a3..e40b376a6c434e8c2a20d3196912496b
      public boolean isOnGround();
  
      /**
-@@ -3171,10 +3173,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3195,10 +3197,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale

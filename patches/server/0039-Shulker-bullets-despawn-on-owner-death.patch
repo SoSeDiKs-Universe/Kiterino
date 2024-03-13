@@ -5,10 +5,10 @@ Subject: [PATCH] Shulker bullets despawn on owner death
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java b/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java
-index da0b7ee796c335875914481a5deda5eef5ddd442..78c2c9673116ca5327fb9eaae04adee6379674d6 100644
+index 1c50c870e59c35a39c83a0f136ee5d3c70268763..284369b2538079fb031a89e753cfe45f748b657c 100644
 --- a/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java
 +++ b/src/main/java/net/minecraft/world/entity/projectile/ShulkerBullet.java
-@@ -219,6 +219,15 @@ public class ShulkerBullet extends Projectile {
+@@ -222,6 +222,15 @@ public class ShulkerBullet extends Projectile {
  
          if (!this.level().isClientSide) {
              if (this.finalTarget == null && this.targetId != null) {

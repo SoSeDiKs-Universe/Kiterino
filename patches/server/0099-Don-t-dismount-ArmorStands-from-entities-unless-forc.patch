@@ -5,10 +5,10 @@ Subject: [PATCH] Don't dismount ArmorStands from entities unless forced
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 59e3e2290bffe8646d4924faa72b5ee7f96a1b0f..c5c94f0776fef8e99e935e198ffbb15834afec9a 100644
+index ffe99cff6a7085ba25c9c5569f1444cee4216e31..61058ad493f5638b1bbc969df667ab9195ff20bc 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3797,6 +3797,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3805,6 +3805,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      }
      @Override
      public void stopRiding(boolean suppressCancellation) {

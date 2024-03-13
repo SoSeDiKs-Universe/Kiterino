@@ -5,10 +5,10 @@ Subject: [PATCH] Max stack size API
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 5686c26edbc3c91575a5bee306cf3b53a71906fc..2e8dc647ae7354506de293e6138a42d32d60782c 100644
+index 7869148da0b6e7157900b2798fffd65deda03fec..5042b8d96f812c1536aca8970034f5b7b16a8ad6 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2994,4 +2994,16 @@ public final class Bukkit {
+@@ -3010,4 +3010,16 @@ public final class Bukkit {
          server.clearBlockHighlights();
      }
      // Purpur end
@@ -39,10 +39,10 @@ index 7268a548b625534e1dc143c59593c1bdbfaa70e4..511fafdaca147d37551f5ef598b763ca
      public final Class<?> data;
      private final boolean legacy;
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 15a368e55e3ab03a2dadc4ba2cbbb41f4fb1495e..b906d029c2849952f7ba517dfe906663fd9dd353 100644
+index 8b24089feb853633f29b450aee5dffbf868a5a86..19231084f66547f7b95ce3a13a646fbca30b081f 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2624,4 +2624,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2639,4 +2639,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void clearBlockHighlights();
      // Purpur end

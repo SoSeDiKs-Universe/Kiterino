@@ -5,10 +5,10 @@ Subject: [PATCH] All mobs have default attack damage
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index db16bab1bbce8f9b4635c73d88e291db312e5ece..3389967727eb2d7e93558d44d51ebd1ac4348982 100644
+index a80f9d18bc9e21280500eca695903376b332e7d9..972c15ab70ebbd9cd6c5db3bdd4e1bd1ff618986 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -339,7 +339,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -340,7 +340,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      }
  
      public static AttributeSupplier.Builder createLivingAttributes() {
@@ -17,7 +17,7 @@ index db16bab1bbce8f9b4635c73d88e291db312e5ece..3389967727eb2d7e93558d44d51ebd1a
      }
      public boolean shouldSendAttribute(Attribute attribute) { return true; } // Purpur
  
-@@ -3100,7 +3100,12 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -3108,7 +3108,12 @@ public abstract class LivingEntity extends Entity implements Attackable {
  
      public boolean doHurtTarget(Entity target) {
          this.setLastHurtMob(target);
