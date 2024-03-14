@@ -32,7 +32,7 @@ index 342759848c484607cf18b7e0b2f01462d555dfa0..efa5d60f7032519f5810b4c4df9ce6d5
      public double xo;
      public double yo;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index e346226a1b52083d1db89e41c5963c699caf8af0..5227d2877252eccdc16ff7b13c3f9fb379fa30d6 100644
+index e346226a1b52083d1db89e41c5963c699caf8af0..c02c2d41ba697449b22003b1d8e95b62aa31068d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -241,6 +241,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -98,7 +98,7 @@ index e346226a1b52083d1db89e41c5963c699caf8af0..5227d2877252eccdc16ff7b13c3f9fb3
 +                target.restoreFrom(entity1);
 +                target.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 +                target.setYHeadRot(location.getYaw());
-+                entity1.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
++                entity1.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION, null);
 +                this.setHandle(target);
 +                world.addDuringTeleport(target);
 +            }
