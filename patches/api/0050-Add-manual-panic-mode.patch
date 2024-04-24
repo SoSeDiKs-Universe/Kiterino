@@ -5,14 +5,15 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 0e0b6a351c6eff5b3dd96d4ed474ffc1b077e8e4..2cbd9eef34a2b4137072d80e3d7d9d0815353cb5 100644
+index 1eb3a3cba077e1bf648c75f4589a3d5cc11332a0..a603fd958ba56afab8a288641df7c956a1af79bd 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1393,5 +1393,19 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-      */
+@@ -1442,4 +1442,20 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      @Nullable
      UUID getSpawningPlayerUuid();
+     // Kiterino end - Spawning player API
 +
++    // Kiterino start - Add manual panic mode
 +    /**
 +     * Gets the amount of manually set panic ticks left
 +     *
@@ -26,5 +27,5 @@ index 0e0b6a351c6eff5b3dd96d4ed474ffc1b077e8e4..2cbd9eef34a2b4137072d80e3d7d9d08
 +     * @param ticks ticks
 +     */
 +    void setPanicTicks(int ticks);
-     // Kiterino end
++    // Kiterino end - Add manual panic mode
  }

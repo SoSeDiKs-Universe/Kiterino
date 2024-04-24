@@ -26,10 +26,10 @@ index c2780db29b848506b6c92a681c6a8f74f319100a..d34845452ad8f3a4bf95603a9a00bc0c
              this.playNote(player, state, world, pos);
              player.awardStat(Stats.TUNE_NOTEBLOCK);
 diff --git a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
-index 5f285d190186a2ff5a61d05070593e1d633dd79a..12c5625366f5845b996d8e75d8a9a018e76ec2d7 100644
+index 2630f54d499abbe52798f97c8ea14a8d0bd75e99..c18dfe6bfbc38688c9fc684fa623c750d3581539 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
-@@ -68,6 +68,22 @@ public abstract class StateHolder<O, S> {
+@@ -69,6 +69,22 @@ public abstract class StateHolder<O, S> {
          return iterator.next();
      }
  

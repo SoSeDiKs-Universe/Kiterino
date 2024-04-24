@@ -697,10 +697,10 @@ index 2dce930e691731781a6700610271dd549cf34fe8..7edd16dca725827bd38ba32b0bf6d27d
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 56eddd28429cf42c02d88b8bf79f8b616fa45289..d6926daaee6a1a533b54e1b33d0edf46f28f53f2 100644
+index d41fe931daf03c40ca1d7b9159001d0122d72f0c..4ac931f8da6aff2da383682c656c3bfff51ed085 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-@@ -82,6 +82,13 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
+@@ -89,6 +89,13 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
          });
      }
  
@@ -756,7 +756,7 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..90fb9b576ed74a9063574f7bc3926668
      public void write(FriendlyByteBuf buf) {
          buf.writeVarInt(this.id);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a77878445a031c96ed77047fd0fbc30f42240ec4..ddee7541f67f412bbbf1b9f1b95b02ba4a689293 100644
+index f2c6b52fe7fbb05afa0074684cd195f6ae598f1f..8d974770f304e03b0fed57c1bbc29d8d0a19de02 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -349,7 +349,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -784,7 +784,7 @@ index a77878445a031c96ed77047fd0fbc30f42240ec4..ddee7541f67f412bbbf1b9f1b95b02ba
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index bfa69b2c37f07132f8b31c12d26f4ceb074901a5..a80f9d18bc9e21280500eca695903376b332e7d9 100644
+index d6705dce3bc8c1964184fe425386b3f3c0a8202e..02137d76330b046f88e3a198059debfe5f56c05d 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {

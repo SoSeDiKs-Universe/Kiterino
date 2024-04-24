@@ -5,10 +5,10 @@ Subject: [PATCH] Call BlockDestroyEvent for breakNaturally
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-index f327d1b3cfaf2b7902d5cfc12c88a2af18f68c5a..2d13b50072423c1b1352f5d668baeddf3917e36d 100644
+index 3e5835f42f4df8c7788fdb1eb0124a3612e42d50..d405b25d7d542a46c56084a6e710a735d4121f1c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-@@ -501,9 +501,23 @@ public class CraftBlock implements Block {
+@@ -507,9 +507,23 @@ public class CraftBlock implements Block {
          net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
          boolean result = false;
  
@@ -33,7 +33,7 @@ index f327d1b3cfaf2b7902d5cfc12c88a2af18f68c5a..2d13b50072423c1b1352f5d668baeddf
              // Paper start - improve Block#breanNaturally
              if (triggerEffect) {
                  if (iblockdata.getBlock() instanceof net.minecraft.world.level.block.BaseFireBlock) {
-@@ -512,7 +526,7 @@ public class CraftBlock implements Block {
+@@ -518,7 +532,7 @@ public class CraftBlock implements Block {
                      this.world.levelEvent(net.minecraft.world.level.block.LevelEvent.PARTICLES_DESTROY_BLOCK, this.position, net.minecraft.world.level.block.Block.getId(iblockdata));
                  }
              }

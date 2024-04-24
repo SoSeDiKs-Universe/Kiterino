@@ -5,10 +5,10 @@ Subject: [PATCH] Rework Some Deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 79db344adaae0c1e8613594fa887be2275ba4b9f..7869148da0b6e7157900b2798fffd65deda03fec 100644
+index d1c7a5bff999a54750b4083b4b957b6b094db5d5..13bad7262a7d971734748dc3baffc4ca74287c0c 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2555,7 +2555,7 @@ public final class Bukkit {
+@@ -2561,7 +2561,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -88,7 +88,7 @@ index c4537080ee1875e984356eee42337a1342f4c9a3..aee52fc50d55d8e7b89d88de18030b4c
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 5d22249f7bc98bc88ee798974f481c37807f7c5e..d104a3969475383513ec77413cb5b0ffac3af4bd 100644
+index 8bbbdad40bc6a1932d8f79ec95c0a92037b3dac5..80d3f47f272194b5da7650afb35c1a9ae82a9114 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -403,13 +403,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM

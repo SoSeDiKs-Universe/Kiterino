@@ -5,14 +5,15 @@ Subject: [PATCH] More Sound API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 48088e71c91642058f28caa281babbd4556a9c56..989f2712293629a3725a8330e9f34ff879b7c9c4 100644
+index 73a3d41ab7e8cf9772cf1fc6688bd3b6fc93d687..869ee723e0fbb9403cfa57812f34150e05e8b0b3 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -817,5 +817,32 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
-     default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getKiterinoNbt() {
+@@ -840,4 +840,33 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          return getPersistentData().getOrCreateCompound(org.bukkit.Bukkit.getName());
      }
+     // Kiterino end - Kiterino NBT additions
 +
++    // Kiterino start - More Sound API
 +    /**
 +     * Play a sound at the location of the block.
 +     * <p>
@@ -39,17 +40,18 @@ index 48088e71c91642058f28caa281babbd4556a9c56..989f2712293629a3725a8330e9f34ff8
 +    default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
 +        getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
 +    }
-     // Kiterino end
++    // Kiterino end - More Sound API
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 7375bc56f481dfe3829bed1ebc2651760b647ca9..63cbbe4e99974a1f652b33eb2a0a6e954a8f4fee 100644
+index e6eb00347d30b10dfbbb171ee1ebed965467724b..6365c6d3bbbc0e47b2edaf0073d17ad5f9d72c98 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1279,5 +1279,37 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-             consumer.accept(nbt.getOrCreateCompound(org.bukkit.Bukkit.getName()));
+@@ -1322,4 +1322,38 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
          });
      }
+     // Kiterino end - Kiterino NBT additions
 +
++    // Kiterino start - More Sound API
 +    /**
 +     * Play a sound at the location of the entity.
 +     * <p>
@@ -81,5 +83,5 @@ index 7375bc56f481dfe3829bed1ebc2651760b647ca9..63cbbe4e99974a1f652b33eb2a0a6e95
 +    default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
 +        getWorld().playSound(getLocation(), sound, category, volume, pitch);
 +    }
-     // Kiterino end
++    // Kiterino end - More Sound API
  }

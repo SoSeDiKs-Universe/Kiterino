@@ -5,14 +5,15 @@ Subject: [PATCH] Simple water biome cache
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 624a8643224f77fccb053a45f15347ccb431ce79..bc274f921c2fada8462f0fa6957b88b235fe1605 100644
+index 4157e2072db6c197afd69bb6312d1129db4c3df8..78d2a39c2f041aad037694727b7caea3a01da68c 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -892,5 +892,19 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
-     default org.bukkit.entity.Item dropItemNaturally(@NotNull ItemStack item, @Nullable org.bukkit.util.Consumer<org.bukkit.entity.Item> function) {
+@@ -919,4 +919,20 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          return getWorld().dropItem(getLocation().toCenterLocation(), item, function);
      }
+     // Kiterino end - More item drop API
 +
++    // Kiterino start - Simple water biome cache
 +    /**
 +     * Checks whether this chunk has infinite water
 +     *
@@ -26,5 +27,5 @@ index 624a8643224f77fccb053a45f15347ccb431ce79..bc274f921c2fada8462f0fa6957b88b2
 +     * @return the nearest cached water biome, if present
 +     */
 +    @org.jetbrains.annotations.Nullable Biome getCachedWaterBiome();
-     // Kiterino end
++    // Kiterino end - Simple water biome cache
  }

@@ -5,12 +5,12 @@ Subject: [PATCH] Render Nether maps at dynamic height
 
 
 diff --git a/src/main/java/net/minecraft/world/item/EmptyMapItem.java b/src/main/java/net/minecraft/world/item/EmptyMapItem.java
-index a87f4d82d4f6678b7c060de129997809d5722512..c5d6fcc750a9b4387588ac5cbd6045ac8158c632 100644
+index f581e5eb2bfa6ffa169cbdbc0d7b737a3825e7ae..e20b8458a2b43ad6e3f7bf4053783fb7f1cd1a78 100644
 --- a/src/main/java/net/minecraft/world/item/EmptyMapItem.java
 +++ b/src/main/java/net/minecraft/world/item/EmptyMapItem.java
 @@ -25,6 +25,10 @@ public class EmptyMapItem extends ComplexItem {
              user.awardStat(Stats.ITEM_USED.get(this));
-             user.level().playSound((Player)null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0F, 1.0F);
+             user.level().playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0F, 1.0F);
              ItemStack itemStack2 = MapItem.create(world, user.getBlockX(), user.getBlockZ(), (byte)0, true, false);
 +            // Kiterino start
 +            net.minecraft.nbt.CompoundTag tag = itemStack2.getTag();

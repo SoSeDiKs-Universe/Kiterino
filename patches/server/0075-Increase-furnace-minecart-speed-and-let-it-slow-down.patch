@@ -28,7 +28,7 @@ index aa80b2c30e6545a82e14223d92f187d3e98df35e..4eb359b43cb9bdecdad1aa68afd556e1
                      // due to spending less ticks per powered block on higher speeds (and even skipping blocks)
                      final double basisTicksPerSecond = 10D;
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java b/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java
-index 72da2fa1525356fe5abbe982379e5b2f09920e28..27369c49647cb212eebe96f88771bacc98e72a97 100644
+index 027716d7dca28b4da9fd0d4f75529d2eab612a52..e36c05af317c797e6d105fe76ac6fc8fa569023f 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/MinecartFurnace.java
 @@ -27,6 +27,11 @@ public class MinecartFurnace extends AbstractMinecart {
@@ -47,45 +47,45 @@ index 72da2fa1525356fe5abbe982379e5b2f09920e28..27369c49647cb212eebe96f88771bacc
          super.tick();
          if (!this.level().isClientSide()) {
              if (this.fuel > 0) {
--                --this.fuel;
+-                this.fuel--;
 +                this.fuel = Math.max(0, fuel - 4); // Kiterino - burn fuel 4x faster
              }
  
              if (this.fuel <= 0) {
-@@ -71,7 +76,7 @@ public class MinecartFurnace extends AbstractMinecart {
+@@ -70,7 +75,7 @@ public class MinecartFurnace extends AbstractMinecart {
  
      @Override
      protected double getMaxSpeed() {
--        return (this.isInWater() ? 3.0D : 4.0D) / 20.0D;
+-        return (this.isInWater() ? 3.0 : 4.0) / 20.0;
 +        return this.isInWater() ? 0.2D : 0.6D; // Kiterino
      }
  
      @Override
-@@ -94,6 +99,23 @@ public class MinecartFurnace extends AbstractMinecart {
+@@ -92,6 +97,23 @@ public class MinecartFurnace extends AbstractMinecart {
+             this.xPush = vec3.x / h * i;
              this.zPush = vec3.z / h * i;
          }
- 
++
 +        // Kiterino start
 +        if (storedFuel <= 0 && fuel > 0) {
 +            if (state.is(Blocks.POWERED_RAIL) && !state.getValue(net.minecraft.world.level.block.PoweredRailBlock.POWERED)) {
 +                storedXPush = xPush;
 +                storedZPush = zPush;
-+                storedFuel += fuel;
++                storedFuel = fuel;
 +                fuel = 0;
 +                this.setDeltaMovement(this.getDeltaMovement().multiply(0.4D, 0.0D, 0.4D));
 +            }
 +        } else if (!state.is(Blocks.POWERED_RAIL) || state.getValue(net.minecraft.world.level.block.PoweredRailBlock.POWERED)) {
-+            fuel += storedFuel;
++            fuel = storedFuel;
 +            storedFuel = 0;
 +            xPush = storedXPush;
 +            zPush = storedZPush;
 +        }
 +        // Kiterino end
-+
      }
  
      @Override
-@@ -141,6 +163,11 @@ public class MinecartFurnace extends AbstractMinecart {
+@@ -139,6 +161,11 @@ public class MinecartFurnace extends AbstractMinecart {
          nbt.putDouble("PushX", this.xPush);
          nbt.putDouble("PushZ", this.zPush);
          nbt.putShort("Fuel", (short)this.fuel);
@@ -97,7 +97,7 @@ index 72da2fa1525356fe5abbe982379e5b2f09920e28..27369c49647cb212eebe96f88771bacc
      }
  
      @Override
-@@ -149,6 +176,11 @@ public class MinecartFurnace extends AbstractMinecart {
+@@ -147,6 +174,11 @@ public class MinecartFurnace extends AbstractMinecart {
          this.xPush = nbt.getDouble("PushX");
          this.zPush = nbt.getDouble("PushZ");
          this.fuel = nbt.getShort("Fuel");

@@ -5,7 +5,7 @@ Subject: [PATCH] Allow force sleeping
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 36b7686fdfeaab13cb1be9610ddc76fc70f6f6e5..82e8c4aa56f348d46c910052fe697096cb0895a4 100644
+index 305b90d10a499e9731f5178433fb10207e428091..fa1ebfe3270ab138ae3598af67931b51f055075f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -547,7 +547,7 @@ public class ServerPlayer extends Player {
@@ -18,7 +18,7 @@ index 36b7686fdfeaab13cb1be9610ddc76fc70f6f6e5..82e8c4aa56f348d46c910052fe697096
          }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 972c15ab70ebbd9cd6c5db3bdd4e1bd1ff618986..09c0c00915adca0afeb4bebf5ecc1e9ddcda26ab 100644
+index b8aa36986aac691f3334bb57c3a353f4cea77f6d..93fa6f20fae144dc36a8bbe3e4a06a1bda8ccae2 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -3153,7 +3153,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -40,10 +40,10 @@ index 972c15ab70ebbd9cd6c5db3bdd4e1bd1ff618986..09c0c00915adca0afeb4bebf5ecc1e9d
              return this.level().getBlockState(blockposition).getBlock() instanceof BedBlock;
          }).orElse(false);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 988cc1290200de629a4c24cc67a03e69c2fcc727..1a07d4defdc2c8e23e457ce908a24cc14c98dc22 100644
+index fb2d05e43df3bfb72b1f6e325736dd3cbc6c3096..557332a12d5fbac17369a5475177822b998ddbc9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1380,7 +1380,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1382,7 +1382,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          if (dismount) entity.stopRiding(); // Paper - Teleport API
  
          // SPIGOT-5509: Wakeup, similar to riding

@@ -5,21 +5,26 @@ Subject: [PATCH] Recalculate melee target location when lost
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java
-index 7d36cec7c45e6ba8dfa97263e33995fdd007db37..1bbcc8effb0f2ecfc39d0d37039b47fd63dd4f1d 100644
+index d59e0044db03ba30d5bab9a8c126b597b7659015..aa531e4bc2ad11c8eb2f5566e794e7311e37937a 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/MeleeAttackGoal.java
-@@ -60,7 +60,13 @@ public class MeleeAttackGoal extends Goal {
+@@ -56,9 +56,16 @@ public class MeleeAttackGoal extends Goal {
          } else if (!livingEntity.isAlive()) {
              return false;
-         } else if (!this.followingTargetEvenIfNotSeen) {
--            return !this.mob.getNavigation().isDone();
-+            boolean idling = this.mob.getNavigation().isDone();
-+            if (!idling) return true;
-+            if (this.mob.distanceTo(this.mob.getTarget()) < 10) {
-+                this.path = this.mob.getNavigation().createPath(this.mob.getTarget(), 0);
-+                this.mob.getNavigation().moveTo(this.path, this.speedModifier);
-+            }
-+            return false;
-         } else if (!this.mob.isWithinRestriction(livingEntity.blockPosition())) {
-             return false;
          } else {
+-            return !this.followingTargetEvenIfNotSeen
+-                ? !this.mob.getNavigation().isDone()
+-                : this.mob.isWithinRestriction(livingEntity.blockPosition())
++            if (!this.followingTargetEvenIfNotSeen) {
++                boolean idling = this.mob.getNavigation().isDone();
++                if (!idling) return true;
++                if (this.mob.distanceTo(this.mob.getTarget()) < 10) {
++                    this.path = this.mob.getNavigation().createPath(this.mob.getTarget(), 0);
++                    this.mob.getNavigation().moveTo(this.path, this.speedModifier);
++                }
++                return false;
++            }
++            return this.mob.isWithinRestriction(livingEntity.blockPosition())
+                     && (!(livingEntity instanceof Player) || !livingEntity.isSpectator() && !((Player)livingEntity).isCreative());
+         }
+     }

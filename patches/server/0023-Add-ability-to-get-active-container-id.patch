@@ -5,10 +5,10 @@ Subject: [PATCH] Add ability to get active container id
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index f8f5aa602853f420d527fa5e4706d47eafddd1c0..0693832cde3b0a47fa3706205862a15359980cca 100644
+index 863984a69c0ccd31e9b48145bb3a9b3f910de89c..676ed06e58e002563ebc8ceb1c0a46474f6b4a17 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -884,4 +884,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -880,4 +880,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      public org.bukkit.entity.Entity copy(Location location) {
          throw new UnsupportedOperationException("Cannot copy human entities");
      }

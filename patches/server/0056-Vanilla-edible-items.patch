@@ -5,7 +5,7 @@ Subject: [PATCH] Vanilla edible items
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index 4dd799d6fb1969f7bdfb8112431515b7477d7c9d..b353a5d669021b53fc5fd02c8209fdddc29b4534 100644
+index 5aaa99e26486e0c097643e0608d2bbe304f85231..251803464e085f06cafff5b1788edd3358d699f1 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
 @@ -68,7 +68,7 @@ public class Item implements FeatureElement, ItemLike {
@@ -17,7 +17,7 @@ index 4dd799d6fb1969f7bdfb8112431515b7477d7c9d..b353a5d669021b53fc5fd02c8209fddd
      private final FeatureFlagSet requiredFeatures;
  
      public static int getId(Item item) {
-@@ -354,6 +354,12 @@ public class Item implements FeatureElement, ItemLike {
+@@ -353,6 +353,12 @@ public class Item implements FeatureElement, ItemLike {
          return this.foodProperties;
      }
  

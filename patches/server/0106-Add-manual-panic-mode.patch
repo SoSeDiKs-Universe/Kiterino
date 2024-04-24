@@ -5,7 +5,7 @@ Subject: [PATCH] Add manual panic mode
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index efa5d60f7032519f5810b4c4df9ce6d5ceaadeab..0192f18dcd9bd26009dae1915f90cc8d5306db95 100644
+index 8acf8a2a95d9ca6ef1de04b6ec6265e80c39ba04..21f7cf0fa8ba3ff418bf2409f7cb5141cd83232b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -342,6 +342,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -30,20 +30,19 @@ index efa5d60f7032519f5810b4c4df9ce6d5ceaadeab..0192f18dcd9bd26009dae1915f90cc8d
              this.lavaHurt();
              this.fallDistance *= 0.5F;
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
-index eee92ab1b4072a5b72559dd21dc590cce7d8bca9..7a728a08cda941bb7d873af526a1d48d032dceb8 100644
+index 8064b5a69de2a101c9fccb2b186ce3e074521e08..d5f9f5ca658e6e8c0de9502b5a1bc7b3548f7412 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
-@@ -24,7 +24,7 @@ public class AnimalPanic extends Behavior<PathfinderMob> {
-     private static final int PANIC_DISTANCE_HORIZONTAL = 5;
+@@ -25,6 +25,7 @@ public class AnimalPanic extends Behavior<PathfinderMob> {
      private static final int PANIC_DISTANCE_VERTICAL = 4;
-     private static final Predicate<PathfinderMob> DEFAULT_SHOULD_PANIC_PREDICATE = (entity) -> {
--        return entity.getLastHurtByMob() != null || entity.isFreezing() || entity.isOnFire();
-+        return entity.getLastHurtByMob() != null || entity.isFreezing() || entity.isOnFire() || entity.isForcePanicking(); // Kiterino - manual panic
-     };
+     private static final Predicate<PathfinderMob> DEFAULT_SHOULD_PANIC_PREDICATE = entity -> entity.getLastHurtByMob() != null
+             || entity.isFreezing()
++            || entity.isForcePanicking() // Kiterino - manual panic
+             || entity.isOnFire();
      private final float speedMultiplier;
      private final Predicate<PathfinderMob> shouldPanic;
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
-index 3263c816e82285ff943270be21049432ac7f55e9..da2cc383231175c7d0739f5a7169219bc8875a37 100644
+index 7d1df6fbb8ef0f51df06a50cad9a0df366c76dea..787a48eaa019b34f3b1eb8db0adb1055106983ce 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
 @@ -45,7 +45,7 @@ public class PanicGoal extends Goal {
@@ -56,10 +55,10 @@ index 3263c816e82285ff943270be21049432ac7f55e9..da2cc383231175c7d0739f5a7169219b
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 5227d2877252eccdc16ff7b13c3f9fb379fa30d6..78830d4da3890d33e2881d0da5edf36dc52d85cc 100644
+index aba35a47e07ab880398aa1a0ec08c780f22ae485..d27aaca91f091b4308f4888ebe459bb33fe1f86f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1372,5 +1372,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1414,5 +1414,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      public UUID getSpawningPlayerUuid() {
          return getHandle().spawningPlayerUuid;
      }

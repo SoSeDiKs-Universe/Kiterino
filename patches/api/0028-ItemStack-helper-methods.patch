@@ -5,15 +5,15 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index e713a5cd497b8cde8a3f37e084a24bbae04423e5..66c70dacbea2175a98f00f521e9c69232ab6b7a9 100644
+index fecc729ea90589a79b98030236a96bcd2094534c..e0afe7cc12a1de64ffa1db2cf01d52f2ee81e625 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1803,4 +1803,81 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1833,4 +1833,81 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return subtractId() != null;
      }
-     // Kiterino end
+     // Kiterino end - Kiterino NBT additions
 +
-+    // Kiterino start
++    // Kiterino start - ItemStack helper methods
 +    /**
 +     * Returns clone of this item with colored
 +     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
@@ -88,5 +88,5 @@ index e713a5cd497b8cde8a3f37e084a24bbae04423e5..66c70dacbea2175a98f00f521e9c6923
 +    public static boolean isType(@Nullable ItemStack item, @NotNull Material type) {
 +        return item != null && item.getType() == type;
 +    }
-+    // Kiterino end
++    // Kiterino end - ItemStack helper methods
  }

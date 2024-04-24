@@ -5,20 +5,22 @@ Subject: [PATCH] Allow explosions underwater (/fluids)
 
 
 diff --git a/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java b/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
-index f529f5d0f28533ec89f3ee712e59745991d068ee..d77e2f92a2e4c0d73224f93876a209359bd01f33 100644
+index 5b93c038331c1750260a42726f5bfb97998d93a9..b2373a2f20c3e26af2161e284fd943a616b8f7dc 100644
 --- a/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
 +++ b/src/main/java/net/minecraft/world/level/ExplosionDamageCalculator.java
-@@ -9,7 +9,12 @@ import net.minecraft.world.phys.Vec3;
+@@ -9,9 +9,14 @@ import net.minecraft.world.phys.Vec3;
  
  public class ExplosionDamageCalculator {
      public Optional<Float> getBlockExplosionResistance(Explosion explosion, BlockGetter world, BlockPos pos, BlockState blockState, FluidState fluidState) {
--        return blockState.isAir() && fluidState.isEmpty() ? Optional.empty() : Optional.of(Math.max(blockState.getBlock().getExplosionResistance(), fluidState.getExplosionResistance()));
-+        // Kiterino start
-+        //return blockState.isAir() && fluidState.isEmpty() ? Optional.empty() : Optional.of(Math.max(blockState.getBlock().getExplosionResistance(), fluidState.getExplosionResistance()));
+-        return blockState.isAir() && fluidState.isEmpty()
++        // Kiterino start - Allow explosions underwater (/fluids)
 +        if (blockState.isAir()) return Optional.empty();
 +        if (!fluidState.isEmpty()) return Optional.empty();
 +        return Optional.of(blockState.getBlock().getExplosionResistance());
-+        // Kiterino end
++        /*return blockState.isAir() && fluidState.isEmpty()
+             ? Optional.empty()
+             : Optional.of(Math.max(blockState.getBlock().getExplosionResistance(), fluidState.getExplosionResistance()));
++         */ // Kiterino end - Allow explosions underwater (/fluids)
      }
  
      public boolean shouldBlockExplode(Explosion explosion, BlockGetter world, BlockPos pos, BlockState state, float power) {

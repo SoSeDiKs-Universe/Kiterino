@@ -5,10 +5,10 @@ Subject: [PATCH] Parchment - Expose NMS ordinals
 
 
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 9a65c4f614a6c358d74491794d7b25172a00bc11..8a1330e998729024cf57d1247b7d4e6d181ef283 100644
+index b9a07b2db8a3dcdb72c33c8ceda129921b2c02f1..884834989947c77b745e2fad5de2d317503fef00 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -300,4 +300,13 @@ public interface UnsafeValues {
+@@ -302,4 +302,13 @@ public interface UnsafeValues {
      // Paper end - lifecycle event API
  
      @NotNull java.util.List<net.kyori.adventure.text.Component> computeTooltipLines(@NotNull ItemStack itemStack, @NotNull io.papermc.paper.inventory.tooltip.TooltipContext tooltipContext, @Nullable org.bukkit.entity.Player player); // Paper - expose itemstack tooltip lines

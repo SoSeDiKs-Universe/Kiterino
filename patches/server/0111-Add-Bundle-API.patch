@@ -5,21 +5,23 @@ Subject: [PATCH] Add Bundle API
 
 
 diff --git a/src/main/java/net/minecraft/world/item/BundleItem.java b/src/main/java/net/minecraft/world/item/BundleItem.java
-index ac0bc87f60c4e1562d1301522183e449558d42f8..2b4b71fa612d61b63355ed706d0eb8c58fcba958 100644
+index c4c966c555407b7146053187e2ed16cfb99a2dc9..47413e1f39dab6203700d41fae74af8822f058ea 100644
 --- a/src/main/java/net/minecraft/world/item/BundleItem.java
 +++ b/src/main/java/net/minecraft/world/item/BundleItem.java
-@@ -48,10 +48,17 @@ public class BundleItem extends Item {
+@@ -46,9 +46,18 @@ public class BundleItem extends Item {
+             ItemStack itemStack = slot.getItem();
              if (itemStack.isEmpty()) {
                  this.playRemoveOneSound(player);
-                 removeOne(stack).ifPresent((removedStack) -> {
+-                removeOne(stack).ifPresent(removedStack -> add(stack, slot.safeInsert(removedStack)));
++                removeOne(stack).ifPresent(removedStack -> {
 +                    // Kiterino start
 +                    if (!new me.sosedik.kiterino.event.player.PlayerRemovesItemFromBundleEvent(((ServerPlayer) player).getBukkitEntity(), stack.asBukkitMirror(), removedStack.asBukkitMirror(), slot.getContainerSlot(), false).callEvent()) {
 +                        add(stack, itemStack);
 +                        return;
 +                    }
 +                    // Kiterino end
-                     add(stack, slot.safeInsert(removedStack));
-                 });
++                    add(stack, slot.safeInsert(removedStack));
++                });
              } else if (itemStack.getItem().canFitInsideContainerItems()) {
 -                int i = (64 - getContentWeight(stack)) / getWeight(itemStack);
 +                if (!new me.sosedik.kiterino.event.player.PlayerPutsItemInBundleEvent(((ServerPlayer) player).getBukkitEntity(), stack.asBukkitMirror(), itemStack.asBukkitMirror(), slot.getContainerSlot(), false).callEvent()) return true; // Kiterino
@@ -27,10 +29,10 @@ index ac0bc87f60c4e1562d1301522183e449558d42f8..2b4b71fa612d61b63355ed706d0eb8c5
                  int j = add(stack, slot.safeTake(itemStack.getCount(), Math.max(0, i), player)); // Paper - prevent item addition on overfilled bundles - safeTake will yield EMPTY for amount == 0.
                  if (j > 0) {
                      this.playInsertSound(player);
-@@ -67,10 +74,17 @@ public class BundleItem extends Item {
+@@ -66,10 +75,17 @@ public class BundleItem extends Item {
          if (clickType == ClickAction.SECONDARY && slot.allowModification(player)) {
              if (otherStack.isEmpty()) {
-                 removeOne(stack).ifPresent((itemStack) -> {
+                 removeOne(stack).ifPresent(itemStack -> {
 +                    // Kiterino start
 +                    if (!new me.sosedik.kiterino.event.player.PlayerRemovesItemFromBundleEvent(((ServerPlayer) player).getBukkitEntity(), stack.asBukkitMirror(), itemStack.asBukkitMirror(), slot.getContainerSlot(), true).callEvent()) {
 +                        add(stack, itemStack);
@@ -45,7 +47,7 @@ index ac0bc87f60c4e1562d1301522183e449558d42f8..2b4b71fa612d61b63355ed706d0eb8c5
                  int i = add(stack, otherStack);
                  if (i > 0) {
                      this.playInsertSound(player);
-@@ -87,6 +101,12 @@ public class BundleItem extends Item {
+@@ -86,6 +102,12 @@ public class BundleItem extends Item {
      @Override
      public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
          ItemStack itemStack = user.getItemInHand(hand);
@@ -58,7 +60,7 @@ index ac0bc87f60c4e1562d1301522183e449558d42f8..2b4b71fa612d61b63355ed706d0eb8c5
          if (dropContents(itemStack, user)) {
              this.playDropContentsSound(user);
              user.awardStat(Stats.ITEM_USED.get(this));
-@@ -119,7 +139,7 @@ public class BundleItem extends Item {
+@@ -118,7 +140,7 @@ public class BundleItem extends Item {
              }
  
              int i = getContentWeight(bundle);
@@ -67,7 +69,7 @@ index ac0bc87f60c4e1562d1301522183e449558d42f8..2b4b71fa612d61b63355ed706d0eb8c5
              int k = Math.min(stack.getCount(), (64 - i) / j);
              if (k <= 0) { // Paper - prevent item addition on overfilled bundles
                  return 0;
-@@ -168,9 +188,19 @@ public class BundleItem extends Item {
+@@ -171,8 +193,18 @@ public class BundleItem extends Item {
          }
      }
  
@@ -82,9 +84,8 @@ index ac0bc87f60c4e1562d1301522183e449558d42f8..2b4b71fa612d61b63355ed706d0eb8c5
 +    // Kiterino end
 +
      private static int getContentWeight(ItemStack stack) {
-         return getContents(stack).mapToInt((itemStack) -> {
--            return getWeight(itemStack) * itemStack.getCount();
-+            return getWeight(stack, itemStack) * itemStack.getCount(); // Kiterino
-         }).sum();
+-        return getContents(stack).mapToInt(itemStack -> getWeight(itemStack) * itemStack.getCount()).sum();
++        return getContents(stack).mapToInt(itemStack -> getWeight(stack, itemStack) * itemStack.getCount()).sum(); // Kiterino
      }
  
+     private static Optional<ItemStack> removeOne(ItemStack stack) {

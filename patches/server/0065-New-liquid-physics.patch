@@ -27,27 +27,27 @@ index 7e9fabd90bd5824a4b3607af979a6f3e1081f472..2e88e55e6cd9f8138103f1bc0726a645
  
                          flag = true;
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index 82a048c01505ad76f3818710f531d448c5974c90..2c4f9d584d67c0e4ecea381b203b318854c35e00 100644
+index e614946f11b48e11e3c0d34fa7ad43a1167a14cf..d72112f4f864a35421a395adda9cdeed3cd23b05 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
-@@ -81,7 +81,7 @@ public class Blocks {
-     public static final Block DARK_OAK_SAPLING = register("dark_oak_sapling", new SaplingBlock(TreeGrower.DARK_OAK, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
-     public static final Block MANGROVE_PROPAGULE = register("mangrove_propagule", new MangrovePropaguleBlock(TreeGrower.MANGROVE, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
-     public static final Block BEDROCK = register("bedrock", new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(Blocks::never)));
--    public static final Block WATER = register("water", new LiquidBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
-+    public static final Block WATER = register("water", new LiquidBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F).pushReaction(PushReaction.PUSH_ONLY).noLootTable().liquid().sound(SoundType.EMPTY))); // Kiterino - pushable water
-     public static final Block LAVA = register("lava", new LiquidBlock(Fluids.LAVA, BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().randomTicks().strength(100.0F).lightLevel((state) -> {
-         return 15;
-     }).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
+@@ -346,7 +346,7 @@ public class Blocks {
+                 .replaceable()
+                 .noCollission()
+                 .strength(100.0F)
+-                .pushReaction(PushReaction.DESTROY)
++                .pushReaction(PushReaction.PUSH_ONLY) // Kiterino - pushable water
+                 .noLootTable()
+                 .liquid()
+                 .sound(SoundType.EMPTY)
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
-index be74adc86f0ca467f3b59e7b57fd47a8f381d86e..3c4e7e8df6a90a59354d7474ee2d6c9df515fb38 100644
+index be74adc86f0ca467f3b59e7b57fd47a8f381d86e..052c49bd53f96fc2f1ffe7167d47dbc27b06e0eb 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonBaseBlock.java
 @@ -312,6 +312,18 @@ public class PistonBaseBlock extends DirectionalBlock {
      }
  
      public static boolean isPushable(BlockState state, Level world, BlockPos pos, Direction direction, boolean canBreak, Direction pistonDir) {
-+        // Kiterino start
++        // Kiterino start - New liquid physics
 +        net.minecraft.world.level.material.FluidState fluidState = state.getFluidState();
 +        if (!fluidState.isEmpty() && fluidState.isSourceOfType(net.minecraft.world.level.material.Fluids.WATER)) {
 +            BlockPos nextBlockPos = pos.relative(direction);
@@ -58,7 +58,7 @@ index be74adc86f0ca467f3b59e7b57fd47a8f381d86e..3c4e7e8df6a90a59354d7474ee2d6c9d
 +                return false;
 +            }
 +        }
-+        // Kiterino end
++        // Kiterino end - New liquid physics
          if (pos.getY() >= world.getMinBuildHeight() && pos.getY() <= world.getMaxBuildHeight() - 1 && world.getWorldBorder().isWithinBounds(pos)) {
              if (state.isAir()) {
                  return true;
@@ -108,7 +108,7 @@ index be74adc86f0ca467f3b59e7b57fd47a8f381d86e..3c4e7e8df6a90a59354d7474ee2d6c9d
              int j;
              BlockState iblockdata1;
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
-index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f461e0a94f 100644
+index 72c7179ea7743c67f2489573c0e886f20871fe60..3fade97db4f20cad5b6173ef017399761135ce74 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/SpringFeature.java
 @@ -69,7 +69,26 @@ public class SpringFeature extends Feature<SpringConfiguration> {
@@ -137,10 +137,10 @@ index 1d4c3d6e51db8ba5ef77661f54c086accbb80c15..5a9790ecd8bd7c0c810869dc649093f4
 +                    worldGenLevel.setBlock(blockPos, springState, 2);
 +                    // Kiterino end
                      worldGenLevel.scheduleTick(blockPos, springConfiguration.state.getType(), 0);
-                     ++i;
+                     i++;
                  }
 diff --git a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
-index 0fe597d32a0e15ea67b32925c1a62e8c143ff81d..1ace2696fb822e38eda5eb5919c520548d1af882 100644
+index 0fe597d32a0e15ea67b32925c1a62e8c143ff81d..694e00fd3a9561e461033395f24258a61978a18d 100644
 --- a/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/FlowingFluid.java
 @@ -227,7 +227,7 @@ public abstract class FlowingFluid extends Fluid {
@@ -439,15 +439,15 @@ index 0fe597d32a0e15ea67b32925c1a62e8c143ff81d..1ace2696fb822e38eda5eb5919c52054
  
      protected int getSpreadDelay(Level world, BlockPos pos, FluidState oldState, FluidState newState) {
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-index c664fd77dd865037293a3e86699fd1fa6b703882..b84c8a4db9383c448ab8f576bca3cb6bd053ee13 100644
+index 9dcdb2f4001115db0c26fdbf86531dbe6098485d..5501df4f547ddbed2969aa42bd3558ccb92144b5 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-@@ -61,9 +61,32 @@ public abstract class WaterFluid extends FlowingFluid {
+@@ -77,9 +77,32 @@ public abstract class WaterFluid extends FlowingFluid {
  
      @Override
      protected boolean canConvertToSource(Level world) {
 -        return world.getGameRules().getBoolean(GameRules.RULE_WATER_SOURCE_CONVERSION);
-+        return false && world.getGameRules().getBoolean(GameRules.RULE_WATER_SOURCE_CONVERSION); // Kiterino
++        return false && world.getGameRules().getBoolean(GameRules.RULE_WATER_SOURCE_CONVERSION); // Kiterino - Don't convert to source
      }
  
 +    // Kiterino start

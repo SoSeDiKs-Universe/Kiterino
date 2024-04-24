@@ -5,7 +5,7 @@ Subject: [PATCH] Max stack size API
 
 
 diff --git a/src/main/java/net/minecraft/world/item/Item.java b/src/main/java/net/minecraft/world/item/Item.java
-index c072e3e9742f733aad0d13833fb700c42ca1c356..4dd799d6fb1969f7bdfb8112431515b7477d7c9d 100644
+index 55b5f27dd5a98cc0b3ba21088f69678cbe5f7cd7..5aaa99e26486e0c097643e0608d2bbe304f85231 100644
 --- a/src/main/java/net/minecraft/world/item/Item.java
 +++ b/src/main/java/net/minecraft/world/item/Item.java
 @@ -60,7 +60,7 @@ public class Item implements FeatureElement, ItemLike {
@@ -17,7 +17,7 @@ index c072e3e9742f733aad0d13833fb700c42ca1c356..4dd799d6fb1969f7bdfb8112431515b7
      private final int maxDamage;
      private final boolean isFireResistant;
      @Nullable
-@@ -156,6 +156,12 @@ public class Item implements FeatureElement, ItemLike {
+@@ -153,6 +153,12 @@ public class Item implements FeatureElement, ItemLike {
          return this.maxStackSize;
      }
  

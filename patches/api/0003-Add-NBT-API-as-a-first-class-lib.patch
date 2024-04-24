@@ -5,27 +5,27 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index fdea23beb4aee86e7080d54aa7d4ff74b0e9cf69..c8aa1a9442acfb94d72428390f063df56a165de0 100644
+index 9a322281a54cc6854e901772e9235a262498ffc9..d33f816d7a67fadf61ef02cb58af2205ef01b94a 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -52,6 +52,7 @@ dependencies {
      api("org.apache.logging.log4j:log4j-api:$log4jVersion")
      api("org.slf4j:slf4j-api:$slf4jVersion")
      api("io.sentry:sentry:5.4.0") // Pufferfish
-+    api("de.tr7zw:item-nbt-api:2.12.2") // Kiterino
++    api("de.tr7zw:item-nbt-api:2.12.4-SNAPSHOT") // Kiterino - Add NBT-API as a first-class lib
  
-     implementation("org.ow2.asm:asm:9.5")
-     implementation("org.ow2.asm:asm-commons:9.5")
+     implementation("org.ow2.asm:asm:9.7")
+     implementation("org.ow2.asm:asm-commons:9.7")
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 38cf77e32b76bc7d9db7523f7f21427ebb72f913..c5f7bb80deb581f8f7c9bf26c0ceb7d788688842 100644
+index 8a842840e1a2652a6356d4a56e4749a5ba36e902..94d472341cae07014f0fc81a50e6dc1ce85bb46f 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -796,4 +796,16 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -816,4 +816,16 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
      }
      // Paper end - destroy speed API
 +
-+    // Kiterino start
++    // Kiterino start - Add NBT-API as a first-class lib
 +    /**
 +     * Returns a custom tag container of this block.
 +     * <p>Block's custom data is stored within its {@link Chunk}'s persistent nbt data.
@@ -35,10 +35,10 @@ index 38cf77e32b76bc7d9db7523f7f21427ebb72f913..c5f7bb80deb581f8f7c9bf26c0ceb7d7
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTCompound getPersistentData() {
 +        return new de.tr7zw.changeme.nbtapi.NBTBlock(this).getData();
 +    }
-+    // Kiterino end
++    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/block/TileState.java b/src/main/java/org/bukkit/block/TileState.java
-index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..92ee8d4b4252dd018f49b862fa2dd2026f7e869e 100644
+index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..d33bcd7720f7abbb91e39887c2d97a5494b6084d 100644
 --- a/src/main/java/org/bukkit/block/TileState.java
 +++ b/src/main/java/org/bukkit/block/TileState.java
 @@ -50,4 +50,77 @@ public interface TileState extends BlockState, PersistentDataHolder {
@@ -46,7 +46,7 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..92ee8d4b4252dd018f49b862fa2dd202
      boolean isSnapshot();
      // Paper end
 +
-+    // Kiterino start
++    // Kiterino start - Add NBT-API as a first-class lib
 +    /**
 +     * Reads nbt data of this tile state
 +     *
@@ -117,18 +117,18 @@ index 5c8517c5bcae10161952c104b6a4ff7c713bcdbd..92ee8d4b4252dd018f49b862fa2dd202
 +    default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
 +        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
 +    }
-+    // Kiterino end
++    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index a36fc32dd83339b6939cb4046538ec6285042397..b43efc0be59e05508c87085f05118a88d3559efd 100644
+index 706096924ffd3b578866693e2937de4182fad554..54ce1b3a9fc80a173403959d9a54923d8de20ca7 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1155,4 +1155,77 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1195,4 +1195,77 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end
 +
-+    // Kiterino start
++    // Kiterino start - Add NBT-API as a first-class lib
 +    /**
 +     * Reads nbt data of this entity
 +     *
@@ -199,18 +199,18 @@ index a36fc32dd83339b6939cb4046538ec6285042397..b43efc0be59e05508c87085f05118a88
 +    default void modifyPersistentData(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteNBT> consumer) {
 +        de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
 +    }
-+    // Kiterino end
++    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 54dd0bd043a37f6519fc8a318856a4825d389669..0f346bceccedd4d5e7c5df7a0f8f65fc0fad44fb 100644
+index 591759aef6c7c3333cbdab596c6619af9185c3c2..57c468684b89906a13be1a5768210c137eed5fed 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1676,4 +1676,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1704,4 +1704,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return Bukkit.getItemFactory().getHoverLines(this, advanced);
      }
      // Purpur end
 +
-+    // Kiterino start
++    // Kiterino start - Add NBT-API as a first-class lib
 +    /**
 +     * Reads nbt data of this item.
 +     * <p>Note: this <b>will copy the item</b>, but allows context-free access to the data.
@@ -260,10 +260,10 @@ index 54dd0bd043a37f6519fc8a318856a4825d389669..0f346bceccedd4d5e7c5df7a0f8f65fc
 +    public void modifyNbt(@NotNull java.util.function.Consumer<de.tr7zw.changeme.nbtapi.iface.@NotNull ReadWriteItemNBT> consumer) {
 +        de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
 +    }
-+    // Kiterino end
++    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index decf3b1949d4653a9fb01684b93ff91048137076..158b13e02f17fe9608171f1faae6a7a43aa6739d 100644
+index decf3b1949d4653a9fb01684b93ff91048137076..22699dd02a38516fba5e47a329a9e5ae5d82b51d 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 @@ -219,4 +219,15 @@ public interface PersistentDataContainer {
@@ -271,7 +271,7 @@ index decf3b1949d4653a9fb01684b93ff91048137076..158b13e02f17fe9608171f1faae6a7a4
      }
      // Paper end - byte array serialization
 +
-+    // Kiterino start
++    // Kiterino start - Add NBT-API as a first-class lib
 +    /**
 +     * Returns a custom tag container.
 +     *
@@ -280,17 +280,17 @@ index decf3b1949d4653a9fb01684b93ff91048137076..158b13e02f17fe9608171f1faae6a7a4
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
 +        return new de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer(this);
 +    }
-+    // Kiterino end
++    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-index 80b277cc57f092f04fbf7810ac78d250b207b775..3bba12d6855119ceb02d2a0ed96833a0ce41280a 100644
+index 80b277cc57f092f04fbf7810ac78d250b207b775..e245767bfe2d61118059b5c1a974cbfbab1c9d77 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 @@ -20,4 +20,15 @@ public interface PersistentDataHolder {
      @NotNull
      PersistentDataContainer getPersistentDataContainer();
  
-+    // Kiterino start
++    // Kiterino start - Add NBT-API as a first-class lib
 +    /**
 +     * Returns a custom tag container.
 +     *
@@ -299,6 +299,6 @@ index 80b277cc57f092f04fbf7810ac78d250b207b775..3bba12d6855119ceb02d2a0ed96833a0
 +    default @NotNull de.tr7zw.changeme.nbtapi.NBTPersistentDataContainer getPersistentData() {
 +        return getPersistentDataContainer().getPersistentData();
 +    }
-+    // Kiterino end
++    // Kiterino end - Add NBT-API as a first-class lib
 +
  }

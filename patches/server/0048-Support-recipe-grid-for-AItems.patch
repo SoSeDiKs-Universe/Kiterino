@@ -5,7 +5,7 @@ Subject: [PATCH] Support recipe grid for AItems
 
 
 diff --git a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
-index 2a2f8327a5bd3983a3a13fd663beb98906f27312..951b8bc1011fbf8718454e3ca96658db9e404020 100644
+index 2a2f8327a5bd3983a3a13fd663beb98906f27312..580460f2caf07b085d30e32faf00d7049e9d2a9f 100644
 --- a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
 +++ b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
 @@ -15,7 +15,7 @@ public abstract class RecipeBookExactChoiceRecipe<C extends Container> implement
@@ -13,12 +13,12 @@ index 2a2f8327a5bd3983a3a13fd663beb98906f27312..951b8bc1011fbf8718454e3ca96658db
          }
          for (final Ingredient ingredient : this.getIngredients()) {
 -            if (!ingredient.isEmpty() && ingredient.exact) {
-+            if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino
++            if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino - Support recipe grid for AItems
                  this.hasExactIngredients = true;
                  return;
              }
 diff --git a/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java b/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
-index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..64f1a6c2858cf19c6318acffb49a8512f55f09fa 100644
+index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..449266921e8066f041cef69b6941385d760e5fd1 100644
 --- a/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
 +++ b/src/main/java/io/papermc/paper/inventory/recipe/StackedContentsExtraMap.java
 @@ -34,7 +34,7 @@ public final class StackedContentsExtraMap {
@@ -26,7 +26,7 @@ index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..64f1a6c2858cf19c6318acffb49a8512
          if (recipe.hasExactIngredients()) {
              for (final Ingredient ingredient : recipe.getIngredients()) {
 -                if (!ingredient.isEmpty() && ingredient.exact) {
-+                if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino
++                if (!ingredient.isEmpty() && (ingredient.exact || ingredient.kItem)) { // Kiterino - Support recipe grid for AItems
                      final net.minecraft.world.item.ItemStack[] items = ingredient.getItems();
                      final IntList idList = new IntArrayList(items.length);
                      for (final ItemStack item : items) {
@@ -35,13 +35,13 @@ index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..64f1a6c2858cf19c6318acffb49a8512
      }
  
 -    private int registerExact(final ItemStack exactChoice) {
-+    private int registerExact(ItemStack exactChoice) { // Kiterino - remove final
-+        // Kiterino start
++    private int registerExact(ItemStack exactChoice) { // Kiterino - Remove final - Support recipe grid for AItems
++        // Kiterino start - Support recipe grid for AItems
 +        if (exactChoice.hasTag()) {
 +            exactChoice = exactChoice.copy();
-+            exactChoice.setTag(ItemStack.getStripped(exactChoice.getTag())); // Kiterino
++            exactChoice.setTag(ItemStack.getStripped(exactChoice.getTag()));
 +        }
-+        // Kiterino end
++        // Kiterino end - Support recipe grid for AItems
          final int existing = this.exactChoiceIds.getInt(exactChoice);
          if (existing > -1) {
              return existing;
@@ -50,32 +50,32 @@ index 63db0b843c5bd11f979e613ba6cfac9d9da956bb..64f1a6c2858cf19c6318acffb49a8512
      }
  
 -    public boolean accountStack(final ItemStack stack, final int count) {
-+    public boolean accountStack(ItemStack stack, final int count) { // Kiterino - remove final
++    public boolean accountStack(ItemStack stack, final int count) { // Kiterino - Remove final - Support recipe grid for AItems
          if (!this.exactChoiceIds.isEmpty()) {
-+            // Kiterino start
++            // Kiterino start - Support recipe grid for AItems
 +            if (stack.hasTag()) {
 +                stack = stack.copy();
 +                stack.setTag(ItemStack.getStripped(stack.getTag()));
 +            }
-+            // Kiterino end
++            // Kiterino end - Support recipe grid for AItems
              final int id = this.exactChoiceIds.getInt(stack);
              if (id >= 0) {
                  this.contents.put(id, count);
 diff --git a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
-index 1534cbb5cb5da61fa7fa41bd503b01994877a01b..f066084478afa35e63aa51a39420d6756eea6684 100644
+index 80f032cca3309b709a11898cbc08bce27cbd624d..d54fe35b714a181f00b10faf3a8059770da25a8d 100644
 --- a/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
 +++ b/src/main/java/net/minecraft/recipebook/ServerPlaceRecipe.java
-@@ -148,7 +148,7 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
+@@ -146,7 +146,7 @@ public class ServerPlaceRecipe<C extends Container> implements PlaceRecipe<Integ
          this.moveItemToGrid(slot, stack, false);
      }
      protected void moveItemToGrid(Slot slot, ItemStack stack, final boolean isExact) {
 -        int i = isExact ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack);
-+        int i = /*isExact*/ !slot.getItem().isEmpty() ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack); // Kiterino
++        int i = /*isExact*/ !slot.getItem().isEmpty() ? this.inventory.findSlotMatchingItem(stack) : this.inventory.findSlotMatchingUnusedItem(stack); // Kiterino - Support recipe grid for AItems
          // Paper end - Improve exact choice recipe ingredients
          if (i != -1) {
              ItemStack itemStack = this.inventory.getItem(i);
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index deabb3400ee2406a8ec179a96d8cfd86f8edbbd6..48995a6b465090911f3b91f48b3b654d56940337 100644
+index c6a925cbd35eb33b27b90bfa8344ac7515d28b76..ab492239fec515cb987fbb1d3478405045138d2a 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
 @@ -205,7 +205,7 @@ public class Inventory implements Container, Nameable {
@@ -83,12 +83,12 @@ index deabb3400ee2406a8ec179a96d8cfd86f8edbbd6..48995a6b465090911f3b91f48b3b654d
              ItemStack itemstack1 = (ItemStack) this.items.get(i);
  
 -            if (!((ItemStack) this.items.get(i)).isEmpty() && ItemStack.isSameItemSameTags(stack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).isDamaged() && !itemstack1.isEnchanted() && !itemstack1.hasCustomHoverName()) {
-+            if (!itemstack1.isEmpty() && itemstack1.getItem() == stack.getItem() && ItemStack.recipesTagsMatch(itemstack1, stack)) { // Kiterino - less limited items in the crafting grid
++            if (!itemstack1.isEmpty() && itemstack1.getItem() == stack.getItem() && ItemStack.recipesTagsMatch(itemstack1, stack)) { // Kiterino - Less limited items in the crafting grid
                  return i;
              }
          }
 diff --git a/src/main/java/net/minecraft/world/entity/player/StackedContents.java b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
-index 9c7b05fec22a8b84c29d7210f1104030a20cc7aa..5f9e6b48ee8dd1849f88e8556b346c8c99f7d66b 100644
+index 33e493874cb8cecd820e80f2c15e6f654bc64b02..e180dd1d61fa20150b67a00f732bb6c44c95aa4f 100644
 --- a/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 +++ b/src/main/java/net/minecraft/world/entity/player/StackedContents.java
 @@ -25,7 +25,7 @@ public class StackedContents {
@@ -96,19 +96,19 @@ index 9c7b05fec22a8b84c29d7210f1104030a20cc7aa..5f9e6b48ee8dd1849f88e8556b346c8c
      public void accountSimpleStack(ItemStack stack) {
          if (this.extrasMap != null && stack.hasTag() && this.extrasMap.accountStack(stack, Math.min(64, stack.getCount()))) return; // Paper - Improve exact choice recipe ingredients; max of 64 due to accountStack method below
 -        if (!stack.isDamaged() && !stack.isEnchanted() && !stack.hasCustomHoverName()) {
-+        if (/*!stack.isDamaged() && !stack.isEnchanted() && */!stack.hasCustomHoverName()) { // Kiterino - allow damaged and enchanted items
++        if (/*!stack.isDamaged() && !stack.isEnchanted() && */!stack.hasCustomHoverName()) { // Kiterino - Allow damaged and enchanted items
              this.accountStack(stack);
          }
- 
+     }
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index f6664447c45b1d6f3371af7bed8b1175b17f25e2..5eb4eaf5fdd0d16701daa0a39485cd05f3674157 100644
+index f6664447c45b1d6f3371af7bed8b1175b17f25e2..3b6e35b88b9d27d3a5be0b3f73153542e6b417cf 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
 @@ -813,6 +813,54 @@ public final class ItemStack {
          return !stack.is(otherStack.getItem()) ? false : (stack.isEmpty() && otherStack.isEmpty() ? true : Objects.equals(stack.tag, otherStack.tag));
      }
  
-+    // Kiterino start
++    // Kiterino start - Support recipe grid for AItems
 +    public static boolean recipesTagsMatch(@Nullable ItemStack comparing, @Nullable ItemStack expected) {
 +        if (comparing == null || expected == null) return false;
 +        if (comparing.isEmpty()) return expected.isEmpty();
@@ -154,7 +154,7 @@ index f6664447c45b1d6f3371af7bed8b1175b17f25e2..5eb4eaf5fdd0d16701daa0a39485cd05
 +        }
 +        return nbt.isEmpty() ? null : nbt;
 +    }
-+    // Kiterino end
++    // Kiterino end - Support recipe grid for AItems
 +
      public String getDescriptionId() {
          return this.getItem().getDescriptionId(this);

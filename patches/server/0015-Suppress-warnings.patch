@@ -5,7 +5,7 @@ Subject: [PATCH] Suppress warnings
 
 
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
-index a6d95fc20e18c0aa34ef956d792fc7d019842ce7..79a38eb20da8c3c1ccb2a6de422587d8b05283ec 100644
+index ab43903a69ec54220829802c369712ebb6da7240..c9253c897bf0e2255d4db3cd1306b02743980ce2 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
 +++ b/src/main/java/net/minecraft/world/level/storage/loot/functions/SmeltItemFunction.java
 @@ -42,6 +42,7 @@ public class SmeltItemFunction extends LootItemConditionalFunction {
@@ -13,7 +13,7 @@ index a6d95fc20e18c0aa34ef956d792fc7d019842ce7..79a38eb20da8c3c1ccb2a6de422587d8
              }
  
 +            if (!org.purpurmc.purpur.PurpurConfig.loggerSuppressUnrecognizedRecipeErrors) // Kiterino - suppress
-             LOGGER.warn("Couldn't smelt {} because there is no smelting recipe", (Object)stack);
+             LOGGER.warn("Couldn't smelt {} because there is no smelting recipe", stack);
              return stack;
          }
 diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java

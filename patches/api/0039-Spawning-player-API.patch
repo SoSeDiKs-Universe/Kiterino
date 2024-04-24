@@ -5,14 +5,15 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 4a83b02a7c072463248dd4fdd96bbb08194a8a3d..0e0b6a351c6eff5b3dd96d4ed474ffc1b077e8e4 100644
+index 97ff71da733b1f622ee2036bb323f075b1fcb60d..1eb3a3cba077e1bf648c75f4589a3d5cc11332a0 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1382,5 +1382,16 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-     default Item dropItemNaturally(@NotNull org.bukkit.inventory.ItemStack item, @Nullable org.bukkit.util.Consumer<Item> function) {
+@@ -1429,4 +1429,17 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
          return getWorld().dropItem(getLocation(), item, function);
      }
+     // Kiterino end - More item drop API
 +
++    // Kiterino start - Spawning player API
 +    /**
 +     * Gets the {@link UUID} of the player for whom
 +     * this entity was spawned.
@@ -23,5 +24,5 @@ index 4a83b02a7c072463248dd4fdd96bbb08194a8a3d..0e0b6a351c6eff5b3dd96d4ed474ffc1
 +     */
 +    @Nullable
 +    UUID getSpawningPlayerUuid();
-     // Kiterino end
++    // Kiterino end - Spawning player API
  }

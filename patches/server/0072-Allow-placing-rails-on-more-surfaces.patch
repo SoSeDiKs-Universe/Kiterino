@@ -5,7 +5,7 @@ Subject: [PATCH] Allow placing rails on more surfaces
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java b/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java
-index 6bd4e4d173f34e0234f4474e49ce2d897f85386f..5fe6f24d8ac695a3e6c5ff4bc1dd12cdc08e8aa9 100644
+index 93398cf061a8609f0b77a5e7f8340870019b9824..1616690e158e57bd6f5b9750415ba7c6c01fe9e7 100644
 --- a/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BaseRailBlock.java
 @@ -54,7 +54,7 @@ public abstract class BaseRailBlock extends Block implements SimpleWaterloggedBl
@@ -17,7 +17,7 @@ index 6bd4e4d173f34e0234f4474e49ce2d897f85386f..5fe6f24d8ac695a3e6c5ff4bc1dd12cd
      }
  
      @Override
-@@ -89,6 +89,7 @@ public abstract class BaseRailBlock extends Block implements SimpleWaterloggedBl
+@@ -88,6 +88,7 @@ public abstract class BaseRailBlock extends Block implements SimpleWaterloggedBl
      }
  
      private static boolean shouldBeRemoved(BlockPos pos, Level world, RailShape shape) {

@@ -19,10 +19,10 @@ index b3d563285c45ef8e4468c6633d5d8818d1018bd8..9b9176ccd9dd47e9d40f03a25b0b478f
                  if (iblockdata.getBlock() instanceof CarrotBlock && ((CarrotBlock) iblockdata.getBlock()).isMaxAge(iblockdata)) {
                      this.canRaid = true;
 diff --git a/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java b/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java
-index 983172699efc0a8e30d6d8a2aa1809026e85e573..6494514a6df663fb87857771a853dfb7173e4666 100644
+index 3e5bdd5b842b6067529dfb1447a619d790b70c13..1073d9bc6221231c64a9a94a7b4d660c063e8167 100644
 --- a/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/AttachedStemBlock.java
-@@ -72,7 +72,7 @@ public class AttachedStemBlock extends BushBlock {
+@@ -85,7 +85,7 @@ public class AttachedStemBlock extends BushBlock {
  
      @Override
      protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
@@ -67,10 +67,10 @@ index 2077cb5dcf2352c9d5b502744aeb9a66df256939..c823c08e6b2fd5cdadaca715dc006fe3
                      if ((Integer) iblockdata.getValue(FarmBlock.MOISTURE) > 0) {
                          f1 = 3.0F;
 diff --git a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-index d20c009baf69d083bf8a14000028991b6518cd50..6bed72b5b74d0e162ca7fe2aee9bbdabb2c4fe5a 100644
+index 5f1ec3f69295760b7b8097916c82cbf9ddd49700..b7235b445ce01a54adb5772aedb7ba7f39d8b330 100644
 --- a/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PitcherCropBlock.java
-@@ -83,7 +83,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
+@@ -87,7 +87,7 @@ public class PitcherCropBlock extends DoublePlantBlock implements BonemealableBl
  
      @Override
      protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {

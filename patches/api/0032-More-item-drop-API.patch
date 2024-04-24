@@ -5,14 +5,15 @@ Subject: [PATCH] More item drop API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 989f2712293629a3725a8330e9f34ff879b7c9c4..624a8643224f77fccb053a45f15347ccb431ce79 100644
+index 869ee723e0fbb9403cfa57812f34150e05e8b0b3..4157e2072db6c197afd69bb6312d1129db4c3df8 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -844,5 +844,53 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
-     default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
+@@ -869,4 +869,54 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
      }
+     // Kiterino end - More Sound API
 +
++    // Kiterino start - More item drop API
 +    /**
 +     * Drops an item at the location of the block.
 +     *
@@ -60,17 +61,18 @@ index 989f2712293629a3725a8330e9f34ff879b7c9c4..624a8643224f77fccb053a45f15347cc
 +    default org.bukkit.entity.Item dropItemNaturally(@NotNull ItemStack item, @Nullable org.bukkit.util.Consumer<org.bukkit.entity.Item> function) {
 +        return getWorld().dropItem(getLocation().toCenterLocation(), item, function);
 +    }
-     // Kiterino end
++    // Kiterino end - More item drop API
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 63cbbe4e99974a1f652b33eb2a0a6e954a8f4fee..abf3e82ae813f8b1989b8cfece71118c20c71d51 100644
+index 6365c6d3bbbc0e47b2edaf0073d17ad5f9d72c98..cb01bdeb74974c02aac0b693e59137c7104e3de7 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1311,5 +1311,53 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-     default void playSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
+@@ -1356,4 +1356,54 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
          getWorld().playSound(getLocation(), sound, category, volume, pitch);
      }
+     // Kiterino end - More Sound API
 +
++    // Kiterino start - More item drop API
 +    /**
 +     * Drops an item at the location of the entity.
 +     *
@@ -118,5 +120,5 @@ index 63cbbe4e99974a1f652b33eb2a0a6e954a8f4fee..abf3e82ae813f8b1989b8cfece71118c
 +    default Item dropItemNaturally(@NotNull org.bukkit.inventory.ItemStack item, @Nullable org.bukkit.util.Consumer<Item> function) {
 +        return getWorld().dropItem(getLocation(), item, function);
 +    }
-     // Kiterino end
++    // Kiterino end - More item drop API
  }

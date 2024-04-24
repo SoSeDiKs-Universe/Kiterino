@@ -5,10 +5,10 @@ Subject: [PATCH] Expose checkBedExists
 
 
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index 744b869c028324d5de30d2d64ab080b050fa3c47..af7100fcb49bbebba28eba53c2391967e2bcdced 100644
+index 5369d802d37863a1efc0c031520147ceedcadc78..8ddd35a63f826c761eec384cb23fa596c6569120 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1347,4 +1347,14 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1482,4 +1482,14 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);
      // Purpur end

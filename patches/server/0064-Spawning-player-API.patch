@@ -5,7 +5,7 @@ Subject: [PATCH] Spawning player API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 7a94933e310d23f15d93a6d65480a05db5a7bb15..6f79c6d60d4e8209da039eed06a35a3962b9bdf6 100644
+index 66857a87232cbd015e28c17242ea67fabe39c436..8f89c6f86993c9bf5009dbb9242fb25c09552a6c 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -510,6 +510,27 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -73,10 +73,10 @@ index a2026900948e9157cb35ba0183dc3af20c63214f..76fc644651b729eaefb5ede39aecb5c9
                                              // CraftBukkit start
                                              // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index a66fe8055c2734511fd71623f8230ae894584a07..e346226a1b52083d1db89e41c5963c699caf8af0 100644
+index ba443e1679a4c7ff6ebe4af982d290a039e3cf1a..d7c01b43a554f015bc5e907f0ab55d44af440765 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1283,4 +1283,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1325,4 +1325,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return !getHandle().dismountsUnderwater();
      }
      // Purpur end

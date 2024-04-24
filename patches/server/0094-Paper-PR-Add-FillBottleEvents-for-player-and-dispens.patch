@@ -15,7 +15,7 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
-index 50fd3e43b4971cd72efd1f609f0cdc4b0f57bed4..345e2dc6e4ec52de766b04ca482aed1497a263d1 100644
+index 50fd3e43b4971cd72efd1f609f0cdc4b0f57bed4..ddbf1a6bcf10664e4eb1ed3394a1aef57cefc7d2 100644
 --- a/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
 +++ b/src/main/java/net/minecraft/core/cauldron/CauldronInteraction.java
 @@ -114,7 +114,14 @@ public interface CauldronInteraction {
@@ -30,7 +30,7 @@ index 50fd3e43b4971cd72efd1f609f0cdc4b0f57bed4..345e2dc6e4ec52de766b04ca482aed14
 +                    return InteractionResult.PASS; // PASS to not increment statistics
 +                }
 +                entityhuman.setItemInHand(enumhand, ItemUtils.createFilledResult(itemstack, entityhuman, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem())));
-+                // Paper end
++                // Paper end - glass bottle events
                  entityhuman.awardStat(Stats.USE_CAULDRON);
                  entityhuman.awardStat(Stats.ITEM_USED.get(item));
                  // LayeredCauldronBlock.lowerFillLevel(iblockdata, world, blockposition); // CraftBukkit
@@ -78,7 +78,7 @@ index a3fe92e1db6755a9111ab58e84d61f429d72010f..10430538363de250243ab17112c5eb2d
                      return super.execute(pointer, stack);
                  }
 diff --git a/src/main/java/net/minecraft/world/item/BottleItem.java b/src/main/java/net/minecraft/world/item/BottleItem.java
-index 384da302bbf87d87352dad9cce841deae7faf0e9..126fc6b13f6bc6fe11666f411a05774eb86efed9 100644
+index 042581554b04dcde2033013426d09c20ef562582..cd1b67d96d10c71994864b96987483e25bb533fc 100644
 --- a/src/main/java/net/minecraft/world/item/BottleItem.java
 +++ b/src/main/java/net/minecraft/world/item/BottleItem.java
 @@ -34,6 +34,13 @@ public class BottleItem extends Item {
@@ -93,9 +93,9 @@ index 384da302bbf87d87352dad9cce841deae7faf0e9..126fc6b13f6bc6fe11666f411a05774e
 +            }
 +            // Paper end
              areaEffectCloud.setRadius(areaEffectCloud.getRadius() - 0.5F);
-             world.playSound((Player)null, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.NEUTRAL, 1.0F, 1.0F);
+             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.NEUTRAL, 1.0F, 1.0F);
              world.gameEvent(user, GameEvent.FLUID_PICKUP, user.position());
-@@ -42,7 +49,7 @@ public class BottleItem extends Item {
+@@ -41,7 +48,7 @@ public class BottleItem extends Item {
                  CriteriaTriggers.PLAYER_INTERACTED_WITH_ENTITY.trigger(serverPlayer, itemStack, areaEffectCloud);
              }
  
@@ -104,7 +104,7 @@ index 384da302bbf87d87352dad9cce841deae7faf0e9..126fc6b13f6bc6fe11666f411a05774e
          } else {
              BlockHitResult blockHitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
              if (blockHitResult.getType() == HitResult.Type.MISS) {
-@@ -55,9 +62,16 @@ public class BottleItem extends Item {
+@@ -54,10 +61,17 @@ public class BottleItem extends Item {
                      }
  
                      if (world.getFluidState(blockPos).is(FluidTags.WATER)) {
@@ -117,11 +117,12 @@ index 384da302bbf87d87352dad9cce841deae7faf0e9..126fc6b13f6bc6fe11666f411a05774e
 +                        // Paper end
                          world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
                          world.gameEvent(user, GameEvent.FLUID_PICKUP, blockPos);
--                        return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)), world.isClientSide());
-+                        return InteractionResultHolder.sidedSuccess(this.turnBottleIntoItem(itemStack, user, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem())), world.isClientSide()); // Paper
+                         return InteractionResultHolder.sidedSuccess(
+-                            this.turnBottleIntoItem(itemStack, user, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)), world.isClientSide()
++                            this.turnBottleIntoItem(itemStack, user, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem())), world.isClientSide() // Paper
+                         );
                      }
                  }
- 
 diff --git a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java b/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
 index 25e8d6066fb94d0b9a244ab1fec5139b9266d86d..cc1b22a1abb2f042f7fc501efbdbb5f82770114d 100644
 --- a/src/main/java/net/minecraft/world/level/block/BeehiveBlock.java
@@ -153,10 +154,10 @@ index 25e8d6066fb94d0b9a244ab1fec5139b9266d86d..cc1b22a1abb2f042f7fc501efbdbb5f8
  
                  flag = true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 9fcf4976a1fad9c2517ebd06279d6973c1d620ac..5bd1f80dae05c48a557ebc7f998a52b0940358c1 100644
+index 945446114a9795985a5050ea18a79be55abe1c22..1488d6e9f072669127e6e042363ead1266e303e7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2163,6 +2163,18 @@ public class CraftEventFactory {
+@@ -2167,6 +2167,18 @@ public class CraftEventFactory {
          io.papermc.paper.event.block.BlockPreDispenseEvent event = new io.papermc.paper.event.block.BlockPreDispenseEvent(block, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemStack), slot);
          return event.callEvent();
      }

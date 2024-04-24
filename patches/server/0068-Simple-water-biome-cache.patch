@@ -5,24 +5,26 @@ Subject: [PATCH] Simple water biome cache
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-index f7e5e016a7028a9196e689e950805b0d5b31fe38..0cca6b1851f92649a1d6b1f621e9a1840e5b8300 100644
+index f7e5e016a7028a9196e689e950805b0d5b31fe38..b3d501fbc0de6c581fe2ca4a7e097fb97bd610f9 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkAccess.java
-@@ -128,6 +128,9 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
+@@ -128,6 +128,11 @@ public abstract class ChunkAccess implements BlockGetter, BiomeManager.NoiseBiom
      }
      // Paper end - rewrite light engine
  
-+    public @Nullable org.bukkit.block.Biome cachedWaterBiome; // Kiterino
-+    public @Nullable Boolean infiniteWater; // Kiterino
++    // Kiterino start - Simple water biome cache
++    public @Nullable org.bukkit.block.Biome cachedWaterBiome;
++    public @Nullable Boolean infiniteWater;
++    // Kiterino end - Simple water biome cache
 +
      public ChunkAccess(ChunkPos pos, UpgradeData upgradeData, LevelHeightAccessor heightLimitView, Registry<Biome> biomeRegistry, long inhabitedTime, @Nullable LevelChunkSection[] sectionArray, @Nullable BlendingData blendingData) {
          // Paper start - rewrite light engine
          if (!(this instanceof ImposterProtoChunk)) {
 diff --git a/src/main/java/net/minecraft/world/level/material/WaterFluid.java b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-index b84c8a4db9383c448ab8f576bca3cb6bd053ee13..3514428888284b1b26c4c78eb2a462082d25885c 100644
+index 5501df4f547ddbed2969aa42bd3558ccb92144b5..30184d3521aefb1808dc678c3d3c6a798213a3e0 100644
 --- a/src/main/java/net/minecraft/world/level/material/WaterFluid.java
 +++ b/src/main/java/net/minecraft/world/level/material/WaterFluid.java
-@@ -67,22 +67,51 @@ public abstract class WaterFluid extends FlowingFluid {
+@@ -83,22 +83,51 @@ public abstract class WaterFluid extends FlowingFluid {
      // Kiterino start
      @Override
      protected boolean canConvertToSource(Level world, BlockPos pos) {
@@ -83,11 +85,11 @@ index b84c8a4db9383c448ab8f576bca3cb6bd053ee13..3514428888284b1b26c4c78eb2a46208
      }
      // Kiterino end
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-index 4b42ef2a876ea210d948238e63fd7a2b7035bb5b..f327d1b3cfaf2b7902d5cfc12c88a2af18f68c5a 100644
+index ac11f18690434922179b61ffcc3036dea025b0cb..3e5835f42f4df8c7788fdb1eb0124a3612e42d50 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-@@ -727,4 +727,21 @@ public class CraftBlock implements Block {
-         blockData.getBlock().randomTick(blockData, level, this.position, level.random);
+@@ -735,4 +735,21 @@ public class CraftBlock implements Block {
+         this.getNMS().randomTick(level, this.position, level.random);
      }
      // Paper end
 +

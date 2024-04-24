@@ -22,7 +22,7 @@ index fa185a8145843edf44fc0aeedb6c36b2b13263ae..328fadf5a224b52212c0ee2e338882f9
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index e2fd415b69e0213688561e9a19aec2cdcd267211..4225298a21a65ceba02df9f0c305dd13eab4335f 100644
+index 1b1d4c46827aa397183ca3dfec46c785e5531b71..7972d1139fe201a609167cd9b3e365300e2242bc 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -14,6 +14,13 @@ public class Slot {
@@ -39,7 +39,7 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..4225298a21a65ceba02df9f0c305dd13
  
      public Slot(Container inventory, int index, int x, int y) {
          this.container = inventory;
-@@ -44,7 +51,7 @@ public class Slot {
+@@ -43,7 +50,7 @@ public class Slot {
      }
  
      public boolean mayPlace(ItemStack stack) {
@@ -48,7 +48,7 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..4225298a21a65ceba02df9f0c305dd13
      }
  
      public ItemStack getItem() {
-@@ -90,7 +97,7 @@ public class Slot {
+@@ -89,7 +96,7 @@ public class Slot {
      }
  
      public boolean mayPickup(Player playerEntity) {
@@ -58,10 +58,10 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..4225298a21a65ceba02df9f0c305dd13
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 6c2e91b986099027d83aba85f14ae69cbc358348..f8f5aa602853f420d527fa5e4706d47eafddd1c0 100644
+index a8b30fa294e088c0b604a5d8ac5667e32ed1b287..863984a69c0ccd31e9b48145bb3a9b3f910de89c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -314,6 +314,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -315,6 +315,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -73,16 +73,16 @@ index 6c2e91b986099027d83aba85f14ae69cbc358348..f8f5aa602853f420d527fa5e4706d47e
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -343,7 +348,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
-         if (iinventory instanceof MenuProvider) {
-             this.getHandle().openMenu(iinventory);
+@@ -346,7 +351,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+             this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
          } else {
+             MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
 -            CraftHumanEntity.openCustomInventory(inventory, player, container);
 +            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy);
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -354,9 +359,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -357,9 +362,19 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
@@ -99,7 +99,6 @@ index 6c2e91b986099027d83aba85f14ae69cbc358348..f8f5aa602853f420d527fa5e4706d47e
 +        if (inventoryItemStackMoveStrategy != null){
 +            container.setItemStackMoveStrategy(inventoryItemStackMoveStrategy);
 +        }
-+        // Weeper end - InventoryItemStackMoveStrategy
  
          // Paper start - Add titleOverride to InventoryOpenEvent
          final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);

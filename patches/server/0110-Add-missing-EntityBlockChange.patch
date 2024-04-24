@@ -5,10 +5,10 @@ Subject: [PATCH] Add missing EntityBlockChange
 
 
 diff --git a/src/main/java/net/minecraft/world/item/HoeItem.java b/src/main/java/net/minecraft/world/item/HoeItem.java
-index 552c31c0f3746dd35388395036e70a925bf00bd4..e53cf2400444d5972999df5b0c41c79845fa994c 100644
+index 18cbcfcd331f7b7a112383311e3e2b9984857028..d71d53ab6ce15e4e0977ea2f52f46e50d289a192 100644
 --- a/src/main/java/net/minecraft/world/item/HoeItem.java
 +++ b/src/main/java/net/minecraft/world/item/HoeItem.java
-@@ -50,6 +50,11 @@ public class HoeItem extends DiggerItem {
+@@ -61,6 +61,11 @@ public class HoeItem extends DiggerItem {
              // Purpur end
              if (predicate.test(context)) {
                  Player player = context.getPlayer();
