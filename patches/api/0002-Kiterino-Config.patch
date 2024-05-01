@@ -1,23 +1,23 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: SoSeDiK <mrsosedik@gmail.com>
-Date: Sat, 31 Jul 2021 16:01:50 +0300
+Date: Mon, 29 Apr 2024 22:14:56 +0300
 Subject: [PATCH] Kiterino Config
 
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index c15b0b05870a469ea5d314c9fac6a57a045f463c..63f9e4649f5e6c1e5e3d634ec88307d823415916 100644
+index ec8b9b2cbe65838a194281f7d76d0e17defc5211..78ea5744c1c35151025a1a2636dc06bbee8d1494 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2247,6 +2247,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2269,6 +2269,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
          }
          // Purpur end
  
-+        // Kiterino start
++        // Kiterino start - Add Kiterino config
 +        @NotNull
 +        public org.bukkit.configuration.file.YamlConfiguration getKiterinoConfig() {
 +            throw new UnsupportedOperationException("Not supported yet.");
 +        }
-+        // Kiterino end
++        // Kiterino end - Add Kiterino config
 +
          /**
           * Sends the component to the player

@@ -12,7 +12,7 @@ pluginManagement {
 
 rootProject.name = "kiterino"
 for (name in listOf("Kiterino-API", "Kiterino-Server")) {
-    val projName = name.toLowerCase(Locale.ENGLISH)
+    val projName = name.lowercase(Locale.ENGLISH)
     include(projName)
     findProject(":$projName")!!.projectDir = file(name)
 }

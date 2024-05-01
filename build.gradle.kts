@@ -1,19 +1,17 @@
-import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
-    id("io.papermc.paperweight.patcher") version "1.5.14"
+    id("io.papermc.paperweight.patcher") version "1.7.1"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
 
 repositories {
     mavenCentral()
-    maven(paperMavenPublicUrl) { content { onlyForConfigurations(PAPERCLIP_CONFIG) } }
+    maven(paperMavenPublicUrl) { content { onlyForConfigurations(configurations.paperclip.name) } }
 }
 
 dependencies {
@@ -26,13 +24,13 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
 
-    java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
+    java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
+}
 
+subprojects {
     tasks.withType<JavaCompile>().configureEach {
-        options.isFork = true
-        options.isIncremental = true
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release.set(21)
     }
 
     tasks.withType<Javadoc>().configureEach {
@@ -54,16 +52,7 @@ allprojects {
     repositories {
         mavenCentral()
         maven(paperMavenPublicUrl)
-        maven("https://libraries.minecraft.net/")
-        maven("https://repo.codemc.org/repository/maven-public/")
-        maven("https://oss.sonatype.org/content/groups/public/")
-        maven("https://ci.emc.gs/nexus/content/groups/aikar/")
-        maven("https://repo.aikar.co/content/groups/aikar")
-        maven("https://repo.md-5.net/content/repositories/releases/")
-        maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-        maven("https://nexus.velocitypowered.com/repository/velocity-artifacts-snapshots/")
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://jitpack.io") // Pufferfish stuff
+        // maven("https://jitpack.io") // Pufferfish stuff
     }
 }
 
@@ -98,20 +87,19 @@ paperweight {
 
 tasks.generateDevelopmentBundle {
     ignoreUnsupportedEnvironment.set(true)
-    apiCoordinates.set("me.sosedik:kiterino-api")
-    mojangApiCoordinates.set("io.papermc.paper:paper-mojangapi")
+    apiCoordinates.set("me.sosedik.kiterino:kiterino-api")
     libraryRepositories.set(
         listOf(
             "https://repo.maven.apache.org/maven2/",
             paperMavenPublicUrl,
-            "https://libraries.minecraft.net/",
-            "https://maven.fabricmc.net/",
-            "https://maven.quiltmc.org/repository/release/",
-            "https://repo.aikar.co/content/groups/aikar",
-            "https://ci.emc.gs/nexus/content/groups/aikar/",
-            "https://sonatype.projecteden.gg/repository/maven-public/",
+//            "https://libraries.minecraft.net/",
+//            "https://maven.fabricmc.net/",
+//            "https://maven.quiltmc.org/repository/release/",
+//            "https://repo.aikar.co/content/groups/aikar",
+//            "https://ci.emc.gs/nexus/content/groups/aikar/",
+//            "https://sonatype.projecteden.gg/repository/maven-public/",
             "https://nexus.velocitypowered.com/repository/velocity-artifacts-snapshots/", // Velocity stuff
-            "https://jitpack.io" // Pufferfish stuff
+//            "https://jitpack.io" // Pufferfish stuff
         )
     )
 }
@@ -138,6 +126,6 @@ tasks.register("printKiterinoVersion") {
     }
 }
 
-tasks.createReobfPaperclipJar {
+tasks.createMojmapPaperclipJar {
     outputZip.set(rootProject.layout.projectDirectory.file("kiterino.jar"))
 }

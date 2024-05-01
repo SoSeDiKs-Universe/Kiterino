@@ -1,41 +1,11 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: SoSeDiK <mrsosedik@gmail.com>
-Date: Sat, 31 Jul 2021 16:01:34 +0300
+Date: Mon, 29 Apr 2024 22:22:51 +0300
 Subject: [PATCH] Rebrand
 
 
-diff --git a/build.gradle.kts b/build.gradle.kts
-index 40f130860adef91acee5d2a577e14d0848fd0a3f..7f8f915fd59e5e1f47b82c9b5d795f780f23cd49 100644
---- a/build.gradle.kts
-+++ b/build.gradle.kts
-@@ -1,4 +1,6 @@
--import io.papermc.paperweight.util.*
-+import io.papermc.paperweight.util.Git
-+import io.papermc.paperweight.util.defaultJavaLauncher
-+import io.papermc.paperweight.util.path
- 
- plugins {
-     java
-@@ -14,7 +16,7 @@ val alsoShade: Configuration by configurations.creating
- 
- dependencies {
-     // Purpur start
--    implementation(project(":purpur-api"))
-+    implementation(project(":kiterino-api")) // Kiterino
-     implementation("io.papermc.paper:paper-mojangapi:${project.version}") {
-         exclude("io.papermc.paper", "paper-api")
-     }
-@@ -99,7 +101,7 @@ tasks.jar {
-         attributes(
-             "Main-Class" to "org.bukkit.craftbukkit.Main",
-             "Implementation-Title" to "CraftBukkit",
--            "Implementation-Version" to "git-Purpur-$implementationVersion", // Pufferfish // Purpur
-+            "Implementation-Version" to "git-Kiterino-$implementationVersion", // Pufferfish // Purpur // Kiterino
-             "Implementation-Vendor" to date, // Paper
-             "Specification-Title" to "Bukkit",
-             "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..b36ce80b7940dd435783375a6bb9352e04d5a27e 100644
+index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..5eb3ce1348587e4b494608f269e5faaf0691a5ea 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -593,7 +593,7 @@ public class Metrics {
@@ -43,24 +13,21 @@ index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..b36ce80b7940dd435783375a6bb9352e
              // Only start Metrics, if it's enabled in the config
              if (config.getBoolean("enabled", true)) {
 -                Metrics metrics = new Metrics("Purpur", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur
-+                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur // Kiterino
++                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Kiterino - Rebrand
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
-@@ -603,9 +603,9 @@ public class Metrics {
+@@ -603,7 +603,7 @@ public class Metrics {
  
                  metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
                  metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
 -                metrics.addCustomChart(new Metrics.SimplePie("purpur_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur
-+                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Purpur // Kiterino
++                metrics.addCustomChart(new Metrics.SimplePie("kiterino_version", () -> (org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() != null) ? org.bukkit.craftbukkit.Main.class.getPackage().getImplementationVersion() : "unknown")); // Kiterino - Rebrand
  
--                metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
-+                        metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
+                 metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
-                     String javaVersion = System.getProperty("java.version");
-                     Map<String, Integer> entry = new HashMap<>();
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270580f4890 100644
+index 3cb56595822799926a8141e60a42f5d1edfc6de5..917a4e643c5e15e6819a7c01206ab2ff393c9cc3 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 +++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 @@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
@@ -68,51 +35,71 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..91fc74ba7659d5981b32b48985e53270
      protected LineReader buildReader(LineReaderBuilder builder) {
          builder
 -                .appName("Purpur") // Purpur
-+                .appName("Kiterino") // Kiterino
++                .appName("Kiterino") // Kiterino - Rebrand
                  .variable(LineReader.HISTORY_FILE, java.nio.file.Paths.get(".console_history"))
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
-diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index dabaf0cff6dafe8ca411996e67ead9a2cf84dfb8..d3057618f5010d28c35c1cd8afa8fe887932b3fd 100644
---- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-+++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -266,7 +266,7 @@ import javax.annotation.Nullable; // Paper
- import javax.annotation.Nonnull; // Paper
+diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+index a6e5950b5875cafd734300cdfbf58f5d3736f3c8..aeb739d8d0f1178bcbade4913b3391f0808dbf0d 100644
+--- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
++++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+@@ -32,6 +32,7 @@ public record ServerBuildInfoImpl(
  
- public final class CraftServer implements Server {
--    private final String serverName = "Purpur"; // Paper // Pufferfish // Purpur
-+    private final String serverName = "Kiterino"; // Paper // Pufferfish // Purpur // Kiterino
-     private final String serverVersion;
-     private final String bukkitVersion = Versioning.getBukkitVersion();
-     private final Logger logger = Logger.getLogger("Minecraft");
-diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 99597258e8e88cd9e2c901c4ac3ff7faeeabee2b..6bc6969d76e715a73f702bbdaf05e0a828672ff5 100644
---- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-+++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-@@ -11,7 +11,7 @@ public final class Versioning {
-     public static String getBukkitVersion() {
-         String result = "Unknown-Version";
+     private static final String BRAND_PAPER_NAME = "Paper";
+     private static final String BRAND_PURPUR_NAME = "Purpur"; // Purpur
++    private static final String BRAND_KITERINO_NAME = "Kiterino"; // Kiterino - Rebrand
  
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik/kiterino-api/pom.properties"); // Pufferfish // Purpur // Kiterino
-         Properties properties = new Properties();
+     private static final String BUILD_DEV = "DEV";
  
-         if (stream != null) {
-diff --git a/src/main/java/org/purpurmc/purpur/PurpurConfig.java b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-index efe25d3894f3ad000257c72d9a5e06ef22446d41..7b51b7cefb75ef500d2846166c4452a5f1e30840 100644
---- a/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-+++ b/src/main/java/org/purpurmc/purpur/PurpurConfig.java
-@@ -231,7 +231,7 @@ public class PurpurConfig {
-         deathMessageOnlyBroadcastToAffectedPlayer = getBoolean("settings.broadcasts.death.only-broadcast-to-affected-player", deathMessageOnlyBroadcastToAffectedPlayer);
+@@ -43,9 +44,9 @@ public record ServerBuildInfoImpl(
+         this(
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
+                 .map(Key::key)
+-                .orElse(BRAND_PURPUR_ID), // Purpur
++                .orElse(BRAND_KITERINO_ID), // Kiterino - Rebrand
+             getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
+-                .orElse(BRAND_PURPUR_NAME), // Purpur
++                .orElse(BRAND_KITERINO_NAME), // Kiterino - Rebrand
+             SharedConstants.getCurrentVersion().getId(),
+             SharedConstants.getCurrentVersion().getName(),
+             getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
+@@ -62,7 +63,7 @@ public record ServerBuildInfoImpl(
+ 
+     @Override
+     public boolean isBrandCompatible(final @NotNull Key brandId) {
+-        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur
++        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur // Kiterino - Rebrand
      }
  
--    public static String serverModName = "Purpur";
-+    public static String serverModName = "Kiterino"; // Kiterino
-     private static void serverModName() {
-         serverModName = getString("settings.server-mod-name", serverModName);
-     }
+     @Override
+diff --git a/src/main/java/net/minecraft/CrashReport.java b/src/main/java/net/minecraft/CrashReport.java
+index c366d84518979e842a6f10f969a5951539ecac93..c43bfc90274c0f6321cef127d5a2280e4d26ffd7 100644
+--- a/src/main/java/net/minecraft/CrashReport.java
++++ b/src/main/java/net/minecraft/CrashReport.java
+@@ -127,7 +127,7 @@ public class CrashReport {
+         stringbuilder.append("---- Minecraft Crash Report ----\n");
+         // Purpur start
+         stringbuilder.append("// ");
+-        stringbuilder.append("// DO NOT REPORT THIS TO PAPER! REPORT TO PURPUR INSTEAD!");
++        stringbuilder.append("// DO NOT REPORT THIS TO PAPER/PURPUR! REPORT TO KITERINO INSTEAD!"); // Kiterino - Rebrand
+         // Purpur end
+         stringbuilder.append("// ");
+         stringbuilder.append(CrashReport.getErrorComment());
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 71705ccbc0cce88382b1fb536271773a332ad3a2..473c5e61bb4e5eee1e6bd9f5bdb1a425de1adeda 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -962,7 +962,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+         shutdownThread = Thread.currentThread();
+         org.spigotmc.WatchdogThread.doStop(); // Paper
+         if (!isSameThread()) {
+-            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PURPUR)"); // Purpur
++            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO KITERINO)"); // Kiterino - Rebrand
+             while (this.getRunningThread().isAlive()) {
+                 this.getRunningThread().stop();
+                 try {
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index f7296691cb4af7814de1520347b307ff209082e4..8de5c6ede6ae9acf593be8d71f2b9fb8b8008f8f 100644
+index a353eb9f45af7b7f9bfd92a4a89403335b841840..8d7ecb81b20bf0434a60d7c62120616e59670a44 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -155,14 +155,14 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
@@ -120,16 +107,16 @@ index f7296691cb4af7814de1520347b307ff209082e4..8de5c6ede6ae9acf593be8d71f2b9fb8
                  // Paper end
                  log.log( Level.SEVERE, "------------------------------" );
 -                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Purpur bug." ); // Paper // Purpur
-+                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Kiterino bug." ); // Paper // Purpur // Kiterino
++                log.log( Level.SEVERE, "The server has stopped responding! This is (probably) not a Kiterino bug." ); // Kiterino - Rebrand
                  log.log( Level.SEVERE, "If you see a plugin in the Server thread dump below, then please report it to that author" );
                  log.log( Level.SEVERE, "\t *Especially* if it looks like HTTP or MySQL operations are occurring" );
                  log.log( Level.SEVERE, "If you see a world save or edit, then it means you did far more than your server can handle at once" );
                  log.log( Level.SEVERE, "\t If this is the case, consider increasing timeout-time in spigot.yml but note that this will replace the crash with LARGE lag spikes" );
 -                log.log( Level.SEVERE, "If you are unsure or still think this is a Purpur bug, please report this to https://github.com/PurpurMC/Purpur/issues" ); // Purpur
-+                log.log( Level.SEVERE, "If you are unsure or still think this is a Kiterino bug, please report this to https://github.com/SoSeDiKs-Universe/Kiterino/issues" ); // Purpur // Kiterino
++                    log.log( Level.SEVERE, "If you are unsure or still think this is a Kiterino bug, please report this to https://github.com/SoSeDiKs-Universe/Kiterino/issues" ); // Kiterino - Rebrand
                  log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
 -                log.log( Level.SEVERE, "Purpur version: " + Bukkit.getServer().getVersion() ); // Purpur
-+                log.log( Level.SEVERE, "Kiterino version: " + Bukkit.getServer().getVersion() ); // Purpur // Kiterino
++                log.log( Level.SEVERE, "Kiterino version: " + Bukkit.getServer().getVersion() ); // Kiterino - Rebrand
                  //
                  if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
                  {
@@ -138,13 +125,13 @@ index f7296691cb4af7814de1520347b307ff209082e4..8de5c6ede6ae9acf593be8d71f2b9fb8
                  } else
                  {
 -                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur
-+                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Purpur // KITERINO
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH  - " + Bukkit.getServer().getVersion() + " ---"); // Kiterino - Rebrand
                      log.log(Level.SEVERE, "The server has not responded for " + (currentTime - lastTick) / 1000 + " seconds! Creating thread dump");
                  }
                  // Paper end - Different message for short timeout
                  log.log( Level.SEVERE, "------------------------------" );
 -                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):" ); // Paper // Purpur
-+                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Paper // Purpur // Kiterino
++                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Kiterino - Rebrand
                  io.papermc.paper.chunk.system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper - rewrite chunk system
                  this.dumpTickingInfo(); // Paper - log detailed tick information
                  WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE ), log );
@@ -153,7 +140,7 @@ index f7296691cb4af7814de1520347b307ff209082e4..8de5c6ede6ae9acf593be8d71f2b9fb8
                  }
                  } else {
 -                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO PURPUR - THIS IS NOT A BUG OR A CRASH ---"); // Purpur
-+                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH ---"); // Purpur // Kiterino
++                    log.log(Level.SEVERE, "--- DO NOT REPORT THIS TO KITERINO - THIS IS NOT A BUG OR A CRASH ---"); // Kiterino - Rebrand
                  }
  
                  log.log( Level.SEVERE, "------------------------------" );
