@@ -56,6 +56,7 @@ run/
 # Kiterino build files
 build-data/
 paper-api-generator
+test-plugin.settings.gradle.kts
 Kiterino-API
 Kiterino-MojangAPI
 Kiterino-Server

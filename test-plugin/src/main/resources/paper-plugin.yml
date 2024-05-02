@@ -1,0 +1,12 @@
+name: Kiterino-Test-Plugin
+version: ${version}
+main: me.sosedik.kiterino.testplugin.TestPlugin
+description: Kiterino Test Plugin
+author: Kiterino
+api-version: ${apiversion}
+load: STARTUP
+bootstrapper: me.sosedik.kiterino.testplugin.TestPluginBootstrap
+loader: me.sosedik.kiterino.testplugin.TestPluginLoader
+defaultPerm: FALSE
+permissions:
+dependencies:
