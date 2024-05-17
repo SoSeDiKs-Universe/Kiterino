@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 2 May 2024 19:45:22 +0300
+Subject: [PATCH] Allow server-side translatables on items
+
+Adds "items.allow-server-translatables" config option to apply server-side translatabes to items before sending them to the client
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
+index 922cc7498b678ce5a4e63b197eca8bd5f13ae352..a2bbd89da760b2fba218ece744dfff32977efa30 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
+@@ -136,4 +136,11 @@ public final class KiterinoConfig {
+ 	}
+ 	// Kiterino end - Prevent creative from overriding items
+ 
++	// Kiterino start - Allow server-side translatables on items
++	public static boolean denyServerTranslatablesOnItems;
++	private static void allowServerTranslatablesOnItems() {
++		denyServerTranslatablesOnItems = !getBoolean(config, "items.allow-server-translatables", true, "Apply server-side translatables to items before sending to the client");
++	}
++	// Kiterino end - Allow server-side translatables on items
++
+ }
+diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
+index 1b6c2ea094a25bad8382e601825ea8b6bdd4d320..39c8d9f8530cc1ffac6014e04c5033f3d15b42df 100644
+--- a/src/main/java/net/minecraft/world/item/ItemStack.java
++++ b/src/main/java/net/minecraft/world/item/ItemStack.java
+@@ -211,7 +211,7 @@ public final class ItemStack implements DataComponentHolder {
+                 // Paper start - adventure; conditionally render translatable components
+                 boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
+                 try {
+-                    net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
++                    net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(me.sosedik.kiterino.KiterinoConfig.denyServerTranslatablesOnItems); // Kiterino - Allow server-side translatables on items
+                 DataComponentPatch.STREAM_CODEC.encode(registryfriendlybytebuf, itemstack.components.asPatch());
+                 } finally {
+                     net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);

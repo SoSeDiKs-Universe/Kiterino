@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 16 May 2024 05:29:31 +0300
+Subject: [PATCH] Unfreeze registries during data injection
+
+
+diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
+index a35fe2b8ef35692fb7b5d520944d0c6ae53ac07e..6676587b5570c418702171e63b63b242ec9a493a 100644
+--- a/src/main/java/net/minecraft/core/MappedRegistry.java
++++ b/src/main/java/net/minecraft/core/MappedRegistry.java
+@@ -43,6 +43,7 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
+     private Lifecycle registryLifecycle;
+     private volatile Map<TagKey<T>, HolderSet.Named<T>> tags = new IdentityHashMap<>();
+     private boolean frozen;
++    private final boolean intrusive; // Kiterino - Real custom items
+     @Nullable
+     private Map<T, Holder.Reference<T>> unregisteredIntrusiveHolders;
+     private final HolderLookup.RegistryLookup<T> lookup = new HolderLookup.RegistryLookup<T>() {
+@@ -88,8 +89,29 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
+         if (intrusive) {
+             this.unregisteredIntrusiveHolders = new IdentityHashMap<>();
+         }
++        this.intrusive = intrusive; // Kiterino - Real custom items
+     }
+ 
++    // Kiterino start - Real custom items
++    public void removeDefaultIntrusiveAndFreeze() {
++        if (this.unregisteredIntrusiveHolders != null && this.unregisteredIntrusiveHolders.size() == 1) {
++            this.unregisteredIntrusiveHolders.clear(); // ToDo: why removing default doesn't work?
++        }
++        freeze();
++    }
++
++    public Registry<T> unfreeze() {
++        if (!this.frozen) return this;
++
++        if (this.intrusive) {
++            this.unregisteredIntrusiveHolders = new IdentityHashMap<>();
++        }
++        this.frozen = false;
++
++        return this;
++    }
++    // Kiterino end - Real custom items
++
+     @Override
+     public ResourceKey<? extends Registry<T>> key() {
+         return this.key;

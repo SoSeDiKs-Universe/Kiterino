@@ -5,18 +5,10 @@ Subject: [PATCH] Hide irrelevant compilation warnings
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 6aef83558a5ef7e84873b127c3bb43a6468c9a24..6bd70ebc0f286413b6000ebedc7fffe011843e21 100644
+index 6aef83558a5ef7e84873b127c3bb43a6468c9a24..a5a059f6fd2d3c4cf70bb5bba6a521a54b17c8d3 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -189,6 +189,7 @@ tasks.withType<Javadoc> {
-             into("build/docs/javadoc")
-         }
-     }
-+    options.addStringOption("Xdoclint:none", "-quiet") // Kiterino - Hide irrelevant compilation warnings
- }
- 
- tasks.test {
-@@ -222,3 +223,12 @@ tasks.check {
+@@ -222,3 +222,12 @@ tasks.check {
      dependsOn(scanJarForOldGeneratedCode)
  }
  // Paper end

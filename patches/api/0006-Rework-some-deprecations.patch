@@ -1,0 +1,165 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 8 Jun 2024 17:05:42 +0300
+Subject: [PATCH] Rework some deprecations
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index bb09c468ab1261ea4eaf59012d30a2e45199caf7..8545413d0c6daedfff450320d1d0e36a40ea977f 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2584,7 +2584,7 @@ public final class Bukkit {
+      * @return the unsafe values instance
+      * @see UnsafeValues
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     @NotNull
+     public static UnsafeValues getUnsafe() {
+         return server.getUnsafe();
+diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
+index d0206c9c2f423a9b77237d9a005b9ee139dae70f..9554895987e5b10afdcc5b0d03324c489b4c78db 100644
+--- a/src/main/java/org/bukkit/OfflinePlayer.java
++++ b/src/main/java/org/bukkit/OfflinePlayer.java
+@@ -239,9 +239,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
+      * UTC.
+      *
+      * @return Date of last log-in for this player, or 0
+-     * @deprecated The API contract is ambiguous and the implementation may or may not return the correct value given this API ambiguity. It is instead recommended use {@link #getLastLogin()} or {@link #getLastSeen()} depending on your needs.
++     * @see #hasPlayedBefore()
++     * @see #getLastLogin()
++     * @see #getLastSeen()
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     public long getLastPlayed();
+ 
+     /**
+diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
+index 0e9ccfee7a03d341e7c4d271f53b4ed168b404ef..89136db409da1f985022edd4ff7bbb420b819953 100644
+--- a/src/main/java/org/bukkit/UnsafeValues.java
++++ b/src/main/java/org/bukkit/UnsafeValues.java
+@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
+  * may be poorly named, throw exceptions, have misleading parameters, or any
+  * other bad programming practice.
+  */
+-@Deprecated
++//@Deprecated // Kiterino - Rework some deprecations
+ public interface UnsafeValues {
+     // Paper start
+     net.kyori.adventure.text.flattener.ComponentFlattener componentFlattener();
+diff --git a/src/main/java/org/bukkit/entity/Damageable.java b/src/main/java/org/bukkit/entity/Damageable.java
+index f89edd9c129802f70eac022ff6bf80bef378f5e8..69ed6f14a10f6618e2abac6d653801e2c0e8aa87 100644
+--- a/src/main/java/org/bukkit/entity/Damageable.java
++++ b/src/main/java/org/bukkit/entity/Damageable.java
+@@ -96,9 +96,9 @@ public interface Damageable extends Entity {
+      * Gets the maximum health this entity has.
+      *
+      * @return Maximum health
+-     * @deprecated use {@link Attribute#GENERIC_MAX_HEALTH}.
++     * @see Attribute#GENERIC_MAX_HEALTH
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     double getMaxHealth();
+ 
+     /**
+@@ -111,15 +111,15 @@ public interface Damageable extends Entity {
+      * {@link Wither}, etc...} will have their bar scaled accordingly.
+      *
+      * @param health amount of health to set the maximum to
+-     * @deprecated use {@link Attribute#GENERIC_MAX_HEALTH}.
++     * @see Attribute#GENERIC_MAX_HEALTH
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     void setMaxHealth(double health);
+ 
+     /**
+      * Resets the max health to the original amount.
+-     * @deprecated use {@link Attribute#GENERIC_MAX_HEALTH}.
++     * @see Attribute#GENERIC_MAX_HEALTH
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     void resetMaxHealth();
+ }
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index c41b5e13c519b3f48cbc866ad77b153cdde13136..1ea1e5a7d89bd136ef90db86fc30181498d7e506 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -457,13 +457,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      *
+      * This value is a state updated by the client after each movement.
+      *
+-     * @return True if entity is on ground.
+-     * @deprecated This value is controlled only by the client and is therefore
++     * <p>
++     * Note: This value is controlled only by the client and is therefore
+      * unreliable and vulnerable to spoofing and/or desync depending on the
+      * context/time which it is accessed
++     *
++     * @return True if entity is on ground.
+      */
+     @Override
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     public boolean isOnGround();
+ 
+     /**
+@@ -3297,10 +3299,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      * they wish.
+      *
+      * @return the player's locale
+-     * @deprecated in favour of {@link #locale()}
++     * @see #locale()
+      */
+     @NotNull
+-    @Deprecated // Paper
++    //@Deprecated // Paper // Kiterino - Rework some deprecations
+     public String getLocale();
+ 
+     // Paper start
+diff --git a/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java b/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
+index ddea08e4de2198a0a7565e2fd7a05571ed48f27b..c521c0ddacabf03aab972f627a15c181ad3effe3 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerInteractEvent.java
+@@ -235,11 +235,11 @@ public class PlayerInteractEvent extends PlayerEvent implements Cancellable {
+      * <p>
+      * All vector components are between 0.0 and 1.0 inclusive.
+      *
+-     * @deprecated misleading, use {@link #getInteractionPoint()}
++     * @see #getInteractionPoint()
+      * @return the clicked position. May be null.
+      */
+     @Nullable
+-    @Deprecated // Paper
++    //@Deprecated // Paper // Kiterino - Rework some deprecations
+     public Vector getClickedPosition() {
+         return clickedPosistion;
+     }
+diff --git a/src/main/java/org/bukkit/inventory/meta/MapMeta.java b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
+index 26a336dade83baee97d20eb39a058925659f5777..0461967d78c0a8f42dc0eaf173a05860f184da30 100644
+--- a/src/main/java/org/bukkit/inventory/meta/MapMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
+@@ -36,15 +36,16 @@ public interface MapMeta extends ItemMeta {
+     /**
+      * Sets the map ID. This is used to determine what map is displayed.
+      *
+-     * @param id the map id to set
+-     * @see #setMapView(org.bukkit.map.MapView)
+-     * @deprecated These methods are poor API: They rely on the caller to pass
++     * <p> Note: These methods are poor API: They rely on the caller to pass
+      * in an only an integer property, and have poorly defined implementation
+      * behavior if that integer is not a valid map (the current implementation
+      * for example will generate a new map with a different ID). The xxxMapView
+      * family of methods should be used instead.
++     *
++     * @param id the map id to set
++     * @see #setMapView(org.bukkit.map.MapView)
+      */
+-    @Deprecated
++    //@Deprecated // Kiterino - Rework some deprecations
+     void setMapId(int id);
+ 
+     /**

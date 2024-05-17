@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 31 Jul 2021 20:15:05 +0300
+Subject: [PATCH] Add NBT API as a first-class lib
+
+
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index 2b3b671f5bc7caa6a74673c12126960bd33d5cb4..481067d85e49c65ad72a819d92a2e59be671d4e8 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -324,6 +324,14 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         }
+         // Purpur end
+ 
++        // Kiterino start - Add NBT API as a first-class lib
++        de.tr7zw.changeme.nbtapi.utils.MinecraftVersion.disablePackageWarning();
++        de.tr7zw.changeme.nbtapi.utils.MinecraftVersion.disableUpdateCheck();
++        de.tr7zw.changeme.nbtapi.utils.MinecraftVersion.disableBStats(); // bStats need plugin instance
++        de.tr7zw.changeme.nbtapi.utils.MinecraftVersion.getVersion(); // Init
++        de.tr7zw.changeme.nbtapi.utils.nmsmappings.ReflectionMethod.COMPOUND_SET_FLOAT.getMethodName(); // Cache reflections
++        // Kiterino end - Add NBT API as a first-class lib
++
+         // CraftBukkit start
+         // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up
+         this.server.loadPlugins();

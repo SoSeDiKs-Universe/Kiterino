@@ -1,0 +1,66 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 16 May 2024 06:40:03 +0300
+Subject: [PATCH] Implement packet item faker for injected items
+
+Forces default item faker for injected items as to not kick the client from the server because of modded items
+
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
+index 3cf90db563f12c873c62cf30a463ca277351fab3..47b900d8d4389484451840175e3990dd6b99d4cd 100644
+--- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
+@@ -140,7 +140,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
+ 	}
+ 
+ 	public static void init() {
++		ItemModifier itemFaker = modifiers.get(KiterinoItemModifier.MODIFIER_KEY);
+ 		modifiers.clear(); // In case of reload. Not supported, but eh
++		if (itemFaker != null) {
++			modifiers.put(itemFaker.getModifierId(), itemFaker);
++		}
+ 		if (ItemModifiersHandler.itemModifiersHandler == null) ItemModifiersHandler.itemModifiersHandler = new ItemModifiersHandlerImpl();
+ 		ItemPacketContextInitializer.init();
+ 	}
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifier.java b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifier.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..7bd76ecd79401f08d5e8d52e6d0e27fe44fd0588
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifier.java
+@@ -0,0 +1,37 @@
++package me.sosedik.kiterino.modifier.item;
++
++import me.sosedik.kiterino.world.item.KiterinoNMSItem;
++import org.bukkit.Material;
++import org.bukkit.NamespacedKey;
++import org.jetbrains.annotations.NotNull;
++
++import java.util.HashMap;
++import java.util.Map;
++
++public final class KiterinoItemModifier extends ItemModifier {
++
++	public static final NamespacedKey MODIFIER_KEY = new NamespacedKey(NamespacedKey.KITERINO, "item_faker");
++
++	private final Map<Material, KiterinoNMSItem> wrappers;
++
++	@SuppressWarnings("java:S1640")
++	public KiterinoItemModifier(int count) {
++		super(MODIFIER_KEY);
++		this.wrappers = new HashMap<>(count, 1F);
++	}
++
++	public void add(@NotNull Material material, @NotNull KiterinoNMSItem wrapper) {
++		this.wrappers.put(material, wrapper);
++	}
++
++	@Override
++	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
++		KiterinoNMSItem wrapper = wrappers.get(contextBox.getItem().getType());
++		if (wrapper != null) {
++			wrapper.modify(contextBox);
++			return ModificationResult.OK;
++		}
++		return ModificationResult.PASS;
++	}
++
++}

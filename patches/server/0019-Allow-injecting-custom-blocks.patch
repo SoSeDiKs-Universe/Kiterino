@@ -1,0 +1,138 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 18 May 2024 07:14:45 +0300
+Subject: [PATCH] Allow injecting custom blocks
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
+index 7564a6873554a3c6923849ceb7c893c321b8e9b2..afb691976a48a22efdd3aeb084a375e501e2475f 100644
+--- a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
++++ b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
+@@ -3,14 +3,21 @@ package me.sosedik.kiterino.util;
+ import com.destroystokyo.paper.event.executor.asm.SafeClassDefiner;
+ import io.papermc.paper.adventure.PaperAdventure;
+ import me.sosedik.kiterino.modifier.item.ItemContextBox;
++import me.sosedik.kiterino.world.block.KiterinoBlock;
++import me.sosedik.kiterino.world.block.KiterinoNMSBlock;
++import me.sosedik.kiterino.world.item.KiterinoBlockItem;
+ import me.sosedik.kiterino.world.item.KiterinoItem;
+ import me.sosedik.kiterino.world.item.KiterinoItemProperties;
+ import me.sosedik.kiterino.world.item.KiterinoNMSItem;
+ import net.minecraft.core.component.DataComponents;
+ import net.minecraft.resources.ResourceLocation;
++import net.minecraft.world.item.BlockItem;
+ import net.minecraft.world.item.Item;
+ import net.minecraft.world.item.Items;
++import net.minecraft.world.level.block.Block;
++import net.minecraft.world.level.block.Blocks;
+ import net.minecraft.world.level.block.ComposterBlock;
++import net.minecraft.world.level.block.state.BlockState;
+ import org.bukkit.Material;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.jetbrains.annotations.NotNull;
+@@ -45,6 +52,26 @@ public class KiterinoDataInjectorImpl extends KiterinoDataInjector {
+ 	public void injectItem(@NotNull Material material, @NotNull KiterinoNMSItem item) {
+ 		ResourceLocation id = PaperAdventure.asVanilla(material.getKey());
+ 		try {
++			if (item instanceof BlockItem nmsBlockItem) {
++				Block nmsBlock = nmsBlockItem.getBlock();
++				registerNMSBlock(id, nmsBlock);
++				registerNMSItem(material, id, nmsBlockItem);
++			} else if (item instanceof KiterinoBlockItem kiterinoBlockItem) {
++				KiterinoNMSBlock kiterinoNMSBlock = kiterinoBlockItem.getKiterinoBlock().get();
++				Block nmsBlock;
++				if (kiterinoNMSBlock instanceof Block block) {
++					nmsBlock = block;
++				} else if (kiterinoNMSBlock instanceof KiterinoBlock kiterinoBlock) {
++					nmsBlock = null; // TODO
++				} else {
++					throw new KiterinoDataInjectorRuntimeException("Unknown Kiterino block: " + id);
++				}
++				registerNMSBlock(id, nmsBlock);
++				Item nmsItem = createNmsBlockItemClass(id, nmsBlock, kiterinoBlockItem);
++				registerNMSItem(material, id, nmsItem);
++				applyExtraItemProperties(nmsItem, kiterinoBlockItem.getItemProperties());
++				//applyExtraBlockProperties(nmsBlock, properties, material); // Has to be done after item due to Bukkit stuff
++			} else
+ 			if (item instanceof Item nmsItem) {
+ 				registerNMSItem(material, id, nmsItem);
+ 				applyExtraItemProperties(nmsItem, item.getItemProperties());
+@@ -69,6 +96,19 @@ public class KiterinoDataInjectorImpl extends KiterinoDataInjector {
+ 		((Map<Material, Item>) materialItemField.get(null)).put(material, nmsItem);
+ 	}
+ 
++	private static void registerNMSBlock(@NotNull ResourceLocation id, @NotNull Block block) {
++		Blocks.register(id.toString(), block);
++		for (BlockState blockState : block.getStateDefinition().getPossibleStates()) {
++			Block.BLOCK_STATE_REGISTRY.add(blockState);
++			blockState.initCache();
++		}
++		block.getLootTable(); // Init loot table
++	}
++
++//	private static void applyExtraBlockProperties(@NotNull Block block, @Nullable BlockProperties properties, @NotNull Material material) {
++//		if (properties == null) return;
++//	}
++
+ 	@SuppressWarnings("java:S3011")
+ 	private void applyBukkitData(@NotNull Material material, @NotNull Item item) throws IllegalArgumentException, IllegalAccessException {
+ 		maxStackField.set(material, item.getDefaultMaxStackSize());
+@@ -135,6 +175,58 @@ public class KiterinoDataInjectorImpl extends KiterinoDataInjector {
+ 		return (Item) nmsItemClass.getDeclaredConstructor(KiterinoNMSItem.class, Item.Properties.class).newInstance(item, getFromBukkit(item.getItemProperties()));
+ 	}
+ 
++	private @NotNull BlockItem createNmsBlockItemClass(@NotNull ResourceLocation id, @NotNull Block nmsBlock, @NotNull KiterinoNMSItem item) throws Exception {
++		var classWriter = new ClassWriter(0);
++
++		String classInternalName = generateClassName(id, "BlockItem");
++		String parentClass = Type.getInternalName(BlockItem.class);
++
++		// Define class
++		List<Class<?>> interfaces = new ArrayList<>();
++		interfaces.add(KiterinoNMSItem.class);
++		classWriter.visit(Opcodes.V21, Opcodes.ACC_PUBLIC + Opcodes.ACC_SUPER, classInternalName, null, parentClass, interfaces.stream().map(Type::getInternalName).toArray(String[]::new));
++
++		// Add "private final wrapper KiterinoNMSItem" field
++		FieldVisitor fieldVisitor = classWriter.visitField(Opcodes.ACC_PRIVATE + Opcodes.ACC_FINAL, "wrapper", Type.getDescriptor(KiterinoNMSItem.class), null, null);
++		fieldVisitor.visitEnd();
++
++		// Create the default constructor
++		String constDesc = Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(KiterinoNMSItem.class), Type.getType(Block.class), Type.getType(Item.Properties.class));
++		MethodVisitor constructor = classWriter.visitMethod(Opcodes.ACC_PUBLIC, "<init>", constDesc, null, null);
++		constructor.visitCode();
++		constructor.visitVarInsn(Opcodes.ALOAD, 0);
++		constructor.visitVarInsn(Opcodes.ALOAD, 2);
++		constructor.visitMethodInsn(Opcodes.INVOKESPECIAL, parentClass, "<init>", Type.getConstructorDescriptor(BlockItem.class.getDeclaredConstructor(Block.class, Item.Properties.class)), false);
++		constructor.visitVarInsn(Opcodes.ALOAD, 0);
++		constructor.visitVarInsn(Opcodes.ALOAD, 1);
++		constructor.visitFieldInsn(Opcodes.PUTFIELD, classInternalName, "wrapper", Type.getDescriptor(KiterinoNMSItem.class));
++		constructor.visitInsn(Opcodes.RETURN);
++		constructor.visitMaxs(2, 3);
++		constructor.visitEnd();
++
++		// Implement interface methods
++		for (Class<?> interf : interfaces) {
++			switch (interf.getSimpleName()) {
++				case "KiterinoNMSItem" ->
++						implementMethod(classWriter, KiterinoNMSItem.class.getDeclaredMethod("modify", ItemContextBox.class), (method, visitor) -> {
++							visitor.visitVarInsn(Opcodes.ALOAD, 0);
++							visitor.visitFieldInsn(Opcodes.GETFIELD, classInternalName, "wrapper", Type.getDescriptor(KiterinoNMSItem.class));
++							visitor.visitVarInsn(Opcodes.ALOAD, 1);
++							visitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, Type.getInternalName(KiterinoNMSItem.class), method.getName(), Type.getMethodDescriptor(method), true);
++							visitor.visitInsn(Opcodes.RETURN); // Return void
++							visitor.visitMaxs(2, 2);
++						});
++			}
++		}
++
++		classWriter.visitEnd();
++
++		byte[] classData = classWriter.toByteArray();
++
++		Class<?> nmsItemClass = SafeClassDefiner.INSTANCE.defineClass(this.getClass().getClassLoader(), classInternalName.replace('/', '.'), classData);
++		return (BlockItem) nmsItemClass.getDeclaredConstructor(KiterinoNMSItem.class, Block.class, Item.Properties.class).newInstance(item, nmsBlock, getFromBukkit(item.getItemProperties()));
++	}
++
+    @Override
+ 	protected @NotNull KiterinoNMSItem modifyNmsItemClass0(@NotNull Class<? extends KiterinoNMSItem> itemClass, @NotNull Object... constructorArgs) {
+ 		try {

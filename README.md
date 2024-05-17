@@ -13,13 +13,16 @@
 
 </div>
 
+> [!WARNING]  
+> Highly experimental branch, not ready for production.
+
 ## Building and setting up
 
 Run the following commands in the root directory:
 
 ```
 ./gradlew applyPatches
-./gradlew createReobfPaperclipJar
+./gradlew createMojmapPaperclipJar
 ```
 
 Publishing the dev bundle:
@@ -35,4 +38,4 @@ License
 
 [![MIT License](https://img.shields.io/badge/licence-MIT-brightgreen)](LICENSE)
 
-All of the original Kiterino patches are licensed under MIT found [here](LICENSE).
+All the original Kiterino patches are licensed under MIT found [here](LICENSE).

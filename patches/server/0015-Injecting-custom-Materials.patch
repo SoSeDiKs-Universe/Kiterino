@@ -1,0 +1,214 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 12 May 2024 03:31:06 +0300
+Subject: [PATCH] Injecting custom Materials
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index de871506be1b377fa92f7f08c2f226f025ef8e8a..69b8dd07a3a844ad84733fdf0a539d6e3aefaddd 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -84,6 +84,7 @@ tasks.jar {
+         val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
+         attributes(
+             "Main-Class" to "org.bukkit.craftbukkit.Main",
++            "Add-Opens" to "java.base/java.lang", // Kiterino - Injecting custom Materials
+             "Implementation-Title" to "Kiterino", // Kiterino - Init
+             "Implementation-Version" to implementationVersion,
+             "Implementation-Vendor" to date, // Paper
+@@ -159,6 +160,7 @@ fun TaskContainer.registerRunTask(
+         vendor.set(JvmVendorSpec.JETBRAINS)
+     })
+     jvmArgs("-XX:+AllowEnhancedClassRedefinition", "-XX:+AllowRedefinitionToAddDeleteMethods")
++    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Kiterino - Injecting custom Materials
+ 
+     if (rootProject.childProjects["test-plugin"] != null) {
+         val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
+diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..e25384875f2080dee9f7ca294328241adc5dbcfa
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
+@@ -0,0 +1,164 @@
++package me.sosedik.kiterino.util;
++
++import me.sosedik.kiterino.KiterinoConfig;
++import me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl;
++import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
++import me.sosedik.kiterino.world.item.KiterinoNMSItem;
++import net.minecraft.core.MappedRegistry;
++import net.minecraft.core.registries.BuiltInRegistries;
++import net.minecraft.world.item.Item;
++import net.minecraft.world.level.block.Block;
++import org.bukkit.Material;
++import org.bukkit.NamespacedKey;
++import org.bukkit.material.MaterialData;
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++import java.lang.reflect.Field;
++import java.lang.reflect.Modifier;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Locale;
++import java.util.Map;
++import java.util.function.Supplier;
++import java.util.logging.Level;
++
++import static me.sosedik.kiterino.util.KiterinoUnsafeUtil.getField;
++
++/**
++ * Abomination to workaround Material enum
++ * This accessibility hack should never be used, ever
++ */
++public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrapMaterialInjector {
++
++	private final int originalMaterialCount = Material.values().length;
++	private final List<Map.Entry<Material, Supplier<? extends KiterinoNMSItem>>> allocated = new ArrayList<>();
++	private final Field nameField = getField(Enum.class, "name");
++	private final Field ordinalField = getField(Enum.class, "ordinal");
++	private final Field byNameField = getField(Material.class, "BY_NAME");
++	private final Field idField = getField(Material.class, "id");
++	private final Field ctorField = getField(Material.class, "ctor");
++	private final Field dataField = getField(Material.class, "data");
++	private final Field legacyField = getField(Material.class, "legacy");
++	private final Field keyField = getField(Material.class, "key");
++	private final Field injectedField = getField(Material.class, "injected");
++
++	@SuppressWarnings("java:S3011")
++	@Override
++	public void injectMaterials(@NotNull Class<?> materialsClass, @NotNull String namespace) {
++		try {
++			for (Field field : materialsClass.getDeclaredFields()) {
++				if (field.getType() != Material.class) continue;
++
++				int modifiers = field.getModifiers();
++				if (!Modifier.isPublic(modifiers)) continue;
++				if (!Modifier.isStatic(modifiers)) continue;
++				if (!Modifier.isFinal(modifiers)) continue;
++
++				Material material = (Material) field.get(null);
++				String enumName = field.getName().toLowerCase(Locale.ROOT);
++				NamespacedKey key = (NamespacedKey) keyField.get(material);
++				if (key == null) {
++					key = new NamespacedKey(namespace, enumName);
++					keyField.set(material, key);
++				}
++			}
++		} catch (Exception e) {
++			throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material", e);
++		}
++	}
++
++	@SuppressWarnings("java:S3011")
++	@Override
++	public @NotNull Material allocateMaterial(@Nullable NamespacedKey key, @NotNull Supplier<? extends KiterinoNMSItem> options) {
++		try {
++			Material material = KiterinoUnsafeUtil.allocateInstance(Material.class);
++			allocated.add(Map.entry(material, options));
++
++			injectedField.set(material, true);
++
++			if (key != null) {
++				keyField.set(material, key);
++			}
++
++			return material;
++		} catch (Exception e) {
++			throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material", e);
++		}
++	}
++
++	@SuppressWarnings("java:S3011")
++	public void finalizeInject(@NotNull KiterinoDataInjectorImpl injector) {
++		try {
++			if (allocated.isEmpty()) return;
++
++			Material[] newValues = new Material[originalMaterialCount + allocated.size()];
++			for (int i = 0; i < allocated.size(); i++) {
++				Material material = allocated.get(i).getKey();
++				populate(material, originalMaterialCount + i);
++				newValues[originalMaterialCount + i] = material;
++			}
++
++			System.arraycopy(Material.values(), 0, newValues, 0, originalMaterialCount);
++			Field valuesField = Material.class.getDeclaredField("$VALUES");
++			KiterinoUnsafeUtil.setField(valuesField, newValues);
++
++			Field enumConstants = Class.class.getDeclaredField("enumConstants");
++			enumConstants.setAccessible(true);
++			enumConstants.set(Material.class, null);
++			Field enumConstantDirectory = Class.class.getDeclaredField("enumConstantDirectory");
++			enumConstantDirectory.setAccessible(true);
++			enumConstantDirectory.set(Material.class, null);
++
++			((MappedRegistry<Item>) BuiltInRegistries.ITEM).unfreeze();
++			((MappedRegistry<Block>) BuiltInRegistries.BLOCK).unfreeze();
++
++			var modifier = new KiterinoItemModifier(allocated.size());
++			for (Map.Entry<Material, Supplier<? extends KiterinoNMSItem>> material : allocated) {
++				injector.injectItem(material.getKey(), material.getValue().get());
++				modifier.add(material.getKey(), material.getValue().get());
++			}
++			if (!KiterinoConfig.itemModifiersOrder.contains(modifier.getModifierId())) {
++				ItemModifiersHandlerImpl.modifiers.put(modifier.getModifierId(), modifier);
++				KiterinoConfig.itemModifiersOrder.addLast(modifier.getModifierId());
++				KiterinoConfig.log(Level.WARNING, "Item modifier with id " + modifier.getModifierId() + " is missing from \"item-modifiers.modification-order\" option, but custom item was injected. Forcing the modifier automatically.");
++			} else {
++				modifier.register();
++			}
++		} catch (Exception e) {
++			throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material", e);
++		} finally {
++			((MappedRegistry<Item>) BuiltInRegistries.ITEM).removeDefaultIntrusiveAndFreeze();
++			((MappedRegistry<Block>) BuiltInRegistries.BLOCK).removeDefaultIntrusiveAndFreeze();
++		}
++	}
++
++	@SuppressWarnings({"deprecation", "unchecked", "java:S3011"})
++	private void populate(@NotNull Material material, int ordinal) throws IllegalArgumentException, IllegalAccessException, NoSuchMethodException, SecurityException {
++		NamespacedKey key = (NamespacedKey) keyField.get(material);
++		String enumName = toMaterialName(key);
++		nameField.set(material, enumName);
++		ordinalField.set(material, ordinal);
++		((Map<String, Material>) byNameField.get(null)).put(enumName, material);
++
++		idField.set(material, 1);
++		legacyField.set(material, false);
++		ctorField.set(material, MaterialData.class.getConstructor(Material.class, byte.class));
++		dataField.set(material, MaterialData.class);
++	}
++
++	private static @NotNull String toMaterialName(@NotNull NamespacedKey key) {
++		return key.asString().toUpperCase(Locale.ROOT).replace(':', '_');
++	}
++
++	public static void init() {
++		KiterinoBootstrapMaterialInjector.injector = new KiterinoBootstrapMaterialInjectorImpl();
++	}
++
++	public static KiterinoBootstrapMaterialInjectorImpl destruct() {
++		var injector = (KiterinoBootstrapMaterialInjectorImpl) KiterinoBootstrapMaterialInjector.injector;
++		KiterinoBootstrapMaterialInjector.injector = null;
++		return injector;
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoMaterialExtenderRuntimeException.java b/src/main/java/me/sosedik/kiterino/util/KiterinoMaterialExtenderRuntimeException.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ddaa868ae19b65d026c5efd93c27d3226bfd05e
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/util/KiterinoMaterialExtenderRuntimeException.java
+@@ -0,0 +1,12 @@
++package me.sosedik.kiterino.util;
++
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++public class KiterinoMaterialExtenderRuntimeException extends RuntimeException {
++
++	public KiterinoMaterialExtenderRuntimeException(@NotNull String message, @Nullable Throwable cause) {
++		super(message, cause);
++	}
++
++}

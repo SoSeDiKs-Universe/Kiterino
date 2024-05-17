@@ -6,7 +6,7 @@ Subject: [PATCH] Accept the EULA
 We at SoSeDiK's Universe agree to Mojang's EULA
 
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index 411f1f8c6be072cfc5ba88cbec38dbc4300a41d1..ecef2b609a6439822060f503357214f22617e7a8 100644
+index 0f7d6da8685716604f0749d4f5b60730a44cde73..7c5ef70698831a1061ee52c43ea8ade36eda0573 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
 @@ -168,6 +168,21 @@ public class Main {

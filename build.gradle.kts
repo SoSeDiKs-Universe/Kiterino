@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    remapper("net.fabricmc:tiny-remapper:0.10.1:fat")
+    remapper("net.fabricmc:tiny-remapper:0.10.3:fat")
     decompiler("org.vineflower:vineflower:1.10.1")
     paperclip("io.papermc:paperclip:3.0.3")
 }
@@ -52,7 +52,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven(paperMavenPublicUrl)
-        // maven("https://jitpack.io") // Pufferfish stuff
+        maven("https://repo.codemc.io/repository/maven-public/") // NBT-API
     }
 }
 
@@ -99,7 +99,7 @@ tasks.generateDevelopmentBundle {
 //            "https://ci.emc.gs/nexus/content/groups/aikar/",
 //            "https://sonatype.projecteden.gg/repository/maven-public/",
             "https://nexus.velocitypowered.com/repository/velocity-artifacts-snapshots/", // Velocity stuff
-//            "https://jitpack.io" // Pufferfish stuff
+            "https://repo.codemc.io/repository/maven-public/", // NBT-API
         )
     )
 }
