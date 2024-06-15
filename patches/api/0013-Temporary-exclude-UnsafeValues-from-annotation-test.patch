@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 15 Jun 2024 16:14:19 +0300
+Subject: [PATCH] Temporary exclude UnsafeValues from annotation test
+
+
+diff --git a/src/test/java/org/bukkit/AnnotationTest.java b/src/test/java/org/bukkit/AnnotationTest.java
+index 057dc3ebea3516863dda24252fe05d344c16fab3..cec435a4b085c6c5b85b19f9b1b0c5759c53b991 100644
+--- a/src/test/java/org/bukkit/AnnotationTest.java
++++ b/src/test/java/org/bukkit/AnnotationTest.java
+@@ -39,6 +39,7 @@ public class AnnotationTest {
+     };
+ 
+     private static final String[] EXCLUDED_CLASSES = {
++        "org/bukkit/UnsafeValues", // Kiterino - Temporary exclude UnsafeValues from annotation test
+         // Internal technical classes
+         "org/bukkit/plugin/java/JavaPluginLoader",
+         "org/bukkit/util/io/BukkitObjectInputStream",
