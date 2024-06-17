@@ -128,10 +128,10 @@ index 0000000000000000000000000000000000000000..f402ce0be376a0b5dfa229b44cff4d2e
 +
 +}
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 54c080d650f807b05e5d8347f78e2bc243791172..e05ba5ede12cd364fc56c295a5656bdbb6a2c9c7 100644
+index e1a677cfde05aba487a09e34e170fea61a125e7d..4cf80f766673050110c71c254e6f6fda75e69cf9 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -4763,6 +4763,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4621,6 +4621,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
      public final Class<?> data;
      private final boolean legacy;
      private final NamespacedKey key;
@@ -139,7 +139,7 @@ index 54c080d650f807b05e5d8347f78e2bc243791172..e05ba5ede12cd364fc56c295a5656bdb
  
      private Material(final int id) {
          this(id, 64);
-@@ -5106,6 +5107,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4964,6 +4965,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
@@ -151,7 +151,7 @@ index 54c080d650f807b05e5d8347f78e2bc243791172..e05ba5ede12cd364fc56c295a5656bdb
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -5800,4 +5806,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5658,4 +5664,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          }
      }
      // Purpur end

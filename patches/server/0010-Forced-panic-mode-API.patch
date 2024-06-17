@@ -1,0 +1,91 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Jun 2024 21:32:37 +0300
+Subject: [PATCH] Forced panic mode API
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index c1d6b00c2e74cd19df9dd074a021024e0c9ac442..2ff8f572492ef79dad34cfff96e7e8eff37ca1ae 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -348,6 +348,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+     public final RandomSource random;
+     public int tickCount;
+     private int remainingFireTicks;
++    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino - Forced panic mode API
+     public boolean wasTouchingWater;
+     protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
+     protected boolean wasEyeInWater;
+@@ -906,6 +907,12 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+             }
+         }
+ 
++        // Kiterino start - Forced panic mode API
++        if (this.forcePanicTicks > 0) {
++            this.forcePanicTicks--;
++        }
++        // Kiterino end - Forced panic mode API
++
+         if (this.isInLava()) {
+             this.lavaHurt();
+             this.fallDistance *= 0.5F;
+diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
+index d0212665c3fd6182d2c63356ba4e7c49b944eb62..8cea002c314509f6c0856f0fc9bf2d9f6731fa77 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
++++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
+@@ -43,7 +43,7 @@ public class AnimalPanic<E extends PathfinderMob> extends Behavior<E> {
+     @Override
+     protected boolean checkExtraStartConditions(ServerLevel world, E entity) {
+         return entity.getBrain().getMemory(MemoryModuleType.HURT_BY).map(hurtBy -> hurtBy.is(this.panicCausingDamageTypes.apply(entity))).orElse(false)
+-            || entity.getBrain().hasMemoryValue(MemoryModuleType.IS_PANICKING);
++            || entity.getBrain().hasMemoryValue(MemoryModuleType.IS_PANICKING) || entity.isForcePanicking(); // Kiterino - Forced panic mode API
+     }
+ 
+     @Override
+diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
+index 20d4e3fb00a9eaac8484e95329bd64a368872b59..bec81c864a07d53a31da4e6e7437b2418020d240 100644
+--- a/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
++++ b/src/main/java/net/minecraft/world/entity/ai/goal/PanicGoal.java
+@@ -59,7 +59,7 @@ public class PanicGoal extends Goal {
+     }
+ 
+     protected boolean shouldPanic() {
+-        return this.mob.getLastDamageSource() != null && this.mob.getLastDamageSource().is(this.panicCausingDamageTypes.apply(this.mob));
++        return (this.mob.getLastDamageSource() != null && this.mob.getLastDamageSource().is(this.panicCausingDamageTypes.apply(this.mob))) || this.mob.isForcePanicking(); // Kiterino - Forced panic mode API
+     }
+ 
+     protected boolean findRandomPosition() {
+diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
+index 30be013ceeb9263809a606f2a94fc31de7a6747b..929247e1684a589fe931c32acc43cba3e9ba3efa 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
++++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
+@@ -953,7 +953,7 @@ public class Fox extends Animal implements VariantHolder<Fox.Type> {
+ 
+         @Override
+         public boolean shouldPanic() {
+-            return !Fox.this.isDefending() && super.shouldPanic();
++            return (!Fox.this.isDefending() && super.shouldPanic()) || this.mob.isForcePanicking(); // Kiterino - Forced panic mode API
+         }
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index becc6768857e0968b76988deb8a42b32eb3a6190..f6c572c71f5b190d94785446fd139ad923a031f1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1337,4 +1337,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return !getHandle().dismountsUnderwater();
+     }
+     // Purpur end
++
++    // Kiterino start - Forced panic mode API
++    @Override
++    public int getPanicTicks() {
++        return getHandle().forcePanicTicks;
++    }
++
++    @Override
++    public void setPanicTicks(int ticks) {
++        getHandle().forcePanicTicks = Math.max(0, ticks);
++    }
++    // Kiterino end - Forced panic mode API
+ }

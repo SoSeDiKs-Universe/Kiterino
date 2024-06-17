@@ -56,7 +56,7 @@ index 0d0312744369b332ed0dfd171c060fc9019ae8b1..048ac1c6fe11d8f65890f08882914277
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..26573a3df82aecbfc5000e1791462043339281af
+index 0000000000000000000000000000000000000000..bd08622189a5230199780b3d0e23a0bdc88658c3
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -0,0 +1,530 @@
@@ -288,7 +288,7 @@ index 0000000000000000000000000000000000000000..26573a3df82aecbfc5000e1791462043
 +	// As much as I dislike this, not sure if there's a better way
 +	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEntityDataPacket packet) {
 +		int entityId = packet.id();
-+		Entity entity = ((CraftWorld) player.getWorld()).getHandle().getEntityLookup().get(entityId);
++		Entity entity = ((CraftWorld) player.getWorld()).getHandle().moonrise$getEntityLookup().get(entityId);
 +		if (entity == null) {
 +			List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
 +			for (int i = 0; i < dataValues.size(); i++) {
@@ -392,7 +392,7 @@ index 0000000000000000000000000000000000000000..26573a3df82aecbfc5000e1791462043
 +					result = original;
 +				}
 +
-+				var pattern = new ShapedRecipePattern(nmsRecipe.getWidth(), nmsRecipe.getHeight(), ingredientsCopy, nmsRecipe.pattern.data());
++				var pattern = new ShapedRecipePattern(nmsRecipe.getWidth(), nmsRecipe.getHeight(), ingredientsCopy, nmsRecipe.pattern.data);
 +				nmsRecipe = new ShapedRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), pattern, result, nmsRecipe.showNotification());
 +				recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
 +				continue;
@@ -617,10 +617,10 @@ index 0000000000000000000000000000000000000000..4f7a04f81d19612e9de609a53504553c
 +
 +}
 diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
-index 3b66ecc4f110d0f2dc0ef6c560801296d7e0be64..99c94697a2f77fee57028c18e5db15724b392d78 100644
+index f37857eb3973a0cf1a02041effd5491d711c2eb7..ddffb25790ba712542944d363543931694f22af7 100644
 --- a/src/main/java/net/minecraft/network/Connection.java
 +++ b/src/main/java/net/minecraft/network/Connection.java
-@@ -501,6 +501,11 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+@@ -509,6 +509,11 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
              return;
          }
          try {
@@ -632,7 +632,7 @@ index 3b66ecc4f110d0f2dc0ef6c560801296d7e0be64..99c94697a2f77fee57028c18e5db1572
          // Paper end - Optimize network
          ChannelFuture channelfuture = flush ? this.channel.writeAndFlush(packet) : this.channel.write(packet);
  
-@@ -523,7 +528,8 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+@@ -531,7 +536,8 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
  
          // Paper start - Optimize network
          if (packet.hasFinishListener()) {
@@ -708,23 +708,36 @@ index 67a3c3d021ef9a4c47179ef6659bb69676e61d93..d5cc816a993beaa1dc1b4aab092085d9
      public ClientboundUpdateRecipesPacket(Collection<RecipeHolder<?>> recipes) {
          this.recipes = List.copyOf(recipes);
 diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
-index fb4c8a2a15e8e3e26454b7da920454e9861336c6..6a9fb53fb26f8b6247f813679c2f1af0fcab982a 100644
+index 1bf54b0142fe41b29b21c8b97d3f52bb24a36a92..74aac941506810a34b1b7835cdf1eeb335c386de 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
-@@ -20,7 +20,7 @@ import org.bukkit.inventory.RecipeChoice;
+@@ -19,7 +19,7 @@ import org.bukkit.inventory.RecipeChoice;
  
- public class ShapedRecipe extends io.papermc.paper.inventory.recipe.RecipeBookExactChoiceRecipe<CraftingContainer> implements CraftingRecipe { // Paper - improve exact recipe choices
+ public class ShapedRecipe extends io.papermc.paper.inventory.recipe.RecipeBookExactChoiceRecipe<CraftingInput> implements CraftingRecipe { // Paper - improve exact recipe choices
  
 -    final ShapedRecipePattern pattern;
 +    public final ShapedRecipePattern pattern; // Kiterino - Item Modification API
      final ItemStack result;
      final String group;
      final CraftingBookCategory category;
+diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java
+index 7c3e561f2ca2522ab8336487c0307e1b69a397a8..2bfb9c0652097694d7eaaa8497b1de7034fc2428 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java
++++ b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java
+@@ -31,7 +31,7 @@ public final class ShapedRecipePattern {
+     private final int width;
+     private final int height;
+     private final NonNullList<Ingredient> ingredients;
+-    private final Optional<ShapedRecipePattern.Data> data;
++    public final Optional<ShapedRecipePattern.Data> data; // Kiterino - Item Modifiers API
+     private final int ingredientCount;
+     private final boolean symmetrical;
+ 
 diff --git a/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java b/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java
-index a39a2b2b1a4294cb68cdbc3e67ad3e29552eeec8..2612ae94f63d9313c88002d0657e893b43c22dfc 100644
+index d64a1c1e146d5d9aa940a37dbee16889c9bab783..e4a08ec38fa62fe7bdce339712507d5f75d77d16 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java
-@@ -19,11 +19,11 @@ import org.bukkit.inventory.Recipe;
+@@ -18,11 +18,11 @@ import org.bukkit.inventory.Recipe;
  
  public class SmithingTransformRecipe implements SmithingRecipe {
  

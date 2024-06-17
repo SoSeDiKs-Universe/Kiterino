@@ -6,10 +6,10 @@ Subject: [PATCH] Init/destruct injectors
 System property in tests is to bandaid failing tests due to missing "--add-opens java.base/java.lang=ALL-UNNAMED" flag in gradle build task required by Material injector patch.
 
 diff --git a/src/main/java/net/minecraft/server/Bootstrap.java b/src/main/java/net/minecraft/server/Bootstrap.java
-index 6885a653bfe629c46bface19ff1eb666d74d4f1b..71f2d66e67e9f849ad19627099b7abeff0075d7e 100644
+index 8c2f9f549b5155b8d8fecbc22164b334805381e2..fb3525ed6c34f3b87063c8e5d4857704ccd5d8ef 100644
 --- a/src/main/java/net/minecraft/server/Bootstrap.java
 +++ b/src/main/java/net/minecraft/server/Bootstrap.java
-@@ -63,6 +63,12 @@ public class Bootstrap {
+@@ -62,6 +62,12 @@ public class Bootstrap {
              Bootstrap.isBootstrapped = true;
              Instant instant = Instant.now();
  
@@ -23,10 +23,10 @@ index 6885a653bfe629c46bface19ff1eb666d74d4f1b..71f2d66e67e9f849ad19627099b7abef
              if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
                  throw new IllegalStateException("Unable to load registries");
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 481067d85e49c65ad72a819d92a2e59be671d4e8..2900aa32f4bd3f3f0a3c74893f77826b3499a963 100644
+index 2296ef5cbe136a8405f197d65b35b2fcde331bfd..0e483821d283cb45ffe1fae01c188a346e17b9e9 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -332,9 +332,20 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -336,9 +336,20 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          de.tr7zw.changeme.nbtapi.utils.nmsmappings.ReflectionMethod.COMPOUND_SET_FLOAT.getMethodName(); // Cache reflections
          // Kiterino end - Add NBT API as a first-class lib
  

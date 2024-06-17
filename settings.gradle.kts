@@ -1,12 +1,31 @@
-import java.util.Locale
+import java.util.*
 
 pluginManagement {
     repositories {
         gradlePluginPortal()
         maven("https://papermc.io/repo/repository/maven-public/")
-        maven("https://mvn.thearcanebrony.net/repository/maven-public/")
-        mavenCentral()
     }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
+
+if (!file(".git").exists()) {
+    val errorText = """
+        
+        =====================[ ERROR ]=====================
+         The Kiterino project directory is not a properly cloned Git repository.
+         
+         In order to build Kiterino from source you must clone
+         the Kiterino repository using Git, not download a code
+         zip from GitHub.
+         
+         Refer to https://github.com/PurpurMC/Purpur/blob/HEAD/CONTRIBUTING.md
+         for further information on building and modifying Kiterino.
+        ===================================================
+    """.trimIndent()
+    error(errorText)
 }
 
 rootProject.name = "kiterino"

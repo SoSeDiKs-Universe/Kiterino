@@ -6,7 +6,7 @@ Subject: [PATCH] Implement packet item faker for injected items
 Forces default item faker for injected items as to not kick the client from the server because of modded items
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 3cf90db563f12c873c62cf30a463ca277351fab3..47b900d8d4389484451840175e3990dd6b99d4cd 100644
+index b34a47c2bfb140aca89d74ff8532e68007cfbd23..2e92dc88816c739c70d487e4b811bb34b378b4cf 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -140,7 +140,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {

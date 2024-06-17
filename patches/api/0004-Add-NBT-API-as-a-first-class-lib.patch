@@ -211,10 +211,10 @@ index 2d12c70b0baa50504619c8e37881a11a56d7df2c..71f479f5ce41de5a3da7e0fa16046b30
 +    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index fee2469bdedff0e55ef4dcda410cac35c6319258..df99ee1561311eb0ad640bf416f625bd3de0097f 100644
+index e77842896654088cedc19822a99361778336057a..307ffe483cb7379fe3c518ee9f3ee10435d003a5 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1653,4 +1653,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1661,4 +1661,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end

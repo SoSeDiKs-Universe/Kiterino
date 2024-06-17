@@ -23,7 +23,7 @@ index 9d6b2a44cede2337e3a6ac671395c34cbf337aa6..922cc7498b678ce5a4e63b197eca8bd5
 +
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 26573a3df82aecbfc5000e1791462043339281af..fe7e38c610f1f27317879e68e4ea6c85d1d75b3e 100644
+index bd08622189a5230199780b3d0e23a0bdc88658c3..3d576e148a7ac07fadb585206fd4e161121acb50 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -18,6 +18,8 @@ import net.minecraft.advancements.AdvancementHolder;
@@ -59,10 +59,10 @@ index 26573a3df82aecbfc5000e1791462043339281af..fe7e38c610f1f27317879e68e4ea6c85
  
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
-index 7424246750d6ceca1acd5d9ebfd48f0d66504c5d..bff5c763cf42a2e3f1cfb497b9ca6fc5d7c9387d 100644
+index 89eef5b3c964668e3be53cce6551a6faa8f1cca9..c437e5160318e03fe3bb82ecd0f6771c4be510b4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
-@@ -106,6 +106,11 @@ public class ServerPlayerGameMode {
+@@ -108,6 +108,11 @@ public class ServerPlayerGameMode {
      protected void setGameModeForPlayer(GameType gameMode, @Nullable GameType previousGameMode) {
          this.previousGameModeForPlayer = previousGameMode;
          this.gameModeForPlayer = gameMode;
@@ -75,10 +75,10 @@ index 7424246750d6ceca1acd5d9ebfd48f0d66504c5d..bff5c763cf42a2e3f1cfb497b9ca6fc5
      }
  
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index dc6c07b3cce53da0247fa8e2a7dc70d02a55ade4..1b6c2ea094a25bad8382e601825ea8b6bdd4d320 100644
+index 11f4711f149f56adaa67774d1d2595487580436a..453d5a3c878bb63f5d8e315c2cda15c3e38990ca 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -171,6 +171,15 @@ public final class ItemStack implements DataComponentHolder {
+@@ -168,6 +168,15 @@ public final class ItemStack implements DataComponentHolder {
                  if (false && !datacomponentpatch.isEmpty()) { // Paper - This is no longer needed with raw NBT being handled in metadata
                      CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
                  }
@@ -94,7 +94,7 @@ index dc6c07b3cce53da0247fa8e2a7dc70d02a55ade4..1b6c2ea094a25bad8382e601825ea8b6
                  return itemstack;
                  // CraftBukkit end
              }
-@@ -185,6 +194,19 @@ public final class ItemStack implements DataComponentHolder {
+@@ -182,6 +191,19 @@ public final class ItemStack implements DataComponentHolder {
                  // itemstack = itemstack.copy();
                  // CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack)); // Paper - This is no longer with raw NBT being handled in metadata
                  // Spigot end
@@ -114,7 +114,7 @@ index dc6c07b3cce53da0247fa8e2a7dc70d02a55ade4..1b6c2ea094a25bad8382e601825ea8b6
                  ITEM_STREAM_CODEC.encode(registryfriendlybytebuf, itemstack.getItemHolder()); // CraftBukkit - decompile error
                  // Paper start - adventure; conditionally render translatable components
                  boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
-@@ -193,6 +215,15 @@ public final class ItemStack implements DataComponentHolder {
+@@ -190,6 +212,15 @@ public final class ItemStack implements DataComponentHolder {
                  DataComponentPatch.STREAM_CODEC.encode(registryfriendlybytebuf, itemstack.components.asPatch());
                  } finally {
                      net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);

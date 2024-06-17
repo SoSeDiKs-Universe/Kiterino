@@ -59,8 +59,8 @@ subprojects {
 paperweight {
     serverProject.set(project(":kiterino-server"))
 
-	remapRepo.set(paperMavenPublicUrl)
-	decompileRepo.set(paperMavenPublicUrl)
+	remapRepo = paperMavenPublicUrl
+	decompileRepo = paperMavenPublicUrl
 
     useStandardUpstream("Purpur") {
         url.set(github("pl3xgaming", "Purpur"))
@@ -86,26 +86,19 @@ paperweight {
 }
 
 tasks.generateDevelopmentBundle {
-    ignoreUnsupportedEnvironment.set(true)
-    apiCoordinates.set("me.sosedik.kiterino:kiterino-api")
+    apiCoordinates = "me.sosedik.kiterino:kiterino-api"
     libraryRepositories.set(
         listOf(
             "https://repo.maven.apache.org/maven2/",
             paperMavenPublicUrl,
-//            "https://libraries.minecraft.net/",
-//            "https://maven.fabricmc.net/",
-//            "https://maven.quiltmc.org/repository/release/",
-//            "https://repo.aikar.co/content/groups/aikar",
-//            "https://ci.emc.gs/nexus/content/groups/aikar/",
-//            "https://sonatype.projecteden.gg/repository/maven-public/",
-            "https://nexus.velocitypowered.com/repository/velocity-artifacts-snapshots/", // Velocity stuff
+            "https://repo.purpurmc.org/snapshots",
             "https://repo.codemc.io/repository/maven-public/", // NBT-API
         )
     )
 }
 
 publishing {
-    if (project.hasProperty("publishDevBundle")) {
+    if (project.providers.gradleProperty("publishDevBundle").isPresent) {
         publications.create<MavenPublication>("devBundle") {
             artifact(tasks.generateDevelopmentBundle) {
                 artifactId = "dev-bundle"

@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Jun 2024 21:13:08 +0300
+Subject: [PATCH] Red tint API
+
+
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
+index 4d4f3d577125fd795710e587db2dadfa9c350f68..fd9c8c8d78f5623f0dc16884c2356dc36b9c133e 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
+@@ -19,6 +19,13 @@ public class ClientboundSetBorderCenterPacket implements Packet<ClientGamePacket
+         // CraftBukkit end
+     }
+ 
++    // Kiterino start - Red tint API
++    public ClientboundSetBorderCenterPacket(double newCenterX, double newCenterZ) {
++        this.newCenterX = newCenterX;
++        this.newCenterZ = newCenterZ;
++    }
++    // Kiterino ens - Red tint API
++
+     private ClientboundSetBorderCenterPacket(FriendlyByteBuf buf) {
+         this.newCenterX = buf.readDouble();
+         this.newCenterZ = buf.readDouble();
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
+index 802de2ff74b490ea73c415739375a0169fce9f2f..f191e86c6d3a76225be95914ba5214921643fab7 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
+@@ -20,6 +20,14 @@ public class ClientboundSetBorderLerpSizePacket implements Packet<ClientGamePack
+         this.lerpTime = worldBorder.getLerpRemainingTime();
+     }
+ 
++    // Kiterino start - Red tint API
++    public ClientboundSetBorderLerpSizePacket(double oldSize, double newSize, long lerpTime) {
++        this.oldSize = oldSize;
++        this.newSize = newSize;
++        this.lerpTime = lerpTime;
++    }
++    // Kiterino end - Red tint API
++
+     private ClientboundSetBorderLerpSizePacket(FriendlyByteBuf buf) {
+         this.oldSize = buf.readDouble();
+         this.newSize = buf.readDouble();
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 61ae7f9d871bb2747c928e91eb07496b862a4975..9f3ba5f1a39aafa7f12ab86506a953e50fa0af7f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -3646,4 +3646,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
+     }
+     // Purpur end
++
++    // Kiterino start - Red tint API
++    @Override
++    public void sendRedTint(double percentage) {
++        Location loc = this.getLocation();
++        ServerGamePacketListenerImpl connection = this.getHandle().connection;
++        connection.send(new ClientboundSetBorderCenterPacket(loc.getX(), loc.getZ()));
++
++        double distance = 13_000_000 - 10_000_000 * percentage;
++        connection.send(new ClientboundSetBorderLerpSizePacket(20_000_00D, distance, 14_000L));
++    }
++    // Kiterino end - Red tint API
+ }

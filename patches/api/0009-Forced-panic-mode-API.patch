@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Jun 2024 21:32:37 +0300
+Subject: [PATCH] Forced panic mode API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index 65751e7293b1bce076b44f0ce69bb33c158ff9d8..dadbf6787eec03c5c56cb5612181f1f9316f8bbf 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -1314,4 +1314,20 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+         getWorld().playSound(this, sound, category, volume, pitch);
+     }
+     // Kiterino end - More Sound API
++
++    // Kiterino start - Forced panic mode API
++    /**
++     * Gets the amount of forced panic ticks left
++     *
++     * @return the amount of panic ticks
++     */
++    int getPanicTicks();
++
++    /**
++     * Sets the amount of forced panic ticks
++     *
++     * @param ticks ticks
++     */
++    void setPanicTicks(int ticks);
++    // Kiterino end - Forced panic mode API
+ }

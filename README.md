@@ -31,7 +31,7 @@ Publishing the dev bundle:
 ./gradlew publishToMavenLocal -PpublishDevBundle
 ```
 
-For anything else you can refer to [Paper](https://github.com/PaperMC/Paper)'s documentation on how to contribute.
+For anything else you can refer to [Paper](https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md)'s/[Purpur](https://github.com/PurpurMC/Purpur/blob/HEAD/CONTRIBUTING.md)'s documentation on how to contribute.
 
 License
 ---

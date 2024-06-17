@@ -5,7 +5,7 @@ Subject: [PATCH] Unfreeze registries during data injection
 
 
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index a35fe2b8ef35692fb7b5d520944d0c6ae53ac07e..6676587b5570c418702171e63b63b242ec9a493a 100644
+index f22d22ebcedcc9c20225677844c86a1ad27c4211..e0f396204c3d176828d390440ae59cb51ec59bab 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
 @@ -43,6 +43,7 @@ public class MappedRegistry<T> implements WritableRegistry<T> {

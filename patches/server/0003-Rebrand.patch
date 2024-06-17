@@ -5,10 +5,10 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..5eb3ce1348587e4b494608f269e5faaf0691a5ea 100644
+index 308d80ca27aa0edd63fba87343b12b39675462bc..768c0f6aef290be11db540eb88dfe5ce4fafa79e 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
-@@ -593,7 +593,7 @@ public class Metrics {
+@@ -588,7 +588,7 @@ public class Metrics {
              boolean logFailedRequests = config.getBoolean("logFailedRequests", false);
              // Only start Metrics, if it's enabled in the config
              if (config.getBoolean("enabled", true)) {
@@ -17,7 +17,7 @@ index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..5eb3ce1348587e4b494608f269e5faaf
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
-@@ -603,7 +603,7 @@ public class Metrics {
+@@ -598,7 +598,7 @@ public class Metrics {
  
                  metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
                  metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur
@@ -73,36 +73,23 @@ index a6e5950b5875cafd734300cdfbf58f5d3736f3c8..aeb739d8d0f1178bcbade4913b3391f0
  
      @Override
 diff --git a/src/main/java/net/minecraft/CrashReport.java b/src/main/java/net/minecraft/CrashReport.java
-index c366d84518979e842a6f10f969a5951539ecac93..c43bfc90274c0f6321cef127d5a2280e4d26ffd7 100644
+index 7eabcb453ef655741c4802d2f574932d6d741631..d901a23d67a8aeb078a43c17f5852888e40438af 100644
 --- a/src/main/java/net/minecraft/CrashReport.java
 +++ b/src/main/java/net/minecraft/CrashReport.java
-@@ -127,7 +127,7 @@ public class CrashReport {
-         stringbuilder.append("---- Minecraft Crash Report ----\n");
-         // Purpur start
-         stringbuilder.append("// ");
--        stringbuilder.append("// DO NOT REPORT THIS TO PAPER! REPORT TO PURPUR INSTEAD!");
-+        stringbuilder.append("// DO NOT REPORT THIS TO PAPER/PURPUR! REPORT TO KITERINO INSTEAD!"); // Kiterino - Rebrand
-         // Purpur end
-         stringbuilder.append("// ");
-         stringbuilder.append(CrashReport.getErrorComment());
-diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 678a448edb5e167d5d2d3d162034312b8a0bf468..f1aef7eb6f6ab04211d4d224f589dec0399bbef9 100644
---- a/src/main/java/net/minecraft/server/MinecraftServer.java
-+++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -959,7 +959,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
-         shutdownThread = Thread.currentThread();
-         org.spigotmc.WatchdogThread.doStop(); // Paper
-         if (!isSameThread()) {
--            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO PURPUR)"); // Purpur
-+            MinecraftServer.LOGGER.info("Stopping main thread (Ignore any thread death message you see! - DO NOT REPORT THREAD DEATH TO KITERINO)"); // Kiterino - Rebrand
-             while (this.getRunningThread().isAlive()) {
-                 this.getRunningThread().stop();
-                 try {
+@@ -32,7 +32,7 @@ public class CrashReport {
+     private boolean trackingStackTrace = true;
+     private StackTraceElement[] uncategorizedStackTrace = new StackTraceElement[0];
+     private final SystemReport systemReport = new SystemReport();
+-    private List<String> extraInfo = List.of("", "DO NOT REPORT THIS TO PAPER! REPORT TO PURPUR INSTEAD!", ""); // Purpur - Rebrand
++    private List<String> extraInfo = List.of("", "DO NOT REPORT THIS TO PAPER/PURPUR! REPORT TO KITERINO INSTEAD!", ""); // Purpur - Rebrand // Kiterino - Rebrand
+ 
+     public CrashReport(String message, Throwable cause) {
+         io.papermc.paper.util.StacktraceDeobfuscator.INSTANCE.deobfuscateThrowable(cause); // Paper
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index a353eb9f45af7b7f9bfd92a4a89403335b841840..8d7ecb81b20bf0434a60d7c62120616e59670a44 100644
+index 101d1528d818a1c27080c973df5eee041f1ebc9e..16d0cc89e6be136255f775001657b90804613c0c 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
-@@ -155,14 +155,14 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+@@ -80,14 +80,14 @@ public class WatchdogThread extends Thread
                  if (isLongTimeout) {
                  // Paper end
                  log.log( Level.SEVERE, "------------------------------" );
@@ -113,14 +100,14 @@ index a353eb9f45af7b7f9bfd92a4a89403335b841840..8d7ecb81b20bf0434a60d7c62120616e
                  log.log( Level.SEVERE, "If you see a world save or edit, then it means you did far more than your server can handle at once" );
                  log.log( Level.SEVERE, "\t If this is the case, consider increasing timeout-time in spigot.yml but note that this will replace the crash with LARGE lag spikes" );
 -                log.log( Level.SEVERE, "If you are unsure or still think this is a Purpur bug, please report this to https://github.com/PurpurMC/Purpur/issues" ); // Purpur
-+                    log.log( Level.SEVERE, "If you are unsure or still think this is a Kiterino bug, please report this to https://github.com/SoSeDiKs-Universe/Kiterino/issues" ); // Kiterino - Rebrand
++                log.log( Level.SEVERE, "If you are unsure or still think this is a Kiterino bug, please report this to https://github.com/SoSeDiKs-Universe/Kiterino/issues" ); // Kiterino - Rebrand
                  log.log( Level.SEVERE, "Be sure to include ALL relevant console errors and Minecraft crash reports" );
 -                log.log( Level.SEVERE, "Purpur version: " + Bukkit.getServer().getVersion() ); // Purpur
 +                log.log( Level.SEVERE, "Kiterino version: " + Bukkit.getServer().getVersion() ); // Kiterino - Rebrand
                  //
                  if ( net.minecraft.world.level.Level.lastPhysicsProblem != null )
                  {
-@@ -184,12 +184,12 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+@@ -109,12 +109,12 @@ public class WatchdogThread extends Thread
                  // Paper end
                  } else
                  {
@@ -131,11 +118,11 @@ index a353eb9f45af7b7f9bfd92a4a89403335b841840..8d7ecb81b20bf0434a60d7c62120616e
                  // Paper end - Different message for short timeout
                  log.log( Level.SEVERE, "------------------------------" );
 -                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):" ); // Paper // Purpur
-+                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Kiterino - Rebrand
-                 io.papermc.paper.chunk.system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper - rewrite chunk system
-                 this.dumpTickingInfo(); // Paper - log detailed tick information
++                log.log( Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Paper // Purpur // Kiterino - Rebrand
+                 ca.spottedleaf.moonrise.patches.chunk_system.scheduling.ChunkTaskScheduler.dumpAllChunkLoadInfo(isLongTimeout); // Paper - rewrite chunk system
                  WatchdogThread.dumpThread( ManagementFactory.getThreadMXBean().getThreadInfo( MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE ), log );
-@@ -205,7 +205,7 @@ public final class WatchdogThread extends io.papermc.paper.util.TickThread // Pa
+                 log.log( Level.SEVERE, "------------------------------" );
+@@ -129,7 +129,7 @@ public class WatchdogThread extends Thread
                      WatchdogThread.dumpThread( thread, log );
                  }
                  } else {

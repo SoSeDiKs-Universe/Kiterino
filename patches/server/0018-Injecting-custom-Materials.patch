@@ -5,7 +5,7 @@ Subject: [PATCH] Injecting custom Materials
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index de871506be1b377fa92f7f08c2f226f025ef8e8a..69b8dd07a3a844ad84733fdf0a539d6e3aefaddd 100644
+index 5d8dabfe883da4b578180762aa4b6e2e697558d9..759e8683abbc202b9437615090f4dd6604c6e87c 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -84,6 +84,7 @@ tasks.jar {

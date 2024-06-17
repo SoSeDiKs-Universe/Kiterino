@@ -22,10 +22,10 @@ index 922cc7498b678ce5a4e63b197eca8bd5f13ae352..a2bbd89da760b2fba218ece744dfff32
 +
  }
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 1b6c2ea094a25bad8382e601825ea8b6bdd4d320..39c8d9f8530cc1ffac6014e04c5033f3d15b42df 100644
+index 453d5a3c878bb63f5d8e315c2cda15c3e38990ca..8c248ff5586e69fa9191333dd562af40afd4da86 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -211,7 +211,7 @@ public final class ItemStack implements DataComponentHolder {
+@@ -208,7 +208,7 @@ public final class ItemStack implements DataComponentHolder {
                  // Paper start - adventure; conditionally render translatable components
                  boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
                  try {

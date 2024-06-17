@@ -7,9 +7,10 @@ Introduces the concept of "item modifiers". They are primary used to modify item
 Item modifiers are a set of rules to apply to the item stacks before displaying them to the player.
 
 The order of modifiers is handled by a string list of modifier ids in config (option "item-modifiers.modification-order").
-Also adds "item-modifiers.log-missing-ids" to log when the id is missing from the config.
+Also adds "item-modifiers.add-unknown" to automatically add new modifier ids to the config
+and "item-modifiers.log-missing-ids" to log if the id is missing from the config.
 
-Plugins need to extend ItemModifier and call #register on it to add the modifier.
+Plugins need to implement ItemModifier and call #register on them to enable them.
 
 diff --git a/src/main/java/me/sosedik/kiterino/inventory/InventorySlotHelper.java b/src/main/java/me/sosedik/kiterino/inventory/InventorySlotHelper.java
 new file mode 100644

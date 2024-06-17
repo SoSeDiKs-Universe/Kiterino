@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 17 Jun 2024 15:25:03 +0300
+Subject: [PATCH] Allow setting entity's rider
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 2ff8f572492ef79dad34cfff96e7e8eff37ca1ae..cef2881da7936a14bd1a509a41d3e1716988ccb0 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -3017,6 +3017,21 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         }
+     }
+ 
++    // Kiterino start - Allow setting entity's rider
++    public boolean setRider(Player rider) {
++        if (!new org.bukkit.event.entity.EntityMountEvent(rider.getBukkitEntity(), this.getBukkitEntity()).callEvent()) return false;
++        if (!rider.startRiding(this, true)) return false;
++
++        onMount(rider);
++        this.rider = rider;
++        return true;
++    }
++
++    public boolean hasRider() {
++        return getRider() != null;
++    }
++    // Kiterino end - Allow setting entity's rider
++
+     // Paper start - Force entity dismount during teleportation
+     protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
+     protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index f6c572c71f5b190d94785446fd139ad923a031f1..7fcceeb519d46b77ac802138a0551164c5553b67 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1349,4 +1349,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         getHandle().forcePanicTicks = Math.max(0, ticks);
+     }
+     // Kiterino end - Forced panic mode API
++
++    // Kiterino start - Allow setting entity's rider
++    @Override
++    public boolean setRider(Player rider, boolean dismount) {
++        Player currentRider = getRider();
++        if (rider == currentRider) {
++            return true;
++        }
++        if (currentRider != null && (!dismount || !currentRider.leaveVehicle())) {
++            return false;
++        }
++        return getHandle().setRider(((CraftPlayer) rider).getHandle());
++    }
++    // Kiterino end - Allow setting entity's rider
+ }

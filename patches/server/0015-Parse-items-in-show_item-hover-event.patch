@@ -23,7 +23,7 @@ index a2bbd89da760b2fba218ece744dfff32977efa30..91f15295f7559a167e15a9804331e49f
  	public static boolean itemModifiersLogMissingIds;
  	public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index fe7e38c610f1f27317879e68e4ea6c85d1d75b3e..3cf90db563f12c873c62cf30a463ca277351fab3 100644
+index 3d576e148a7ac07fadb585206fd4e161121acb50..b34a47c2bfb140aca89d74ff8532e68007cfbd23 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -20,6 +20,8 @@ import net.minecraft.core.NonNullList;
