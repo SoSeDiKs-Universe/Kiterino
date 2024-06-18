@@ -36,7 +36,7 @@ index d0206c9c2f423a9b77237d9a005b9ee139dae70f..9554895987e5b10afdcc5b0d03324c48
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 7332034bb1753f48f7904dafab1ef4b3ee117ea3..3e0df723c38e5f2afb940a5f9e43d27d186d0f13 100644
+index 11bccf6c27b8b2a2ed558a1375a3b3adc7952076..34188d11b0c065235f62999985d00a0b5a39ac7f 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
 @@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;

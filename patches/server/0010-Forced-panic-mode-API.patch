@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: SoSeDiK <mrsosedik@gmail.com>
-Date: Sun, 16 Jun 2024 21:32:37 +0300
+Date: Wed, 24 May 2023 17:13:26 +0300
 Subject: [PATCH] Forced panic mode API
 
 
@@ -69,10 +69,10 @@ index 30be013ceeb9263809a606f2a94fc31de7a6747b..929247e1684a589fe931c32acc43cba3
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index becc6768857e0968b76988deb8a42b32eb3a6190..f6c572c71f5b190d94785446fd139ad923a031f1 100644
+index 4b7d38a5ac6247c6e9d71ac7f3b65765ed3cf3ee..c9883eec3d09e14325351cc267e6c75b0423eaf7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1337,4 +1337,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1338,4 +1338,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return !getHandle().dismountsUnderwater();
      }
      // Purpur end

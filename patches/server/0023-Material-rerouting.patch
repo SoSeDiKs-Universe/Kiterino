@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 15 Jun 2024 03:26:19 +0300
+Subject: [PATCH] Material rerouting
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
+index f0471f92044612e3a2fd12a575b8b1f844790d3a..576bb9bb7ca8e2443e9d55a87db1173efb1c52c5 100644
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
+@@ -718,4 +718,27 @@ public class MaterialRerouting {
+         return itemStack.getBlockData(MaterialRerouting.transformToBlockType(material));
+     }
+     // Purpur end
++
++    // Kiterino start - Material rerouting
++    @RerouteStatic("org/bukkit/inventory/ItemStack")
++    public static boolean isType(ItemStack item, Material type) {
++        return ItemStack.isType(item, type);
++    }
++
++    public static Material getMaterial(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox) {
++        return contextBox.getMaterial();
++    }
++
++    public static Material getNewMaterial(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox) {
++        return contextBox.getNewMaterial();
++    }
++
++    public static void setNewMaterial(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox, Material type) {
++        contextBox.setNewMaterial(type);
++    }
++
++    public static void setNewMaterial(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox, Material type, boolean refreshMeta) {
++        contextBox.setNewMaterial(type, refreshMeta);
++    }
++    // Kiterino end - Material rerouting
+ }
+diff --git a/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java b/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
+index 946cd46f3389a4d4ceda86e0115c59c5725a8a0a..32b73c9d80a0dfe43a6feec12921e5e20317adb0 100644
+--- a/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
++++ b/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
+@@ -58,6 +58,11 @@ public class MaterialReroutingTest extends AbstractTestingBase {
+                 // Paper start - types that cannot be translated to ItemType/BlockType
+                 .filter(entry -> !entry.getName().equals("com/destroystokyo/paper/MaterialSetTag.class"))
+                 // Paper end - types that cannot be translated to ItemType/BlockType
++                // Kiterino start - Material rerouting
++                .filter(entry -> !entry.getName().equals("me/sosedik/kiterino/util/IKiterinoBootstrapMaterialInjector.class"))
++                .filter(entry -> !entry.getName().equals("me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjector.class"))
++                .filter(entry -> !entry.getName().equals("me/sosedik/kiterino/world/item/KiterinoItem.class"))
++                // Kiterino end - Material rerouting
+                 .map(entry -> {
+                     try {
+                         return MaterialReroutingTest.jarFile.getInputStream(entry);

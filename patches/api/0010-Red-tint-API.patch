@@ -5,7 +5,7 @@ Subject: [PATCH] Red tint API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 70a80a56ed6fcfd118ad4c51193dbe0c8c0250a8..d80241bd69aeb1817ef9ccb25eaef0844a50b025 100644
+index 70a80a56ed6fcfd118ad4c51193dbe0c8c0250a8..2977ca0ff996c27810af20f984624ed5210671e7 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -3980,4 +3980,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -15,7 +15,7 @@ index 70a80a56ed6fcfd118ad4c51193dbe0c8c0250a8..d80241bd69aeb1817ef9ccb25eaef084
 +
 +    // Kiterino start - Red tint API
 +    /**
-+     * Abuses border packages to apply red tint on screen
++     * Abuses world border packets to apply red tint on screen
 +     *
 +     * @param percentage tint percentage
 +     */

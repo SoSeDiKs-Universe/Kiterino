@@ -211,10 +211,10 @@ index 2d12c70b0baa50504619c8e37881a11a56d7df2c..71f479f5ce41de5a3da7e0fa16046b30
 +    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index e77842896654088cedc19822a99361778336057a..307ffe483cb7379fe3c518ee9f3ee10435d003a5 100644
+index 5fd6ec735ff88e66c0ff0359f5838fe49fb24d08..12a60455f895e6ac52f0a90c80547e60b51357eb 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1661,4 +1661,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1589,4 +1589,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end
@@ -272,10 +272,10 @@ index e77842896654088cedc19822a99361778336057a..307ffe483cb7379fe3c518ee9f3ee104
 +    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-index decf3b1949d4653a9fb01684b93ff91048137076..22699dd02a38516fba5e47a329a9e5ae5d82b51d 100644
+index 0f40eb52f6e2a5b6932cf9f223c1bbe9ab9eab1b..321a664d73b37fb721467db6a7cbd44f2ced2d16 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-@@ -219,4 +219,15 @@ public interface PersistentDataContainer {
+@@ -71,4 +71,15 @@ public interface PersistentDataContainer extends io.papermc.paper.persistence.Pe
          this.readFromBytes(bytes, true);
      }
      // Paper end - byte array serialization
@@ -292,10 +292,10 @@ index decf3b1949d4653a9fb01684b93ff91048137076..22699dd02a38516fba5e47a329a9e5ae
 +    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-index 80b277cc57f092f04fbf7810ac78d250b207b775..e245767bfe2d61118059b5c1a974cbfbab1c9d77 100644
+index 71f33c1265bc753ef40108ffce0d4bd8656d2903..a8d8b4cf648e81e697b4f67464e0150e814277f3 100644
 --- a/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataHolder.java
-@@ -20,4 +20,15 @@ public interface PersistentDataHolder {
+@@ -22,4 +22,15 @@ public interface PersistentDataHolder extends io.papermc.paper.persistence.Persi
      @NotNull
      PersistentDataContainer getPersistentDataContainer();
  
