@@ -5,14 +5,14 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a5a059f6fd2d3c4cf70bb5bba6a521a54b17c8d3..14e26dd632ebc308d5c4fcb5e7b1074db7028716 100644
+index a5a059f6fd2d3c4cf70bb5bba6a521a54b17c8d3..44ed39d7abe52cb839289c722e394ebfb4a8749e 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -71,6 +71,8 @@ dependencies {
      testCompileOnly(checkerQual)
      // Paper end
  
-+    api("de.tr7zw:item-nbt-api:2.13.1-SNAPSHOT") // Kiterino - Add NBT-API as a first-class lib
++    apiAndDocs("de.tr7zw:item-nbt-api:2.13.1") // Kiterino - Add NBT-API as a first-class lib
 +
      testImplementation("org.apache.commons:commons-lang3:3.12.0")
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
@@ -211,10 +211,10 @@ index 2d12c70b0baa50504619c8e37881a11a56d7df2c..71f479f5ce41de5a3da7e0fa16046b30
 +    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 5fd6ec735ff88e66c0ff0359f5838fe49fb24d08..12a60455f895e6ac52f0a90c80547e60b51357eb 100644
+index cb37a8af9e54349fc8a3eb70bbe2fddaaa3767d6..e4b49e29b3795ddca80aeace540edf4b96dbec9d 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1589,4 +1589,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1591,4 +1591,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end

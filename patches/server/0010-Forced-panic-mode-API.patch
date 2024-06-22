@@ -56,10 +56,10 @@ index 20d4e3fb00a9eaac8484e95329bd64a368872b59..bec81c864a07d53a31da4e6e7437b241
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index 30be013ceeb9263809a606f2a94fc31de7a6747b..929247e1684a589fe931c32acc43cba3e9ba3efa 100644
+index 5d13c8827c0746d180b5a838b3f2be2cbd2cba14..425568df843a9b3bc36ea73e85ff7b6702b2b01f 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-@@ -953,7 +953,7 @@ public class Fox extends Animal implements VariantHolder<Fox.Type> {
+@@ -954,7 +954,7 @@ public class Fox extends Animal implements VariantHolder<Fox.Type> {
  
          @Override
          public boolean shouldPanic() {
