@@ -42,10 +42,10 @@ index 802de2ff74b490ea73c415739375a0169fce9f2f..f191e86c6d3a76225be95914ba521492
          this.oldSize = buf.readDouble();
          this.newSize = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 41863584c3a85068b807a5aeb93c3da70f133b47..d7b07aa040afc2b12f763d5683ffa3fc039f2aab 100644
+index 41863584c3a85068b807a5aeb93c3da70f133b47..6cb5f185b711dca68efe2071f74766adf3b547d9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3647,4 +3647,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3647,4 +3647,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
      }
      // Purpur end
@@ -53,6 +53,7 @@ index 41863584c3a85068b807a5aeb93c3da70f133b47..d7b07aa040afc2b12f763d5683ffa3fc
 +    // Kiterino start - Red tint API
 +    @Override
 +    public void sendRedTint(double percentage) {
++        percentage = 1D - Math.clamp(percentage, 0D, 1D);
 +        Location loc = this.getLocation();
 +        ServerGamePacketListenerImpl connection = this.getHandle().connection;
 +        connection.send(new ClientboundSetBorderCenterPacket(loc.getX(), loc.getZ()));

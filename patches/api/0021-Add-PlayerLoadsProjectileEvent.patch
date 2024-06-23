@@ -1,15 +1,15 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: SoSeDiK <mrsosedik@gmail.com>
 Date: Mon, 13 Jun 2022 00:12:32 +0300
-Subject: [PATCH] PlayerLoadProjectileEvent
+Subject: [PATCH] Add PlayerLoadsProjectileEvent
 
 
 diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerLoadsProjectileEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerLoadsProjectileEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..996eabe8609fdfebfa7a89588992aaeec82202dc
+index 0000000000000000000000000000000000000000..2de8821605995ce944b02e3ee64abd0a973b72c0
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerLoadsProjectileEvent.java
-@@ -0,0 +1,97 @@
+@@ -0,0 +1,95 @@
 +package me.sosedik.kiterino.event.player;
 +
 +import org.bukkit.Material;
@@ -95,14 +95,12 @@ index 0000000000000000000000000000000000000000..996eabe8609fdfebfa7a89588992aaee
 +        return projectile != null && projectile.getType() != Material.AIR && projectile.getAmount() > 0;
 +    }
 +
-+    @NotNull
 +    @Override
-+    public HandlerList getHandlers() {
++    public @NotNull HandlerList getHandlers() {
 +        return handlers;
 +    }
 +
-+    @NotNull
-+    public static HandlerList getHandlerList() {
++    public static @NotNull HandlerList getHandlerList() {
 +        return handlers;
 +    }
 +
