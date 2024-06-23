@@ -32,7 +32,7 @@ index d23ecfabf6bf1e355fb2efe5abd80236259ce3c4..6b2e1cc81eb0acf8d56cf051ddba806a
 -            "Brand-Id" to "purpurmc:purpur", // Purpur
 -            "Brand-Name" to "Purpur", // Purpur
 +            "Specification-Vendor" to "SoSeDiK", // Kiterino - Init
-+            "Brand-Id" to "sosedik:kiterino", // Kiterino - Init
++            "Brand-Id" to "kiterino:kiterino", // Kiterino - Init
 +            "Brand-Name" to "Kiterino", // Kiterino - Init
              "Build-Number" to (build ?: ""),
              "Build-Time" to Instant.now().toString(),

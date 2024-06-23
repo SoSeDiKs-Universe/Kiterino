@@ -5,7 +5,7 @@ Subject: [PATCH] Allow injecting custom blocks
 
 
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
-index 7564a6873554a3c6923849ceb7c893c321b8e9b2..afb691976a48a22efdd3aeb084a375e501e2475f 100644
+index 071eb60df19587f64218de8682eb4320b556e469..831f8a3cd833a66fd9802cf604e2282d00e80ccf 100644
 --- a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
 @@ -3,14 +3,21 @@ package me.sosedik.kiterino.util;
@@ -133,6 +133,6 @@ index 7564a6873554a3c6923849ceb7c893c321b8e9b2..afb691976a48a22efdd3aeb084a375e5
 +		return (BlockItem) nmsItemClass.getDeclaredConstructor(KiterinoNMSItem.class, Block.class, Item.Properties.class).newInstance(item, nmsBlock, getFromBukkit(item.getItemProperties()));
 +	}
 +
-    @Override
- 	protected @NotNull KiterinoNMSItem modifyNmsItemClass0(@NotNull Class<? extends KiterinoNMSItem> itemClass, @NotNull Object... constructorArgs) {
+ 	@Override
+ 	protected @NotNull KiterinoNMSItem modifyNmsItemClass0(@NotNull Class<? extends KiterinoNMSItem> itemClass, @Nullable Object @NotNull ... constructorArgs) {
  		try {

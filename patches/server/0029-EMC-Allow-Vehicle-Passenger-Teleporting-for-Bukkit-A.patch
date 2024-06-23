@@ -19,7 +19,7 @@ index bf6736dcead53cf1bb3753b5f8c48c1c728abf43..545edc5574aed7532938e9ba2ce5179b
          this.playersByName.remove(entityplayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          entityplayer.serverLevel().removePlayerImmediately(entityplayer, entity_removalreason);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index cef2881da7936a14bd1a509a41d3e1716988ccb0..3322add5b8d165254f1fca8e0998a6dadd7623f7 100644
+index 3396fba070773564e78ab30a5ee39ca448033b45..9cb0a44cc9df90d0172c3655852b0055d24605a2 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -309,7 +309,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -162,7 +162,7 @@ index df7bd21c6fa8be94fa3bc7437583975b99f5be0b..eff978d8f6c5075b73a077001c851523
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index d7b07aa040afc2b12f763d5683ffa3fc039f2aab..5a5b234f6766f192f2fba20e1eafc054fb7297b0 100644
+index 6cb5f185b711dca68efe2071f74766adf3b547d9..c2e9806662ba0e7e633a55223bb07f24d73b0558 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1435,13 +1435,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

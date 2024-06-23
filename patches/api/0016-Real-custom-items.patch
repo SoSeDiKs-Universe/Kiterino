@@ -20,32 +20,33 @@ index abcc966d8ee01d73c1d1480237ab46fa0ab55fdc..de55e47fda751d09647ac04f51578d76
  
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjector.java b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjector.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..1888e15525b73b03fd6aa65f6a077fb19cd3b23d
+index 0000000000000000000000000000000000000000..105cfd7b80166babdf238107f2b27aede756c183
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjector.java
-@@ -0,0 +1,19 @@
+@@ -0,0 +1,20 @@
 +package me.sosedik.kiterino.util;
 +
 +import me.sosedik.kiterino.world.item.KiterinoNMSItem;
 +import org.jetbrains.annotations.ApiStatus;
 +import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
 +
 +@ApiStatus.Internal
 +public abstract class KiterinoDataInjector {
 +
 +	static KiterinoDataInjector injector;
 +
-+	protected abstract @NotNull KiterinoNMSItem modifyNmsItemClass0(@NotNull Class<? extends KiterinoNMSItem> itemClass, @NotNull Object... constructorArgs);
++	protected abstract @NotNull KiterinoNMSItem modifyNmsItemClass0(@NotNull Class<? extends KiterinoNMSItem> itemClass, @Nullable Object @NotNull ... constructorArgs);
 +
 +	@ApiStatus.Internal
-+	public static @NotNull KiterinoNMSItem modifyNmsItemClass(@NotNull Class<? extends KiterinoNMSItem> itemClass, @NotNull Object... constructorArgs) {
++	public static @NotNull KiterinoNMSItem modifyNmsItemClass(@NotNull Class<? extends KiterinoNMSItem> itemClass, @Nullable Object @NotNull ... constructorArgs) {
 +		return injector.modifyNmsItemClass0(itemClass, constructorArgs);
 +	}
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/world/item/KiterinoItem.java b/src/main/java/me/sosedik/kiterino/world/item/KiterinoItem.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f6aafa01eb558435e44a8045eb824512ee8d4d80
+index 0000000000000000000000000000000000000000..1dc4de53bec4858810a68b189a9ecae23dbec61a
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/world/item/KiterinoItem.java
 @@ -0,0 +1,54 @@
@@ -73,7 +74,7 @@ index 0000000000000000000000000000000000000000..f6aafa01eb558435e44a8045eb824512
 +	 * @param properties item properties
 +	 * @return nms wrapper for the item
 +	 */
-+	static @NotNull Supplier<KiterinoItem> simpleItem(@NotNull Material material, @Nullable Integer cmd, @Nullable UnaryOperator<KiterinoItemProperties> properties) {
++	static @NotNull Supplier<@NotNull KiterinoItem> simpleItem(@NotNull Material material, @Nullable Integer cmd, @Nullable UnaryOperator<@NotNull KiterinoItemProperties> properties) {
 +		var props = properties == null ? new KiterinoItemProperties() : properties.apply(new KiterinoItemProperties());
 +		return () -> new KiterinoItem() {
 +			@Override
@@ -98,7 +99,7 @@ index 0000000000000000000000000000000000000000..f6aafa01eb558435e44a8045eb824512
 +	 * @param constructorArgs values to pass to itemClass's constructor
 +	 * @return nms wrapper for the item
 +	 */
-+	static @NotNull Supplier<KiterinoNMSItem> nmsItem(@NotNull Class<? extends KiterinoNMSItem> itemClass, @NotNull Object... constructorArgs) {
++	static @NotNull Supplier<@NotNull KiterinoNMSItem> nmsItem(@NotNull Class<? extends KiterinoNMSItem> itemClass, @Nullable Object @NotNull ... constructorArgs) {
 +		return () -> KiterinoDataInjector.modifyNmsItemClass(itemClass, constructorArgs);
 +	}
 +

@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2ff8f572492ef79dad34cfff96e7e8eff37ca1ae..cef2881da7936a14bd1a509a41d3e1716988ccb0 100644
+index 834c5a6f80073643410cb4e0d2ea3dd3785b13a8..3396fba070773564e78ab30a5ee39ca448033b45 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3017,6 +3017,21 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -3016,6 +3016,21 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
          }
      }
  

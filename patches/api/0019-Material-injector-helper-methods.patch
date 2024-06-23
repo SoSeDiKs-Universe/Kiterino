@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 24 Jun 2024 03:44:00 +0300
+Subject: [PATCH] Material injector helper methods
+
+
+diff --git a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
+index 37dfdcfcbd14947e0550e7528aca68f452e53eb6..dc9975c013f633035ee6370f12955a812ac969ea 100644
+--- a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
++++ b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
+@@ -22,4 +22,27 @@ public interface BootstrapContext extends PluginProviderContext, LifecycleEventO
+      * @return the lifecycle event manager
+      */
+     @NotNull LifecycleEventManager<BootstrapContext> getLifecycleManager();
++
++    // Kiterino start - Material injector helper methods
++    /**
++     * Inject materials in the class using the plugin's name as namespace.
++     * Keys will be fetched from Material field names.
++     *
++     * @param materialsClass class with public static final Material instances
++     */
++    default void injectMaterials(@NotNull Class<?> materialsClass) {
++        me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector.injectMaterials(materialsClass, this);
++    }
++
++    /**
++     * Inject materials in the class using the provided namespace.
++     * Keys will be fetched from Material field names.
++     *
++     * @param materialsClass class with public static final Material instances
++     * @param namespace namespace for Materials
++     */
++    default void injectMaterials(@NotNull Class<?> materialsClass, @NotNull String namespace) {
++        me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector.injectMaterials(materialsClass, namespace);
++    }
++    // Kiterino end - Material injector helper methods
+ }

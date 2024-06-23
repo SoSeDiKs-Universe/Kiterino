@@ -16,7 +16,7 @@ index 7107eabf02d9d9b69d97c978ba421ad52031ec3f..8e5abb66b4c026838ee653ce521c49f3
 +    /**
 +     * The brand id for Kiterino.
 +     */
-+    Key BRAND_KITERINO_ID = Key.key("sosedik", "kiterino");
++    Key BRAND_KITERINO_ID = Key.key("kiterino", "kiterino");
 +    // Kiterino end - Rebrand
 +
      /**
