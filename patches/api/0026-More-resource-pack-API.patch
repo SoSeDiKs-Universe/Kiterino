@@ -1,0 +1,72 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 27 Jun 2024 06:36:56 +0300
+Subject: [PATCH] More resource pack API
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index 1234c9b5af7cac4d60ec719f021146f42230a036..add34410f8fc3cf85c35cbd8738b93613e642d0f 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -3030,4 +3030,30 @@ public final class Bukkit {
+         server.clearBlockHighlights();
+     }
+     // Purpur end
++
++    // Kiterino start - More resource pack API
++    /**
++     * Creates server resource pack
++     *
++     * @param uuid pack id
++     * @param url pack url
++     * @param hash pack sha-1 hash
++     * @param required whether the resource pack is required
++     * @param prompt pack prompt
++     * @return resource pack data
++     */
++    public static @NotNull ResourcePack createResourcePack(@NotNull UUID uuid, @NotNull String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt) {
++        return server.createResourcePack(uuid, url, hash, required, prompt);
++    }
++
++    /**
++     * Sets (or removes if null) the server resource pack
++     *
++     * @param resourcePack resource pack
++     * @see #createResourcePack(UUID, String, String, boolean, net.kyori.adventure.text.Component)
++     */
++    public static void setServerResourcePack(@Nullable ResourcePack resourcePack) {
++        server.setServerResourcePack(resourcePack);
++    }
++    // Kiterino end - More resource pack API
+ }
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 5c405d55aab9bff417a423a176b78dd435450feb..0561b7ddb98d52f890c3716757e464c43c6e33b5 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2660,4 +2660,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     void clearBlockHighlights();
+     // Purpur end
++
++    // Kiterino start - More resource pack API
++    /**
++     * Creates server resource pack
++     *
++     * @param uuid pack id
++     * @param url pack url
++     * @param hash pack sha-1 hash
++     * @param required whether the resource pack is required
++     * @param prompt pack prompt
++     * @return resource pack data
++     */
++    @NotNull ResourcePack createResourcePack(@NotNull UUID uuid, @NotNull String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt);
++
++    /**
++     * Sets (or removes if null) the server resource pack
++     *
++     * @param resourcePack resource pack
++     * @see #createResourcePack(UUID, String, String, boolean, net.kyori.adventure.text.Component)
++     */
++    void setServerResourcePack(@Nullable ResourcePack resourcePack);
++    // Kiterino end - More resource pack API
+ }

@@ -5,7 +5,7 @@ Subject: [PATCH] Allow injecting custom blocks
 
 
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
-index 071eb60df19587f64218de8682eb4320b556e469..831f8a3cd833a66fd9802cf604e2282d00e80ccf 100644
+index ba0c79683173015d9f9935c0f567f3458045921e..c47d744646e2cedd8901255d0dc74f112460ac75 100644
 --- a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
 @@ -3,14 +3,21 @@ package me.sosedik.kiterino.util;
@@ -92,7 +92,7 @@ index 071eb60df19587f64218de8682eb4320b556e469..831f8a3cd833a66fd9802cf604e2282d
 +		interfaces.add(KiterinoNMSItem.class);
 +		classWriter.visit(Opcodes.V21, Opcodes.ACC_PUBLIC + Opcodes.ACC_SUPER, classInternalName, null, parentClass, interfaces.stream().map(Type::getInternalName).toArray(String[]::new));
 +
-+		// Add "private final wrapper KiterinoNMSItem" field
++		// Add "private final KiterinoNMSItem wrapper" field
 +		FieldVisitor fieldVisitor = classWriter.visitField(Opcodes.ACC_PRIVATE + Opcodes.ACC_FINAL, "wrapper", Type.getDescriptor(KiterinoNMSItem.class), null, null);
 +		fieldVisitor.visitEnd();
 +
@@ -114,14 +114,14 @@ index 071eb60df19587f64218de8682eb4320b556e469..831f8a3cd833a66fd9802cf604e2282d
 +		for (Class<?> interf : interfaces) {
 +			switch (interf.getSimpleName()) {
 +				case "KiterinoNMSItem" ->
-+						implementMethod(classWriter, KiterinoNMSItem.class.getDeclaredMethod("modify", ItemContextBox.class), (method, visitor) -> {
-+							visitor.visitVarInsn(Opcodes.ALOAD, 0);
-+							visitor.visitFieldInsn(Opcodes.GETFIELD, classInternalName, "wrapper", Type.getDescriptor(KiterinoNMSItem.class));
-+							visitor.visitVarInsn(Opcodes.ALOAD, 1);
-+							visitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, Type.getInternalName(KiterinoNMSItem.class), method.getName(), Type.getMethodDescriptor(method), true);
-+							visitor.visitInsn(Opcodes.RETURN); // Return void
-+							visitor.visitMaxs(2, 2);
-+						});
++					implementMethod(classWriter, KiterinoNMSItem.class.getDeclaredMethod("modify", ItemContextBox.class), (method, visitor) -> {
++						visitor.visitVarInsn(Opcodes.ALOAD, 0);
++						visitor.visitFieldInsn(Opcodes.GETFIELD, classInternalName, "wrapper", Type.getDescriptor(KiterinoNMSItem.class));
++						visitor.visitVarInsn(Opcodes.ALOAD, 1);
++						visitor.visitMethodInsn(Opcodes.INVOKEINTERFACE, Type.getInternalName(KiterinoNMSItem.class), method.getName(), Type.getMethodDescriptor(method), true);
++						visitor.visitInsn(Opcodes.RETURN); // Return void
++						visitor.visitMaxs(2, 2);
++					});
 +			}
 +		}
 +

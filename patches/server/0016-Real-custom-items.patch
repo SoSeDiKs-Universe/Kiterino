@@ -6,7 +6,7 @@ Subject: [PATCH] Real custom items
 
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5682ec993c63d9adaccc005fad0b02bbd06ec496
+index 0000000000000000000000000000000000000000..ad727c9f704f0bb739041869b2b0b4478320e4a0
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoDataInjectorImpl.java
 @@ -0,0 +1,216 @@
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..5682ec993c63d9adaccc005fad0b02bb
 +		interfaces.add(KiterinoNMSItem.class);
 +		classWriter.visit(Opcodes.V21, Opcodes.ACC_PUBLIC + Opcodes.ACC_SUPER, classInternalName, null, parentClass, interfaces.stream().map(Type::getInternalName).toArray(String[]::new));
 +
-+		// Add "private final wrapper KiterinoNMSItem" field
++		// Add "private final KiterinoNMSItem wrapper" field
 +		FieldVisitor fieldVisitor = classWriter.visitField(Opcodes.ACC_PRIVATE + Opcodes.ACC_FINAL, "wrapper", Type.getDescriptor(KiterinoNMSItem.class), null, null);
 +		fieldVisitor.visitEnd();
 +

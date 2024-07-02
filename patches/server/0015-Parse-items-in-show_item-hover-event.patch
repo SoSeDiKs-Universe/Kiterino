@@ -69,10 +69,10 @@ index 3d576e148a7ac07fadb585206fd4e161121acb50..b34a47c2bfb140aca89d74ff8532e680
  	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
  		if (!(initialPacket.subPackets() instanceof ArrayList list)) {
 diff --git a/src/main/java/net/minecraft/network/chat/ComponentSerialization.java b/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
-index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..42392058d181eaf9752ed26508a07f01d43d6a4d 100644
+index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..325401d2287585507569de2dfb39c55bc8432056 100644
 --- a/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
 +++ b/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
-@@ -54,13 +54,73 @@ public class ComponentSerialization {
+@@ -54,13 +54,85 @@ public class ComponentSerialization {
  
              @Override
              public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, Component object) {
@@ -104,7 +104,19 @@ index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..42392058d181eaf9752ed26508a07f01
 +                component = component.copy();
 +                children = component.getSiblings();
 +            }
-+            children.replaceAll(child -> replaceHoverItems(player, locale, child));
++            try {
++                children.replaceAll(child -> replaceHoverItems(player, locale, child));
++                // Mutable component with immutable children?
++            } catch (UnsupportedOperationException ignored1) {
++                component = component.copy();
++                children = component.getSiblings();
++                try {
++                    children.replaceAll(child -> replaceHoverItems(player, locale, child));
++                    // Shouldn't happen, but just in case
++                } catch (UnsupportedOperationException ignored2) {
++                    return component;
++                }
++            }
 +        }
 +
 +        // Translatables may have component arguments
