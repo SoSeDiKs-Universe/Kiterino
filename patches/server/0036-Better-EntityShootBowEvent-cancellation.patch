@@ -6,10 +6,10 @@ Subject: [PATCH] Better EntityShootBowEvent cancellation
 Don't increase stats / play bow sound if event was cancelled
 
 diff --git a/src/main/java/net/minecraft/world/item/BowItem.java b/src/main/java/net/minecraft/world/item/BowItem.java
-index a00181da8417445705d181fe62933c48a0b1170a..8ab734e25add08e8d5a177666851cd80fea3ed27 100644
+index fc534b1f214663eb8e4fe479fed12b1dd069105c..d3bb59bfef7beee08b49d9598e2f43822dcae334 100644
 --- a/src/main/java/net/minecraft/world/item/BowItem.java
 +++ b/src/main/java/net/minecraft/world/item/BowItem.java
-@@ -32,7 +32,7 @@ public class BowItem extends ProjectileWeaponItem {
+@@ -37,7 +37,7 @@ public class BowItem extends ProjectileWeaponItem {
                  if (!((double)f < 0.1)) {
                      List<ItemStack> list = draw(stack, itemStack, player);
                      if (world instanceof ServerLevel serverLevel && !list.isEmpty()) {
@@ -32,7 +32,7 @@ index dbdd1cd9486d91142e1c6b8a34aafba46c3988d3..683357353c86425e0425f67df74e062b
                      CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, stack);
                      serverPlayer.awardStat(Stats.ITEM_USED.get(stack.getItem()));
 diff --git a/src/main/java/net/minecraft/world/item/ProjectileWeaponItem.java b/src/main/java/net/minecraft/world/item/ProjectileWeaponItem.java
-index ffbc56290eb8e36339e29f6084bb207366506c39..2058a68deeecc9202da15250e5174a6277aef28c 100644
+index 9751eea2d8aa3a45da34f09377d2fc81fe9a90d8..cf5d385d59caf1808117d17977b1cdc6e1b30ee8 100644
 --- a/src/main/java/net/minecraft/world/item/ProjectileWeaponItem.java
 +++ b/src/main/java/net/minecraft/world/item/ProjectileWeaponItem.java
 @@ -46,7 +46,7 @@ public abstract class ProjectileWeaponItem extends Item {

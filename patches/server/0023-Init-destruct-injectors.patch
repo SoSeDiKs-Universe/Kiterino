@@ -6,10 +6,10 @@ Subject: [PATCH] Init/destruct injectors
 System property in tests is to bandaid failing tests due to missing "--add-opens java.base/java.lang=ALL-UNNAMED" flag in gradle build task required by Material injector patch.
 
 diff --git a/src/main/java/net/minecraft/server/Bootstrap.java b/src/main/java/net/minecraft/server/Bootstrap.java
-index 8c2f9f549b5155b8d8fecbc22164b334805381e2..fb3525ed6c34f3b87063c8e5d4857704ccd5d8ef 100644
+index 8c2f9f549b5155b8d8fecbc22164b334805381e2..1637bb4c73b7e84b0761a442e2d7e8084d086e7c 100644
 --- a/src/main/java/net/minecraft/server/Bootstrap.java
 +++ b/src/main/java/net/minecraft/server/Bootstrap.java
-@@ -62,6 +62,12 @@ public class Bootstrap {
+@@ -62,6 +62,13 @@ public class Bootstrap {
              Bootstrap.isBootstrapped = true;
              Instant instant = Instant.now();
  
@@ -17,16 +17,17 @@ index 8c2f9f549b5155b8d8fecbc22164b334805381e2..fb3525ed6c34f3b87063c8e5d4857704
 +            if (!Boolean.getBoolean("Kiterino.testingBase")) {
 +                me.sosedik.kiterino.util.KiterinoDataInjectorImpl.init(); // Kiterino - Real custom items
 +                me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.init(); // Kiterino - Injecting custom Materials
++                me.sosedik.kiterino.util.KiterinoBootstrapMobEffectInjectorImpl.init(); // Kiterino - Injecting custom mob effects
 +            }
 +            // Kiterino end - Init/destruct injectors
              io.papermc.paper.plugin.entrypoint.LaunchEntryPointHandler.enterBootstrappers(); // Paper - Entrypoint for bootstrapping
              if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
                  throw new IllegalStateException("Unable to load registries");
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 2296ef5cbe136a8405f197d65b35b2fcde331bfd..0e483821d283cb45ffe1fae01c188a346e17b9e9 100644
+index 4ee376e023c621e98f19c6cd1015c00d453702d6..53f01e8ba6521bcf39c98b6952a80619e845ae99 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -336,9 +336,20 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -338,9 +338,21 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          de.tr7zw.changeme.nbtapi.utils.nmsmappings.ReflectionMethod.COMPOUND_SET_FLOAT.getMethodName(); // Cache reflections
          // Kiterino end - Add NBT API as a first-class lib
  
@@ -42,6 +43,7 @@ index 2296ef5cbe136a8405f197d65b35b2fcde331bfd..0e483821d283cb45ffe1fae01c188a34
 +            // Delaying nms inject up until onLoad() were called to allow passing custom data not available in bootstrap into constructors
 +            materialInjectorK.finalizeInject(me.sosedik.kiterino.util.KiterinoDataInjectorImpl.getInstance());
 +            me.sosedik.kiterino.util.KiterinoDataInjectorImpl.destruct();
++            me.sosedik.kiterino.util.KiterinoBootstrapMobEffectInjectorImpl.destruct();
 +        }
 +        // Kiterino end - Init/destruct injectors
          this.server.enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);

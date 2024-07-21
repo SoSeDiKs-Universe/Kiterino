@@ -5,10 +5,10 @@ Subject: [PATCH] Rework some deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 0430e8238609336a4fa0bd220a7c44f6af264945..1234c9b5af7cac4d60ec719f021146f42230a036 100644
+index 4a870c63cf240c4fa89534bf3ec1b06393efb967..cf5a98a1752435cffdfd792ca89a55bdae311d65 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2578,7 +2578,7 @@ public final class Bukkit {
+@@ -2581,7 +2581,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -36,7 +36,7 @@ index d0206c9c2f423a9b77237d9a005b9ee139dae70f..9554895987e5b10afdcc5b0d03324c48
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 11bccf6c27b8b2a2ed558a1375a3b3adc7952076..34188d11b0c065235f62999985d00a0b5a39ac7f 100644
+index 330e3013eda204aa9b33d5e1c3104e0b595abdbc..97ae01bf2daffb05613467120a3f9285252e65d5 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
 @@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;

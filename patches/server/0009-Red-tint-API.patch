@@ -42,10 +42,10 @@ index 802de2ff74b490ea73c415739375a0169fce9f2f..f191e86c6d3a76225be95914ba521492
          this.oldSize = buf.readDouble();
          this.newSize = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 41863584c3a85068b807a5aeb93c3da70f133b47..6cb5f185b711dca68efe2071f74766adf3b547d9 100644
+index b9130d040acff1e5cb7a475be93b03cdbe229683..493f27176ef6b9d32b9c1490706d65ec826d433b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3647,4 +3647,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3648,4 +3648,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
      }
      // Purpur end

@@ -5,7 +5,7 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a5a059f6fd2d3c4cf70bb5bba6a521a54b17c8d3..44ed39d7abe52cb839289c722e394ebfb4a8749e 100644
+index a40a0623db8b901e39e04b1f1d5f0b1f1735cade..be0d92ec50db903e0d6b6e6317c593a7064630af 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -71,6 +71,8 @@ dependencies {
@@ -17,7 +17,7 @@ index a5a059f6fd2d3c4cf70bb5bba6a521a54b17c8d3..44ed39d7abe52cb839289c722e394ebf
      testImplementation("org.apache.commons:commons-lang3:3.12.0")
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
      testImplementation("org.hamcrest:hamcrest:2.2")
-@@ -168,6 +170,7 @@ tasks.withType<Javadoc> {
+@@ -169,6 +171,7 @@ tasks.withType<Javadoc> {
          "https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/$log4jVersion/",
          // Paper end
          "https://javadoc.io/doc/org.apache.maven.resolver/maven-resolver-api/1.7.3", // Paper
@@ -211,7 +211,7 @@ index 2d12c70b0baa50504619c8e37881a11a56d7df2c..71f479f5ce41de5a3da7e0fa16046b30
 +    // Kiterino end - Add NBT-API as a first-class lib
  }
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index cb37a8af9e54349fc8a3eb70bbe2fddaaa3767d6..e4b49e29b3795ddca80aeace540edf4b96dbec9d 100644
+index 9b8b958ce181b60eb5db89d4720380153152a2ac..4eae3cfe2249913d9bc58e9971a4b85a439e724e 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -1591,4 +1591,56 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat

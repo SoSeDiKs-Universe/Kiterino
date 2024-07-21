@@ -5,7 +5,7 @@ Subject: [PATCH] Expose invalid world to PlayerSpawnLocationEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 2559ab1ff40c934ca1ea3914e61a0d98b730912e..bf6736dcead53cf1bb3753b5f8c48c1c728abf43 100644
+index 69e0f8595ac9e5fbce4f4f991645e3b71db1b60b..c0668030937a1787a2046f46783e1337c2056535 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -258,7 +258,12 @@ public abstract class PlayerList {

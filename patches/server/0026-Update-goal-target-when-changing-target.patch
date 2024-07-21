@@ -20,7 +20,7 @@ index f09d7e5052ae0166a8f3363d4eff1c000af07a96..ae3744a8ecd4241af4e7f9e79491bb65
 +    // Kiterino end - Update goal target when changing target
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
-index deb66c04abefb4a88521483db1612e494bd27164..08b30bc72b229dead4b3af2b0ab168dc4a71a343 100644
+index deb66c04abefb4a88521483db1612e494bd27164..6f5f1c99b9b474789dc48f1f5f27d9ca8ee88bdb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
 @@ -29,6 +29,17 @@ public abstract class CraftMob extends CraftLivingEntity implements Mob {

@@ -37,10 +37,10 @@ index f0471f92044612e3a2fd12a575b8b1f844790d3a..576bb9bb7ca8e2443e9d55a87db1173e
 +    // Kiterino end - Material rerouting
  }
 diff --git a/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java b/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
-index 946cd46f3389a4d4ceda86e0115c59c5725a8a0a..32b73c9d80a0dfe43a6feec12921e5e20317adb0 100644
+index 0fac826b9367a821c6801190997592219cb47f73..85d7e19b8614e9e7d472c196f997bfbcdd1b3741 100644
 --- a/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
 +++ b/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
-@@ -58,6 +58,11 @@ public class MaterialReroutingTest extends AbstractTestingBase {
+@@ -59,6 +59,11 @@ public class MaterialReroutingTest extends AbstractTestingBase {
                  // Paper start - types that cannot be translated to ItemType/BlockType
                  .filter(entry -> !entry.getName().equals("com/destroystokyo/paper/MaterialSetTag.class"))
                  // Paper end - types that cannot be translated to ItemType/BlockType
