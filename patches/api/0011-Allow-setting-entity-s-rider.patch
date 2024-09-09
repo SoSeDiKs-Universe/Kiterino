@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index dadbf6787eec03c5c56cb5612181f1f9316f8bbf..1143142745c203070992238be707d38ef04284b6 100644
+index fcde6e194ededcb72fa7e0005154e8b6c0df2c6b..ae048744121bf1554a119acc7da472a45d4b577a 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1330,4 +1330,27 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1257,4 +1257,27 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setPanicTicks(int ticks);
      // Kiterino end - Forced panic mode API

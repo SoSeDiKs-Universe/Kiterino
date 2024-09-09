@@ -24,17 +24,17 @@ index 8c2f9f549b5155b8d8fecbc22164b334805381e2..1637bb4c73b7e84b0761a442e2d7e808
              if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
                  throw new IllegalStateException("Unable to load registries");
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 1b611c04be72e5a9be34b8b96b8e98eea4e26509..562f80116ae01c48415855e03968172b32a9bbd4 100644
+index 4c3e1b4d8f972a3773480eabaf549aa52c2f4ab2..815272e1bb3517081bef352c0b9721c20c1989bf 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -341,9 +341,21 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
-         de.tr7zw.changeme.nbtapi.utils.nmsmappings.ReflectionMethod.COMPOUND_SET_FLOAT.getMethodName(); // Cache reflections
-         // Kiterino end - Add NBT API as a first-class lib
+@@ -333,9 +333,21 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         }
+         // Purpur end
  
-+        // Kiterino start - Init/destruct injectors
-+        boolean skipInject = Boolean.getBoolean("Kiterino.testingBase");
-+        var materialInjectorK = skipInject ? null : me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.destruct();
-+        // Kiterino end - Init/destruct injectors
++	    // Kiterino start - Init/destruct injectors
++	    boolean skipInject = Boolean.getBoolean("Kiterino.testingBase");
++	    var materialInjectorK = skipInject ? null : me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.destruct();
++	    // Kiterino end - Init/destruct injectors
          // CraftBukkit start
          // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up
          this.server.loadPlugins();

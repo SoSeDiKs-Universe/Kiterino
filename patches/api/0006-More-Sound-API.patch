@@ -5,13 +5,13 @@ Subject: [PATCH] More Sound API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index 175164f7b20ae31afa4c33819ab0c03c4a10dd73..f4db637dd524184dc0b5acfc02cff7343dd7e0de 100644
+index a13c8ddd4a1222e7a16debb61769af3758502d7c..84a2e44fe8a6ff534230f7407b948e70d2dcb0cc 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -828,4 +828,29 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
-         return new de.tr7zw.changeme.nbtapi.NBTBlock(this).getData();
+@@ -816,4 +816,29 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+         return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
      }
-     // Kiterino end - Add NBT-API as a first-class lib
+     // Paper end - destroy speed API
 +
 +    // Kiterino start - More Sound API
 +    /**
@@ -39,13 +39,13 @@ index 175164f7b20ae31afa4c33819ab0c03c4a10dd73..f4db637dd524184dc0b5acfc02cff734
 +    // Kiterino end - More Sound API
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 71f479f5ce41de5a3da7e0fa16046b301ac66946..65751e7293b1bce076b44f0ce69bb33c158ff9d8 100644
+index 2d12c70b0baa50504619c8e37881a11a56d7df2c..bb1d64df05e9c0727344e35176c00c28aa3cc1a6 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1283,4 +1283,35 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
-         de.tr7zw.changeme.nbtapi.NBT.modifyPersistentData(this, consumer);
-     }
-     // Kiterino end - Add NBT-API as a first-class lib
+@@ -1210,4 +1210,35 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      */
+     void setImmuneToFire(@Nullable Boolean fireImmune);
+     // Purpur end
 +
 +    // Kiterino start - More Sound API
 +    /**
@@ -57,12 +57,12 @@ index 71f479f5ce41de5a3da7e0fa16046b301ac66946..65751e7293b1bce076b44f0ce69bb33c
 +     */
 +    default void emitSound(@NotNull org.bukkit.Sound sound, float volume, float pitch) {
 +        org.bukkit.SoundCategory soundGroup = switch (this) {
-+	        case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
-+	        case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
-+	        case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
-+	        default -> org.bukkit.SoundCategory.NEUTRAL;
++            case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
++            case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
++            case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
++            default -> org.bukkit.SoundCategory.NEUTRAL;
 +        };
-+	    emitSound(sound, soundGroup, volume, pitch);
++        emitSound(sound, soundGroup, volume, pitch);
 +    }
 +
 +    /**

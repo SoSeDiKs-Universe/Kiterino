@@ -6,7 +6,7 @@ Subject: [PATCH] Pufferfish's yaml changes
 Include Simple-YAML repo and sync snakeyaml version to API's one
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 03c5a34998d545968727a7694a05097e6b43e59c..a73b92a9d75a58a318f9b27454197a75b5e91b7d 100644
+index 99ba2fc1fd9d442f26e32ce29bd61b70e07e246d..f4a9915f520fa55a5186caedd355b85d0f631b71 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -12,6 +12,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {

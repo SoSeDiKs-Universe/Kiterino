@@ -5,7 +5,7 @@ Subject: [PATCH] Material injector helper methods
 
 
 diff --git a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
-index 37dfdcfcbd14947e0550e7528aca68f452e53eb6..dc9975c013f633035ee6370f12955a812ac969ea 100644
+index c319f3bbfabdd39ee571c59d7bfc144c58232abc..4ebcc403159f6ce70d42f5b7801e6f9b20619764 100644
 --- a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
 +++ b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
 @@ -22,4 +22,27 @@ public interface BootstrapContext extends PluginProviderContext, LifecycleEventO

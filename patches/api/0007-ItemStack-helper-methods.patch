@@ -5,13 +5,13 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index e4b49e29b3795ddca80aeace540edf4b96dbec9d..8e08da6db8c27576620c82c65891fbce5090c21f 100644
+index 9b8b958ce181b60eb5db89d4720380153152a2ac..c4686f06fd945c77a2813f1b2c31508e65f64ad2 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1643,4 +1643,54 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
-         de.tr7zw.changeme.nbtapi.NBT.modify(this, consumer);
+@@ -1591,4 +1591,54 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+         return random.nextInt(unbreaking + 1) > 0;
      }
-     // Kiterino end - Add NBT-API as a first-class lib
+     // Purpur end
 +
 +    // Kiterino start - ItemStack helper methods
 +    /**

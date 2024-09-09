@@ -5,7 +5,7 @@ Subject: [PATCH] Temporary exclude UnsafeValues from annotation test
 
 
 diff --git a/src/test/java/org/bukkit/AnnotationTest.java b/src/test/java/org/bukkit/AnnotationTest.java
-index b82f07a2879412f6b30643ca93a97439aa49a98a..952350c39c6afcffa6219b752aceac7c07504baa 100644
+index 6369124775f8b51b10476a6819969fd075cb61e1..75cfb817c4523640d6173a6e57daab8fe023fd7c 100644
 --- a/src/test/java/org/bukkit/AnnotationTest.java
 +++ b/src/test/java/org/bukkit/AnnotationTest.java
 @@ -39,6 +39,7 @@ public class AnnotationTest {

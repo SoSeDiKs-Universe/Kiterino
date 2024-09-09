@@ -52,7 +52,6 @@ subprojects {
     repositories {
         mavenCentral()
         maven(paperMavenPublicUrl)
-        maven("https://repo.codemc.io/repository/maven-public/") // NBT-API
     }
 }
 
@@ -92,7 +91,6 @@ tasks.generateDevelopmentBundle {
             "https://repo.maven.apache.org/maven2/",
             paperMavenPublicUrl,
             "https://repo.purpurmc.org/snapshots",
-            "https://repo.codemc.io/repository/maven-public/", // NBT-API
         )
     )
 }

@@ -5,7 +5,7 @@ Subject: [PATCH] Mob effect injector helper methods
 
 
 diff --git a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
-index dc9975c013f633035ee6370f12955a812ac969ea..f297feadd01c249744f6e28b0228cd0981fee25f 100644
+index 4ebcc403159f6ce70d42f5b7801e6f9b20619764..f003ddb7d2b621d55e699c33bce761f03b2766a6 100644
 --- a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
 +++ b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
 @@ -45,4 +45,26 @@ public interface BootstrapContext extends PluginProviderContext, LifecycleEventO
