@@ -128,7 +128,7 @@ index 0000000000000000000000000000000000000000..f402ce0be376a0b5dfa229b44cff4d2e
 +
 +}
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index e1a677cfde05aba487a09e34e170fea61a125e7d..4cf80f766673050110c71c254e6f6fda75e69cf9 100644
+index 724e64a8ff978456c101a97432e45f234e349926..7ab1e826034a58227f44a070e5a17296e9f452f3 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
 @@ -4621,6 +4621,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
@@ -151,7 +151,7 @@ index e1a677cfde05aba487a09e34e170fea61a125e7d..4cf80f766673050110c71c254e6f6fda
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -5658,4 +5664,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5659,4 +5665,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          }
      }
      // Purpur end

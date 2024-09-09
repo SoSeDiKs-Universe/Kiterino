@@ -24,10 +24,10 @@ index 8c2f9f549b5155b8d8fecbc22164b334805381e2..1637bb4c73b7e84b0761a442e2d7e808
              if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
                  throw new IllegalStateException("Unable to load registries");
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 4ee376e023c621e98f19c6cd1015c00d453702d6..53f01e8ba6521bcf39c98b6952a80619e845ae99 100644
+index 1b611c04be72e5a9be34b8b96b8e98eea4e26509..562f80116ae01c48415855e03968172b32a9bbd4 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -338,9 +338,21 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -341,9 +341,21 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          de.tr7zw.changeme.nbtapi.utils.nmsmappings.ReflectionMethod.COMPOUND_SET_FLOAT.getMethodName(); // Cache reflections
          // Kiterino end - Add NBT API as a first-class lib
  
@@ -50,7 +50,7 @@ index 4ee376e023c621e98f19c6cd1015c00d453702d6..53f01e8ba6521bcf39c98b6952a80619
          // CraftBukkit end
  
 diff --git a/src/test/java/org/bukkit/support/AbstractTestingBase.java b/src/test/java/org/bukkit/support/AbstractTestingBase.java
-index 1b1d51a68c0abe7d8f0aa1172064192c71ae645e..b208e58979edf85e1cc807dbf6e49654ad764a1b 100644
+index 4e9612600822bc1b52b8528dff2783d43385ec73..f597e8144e1ac7bea55df12bd421f3a94c747084 100644
 --- a/src/test/java/org/bukkit/support/AbstractTestingBase.java
 +++ b/src/test/java/org/bukkit/support/AbstractTestingBase.java
 @@ -44,6 +44,7 @@ public abstract class AbstractTestingBase {

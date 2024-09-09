@@ -5,10 +5,10 @@ Subject: [PATCH] Add PlayerStartUsingItemEvent
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index fa43300ba2110a85b67eb8ace6c67f2b27fb4ed9..d7a4f4445ca2df23ead3a9273a7b96097f43281a 100644
+index e194f46dfe2f4312d0c4d01b4a0281114ec63bee..03a0cbcb9d52ed2a21cef92d26d9f9778147298b 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -4095,8 +4095,19 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4121,8 +4121,19 @@ public abstract class LivingEntity extends Entity implements Attackable {
  
          if (!itemstack.isEmpty() && !this.isUsingItem() || forceUpdate) { // Paper - Prevent consuming the wrong itemstack
              this.useItem = itemstack;

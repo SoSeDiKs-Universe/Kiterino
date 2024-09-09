@@ -27,10 +27,10 @@ index 8cde30544e14f8fc2dac32966ae3c21f8cf3a551..5eb3ce1348587e4b494608f269e5faaf
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-index 3cb56595822799926a8141e60a42f5d1edfc6de5..917a4e643c5e15e6819a7c01206ab2ff393c9cc3 100644
+index 90b3526479320064378f2cde6c2f2b8e48a59ba6..70145bafa7c9c45a6f7a7a6854e9eefaccd97e9a 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 +++ b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
-@@ -17,7 +17,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
+@@ -20,7 +20,7 @@ public final class PaperConsole extends SimpleTerminalConsole {
      @Override
      protected LineReader buildReader(LineReaderBuilder builder) {
          builder
@@ -40,18 +40,18 @@ index 3cb56595822799926a8141e60a42f5d1edfc6de5..917a4e643c5e15e6819a7c01206ab2ff
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-index a6e5950b5875cafd734300cdfbf58f5d3736f3c8..aeb739d8d0f1178bcbade4913b3391f0808dbf0d 100644
+index 3099c21ee589acf6edff5903a23673adf489024f..b49360050a81ce984e7f9fdd04894be296648540 100644
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-@@ -32,6 +32,7 @@ public record ServerBuildInfoImpl(
- 
+@@ -33,6 +33,7 @@ public record ServerBuildInfoImpl(
      private static final String BRAND_PAPER_NAME = "Paper";
+     private static final String BRAND_PUFFERFISH_NAME = "Pufferfish"; // Purpur
      private static final String BRAND_PURPUR_NAME = "Purpur"; // Purpur
 +    private static final String BRAND_KITERINO_NAME = "Kiterino"; // Kiterino - Rebrand
  
      private static final String BUILD_DEV = "DEV";
  
-@@ -43,9 +44,9 @@ public record ServerBuildInfoImpl(
+@@ -44,9 +45,9 @@ public record ServerBuildInfoImpl(
          this(
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
@@ -63,12 +63,12 @@ index a6e5950b5875cafd734300cdfbf58f5d3736f3c8..aeb739d8d0f1178bcbade4913b3391f0
              SharedConstants.getCurrentVersion().getId(),
              SharedConstants.getCurrentVersion().getName(),
              getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
-@@ -62,7 +63,7 @@ public record ServerBuildInfoImpl(
+@@ -63,7 +64,7 @@ public record ServerBuildInfoImpl(
  
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
--        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur
-+        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur // Kiterino - Rebrand
+-        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PUFFERFISH_ID); // Purpur
++        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PUFFERFISH_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur // Kiterino - Rebrand
      }
  
      @Override

@@ -5,10 +5,10 @@ Subject: [PATCH] Kiterino Config
 
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 1d594c256200d46882fafce5d2b33e60f0fa3a59..62c6ac11a72622e6170733d102576ea847532ddd 100644
+index eb29794f6ca2efc9cde4dd1685822f9a3a73f3b9..a6815cf155796c12708d04f8fc4309d9e0a28ddc 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2266,6 +2266,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2277,6 +2277,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
          }
          // Purpur end
  

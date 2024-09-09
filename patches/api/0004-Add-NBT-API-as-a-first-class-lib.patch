@@ -5,10 +5,10 @@ Subject: [PATCH] Add NBT API as a first-class lib
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a40a0623db8b901e39e04b1f1d5f0b1f1735cade..be0d92ec50db903e0d6b6e6317c593a7064630af 100644
+index 7b0b17ff41aa336ee92636bc2844ba8697d399d4..4794ee266bd4720baa3547a9a2e09ee574723ef5 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -71,6 +71,8 @@ dependencies {
+@@ -72,6 +72,8 @@ dependencies {
      testCompileOnly(checkerQual)
      // Paper end
  
@@ -17,7 +17,7 @@ index a40a0623db8b901e39e04b1f1d5f0b1f1735cade..be0d92ec50db903e0d6b6e6317c593a7
      testImplementation("org.apache.commons:commons-lang3:3.12.0")
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
      testImplementation("org.hamcrest:hamcrest:2.2")
-@@ -169,6 +171,7 @@ tasks.withType<Javadoc> {
+@@ -177,6 +179,7 @@ tasks.withType<Javadoc> {
          "https://javadoc.io/doc/org.apache.logging.log4j/log4j-api/$log4jVersion/",
          // Paper end
          "https://javadoc.io/doc/org.apache.maven.resolver/maven-resolver-api/1.7.3", // Paper

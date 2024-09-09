@@ -5,10 +5,10 @@ Subject: [PATCH] Material rerouting
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
-index f0471f92044612e3a2fd12a575b8b1f844790d3a..576bb9bb7ca8e2443e9d55a87db1173efb1c52c5 100644
+index e5c30847297e056782084d81fb9300f98d4a8f75..8f465bc9f03bc5fab80674bc47552f8325067c1d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
 +++ b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
-@@ -718,4 +718,27 @@ public class MaterialRerouting {
+@@ -736,4 +736,27 @@ public class MaterialRerouting {
          return itemStack.getBlockData(MaterialRerouting.transformToBlockType(material));
      }
      // Purpur end

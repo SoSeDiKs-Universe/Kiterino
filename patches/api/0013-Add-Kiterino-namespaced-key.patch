@@ -5,10 +5,10 @@ Subject: [PATCH] Add Kiterino namespaced key
 
 
 diff --git a/src/main/java/org/bukkit/NamespacedKey.java b/src/main/java/org/bukkit/NamespacedKey.java
-index 7ff6d60deb129e23b2a4d772aee123eb6c0b6433..c85bf8b7e77220e6f486b846754e2805ac977448 100644
+index 52a2763773b234c581b2dcc6f0584f8d8b0fbc60..fb0a5db6bc7587f111b94b1054d6545e67d0e0f2 100644
 --- a/src/main/java/org/bukkit/NamespacedKey.java
 +++ b/src/main/java/org/bukkit/NamespacedKey.java
-@@ -30,6 +30,12 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key { // Pap
+@@ -30,6 +30,12 @@ public final class NamespacedKey implements net.kyori.adventure.key.Key, com.des
       * compatibility measures.
       */
      public static final String BUKKIT = "bukkit";

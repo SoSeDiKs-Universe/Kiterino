@@ -5,10 +5,10 @@ Subject: [PATCH] Hide irrelevant compilation warnings
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ea3ad97909de951efa0ad322df766689339b8af6..a40a0623db8b901e39e04b1f1d5f0b1f1735cade 100644
+index b7d584c8b96eb7699e5df90ed04bf22ee256d571..7b0b17ff41aa336ee92636bc2844ba8697d399d4 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -223,3 +223,12 @@ tasks.check {
+@@ -231,3 +231,12 @@ tasks.check {
      dependsOn(scanJarForOldGeneratedCode)
  }
  // Paper end

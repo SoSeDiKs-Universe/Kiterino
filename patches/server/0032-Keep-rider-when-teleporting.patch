@@ -5,10 +5,10 @@ Subject: [PATCH] Keep rider when teleporting
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 6c963f0dda6e0491bbff60bb07e8349fcdb5750f..8733c027a68b1c57616c62d56baa82a903579e7c 100644
+index d91aef1bb668e87998b4270ecf2a3e730cb9929f..fe897009d48193527db225138b02188babfc90e0 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -5085,7 +5085,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -5146,7 +5146,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      // Paper end - Expose entity id counter
      // Purpur start
      @Nullable
@@ -18,7 +18,7 @@ index 6c963f0dda6e0491bbff60bb07e8349fcdb5750f..8733c027a68b1c57616c62d56baa82a9
      @Nullable
      public Player getRider() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index eff978d8f6c5075b73a077001c85152300285b6c..da22e8ed23b721f29270c03cbd207e83ee9c294c 100644
+index 6c3171f6c6a73e42ed31f564bcd4f3d5e36cc738..9a9ed43776e0752fc12922136d49a1f364c615b7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -248,11 +248,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {

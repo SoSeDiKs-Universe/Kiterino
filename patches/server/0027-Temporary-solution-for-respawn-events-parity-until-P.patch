@@ -6,7 +6,7 @@ Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
 
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 1b1008ffd544dcddc31238e10c06df0d7aa68793..69e0f8595ac9e5fbce4f4f991645e3b71db1b60b 100644
+index e4978abcc79ee51fa95442b82d9079c8ee1e60d6..1db55b8ea73f6eab8dd38bfc5104d7f520bd533f 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -843,6 +843,7 @@ public abstract class PlayerList {
@@ -17,7 +17,7 @@ index 1b1008ffd544dcddc31238e10c06df0d7aa68793..69e0f8595ac9e5fbce4f4f991645e3b7
          boolean isRespawn = false;
          // Paper end - Add PlayerPostRespawnEvent
  
-@@ -902,6 +903,7 @@ public abstract class PlayerList {
+@@ -906,6 +907,7 @@ public abstract class PlayerList {
              BlockState iblockdata = worldserver.getBlockState(blockposition);
  
              if (iblockdata.is(Blocks.RESPAWN_ANCHOR)) {
@@ -25,7 +25,7 @@ index 1b1008ffd544dcddc31238e10c06df0d7aa68793..69e0f8595ac9e5fbce4f4f991645e3b7
                  entityplayer1.connection.send(new ClientboundSoundPacket(SoundEvents.RESPAWN_ANCHOR_DEPLETE, SoundSource.BLOCKS, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0F, 1.0F, worldserver.getRandom().nextLong()));
              }
              // Paper start - Add PlayerPostRespawnEvent
-@@ -933,7 +935,13 @@ public abstract class PlayerList {
+@@ -937,7 +939,13 @@ public abstract class PlayerList {
  
          // Paper start - Add PlayerPostRespawnEvent
          if (isRespawn) {

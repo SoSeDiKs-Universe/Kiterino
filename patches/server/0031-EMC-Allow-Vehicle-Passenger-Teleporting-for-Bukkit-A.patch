@@ -6,7 +6,7 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index c0668030937a1787a2046f46783e1337c2056535..c4f70429bee3d8ee8816465f5f36cdd2ff226651 100644
+index ce549ad8aed721664df0929a4de197929dc565d1..98204f901ebb63e2970b036dc5b6bd7512dd6c8b 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -813,7 +813,7 @@ public abstract class PlayerList {
@@ -19,10 +19,10 @@ index c0668030937a1787a2046f46783e1337c2056535..c4f70429bee3d8ee8816465f5f36cdd2
          this.playersByName.remove(entityplayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          entityplayer.serverLevel().removePlayerImmediately(entityplayer, entity_removalreason);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index eb3f73f42d8ebd0e4c54631cb272e03be788d954..6c963f0dda6e0491bbff60bb07e8349fcdb5750f 100644
+index cd9c1b07d275c6218a9c0239e6625ad430abcef9..d91aef1bb668e87998b4270ecf2a3e730cb9929f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -310,7 +310,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -309,7 +309,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      public ImmutableList<Entity> passengers;
      protected int boardingCooldown;
      @Nullable
@@ -32,7 +32,7 @@ index eb3f73f42d8ebd0e4c54631cb272e03be788d954..6c963f0dda6e0491bbff60bb07e8349f
      public double xo;
      public double yo;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index df7bd21c6fa8be94fa3bc7437583975b99f5be0b..eff978d8f6c5075b73a077001c85152300285b6c 100644
+index adc7ae901f217b9b68a92c849390af8e51074f73..6c3171f6c6a73e42ed31f564bcd4f3d5e36cc738 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -245,6 +245,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -162,7 +162,7 @@ index df7bd21c6fa8be94fa3bc7437583975b99f5be0b..eff978d8f6c5075b73a077001c851523
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 493f27176ef6b9d32b9c1490706d65ec826d433b..73fc40c9de16c277d56c21e55bfd28a7a3230e9a 100644
+index 4df2c368cb9cd15017e8072a5f306a93c06ed189..3332e85257aad8bab8a75bb949f63f9d836bf8ca 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1435,13 +1435,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -181,7 +181,7 @@ index 493f27176ef6b9d32b9c1490706d65ec826d433b..73fc40c9de16c277d56c21e55bfd28a7
              return false;
          }
          // Paper end
-@@ -1495,6 +1495,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1496,6 +1496,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              this.getHandle().closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.TELEPORT); // Paper - Inventory close reason
          }
  
@@ -189,7 +189,7 @@ index 493f27176ef6b9d32b9c1490706d65ec826d433b..73fc40c9de16c277d56c21e55bfd28a7
          // Check if the fromWorld and toWorld are the same.
          if (fromWorld == toWorld) {
              // Paper start - Teleport API
-@@ -1509,9 +1510,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1510,9 +1511,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              // The respawn reason should never be used if the passed location is non null.
              this.server.getHandle().respawn(entity, true, Entity.RemovalReason.CHANGED_DIMENSION, null, to);
          }

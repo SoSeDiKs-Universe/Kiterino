@@ -5,10 +5,10 @@ Subject: [PATCH] Injecting custom Materials
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 70d22bdb9cf756f06473637f296a622add6e8087..a45e5207e8c644280febde70858e834cbc2f4e02 100644
+index 8607e1973a1164e4130d9852eeba1c5e7d97fff1..03c5a34998d545968727a7694a05097e6b43e59c 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -88,6 +88,7 @@ tasks.jar {
+@@ -103,6 +103,7 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
@@ -16,7 +16,7 @@ index 70d22bdb9cf756f06473637f296a622add6e8087..a45e5207e8c644280febde70858e834c
              "Implementation-Title" to "Kiterino", // Kiterino - Init
              "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date, // Paper
-@@ -163,6 +164,7 @@ fun TaskContainer.registerRunTask(
+@@ -178,6 +179,7 @@ fun TaskContainer.registerRunTask(
          vendor.set(JvmVendorSpec.JETBRAINS)
      })
      jvmArgs("-XX:+AllowEnhancedClassRedefinition", "-XX:+AllowRedefinitionToAddDeleteMethods")
