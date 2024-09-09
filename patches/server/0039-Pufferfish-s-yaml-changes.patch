@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 9 Sep 2024 21:15:50 +0300
+Subject: [PATCH] Pufferfish's yaml changes
+
+Include Simple-YAML repo and sync snakeyaml version to API's one
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 03c5a34998d545968727a7694a05097e6b43e59c..a73b92a9d75a58a318f9b27454197a75b5e91b7d 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -12,6 +12,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
+ }
+ val alsoShade: Configuration by configurations.creating
+ 
++// Kiterino start - Pufferfish's yaml changes
++repositories {
++    maven("https://jitpack.io") // Pufferfish's Simple-YAML
++}
++// Kiterino end - Pufferfish's yaml changes
++
+ dependencies {
+     implementation(project(":kiterino-api")) // Kiterino - Init
+     // Paper start
+@@ -48,7 +54,7 @@ dependencies {
+     runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
+ 
+     // Pufferfish start
+-    implementation("org.yaml:snakeyaml:1.32")
++    implementation("org.yaml:snakeyaml:2.2") // Kiterino start - Sync snakeyaml to API's version - Pufferfish's yaml changes
+     implementation ("com.github.carleslc.Simple-YAML:Simple-Yaml:1.8.4") { // Purpur
+         exclude(group="org.yaml", module="snakeyaml")
+     }
