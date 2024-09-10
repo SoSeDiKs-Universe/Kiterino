@@ -5,25 +5,25 @@ Subject: [PATCH] Parse items in show_item hover event
 
 
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
-index a2bbd89da760b2fba218ece744dfff32977efa30..91f15295f7559a167e15a9804331e49fd3f9f459 100644
+index 25eafe3b3cce238ebd556ac894bb59c549c27e48..c53d495beeda9c057efc5af1b06613be1b5fa9f4 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 @@ -120,6 +120,13 @@ public final class KiterinoConfig {
- 		return version;
- 	}
+         return version;
+     }
  
-+	// Kiterino start - Parse items in show_item hover event
-+	public static boolean parseItemHoversEverywhere;
-+	private static void parseItemHoversEverywhere() {
-+		parseItemHoversEverywhere = getBoolean(config, "item-modifiers.apply-modifiers-on-all-hover", false, "Apply item modifiers on all show_item hover events in text components.", "By default, they are applied only to system chat messages.", "Only enable if your client is getting kicked due to injected items.");
-+	}
-+	// Kiterino end - Parse items in show_item hover event
++    // Kiterino start - Parse items in show_item hover event
++    public static boolean parseItemHoversEverywhere;
++    private static void parseItemHoversEverywhere() {
++        parseItemHoversEverywhere = getBoolean(config, "item-modifiers.apply-modifiers-on-all-hover", false, "Apply item modifiers on all show_item hover events in text components.", "By default, they are applied only to system chat messages.", "Only enable if your client is getting kicked due to injected items.");
++    }
++    // Kiterino end - Parse items in show_item hover event
 +
- 	// Kiterino start - Item Modifiers API
- 	public static boolean itemModifiersLogMissingIds;
- 	public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
+     // Kiterino start - Item Modifiers API
+     public static boolean itemModifiersLogMissingIds;
+     public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 3d576e148a7ac07fadb585206fd4e161121acb50..b34a47c2bfb140aca89d74ff8532e68007cfbd23 100644
+index 03a0f7ca36375af80ea936de54c001b310795366..0e5e58bbf5b152d293ff5c8e438c19c327ed5f28 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -20,6 +20,8 @@ import net.minecraft.core.NonNullList;
@@ -44,30 +44,30 @@ index 3d576e148a7ac07fadb585206fd4e161121acb50..b34a47c2bfb140aca89d74ff8532e680
  import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
  import net.minecraft.network.syncher.EntityDataSerializers;
 @@ -155,10 +158,24 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
- 			case ClientboundUpdateRecipesPacket packet -> handle(player, packet);
- 			case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
- 			case ClientboundMerchantOffersPacket packet -> handle(player, packet);
-+			case ClientboundSystemChatPacket packet -> handle(player, packet);
- 			default -> initialPacket;
- 		};
- 	}
+             case ClientboundUpdateRecipesPacket packet -> handle(player, packet);
+             case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
+             case ClientboundMerchantOffersPacket packet -> handle(player, packet);
++            case ClientboundSystemChatPacket packet -> handle(player, packet);
+             default -> initialPacket;
+         };
+     }
  
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSystemChatPacket initialPacket) {
-+		if (initialPacket.overlay()) {
-+			return initialPacket;
-+		}
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSystemChatPacket initialPacket) {
++        if (initialPacket.overlay()) {
++            return initialPacket;
++        }
 +
-+		boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
-+		ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
-+		Component component = initialPacket.content();
-+		component = ComponentSerialization.replaceHoverItems(player, player.locale(), component);
-+		ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
-+		return new ClientboundSystemChatPacket(component, false);
-+	}
++        boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
++        ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
++        Component component = initialPacket.content();
++        component = ComponentSerialization.replaceHoverItems(player, player.locale(), component);
++        ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
++        return new ClientboundSystemChatPacket(component, false);
++    }
 +
- 	@SuppressWarnings({"unchecked"})
- 	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
- 		if (!(initialPacket.subPackets() instanceof ArrayList list)) {
+     @SuppressWarnings({"unchecked"})
+     private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
+         if (!(initialPacket.subPackets() instanceof ArrayList list)) {
 diff --git a/src/main/java/net/minecraft/network/chat/ComponentSerialization.java b/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
 index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..325401d2287585507569de2dfb39c55bc8432056 100644
 --- a/src/main/java/net/minecraft/network/chat/ComponentSerialization.java

@@ -5,7 +5,7 @@ Subject: [PATCH] Don't send custom mob effects to client
 
 
 diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
-index f8855680e0f0b19927ae0279b85584b6d8b4acae..83aa228593d475007c17856fa5b0c268cfd6558a 100644
+index f8855680e0f0b19927ae0279b85584b6d8b4acae..c5b0f00af05effa0cf85f9c101c51586e3374d6d 100644
 --- a/src/main/java/net/minecraft/network/Connection.java
 +++ b/src/main/java/net/minecraft/network/Connection.java
 @@ -514,6 +514,21 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {

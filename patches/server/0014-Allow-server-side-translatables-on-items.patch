@@ -6,23 +6,23 @@ Subject: [PATCH] Allow server-side translatables on items
 Adds "items.allow-server-translatables" config option to apply server-side translatabes to items before sending them to the client
 
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
-index 922cc7498b678ce5a4e63b197eca8bd5f13ae352..a2bbd89da760b2fba218ece744dfff32977efa30 100644
+index f51c974137edad3cb03230e93fbcae744c877e58..25eafe3b3cce238ebd556ac894bb59c549c27e48 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 @@ -136,4 +136,11 @@ public final class KiterinoConfig {
- 	}
- 	// Kiterino end - Prevent creative from overriding items
+     }
+     // Kiterino end - Prevent creative from overriding items
  
-+	// Kiterino start - Allow server-side translatables on items
-+	public static boolean denyServerTranslatablesOnItems;
-+	private static void allowServerTranslatablesOnItems() {
-+		denyServerTranslatablesOnItems = !getBoolean(config, "items.allow-server-translatables", true, "Apply server-side translatables to items before sending to the client");
-+	}
-+	// Kiterino end - Allow server-side translatables on items
++    // Kiterino start - Allow server-side translatables on items
++    public static boolean denyServerTranslatablesOnItems;
++    private static void allowServerTranslatablesOnItems() {
++        denyServerTranslatablesOnItems = !getBoolean(config, "items.allow-server-translatables", true, "Apply server-side translatables to items before sending to the client");
++    }
++    // Kiterino end - Allow server-side translatables on items
 +
  }
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 453d5a3c878bb63f5d8e315c2cda15c3e38990ca..8c248ff5586e69fa9191333dd562af40afd4da86 100644
+index 2cfeea6a7b0fdb0c443a91232303fd734ed39465..11dd103d552745e2428a61bc4125c402a7f09207 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
 @@ -208,7 +208,7 @@ public final class ItemStack implements DataComponentHolder {

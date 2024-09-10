@@ -6,7 +6,7 @@ Subject: [PATCH] Init Kiterino configs
 
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..0d0312744369b332ed0dfd171c060fc9019ae8b1
+index 0000000000000000000000000000000000000000..45d2ddb697562b1cf25d6676bb206b10f4743608
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
 @@ -0,0 +1,8 @@
@@ -14,8 +14,8 @@ index 0000000000000000000000000000000000000000..0d0312744369b332ed0dfd171c060fc9
 +
 +public class KiterinoInitializer {
 +
-+	public static void initPostConfig() {
-+	}
++    public static void initPostConfig() {
++    }
 +
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java

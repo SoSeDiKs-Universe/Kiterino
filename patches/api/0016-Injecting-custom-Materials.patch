@@ -1,56 +1,42 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: SoSeDiK <mrsosedik@gmail.com>
-Date: Sun, 12 May 2024 03:31:07 +0300
+Date: Tue, 14 May 2024 04:23:20 +0300
 Subject: [PATCH] Injecting custom Materials
 
-Abomination to workaround Material enum.
-Servers utilizing this API must use `--add-opens java.base/java.lang=ALL-UNNAMED` in startup flags,
-which allows changing fields inside Enum class.
-
-Plugins injecting custom items must fake the item before sending it to the client, e.g. using Item Modifiers API.
+Injects custom Material enums for data-driven items
 
 diff --git a/src/main/java/me/sosedik/kiterino/util/IKiterinoBootstrapMaterialInjector.java b/src/main/java/me/sosedik/kiterino/util/IKiterinoBootstrapMaterialInjector.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..7a5c35fd43af65686cd324c952212744f52b2e57
+index 0000000000000000000000000000000000000000..4fadea41afa71dd8deca52a33e40797f69be6607
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/util/IKiterinoBootstrapMaterialInjector.java
-@@ -0,0 +1,19 @@
+@@ -0,0 +1,15 @@
 +package me.sosedik.kiterino.util;
 +
-+import me.sosedik.kiterino.world.item.KiterinoNMSItem;
++import net.kyori.adventure.key.Key;
 +import org.bukkit.Material;
-+import org.bukkit.NamespacedKey;
 +import org.jetbrains.annotations.ApiStatus;
 +import org.jetbrains.annotations.NotNull;
-+import org.jetbrains.annotations.Nullable;
-+
-+import java.util.function.Supplier;
 +
 +@ApiStatus.Internal
 +interface IKiterinoBootstrapMaterialInjector {
 +
-+	void injectMaterials(@NotNull Class<?> materialsClass, @NotNull String namespace);
++    void injectMaterials(@NotNull Class<?> materialsClass);
 +
-+	@NotNull Material allocateMaterial(@Nullable NamespacedKey key, @NotNull Supplier<? extends KiterinoNMSItem> options);
++    @NotNull Material allocateMaterial(@NotNull Key key);
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjector.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjector.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f402ce0be376a0b5dfa229b44cff4d2e4e482cf4
+index 0000000000000000000000000000000000000000..d506e6bb0b2c88ffb4e9274672bf8ee4dc339db1
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjector.java
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,50 @@
 +package me.sosedik.kiterino.util;
 +
-+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
-+import me.sosedik.kiterino.world.item.KiterinoNMSItem;
++import net.kyori.adventure.key.Key;
 +import org.bukkit.Material;
-+import org.bukkit.NamespacedKey;
 +import org.jetbrains.annotations.NotNull;
-+import org.jetbrains.annotations.Nullable;
-+
-+import java.util.Locale;
-+import java.util.function.Supplier;
 +
 +/**
 + * Used for injecting custom Materials.
@@ -59,76 +45,45 @@ index 0000000000000000000000000000000000000000..f402ce0be376a0b5dfa229b44cff4d2e
 + */
 +public class KiterinoBootstrapMaterialInjector {
 +
-+	private KiterinoBootstrapMaterialInjector() {
-+		throw new IllegalStateException("Utility class");
-+	}
++    private KiterinoBootstrapMaterialInjector() {
++        throw new IllegalStateException("Utility class");
++    }
 +
-+	static IKiterinoBootstrapMaterialInjector injector;
++    static IKiterinoBootstrapMaterialInjector injector;
 +
-+	/**
-+	 * Inject materials in the class using the plugin's name as namespace.
-+	 * Keys will be fetched from Material field names.
-+	 *
-+	 * <p><b>Can be used only during bootstrap phase.
-+	 *
-+	 * @param materialsClass class with public static final Material instances
-+	 * @param context bootstrap context
-+	 * @throws IllegalStateException if not in bootstrap phase
-+	 */
-+	public static void injectMaterials(@NotNull Class<?> materialsClass, @NotNull BootstrapContext context) {
-+		injectMaterials(materialsClass, context.getConfiguration().getName().toLowerCase(Locale.ROOT).replace("-", "_"));
-+	}
++    /**
++     * Inject materials in the class using the plugin's name as namespace.
++     * Keys will be fetched from Material field names.
++     *
++     * <p><b>Can be used only during bootstrap phase.
++     *
++     * @param materialsClass class with public static final Material instances
++     * @throws IllegalStateException if not in bootstrap phase
++     */
++    public static void injectMaterials(@NotNull Class<?> materialsClass) {
++        if (injector == null) throw new IllegalStateException("Can't inject Materials outside bootstrap phase!");
++        injector.injectMaterials(materialsClass);
++    }
 +
-+	/**
-+	 * Inject materials in the class using the provided namespace.
-+	 * Keys will be fetched from Material field names.
-+	 *
-+	 * <p><b>Can be used only during bootstrap phase.
-+	 *
-+	 * @param materialsClass class with public static final Material instances
-+	 * @param namespace namespace for Materials
-+	 * @throws IllegalStateException if not in bootstrap phase
-+	 */
-+	public static void injectMaterials(@NotNull Class<?> materialsClass, @NotNull String namespace) {
-+		if (injector == null) throw new IllegalStateException("Can't inject Materials outside bootstrap phase!");
-+		injector.injectMaterials(materialsClass, namespace);
-+	}
-+
-+	/**
-+	 * Injects custom material.
-+	 * The key will be calculated from Plugin's name as namespace
-+	 * and field's name as a key.
-+	 *
-+	 * <p><b>Can be used only during bootstrap phase.
-+	 *
-+	 * @param options nms item
-+	 * @return injected Material
-+	 * @throws IllegalStateException if not in bootstrap phase
-+	 */
-+	public static @NotNull Material injectMaterial(@NotNull Supplier<? extends KiterinoNMSItem> options) {
-+		return injectMaterial(null, options);
-+	}
-+
-+	/**
-+	 * Injects custom material.
-+	 * If the key is null, it will be calculated from Plugin's provided namespace
-+	 * and Material field's name as a key.
-+	 *
-+	 * <p><b>Can be used only during bootstrap phase.
-+	 *
-+	 * @param key material key
-+	 * @param options nms item
-+	 * @return injected Material
-+	 * @throws IllegalStateException if not in bootstrap phase
-+	 */
-+	public static @NotNull Material injectMaterial(@Nullable NamespacedKey key, @NotNull Supplier<? extends KiterinoNMSItem> options) {
-+		if (injector == null) throw new IllegalStateException("Can't inject Materials outside bootstrap phase!");
-+		return injector.allocateMaterial(key, options);
-+	}
++    /**
++     * Injects a custom material.
++     * If the key is null, it will be calculated from Plugin's provided namespace
++     * and Material field's name as a key.
++     *
++     * <p><b>Can be used only during bootstrap phase.
++     *
++     * @param key material key
++     * @return injected Material
++     * @throws IllegalStateException if not in bootstrap phase
++     */
++    public static @NotNull Material injectMaterial(@NotNull Key key) {
++        if (injector == null) throw new IllegalStateException("Can't inject Materials outside bootstrap phase!");
++        return injector.allocateMaterial(key);
++    }
 +
 +}
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 724e64a8ff978456c101a97432e45f234e349926..7ab1e826034a58227f44a070e5a17296e9f452f3 100644
+index 724e64a8ff978456c101a97432e45f234e349926..af332799ef469e87736e134bc35c0557d9029b72 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
 @@ -4621,6 +4621,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
@@ -139,19 +94,45 @@ index 724e64a8ff978456c101a97432e45f234e349926..7ab1e826034a58227f44a070e5a17296
  
      private Material(final int id) {
          this(id, 64);
-@@ -4964,6 +4965,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4777,6 +4778,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+      * @return Maximum stack size for this material
+      */
+     public int getMaxStackSize() {
++    // Kiterino start - Injecting custom Materials
++    ItemType type = asItemType();
++    if (type != null) {
++        return type.getMaxStackSize();
++    }
++    // Kiterino end - Injecting custom Materials
+         return maxStack;
+     }
+ 
+@@ -4786,6 +4793,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+      * @return Maximum durability for this material
+      */
+     public short getMaxDurability() {
++    // Kiterino start - Injecting custom Materials
++    ItemType type = asItemType();
++    if (type != null) {
++        return type.getMaxDurability();
++    }
++    // Kiterino end - Injecting custom Materials
+         return durability;
+     }
+ 
+@@ -4964,6 +4977,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
-+        // Kiterino start - Injecting custom Materials
-+        else {
-+            filtered = filtered.replace(':', '_');
-+        }
-+        // Kiterino end - Injecting custom Materials
++    // Kiterino start - Injecting custom Materials
++    else {
++        filtered = filtered.replace(':', '_');
++    }
++    // Kiterino end - Injecting custom Materials
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -5659,4 +5665,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5659,4 +5677,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          }
      }
      // Purpur end
@@ -164,7 +145,7 @@ index 724e64a8ff978456c101a97432e45f234e349926..7ab1e826034a58227f44a070e5a17296
 +     * @return whether this item is injected
 +     */
 +    public boolean isInjected() {
-+        return this.injected;
++    return this.injected;
 +    }
 +    // Kiterino end - Injecting custom Materials
  }

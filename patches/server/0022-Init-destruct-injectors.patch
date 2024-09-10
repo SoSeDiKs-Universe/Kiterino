@@ -6,16 +6,15 @@ Subject: [PATCH] Init/destruct injectors
 System property in tests is to bandaid failing tests due to missing "--add-opens java.base/java.lang=ALL-UNNAMED" flag in gradle build task required by Material injector patch.
 
 diff --git a/src/main/java/net/minecraft/server/Bootstrap.java b/src/main/java/net/minecraft/server/Bootstrap.java
-index 8c2f9f549b5155b8d8fecbc22164b334805381e2..fb3525ed6c34f3b87063c8e5d4857704ccd5d8ef 100644
+index 8c2f9f549b5155b8d8fecbc22164b334805381e2..e6c8739ca3122bcd028ac0773b18cd210f1b0f3e 100644
 --- a/src/main/java/net/minecraft/server/Bootstrap.java
 +++ b/src/main/java/net/minecraft/server/Bootstrap.java
-@@ -62,6 +62,12 @@ public class Bootstrap {
+@@ -62,6 +62,11 @@ public class Bootstrap {
              Bootstrap.isBootstrapped = true;
              Instant instant = Instant.now();
  
 +            // Kiterino start - Init/destruct injectors
 +            if (!Boolean.getBoolean("Kiterino.testingBase")) {
-+                me.sosedik.kiterino.util.KiterinoDataInjectorImpl.init(); // Kiterino - Real custom items
 +                me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.init(); // Kiterino - Injecting custom Materials
 +            }
 +            // Kiterino end - Init/destruct injectors
@@ -23,30 +22,21 @@ index 8c2f9f549b5155b8d8fecbc22164b334805381e2..fb3525ed6c34f3b87063c8e5d4857704
              if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
                  throw new IllegalStateException("Unable to load registries");
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 4c3e1b4d8f972a3773480eabaf549aa52c2f4ab2..3e2cec5acbaa4942487a38fd0f5679bd0c0b480b 100644
+index 4c3e1b4d8f972a3773480eabaf549aa52c2f4ab2..f6766d9a745dc5f5a47164021a2396e732af8df1 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -333,9 +333,20 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -333,6 +333,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          }
          // Purpur end
  
-+	    // Kiterino start - Init/destruct injectors
-+	    boolean skipInject = Boolean.getBoolean("Kiterino.testingBase");
-+	    var materialInjectorK = skipInject ? null : me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.destruct();
-+	    // Kiterino end - Init/destruct injectors
++        // Kiterino start - Init/destruct injectors
++        if (!Boolean.getBoolean("Kiterino.testingBase")) {
++            me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.destruct(); // Kiterino - Injecting custom Materials
++        }
++        // Kiterino end - Init/destruct injectors
          // CraftBukkit start
          // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up
          this.server.loadPlugins();
-+        // Kiterino start - Init/destruct injectors
-+        if (materialInjectorK != null) {
-+            // Delaying nms inject up until onLoad() were called to allow passing custom data not available in bootstrap into constructors
-+            materialInjectorK.finalizeInject(me.sosedik.kiterino.util.KiterinoDataInjectorImpl.getInstance());
-+            me.sosedik.kiterino.util.KiterinoDataInjectorImpl.destruct();
-+        }
-+        // Kiterino end - Init/destruct injectors
-         this.server.enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);
-         // CraftBukkit end
- 
 diff --git a/src/test/java/org/bukkit/support/AbstractTestingBase.java b/src/test/java/org/bukkit/support/AbstractTestingBase.java
 index 4e9612600822bc1b52b8528dff2783d43385ec73..f597e8144e1ac7bea55df12bd421f3a94c747084 100644
 --- a/src/test/java/org/bukkit/support/AbstractTestingBase.java

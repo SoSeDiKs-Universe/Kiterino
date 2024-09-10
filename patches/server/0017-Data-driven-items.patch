@@ -1,0 +1,111 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 10 Sep 2024 21:35:48 +0300
+Subject: [PATCH] Data-driven items
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+index 6ec9d9b9acf557aa2ebf39d38a14225b0205fae1..7603395aace52f16453de854b95f2f8ca691c573 100644
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+@@ -75,7 +75,7 @@ public final class PaperRegistries {
+             entry(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new),
+             entry(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE, StructureType.class, CraftStructureType::new),
+             entry(Registries.BLOCK, RegistryKey.BLOCK, BlockType.class, CraftBlockType::new),
+-            entry(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new),
++            writable(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new, me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             entry(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT, Cat.Type.class, CraftCat.CraftType::new),
+             entry(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT, Frog.Variant.class, CraftFrog.CraftVariant::new),
+             entry(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION, Villager.Profession.class, CraftVillager.CraftProfession::new),
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..6ecdda153fbaad9d7279a326f2ab35e46cb7dec3
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
+@@ -0,0 +1,86 @@
++package me.sosedik.kiterino.registry.data;
++
++import io.papermc.paper.registry.PaperRegistryBuilder;
++import io.papermc.paper.registry.TypedKey;
++import io.papermc.paper.registry.data.util.Conversions;
++import net.minecraft.world.item.Item;
++import net.minecraft.world.level.block.ComposterBlock;
++import org.bukkit.inventory.ItemType;
++import org.checkerframework.checker.nullness.qual.NonNull;
++import org.checkerframework.checker.nullness.qual.Nullable;
++
++public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
++
++    protected int maxStackSize;
++    protected boolean fireResistant;
++    protected @Nullable Float compostChance;
++
++    protected final Conversions conversions;
++
++    public KiterinoItemRegistryEntity(
++            final @NonNull Conversions conversions,
++            final @NonNull TypedKey<ItemType> ignoredKey,
++            final @Nullable Item internal
++    ) {
++        this.conversions = conversions;
++        if (internal == null) {
++            this.maxStackSize = 64;
++            return;
++        }
++
++        this.maxStackSize = internal.getDefaultMaxStackSize();
++    }
++
++    @Override
++    public int maxStackSize() {
++        return this.maxStackSize;
++    }
++
++    @Override
++    public boolean fireResistant() {
++        return this.fireResistant;
++    }
++
++    @Override
++    public @Nullable Float compostChance() {
++        return this.compostChance;
++    }
++
++    public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
++            PaperRegistryBuilder<Item, ItemType> {
++
++        public KiterinoBuilder(final @NonNull Conversions conversions, final @NonNull TypedKey<ItemType> key, final @Nullable Item internal) {
++            super(conversions, key, internal);
++        }
++
++        @Override
++        public @NonNull Builder maxStackSize(int size) {
++            this.maxStackSize = size;
++            return this;
++        }
++
++        @Override
++        public @NonNull Builder fireResistant(boolean fireResistant) {
++            this.fireResistant = fireResistant;
++            return this;
++        }
++
++        @Override
++        public @NonNull Builder compostChance(@Nullable Float levelIncreaseChance) {
++            this.compostChance = levelIncreaseChance;
++            return this;
++        }
++
++        @Override
++        public @NonNull Item build() {
++            var properties = new Item.Properties()
++                    .stacksTo(this.maxStackSize);
++            if (this.fireResistant) properties = properties.fireResistant();
++            var item = new Item(properties);
++            if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
++            return item;
++        }
++
++    }
++
++}

@@ -14,7 +14,7 @@ Plugins need to implement ItemModifier and call #register on them to enable them
 
 diff --git a/src/main/java/me/sosedik/kiterino/inventory/InventorySlotHelper.java b/src/main/java/me/sosedik/kiterino/inventory/InventorySlotHelper.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f657fd9e569e3ccea1444d09066ce828c7c1982b
+index 0000000000000000000000000000000000000000..3d596bbfaa0015a5d2e34207f4065d9ad38f2344
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/inventory/InventorySlotHelper.java
 @@ -0,0 +1,47 @@
@@ -25,49 +25,49 @@ index 0000000000000000000000000000000000000000..f657fd9e569e3ccea1444d09066ce828
 + */
 +public final class InventorySlotHelper {
 +
-+	private InventorySlotHelper() {
-+		throw new IllegalStateException("Utility class");
-+	}
++    private InventorySlotHelper() {
++        throw new IllegalStateException("Utility class");
++    }
 +
-+	/**
-+	 * Item held in cursor
-+	 */
-+	public static final int CURSOR = -1;
++    /**
++     * Item held in cursor
++     */
++    public static final int CURSOR = -1;
 +
-+	/**
-+	 * The head inventory slot
-+	 */
-+	public static final int HEAD_SLOT = 5;
++    /**
++     * The head inventory slot
++     */
++    public static final int HEAD_SLOT = 5;
 +
-+	/**
-+	 * The chest/chestplate inventory slot
-+	 */
-+	public static final int CHEST_SLOT = 6;
++    /**
++     * The chest/chestplate inventory slot
++     */
++    public static final int CHEST_SLOT = 6;
 +
-+	/**
-+	 * The legs/leggings inventory slot
-+	 */
-+	public static final int LEGS_SLOT = 7;
++    /**
++     * The legs/leggings inventory slot
++     */
++    public static final int LEGS_SLOT = 7;
 +
-+	/**
-+	 * The feet/boots inventory slot
-+	 */
-+	public static final int FEET_SLOT = 8;
++    /**
++     * The feet/boots inventory slot
++     */
++    public static final int FEET_SLOT = 8;
 +
-+	/**
-+	 * The first hotbar slot
-+	 */
-+	public static final int FIRST_HOTBAR_SLOT = 36;
++    /**
++     * The first hotbar slot
++     */
++    public static final int FIRST_HOTBAR_SLOT = 36;
 +
-+	/**
-+	 * Item held in offhand
-+	 */
-+	public static final int OFF_HAND = 45;
++    /**
++     * Item held in offhand
++     */
++    public static final int OFF_HAND = 45;
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..6700c03c737cf48e676aae955d6089cf955a3d82
+index 0000000000000000000000000000000000000000..9499c5f24702e5c1ff0fa1b688fc0d5d1c5f59a4
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
 @@ -0,0 +1,223 @@
@@ -92,211 +92,211 @@ index 0000000000000000000000000000000000000000..6700c03c737cf48e676aae955d6089cf
 +@SuppressWarnings("unused")
 +public class ItemContextBox {
 +
-+	private final @Nullable Player viewer;
-+	private final Locale locale;
-+	private final ItemModifierContextType contextType;
-+	private final ItemModifierContext context;
-+	private ItemStack item;
-+	@Nullable ItemMeta meta;
-+	@Nullable Material newType;
++    private final @Nullable Player viewer;
++    private final Locale locale;
++    private final ItemModifierContextType contextType;
++    private final ItemModifierContext context;
++    private ItemStack item;
++    @Nullable ItemMeta meta;
++    @Nullable Material newType;
 +
-+	/**
-+	 * Creates a new context box with viewer's locale
-+	 *
-+	 * @param viewer player viewing the item
-+	 * @param contextType context type
-+	 * @param context modification context
-+	 * @param item item
-+	 */
-+	public ItemContextBox(@NotNull Player viewer, @NotNull ItemModifierContextType contextType, @NotNull ItemModifierContext context, @NotNull ItemStack item) {
-+		this(viewer, viewer.locale(), contextType, context, item);
-+	}
++    /**
++     * Creates a new context box with viewer's locale
++     *
++     * @param viewer player viewing the item
++     * @param contextType context type
++     * @param context modification context
++     * @param item item
++     */
++    public ItemContextBox(@NotNull Player viewer, @NotNull ItemModifierContextType contextType, @NotNull ItemModifierContext context, @NotNull ItemStack item) {
++        this(viewer, viewer.locale(), contextType, context, item);
++    }
 +
-+	/**
-+	 * Creates a new context box
-+	 *
-+	 * @param viewer player viewing the item
-+	 * @param locale locale for modifications
-+	 * @param contextType context type
-+	 * @param context modification context
-+	 * @param item item
-+	 */
-+	public ItemContextBox(@Nullable Player viewer, @NotNull Locale locale, @NotNull ItemModifierContextType contextType, @NotNull ItemModifierContext context, @NotNull ItemStack item) {
-+		this.viewer = viewer;
-+		this.locale = locale;
-+		this.contextType = contextType;
-+		this.item = item;
-+		this.context = context;
-+	}
++    /**
++     * Creates a new context box
++     *
++     * @param viewer player viewing the item
++     * @param locale locale for modifications
++     * @param contextType context type
++     * @param context modification context
++     * @param item item
++     */
++    public ItemContextBox(@Nullable Player viewer, @NotNull Locale locale, @NotNull ItemModifierContextType contextType, @NotNull ItemModifierContext context, @NotNull ItemStack item) {
++        this.viewer = viewer;
++        this.locale = locale;
++        this.contextType = contextType;
++        this.item = item;
++        this.context = context;
++    }
 +
-+	/**
-+	 * Gets the player receiving this item
-+	 *
-+	 * @return player viewer
-+	 */
-+	public @Nullable Player getViewer() {
-+		return this.viewer;
-+	}
++    /**
++     * Gets the player receiving this item
++     *
++     * @return player viewer
++     */
++    public @Nullable Player getViewer() {
++        return this.viewer;
++    }
 +
-+	/**
-+	 * Locale that should be used for modification
-+	 *
-+	 * @return locale
-+	 */
-+	public @NotNull Locale getLocale() {
-+		return this.locale;
-+	}
++    /**
++     * Locale that should be used for modification
++     *
++     * @return locale
++     */
++    public @NotNull Locale getLocale() {
++        return this.locale;
++    }
 +
-+	/**
-+	 * Gets the context type
-+	 *
-+	 * @return context type
-+	 */
-+	public @NotNull ItemModifierContextType getContextType() {
-+		return this.contextType;
-+	}
++    /**
++     * Gets the context type
++     *
++     * @return context type
++     */
++    public @NotNull ItemModifierContextType getContextType() {
++        return this.contextType;
++    }
 +
-+	/**
-+	 * Gets the modification context
-+	 *
-+	 * @return modification context
-+	 */
-+	public @NotNull ItemModifierContext getContext() {
-+		return context;
-+	}
++    /**
++     * Gets the modification context
++     *
++     * @return modification context
++     */
++    public @NotNull ItemModifierContext getContext() {
++        return context;
++    }
 +
-+	/**
-+	 * Gets the modifying item. Changes to item meta
-+	 * and item's type should be done only via the
-+	 * accessibility methods in this class.
-+	 * <p>
-+	 * Again, DO NOT modify the item meta of the
-+	 * returned item unless you really have to.
-+	 *
-+	 * @return item
-+	 * @see #getMeta()
-+	 */
-+	public @NotNull ItemStack getItem() {
-+		return this.item;
-+	}
++    /**
++     * Gets the modifying item. Changes to item meta
++     * and item's type should be done only via the
++     * accessibility methods in this class.
++     * <p>
++     * Again, DO NOT modify the item meta of the
++     * returned item unless you really have to.
++     *
++     * @return item
++     * @see #getMeta()
++     */
++    public @NotNull ItemStack getItem() {
++        return this.item;
++    }
 +
-+	/**
-+	 * Completely replaces an item
-+	 *
-+	 * @param item item
-+	 */
-+	public void setItem(@NotNull ItemStack item) {
-+		this.item = item;
-+		this.meta = null;
-+		this.newType = null;
-+	}
++    /**
++     * Completely replaces an item
++     *
++     * @param item item
++     */
++    public void setItem(@NotNull ItemStack item) {
++        this.item = item;
++        this.meta = null;
++        this.newType = null;
++    }
 +
-+	/**
-+	 * Gets the resulting item meta
-+	 *
-+	 * @return item meta
-+	 * @see ItemStack#hasItemMeta()
-+	 */
-+	public @NotNull ItemMeta getMeta() {
-+		if (this.meta == null) this.meta = this.item.getItemMeta();
-+		return this.meta;
-+	}
++    /**
++     * Gets the resulting item meta
++     *
++     * @return item meta
++     * @see ItemStack#hasItemMeta()
++     */
++    public @NotNull ItemMeta getMeta() {
++        if (this.meta == null) this.meta = this.item.getItemMeta();
++        return this.meta;
++    }
 +
-+	/**
-+	 * Overrides the item meta used for this item.
-+	 * Passing {@code null} will revert any prior changes.
-+	 *
-+	 * @param meta item meta
-+	 */
-+	public void setMeta(@Nullable ItemMeta meta) {
-+		this.meta = meta;
-+	}
++    /**
++     * Overrides the item meta used for this item.
++     * Passing {@code null} will revert any prior changes.
++     *
++     * @param meta item meta
++     */
++    public void setMeta(@Nullable ItemMeta meta) {
++        this.meta = meta;
++    }
 +
-+	/**
-+	 * Edits the resulting {@link ItemMeta} of this stack
-+	 *
-+	 * @param consumer the meta consumer
-+	 * @return whether the edit was successful
-+	 */
-+	public boolean editMeta(@NotNull Consumer<? super ItemMeta> consumer) {
-+		return editMeta(ItemMeta.class, consumer);
-+	}
++    /**
++     * Edits the resulting {@link ItemMeta} of this stack
++     *
++     * @param consumer the meta consumer
++     * @return whether the edit was successful
++     */
++    public boolean editMeta(@NotNull Consumer<? super ItemMeta> consumer) {
++        return editMeta(ItemMeta.class, consumer);
++    }
 +
-+	/**
-+	 * Edits the resulting {@link ItemMeta} of this stack if the meta is of the specified type
-+	 *
-+	 * @param metaClass the type of meta to edit
-+	 * @param consumer the meta consumer
-+	 * @param <M> the meta type
-+	 * @return whether the edit was successful
-+	 */
-+	@SuppressWarnings("unchecked")
-+	public <M extends ItemMeta> boolean editMeta(@NotNull Class<M> metaClass, @NotNull Consumer<? super M> consumer) {
-+		if (metaClass.isInstance(meta)) {
-+			consumer.accept((M) meta);
-+			return true;
-+		}
-+		return false;
-+	}
++    /**
++     * Edits the resulting {@link ItemMeta} of this stack if the meta is of the specified type
++     *
++     * @param metaClass the type of meta to edit
++     * @param consumer the meta consumer
++     * @param <M> the meta type
++     * @return whether the edit was successful
++     */
++    @SuppressWarnings("unchecked")
++    public <M extends ItemMeta> boolean editMeta(@NotNull Class<M> metaClass, @NotNull Consumer<? super M> consumer) {
++        if (metaClass.isInstance(meta)) {
++            consumer.accept((M) meta);
++            return true;
++        }
++        return false;
++    }
 +
-+	/**
-+	 * Gets the resulting type of the item.
-+	 * This will return either {@link #getNewMaterial()} or current item's type.
-+	 * If you are interested only in the original item type,
-+	 * get it from the item itself instead.
-+	 *
-+	 * @return resulting item type
-+	 */
-+	public @NotNull Material getMaterial() {
-+		return this.newType == null ? this.item.getType() : this.newType;
-+	}
++    /**
++     * Gets the resulting type of the item.
++     * This will return either {@link #getNewMaterial()} or current item's type.
++     * If you are interested only in the original item type,
++     * get it from the item itself instead.
++     *
++     * @return resulting item type
++     */
++    public @NotNull Material getMaterial() {
++        return this.newType == null ? this.item.getType() : this.newType;
++    }
 +
-+	/**
-+	 * Gets the new type for the item
-+	 *
-+	 * @return new item type
-+	 */
-+	public @Nullable Material getNewMaterial() {
-+		return this.newType;
-+	}
++    /**
++     * Gets the new type for the item
++     *
++     * @return new item type
++     */
++    public @Nullable Material getNewMaterial() {
++        return this.newType;
++    }
 +
-+	/**
-+	 * Sets the new type for the item
-+	 *
-+	 * @param type new item type
-+	 */
-+	public void setNewMaterial(@Nullable Material type) {
-+		setNewMaterial(type, false);
-+	}
++    /**
++     * Sets the new type for the item
++     *
++     * @param type new item type
++     */
++    public void setNewMaterial(@Nullable Material type) {
++        setNewMaterial(type, false);
++    }
 +
-+	/**
-+	 * Sets the new type for the item and optionally
-+	 * refreshes meta to match it.
-+	 * <p>
-+	 * Meta won't be reconstructed if type is {@code null}.
-+	 * If you need to reset the item meta,
-+	 * use {@link #setMeta(ItemMeta)} instead.
-+	 *
-+	 * @param type new item type
-+	 * @param refreshMeta whether to reconstruct item meta
-+	 * @throws IllegalArgumentException if the {@code type} is not {@link Material#isItem()}
-+	 */
-+	public void setNewMaterial(@Nullable Material type, boolean refreshMeta) {
-+		Preconditions.checkArgument(type == null || type.isItem(), "New item type must be an item!");
++    /**
++     * Sets the new type for the item and optionally
++     * refreshes meta to match it.
++     * <p>
++     * Meta won't be reconstructed if type is {@code null}.
++     * If you need to reset the item meta,
++     * use {@link #setMeta(ItemMeta)} instead.
++     *
++     * @param type new item type
++     * @param refreshMeta whether to reconstruct item meta
++     * @throws IllegalArgumentException if the {@code type} is not {@link Material#isItem()}
++     */
++    public void setNewMaterial(@Nullable Material type, boolean refreshMeta) {
++        Preconditions.checkArgument(type == null || type.isItem(), "New item type must be an item!");
 +
-+		this.newType = type;
-+		if (!refreshMeta) return;
-+		if (type == null) return;
++        this.newType = type;
++        if (!refreshMeta) return;
++        if (type == null) return;
 +
-+		var tempItem = new ItemStack(type);
-+		tempItem.setItemMeta(this.meta);
-+		this.meta = tempItem.getItemMeta();
-+	}
++        var tempItem = new ItemStack(type);
++        tempItem.setItemMeta(this.meta);
++        this.meta = tempItem.getItemMeta();
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifier.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifier.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..47b31ebc61a3bee3618730ca1951e7f60998b6e0
+index 0000000000000000000000000000000000000000..cc2ffdc060f539ec7960ccc8aaabb3b5ff9c1b26
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifier.java
 @@ -0,0 +1,112 @@
@@ -317,104 +317,104 @@ index 0000000000000000000000000000000000000000..47b31ebc61a3bee3618730ca1951e7f6
 + */
 +public abstract class ItemModifier {
 +
-+	private final NamespacedKey modifierId;
++    private final NamespacedKey modifierId;
 +
-+	protected ItemModifier(@NotNull NamespacedKey modifierId) {
-+		this.modifierId = modifierId;
-+	}
++    protected ItemModifier(@NotNull NamespacedKey modifierId) {
++        this.modifierId = modifierId;
++    }
 +
-+	/**
-+	 * Unique ID of this modifier
-+	 *
-+	 * @return modifier id
-+	 */
-+	public @NotNull NamespacedKey getModifierId() {
-+		return modifierId;
-+	}
++    /**
++     * Unique ID of this modifier
++     *
++     * @return modifier id
++     */
++    public @NotNull NamespacedKey getModifierId() {
++        return modifierId;
++    }
 +
-+	/**
-+	 * Registers this modifier
-+	 */
-+	public void register() {
-+		ItemModifiersHandler.itemModifiersHandler().registerModifier(this);
-+	}
++    /**
++     * Registers this modifier
++     */
++    public void register() {
++        ItemModifiersHandler.itemModifiersHandler().registerModifier(this);
++    }
 +
-+	/**
-+	 * Unregisters this modifier
-+	 */
-+	public void unregister() {
-+		ItemModifiersHandler.itemModifiersHandler().unregisterModifier(this);
-+	}
++    /**
++     * Unregisters this modifier
++     */
++    public void unregister() {
++        ItemModifiersHandler.itemModifiersHandler().unregisterModifier(this);
++    }
 +
-+	/**
-+	 * Whether this modifier should automatically
-+	 * skip air items
-+	 *
-+	 * @return whether to skip air items
-+	 */
-+	public boolean skipAir() {
-+		return true;
-+	}
++    /**
++     * Whether this modifier should automatically
++     * skip air items
++     *
++     * @return whether to skip air items
++     */
++    public boolean skipAir() {
++        return true;
++    }
 +
-+	/**
-+	 * Whether this modifier should automatically
-+	 * skip the provided context
-+	 *
-+	 * @param contextType context type
-+	 * @return whether to skip context
-+	 */
-+	public boolean skipContext(@NotNull ItemModifierContextType contextType) {
-+		return false;
-+	}
++    /**
++     * Whether this modifier should automatically
++     * skip the provided context
++     *
++     * @param contextType context type
++     * @return whether to skip context
++     */
++    public boolean skipContext(@NotNull ItemModifierContextType contextType) {
++        return false;
++    }
 +
-+	/**
-+	 * Modifies an item given the context
-+	 *
-+	 * @param contextBox item data
-+	 * @return modification result
-+	 */
-+	public abstract @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox);
++    /**
++     * Modifies an item given the context
++     *
++     * @param contextBox item data
++     * @return modification result
++     */
++    public abstract @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox);
 +
-+	/**
-+	 * Modify item with viewer's locale, empty context, lore and 0 slot.
-+	 * Will return {@code null} if no modifications were made.
-+	 *
-+	 * @param viewer player viewing the item
-+	 * @param item item
-+	 * @return modified item or {@code null}
-+	 */
-+	public static @Nullable ItemStack modifyItem(@NotNull Player viewer, @NotNull ItemStack item) {
-+		return modifyItem(viewer, viewer.locale(), item);
-+	}
++    /**
++     * Modify item with viewer's locale, empty context, lore and 0 slot.
++     * Will return {@code null} if no modifications were made.
++     *
++     * @param viewer player viewing the item
++     * @param item item
++     * @return modified item or {@code null}
++     */
++    public static @Nullable ItemStack modifyItem(@NotNull Player viewer, @NotNull ItemStack item) {
++        return modifyItem(viewer, viewer.locale(), item);
++    }
 +
-+	/**
-+	 * Modify item with empty context, lore and 0 slot
-+	 *
-+	 * @param viewer player viewing the item
-+	 * @param locale locale
-+	 * @param item item
-+	 * @return modified item or {@code null}
-+	 */
-+	public static @Nullable ItemStack modifyItem(@Nullable Player viewer, @NotNull Locale locale, @NotNull ItemStack item) {
-+		var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item);
-+		return modifyItem(contextBox);
-+	}
++    /**
++     * Modify item with empty context, lore and 0 slot
++     *
++     * @param viewer player viewing the item
++     * @param locale locale
++     * @param item item
++     * @return modified item or {@code null}
++     */
++    public static @Nullable ItemStack modifyItem(@Nullable Player viewer, @NotNull Locale locale, @NotNull ItemStack item) {
++        var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item);
++        return modifyItem(contextBox);
++    }
 +
-+	/**
-+	 * Modify item given the context.
-+	 * Will return {@code null} if no modifications were made.
-+	 *
-+	 * @param contextBox item context box
-+	 * @return modified item or {@code null}
-+	 */
-+	public static @Nullable ItemStack modifyItem(@NotNull ItemContextBox contextBox) {
-+		return ItemModifiersHandler.itemModifiersHandler().modifyItem(contextBox);
-+	}
++    /**
++     * Modify item given the context.
++     * Will return {@code null} if no modifications were made.
++     *
++     * @param contextBox item context box
++     * @return modified item or {@code null}
++     */
++    public static @Nullable ItemStack modifyItem(@NotNull ItemContextBox contextBox) {
++        return ItemModifiersHandler.itemModifiersHandler().modifyItem(contextBox);
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandler.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandler.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..b447d35fd25a5925dd1bba667f0c20525d972114
+index 0000000000000000000000000000000000000000..3f25b5678b9b44c69543bfe8a773bf4ac379c315
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandler.java
 @@ -0,0 +1,45 @@
@@ -428,44 +428,44 @@ index 0000000000000000000000000000000000000000..b447d35fd25a5925dd1bba667f0c2052
 +@ApiStatus.Internal
 +abstract class ItemModifiersHandler {
 +
-+	static ItemModifiersHandler itemModifiersHandler;
++    static ItemModifiersHandler itemModifiersHandler;
 +
-+	/**
-+	 * Registers item modifier
-+	 *
-+	 * @param itemModifier item modifier
-+	 */
-+	public abstract void registerModifier(@NotNull ItemModifier itemModifier);
++    /**
++     * Registers item modifier
++     *
++     * @param itemModifier item modifier
++     */
++    public abstract void registerModifier(@NotNull ItemModifier itemModifier);
 +
-+	/**
-+	 * Unregisters item modifier
-+	 *
-+	 * @param itemModifier item modifier
-+	 */
-+	public abstract void unregisterModifier(@NotNull ItemModifier itemModifier);
++    /**
++     * Unregisters item modifier
++     *
++     * @param itemModifier item modifier
++     */
++    public abstract void unregisterModifier(@NotNull ItemModifier itemModifier);
 +
-+	/**
-+	 * Applies modifiers to the item.
-+	 * Will return {@code null} if no changes were made.
-+	 *
-+	 * @param contextBox context box
-+	 * @return modified item or {@code null} if no changes
-+	 */
-+	public abstract @Nullable ItemStack modifyItem(@NotNull ItemContextBox contextBox);
++    /**
++     * Applies modifiers to the item.
++     * Will return {@code null} if no changes were made.
++     *
++     * @param contextBox context box
++     * @return modified item or {@code null} if no changes
++     */
++    public abstract @Nullable ItemStack modifyItem(@NotNull ItemContextBox contextBox);
 +
-+	/**
-+	 * Gets the item modifiers applier
-+	 *
-+	 * @return item modifiers handler
-+	 */
-+	public static @NotNull ItemModifiersHandler itemModifiersHandler() {
-+		return itemModifiersHandler;
-+	}
++    /**
++     * Gets the item modifiers applier
++     *
++     * @return item modifiers handler
++     */
++    public static @NotNull ItemModifiersHandler itemModifiersHandler() {
++        return itemModifiersHandler;
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ModificationResult.java b/src/main/java/me/sosedik/kiterino/modifier/item/ModificationResult.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e23b3cab7ce614a9bc007f004bae1fdcccb55967
+index 0000000000000000000000000000000000000000..4b6555df17fc0b91a0f362e0f006f8c231a5f558
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ModificationResult.java
 @@ -0,0 +1,26 @@
@@ -476,28 +476,28 @@ index 0000000000000000000000000000000000000000..e23b3cab7ce614a9bc007f004bae1fdc
 + */
 +public enum ModificationResult {
 +
-+	/**
-+	 * Modified item
-+	 */
-+	OK,
-+	/**
-+	 * Skipped item
-+	 */
-+	PASS,
-+	/**
-+	 * Completely replaced item.
-+	 * This will skip any further modifiers.
-+	 * <p>
-+	 * Generally meant to be used by the highest priority modifiers
-+	 * that then redirect to {@link ItemModifier#modifyItem(ItemContextBox)}
-+	 * to go through the remaining modifiers.
-+	 */
-+	RETURN
++    /**
++     * Modified item
++     */
++    OK,
++    /**
++     * Skipped item
++     */
++    PASS,
++    /**
++     * Completely replaced item.
++     * This will skip any further modifiers.
++     * <p>
++     * Generally meant to be used by the highest priority modifiers
++     * that then redirect to {@link ItemModifier#modifyItem(ItemContextBox)}
++     * to go through the remaining modifiers.
++     */
++    RETURN
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c9285970c78fc7c2ed19ea306ff08e5d785678a0
+index 0000000000000000000000000000000000000000..ab1ae078428eca044a7b908f081f5f7956eaf807
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContext.java
 @@ -0,0 +1,13 @@
@@ -508,15 +508,15 @@ index 0000000000000000000000000000000000000000..c9285970c78fc7c2ed19ea306ff08e5d
 + */
 +public interface ItemModifierContext {
 +
-+	/**
-+	 * Empty item modifier context
-+	 */
-+	ItemModifierContext EMPTY = new ItemModifierContext() {};
++    /**
++     * Empty item modifier context
++     */
++    ItemModifierContext EMPTY = new ItemModifierContext() {};
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..3b31356890f1843de7a0fabec64342ac5cc49a16
+index 0000000000000000000000000000000000000000..6b48a06e401d0cfa3f77690f053e10fb89d303fc
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
 @@ -0,0 +1,164 @@
@@ -535,158 +535,158 @@ index 0000000000000000000000000000000000000000..3b31356890f1843de7a0fabec64342ac
 + */
 +public class ItemModifierContextType {
 +
-+	/**
-+	 * Setting singular item in an inventory
-+	 */
-+	public static final ItemModifierContextType SET_SLOT = context(SlottedItemModifierContext.class).withName().withLore().build();
++    /**
++     * Setting singular item in an inventory
++     */
++    public static final ItemModifierContextType SET_SLOT = context(SlottedItemModifierContext.class).withName().withLore().build();
 +
-+	/**
-+	 * Setting multiple items in an inventory
-+	 */
-+	public static final ItemModifierContextType WINDOW_ITEMS = context(SlottedItemModifierContext.class).withName().withLore().build();
++    /**
++     * Setting multiple items in an inventory
++     */
++    public static final ItemModifierContextType WINDOW_ITEMS = context(SlottedItemModifierContext.class).withName().withLore().build();
 +
-+	/**
-+	 * Equipment slots of other entities
-+	 */
-+	public static final ItemModifierContextType ENTITY_EQUIPMENT = context(EntityEquipmentPacketContext.class).build();
++    /**
++     * Equipment slots of other entities
++     */
++    public static final ItemModifierContextType ENTITY_EQUIPMENT = context(EntityEquipmentPacketContext.class).build();
 +
-+	/**
-+	 * Item inside the recipe book
-+	 */
-+	public static final ItemModifierContextType RECIPE_BOOK = context(RecipeBookPacketContext.class).withName().withLore().build();
++    /**
++     * Item inside the recipe book
++     */
++    public static final ItemModifierContextType RECIPE_BOOK = context(RecipeBookPacketContext.class).withName().withLore().build();
 +
-+	/**
-+	 * Advancement's item (also used in toasts due to lack of distinction)
-+	 */
-+	public static final ItemModifierContextType ADVANCEMENT = context(AdvancementPacketContext.class).build();
++    /**
++     * Advancement's item (also used in toasts due to lack of distinction)
++     */
++    public static final ItemModifierContextType ADVANCEMENT = context(AdvancementPacketContext.class).build();
 +
-+	/**
-+	 * Merchant offer (trade screen)
-+	 */
-+	public static final ItemModifierContextType MERCHANT_OFFER = context(MerchantOfferPacketContext.class).withName().withLore().build();
++    /**
++     * Merchant offer (trade screen)
++     */
++    public static final ItemModifierContextType MERCHANT_OFFER = context(MerchantOfferPacketContext.class).withName().withLore().build();
 +
-+	/**
-+	 * Entity data packet
-+	 */
-+	public static final ItemModifierContextType ENTITY_DATA = context(EntityDataPacketContext.class).build();
++    /**
++     * Entity data packet
++     */
++    public static final ItemModifierContextType ENTITY_DATA = context(EntityDataPacketContext.class).build();
 +
-+	/**
-+	 * Unknown entity data packet
-+	 */
-+	public static final ItemModifierContextType UNKNOWN_ENTITY_DATA = context(UnknownEntityDataContext.class).build();
++    /**
++     * Unknown entity data packet
++     */
++    public static final ItemModifierContextType UNKNOWN_ENTITY_DATA = context(UnknownEntityDataContext.class).build();
 +
-+	/**
-+	 * Empty modification context with visible name and lore
-+	 */
-+	public static final ItemModifierContextType EMPTY_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().withLore().build();
++    /**
++     * Empty modification context with visible name and lore
++     */
++    public static final ItemModifierContextType EMPTY_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().withLore().build();
 +
-+	/**
-+	 * Empty modification context with visible name and without visible lore
-+	 */
-+	public static final ItemModifierContextType EMPTY_NO_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().build();
++    /**
++     * Empty modification context with visible name and without visible lore
++     */
++    public static final ItemModifierContextType EMPTY_NO_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().build();
 +
-+	private final Class<? extends ItemModifierContext> contextClass;
-+	private final boolean visibleName;
-+	private final boolean visibleLore;
++    private final Class<? extends ItemModifierContext> contextClass;
++    private final boolean visibleName;
++    private final boolean visibleLore;
 +
-+	/**
-+	 * Constructs a context type
-+	 *
-+	 * @param contextClass context class
-+	 * @param visibleName whether the name is visible in this context
-+	 * @param visibleLore whether the lore is visible in this context
-+	 */
-+	public ItemModifierContextType(@NotNull Class<? extends ItemModifierContext> contextClass, boolean visibleName, boolean visibleLore) {
-+		this.contextClass = contextClass;
-+		this.visibleName = visibleName;
-+		this.visibleLore = visibleLore;
-+	}
++    /**
++     * Constructs a context type
++     *
++     * @param contextClass context class
++     * @param visibleName whether the name is visible in this context
++     * @param visibleLore whether the lore is visible in this context
++     */
++    public ItemModifierContextType(@NotNull Class<? extends ItemModifierContext> contextClass, boolean visibleName, boolean visibleLore) {
++        this.contextClass = contextClass;
++        this.visibleName = visibleName;
++        this.visibleLore = visibleLore;
++    }
 +
-+	/**
-+	 * Gets the context class
-+	 *
-+	 * @return context class
-+	 */
-+	public @NotNull Class<? extends ItemModifierContext> getContextClass() {
-+		return this.contextClass;
-+	}
++    /**
++     * Gets the context class
++     *
++     * @return context class
++     */
++    public @NotNull Class<? extends ItemModifierContext> getContextClass() {
++        return this.contextClass;
++    }
 +
-+	/**
-+	 * Whether the name is visible in this context
-+	 *
-+	 * @return whether the name is visible
-+	 */
-+	public boolean hasVisibleName() {
-+		return this.visibleName;
-+	}
++    /**
++     * Whether the name is visible in this context
++     *
++     * @return whether the name is visible
++     */
++    public boolean hasVisibleName() {
++        return this.visibleName;
++    }
 +
-+	/**
-+	 * Whether the lore is visible in this context
-+	 *
-+	 * @return whether the lore is visible
-+	 */
-+	public boolean hasVisibleLore() {
-+		return this.visibleLore;
-+	}
++    /**
++     * Whether the lore is visible in this context
++     *
++     * @return whether the lore is visible
++     */
++    public boolean hasVisibleLore() {
++        return this.visibleLore;
++    }
 +
-+	/**
-+	 * Constructs a builder for item modifier context type
-+	 *
-+	 * @param contextClass context class
-+	 * @return builder
-+	 */
-+	public static @NotNull Builder context(@NotNull Class<? extends ItemModifierContext> contextClass) {
-+		return new Builder(contextClass);
-+	}
++    /**
++     * Constructs a builder for item modifier context type
++     *
++     * @param contextClass context class
++     * @return builder
++     */
++    public static @NotNull Builder context(@NotNull Class<? extends ItemModifierContext> contextClass) {
++        return new Builder(contextClass);
++    }
 +
-+	/**
-+	 * Item modifier context type builder
-+	 */
-+	public static class Builder {
++    /**
++     * Item modifier context type builder
++     */
++    public static class Builder {
 +
-+		private final Class<? extends ItemModifierContext> contextClass;
-+		private boolean visibleName;
-+		private boolean visibleLore;
++        private final Class<? extends ItemModifierContext> contextClass;
++        private boolean visibleName;
++        private boolean visibleLore;
 +
-+		Builder(@NotNull Class<? extends ItemModifierContext> contextClass) {
-+			this.contextClass = contextClass;
-+		}
++        Builder(@NotNull Class<? extends ItemModifierContext> contextClass) {
++            this.contextClass = contextClass;
++        }
 +
-+		/**
-+		 * Marks that this context had a visible name
-+		 *
-+		 * @return this builder
-+		 */
-+		public @NotNull Builder withName() {
-+			this.visibleName = true;
-+			return this;
-+		}
++        /**
++         * Marks that this context had a visible name
++         *
++         * @return this builder
++         */
++        public @NotNull Builder withName() {
++            this.visibleName = true;
++            return this;
++        }
 +
-+		/**
-+		 * Marks that this context had a visible lore
-+		 *
-+		 * @return this builder
-+		 */
-+		public @NotNull Builder withLore() {
-+			this.visibleLore = true;
-+			return this;
-+		}
++        /**
++         * Marks that this context had a visible lore
++         *
++         * @return this builder
++         */
++        public @NotNull Builder withLore() {
++            this.visibleLore = true;
++            return this;
++        }
 +
-+		/**
-+		 * Builds a context type
-+		 *
-+		 * @return context type
-+		 */
-+		public @NotNull ItemModifierContextType build() {
-+			return new ItemModifierContextType(this.contextClass, this.visibleName, this.visibleLore);
-+		}
++        /**
++         * Builds a context type
++         *
++         * @return context type
++         */
++        public @NotNull ItemModifierContextType build() {
++            return new ItemModifierContextType(this.contextClass, this.visibleName, this.visibleLore);
++        }
 +
-+	}
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/PacketItemModifierContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/PacketItemModifierContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..b90bb4d5bf4a9df94b964c1ae9af67879bc6d3d0
+index 0000000000000000000000000000000000000000..67f0cf829a98756d1196ad5227540828a4345d69
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/PacketItemModifierContext.java
 @@ -0,0 +1,17 @@
@@ -699,17 +699,17 @@ index 0000000000000000000000000000000000000000..b90bb4d5bf4a9df94b964c1ae9af6787
 + */
 +public interface PacketItemModifierContext extends ItemModifierContext {
 +
-+	/**
-+	 * The item packet that was in the base of this context
-+	 *
-+	 * @return the item packet, if present
-+	 */
-+	@NotNull Object packet();
++    /**
++     * The item packet that was in the base of this context
++     *
++     * @return the item packet, if present
++     */
++    @NotNull Object packet();
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/SlottedItemModifierContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/SlottedItemModifierContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..9c370957e0ab6581cb28f38fe09e4ffc0a1dd5a9
+index 0000000000000000000000000000000000000000..cd932d04ae657c77a6947ec9bbe5e3d5f1c136f9
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/SlottedItemModifierContext.java
 @@ -0,0 +1,18 @@
@@ -722,18 +722,18 @@ index 0000000000000000000000000000000000000000..9c370957e0ab6581cb28f38fe09e4ffc
 + */
 +public interface SlottedItemModifierContext extends ItemModifierContext {
 +
-+	/**
-+	 * Gets the raw container slot the item's in
-+	 *
-+	 * @return slot
-+	 * @see InventorySlotHelper
-+	 */
-+	int slot();
++    /**
++     * Gets the raw container slot the item's in
++     *
++     * @return slot
++     * @see InventorySlotHelper
++     */
++    int slot();
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/AdvancementPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/AdvancementPacketContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f0bbb4afc37745807f632ff11d897696ca8703a8
+index 0000000000000000000000000000000000000000..7432bdba6c37eac184051ef5003270aedfc284ca
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/AdvancementPacketContext.java
 @@ -0,0 +1,51 @@
@@ -749,48 +749,48 @@ index 0000000000000000000000000000000000000000..f0bbb4afc37745807f632ff11d897696
 +
 +public class AdvancementPacketContext implements PacketItemModifierContext {
 +
-+	private final Object packet;
-+	private final NamespacedKey advancementKey;
-+	private final Supplier<Advancement> advancementSupplier;
-+	private @Nullable Advancement advancement;
++    private final Object packet;
++    private final NamespacedKey advancementKey;
++    private final Supplier<Advancement> advancementSupplier;
++    private @Nullable Advancement advancement;
 +
-+	public AdvancementPacketContext(@NotNull Object packet, @NotNull NamespacedKey advancementKey, @NotNull Supplier<Advancement> advancementSupplier) {
-+		this.packet = packet;
-+		this.advancementKey = advancementKey;
-+		this.advancementSupplier = advancementSupplier;
-+	}
++    public AdvancementPacketContext(@NotNull Object packet, @NotNull NamespacedKey advancementKey, @NotNull Supplier<Advancement> advancementSupplier) {
++        this.packet = packet;
++        this.advancementKey = advancementKey;
++        this.advancementSupplier = advancementSupplier;
++    }
 +
-+	/**
-+	 * {@inheritDoc}
-+	 */
-+	@Override
-+	public @NotNull Object packet() {
-+		return this.packet;
-+	}
++    /**
++     * {@inheritDoc}
++     */
++    @Override
++    public @NotNull Object packet() {
++        return this.packet;
++    }
 +
-+	/**
-+	 * Gets the advancement key
-+	 *
-+	 * @return the advancement key
-+	 */
-+	public @NotNull NamespacedKey getAdvancementKey() {
-+		return this.advancementKey;
-+	}
++    /**
++     * Gets the advancement key
++     *
++     * @return the advancement key
++     */
++    public @NotNull NamespacedKey getAdvancementKey() {
++        return this.advancementKey;
++    }
 +
-+	/**
-+	 * Fetches the bukkit advancement wrapper
-+	 *
-+	 * @return advancement
-+	 */
-+	public @NotNull Advancement getAdvancement() {
-+		if (this.advancement == null) this.advancement = advancementSupplier.get();
-+		return this.advancement;
-+	}
++    /**
++     * Fetches the bukkit advancement wrapper
++     *
++     * @return advancement
++     */
++    public @NotNull Advancement getAdvancement() {
++        if (this.advancement == null) this.advancement = advancementSupplier.get();
++        return this.advancement;
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityDataPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityDataPacketContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d8fd43b626cdda612bfa1548742b110d25c835f8
+index 0000000000000000000000000000000000000000..804e6d866a36cf76f8e9121c4c2ecf7dab8b2841
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityDataPacketContext.java
 @@ -0,0 +1,43 @@
@@ -809,37 +809,37 @@ index 0000000000000000000000000000000000000000..d8fd43b626cdda612bfa1548742b110d
 + */
 +public class EntityDataPacketContext extends EntityPacketContext {
 +
-+	static Function<Object, @Nullable Entity> entityFetcher;
++    static Function<Object, @Nullable Entity> entityFetcher;
 +
-+	private final EntityType entityType;
++    private final EntityType entityType;
 +
-+	/**
-+	 * Constructs wrapper around entity data packet
-+	 *
-+	 * @param packet nms packet
-+	 * @param world world
-+	 * @param entityId entity id
-+	 * @param entity entity instance
-+	 */
-+	public EntityDataPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @NotNull EntityType entityType, @NotNull Object entity) {
-+		super(packet, world, entityId, () -> entityFetcher.apply(entity));
-+		this.entityType = entityType;
-+	}
++    /**
++     * Constructs wrapper around entity data packet
++     *
++     * @param packet nms packet
++     * @param world world
++     * @param entityId entity id
++     * @param entity entity instance
++     */
++    public EntityDataPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @NotNull EntityType entityType, @NotNull Object entity) {
++        super(packet, world, entityId, () -> entityFetcher.apply(entity));
++        this.entityType = entityType;
++    }
 +
-+	/**
-+	 * Gets the entity type of this entity.
-+	 * Does not require fetching the entity instance.
-+	 *
-+	 * @return entity type
-+	 */
-+	public @NotNull EntityType getEntityType() {
-+		return this.entityType;
-+	}
++    /**
++     * Gets the entity type of this entity.
++     * Does not require fetching the entity instance.
++     *
++     * @return entity type
++     */
++    public @NotNull EntityType getEntityType() {
++        return this.entityType;
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityEquipmentPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityEquipmentPacketContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e6e26bb8edfbbca40e7028a33a9603479569e730
+index 0000000000000000000000000000000000000000..e85d7bb003b14a3eeca800c1a43bbcbf69b69285
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityEquipmentPacketContext.java
 @@ -0,0 +1,39 @@
@@ -856,35 +856,35 @@ index 0000000000000000000000000000000000000000..e6e26bb8edfbbca40e7028a33a960347
 + */
 +public class EntityEquipmentPacketContext extends EntityPacketContext {
 +
-+	private final EquipmentSlot slot;
++    private final EquipmentSlot slot;
 +
-+	/**
-+	 * Constructs entity equipment packet wrapper
-+	 *
-+	 * @param packet nms packet
-+	 * @param world entity's world
-+	 * @param entityId internal entity id
-+	 * @param entity entity
-+	 * @param slot equipment slot
-+	 */
-+	public EntityEquipmentPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @Nullable Entity entity, @NotNull EquipmentSlot slot) {
-+		super(packet, world, entityId, entity);
-+		this.slot = slot;
-+	}
++    /**
++     * Constructs entity equipment packet wrapper
++     *
++     * @param packet nms packet
++     * @param world entity's world
++     * @param entityId internal entity id
++     * @param entity entity
++     * @param slot equipment slot
++     */
++    public EntityEquipmentPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @Nullable Entity entity, @NotNull EquipmentSlot slot) {
++        super(packet, world, entityId, entity);
++        this.slot = slot;
++    }
 +
-+	/**
-+	 * Gets the equipment slot
-+	 *
-+	 * @return the equipment slot
-+	 */
-+	public @NotNull EquipmentSlot getSlot() {
-+		return slot;
-+	}
++    /**
++     * Gets the equipment slot
++     *
++     * @return the equipment slot
++     */
++    public @NotNull EquipmentSlot getSlot() {
++        return slot;
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityPacketContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5623f8f1183b96a841c124db2569292121288fa9
+index 0000000000000000000000000000000000000000..78b066594ca3c5bdb7a3721448c9bee8be463a06
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/EntityPacketContext.java
 @@ -0,0 +1,102 @@
@@ -903,96 +903,96 @@ index 0000000000000000000000000000000000000000..5623f8f1183b96a841c124db25692921
 + */
 +public abstract class EntityPacketContext implements PacketItemModifierContext {
 +
-+	private final Object packet;
-+	private final World world;
-+	private final int entityId;
-+	protected @Nullable Entity entity;
-+	private @Nullable Supplier<@Nullable Entity> entityFetcher;
-+	protected boolean fetchedEntity;
++    private final Object packet;
++    private final World world;
++    private final int entityId;
++    protected @Nullable Entity entity;
++    private @Nullable Supplier<@Nullable Entity> entityFetcher;
++    protected boolean fetchedEntity;
 +
-+	/**
-+	 * Constructs wrapper around packet that contains an entity
-+	 *
-+	 * @param packet nms packet
-+	 * @param world world instance
-+	 * @param entityId internal entity id
-+	 * @param entity entity
-+	 */
-+	protected EntityPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @Nullable Entity entity) {
-+		this.packet = packet;
-+		this.world = world;
-+		this.entityId = entityId;
-+		this.entity = entity;
-+		this.fetchedEntity = true;
-+	}
++    /**
++     * Constructs wrapper around packet that contains an entity
++     *
++     * @param packet nms packet
++     * @param world world instance
++     * @param entityId internal entity id
++     * @param entity entity
++     */
++    protected EntityPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @Nullable Entity entity) {
++        this.packet = packet;
++        this.world = world;
++        this.entityId = entityId;
++        this.entity = entity;
++        this.fetchedEntity = true;
++    }
 +
-+	/**
-+	 * Constructs wrapper around packet that contains an entity
-+	 *
-+	 * @param packet nms packet
-+	 * @param world world instance
-+	 * @param entityId internal entity id
-+	 * @param entityFetcher entity supplier
-+	 */
-+	protected EntityPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
-+		this.packet = packet;
-+		this.world = world;
-+		this.entityId = entityId;
-+		this.entityFetcher = entityFetcher;
-+		this.fetchedEntity = entityFetcher == null;
-+	}
++    /**
++     * Constructs wrapper around packet that contains an entity
++     *
++     * @param packet nms packet
++     * @param world world instance
++     * @param entityId internal entity id
++     * @param entityFetcher entity supplier
++     */
++    protected EntityPacketContext(@NotNull Object packet, @NotNull World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
++        this.packet = packet;
++        this.world = world;
++        this.entityId = entityId;
++        this.entityFetcher = entityFetcher;
++        this.fetchedEntity = entityFetcher == null;
++    }
 +
-+	/**
-+	 * {@inheritDoc}
-+	 */
-+	@Override
-+	public @NotNull Object packet() {
-+		return this.packet;
-+	}
++    /**
++     * {@inheritDoc}
++     */
++    @Override
++    public @NotNull Object packet() {
++        return this.packet;
++    }
 +
-+	/**
-+	 * Gets the internal entity id
-+	 *
-+	 * @return the entity id
-+	 */
-+	public int getEntityId() {
-+		return this.entityId;
-+	}
++    /**
++     * Gets the internal entity id
++     *
++     * @return the entity id
++     */
++    public int getEntityId() {
++        return this.entityId;
++    }
 +
-+	/**
-+	 * Get the world the entity's in
-+	 *
-+	 * @return world
-+	 */
-+	public @NotNull World getWorld() {
-+		return this.world;
-+	}
++    /**
++     * Get the world the entity's in
++     *
++     * @return world
++     */
++    public @NotNull World getWorld() {
++        return this.world;
++    }
 +
-+	/**
-+	 * Fetches the Bukkit entity by its internal id
-+	 *
-+	 * @return bukkit entity
-+	 */
-+	public @Nullable Entity getEntity() {
-+		if (this.fetchedEntity) return this.entity;
-+		this.fetchedEntity = true;
-+		if (entityFetcher != null) this.entity = entityFetcher.get();
-+		return this.entity;
-+	}
++    /**
++     * Fetches the Bukkit entity by its internal id
++     *
++     * @return bukkit entity
++     */
++    public @Nullable Entity getEntity() {
++        if (this.fetchedEntity) return this.entity;
++        this.fetchedEntity = true;
++        if (entityFetcher != null) this.entity = entityFetcher.get();
++        return this.entity;
++    }
 +
-+	/**
-+	 * Checks whether the entity was fetched
-+	 *
-+	 * @return whether the entity was fetched
-+	 */
-+	public boolean isFetched() {
-+		return this.fetchedEntity;
-+	}
++    /**
++     * Checks whether the entity was fetched
++     *
++     * @return whether the entity was fetched
++     */
++    public boolean isFetched() {
++        return this.fetchedEntity;
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/MerchantOfferPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/MerchantOfferPacketContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..874bd490f2426d6aaba7abb204ae2ba5c4fca05f
+index 0000000000000000000000000000000000000000..6e59e0f8cabd301599bbf6f78747851d336991ea
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/MerchantOfferPacketContext.java
 @@ -0,0 +1,38 @@
@@ -1013,25 +1013,25 @@ index 0000000000000000000000000000000000000000..874bd490f2426d6aaba7abb204ae2ba5
 +                                         @NotNull MerchantRecipe merchantRecipe,
 +                                         @NotNull Slot slot) implements PacketItemModifierContext {
 +
-+	/**
-+	 * Represents trade screen's item slot position
-+	 */
-+	public enum Slot {
++    /**
++     * Represents trade screen's item slot position
++     */
++    public enum Slot {
 +
-+		/**
-+		 * First item cost
-+		 */
-+		FIRST,
-+		/**
-+		 * Second item cost
-+		 */
-+		SECOND,
-+		/**
-+		 * Trade result
-+		 */
-+		RESULT
++        /**
++         * First item cost
++         */
++        FIRST,
++        /**
++         * Second item cost
++         */
++        SECOND,
++        /**
++         * Trade result
++         */
++        RESULT
 +
-+	}
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/RecipeBookPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/RecipeBookPacketContext.java
@@ -1081,7 +1081,7 @@ index 0000000000000000000000000000000000000000..2499cf046a74c8604f1020c3115f61f8
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/UnknownEntityDataContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/UnknownEntityDataContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c56e5f11d7a25180b8ecd333d6784d2ca6dd6963
+index 0000000000000000000000000000000000000000..e38ae04d3d13f3c86e7570589be02e8452ef620e
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/UnknownEntityDataContext.java
 @@ -0,0 +1,25 @@
@@ -1098,15 +1098,15 @@ index 0000000000000000000000000000000000000000..c56e5f11d7a25180b8ecd333d6784d2c
 + */
 +public class UnknownEntityDataContext extends EntityPacketContext {
 +
-+	/**
-+	 * Constructs wrapper around packet that contains an unknown entity
-+	 *
-+	 * @param packet   nms packet
-+	 * @param world    world instance
-+	 * @param entityId internal entity id
-+	 */
-+	public UnknownEntityDataContext(@NotNull Object packet, @NotNull World world, int entityId) {
-+		super(packet, world, entityId, (Supplier<Entity>) null);
-+	}
++    /**
++     * Constructs wrapper around packet that contains an unknown entity
++     *
++     * @param packet   nms packet
++     * @param world    world instance
++     * @param entityId internal entity id
++     */
++    public UnknownEntityDataContext(@NotNull Object packet, @NotNull World world, int entityId) {
++        super(packet, world, entityId, (Supplier<Entity>) null);
++    }
 +
 +}

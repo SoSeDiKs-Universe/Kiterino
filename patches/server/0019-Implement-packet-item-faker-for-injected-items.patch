@@ -1,0 +1,175 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 16 May 2024 06:40:03 +0300
+Subject: [PATCH] Implement packet item faker for injected items
+
+Forces default item faker for injected items as to not kick the client from the server because of modded items
+
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
+index 0e5e58bbf5b152d293ff5c8e438c19c327ed5f28..7f24ded76d15911abcdca5427ed957cf6e8b5eea 100644
+--- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
+@@ -140,7 +140,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
+     }
+ 
+     public static void init() {
++        ItemModifier itemFaker = modifiers.get(KiterinoItemModifierImpl.MODIFIER_KEY);
+         modifiers.clear(); // In case of reload. Not supported, but eh
++        if (itemFaker != null) {
++            modifiers.put(itemFaker.getModifierId(), itemFaker);
++        }
+         if (ItemModifiersHandler.itemModifiersHandler == null) ItemModifiersHandler.itemModifiersHandler = new ItemModifiersHandlerImpl();
+         ItemPacketContextInitializer.init();
+     }
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifierImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifierImpl.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d9e9f8061
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifierImpl.java
+@@ -0,0 +1,39 @@
++package me.sosedik.kiterino.modifier.item;
++
++import org.bukkit.NamespacedKey;
++import org.jetbrains.annotations.ApiStatus;
++import org.jetbrains.annotations.NotNull;
++
++import java.util.HashMap;
++import java.util.Map;
++
++/**
++ * Handles visual modification for injected items
++ */
++@ApiStatus.Internal
++public final class KiterinoItemModifierImpl extends ItemModifier {
++
++    public static final NamespacedKey MODIFIER_KEY = new NamespacedKey(NamespacedKey.KITERINO, "item_faker");
++    public static final KiterinoItemModifierImpl MODIFIER_IMPL = new KiterinoItemModifierImpl();
++
++    private final Map<NamespacedKey, KiterinoItemModifier> modifiers = new HashMap<>();
++
++    private KiterinoItemModifierImpl() {
++        super(MODIFIER_KEY);
++    }
++
++    public void add(@NotNull NamespacedKey key, @NotNull KiterinoItemModifier modifier) {
++        this.modifiers.put(key, modifier);
++    }
++
++    @Override
++    public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
++        KiterinoItemModifier modifier = modifiers.get(contextBox.getItem().getType().getKey());
++        if (modifier != null) {
++            modifier.modify(contextBox);
++            return ModificationResult.OK;
++        }
++        return ModificationResult.PASS;
++    }
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
+index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72853e31d9 100644
+--- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
++++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
+@@ -1,21 +1,26 @@
+ package me.sosedik.kiterino.registry.data;
+ 
++import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
++import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
+ import io.papermc.paper.registry.PaperRegistryBuilder;
+ import io.papermc.paper.registry.TypedKey;
+ import io.papermc.paper.registry.data.util.Conversions;
+ import net.minecraft.world.item.Item;
+ import net.minecraft.world.level.block.ComposterBlock;
+ import org.bukkit.inventory.ItemType;
++import org.bukkit.inventory.meta.ItemMeta;
+ import org.checkerframework.checker.nullness.qual.NonNull;
+ import org.checkerframework.checker.nullness.qual.Nullable;
+ 
+ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+ 
++    protected @Nullable KiterinoItemModifier modifier;
+     protected int maxStackSize;
+     protected boolean fireResistant;
+     protected @Nullable Float compostChance;
+ 
+     protected final Conversions conversions;
++    protected final TypedKey<ItemType> itemKey;
+ 
+     public KiterinoItemRegistryEntity(
+             final @NonNull Conversions conversions,
+@@ -23,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+             final @Nullable Item internal
+     ) {
+         this.conversions = conversions;
++        this.itemKey = ignoredKey;
+         if (internal == null) {
+             this.maxStackSize = 64;
+             return;
+@@ -31,6 +37,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+         this.maxStackSize = internal.getDefaultMaxStackSize();
+     }
+ 
++    @Override
++    public @Nullable KiterinoItemModifier modifier() {
++        return this.modifier;
++    }
++
+     @Override
+     public int maxStackSize() {
+         return this.maxStackSize;
+@@ -53,6 +64,12 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+             super(conversions, key, internal);
+         }
+ 
++        @Override
++        public @NonNull Builder modifier(@Nullable KiterinoItemModifier modifier) {
++            this.modifier = modifier;
++            return this;
++        }
++
+         @Override
+         public @NonNull Builder maxStackSize(int size) {
+             this.maxStackSize = size;
+@@ -73,6 +90,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+ 
+         @Override
+         public @NonNull Item build() {
++            if (this.modifier != null) KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.key().namespace(), this.itemKey.key().value()), buildModifier());
+             var properties = new Item.Properties()
+                     .stacksTo(this.maxStackSize);
+             if (this.fireResistant) properties = properties.fireResistant();
+@@ -81,6 +99,14 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+             return item;
+         }
+ 
++        private @NonNull KiterinoItemModifier buildModifier() {
++            return box -> {
++                ItemMeta meta = box.getMeta();
++                meta.setMaxStackSize(this.maxStackSize);
++                if (this.modifier != null) this.modifier.modify(box);
++            };
++        }
++
+     }
+ 
+ }
+diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
+index 55bc65e480f4492fe067c9cd7731b21feec0de38..65851d6c8c57f148002391d0bcff815f8c6c03b7 100644
+--- a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
++++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
+@@ -113,6 +113,15 @@ public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrap
+             Field enumConstantDirectory = Class.class.getDeclaredField("enumConstantDirectory");
+             enumConstantDirectory.setAccessible(true);
+             enumConstantDirectory.set(Material.class, null);
++
++            var modifier = me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl.MODIFIER_IMPL;
++            if (!me.sosedik.kiterino.KiterinoConfig.itemModifiersOrder.contains(modifier.getModifierId())) {
++                me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.modifiers.put(modifier.getModifierId(), modifier);
++                me.sosedik.kiterino.KiterinoConfig.itemModifiersOrder.addLast(modifier.getModifierId());
++                me.sosedik.kiterino.KiterinoConfig.log(java.util.logging.Level.WARNING, "Item modifier with id " + modifier.getModifierId() + " is missing from \"item-modifiers.modification-order\" option, but custom item was injected. Forcing the modifier automatically.");
++            } else {
++                modifier.register();
++            }
+         } catch (Exception e) {
+             throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material", e);
+         }

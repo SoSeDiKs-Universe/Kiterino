@@ -5,7 +5,7 @@ Subject: [PATCH] Item Modifiers API
 
 
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
-index 03c77fd455c0d5014aaf490bff9f9b869fc28d6f..9d6b2a44cede2337e3a6ac671395c34cbf337aa6 100644
+index 6c77d9c7583ea95e0ad7ffba4aecccb3ccc56d29..31b2b21cb4de6cb975d5fbc1480eb32d23ab56f6 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 @@ -2,6 +2,7 @@ package me.sosedik.kiterino;
@@ -25,21 +25,21 @@ index 03c77fd455c0d5014aaf490bff9f9b869fc28d6f..9d6b2a44cede2337e3a6ac671395c34c
  import java.util.logging.Level;
  
 @@ -118,4 +120,13 @@ public final class KiterinoConfig {
- 		return version;
- 	}
+         return version;
+     }
  
-+	// Kiterino start - Item Modifiers API
-+	public static boolean itemModifiersLogMissingIds;
-+	public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
-+	private static void itemModifiers() {
-+		itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
-+		getList(config, "item-modifiers.modification-order", List.of(), "List of item modifier ids, determines modification order").forEach(id -> itemModifiersOrder.add(NamespacedKey.fromString((String) id)));
-+	}
-+	// Kiterino end - Item Modifiers API
++    // Kiterino start - Item Modifiers API
++    public static boolean itemModifiersLogMissingIds;
++    public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
++    private static void itemModifiers() {
++        itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
++        getList(config, "item-modifiers.modification-order", List.of(), "List of item modifier ids, determines modification order").forEach(id -> itemModifiersOrder.add(NamespacedKey.fromString((String) id)));
++    }
++    // Kiterino end - Item Modifiers API
 +
  }
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
-index 0d0312744369b332ed0dfd171c060fc9019ae8b1..048ac1c6fe11d8f65890f08882914277aa0799a3 100644
+index 45d2ddb697562b1cf25d6676bb206b10f4743608..d2bc504436562975ee9aae9e60fe78e3ce240a5b 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
 @@ -1,8 +1,11 @@
@@ -49,14 +49,14 @@ index 0d0312744369b332ed0dfd171c060fc9019ae8b1..048ac1c6fe11d8f65890f08882914277
 +
  public class KiterinoInitializer {
  
- 	public static void initPostConfig() {
-+		ItemModifiersHandlerImpl.init();
- 	}
+     public static void initPostConfig() {
++        ItemModifiersHandlerImpl.init();
+     }
  
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..bd08622189a5230199780b3d0e23a0bdc88658c3
+index 0000000000000000000000000000000000000000..a8a95957ffab212155566a1fbf84ddb8bb4e299e
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -0,0 +1,530 @@
@@ -145,454 +145,454 @@ index 0000000000000000000000000000000000000000..bd08622189a5230199780b3d0e23a0bd
 +
 +public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 +
-+	public static final Map<NamespacedKey, ItemModifier> modifiers = new HashMap<>();
++    public static final Map<NamespacedKey, ItemModifier> modifiers = new HashMap<>();
 +
-+	@Override
-+	public void registerModifier(@NotNull ItemModifier itemModifier) {
-+		boolean log = true;
-+		NamespacedKey modifierId = itemModifier.getModifierId();
-+		if (KiterinoConfig.itemModifiersLogMissingIds && !KiterinoConfig.itemModifiersOrder.contains(modifierId) && !modifiers.containsKey(modifierId)) {
-+			KiterinoConfig.log(Level.INFO, "Skipping item modifier with id: " + modifierId);
-+			log = false;
-+		}
++    @Override
++    public void registerModifier(@NotNull ItemModifier itemModifier) {
++        boolean log = true;
++        NamespacedKey modifierId = itemModifier.getModifierId();
++        if (KiterinoConfig.itemModifiersLogMissingIds && !KiterinoConfig.itemModifiersOrder.contains(modifierId) && !modifiers.containsKey(modifierId)) {
++            KiterinoConfig.log(Level.INFO, "Skipping item modifier with id: " + modifierId);
++            log = false;
++        }
 +
-+		synchronized (modifiers) {
-+			if (modifiers.put(modifierId, itemModifier) == null && log)
-+				KiterinoConfig.log(Level.INFO, "Registering a new item modifier with id: " + modifierId);
-+		}
-+	}
++        synchronized (modifiers) {
++            if (modifiers.put(modifierId, itemModifier) == null && log)
++                KiterinoConfig.log(Level.INFO, "Registering a new item modifier with id: " + modifierId);
++        }
++    }
 +
-+	@Override
-+	public void unregisterModifier(@NotNull ItemModifier itemModifier) {
-+		synchronized (modifiers) {
-+			modifiers.remove(itemModifier.getModifierId());
-+		}
-+	}
++    @Override
++    public void unregisterModifier(@NotNull ItemModifier itemModifier) {
++        synchronized (modifiers) {
++            modifiers.remove(itemModifier.getModifierId());
++        }
++    }
 +
-+	@Override
-+	@SuppressWarnings("deprecation") // It's okay :)
-+	public @Nullable org.bukkit.inventory.ItemStack modifyItem(@NotNull ItemContextBox contextBox) {
-+		boolean modified = false;
-+		for (NamespacedKey modifierId : KiterinoConfig.itemModifiersOrder) {
-+			ItemModifier modifier = modifiers.get(modifierId);
-+			if (modifier == null) continue;
-+			if (modifier.skipAir() && contextBox.getItem().getType().isAir()) continue;
-+			if (modifier.skipContext(contextBox.getContextType())) continue;
++    @Override
++    @SuppressWarnings("deprecation") // It's okay :)
++    public @Nullable org.bukkit.inventory.ItemStack modifyItem(@NotNull ItemContextBox contextBox) {
++        boolean modified = false;
++        for (NamespacedKey modifierId : KiterinoConfig.itemModifiersOrder) {
++            ItemModifier modifier = modifiers.get(modifierId);
++            if (modifier == null) continue;
++            if (modifier.skipAir() && contextBox.getItem().getType().isAir()) continue;
++            if (modifier.skipContext(contextBox.getContextType())) continue;
 +
-+			ModificationResult result = modifier.modify(contextBox);
-+			if (result == ModificationResult.PASS) continue;
-+			if (result == ModificationResult.RETURN)
-+				return contextBox.getItem();
++            ModificationResult result = modifier.modify(contextBox);
++            if (result == ModificationResult.PASS) continue;
++            if (result == ModificationResult.RETURN)
++                return contextBox.getItem();
 +
-+			modified = true;
-+		}
++            modified = true;
++        }
 +
-+		if (!modified) return null;
++        if (!modified) return null;
 +
-+		org.bukkit.inventory.ItemStack item = contextBox.getItem();
-+		if (contextBox.meta != null) item.setItemMeta(contextBox.meta);
-+		if (contextBox.newType != null) item.setType(contextBox.newType);
++        org.bukkit.inventory.ItemStack item = contextBox.getItem();
++        if (contextBox.newType != null) item.setType(contextBox.newType);
++        if (contextBox.meta != null) item.setItemMeta(contextBox.meta);
 +
-+		return item;
-+	}
++        return item;
++    }
 +
-+	public static void init() {
-+		modifiers.clear(); // In case of reload. Not supported, but eh
-+		if (ItemModifiersHandler.itemModifiersHandler == null) ItemModifiersHandler.itemModifiersHandler = new ItemModifiersHandlerImpl();
-+		ItemPacketContextInitializer.init();
-+	}
++    public static void init() {
++        modifiers.clear(); // In case of reload. Not supported, but eh
++        if (ItemModifiersHandler.itemModifiersHandler == null) ItemModifiersHandler.itemModifiersHandler = new ItemModifiersHandlerImpl();
++        ItemPacketContextInitializer.init();
++    }
 +
-+	public static @NotNull Packet<?> processPacket(@NotNull CraftPlayer player, @NotNull Packet<?> initialPacket) {
-+		if (modifiers.isEmpty()) return initialPacket;
-+		if (KiterinoConfig.itemModifiersOrder.isEmpty()) return initialPacket;
++    public static @NotNull Packet<?> processPacket(@NotNull CraftPlayer player, @NotNull Packet<?> initialPacket) {
++        if (modifiers.isEmpty()) return initialPacket;
++        if (KiterinoConfig.itemModifiersOrder.isEmpty()) return initialPacket;
 +
-+		return switch (initialPacket) {
-+			case ClientboundBundlePacket packet -> handle(player, packet);
-+			case ClientboundContainerSetSlotPacket packet -> handle(player, packet);
-+			case ClientboundContainerSetContentPacket packet -> handle(player, packet);
-+			case ClientboundSetEquipmentPacket packet -> handle(player, packet);
-+			case ClientboundSetEntityDataPacket packet -> handle(player, packet);
-+			case ClientboundUpdateRecipesPacket packet -> handle(player, packet);
-+			case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
-+			case ClientboundMerchantOffersPacket packet -> handle(player, packet);
-+			default -> initialPacket;
-+		};
-+	}
++        return switch (initialPacket) {
++            case ClientboundBundlePacket packet -> handle(player, packet);
++            case ClientboundContainerSetSlotPacket packet -> handle(player, packet);
++            case ClientboundContainerSetContentPacket packet -> handle(player, packet);
++            case ClientboundSetEquipmentPacket packet -> handle(player, packet);
++            case ClientboundSetEntityDataPacket packet -> handle(player, packet);
++            case ClientboundUpdateRecipesPacket packet -> handle(player, packet);
++            case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
++            case ClientboundMerchantOffersPacket packet -> handle(player, packet);
++            default -> initialPacket;
++        };
++    }
 +
-+	@SuppressWarnings({"unchecked"})
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
-+		if (!(initialPacket.subPackets() instanceof ArrayList list)) {
-+			KiterinoConfig.log(Level.WARNING, "Bundle packets are not in ArrayList: " + initialPacket.subPackets().getClass());
-+			return initialPacket;
-+		}
++    @SuppressWarnings({"unchecked"})
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
++        if (!(initialPacket.subPackets() instanceof ArrayList list)) {
++            KiterinoConfig.log(Level.WARNING, "Bundle packets are not in ArrayList: " + initialPacket.subPackets().getClass());
++            return initialPacket;
++        }
 +
-+		ListIterator<Packet<?>> iterator = list.listIterator();
-+		while (iterator.hasNext()) {
-+			Packet<?> packet = iterator.next();
-+			Packet<?> newPacket = processPacket(player, packet);
-+			if (packet != newPacket) {
-+				iterator.set(newPacket);
-+			}
-+		}
++        ListIterator<Packet<?>> iterator = list.listIterator();
++        while (iterator.hasNext()) {
++            Packet<?> packet = iterator.next();
++            Packet<?> newPacket = processPacket(player, packet);
++            if (packet != newPacket) {
++                iterator.set(newPacket);
++            }
++        }
 +
-+		return initialPacket;
-+	}
++        return initialPacket;
++    }
 +
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundContainerSetSlotPacket packet) {
-+		ItemStack original = packet.getItem();
-+		var context = new SlottedItemPacketContext(packet, packet.getSlot());
-+		var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
-+		ItemStack result = fromBukkit(contextBox, original);
-+		if (result != null) packet.itemStack = result;
-+		return packet;
-+	}
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundContainerSetSlotPacket packet) {
++        ItemStack original = packet.getItem();
++        var context = new SlottedItemPacketContext(packet, packet.getSlot());
++        var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
++        ItemStack result = fromBukkit(contextBox, original);
++        if (result != null) packet.itemStack = result;
++        return packet;
++    }
 +
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundContainerSetContentPacket packet) {
-+		List<ItemStack> items = packet.getItems();
-+		for (int i = 0; i < items.size(); i++) {
-+			ItemStack original = items.get(i);
-+			var context = new SlottedItemPacketContext(packet, i);
-+			var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
-+			ItemStack result = fromBukkit(contextBox, original);
-+			if (result == null) continue;
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundContainerSetContentPacket packet) {
++        List<ItemStack> items = packet.getItems();
++        for (int i = 0; i < items.size(); i++) {
++            ItemStack original = items.get(i);
++            var context = new SlottedItemPacketContext(packet, i);
++            var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
++            ItemStack result = fromBukkit(contextBox, original);
++            if (result == null) continue;
 +
-+			items.set(i, result);
-+		}
++            items.set(i, result);
++        }
 +
-+		ItemStack original = packet.getCarriedItem();
-+		var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
-+		var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
-+		ItemStack result = fromBukkit(contextBox, original);
-+		if (result != null) packet.carriedItem = result;
++        ItemStack original = packet.getCarriedItem();
++        var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
++        var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
++        ItemStack result = fromBukkit(contextBox, original);
++        if (result != null) packet.carriedItem = result;
 +
-+		return packet;
-+	}
++        return packet;
++    }
 +
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEquipmentPacket packet) {
-+		List<Pair<EquipmentSlot, ItemStack>> slots = packet.getSlots();
-+		int entityId = packet.getEntity();
-+		org.bukkit.entity.Entity entity = null;
-+		World world = player.getWorld();
-+		for (int i = 0; i < slots.size(); i++) {
-+			Pair<EquipmentSlot, ItemStack> slot = slots.get(i);
-+			ItemStack original = slot.getSecond();
-+			var context = new EntityEquipmentPacketContext(packet, world, entityId, entity, CraftEquipmentSlot.getSlot(slot.getFirst()));
-+			var contextBox = new ItemContextBox(player, ItemModifierContextType.ENTITY_EQUIPMENT, context, original.asBukkitCopy());
-+			ItemStack result = fromBukkit(contextBox, original);
-+			if (result != null) slots.set(i, Pair.of(slot.getFirst(), result));
-+			if (entity == null && context.isFetched()) entity = context.getEntity();
-+		}
-+		return packet;
-+	}
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEquipmentPacket packet) {
++        List<Pair<EquipmentSlot, ItemStack>> slots = packet.getSlots();
++        int entityId = packet.getEntity();
++        org.bukkit.entity.Entity entity = null;
++        World world = player.getWorld();
++        for (int i = 0; i < slots.size(); i++) {
++            Pair<EquipmentSlot, ItemStack> slot = slots.get(i);
++            ItemStack original = slot.getSecond();
++            var context = new EntityEquipmentPacketContext(packet, world, entityId, entity, CraftEquipmentSlot.getSlot(slot.getFirst()));
++            var contextBox = new ItemContextBox(player, ItemModifierContextType.ENTITY_EQUIPMENT, context, original.asBukkitCopy());
++            ItemStack result = fromBukkit(contextBox, original);
++            if (result != null) slots.set(i, Pair.of(slot.getFirst(), result));
++            if (entity == null && context.isFetched()) entity = context.getEntity();
++        }
++        return packet;
++    }
 +
-+	// As much as I dislike this, not sure if there's a better way
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEntityDataPacket packet) {
-+		int entityId = packet.id();
-+		Entity entity = ((CraftWorld) player.getWorld()).getHandle().moonrise$getEntityLookup().get(entityId);
-+		if (entity == null) {
-+			List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
-+			for (int i = 0; i < dataValues.size(); i++) {
-+				SynchedEntityData.DataValue<?> dataValue = dataValues.get(i);
-+				if (dataValue.serializer() != EntityDataSerializers.ITEM_STACK) continue;
++    // As much as I dislike this, not sure if there's a better way
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEntityDataPacket packet) {
++        int entityId = packet.id();
++        Entity entity = ((CraftWorld) player.getWorld()).getHandle().moonrise$getEntityLookup().get(entityId);
++        if (entity == null) {
++            List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
++            for (int i = 0; i < dataValues.size(); i++) {
++                SynchedEntityData.DataValue<?> dataValue = dataValues.get(i);
++                if (dataValue.serializer() != EntityDataSerializers.ITEM_STACK) continue;
 +
-+				ItemStack original = (ItemStack) dataValue.value();
-+				var contextType = ItemModifierContextType.UNKNOWN_ENTITY_DATA;
-+				var context = new UnknownEntityDataContext(packet, player.getWorld(), entityId);
-+				var contextBox = new ItemContextBox(player, contextType, context, original.asBukkitCopy());
-+				ItemStack result = fromBukkit(contextBox, original);
-+				if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
-+				break;
-+			}
-+			return packet;
-+		}
++                ItemStack original = (ItemStack) dataValue.value();
++                var contextType = ItemModifierContextType.UNKNOWN_ENTITY_DATA;
++                var context = new UnknownEntityDataContext(packet, player.getWorld(), entityId);
++                var contextBox = new ItemContextBox(player, contextType, context, original.asBukkitCopy());
++                ItemStack result = fromBukkit(contextBox, original);
++                if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
++                break;
++            }
++            return packet;
++        }
 +
-+		List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
-+		ItemModifierContext context;
-+		ItemStack original;
-+		switch (entity) {
-+			case ItemEntity droppedItem -> {
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM, droppedItem);
-+				original = droppedItem.getItem();
-+			}
-+			case ItemFrame itemFrame -> {
-+				var entityType = itemFrame instanceof GlowItemFrame ? EntityType.GLOW_ITEM_FRAME : EntityType.ITEM_FRAME;
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, itemFrame);
-+				original = itemFrame.getItem();
-+			}
-+			case ThrowableItemProjectile throwableProjectile -> {
-+				EntityType entityType = switch (throwableProjectile) {
-+					case Snowball snowball -> EntityType.SNOWBALL;
-+					case ThrownEgg thrownEgg -> EntityType.EGG;
-+					case ThrownEnderpearl thrownEnderpearl -> EntityType.ENDER_PEARL;
-+					case ThrownExperienceBottle thrownExperienceBottle -> EntityType.EXPERIENCE_BOTTLE;
-+					default -> EntityType.POTION;
-+				};
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, throwableProjectile);
-+				original = throwableProjectile.getItem();
-+			}
-+			case EyeOfEnder eyeOfEnder -> {
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.EYE_OF_ENDER, eyeOfEnder);
-+				original = eyeOfEnder.getItem();
-+			}
-+			case FireworkRocketEntity firework -> {
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.FIREWORK_ROCKET, firework);
-+				original = firework.getItem();
-+			}
-+			case Fireball fireball -> {
-+				var entityType = fireball instanceof LargeFireball ? EntityType.FIREBALL : EntityType.SMALL_FIREBALL;
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, fireball);
-+				original = fireball.getItem();
-+			}
-+			case AbstractWindCharge windCharge -> {
-+				var entityType = windCharge instanceof WindCharge ? EntityType.WIND_CHARGE : EntityType.BREEZE_WIND_CHARGE;
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, windCharge);
-+				original = windCharge.getItem();
-+			}
-+			case Display.ItemDisplay itemDisplay -> {
-+				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM_DISPLAY, itemDisplay);
-+				original = itemDisplay.getItemStack();
-+			}
-+			default -> {
-+				return packet;
-+			}
-+		}
-+		var contextBox = new ItemContextBox(player, ItemModifierContextType.ENTITY_DATA, context, original.asBukkitCopy());
-+		for (int i = 0; i < dataValues.size(); i++) {
-+			SynchedEntityData.DataValue<?> dataValue = dataValues.get(i);
-+			if (dataValue.serializer() != EntityDataSerializers.ITEM_STACK) continue;
++        List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
++        ItemModifierContext context;
++        ItemStack original;
++        switch (entity) {
++            case ItemEntity droppedItem -> {
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM, droppedItem);
++                original = droppedItem.getItem();
++            }
++            case ItemFrame itemFrame -> {
++                var entityType = itemFrame instanceof GlowItemFrame ? EntityType.GLOW_ITEM_FRAME : EntityType.ITEM_FRAME;
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, itemFrame);
++                original = itemFrame.getItem();
++            }
++            case ThrowableItemProjectile throwableProjectile -> {
++                EntityType entityType = switch (throwableProjectile) {
++                    case Snowball snowball -> EntityType.SNOWBALL;
++                    case ThrownEgg thrownEgg -> EntityType.EGG;
++                    case ThrownEnderpearl thrownEnderpearl -> EntityType.ENDER_PEARL;
++                    case ThrownExperienceBottle thrownExperienceBottle -> EntityType.EXPERIENCE_BOTTLE;
++                    default -> EntityType.POTION;
++                };
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, throwableProjectile);
++                original = throwableProjectile.getItem();
++            }
++            case EyeOfEnder eyeOfEnder -> {
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.EYE_OF_ENDER, eyeOfEnder);
++                original = eyeOfEnder.getItem();
++            }
++            case FireworkRocketEntity firework -> {
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.FIREWORK_ROCKET, firework);
++                original = firework.getItem();
++            }
++            case Fireball fireball -> {
++                var entityType = fireball instanceof LargeFireball ? EntityType.FIREBALL : EntityType.SMALL_FIREBALL;
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, fireball);
++                original = fireball.getItem();
++            }
++            case AbstractWindCharge windCharge -> {
++                var entityType = windCharge instanceof WindCharge ? EntityType.WIND_CHARGE : EntityType.BREEZE_WIND_CHARGE;
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, windCharge);
++                original = windCharge.getItem();
++            }
++            case Display.ItemDisplay itemDisplay -> {
++                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM_DISPLAY, itemDisplay);
++                original = itemDisplay.getItemStack();
++            }
++            default -> {
++                return packet;
++            }
++        }
++        var contextBox = new ItemContextBox(player, ItemModifierContextType.ENTITY_DATA, context, original.asBukkitCopy());
++        for (int i = 0; i < dataValues.size(); i++) {
++            SynchedEntityData.DataValue<?> dataValue = dataValues.get(i);
++            if (dataValue.serializer() != EntityDataSerializers.ITEM_STACK) continue;
 +
-+			ItemStack result = fromBukkit(contextBox, original);
-+			if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
-+			break;
-+		}
-+		return packet;
-+	}
++            ItemStack result = fromBukkit(contextBox, original);
++            if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
++            break;
++        }
++        return packet;
++    }
 +
-+	// This one is a real sucker (and I thought the entity data was bad :')
-+	// Changing items inside the recipes is a no-go and there's lack of context upon
-+	// writing to the buffer, so we have to recreate the recipes in there...
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundUpdateRecipesPacket packet) {
-+		List<RecipeHolder<?>> recipes = new ArrayList<>(packet.getRecipes());
-+		for (int r = 0; r < recipes.size(); r++) {
-+			RecipeHolder<?> recipe = recipes.get(r);
-+			Recipe bukkitRecipe = recipe.toBukkitRecipe();
-+			var recipeKey = new NamespacedKey(recipe.id().getNamespace(), recipe.id().getPath());
-+			var ingredientContext = new RecipeBookPacketContext(packet, bukkitRecipe, recipeKey, true);
-+			var resultContext = new RecipeBookPacketContext(packet, bukkitRecipe, recipeKey, false);
++    // This one is a real sucker (and I thought the entity data was bad :')
++    // Changing items inside the recipes is a no-go and there's lack of context upon
++    // writing to the buffer, so we have to recreate the recipes in there...
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundUpdateRecipesPacket packet) {
++        List<RecipeHolder<?>> recipes = new ArrayList<>(packet.getRecipes());
++        for (int r = 0; r < recipes.size(); r++) {
++            RecipeHolder<?> recipe = recipes.get(r);
++            Recipe bukkitRecipe = recipe.toBukkitRecipe();
++            var recipeKey = new NamespacedKey(recipe.id().getNamespace(), recipe.id().getPath());
++            var ingredientContext = new RecipeBookPacketContext(packet, bukkitRecipe, recipeKey, true);
++            var resultContext = new RecipeBookPacketContext(packet, bukkitRecipe, recipeKey, false);
 +
-+			if (recipe.value() instanceof ShapedRecipe nmsRecipe) {
-+				NonNullList<Ingredient> ingredientsCopy = NonNullList.create();
-+				for (Ingredient ingredient : nmsRecipe.getIngredients()) {
-+					ingredientsCopy.add(replaceIngredient(player, ingredientContext, ingredient));
-+				}
++            if (recipe.value() instanceof ShapedRecipe nmsRecipe) {
++                NonNullList<Ingredient> ingredientsCopy = NonNullList.create();
++                for (Ingredient ingredient : nmsRecipe.getIngredients()) {
++                    ingredientsCopy.add(replaceIngredient(player, ingredientContext, ingredient));
++                }
 +
-+				ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
-+				ItemStack result = replaceItem(player, resultContext, nmsRecipe.getResultItem(RegistryAccess.EMPTY));
-+				if (result == null) {
-+					result = original;
-+				}
++                ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
++                ItemStack result = replaceItem(player, resultContext, nmsRecipe.getResultItem(RegistryAccess.EMPTY));
++                if (result == null) {
++                    result = original;
++                }
 +
-+				var pattern = new ShapedRecipePattern(nmsRecipe.getWidth(), nmsRecipe.getHeight(), ingredientsCopy, nmsRecipe.pattern.data);
-+				nmsRecipe = new ShapedRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), pattern, result, nmsRecipe.showNotification());
-+				recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
-+				continue;
-+			}
++                var pattern = new ShapedRecipePattern(nmsRecipe.getWidth(), nmsRecipe.getHeight(), ingredientsCopy, nmsRecipe.pattern.data);
++                nmsRecipe = new ShapedRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), pattern, result, nmsRecipe.showNotification());
++                recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
++                continue;
++            }
 +
-+			if (recipe.value() instanceof ShapelessRecipe nmsRecipe) {
-+				NonNullList<Ingredient> ingredientsCopy = NonNullList.create();
-+				for (Ingredient ingredient : nmsRecipe.getIngredients()) {
-+					ingredientsCopy.add(replaceIngredient(player, ingredientContext, ingredient));
-+				}
++            if (recipe.value() instanceof ShapelessRecipe nmsRecipe) {
++                NonNullList<Ingredient> ingredientsCopy = NonNullList.create();
++                for (Ingredient ingredient : nmsRecipe.getIngredients()) {
++                    ingredientsCopy.add(replaceIngredient(player, ingredientContext, ingredient));
++                }
 +
-+				ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
-+				ItemStack result = replaceItem(player, resultContext, original);
-+				if (result == null) {
-+					result = original;
-+				}
++                ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
++                ItemStack result = replaceItem(player, resultContext, original);
++                if (result == null) {
++                    result = original;
++                }
 +
-+				nmsRecipe = new ShapelessRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), result, ingredientsCopy);
-+				recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
-+				continue;
-+			}
++                nmsRecipe = new ShapelessRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), result, ingredientsCopy);
++                recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
++                continue;
++            }
 +
-+			if (recipe.value() instanceof AbstractCookingRecipe nmsRecipe) {
-+				NonNullList<Ingredient> ingredients = nmsRecipe.getIngredients();
-+				if (ingredients.size() != 1) continue;
++            if (recipe.value() instanceof AbstractCookingRecipe nmsRecipe) {
++                NonNullList<Ingredient> ingredients = nmsRecipe.getIngredients();
++                if (ingredients.size() != 1) continue;
 +
-+				Ingredient ingredient = replaceIngredient(player, ingredientContext, ingredients.getFirst());
-+				ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
-+				ItemStack result = replaceItem(player, resultContext, original);
-+				if (result == null) {
-+					result = original;
-+				}
++                Ingredient ingredient = replaceIngredient(player, ingredientContext, ingredients.getFirst());
++                ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
++                ItemStack result = replaceItem(player, resultContext, original);
++                if (result == null) {
++                    result = original;
++                }
 +
-+				if (nmsRecipe instanceof CampfireCookingRecipe)
-+					nmsRecipe = new CampfireCookingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
-+				else if (nmsRecipe instanceof BlastingRecipe)
-+					nmsRecipe = new BlastingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
-+				else if (nmsRecipe instanceof SmokingRecipe)
-+					nmsRecipe = new SmokingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
-+				else if (nmsRecipe instanceof SmeltingRecipe)
-+					nmsRecipe = new SmeltingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
-+				recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
-+				continue;
-+			}
++                if (nmsRecipe instanceof CampfireCookingRecipe)
++                    nmsRecipe = new CampfireCookingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
++                else if (nmsRecipe instanceof BlastingRecipe)
++                    nmsRecipe = new BlastingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
++                else if (nmsRecipe instanceof SmokingRecipe)
++                    nmsRecipe = new SmokingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
++                else if (nmsRecipe instanceof SmeltingRecipe)
++                    nmsRecipe = new SmeltingRecipe(nmsRecipe.getGroup(), nmsRecipe.category(), ingredient, result, nmsRecipe.getExperience(), nmsRecipe.getCookingTime());
++                recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
++                continue;
++            }
 +
-+			if (recipe.value() instanceof StonecutterRecipe nmsRecipe) {
-+				NonNullList<Ingredient> ingredients = nmsRecipe.getIngredients();
-+				if (ingredients.size() != 1) continue;
++            if (recipe.value() instanceof StonecutterRecipe nmsRecipe) {
++                NonNullList<Ingredient> ingredients = nmsRecipe.getIngredients();
++                if (ingredients.size() != 1) continue;
 +
-+				Ingredient ingredient = replaceIngredient(player, ingredientContext, ingredients.getFirst());
-+				ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
-+				ItemStack result = replaceItem(player, resultContext, original);
-+				if (result == null) {
-+					result = original;
-+				}
++                Ingredient ingredient = replaceIngredient(player, ingredientContext, ingredients.getFirst());
++                ItemStack original = nmsRecipe.getResultItem(RegistryAccess.EMPTY);
++                ItemStack result = replaceItem(player, resultContext, original);
++                if (result == null) {
++                    result = original;
++                }
 +
-+				nmsRecipe = new StonecutterRecipe(nmsRecipe.getGroup(), ingredient, result);
-+				recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
-+				continue;
-+			}
++                nmsRecipe = new StonecutterRecipe(nmsRecipe.getGroup(), ingredient, result);
++                recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
++                continue;
++            }
 +
-+			if (recipe.value() instanceof SmithingTransformRecipe nmsRecipe) {
-+				Ingredient template = replaceIngredient(player, ingredientContext, nmsRecipe.template);
-+				Ingredient base = replaceIngredient(player, ingredientContext, nmsRecipe.base);
-+				Ingredient addition = replaceIngredient(player, ingredientContext, nmsRecipe.addition);
++            if (recipe.value() instanceof SmithingTransformRecipe nmsRecipe) {
++                Ingredient template = replaceIngredient(player, ingredientContext, nmsRecipe.template);
++                Ingredient base = replaceIngredient(player, ingredientContext, nmsRecipe.base);
++                Ingredient addition = replaceIngredient(player, ingredientContext, nmsRecipe.addition);
 +
-+				ItemStack original = nmsRecipe.result;
-+				ItemStack result = replaceItem(player, resultContext, original);
-+				if (result == null) {
-+					result = original;
-+				}
++                ItemStack original = nmsRecipe.result;
++                ItemStack result = replaceItem(player, resultContext, original);
++                if (result == null) {
++                    result = original;
++                }
 +
-+				nmsRecipe = new SmithingTransformRecipe(template, base, addition, result, nmsRecipe.copyDataComponents);
-+				recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
-+				continue;
-+			}
-+		}
-+		packet.recipes = recipes;
-+		return packet;
-+	}
++                nmsRecipe = new SmithingTransformRecipe(template, base, addition, result, nmsRecipe.copyDataComponents);
++                recipes.set(r, new RecipeHolder<>(recipe.id(), nmsRecipe));
++                continue;
++            }
++        }
++        packet.recipes = recipes;
++        return packet;
++    }
 +
-+	private static @NotNull Ingredient replaceIngredient(@NotNull CraftPlayer player, @NotNull RecipeBookPacketContext context, @NotNull Ingredient ingredient) {
-+		Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
-+		ItemStack[] items = superDirtyCopy.getItems();
-+		for (int i = 0; i < items.length; i++) {
-+			ItemStack result = replaceItem(player, context, items[i]);
-+			if (result != null) {
-+				items[i] = result;
-+			}
-+		}
-+		return superDirtyCopy;
-+	}
++    private static @NotNull Ingredient replaceIngredient(@NotNull CraftPlayer player, @NotNull RecipeBookPacketContext context, @NotNull Ingredient ingredient) {
++        Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
++        ItemStack[] items = superDirtyCopy.getItems();
++        for (int i = 0; i < items.length; i++) {
++            ItemStack result = replaceItem(player, context, items[i]);
++            if (result != null) {
++                items[i] = result;
++            }
++        }
++        return superDirtyCopy;
++    }
 +
-+	private static @Nullable ItemStack replaceItem(@NotNull CraftPlayer player, @NotNull RecipeBookPacketContext context, @NotNull ItemStack original) {
-+		var contextBox = new ItemContextBox(player, ItemModifierContextType.RECIPE_BOOK, context, original.asBukkitCopy());
-+		return fromBukkit(contextBox, original);
-+	}
++    private static @Nullable ItemStack replaceItem(@NotNull CraftPlayer player, @NotNull RecipeBookPacketContext context, @NotNull ItemStack original) {
++        var contextBox = new ItemContextBox(player, ItemModifierContextType.RECIPE_BOOK, context, original.asBukkitCopy());
++        return fromBukkit(contextBox, original);
++    }
 +
-+	// I may have sinned, twice
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundUpdateAdvancementsPacket packet) {
-+		List<AdvancementHolder> advancements = new ArrayList<>(packet.getAdded());
-+		for (int i = 0; i < advancements.size(); i++) {
-+			AdvancementHolder oldHolder = advancements.get(i);
-+			Advancement oldAdvancement = oldHolder.value();
-+			DisplayInfo oldDisplay = oldAdvancement.display().orElse(null);
-+			if (oldDisplay == null) continue;
++    // I may have sinned, twice
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundUpdateAdvancementsPacket packet) {
++        List<AdvancementHolder> advancements = new ArrayList<>(packet.getAdded());
++        for (int i = 0; i < advancements.size(); i++) {
++            AdvancementHolder oldHolder = advancements.get(i);
++            Advancement oldAdvancement = oldHolder.value();
++            DisplayInfo oldDisplay = oldAdvancement.display().orElse(null);
++            if (oldDisplay == null) continue;
 +
-+			var namespacedKey = new NamespacedKey(oldHolder.id().getNamespace(), oldHolder.id().getPath());
-+			var context = new AdvancementPacketContext(packet, namespacedKey, oldHolder::toBukkit);
-+			ItemStack original = oldDisplay.getIcon();
-+			var contextBox = new ItemContextBox(player, ItemModifierContextType.ADVANCEMENT, context, original.asBukkitCopy());
-+			ItemStack result = fromBukkit(contextBox, original);
-+			if (result == null) continue;
++            var namespacedKey = new NamespacedKey(oldHolder.id().getNamespace(), oldHolder.id().getPath());
++            var context = new AdvancementPacketContext(packet, namespacedKey, oldHolder::toBukkit);
++            ItemStack original = oldDisplay.getIcon();
++            var contextBox = new ItemContextBox(player, ItemModifierContextType.ADVANCEMENT, context, original.asBukkitCopy());
++            ItemStack result = fromBukkit(contextBox, original);
++            if (result == null) continue;
 +
-+			var displayInfo = new DisplayInfo(
-+					result,
-+					oldDisplay.getTitle(),
-+					oldDisplay.getDescription(),
-+					oldDisplay.getBackground(),
-+					oldDisplay.getType(),
-+					oldDisplay.shouldShowToast(),
-+					oldDisplay.shouldAnnounceChat(),
-+					oldDisplay.isHidden()
-+			);
-+			var advancement = new Advancement(
-+					oldAdvancement.parent(),
-+					Optional.of(displayInfo),
-+					oldAdvancement.rewards(),
-+					oldAdvancement.criteria(),
-+					oldAdvancement.requirements(),
-+					oldAdvancement.sendsTelemetryEvent()
-+			);
-+			var holder = new AdvancementHolder(oldHolder.id(), advancement);
-+			advancements.set(i, holder);
-+		}
-+		packet.added = advancements;
-+		return packet;
-+	}
++            var displayInfo = new DisplayInfo(
++                    result,
++                    oldDisplay.getTitle(),
++                    oldDisplay.getDescription(),
++                    oldDisplay.getBackground(),
++                    oldDisplay.getType(),
++                    oldDisplay.shouldShowToast(),
++                    oldDisplay.shouldAnnounceChat(),
++                    oldDisplay.isHidden()
++            );
++            var advancement = new Advancement(
++                    oldAdvancement.parent(),
++                    Optional.of(displayInfo),
++                    oldAdvancement.rewards(),
++                    oldAdvancement.criteria(),
++                    oldAdvancement.requirements(),
++                    oldAdvancement.sendsTelemetryEvent()
++            );
++            var holder = new AdvancementHolder(oldHolder.id(), advancement);
++            advancements.set(i, holder);
++        }
++        packet.added = advancements;
++        return packet;
++    }
 +
-+	// ..thrice?!
-+	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundMerchantOffersPacket packet) {
-+		MerchantOffers newOffers = new MerchantOffers();
-+		MerchantOffers oldOffers = packet.getOffers();
-+		for (int i = 0; i < oldOffers.size(); i++) {
-+			boolean modified = false;
-+			MerchantOffer merchantOffer = oldOffers.get(i);
++    // ..thrice?!
++    private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundMerchantOffersPacket packet) {
++        MerchantOffers newOffers = new MerchantOffers();
++        MerchantOffers oldOffers = packet.getOffers();
++        for (int i = 0; i < oldOffers.size(); i++) {
++            boolean modified = false;
++            MerchantOffer merchantOffer = oldOffers.get(i);
 +
-+			ItemCost itemCost = merchantOffer.getItemCostA();
-+			ItemStack original = itemCost.itemStack();
-+			var context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.FIRST);
-+			var contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
-+			ItemStack result = fromBukkit(contextBox, original);
-+			if (result != null) {
-+				modified = true;
-+				merchantOffer = merchantOffer.copy();
-+				merchantOffer.baseCostA = new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components());
-+			}
++            ItemCost itemCost = merchantOffer.getItemCostA();
++            ItemStack original = itemCost.itemStack();
++            var context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.FIRST);
++            var contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
++            ItemStack result = fromBukkit(contextBox, original);
++            if (result != null) {
++                modified = true;
++                merchantOffer = merchantOffer.copy();
++                merchantOffer.baseCostA = new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components());
++            }
 +
-+			itemCost = merchantOffer.getItemCostB().orElse(null);
-+			if (itemCost != null) {
-+				original = itemCost.itemStack();
-+				context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.SECOND);
-+				contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
-+				result = fromBukkit(contextBox, original);
-+				if (result != null) {
-+					if (!modified) {
-+						modified = true;
-+						merchantOffer = merchantOffer.copy();
-+					}
-+					merchantOffer.costB = Optional.of(new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components()));
-+				}
-+			}
++            itemCost = merchantOffer.getItemCostB().orElse(null);
++            if (itemCost != null) {
++                original = itemCost.itemStack();
++                context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.SECOND);
++                contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
++                result = fromBukkit(contextBox, original);
++                if (result != null) {
++                    if (!modified) {
++                        modified = true;
++                        merchantOffer = merchantOffer.copy();
++                    }
++                    merchantOffer.costB = Optional.of(new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components()));
++                }
++            }
 +
-+			original = merchantOffer.getResult();
-+			context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.RESULT);
-+			contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
-+			result = fromBukkit(contextBox, original);
-+			if (result != null) {
-+				if (!modified) {
-+					merchantOffer = merchantOffer.copy();
-+				}
-+				merchantOffer.result = result;
-+			}
-+			newOffers.add(merchantOffer);
-+		}
-+		packet.offers = newOffers;
-+		return packet;
-+	}
++            original = merchantOffer.getResult();
++            context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.RESULT);
++            contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
++            result = fromBukkit(contextBox, original);
++            if (result != null) {
++                if (!modified) {
++                    merchantOffer = merchantOffer.copy();
++                }
++                merchantOffer.result = result;
++            }
++            newOffers.add(merchantOffer);
++        }
++        packet.offers = newOffers;
++        return packet;
++    }
 +
-+	private static @Nullable ItemStack fromBukkit(@NotNull ItemContextBox contextBox, @NotNull ItemStack original) {
-+		var bukkitItem = ItemModifier.modifyItem(contextBox);
-+		if (bukkitItem == null) return null;
++    private static @Nullable ItemStack fromBukkit(@NotNull ItemContextBox contextBox, @NotNull ItemStack original) {
++        var bukkitItem = ItemModifier.modifyItem(contextBox);
++        if (bukkitItem == null) return null;
 +
-+		return ItemStack.fromBukkitCopy(bukkitItem);
-+	}
++        return ItemStack.fromBukkitCopy(bukkitItem);
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/ItemPacketContextInitializer.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/ItemPacketContextInitializer.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..4f7a04f81d19612e9de609a53504553c1b569612
+index 0000000000000000000000000000000000000000..1a04eff726912fcb3a071ff8b673ac28e0ae9929
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/ItemPacketContextInitializer.java
 @@ -0,0 +1,20 @@
@@ -602,22 +602,22 @@ index 0000000000000000000000000000000000000000..4f7a04f81d19612e9de609a53504553c
 +
 +public class ItemPacketContextInitializer {
 +
-+	private ItemPacketContextInitializer() {
-+		throw new IllegalStateException("Utility class");
-+	}
++    private ItemPacketContextInitializer() {
++        throw new IllegalStateException("Utility class");
++    }
 +
-+	public static void init() {
-+		if (EntityDataPacketContext.entityFetcher == null) EntityDataPacketContext.entityFetcher = (entity) -> {
-+			if (entity instanceof org.bukkit.entity.Entity bukkitEntity) return bukkitEntity;
-+			if (entity instanceof Entity nmsEntity) return nmsEntity.getBukkitEntity();
++    public static void init() {
++        if (EntityDataPacketContext.entityFetcher == null) EntityDataPacketContext.entityFetcher = (entity) -> {
++            if (entity instanceof org.bukkit.entity.Entity bukkitEntity) return bukkitEntity;
++            if (entity instanceof Entity nmsEntity) return nmsEntity.getBukkitEntity();
 +
-+			return null;
-+		};
-+	}
++            return null;
++        };
++    }
 +
 +}
 diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
-index f37857eb3973a0cf1a02041effd5491d711c2eb7..ddffb25790ba712542944d363543931694f22af7 100644
+index a937bc49a85c0e565f0400163c1c9174891fb48d..f8855680e0f0b19927ae0279b85584b6d8b4acae 100644
 --- a/src/main/java/net/minecraft/network/Connection.java
 +++ b/src/main/java/net/minecraft/network/Connection.java
 @@ -509,6 +509,11 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {

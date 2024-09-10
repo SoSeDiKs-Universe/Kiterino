@@ -7,23 +7,23 @@ Adds "items.prevent-creative-override" option to prevent creative from overridin
 The original item is stored as nbt in custom_data component when sending to player and is restored later from nbt.
 
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
-index 9d6b2a44cede2337e3a6ac671395c34cbf337aa6..922cc7498b678ce5a4e63b197eca8bd5f13ae352 100644
+index 31b2b21cb4de6cb975d5fbc1480eb32d23ab56f6..f51c974137edad3cb03230e93fbcae744c877e58 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 @@ -129,4 +129,11 @@ public final class KiterinoConfig {
- 	}
- 	// Kiterino end - Item Modifiers API
+     }
+     // Kiterino end - Item Modifiers API
  
-+	// Kiterino start - Prevent creative from overriding items
-+	public static boolean preventCreativeItemOverride;
-+	private static void preventCreativeItemsOverride() {
-+		preventCreativeItemOverride = getBoolean(config, "items.prevent-creative-override", true, "Prevent creative from overriding items");
-+	}
-+	// Kiterino end - Prevent creative from overriding items
++    // Kiterino start - Prevent creative from overriding items
++    public static boolean preventCreativeItemOverride;
++    private static void preventCreativeItemsOverride() {
++        preventCreativeItemOverride = getBoolean(config, "items.prevent-creative-override", true, "Prevent creative from overriding items");
++    }
++    // Kiterino end - Prevent creative from overriding items
 +
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index bd08622189a5230199780b3d0e23a0bdc88658c3..3d576e148a7ac07fadb585206fd4e161121acb50 100644
+index a8a95957ffab212155566a1fbf84ddb8bb4e299e..03a0f7ca36375af80ea936de54c001b310795366 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -18,6 +18,8 @@ import net.minecraft.advancements.AdvancementHolder;
@@ -36,30 +36,30 @@ index bd08622189a5230199780b3d0e23a0bdc88658c3..3d576e148a7ac07fadb585206fd4e161
  import net.minecraft.network.protocol.game.ClientboundBundlePacket;
  import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 @@ -524,7 +526,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
- 		var bukkitItem = ItemModifier.modifyItem(contextBox);
- 		if (bukkitItem == null) return null;
+         var bukkitItem = ItemModifier.modifyItem(contextBox);
+         if (bukkitItem == null) return null;
  
--		return ItemStack.fromBukkitCopy(bukkitItem);
-+		// Kiterino start - Prevent creative from overriding items
-+		ItemStack itemStack = ItemStack.fromBukkitCopy(bukkitItem);
-+		CraftPlayer player = (CraftPlayer) contextBox.getViewer();
-+		if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
-+			net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
-+			if (customData == null) {
-+				customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-+				customData.getUnsafe().put("kiterino_og_item", original.saveOptional(player.getHandle().registryAccess()));
-+				itemStack.set(DataComponents.CUSTOM_DATA, customData);
-+			} else {
-+				customData.getUnsafe().put("kiterino_og_item", original.saveOptional(player.getHandle().registryAccess()));
-+			}
-+		}
-+		return itemStack;
-+		// Kiterino end - Prevent creative from overriding items
- 	}
+-        return ItemStack.fromBukkitCopy(bukkitItem);
++        // Kiterino start - Prevent creative from overriding items
++        ItemStack itemStack = ItemStack.fromBukkitCopy(bukkitItem);
++        CraftPlayer player = (CraftPlayer) contextBox.getViewer();
++        if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
++            net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
++            if (customData == null) {
++                customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
++                customData.getUnsafe().put("kiterino_og_item", original.saveOptional(player.getHandle().registryAccess()));
++                itemStack.set(DataComponents.CUSTOM_DATA, customData);
++            } else {
++                customData.getUnsafe().put("kiterino_og_item", original.saveOptional(player.getHandle().registryAccess()));
++            }
++        }
++        return itemStack;
++        // Kiterino end - Prevent creative from overriding items
+     }
  
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
-index 89eef5b3c964668e3be53cce6551a6faa8f1cca9..c437e5160318e03fe3bb82ecd0f6771c4be510b4 100644
+index 28731f0c5b0ba63fa8d5ce3ee580bf314a844f92..28dfb683adbd9ff879399715124b3076ec3d6479 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayerGameMode.java
 @@ -108,6 +108,11 @@ public class ServerPlayerGameMode {
@@ -75,7 +75,7 @@ index 89eef5b3c964668e3be53cce6551a6faa8f1cca9..c437e5160318e03fe3bb82ecd0f6771c
      }
  
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 11f4711f149f56adaa67774d1d2595487580436a..453d5a3c878bb63f5d8e315c2cda15c3e38990ca 100644
+index f9b1072c794b995781390af7ea542dd4b5965781..2cfeea6a7b0fdb0c443a91232303fd734ed39465 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
 @@ -168,6 +168,15 @@ public final class ItemStack implements DataComponentHolder {

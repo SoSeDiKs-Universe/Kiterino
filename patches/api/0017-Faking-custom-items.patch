@@ -1,0 +1,87 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 11 Sep 2024 00:20:01 +0300
+Subject: [PATCH] Faking custom items
+
+Allows faking items to the client.
+
+Overall, to inject custom items, do the following in bootloader:
+context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(), event -> {
+    // Registering an item
+    event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("namespace", "key")), b -> b
+        .maxStackSize(16) // Modifying default item options
+        .modifier(box -> box.setNewMaterial(Material.DIAMOND)) // (!) Modifying item before sending it to the client
+    );
+
+    // Initializing Materials in a class
+    context.injectMaterials(CustomMaterials.class);
+    // With the class consisting of fields like:
+    // public static final Material TEST_MATERIAL = KiterinoBootstrapMaterialInjector.injectMaterial(Key.key("namespace", "key"));
+});
+
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifier.java b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifier.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..e34e247ae98bf9fe65485f9f2376a61a1a52fe39
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifier.java
+@@ -0,0 +1,19 @@
++package me.sosedik.kiterino.modifier.item;
++
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * Handles visual modification for injected items
++ */
++@FunctionalInterface
++public interface KiterinoItemModifier {
++
++    /**
++     * Modifies an item before sending it to the client.
++     * <p><b>Implementations must override the item type to match one of the vanilla ones.
++     *
++     * @param contextBox item data
++     */
++    void modify(@NotNull ItemContextBox contextBox);
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
+index f79348f75f90da795497d751ef134557569a8052..d72972e9ecd3329a7855c8cbe7374d47402b4995 100644
+--- a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
++++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
+@@ -1,5 +1,6 @@
+ package me.sosedik.kiterino.registry.data;
+ 
++import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
+ import io.papermc.paper.registry.RegistryBuilder;
+ import org.bukkit.inventory.ItemType;
+ import org.checkerframework.checker.nullness.qual.NonNull;
+@@ -15,6 +16,13 @@ import org.jetbrains.annotations.Range;
+ @ApiStatus.NonExtendable
+ public interface ItemRegistryEntity {
+ 
++    /**
++     * Provides the item's visual modifier
++     *
++     * @return the item's visual modifier
++     */
++    @Nullable KiterinoItemModifier modifier();
++
+     /**
+      * Provides the item's default max stack size
+      *
+@@ -43,6 +51,15 @@ public interface ItemRegistryEntity {
+     @ApiStatus.NonExtendable
+     interface Builder extends ItemRegistryEntity, RegistryBuilder<ItemType> {
+ 
++        /**
++         * Configures the item's visual modifier
++         *
++         * @param modifier the item's visual modifier
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder modifier(@Nullable KiterinoItemModifier modifier);
++
+         /**
+          * Configures the item's default max stack size
+          *

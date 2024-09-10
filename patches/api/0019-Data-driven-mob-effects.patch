@@ -8,23 +8,23 @@ Displaying effects to the client is done on the plugin's side.
 Vanilla /effect command won't show new effects in auto complete.
 
 diff --git a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
-index b32ae215e976bcfcdd86b03037de61b3d896f57c..3d5e9a419afd40f0bb3484a92f1d05d60bc92f96 100644
+index 7b12d1fcf5a2f5d4a043f934611fc8247939127c..8eb4d1371a90c41fffd8e7ef3b960294abd40ba1 100644
 --- a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
 +++ b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
-@@ -18,6 +18,7 @@ public final class RegistryEvents {
- 
+@@ -19,6 +19,7 @@ public final class RegistryEvents {
      public static final RegistryEventProvider<GameEvent, GameEventRegistryEntry.Builder> GAME_EVENT = create(RegistryKey.GAME_EVENT);
      public static final RegistryEventProvider<Enchantment, EnchantmentRegistryEntry.Builder> ENCHANTMENT = create(RegistryKey.ENCHANTMENT);
+     public static final RegistryEventProvider<org.bukkit.inventory.ItemType, me.sosedik.kiterino.registry.data.ItemRegistryEntity.Builder> ITEM = create(RegistryKey.ITEM); // Kiterino - Data-driven items
 +    public static final RegistryEventProvider<org.bukkit.potion.PotionEffectType, me.sosedik.kiterino.registry.data.MobEffectRegistryEntity.Builder> MOB_EFFECT = create(RegistryKey.MOB_EFFECT); // Kiterino - Data-driven mob effects
  
      private RegistryEvents() {
      }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/MobEffectRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/MobEffectRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..fc77377aa363b9bb4f6fec41a160345dc3619ae0
+index 0000000000000000000000000000000000000000..3428cde9f9e57a61c1973c7e9af96ffbdf355aab
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/MobEffectRegistryEntity.java
-@@ -0,0 +1,82 @@
+@@ -0,0 +1,81 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.RegistryBuilder;
@@ -42,74 +42,73 @@ index 0000000000000000000000000000000000000000..fc77377aa363b9bb4f6fec41a160345d
 +@ApiStatus.NonExtendable
 +public interface MobEffectRegistryEntity {
 +
-+	/**
-+	 * Provides wrapper around the effect's behaviour
-+	 *
-+	 * @return the wrapper around the effect's behaviour
-+	 */
-+	@NotNull
-+	KiterinoMobEffectBehaviourWrapper wrapper();
++    /**
++     * Provides wrapper around the effect's behaviour
++     *
++     * @return the wrapper around the effect's behaviour
++     */
++    @NotNull KiterinoMobEffectBehaviourWrapper wrapper();
 +
-+	/**
-+	 * Provides the effect's category
-+	 *
-+	 * @return the effect's category
-+	 */
-+	@NotNull PotionEffectType.Category category();
++    /**
++     * Provides the effect's category
++     *
++     * @return the effect's category
++     */
++    @NotNull PotionEffectType.Category category();
 +
-+	/**
-+	 * Provides the effect's color
-+	 *
-+	 * @return the effect's color
-+	 */
-+	int color();
++    /**
++     * Provides the effect's color
++     *
++     * @return the effect's color
++     */
++    int color();
 +
-+	/**
-+	 * A mutable builder for the {@link MobEffectRegistryEntity} plugins may change in applicable registry events.
-+	 * <p>
-+	 * The following values are required for each builder:
-+	 * <ul>
-+	 *     <li>{@link #category(PotionEffectType.Category)}</li>
-+	 *     <li>{@link #color(int)}</li>
-+	 * </ul>
-+	 */
-+	@ApiStatus.Experimental
-+	@ApiStatus.NonExtendable
-+	interface Builder extends MobEffectRegistryEntity, RegistryBuilder<PotionEffectType> {
++    /**
++     * A mutable builder for the {@link MobEffectRegistryEntity} plugins may change in applicable registry events.
++     * <p>
++     * The following values are required for each builder:
++     * <ul>
++     *     <li>{@link #category(PotionEffectType.Category)}</li>
++     *     <li>{@link #color(int)}</li>
++     * </ul>
++     */
++    @ApiStatus.Experimental
++    @ApiStatus.NonExtendable
++    interface Builder extends MobEffectRegistryEntity, RegistryBuilder<PotionEffectType> {
 +
-+		/**
-+		 * Configures the effect's wrapper
-+		 *
-+		 * @param wrapper the effect's wrapper
-+		 * @return this builder
-+		 */
-+		@Contract(value = "_ -> this", mutates = "this")
-+		@NonNull Builder wrapper(@NotNull KiterinoMobEffectBehaviourWrapper wrapper);
++        /**
++         * Configures the effect's wrapper
++         *
++         * @param wrapper the effect's wrapper
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder wrapper(@NotNull KiterinoMobEffectBehaviourWrapper wrapper);
 +
-+		/**
-+		 * Configures the effect's category
-+		 *
-+		 * @param category the effect's category
-+		 * @return this builder
-+		 */
-+		@Contract(value = "_ -> this", mutates = "this")
-+		@NonNull Builder category(PotionEffectType.@NonNull Category category);
++        /**
++         * Configures the effect's category
++         *
++         * @param category the effect's category
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder category(PotionEffectType.@NonNull Category category);
 +
-+		/**
-+		 * Configures the effect's color
-+		 *
-+		 * @param color the effect's color
-+		 * @return this builder
-+		 */
-+		@Contract(value = "_ -> this", mutates = "this")
-+		@NonNull Builder color(int color);
++        /**
++         * Configures the effect's color
++         *
++         * @param color the effect's color
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder color(int color);
 +
-+	}
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/wrapper/KiterinoMobEffectBehaviourWrapper.java b/src/main/java/me/sosedik/kiterino/registry/wrapper/KiterinoMobEffectBehaviourWrapper.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..46a534f3f17c7e2afce769d09b755812b8908411
+index 0000000000000000000000000000000000000000..2c54f5bcc11f59734e712b3061e488e33a954465
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/wrapper/KiterinoMobEffectBehaviourWrapper.java
 @@ -0,0 +1,103 @@
@@ -127,92 +126,92 @@ index 0000000000000000000000000000000000000000..46a534f3f17c7e2afce769d09b755812
 + */
 +public interface KiterinoMobEffectBehaviourWrapper {
 +
-+	/**
-+	 * Gets the effect's blend duration ticks
-+	 *
-+	 * @return effect's blend duration ticks
-+	 */
-+	default int getBlendDurationTicks() {
-+		return 0;
-+	}
++    /**
++     * Gets the effect's blend duration ticks
++     *
++     * @return effect's blend duration ticks
++     */
++    default int getBlendDurationTicks() {
++        return 0;
++    }
 +
-+	/**
-+	 * Called when the effect is ticked.
-+	 * If {@code false} is returned, the effect will be removed from the entity.
-+	 *
-+	 * @param entity entity that has the effect
-+	 * @param amplifier effect amplifier
-+	 * @return whether the effect was ticked
-+	 */
-+	default boolean applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
-+		return true;
-+	}
++    /**
++     * Called when the effect is ticked.
++     * If {@code false} is returned, the effect will be removed from the entity.
++     *
++     * @param entity entity that has the effect
++     * @param amplifier effect amplifier
++     * @return whether the effect was ticked
++     */
++    default boolean applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
++        return true;
++    }
 +
-+	/**
-+	 * Called when the effect is applied if this effect is {@link #isInstantaneous()}
-+	 *
-+	 * @param source effect source (e.g. thrown potion)
-+	 * @param attacker attacker entity (e.g. thrown potion's owner)
-+	 * @param target entity the effect is applied to
-+	 * @param amplifier effect amplifier
-+	 * @param proximity intensity relative to maximum effect; 0.0: not affected; 1.0: fully hit by potion effects
-+	 */
-+	default void applyInstantaneousEffect(@Nullable Entity source, @Nullable Entity attacker, @NotNull LivingEntity target, int amplifier, @Range(from = 0L, to = 1L) double proximity) {
-+		this.applyEffectTick(target, amplifier);
-+	}
++    /**
++     * Called when the effect is applied if this effect is {@link #isInstantaneous()}
++     *
++     * @param source effect source (e.g. thrown potion)
++     * @param attacker attacker entity (e.g. thrown potion's owner)
++     * @param target entity the effect is applied to
++     * @param amplifier effect amplifier
++     * @param proximity intensity relative to maximum effect; 0.0: not affected; 1.0: fully hit by potion effects
++     */
++    default void applyInstantaneousEffect(@Nullable Entity source, @Nullable Entity attacker, @NotNull LivingEntity target, int amplifier, @Range(from = 0L, to = 1L) double proximity) {
++        this.applyEffectTick(target, amplifier);
++    }
 +
-+	/**
-+	 * Checks whether the effect's tick method ({@link #applyEffectTick(LivingEntity, int)}) should be fired this tick
-+	 *
-+	 * @param duration effect duration
-+	 * @param amplifier effect amplifier
-+	 * @return whether to call tick method
-+	 */
-+	default boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-+		return false;
-+	}
++    /**
++     * Checks whether the effect's tick method ({@link #applyEffectTick(LivingEntity, int)}) should be fired this tick
++     *
++     * @param duration effect duration
++     * @param amplifier effect amplifier
++     * @return whether to call tick method
++     */
++    default boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
++        return false;
++    }
 +
-+	/**
-+	 * Called when the effect was added or updated to the entity
-+	 *
-+	 * @param entity entity
-+	 * @param amplifier effect amplifier
-+	 */
-+	default void onEffectStarted(@NotNull LivingEntity entity, int amplifier) {}
++    /**
++     * Called when the effect was added or updated to the entity
++     *
++     * @param entity entity
++     * @param amplifier effect amplifier
++     */
++    default void onEffectStarted(@NotNull LivingEntity entity, int amplifier) {}
 +
-+	/**
-+	 * Called when the effect is being freshly added to the entity
-+	 *
-+	 * @param entity entity
-+	 * @param amplifier effect amplifier
-+	 */
-+	default void onEffectAdded(@NotNull LivingEntity entity, int amplifier) {}
++    /**
++     * Called when the effect is being freshly added to the entity
++     *
++     * @param entity entity
++     * @param amplifier effect amplifier
++     */
++    default void onEffectAdded(@NotNull LivingEntity entity, int amplifier) {}
 +
-+	/**
-+	 * Called when the entity having this effect dies
-+	 *
-+	 * @param entity entity
-+	 * @param amplifier effect amplifier
-+	 */
-+	default void onMobKilled(@NotNull LivingEntity entity, int amplifier) {}
++    /**
++     * Called when the entity having this effect dies
++     *
++     * @param entity entity
++     * @param amplifier effect amplifier
++     */
++    default void onMobKilled(@NotNull LivingEntity entity, int amplifier) {}
 +
-+	/**
-+	 * Called when the entity having this effect is hurt
-+	 *
-+	 * @param entity entity
-+	 * @param amplifier effect amplifier
-+	 * @param source damage source
-+	 * @param amount damage amount
-+	 */
-+	default void onMobHurt(@NotNull LivingEntity entity, int amplifier, @NotNull DamageSource source, float amount) {}
++    /**
++     * Called when the entity having this effect is hurt
++     *
++     * @param entity entity
++     * @param amplifier effect amplifier
++     * @param source damage source
++     * @param amount damage amount
++     */
++    default void onMobHurt(@NotNull LivingEntity entity, int amplifier, @NotNull DamageSource source, float amount) {}
 +
-+	/**
-+	 * Checks whether this effect is instantaneous
-+	 *
-+	 * @return whether this effect is instantaneous
-+	 */
-+	default boolean isInstantaneous() {
-+		return false;
-+	}
++    /**
++     * Checks whether this effect is instantaneous
++     *
++     * @return whether this effect is instantaneous
++     */
++    default boolean isInstantaneous() {
++        return false;
++    }
 +
 +}

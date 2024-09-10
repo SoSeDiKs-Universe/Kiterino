@@ -6,7 +6,7 @@ Subject: [PATCH] Add PlayerStartUsingItemEvent
 
 diff --git a/src/main/java/me/sosedik/kiterino/event/player/PlayerStartUsingItemEvent.java b/src/main/java/me/sosedik/kiterino/event/player/PlayerStartUsingItemEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5c3fd0d08692d4ed034a0be2b17de9a62d2c0736
+index 0000000000000000000000000000000000000000..f211ae9ba64c69e018697d453c9dc29851c1cb88
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/event/player/PlayerStartUsingItemEvent.java
 @@ -0,0 +1,83 @@
@@ -24,72 +24,72 @@ index 0000000000000000000000000000000000000000..5c3fd0d08692d4ed034a0be2b17de9a6
 + */
 +public class PlayerStartUsingItemEvent extends PlayerEvent implements Cancellable {
 +
-+	private static final HandlerList handlers = new HandlerList();
++    private static final HandlerList handlers = new HandlerList();
 +
-+	private final ItemStack item;
-+	private int useDuration;
-+	private boolean cancelled;
++    private final ItemStack item;
++    private int useDuration;
++    private boolean cancelled;
 +
-+	public PlayerStartUsingItemEvent(@NotNull Player player, @NotNull ItemStack item, int useDuration) {
-+		super(player);
-+		this.item = item;
-+		this.useDuration = useDuration;
-+	}
++    public PlayerStartUsingItemEvent(@NotNull Player player, @NotNull ItemStack item, int useDuration) {
++        super(player);
++        this.item = item;
++        this.useDuration = useDuration;
++    }
 +
-+	/**
-+	 * Gets the item that's being used
-+	 *
-+	 * @return the item that's being used
-+	 */
-+	public @NotNull ItemStack getItem() {
-+		return this.item;
-+	}
++    /**
++     * Gets the item that's being used
++     *
++     * @return the item that's being used
++     */
++    public @NotNull ItemStack getItem() {
++        return this.item;
++    }
 +
-+	/**
-+	 * Gets for how long in ticks the item should be used until it's ready
-+	 *
-+	 * @return item use duration
-+	 */
-+	public int getUseDuration() {
-+		return this.useDuration;
-+	}
++    /**
++     * Gets for how long in ticks the item should be used until it's ready
++     *
++     * @return item use duration
++     */
++    public int getUseDuration() {
++        return this.useDuration;
++    }
 +
-+	/**
-+	 * Sets for how long in ticks the item should be used until it's ready
-+	 *
-+	 * @param useDuration item use duration in ticks
-+	 */
-+	public void setUseDuration(int useDuration) {
-+		this.useDuration = useDuration;
-+	}
++    /**
++     * Sets for how long in ticks the item should be used until it's ready
++     *
++     * @param useDuration item use duration in ticks
++     */
++    public void setUseDuration(int useDuration) {
++        this.useDuration = useDuration;
++    }
 +
-+	/**
-+	 * {@inheritDoc}
-+	 *
-+	 * @return if cancelled, the item will stop being in use
-+	 */
-+	@Override
-+	public boolean isCancelled() {
-+		return this.cancelled;
-+	}
++    /**
++     * {@inheritDoc}
++     *
++     * @return if cancelled, the item will stop being in use
++     */
++    @Override
++    public boolean isCancelled() {
++        return this.cancelled;
++    }
 +
-+	/**
-+	 * Set whether to cancel item use. If canceled,
-+	 * the item will stop being in use.
-+	 *
-+	 * @param cancel whether you wish to cancel this event
-+	 */
-+	public void setCancelled(boolean cancel) {
-+		this.cancelled = cancel;
-+	}
++    /**
++     * Set whether to cancel item use. If canceled,
++     * the item will stop being in use.
++     *
++     * @param cancel whether you wish to cancel this event
++     */
++    public void setCancelled(boolean cancel) {
++        this.cancelled = cancel;
++    }
 +
-+	@Override
-+	public @NotNull HandlerList getHandlers() {
-+		return handlers;
-+	}
++    @Override
++    public @NotNull HandlerList getHandlers() {
++        return handlers;
++    }
 +
-+	public static @NotNull HandlerList getHandlerList() {
-+		return handlers;
-+	}
++    public static @NotNull HandlerList getHandlerList() {
++        return handlers;
++    }
 +
 +}
