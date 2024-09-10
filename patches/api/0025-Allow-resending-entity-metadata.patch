@@ -5,7 +5,7 @@ Subject: [PATCH] Allow resending entity metadata
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index ae048744121bf1554a119acc7da472a45d4b577a..48788493944ae3c5a6a1a5be5bd50dcf337e4723 100644
+index e3d666cf6271a67df63d7bd2606ae6b9aac0bed8..6e00b1729245be9ceed4cd5ae07ef7c118fef9c0 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
 @@ -1280,4 +1280,13 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
