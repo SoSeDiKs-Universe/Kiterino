@@ -17,14 +17,46 @@ index 6ec9d9b9acf557aa2ebf39d38a14225b0205fae1..7603395aace52f16453de854b95f2f8c
              entry(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT, Cat.Type.class, CraftCat.CraftType::new),
              entry(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT, Frog.Variant.class, CraftFrog.CraftVariant::new),
              entry(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION, Villager.Profession.class, CraftVillager.CraftProfession::new),
+diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+index eda5cc7d45ef59ccc1c9c7e027c1f044f1dcc86b..48de73884cdece86ff19e36d930e3990066de3bf 100644
+--- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
++++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+@@ -33,4 +33,24 @@ public class Conversions {
+     public Component asAdventure(final net.minecraft.network.chat.@Nullable Component vanilla) {
+         return vanilla == null ? Component.empty() : this.serializer.deserialize(vanilla);
+     }
++
++    // Kiterino start - Data-driven items
++    public net.minecraft.world.item.Rarity asVanilla(final org.bukkit.inventory.ItemRarity rarity) {
++        return switch (rarity) {
++            case COMMON -> net.minecraft.world.item.Rarity.COMMON;
++            case UNCOMMON -> net.minecraft.world.item.Rarity.UNCOMMON;
++            case RARE -> net.minecraft.world.item.Rarity.RARE;
++            case EPIC -> net.minecraft.world.item.Rarity.EPIC;
++        };
++    }
++
++    public org.bukkit.inventory.ItemRarity asBukkit(final net.minecraft.world.item.Rarity rarity) {
++        return switch (rarity) {
++            case COMMON -> org.bukkit.inventory.ItemRarity.COMMON;
++            case UNCOMMON -> org.bukkit.inventory.ItemRarity.UNCOMMON;
++            case RARE -> org.bukkit.inventory.ItemRarity.RARE;
++            case EPIC -> org.bukkit.inventory.ItemRarity.EPIC;
++        };
++    }
++    // Kiterino end - Data-driven items
+ }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7dc4042abe
+index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e318e1d98
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,162 @@
 +package me.sosedik.kiterino.registry.data;
 +
++import net.minecraft.core.component.DataComponentMap;
++import net.minecraft.core.component.DataComponents;
++import org.bukkit.inventory.ItemRarity;
 +import io.papermc.paper.registry.PaperRegistryBuilder;
 +import io.papermc.paper.registry.TypedKey;
 +import io.papermc.paper.registry.data.util.Conversions;
@@ -33,18 +65,23 @@ index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7d
 +import org.bukkit.inventory.ItemType;
 +import org.checkerframework.checker.nullness.qual.NonNull;
 +import org.checkerframework.checker.nullness.qual.Nullable;
++import org.jetbrains.annotations.Range;
 +
++import java.util.Objects;
 +import java.util.function.Function;
 +
 +public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
 +
 +    protected int maxStackSize;
++    protected @Nullable Integer durability;
 +    protected boolean fireResistant;
++    protected @Nullable ItemRarity rarity;
 +    protected @Nullable Float compostChance;
 +    protected @Nullable Item nmsItem;
 +    protected @Nullable Function<Object, Object> nmsItemFunction;
 +
 +    protected final Conversions conversions;
++    protected final TypedKey<ItemType> itemKey;
 +
 +    public KiterinoItemRegistryEntity(
 +            final @NonNull Conversions conversions,
@@ -52,6 +89,7 @@ index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7d
 +            final @Nullable Item internal
 +    ) {
 +        this.conversions = conversions;
++        this.itemKey = ignoredKey;
 +        if (internal == null) {
 +            this.maxStackSize = 64;
 +            return;
@@ -66,8 +104,18 @@ index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7d
 +    }
 +
 +    @Override
++    public @Nullable Integer durability() {
++        return this.durability;
++    }
++
++    @Override
 +    public boolean fireResistant() {
 +        return this.fireResistant;
++    }
++
++    @Override
++    public @Nullable ItemRarity rarity() {
++        return this.rarity;
 +    }
 +
 +    @Override
@@ -86,7 +134,11 @@ index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7d
 +    }
 +
 +    protected void parseValues(@NonNull Item item) {
++        DataComponentMap components = item.components();
 +        this.maxStackSize = item.getDefaultMaxStackSize();
++        this.durability = components.get(DataComponents.MAX_DAMAGE);
++        this.fireResistant = components.has(DataComponents.FIRE_RESISTANT);
++        this.rarity = components.has(DataComponents.RARITY) ? conversions.asBukkit(Objects.requireNonNull(components.get(DataComponents.RARITY))) : null;
 +    }
 +
 +    public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
@@ -97,14 +149,26 @@ index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7d
 +        }
 +
 +        @Override
-+        public @NonNull Builder maxStackSize(int size) {
-+            this.maxStackSize = size;
++        public @NonNull Builder maxStackSize(int maxStackSize) {
++            this.maxStackSize = maxStackSize;
++            return this;
++        }
++
++        @Override
++        public @NonNull Builder durability(@Range(from = 1L, to = Integer.MAX_VALUE) @Nullable Integer durability) {
++            this.durability = durability;
 +            return this;
 +        }
 +
 +        @Override
 +        public @NonNull Builder fireResistant(boolean fireResistant) {
 +            this.fireResistant = fireResistant;
++            return this;
++        }
++
++        @Override
++        public @NonNull Builder rarity(@Nullable ItemRarity rarity) {
++            this.rarity = rarity;
 +            return this;
 +        }
 +
@@ -132,9 +196,11 @@ index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7d
 +        public @NonNull Item build() {
 +            Item item = this.nmsItem;
 +            if (item == null) {
-+                var properties = new Item.Properties()
-+                        .stacksTo(this.maxStackSize);
-+                if (this.fireResistant) properties = properties.fireResistant();
++                var properties = new Item.Properties();
++                if (this.durability != null) properties.durability(this.durability);
++                properties.stacksTo(this.maxStackSize);
++                if (this.fireResistant) properties.fireResistant();
++                if (this.rarity != null) properties.rarity(conversions.asVanilla(this.rarity));
 +                if (this.nmsItemFunction == null) {
 +                    item = new Item(properties);
 +                } else {

@@ -21,13 +21,14 @@ index b32ae215e976bcfcdd86b03037de61b3d896f57c..7b12d1fcf5a2f5d4a043f934611fc824
      }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f1087139b5fa13174ea3bc1699416197022da05f
+index 0000000000000000000000000000000000000000..1f61fe3836de8d89a23e36efc4c5d65fd56ae838
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
-@@ -0,0 +1,109 @@
+@@ -0,0 +1,142 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.RegistryBuilder;
++import org.bukkit.inventory.ItemRarity;
 +import org.bukkit.inventory.ItemType;
 +import org.checkerframework.checker.nullness.qual.NonNull;
 +import org.jetbrains.annotations.ApiStatus;
@@ -52,11 +53,25 @@ index 0000000000000000000000000000000000000000..f1087139b5fa13174ea3bc1699416197
 +    int maxStackSize();
 +
 +    /**
++     * Provides the item's default durability
++     *
++     * @return the item's default durability
++     */
++    @Nullable Integer durability();
++
++    /**
 +     * Provides the item's fire resistance state
 +     *
 +     * @return the item's fire resistance state
 +     */
 +    boolean fireResistant();
++
++    /**
++     * Provides the item's default rarity
++     *
++     * @return the item's default rarity
++     */
++    @Nullable ItemRarity rarity();
 +
 +    /**
 +     * Provides the item's compost chance
@@ -89,11 +104,20 @@ index 0000000000000000000000000000000000000000..f1087139b5fa13174ea3bc1699416197
 +        /**
 +         * Configures the item's default max stack size
 +         *
-+         * @param size the item's default max stack size
++         * @param maxStackSize the item's default max stack size
 +         * @return this builder
 +         */
 +        @Contract(value = "_ -> this", mutates = "this")
-+        @NonNull Builder maxStackSize(@Range(from = 1L, to = 99L) int size);
++        @NonNull Builder maxStackSize(@Range(from = 1L, to = 99L) int maxStackSize);
++
++        /**
++         * Configures the item's default durability
++         *
++         * @param durability the item's default durability
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder durability(@Range(from = 1L, to = Integer.MAX_VALUE) @Nullable Integer durability);
 +
 +        /**
 +         * Configures the item's fire resistance state
@@ -103,6 +127,15 @@ index 0000000000000000000000000000000000000000..f1087139b5fa13174ea3bc1699416197
 +         */
 +        @Contract(value = "_ -> this", mutates = "this")
 +        @NonNull Builder fireResistant(boolean fireResistant);
++
++        /**
++         * Configures the item's default rarity
++         *
++         * @param rarity the item's default rarity
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder rarity(@Nullable ItemRarity rarity);
 +
 +        /**
 +         * Configures the item's compost chance

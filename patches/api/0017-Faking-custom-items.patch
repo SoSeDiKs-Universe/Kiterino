@@ -45,7 +45,7 @@ index 0000000000000000000000000000000000000000..e34e247ae98bf9fe65485f9f2376a61a
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
-index f1087139b5fa13174ea3bc1699416197022da05f..982e1d191a7be650aa1305c0d6a51e08bc4fc13c 100644
+index 1f61fe3836de8d89a23e36efc4c5d65fd56ae838..998405409ec613e60a13f1a235a477ababa6364e 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
 @@ -1,5 +1,6 @@
@@ -53,9 +53,9 @@ index f1087139b5fa13174ea3bc1699416197022da05f..982e1d191a7be650aa1305c0d6a51e08
  
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
  import io.papermc.paper.registry.RegistryBuilder;
+ import org.bukkit.inventory.ItemRarity;
  import org.bukkit.inventory.ItemType;
- import org.checkerframework.checker.nullness.qual.NonNull;
-@@ -17,6 +18,13 @@ import java.util.function.Function;
+@@ -18,6 +19,13 @@ import java.util.function.Function;
  @ApiStatus.NonExtendable
  public interface ItemRegistryEntity {
  
@@ -69,7 +69,7 @@ index f1087139b5fa13174ea3bc1699416197022da05f..982e1d191a7be650aa1305c0d6a51e08
      /**
       * Provides the item's default max stack size
       *
-@@ -59,6 +67,15 @@ public interface ItemRegistryEntity {
+@@ -74,6 +82,15 @@ public interface ItemRegistryEntity {
      @ApiStatus.NonExtendable
      interface Builder extends ItemRegistryEntity, RegistryBuilder<ItemType> {
  

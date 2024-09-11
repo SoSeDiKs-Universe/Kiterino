@@ -18,16 +18,16 @@ index 7603395aace52f16453de854b95f2f8ca691c573..0a4dc6627c1b02f2569305c668130b48
              entry(Registries.BLOCK, RegistryKey.BLOCK, BlockType.class, CraftBlockType::new),
              writable(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new, me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index eda5cc7d45ef59ccc1c9c7e027c1f044f1dcc86b..f87ed83cd16e5840edc33954632f7aaafb86b3e1 100644
+index 48de73884cdece86ff19e36d930e3990066de3bf..b5d6fe97a9a9a1c7e923ec37828fda2389895a7b 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -33,4 +33,18 @@ public class Conversions {
-     public Component asAdventure(final net.minecraft.network.chat.@Nullable Component vanilla) {
-         return vanilla == null ? Component.empty() : this.serializer.deserialize(vanilla);
+@@ -53,4 +53,18 @@ public class Conversions {
+         };
      }
+     // Kiterino end - Data-driven items
 +
 +    // Kiterino start - Data-driven mob effects
-+    public net.minecraft.world.effect.MobEffectCategory asVanilla(org.bukkit.potion.PotionEffectType.Category category) {
++    public net.minecraft.world.effect.MobEffectCategory asVanilla(final org.bukkit.potion.PotionEffectType.Category category) {
 +        return switch (category) {
 +            case BENEFICIAL -> net.minecraft.world.effect.MobEffectCategory.BENEFICIAL;
 +            case HARMFUL -> net.minecraft.world.effect.MobEffectCategory.HARMFUL;

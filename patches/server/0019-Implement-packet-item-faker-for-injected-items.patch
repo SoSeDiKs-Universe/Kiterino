@@ -67,44 +67,29 @@ index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index e7ed3e5e40401433269a802aa455cc7dc4042abe..f8cebc380a565ecb8f56f8f4bebf562f21ae155d 100644
+index 60403dd5ce27c84057e6c9e59c810b3e318e1d98..fd737493e557ff468bc31a9814eced0a07702ac4 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -1,5 +1,8 @@
+@@ -1,5 +1,9 @@
  package me.sosedik.kiterino.registry.data;
  
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
 +import org.bukkit.inventory.meta.ItemMeta;
- import io.papermc.paper.registry.PaperRegistryBuilder;
- import io.papermc.paper.registry.TypedKey;
- import io.papermc.paper.registry.data.util.Conversions;
-@@ -13,6 +16,7 @@ import java.util.function.Function;
- 
- public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 
-+    protected @Nullable KiterinoItemModifier modifier;
-     protected int maxStackSize;
-     protected boolean fireResistant;
++
+ import net.minecraft.core.component.DataComponentMap;
+ import net.minecraft.core.component.DataComponents;
+ import org.bukkit.inventory.ItemRarity;
+@@ -25,6 +29,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
      protected @Nullable Float compostChance;
-@@ -20,6 +24,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+     protected @Nullable Item nmsItem;
      protected @Nullable Function<Object, Object> nmsItemFunction;
++    protected @Nullable KiterinoItemModifier modifier;
  
      protected final Conversions conversions;
-+    protected final TypedKey<ItemType> itemKey;
- 
-     public KiterinoItemRegistryEntity(
-             final @NonNull Conversions conversions,
-@@ -27,6 +32,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
-             final @Nullable Item internal
-     ) {
-         this.conversions = conversions;
-+        this.itemKey = ignoredKey;
-         if (internal == null) {
-             this.maxStackSize = 64;
-             return;
-@@ -35,6 +41,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
-         parseValues(internal);
+     protected final TypedKey<ItemType> itemKey;
+@@ -79,6 +84,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+         return this.nmsItemFunction;
      }
  
 +    @Override
@@ -112,11 +97,11 @@ index e7ed3e5e40401433269a802aa455cc7dc4042abe..f8cebc380a565ecb8f56f8f4bebf562f
 +        return this.modifier;
 +    }
 +
-     @Override
-     public int maxStackSize() {
-         return this.maxStackSize;
-@@ -71,6 +82,12 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
-             super(conversions, key, internal);
+     protected void parseValues(@NonNull Item item) {
+         DataComponentMap components = item.components();
+         this.maxStackSize = item.getDefaultMaxStackSize();
+@@ -138,8 +148,23 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+             return this;
          }
  
 +        @Override
@@ -125,21 +110,6 @@ index e7ed3e5e40401433269a802aa455cc7dc4042abe..f8cebc380a565ecb8f56f8f4bebf562f
 +            return this;
 +        }
 +
-         @Override
-         public @NonNull Builder maxStackSize(int size) {
-             this.maxStackSize = size;
-@@ -105,6 +122,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 
-         @Override
-         public @NonNull Item build() {
-+            if (this.modifier != null) KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.key().namespace(), this.itemKey.key().value()), buildModifier());
-             Item item = this.nmsItem;
-             if (item == null) {
-                 var properties = new Item.Properties()
-@@ -120,6 +138,14 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
-             return item;
-         }
- 
 +        private @NonNull KiterinoItemModifier buildModifier() {
 +            return box -> {
 +                ItemMeta meta = box.getMeta();
@@ -148,9 +118,12 @@ index e7ed3e5e40401433269a802aa455cc7dc4042abe..f8cebc380a565ecb8f56f8f4bebf562f
 +            };
 +        }
 +
-     }
- 
- }
+         @Override
+         public @NonNull Item build() {
++            if (this.modifier != null) KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.key().namespace(), this.itemKey.key().value()), buildModifier());
+             Item item = this.nmsItem;
+             if (item == null) {
+                 var properties = new Item.Properties();
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
 index c8714a9e3d382827a61c02f61f05b1449d0fa8ea..5d8b3b44da3403245157aeadf14dff35cce3362d 100644
 --- a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
