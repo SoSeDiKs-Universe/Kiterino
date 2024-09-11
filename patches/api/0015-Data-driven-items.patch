@@ -21,10 +21,10 @@ index b32ae215e976bcfcdd86b03037de61b3d896f57c..7b12d1fcf5a2f5d4a043f934611fc824
      }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..54946c292fda07025e8887aea254e5ad6c4ae89f
+index 0000000000000000000000000000000000000000..f1087139b5fa13174ea3bc1699416197022da05f
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
-@@ -0,0 +1,91 @@
+@@ -0,0 +1,109 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.RegistryBuilder;
@@ -34,6 +34,8 @@ index 0000000000000000000000000000000000000000..54946c292fda07025e8887aea254e5ad
 +import org.jetbrains.annotations.Contract;
 +import org.jetbrains.annotations.Nullable;
 +import org.jetbrains.annotations.Range;
++
++import java.util.function.Function;
 +
 +/**
 + * A data-centric version-specific registry entry for the {@link ItemType} type.
@@ -69,6 +71,13 @@ index 0000000000000000000000000000000000000000..54946c292fda07025e8887aea254e5ad
 +     * @return the item's nms implementation
 +     */
 +    @Nullable Object nmsItem();
++
++    /**
++     * Provides the function that takes constructed item properties and provides the item's nms implementation
++     *
++     * @return the item's nms implementation
++     */
++    @Nullable Function<Object, Object> nmsItemFunction();
 +
 +    /**
 +     * A mutable builder for the {@link ItemRegistryEntity} plugins may change in applicable registry events.
@@ -112,6 +121,15 @@ index 0000000000000000000000000000000000000000..54946c292fda07025e8887aea254e5ad
 +         */
 +        @Contract(value = "_ -> this", mutates = "this")
 +        @NonNull Builder nmsItem(@Nullable Object nmsItem);
++
++        /**
++         * Configures the function that takes constructed item properties and provides the item's nms implementation
++         *
++         * @param nmsItemFunction the item's nms implementation
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder nmsItemFunction(@Nullable Function<Object, Object> nmsItemFunction);
 +
 +    }
 +

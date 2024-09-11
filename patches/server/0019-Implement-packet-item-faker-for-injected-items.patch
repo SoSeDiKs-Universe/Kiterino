@@ -67,7 +67,7 @@ index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30329abcba 100644
+index e7ed3e5e40401433269a802aa455cc7dc4042abe..f8cebc380a565ecb8f56f8f4bebf562f21ae155d 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,8 @@
@@ -79,7 +79,7 @@ index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30
  import io.papermc.paper.registry.PaperRegistryBuilder;
  import io.papermc.paper.registry.TypedKey;
  import io.papermc.paper.registry.data.util.Conversions;
-@@ -11,12 +14,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
+@@ -13,6 +16,7 @@ import java.util.function.Function;
  
  public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  
@@ -87,14 +87,15 @@ index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30
      protected int maxStackSize;
      protected boolean fireResistant;
      protected @Nullable Float compostChance;
-     protected @Nullable Item nmsItem;
+@@ -20,6 +24,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+     protected @Nullable Function<Object, Object> nmsItemFunction;
  
      protected final Conversions conversions;
 +    protected final TypedKey<ItemType> itemKey;
  
      public KiterinoItemRegistryEntity(
              final @NonNull Conversions conversions,
-@@ -24,6 +29,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -27,6 +32,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              final @Nullable Item internal
      ) {
          this.conversions = conversions;
@@ -102,7 +103,7 @@ index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30
          if (internal == null) {
              this.maxStackSize = 64;
              return;
-@@ -32,6 +38,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -35,6 +41,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
          parseValues(internal);
      }
  
@@ -114,7 +115,7 @@ index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30
      @Override
      public int maxStackSize() {
          return this.maxStackSize;
-@@ -63,6 +74,12 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -71,6 +82,12 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              super(conversions, key, internal);
          }
  
@@ -127,7 +128,7 @@ index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30
          @Override
          public @NonNull Builder maxStackSize(int size) {
              this.maxStackSize = size;
-@@ -91,6 +108,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -105,6 +122,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  
          @Override
          public @NonNull Item build() {
@@ -135,7 +136,7 @@ index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30
              Item item = this.nmsItem;
              if (item == null) {
                  var properties = new Item.Properties()
-@@ -102,6 +120,14 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -120,6 +138,14 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              return item;
          }
  

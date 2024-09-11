@@ -19,10 +19,10 @@ index 6ec9d9b9acf557aa2ebf39d38a14225b0205fae1..7603395aace52f16453de854b95f2f8c
              entry(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION, Villager.Profession.class, CraftVillager.CraftProfession::new),
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d7fb607dd419d48f16147df96f73a054cb2ad6ee
+index 0000000000000000000000000000000000000000..e7ed3e5e40401433269a802aa455cc7dc4042abe
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,107 @@
+@@ -0,0 +1,125 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.PaperRegistryBuilder;
@@ -34,12 +34,15 @@ index 0000000000000000000000000000000000000000..d7fb607dd419d48f16147df96f73a054
 +import org.checkerframework.checker.nullness.qual.NonNull;
 +import org.checkerframework.checker.nullness.qual.Nullable;
 +
++import java.util.function.Function;
++
 +public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
 +
 +    protected int maxStackSize;
 +    protected boolean fireResistant;
 +    protected @Nullable Float compostChance;
 +    protected @Nullable Item nmsItem;
++    protected @Nullable Function<Object, Object> nmsItemFunction;
 +
 +    protected final Conversions conversions;
 +
@@ -75,6 +78,11 @@ index 0000000000000000000000000000000000000000..d7fb607dd419d48f16147df96f73a054
 +    @Override
 +    public @Nullable Object nmsItem() {
 +        return this.nmsItem;
++    }
++
++    @Override
++    public @Nullable Function<Object, Object> nmsItemFunction() {
++        return this.nmsItemFunction;
 +    }
 +
 +    protected void parseValues(@NonNull Item item) {
@@ -115,13 +123,23 @@ index 0000000000000000000000000000000000000000..d7fb607dd419d48f16147df96f73a054
 +        }
 +
 +        @Override
++        public @NonNull Builder nmsItemFunction(@Nullable Function<Object, Object> nmsItemFunction) {
++            this.nmsItemFunction = nmsItemFunction;
++            return this;
++        }
++
++        @Override
 +        public @NonNull Item build() {
 +            Item item = this.nmsItem;
 +            if (item == null) {
 +                var properties = new Item.Properties()
 +                        .stacksTo(this.maxStackSize);
 +                if (this.fireResistant) properties = properties.fireResistant();
-+                item = new Item(properties);
++                if (this.nmsItemFunction == null) {
++                    item = new Item(properties);
++                } else {
++                    item = (Item) this.nmsItemFunction.apply(properties);
++                }
 +            }
 +            if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
 +            return item;
