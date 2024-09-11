@@ -26,10 +26,10 @@ index ecf4434b523fbf74153e273fe4920ec03260c46d..a73b92a9d75a58a318f9b27454197a75
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..55bc65e480f4492fe067c9cd7731b21feec0de38
+index 0000000000000000000000000000000000000000..c8714a9e3d382827a61c02f61f05b1449d0fa8ea
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,136 @@
 +package me.sosedik.kiterino.util;
 +
 +import io.papermc.paper.adventure.PaperAdventure;
@@ -60,6 +60,7 @@ index 0000000000000000000000000000000000000000..55bc65e480f4492fe067c9cd7731b21f
 +    private final int originalMaterialCount = Material.values().length;
 +    private final List<Material> allocated = new ArrayList<>();
 +    private final Field materialItemField = getField(CraftMagicNumbers.class, "MATERIAL_ITEM");
++    private final Field itemMaterialField = getField(CraftMagicNumbers.class, "ITEM_MATERIAL");
 +    private final Field nameField = getField(Enum.class, "name");
 +    private final Field ordinalField = getField(Enum.class, "ordinal");
 +    private final Field byNameField = getField(Material.class, "BY_NAME");
@@ -96,6 +97,7 @@ index 0000000000000000000000000000000000000000..55bc65e480f4492fe067c9cd7731b21f
 +                dataField.set(material, org.bukkit.material.MaterialData.class);
 +
 +                ((Map<Material, Item>) materialItemField.get(null)).put(material, item);
++                ((Map<Item, Material>) itemMaterialField.get(null)).put(item, material);
 +
 +                allocated.add(material);
 +            }

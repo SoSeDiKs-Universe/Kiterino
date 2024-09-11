@@ -19,10 +19,10 @@ index 6ec9d9b9acf557aa2ebf39d38a14225b0205fae1..7603395aace52f16453de854b95f2f8c
              entry(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION, Villager.Profession.class, CraftVillager.CraftProfession::new),
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..6ecdda153fbaad9d7279a326f2ab35e46cb7dec3
+index 0000000000000000000000000000000000000000..d7fb607dd419d48f16147df96f73a054cb2ad6ee
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,107 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.PaperRegistryBuilder;
@@ -39,6 +39,7 @@ index 0000000000000000000000000000000000000000..6ecdda153fbaad9d7279a326f2ab35e4
 +    protected int maxStackSize;
 +    protected boolean fireResistant;
 +    protected @Nullable Float compostChance;
++    protected @Nullable Item nmsItem;
 +
 +    protected final Conversions conversions;
 +
@@ -53,7 +54,7 @@ index 0000000000000000000000000000000000000000..6ecdda153fbaad9d7279a326f2ab35e4
 +            return;
 +        }
 +
-+        this.maxStackSize = internal.getDefaultMaxStackSize();
++        parseValues(internal);
 +    }
 +
 +    @Override
@@ -69,6 +70,15 @@ index 0000000000000000000000000000000000000000..6ecdda153fbaad9d7279a326f2ab35e4
 +    @Override
 +    public @Nullable Float compostChance() {
 +        return this.compostChance;
++    }
++
++    @Override
++    public @Nullable Object nmsItem() {
++        return this.nmsItem;
++    }
++
++    protected void parseValues(@NonNull Item item) {
++        this.maxStackSize = item.getDefaultMaxStackSize();
 +    }
 +
 +    public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
@@ -97,11 +107,22 @@ index 0000000000000000000000000000000000000000..6ecdda153fbaad9d7279a326f2ab35e4
 +        }
 +
 +        @Override
++        public @NonNull Builder nmsItem(@Nullable Object nmsItem) {
++            if (!(nmsItem instanceof Item item)) throw new IllegalArgumentException("NMS item must extend Item");
++            this.nmsItem = item;
++            parseValues(item);
++            return this;
++        }
++
++        @Override
 +        public @NonNull Item build() {
-+            var properties = new Item.Properties()
-+                    .stacksTo(this.maxStackSize);
-+            if (this.fireResistant) properties = properties.fireResistant();
-+            var item = new Item(properties);
++            Item item = this.nmsItem;
++            if (item == null) {
++                var properties = new Item.Properties()
++                        .stacksTo(this.maxStackSize);
++                if (this.fireResistant) properties = properties.fireResistant();
++                item = new Item(properties);
++            }
 +            if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
 +            return item;
 +        }

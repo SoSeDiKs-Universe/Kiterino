@@ -6,7 +6,7 @@ Subject: [PATCH] Implement packet item faker for injected items
 Forces default item faker for injected items as to not kick the client from the server because of modded items
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 0e5e58bbf5b152d293ff5c8e438c19c327ed5f28..7f24ded76d15911abcdca5427ed957cf6e8b5eea 100644
+index d22f5da4d506f2c74e187717d13f14d38b759a5d..aad30050cbef75395ed2d47417c80d4d4bd46ee4 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -140,7 +140,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
@@ -67,23 +67,19 @@ index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72853e31d9 100644
+index d7fb607dd419d48f16147df96f73a054cb2ad6ee..9e6db3fe451a015c77ad367974daea30329abcba 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -1,21 +1,26 @@
+@@ -1,5 +1,8 @@
  package me.sosedik.kiterino.registry.data;
  
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
++import org.bukkit.inventory.meta.ItemMeta;
  import io.papermc.paper.registry.PaperRegistryBuilder;
  import io.papermc.paper.registry.TypedKey;
  import io.papermc.paper.registry.data.util.Conversions;
- import net.minecraft.world.item.Item;
- import net.minecraft.world.level.block.ComposterBlock;
- import org.bukkit.inventory.ItemType;
-+import org.bukkit.inventory.meta.ItemMeta;
- import org.checkerframework.checker.nullness.qual.NonNull;
- import org.checkerframework.checker.nullness.qual.Nullable;
+@@ -11,12 +14,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  
  public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  
@@ -91,13 +87,14 @@ index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72
      protected int maxStackSize;
      protected boolean fireResistant;
      protected @Nullable Float compostChance;
+     protected @Nullable Item nmsItem;
  
      protected final Conversions conversions;
 +    protected final TypedKey<ItemType> itemKey;
  
      public KiterinoItemRegistryEntity(
              final @NonNull Conversions conversions,
-@@ -23,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -24,6 +29,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              final @Nullable Item internal
      ) {
          this.conversions = conversions;
@@ -105,8 +102,8 @@ index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72
          if (internal == null) {
              this.maxStackSize = 64;
              return;
-@@ -31,6 +37,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
-         this.maxStackSize = internal.getDefaultMaxStackSize();
+@@ -32,6 +38,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+         parseValues(internal);
      }
  
 +    @Override
@@ -117,7 +114,7 @@ index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72
      @Override
      public int maxStackSize() {
          return this.maxStackSize;
-@@ -53,6 +64,12 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -63,6 +74,12 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              super(conversions, key, internal);
          }
  
@@ -130,15 +127,15 @@ index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72
          @Override
          public @NonNull Builder maxStackSize(int size) {
              this.maxStackSize = size;
-@@ -73,6 +90,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -91,6 +108,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  
          @Override
          public @NonNull Item build() {
 +            if (this.modifier != null) KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.key().namespace(), this.itemKey.key().value()), buildModifier());
-             var properties = new Item.Properties()
-                     .stacksTo(this.maxStackSize);
-             if (this.fireResistant) properties = properties.fireResistant();
-@@ -81,6 +99,14 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+             Item item = this.nmsItem;
+             if (item == null) {
+                 var properties = new Item.Properties()
+@@ -102,6 +120,14 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              return item;
          }
  
@@ -154,10 +151,10 @@ index 6ecdda153fbaad9d7279a326f2ab35e46cb7dec3..fdfe5b0568c2aa0abbec15b48f892c72
  
  }
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
-index 55bc65e480f4492fe067c9cd7731b21feec0de38..65851d6c8c57f148002391d0bcff815f8c6c03b7 100644
+index c8714a9e3d382827a61c02f61f05b1449d0fa8ea..5d8b3b44da3403245157aeadf14dff35cce3362d 100644
 --- a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
-@@ -113,6 +113,15 @@ public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrap
+@@ -115,6 +115,15 @@ public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrap
              Field enumConstantDirectory = Class.class.getDeclaredField("enumConstantDirectory");
              enumConstantDirectory.setAccessible(true);
              enumConstantDirectory.set(Material.class, null);

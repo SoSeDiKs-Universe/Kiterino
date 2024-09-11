@@ -21,10 +21,10 @@ index b32ae215e976bcfcdd86b03037de61b3d896f57c..7b12d1fcf5a2f5d4a043f934611fc824
      }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f79348f75f90da795497d751ef134557569a8052
+index 0000000000000000000000000000000000000000..54946c292fda07025e8887aea254e5ad6c4ae89f
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
-@@ -0,0 +1,75 @@
+@@ -0,0 +1,91 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.RegistryBuilder;
@@ -64,6 +64,13 @@ index 0000000000000000000000000000000000000000..f79348f75f90da795497d751ef134557
 +    @Nullable Float compostChance();
 +
 +    /**
++     * Provides the item's nms implementation
++     *
++     * @return the item's nms implementation
++     */
++    @Nullable Object nmsItem();
++
++    /**
 +     * A mutable builder for the {@link ItemRegistryEntity} plugins may change in applicable registry events.
 +     */
 +    @ApiStatus.Experimental
@@ -96,6 +103,15 @@ index 0000000000000000000000000000000000000000..f79348f75f90da795497d751ef134557
 +         */
 +        @Contract(value = "_ -> this", mutates = "this")
 +        @NonNull Builder compostChance(@Range(from = 0L, to = 1L) @Nullable Float levelIncreaseChance);
++
++        /**
++         * Configures the item's nms implementation
++         *
++         * @param nmsItem the item's nms implementation
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder nmsItem(@Nullable Object nmsItem);
 +
 +    }
 +
