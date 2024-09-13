@@ -133,7 +133,7 @@ index 0000000000000000000000000000000000000000..6c77d9c7583ea95e0ad7ffba4aecccb3
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e3afd27ef22e689133b42c947102b54ae14f8eb4
+index 0000000000000000000000000000000000000000..54b1af069c31532e1fc66a065cb83681e4aaaf4c
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
 @@ -0,0 +1,18 @@
@@ -145,7 +145,7 @@ index 0000000000000000000000000000000000000000..e3afd27ef22e689133b42c947102b54a
 +public final class KiterinoWorldConfig extends WorldConfig {
 +
 +    public KiterinoWorldConfig(@NotNull String worldName, @NotNull World.Environment environment) {
-+        super(worldName, environment);
++        super(KiterinoConfig.config, worldName, environment);
 +    }
 +
 +    @Override
@@ -157,21 +157,27 @@ index 0000000000000000000000000000000000000000..e3afd27ef22e689133b42c947102b54a
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/WorldConfig.java b/src/main/java/me/sosedik/kiterino/WorldConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..33cb6b7760b0aa77b64c693b34aef577134e66e2
+index 0000000000000000000000000000000000000000..2847457b5ac30d4b4130547ea6b05763fdfc0025
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/WorldConfig.java
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,53 @@
 +package me.sosedik.kiterino;
 +
 +import org.bukkit.World;
++import org.bukkit.configuration.file.YamlConfiguration;
 +import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++import java.util.List;
 +
 +public abstract class WorldConfig {
 +
++    protected final YamlConfiguration config;
 +    protected final String worldName;
 +    protected final World.Environment environment;
 +
-+    protected WorldConfig(@NotNull String worldName, @NotNull World.Environment environment) {
++    protected WorldConfig(@NotNull YamlConfiguration config, @NotNull String worldName, @NotNull World.Environment environment) {
++        this.config = config;
 +        this.worldName = worldName;
 +        this.environment = environment;
 +        init();
@@ -181,6 +187,30 @@ index 0000000000000000000000000000000000000000..33cb6b7760b0aa77b64c693b34aef577
 +
 +    public void log(@NotNull String s) {
 +        KiterinoConfig.log(s);
++    }
++
++    public @Nullable String getString(@NotNull String path, @NotNull String def, @NotNull String... comments) {
++        config.addDefault("world-settings.default." + path, def);
++        if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
++        return config.getString("world-settings." + worldName + "." + path, config.getString("world-settings.default." + path));
++    }
++
++    public boolean getBoolean(@NotNull String path, boolean def, @NotNull String... comments) {
++        config.addDefault("world-settings.default." + path, def);
++        if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
++        return config.getBoolean("world-settings." + worldName + "." + path, config.getBoolean("world-settings.default." + path));
++    }
++
++    public double getDouble(@NotNull String path, double def, @NotNull String... comments) {
++        config.addDefault("world-settings.default." + path, def);
++        if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
++        return config.getDouble("world-settings." + worldName + "." + path, config.getDouble("world-settings.default." + path));
++    }
++
++    public int getInt(@NotNull String path, int def, @NotNull String... comments) {
++        config.addDefault("world-settings.default." + path, def);
++        if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
++        return config.getInt("world-settings." + worldName + "." + path, config.getInt("world-settings.default." + path));
 +    }
 +
 +}

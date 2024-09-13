@@ -21,21 +21,25 @@ index b32ae215e976bcfcdd86b03037de61b3d896f57c..7b12d1fcf5a2f5d4a043f934611fc824
      }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..1f61fe3836de8d89a23e36efc4c5d65fd56ae838
+index 0000000000000000000000000000000000000000..84520226226685b746acc2b2c39a02bc999652f8
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
-@@ -0,0 +1,142 @@
+@@ -0,0 +1,308 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.RegistryBuilder;
++import net.kyori.adventure.key.Key;
 +import org.bukkit.inventory.ItemRarity;
 +import org.bukkit.inventory.ItemType;
++import org.bukkit.potion.PotionEffect;
 +import org.checkerframework.checker.nullness.qual.NonNull;
++import org.checkerframework.checker.nullness.qual.Nullable;
 +import org.jetbrains.annotations.ApiStatus;
 +import org.jetbrains.annotations.Contract;
-+import org.jetbrains.annotations.Nullable;
 +import org.jetbrains.annotations.Range;
 +
++import java.util.List;
++import java.util.Map;
 +import java.util.function.Function;
 +
 +/**
@@ -74,6 +78,20 @@ index 0000000000000000000000000000000000000000..1f61fe3836de8d89a23e36efc4c5d65f
 +    @Nullable ItemRarity rarity();
 +
 +    /**
++     * Provides the key for the item that's left after using this item in crafts
++     *
++     * @return the key for the item that's left after using this item in crafts
++     */
++    @Nullable Key craftRemainingItem();
++
++    /**
++     * Provides the item's default food properties
++     *
++     * @return the item's default food properties
++     */
++    @Nullable FoodProperties foodProperties();
++
++    /**
 +     * Provides the item's compost chance
 +     *
 +     * @return the item's compost chance
@@ -93,6 +111,136 @@ index 0000000000000000000000000000000000000000..1f61fe3836de8d89a23e36efc4c5d65f
 +     * @return the item's nms implementation
 +     */
 +    @Nullable Function<Object, Object> nmsItemFunction();
++
++    /**
++     * Represents food properties
++     */
++    @ApiStatus.Experimental
++    interface FoodProperties {
++
++        /**
++         * Provides the item's nutrition value
++         *
++         * @return the item's nutrition value
++         */
++        int nutrition();
++
++        /**
++         * Provides the item's saturation value
++         *
++         * @return the item's saturation value
++         */
++        float saturation();
++
++        /**
++         * Whether the item is always edible
++         *
++         * @return whether the item is always edible
++         */
++        boolean canAlwaysEat();
++
++        /**
++         * Provides the time in seconds the item takes to be eaten
++         *
++         * @return the time in seconds the item takes to be eaten
++         */
++        float eatSeconds();
++
++        /**
++         * Provides the key for the item that's left after consuming this item
++         *
++         * @return the key for the item that's left after consuming this item
++         */
++        @Nullable Key usingConvertsTo();
++
++        /**
++         * Provides the list of possible effects and their chances
++         *
++         * @return the list of possible effects and their chances
++         */
++        @Nullable List<Map.Entry<PotionEffect, @Range(from = 0L, to = 1L) Float>> possibleEffects();
++
++        interface Builder extends FoodProperties {
++
++            /**
++             * Configures the item's nutrition value
++             *
++             * @param nutrition the item's nutrition value
++             * @return this builder
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            @NonNull Builder nutrition(@Range(from = 0L, to = Integer.MAX_VALUE) int nutrition);
++
++            /**
++             * Configures the item's saturation value
++             *
++             * @param saturation the item's saturation value
++             * @return this builder
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            @NonNull Builder saturation(float saturation);
++
++            /**
++             * Configures whether the item is always edible
++             *
++             * @param alwaysEdible whether the item is always edible
++             * @return this builder
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            @NonNull Builder canAlwaysEat(boolean alwaysEdible);
++
++            /**
++             * Marks the item as always edible
++             *
++             * @return this builder
++             * @see #canAlwaysEat(boolean)
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            default @NonNull Builder alwaysEdible() {
++                return canAlwaysEat(true);
++            }
++
++            /**
++             * Configures the time in seconds the item takes to be eaten
++             *
++             * @param seconds the time in seconds the item takes to be eaten
++             * @return this builder
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            @NonNull Builder eatSeconds(float seconds);
++
++            /**
++             * Marks the item as "fast food", i.e. it takes 0.865 seconds to eat
++             *
++             * @return this builder
++             * @see #eatSeconds(float)
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            default @NonNull Builder fastFood() {
++                return eatSeconds(0.8F);
++            }
++
++            /**
++             * Configures the key for the item that's left after consuming this item
++             *
++             * @param key the key for the item that's left after consuming this item
++             * @return this builder
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            @NonNull Builder usingConvertsTo(@Nullable Key key);
++
++            /**
++             * Configures the list of possible effects and their chances
++             *
++             * @param possibleEffects the list of possible effects and their chances
++             * @return this builder
++             */
++            @Contract(value = "_ -> this", mutates = "this")
++            @NonNull Builder possibleEffects(@Nullable List<Map.Entry<PotionEffect, @Range(from = 0L, to = 1L) Float>> possibleEffects);
++
++        }
++
++    }
 +
 +    /**
 +     * A mutable builder for the {@link ItemRegistryEntity} plugins may change in applicable registry events.
@@ -136,6 +284,24 @@ index 0000000000000000000000000000000000000000..1f61fe3836de8d89a23e36efc4c5d65f
 +         */
 +        @Contract(value = "_ -> this", mutates = "this")
 +        @NonNull Builder rarity(@Nullable ItemRarity rarity);
++
++        /**
++         * Configures the key for the item that's left after using this item in crafts
++         *
++         * @param key the key for the item that's left after using this item in crafts
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder craftRemainingItem(@Nullable Key key);
++
++        /**
++         * Configures the item's default food properties
++         *
++         * @param foodProperties the item's default food properties
++         * @return this builder
++         */
++        @Contract(value = "_ -> this", mutates = "this")
++        @NonNull Builder foodProperties(@Nullable Function<FoodProperties.Builder, FoodProperties.Builder> foodProperties);
 +
 +        /**
 +         * Configures the item's compost chance

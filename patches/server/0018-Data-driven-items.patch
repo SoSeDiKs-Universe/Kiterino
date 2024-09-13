@@ -48,26 +48,35 @@ index eda5cc7d45ef59ccc1c9c7e027c1f044f1dcc86b..48de73884cdece86ff19e36d930e3990
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e318e1d98
+index 0000000000000000000000000000000000000000..82b232742bd50e51d28dfac2258c60f77b0dd95e
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,323 @@
 +package me.sosedik.kiterino.registry.data;
 +
++import net.kyori.adventure.key.Key;
++import org.bukkit.craftbukkit.potion.CraftPotionUtil;
 +import net.minecraft.core.component.DataComponentMap;
 +import net.minecraft.core.component.DataComponents;
 +import org.bukkit.inventory.ItemRarity;
++import io.papermc.paper.adventure.PaperAdventure;
 +import io.papermc.paper.registry.PaperRegistryBuilder;
 +import io.papermc.paper.registry.TypedKey;
 +import io.papermc.paper.registry.data.util.Conversions;
++import net.minecraft.core.registries.BuiltInRegistries;
 +import net.minecraft.world.item.Item;
++import net.minecraft.world.item.ItemStack;
 +import net.minecraft.world.level.block.ComposterBlock;
 +import org.bukkit.inventory.ItemType;
++import org.bukkit.potion.PotionEffect;
 +import org.checkerframework.checker.nullness.qual.NonNull;
 +import org.checkerframework.checker.nullness.qual.Nullable;
 +import org.jetbrains.annotations.Range;
 +
++import java.util.List;
++import java.util.Map;
 +import java.util.Objects;
++import java.util.Optional;
 +import java.util.function.Function;
 +
 +public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
@@ -76,6 +85,8 @@ index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e
 +    protected @Nullable Integer durability;
 +    protected boolean fireResistant;
 +    protected @Nullable ItemRarity rarity;
++    protected @Nullable Key craftRemainingItemKey;
++    protected FoodProperties.@Nullable Builder foodProperties;
 +    protected @Nullable Float compostChance;
 +    protected @Nullable Item nmsItem;
 +    protected @Nullable Function<Object, Object> nmsItemFunction;
@@ -119,6 +130,16 @@ index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e
 +    }
 +
 +    @Override
++    public @Nullable Key craftRemainingItem() {
++        return this.craftRemainingItemKey;
++    }
++
++    @Override
++    public @Nullable FoodProperties foodProperties() {
++        return this.foodProperties;
++    }
++
++    @Override
 +    public @Nullable Float compostChance() {
 +        return this.compostChance;
 +    }
@@ -139,6 +160,104 @@ index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e
 +        this.durability = components.get(DataComponents.MAX_DAMAGE);
 +        this.fireResistant = components.has(DataComponents.FIRE_RESISTANT);
 +        this.rarity = components.has(DataComponents.RARITY) ? conversions.asBukkit(Objects.requireNonNull(components.get(DataComponents.RARITY))) : null;
++        if (components.has(DataComponents.FOOD)) {
++            net.minecraft.world.food.FoodProperties properties = components.get(DataComponents.FOOD);
++            assert properties != null;
++            this.foodProperties = new KiterinoFoodProperties.KiterinoBuilder();
++            this.foodProperties.nutrition(properties.nutrition());
++            this.foodProperties.saturation(properties.saturation());
++            this.foodProperties.canAlwaysEat(properties.canAlwaysEat());
++            this.foodProperties.eatSeconds(properties.eatSeconds());
++            this.foodProperties.usingConvertsTo(properties.usingConvertsTo().map(itemStack -> Key.key(itemStack.getItem().toString())).orElse(null)); // TODO internally ItemStack, not just Item
++            this.foodProperties.possibleEffects(
++                properties.effects().isEmpty()
++                    ? List.of()
++                    : properties.effects().stream()
++                        .map(possibleEffect -> Map.entry(CraftPotionUtil.toBukkit(possibleEffect.effect()), possibleEffect.probability()))
++                        .toList()
++            );
++        }
++    }
++
++    public static class KiterinoFoodProperties implements FoodProperties {
++
++        protected int nutrition = 0;
++        protected float saturation = 0F;
++        protected boolean canAlwaysEat = false;
++        protected float eatSeconds = 1.6F;
++        protected @Nullable Key usingConvertsTo;
++        protected @Nullable List<Map.Entry<PotionEffect, Float>> possibleEffects;
++
++        @Override
++        public int nutrition() {
++            return this.nutrition;
++        }
++
++        @Override
++        public float saturation() {
++            return this.saturation;
++        }
++
++        @Override
++        public boolean canAlwaysEat() {
++            return this.canAlwaysEat;
++        }
++
++        @Override
++        public float eatSeconds() {
++            return this.eatSeconds;
++        }
++
++        @Override
++        public @Nullable Key usingConvertsTo() {
++            return this.usingConvertsTo;
++        }
++
++        @Override
++        public @Nullable List<Map.Entry<PotionEffect, Float>> possibleEffects() {
++            return this.possibleEffects;
++        }
++
++        public static final class KiterinoBuilder extends KiterinoFoodProperties implements Builder {
++
++            @Override
++            public @NonNull Builder nutrition(int nutrition) {
++                this.nutrition = nutrition;
++                return this;
++            }
++
++            @Override
++            public @NonNull Builder saturation(float saturation) {
++                this.saturation = saturation;
++                return this;
++            }
++
++            @Override
++            public @NonNull Builder canAlwaysEat(boolean alwaysEdible) {
++                this.canAlwaysEat = alwaysEdible;
++                return this;
++            }
++
++            @Override
++            public @NonNull Builder eatSeconds(float seconds) {
++                this.eatSeconds = seconds;
++                return this;
++            }
++
++            @Override
++            public @NonNull Builder usingConvertsTo(@Nullable Key key) {
++                this.usingConvertsTo = key;
++                return this;
++            }
++
++            @Override
++            public @NonNull Builder possibleEffects(@Nullable List<Map.Entry<PotionEffect, Float>> possibleEffects) {
++                this.possibleEffects = possibleEffects;
++                return this;
++            }
++
++        }
++
 +    }
 +
 +    public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
@@ -173,6 +292,24 @@ index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e
 +        }
 +
 +        @Override
++        public @NonNull Builder craftRemainingItem(@Nullable Key key) {
++            this.craftRemainingItemKey = key;
++            return this;
++        }
++
++        @Override
++        public @NonNull Builder foodProperties(@Nullable Function<FoodProperties.Builder, FoodProperties.Builder> foodProperties) {
++            this.foodProperties = foodProperties == null
++                ? null
++                : foodProperties.apply(
++                    this.foodProperties != null
++                        ? this.foodProperties
++                        : new KiterinoFoodProperties.KiterinoBuilder()
++                );
++            return this;
++        }
++
++        @Override
 +        public @NonNull Builder compostChance(@Nullable Float levelIncreaseChance) {
 +            this.compostChance = levelIncreaseChance;
 +            return this;
@@ -201,6 +338,8 @@ index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e
 +                properties.stacksTo(this.maxStackSize);
 +                if (this.fireResistant) properties.fireResistant();
 +                if (this.rarity != null) properties.rarity(conversions.asVanilla(this.rarity));
++                if (this.craftRemainingItemKey != null) properties.craftRemainder(BuiltInRegistries.ITEM.getOptional(PaperAdventure.asVanilla(this.craftRemainingItemKey)).orElseThrow());
++                if (this.foodProperties != null) properties.food(buildFoodProperties());
 +                if (this.nmsItemFunction == null) {
 +                    item = new Item(properties);
 +                } else {
@@ -209,6 +348,28 @@ index 0000000000000000000000000000000000000000..60403dd5ce27c84057e6c9e59c810b3e
 +            }
 +            if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
 +            return item;
++        }
++
++        private net.minecraft.world.food.@NonNull FoodProperties buildFoodProperties() {
++            FoodProperties foodProperties = this.foodProperties;
++            assert foodProperties != null;
++            Optional<ItemStack> leftover = foodProperties.usingConvertsTo() == null
++                    ? Optional.empty()
++                    : BuiltInRegistries.ITEM.getOptional(PaperAdventure.asVanilla(Objects.requireNonNull(foodProperties.usingConvertsTo()))).map(ItemStack::new);
++            List<net.minecraft.world.food.FoodProperties.PossibleEffect> possibleEffects = foodProperties.possibleEffects() == null
++                    ? List.of()
++                    : Objects.requireNonNull(foodProperties.possibleEffects())
++                    .stream()
++                    .map(entry -> new net.minecraft.world.food.FoodProperties.PossibleEffect(CraftPotionUtil.fromBukkit(entry.getKey()), Math.clamp(entry.getValue(), 0F, 1F)))
++                    .toList();
++            return new net.minecraft.world.food.FoodProperties(
++                foodProperties.nutrition(),
++                foodProperties.saturation(),
++                foodProperties.canAlwaysEat(),
++                foodProperties.eatSeconds(),
++                leftover,
++                possibleEffects
++            );
 +        }
 +
 +    }

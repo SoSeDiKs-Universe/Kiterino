@@ -6,10 +6,10 @@ Subject: [PATCH] Implement packet item faker for injected items
 Forces default item faker for injected items as to not kick the client from the server because of modded items
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index d22f5da4d506f2c74e187717d13f14d38b759a5d..aad30050cbef75395ed2d47417c80d4d4bd46ee4 100644
+index 19ca196c0fa1a99ae6f66e9313befa53f5bfc308..de829db077f08ac2707c175c1c3afcca1a89127d 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-@@ -140,7 +140,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
+@@ -188,7 +188,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
      }
  
      public static void init() {
@@ -67,20 +67,22 @@ index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index 60403dd5ce27c84057e6c9e59c810b3e318e1d98..fd737493e557ff468bc31a9814eced0a07702ac4 100644
+index 82b232742bd50e51d28dfac2258c60f77b0dd95e..6ef3d3b89139db029e66952339a17ec9055e7164 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -1,5 +1,9 @@
+@@ -1,5 +1,11 @@
  package me.sosedik.kiterino.registry.data;
  
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
++import org.bukkit.craftbukkit.inventory.components.CraftFoodComponent;
++import org.bukkit.inventory.meta.Damageable;
 +import org.bukkit.inventory.meta.ItemMeta;
 +
+ import net.kyori.adventure.key.Key;
+ import org.bukkit.craftbukkit.potion.CraftPotionUtil;
  import net.minecraft.core.component.DataComponentMap;
- import net.minecraft.core.component.DataComponents;
- import org.bukkit.inventory.ItemRarity;
-@@ -25,6 +29,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -36,6 +42,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
      protected @Nullable Float compostChance;
      protected @Nullable Item nmsItem;
      protected @Nullable Function<Object, Object> nmsItemFunction;
@@ -88,7 +90,7 @@ index 60403dd5ce27c84057e6c9e59c810b3e318e1d98..fd737493e557ff468bc31a9814eced0a
  
      protected final Conversions conversions;
      protected final TypedKey<ItemType> itemKey;
-@@ -79,6 +84,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -100,6 +107,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
          return this.nmsItemFunction;
      }
  
@@ -100,7 +102,7 @@ index 60403dd5ce27c84057e6c9e59c810b3e318e1d98..fd737493e557ff468bc31a9814eced0a
      protected void parseValues(@NonNull Item item) {
          DataComponentMap components = item.components();
          this.maxStackSize = item.getDefaultMaxStackSize();
-@@ -138,8 +148,23 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -275,8 +287,27 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              return this;
          }
  
@@ -114,6 +116,10 @@ index 60403dd5ce27c84057e6c9e59c810b3e318e1d98..fd737493e557ff468bc31a9814eced0a
 +            return box -> {
 +                ItemMeta meta = box.getMeta();
 +                meta.setMaxStackSize(this.maxStackSize);
++                if (this.durability != null) ((Damageable) meta).setMaxDamage(this.durability);
++                if (this.fireResistant) meta.setFireResistant(true);
++                if (this.rarity != null) meta.setRarity(this.rarity);
++                if (this.foodProperties != null) meta.setFood(new CraftFoodComponent(buildFoodProperties()));
 +                if (this.modifier != null) this.modifier.modify(box);
 +            };
 +        }

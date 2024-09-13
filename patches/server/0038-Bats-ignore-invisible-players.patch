@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 12 Sep 2024 18:07:16 +0300
+Subject: [PATCH] Bats ignore invisible players
+
+Invisible by API, not via potion effects
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
+index 54b1af069c31532e1fc66a065cb83681e4aaaf4c..deadd404912371b7968250015b4b563615ca5ebc 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
+@@ -15,4 +15,9 @@ public final class KiterinoWorldConfig extends WorldConfig {
+         KiterinoConfig.readConfig(KiterinoWorldConfig.class, this);
+     }
+ 
++    public boolean batsIgnoreInvisiblePlayers = false;
++    private void batsSettings() {
++        batsIgnoreInvisiblePlayers = getBoolean("gameplay-mechanics.bat.ignore-invisible-players", batsIgnoreInvisiblePlayers, "Make resting bats ignore players that are marked invisible by API");
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/ambient/Bat.java b/src/main/java/net/minecraft/world/entity/ambient/Bat.java
+index 36e5a6462675ceb3cef236c451321b1656d9fcc0..6b7aa459b1b156d069a50e52f4325feeb4bf5f37 100644
+--- a/src/main/java/net/minecraft/world/entity/ambient/Bat.java
++++ b/src/main/java/net/minecraft/world/entity/ambient/Bat.java
+@@ -36,7 +36,7 @@ public class Bat extends AmbientCreature {
+     public static final float TICKS_PER_FLAP = 10.0F;
+     private static final EntityDataAccessor<Byte> DATA_ID_FLAGS = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.BYTE);
+     private static final int FLAG_RESTING = 1;
+-    private static final TargetingConditions BAT_RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0D);
++    private static final TargetingConditions BAT_RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0D).selector(entity -> !entity.level().kiterinoConfig.batsIgnoreInvisiblePlayers || !entity.isInvisible()); // Kiterino - Bats ignore invisible players
+     public final AnimationState flyAnimationState = new AnimationState();
+     public final AnimationState restAnimationState = new AnimationState();
+     @Nullable

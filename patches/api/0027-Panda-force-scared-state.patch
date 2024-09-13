@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 12 Sep 2024 23:52:50 +0300
+Subject: [PATCH] Panda force scared state
+
+
+diff --git a/src/main/java/org/bukkit/entity/Panda.java b/src/main/java/org/bukkit/entity/Panda.java
+index 4f06870cc8d8aab93aa83b1b8165e6714884372c..e82ce9616e9f0c4866060aa444ed2c1858a1a0a4 100644
+--- a/src/main/java/org/bukkit/entity/Panda.java
++++ b/src/main/java/org/bukkit/entity/Panda.java
+@@ -100,6 +100,15 @@ public interface Panda extends Animals, Sittable {
+      */
+     boolean isScared();
+ 
++    // Kiterino start - Panda force scared state
++    /**
++     * Forces panda's scared state
++     *
++     * @param scared whether panda is scared
++     */
++    void setScared(@NotNull net.kyori.adventure.util.TriState scared);
++    // Kiterino end - Panda force scared state
++
+     /**
+      * Gets how many ticks the panda will be unhappy for
+      *
