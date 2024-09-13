@@ -6,10 +6,10 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
-index 874dcbefea469440a9028ddc399a37c929429f62..3a21e59993c5da86bdf20e7bed7c9d18348ed390 100644
+index 30a19d10869f73d67b794e8e4c035bc5c10209e6..3943ae879f7bed617091f49d7c6accee3abee20f 100644
 --- a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 +++ b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
-@@ -56,13 +56,23 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
+@@ -64,13 +64,23 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
      }
  
      public static void processRequest(MinecraftServer server, Connection networkManager) {
@@ -35,7 +35,7 @@ index 874dcbefea469440a9028ddc399a37c929429f62..3a21e59993c5da86bdf20e7bed7c9d18
          }
  
          // Setup response
-@@ -90,8 +100,7 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
+@@ -98,8 +108,7 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
          }
          final ServerStatus ping = new ServerStatus(description, players, Optional.of(version), favicon, server.enforceSecureProfile());
  
