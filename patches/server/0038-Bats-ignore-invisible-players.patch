@@ -6,10 +6,10 @@ Subject: [PATCH] Bats ignore invisible players
 Invisible by API, not via potion effects
 
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
-index 54b1af069c31532e1fc66a065cb83681e4aaaf4c..deadd404912371b7968250015b4b563615ca5ebc 100644
+index 0e430c0915012eb55ad9f656565499a9071b2064..2979eb09eee76d5b54e118bf5ce7d39ccc6d5eb3 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
-@@ -15,4 +15,9 @@ public final class KiterinoWorldConfig extends WorldConfig {
+@@ -16,4 +16,9 @@ public final class KiterinoWorldConfig extends WorldConfig {
          KiterinoConfig.readConfig(KiterinoWorldConfig.class, this);
      }
  

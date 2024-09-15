@@ -133,10 +133,10 @@ index 0000000000000000000000000000000000000000..6c77d9c7583ea95e0ad7ffba4aecccb3
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..54b1af069c31532e1fc66a065cb83681e4aaaf4c
+index 0000000000000000000000000000000000000000..0e430c0915012eb55ad9f656565499a9071b2064
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,19 @@
 +package me.sosedik.kiterino;
 +
 +import org.bukkit.World;
@@ -146,6 +146,7 @@ index 0000000000000000000000000000000000000000..54b1af069c31532e1fc66a065cb83681
 +
 +    public KiterinoWorldConfig(@NotNull String worldName, @NotNull World.Environment environment) {
 +        super(KiterinoConfig.config, worldName, environment);
++        init();
 +    }
 +
 +    @Override
@@ -157,10 +158,10 @@ index 0000000000000000000000000000000000000000..54b1af069c31532e1fc66a065cb83681
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/WorldConfig.java b/src/main/java/me/sosedik/kiterino/WorldConfig.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..2847457b5ac30d4b4130547ea6b05763fdfc0025
+index 0000000000000000000000000000000000000000..589f413cb6d6b0ff8acb4ca7bb7a727d5f59a140
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/WorldConfig.java
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,52 @@
 +package me.sosedik.kiterino;
 +
 +import org.bukkit.World;
@@ -180,7 +181,6 @@ index 0000000000000000000000000000000000000000..2847457b5ac30d4b4130547ea6b05763
 +        this.config = config;
 +        this.worldName = worldName;
 +        this.environment = environment;
-+        init();
 +    }
 +
 +    public abstract void init();
