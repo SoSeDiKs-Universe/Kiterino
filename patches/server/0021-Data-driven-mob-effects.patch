@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 7603395aace52f16453de854b95f2f8ca691c573..0a4dc6627c1b02f2569305c668130b4802d506be 100644
+index aac4192aa369ce5c1a59cdc01d1baec6034011e8..c1663ecd1fe46529e7e9ce50a52112ab16611d57 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -72,7 +72,7 @@ public final class PaperRegistries {
+@@ -74,7 +74,7 @@ public final class PaperRegistries {
              // built-ins
              writable(Registries.GAME_EVENT, RegistryKey.GAME_EVENT, GameEvent.class, CraftGameEvent::new, PaperGameEventRegistryEntry.PaperBuilder::new),
              entry(Registries.INSTRUMENT, RegistryKey.INSTRUMENT, MusicInstrument.class, CraftMusicInstrument::new),
