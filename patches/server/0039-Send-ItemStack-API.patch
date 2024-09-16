@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Mon, 16 Sep 2024 18:02:03 +0300
+Subject: [PATCH] Send ItemStack API
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 77e44b2b9260faa5b6caa2f43a0e45134b2a4665..12dd67fd3fcdb03202d4431ab756cc58dec20f5c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -3675,4 +3675,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         connection.send(new ClientboundSetBorderLerpSizePacket(20_000_00D, distance, 14_000L));
+     }
+     // Kiterino end - Red tint API
++
++    // Kiterino start - Send ItemStack API
++    @Override
++    public void sendItem(int slot, ItemStack item) {
++        int stateId = getHandle().containerMenu.getStateId();
++        this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket(0, stateId, slot, CraftItemStack.asNMSCopy(item)));
++    }
++    // Kiterino end - Send ItemStack API
+ }

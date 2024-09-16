@@ -83,7 +83,7 @@ index 0000000000000000000000000000000000000000..d506e6bb0b2c88ffb4e9274672bf8ee4
 +
 +}
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index c7fa497381c5c5d57fda8b9c1ef26f2e89523f66..4a2a11c749e03cc15a3eb1612dc0883c0b54b6ec 100644
+index c7fa497381c5c5d57fda8b9c1ef26f2e89523f66..e4712ac0d7c33dd7cebd348e23b2ce511baf975e 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
 @@ -4623,6 +4623,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
@@ -145,7 +145,7 @@ index c7fa497381c5c5d57fda8b9c1ef26f2e89523f66..4a2a11c749e03cc15a3eb1612dc0883c
 +     * @return whether this item is injected
 +     */
 +    public boolean isInjected() {
-+    return this.injected;
++        return this.injected;
 +    }
 +    // Kiterino end - Injecting custom Materials
  }
