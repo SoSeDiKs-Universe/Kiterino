@@ -67,15 +67,16 @@ index 0000000000000000000000000000000000000000..3d596bbfaa0015a5d2e34207f4065d9a
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..9499c5f24702e5c1ff0fa1b688fc0d5d1c5f59a4
+index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14a5ce00af
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
-@@ -0,0 +1,223 @@
+@@ -0,0 +1,240 @@
 +package me.sosedik.kiterino.modifier.item;
 +
 +import com.google.common.base.Preconditions;
 +import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 +import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
++import net.kyori.adventure.text.Component;
 +import org.bukkit.Material;
 +import org.bukkit.entity.Player;
 +import org.bukkit.inventory.ItemStack;
@@ -83,7 +84,10 @@ index 0000000000000000000000000000000000000000..9499c5f24702e5c1ff0fa1b688fc0d5d
 +import org.jetbrains.annotations.NotNull;
 +import org.jetbrains.annotations.Nullable;
 +
++import java.util.ArrayList;
++import java.util.List;
 +import java.util.Locale;
++import java.util.Objects;
 +import java.util.function.Consumer;
 +
 +/**
@@ -232,11 +236,22 @@ index 0000000000000000000000000000000000000000..9499c5f24702e5c1ff0fa1b688fc0d5d
 +     */
 +    @SuppressWarnings("unchecked")
 +    public <M extends ItemMeta> boolean editMeta(@NotNull Class<M> metaClass, @NotNull Consumer<? super M> consumer) {
-+        if (metaClass.isInstance(meta)) {
-+            consumer.accept((M) meta);
++        ItemMeta itemMeta = getMeta();
++        if (metaClass.isInstance(itemMeta)) {
++            consumer.accept((M) itemMeta);
 +            return true;
 +        }
 +        return false;
++    }
++
++    /**
++     * Gets the item's lore if exists, or a new array list otherwise
++     *
++     * @return item's lore or empty list
++     */
++    public @NotNull List<Component> getLore() {
++        ItemMeta itemMeta = getMeta();
++        return itemMeta.hasLore() ? Objects.requireNonNull(itemMeta.lore()) : new ArrayList<>();
 +    }
 +
 +    /**
@@ -289,7 +304,9 @@ index 0000000000000000000000000000000000000000..9499c5f24702e5c1ff0fa1b688fc0d5d
 +        if (type == null) return;
 +
 +        var tempItem = new ItemStack(type);
-+        tempItem.setItemMeta(this.meta);
++        if (this.meta != null || this.item.getType() != Material.AIR) {
++            tempItem.setItemMeta(getMeta());
++        }
 +        this.meta = tempItem.getItemMeta();
 +    }
 +
