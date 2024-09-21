@@ -1,0 +1,204 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Fri, 20 Sep 2024 08:20:11 +0300
+Subject: [PATCH] Extra recipes API
+
+
+diff --git a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
+index ef68600f6b59674ddea6c77f7e412902888e39b7..8f03ef1af55a216d15bf86394ccf5fe078f6e58d 100644
+--- a/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
++++ b/src/main/java/io/papermc/paper/inventory/recipe/RecipeBookExactChoiceRecipe.java
+@@ -7,10 +7,11 @@ import net.minecraft.world.item.crafting.Recipe;
+ public abstract class RecipeBookExactChoiceRecipe<C extends net.minecraft.world.item.crafting.RecipeInput> implements Recipe<C> {
+ 
+     private boolean hasExactIngredients;
++    public boolean special = false; // Kiterino - Extra recipes API
+ 
+     protected final void checkExactIngredients() {
+         // skip any special recipes
+-        if (this.isSpecial()) {
++        if (!this.special && this.isSpecial()) { // Kiterino - Extra recipes API
+             this.hasExactIngredients = false;
+             return;
+         }
+@@ -27,4 +28,11 @@ public abstract class RecipeBookExactChoiceRecipe<C extends net.minecraft.world.
+     public final boolean hasExactIngredients() {
+         return this.hasExactIngredients;
+     }
++
++    // Kiterino start - Extra recipes API
++    @Override
++    public boolean isSpecial() {
++        return this.special;
++    }
++    // Kiterino end - Extra recipes API
+ }
+diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
+index 74aac941506810a34b1b7835cdf1eeb335c386de..79fd6fe933eade654fc104ddeb076c0d7d5bbec6 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
++++ b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
+@@ -96,6 +96,7 @@ public class ShapedRecipe extends io.papermc.paper.inventory.recipe.RecipeBookEx
+ 
+             c++;
+         }
++        recipe.setSpecial(this.special); // Kiterino - Extra recipes API
+         return recipe;
+     }
+     // CraftBukkit end
+diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
+index 8e46753af60aa9fd8e4b4c0f955f7a55a77de314..6ea64a58507ec776c554ce77723ab6a7e7fd61ea 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
++++ b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
+@@ -52,6 +52,7 @@ public class ShapelessRecipe extends io.papermc.paper.inventory.recipe.RecipeBoo
+         for (Ingredient list : this.ingredients) {
+             recipe.addIngredient(CraftRecipe.toBukkit(list));
+         }
++        recipe.setSpecial(this.special); // Kiterino - Extra recipes API
+         return recipe;
+     }
+     // CraftBukkit end
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftBlastingRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftBlastingRecipe.java
+index ac4056e2782804a12bb0cf3153cbe78835f787d3..60fc1caa43cc871042a311a0a8b94fb881dcf6ec 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftBlastingRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftBlastingRecipe.java
+@@ -20,6 +20,7 @@ public class CraftBlastingRecipe extends BlastingRecipe implements CraftRecipe {
+         CraftBlastingRecipe ret = new CraftBlastingRecipe(recipe.getKey(), recipe.getResult(), recipe.getInputChoice(), recipe.getExperience(), recipe.getCookingTime());
+         ret.setGroup(recipe.getGroup());
+         ret.setCategory(recipe.getCategory());
++        ret.setSpecial(recipe.isSpecial()); // Kiterino - Extra recipes API
+         return ret;
+     }
+ 
+@@ -27,6 +28,10 @@ public class CraftBlastingRecipe extends BlastingRecipe implements CraftRecipe {
+     public void addToCraftingManager() {
+         ItemStack result = this.getResult();
+ 
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.BlastingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime())));
++        // Kiterino start - Extra recipes API
++        var recipe = new net.minecraft.world.item.crafting.BlastingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime());
++        recipe.special = isSpecial();
++        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), recipe));
++        // Kiterino end - Extra recipes API
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftCampfireRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftCampfireRecipe.java
+index be3b081c0b99da3fe5d80d3b77f842ed9d9ed65e..bc3ff8e703375724c9f65a98ffb994e25ec2e3d7 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftCampfireRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftCampfireRecipe.java
+@@ -20,6 +20,7 @@ public class CraftCampfireRecipe extends CampfireRecipe implements CraftRecipe {
+         CraftCampfireRecipe ret = new CraftCampfireRecipe(recipe.getKey(), recipe.getResult(), recipe.getInputChoice(), recipe.getExperience(), recipe.getCookingTime());
+         ret.setGroup(recipe.getGroup());
+         ret.setCategory(recipe.getCategory());
++        ret.setSpecial(recipe.isSpecial()); // Kiterino - Extra recipes API
+         return ret;
+     }
+ 
+@@ -27,6 +28,10 @@ public class CraftCampfireRecipe extends CampfireRecipe implements CraftRecipe {
+     public void addToCraftingManager() {
+         ItemStack result = this.getResult();
+ 
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.CampfireCookingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime())));
++        // Kiterino start - Extra recipes API
++        var recipe = new net.minecraft.world.item.crafting.CampfireCookingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime());
++        recipe.special = isSpecial();
++        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), recipe));
++        // Kiterino end - Extra recipes API
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftFurnaceRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftFurnaceRecipe.java
+index a3879d7b20694e880cfb0b914b06dd4c7d13390d..7ff1d1ea9ef0b1edf2d98b73fa93704fc81fd39c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftFurnaceRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftFurnaceRecipe.java
+@@ -20,6 +20,7 @@ public class CraftFurnaceRecipe extends FurnaceRecipe implements CraftRecipe {
+         CraftFurnaceRecipe ret = new CraftFurnaceRecipe(recipe.getKey(), recipe.getResult(), recipe.getInputChoice(), recipe.getExperience(), recipe.getCookingTime());
+         ret.setGroup(recipe.getGroup());
+         ret.setCategory(recipe.getCategory());
++        ret.setSpecial(recipe.isSpecial()); // Kiterino - Extra recipes API
+         return ret;
+     }
+ 
+@@ -27,6 +28,10 @@ public class CraftFurnaceRecipe extends FurnaceRecipe implements CraftRecipe {
+     public void addToCraftingManager() {
+         ItemStack result = this.getResult();
+ 
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.SmeltingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime())));
++        // Kiterino start - Extra recipes API
++        var recipe = new net.minecraft.world.item.crafting.SmeltingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime());
++        recipe.special = isSpecial();
++        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), recipe));
++        // Kiterino end - Extra recipes API
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapedRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapedRecipe.java
+index 5255812477674d29c65e99ba7c7acebfc252bf16..61f62baa0ab26f788b31d5122030745e6faa8b04 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapedRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapedRecipe.java
+@@ -42,6 +42,7 @@ public class CraftShapedRecipe extends ShapedRecipe implements CraftRecipe {
+                 ret.setIngredient(c, stack);
+             }
+         }
++        ret.setSpecial(recipe.isSpecial()); // Kiterino - Extra recipes API
+         return ret;
+     }
+ 
+@@ -53,7 +54,11 @@ public class CraftShapedRecipe extends ShapedRecipe implements CraftRecipe {
+         Map<Character, Ingredient> data = Maps.transformValues(ingred, (bukkit) -> this.toNMS(bukkit, false));
+ 
+         ShapedRecipePattern pattern = ShapedRecipePattern.of(data, shape);
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.ShapedRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), pattern, CraftItemStack.asNMSCopy(this.getResult()))));
++        // Kiterino start - Extra recipes API
++        var recipe = new net.minecraft.world.item.crafting.ShapedRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), pattern, CraftItemStack.asNMSCopy(this.getResult()));
++        recipe.special = isSpecial();
++        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), recipe));
++        // Kiterino end - Extra recipes API
+     }
+ 
+     private static String[] replaceUndefinedIngredientsWithEmpty(String[] shape, Map<Character, org.bukkit.inventory.RecipeChoice> ingredients) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java
+index c5ce412f321b8b4f31cc042893659e213b081f29..68d7cb513cab98699a223209f3f7a0c59c000f00 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java
+@@ -34,6 +34,7 @@ public class CraftShapelessRecipe extends ShapelessRecipe implements CraftRecipe
+         for (RecipeChoice ingred : recipe.getChoiceList()) {
+             ret.addIngredient(ingred);
+         }
++        ret.setSpecial(recipe.isSpecial()); // Kiterino - Extra recipes API
+         return ret;
+     }
+ 
+@@ -45,6 +46,10 @@ public class CraftShapelessRecipe extends ShapelessRecipe implements CraftRecipe
+             data.set(i, this.toNMS(ingred.get(i), true));
+         }
+ 
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.ShapelessRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), CraftItemStack.asNMSCopy(this.getResult()), data, true))); // Pufferfish
++        // Kiterino start - Extra recipes API
++        var recipe = new net.minecraft.world.item.crafting.ShapelessRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), CraftItemStack.asNMSCopy(this.getResult()), data, true);
++        recipe.special = isSpecial();
++        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), recipe)); // Pufferfish
++        // Kiterino end - Extra recipes API
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftSmokingRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftSmokingRecipe.java
+index 46ce3f274adbb4c77abac446288a627e458659fc..2a34d8a5df3ebbda0911f067dd99615cc2a4bde1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftSmokingRecipe.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftSmokingRecipe.java
+@@ -20,6 +20,7 @@ public class CraftSmokingRecipe extends SmokingRecipe implements CraftRecipe {
+         CraftSmokingRecipe ret = new CraftSmokingRecipe(recipe.getKey(), recipe.getResult(), recipe.getInputChoice(), recipe.getExperience(), recipe.getCookingTime());
+         ret.setGroup(recipe.getGroup());
+         ret.setCategory(recipe.getCategory());
++        ret.setSpecial(recipe.isSpecial()); // Kiterino - Extra recipes API
+         return ret;
+     }
+ 
+@@ -27,6 +28,10 @@ public class CraftSmokingRecipe extends SmokingRecipe implements CraftRecipe {
+     public void addToCraftingManager() {
+         ItemStack result = this.getResult();
+ 
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.SmokingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime())));
++        // Kiterino start - Extra recipes API
++        var recipe = new net.minecraft.world.item.crafting.SmokingRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), this.toNMS(this.getInputChoice(), true), CraftItemStack.asNMSCopy(result), this.getExperience(), this.getCookingTime());
++        recipe.special = isSpecial();
++        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftNamespacedKey.toMinecraft(this.getKey()), recipe));
++        // Kiterino end - Extra recipes API
+     }
+ }
