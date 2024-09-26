@@ -5,10 +5,10 @@ Subject: [PATCH] Keep rider when teleporting
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index d91aef1bb668e87998b4270ecf2a3e730cb9929f..fe897009d48193527db225138b02188babfc90e0 100644
+index 4eb0032aa0481c8afe95a5246e63e05d6cb4f5ea..1ddf4d746fca0a69f63a69b68e589ebacc63f201 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -5146,7 +5146,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -5148,7 +5148,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      // Paper end - Expose entity id counter
      // Purpur start
      @Nullable

@@ -5,12 +5,12 @@ Subject: [PATCH] Data-driven items
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 98b096339fe48b2fc8169ae0376e05d59236fc9a..aac4192aa369ce5c1a59cdc01d1baec6034011e8 100644
+index d59e77811e4090d0f8207e4fff3300d17b1753b2..b2b3d8013ba6bdbd30bf2441efd069e04705cba9 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 @@ -77,7 +77,7 @@ public final class PaperRegistries {
+             entry(Registries.INSTRUMENT, RegistryKey.INSTRUMENT, MusicInstrument.class, CraftMusicInstrument::new),
              entry(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new),
-             entry(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE, StructureType.class, CraftStructureType::new),
              entry(Registries.BLOCK, RegistryKey.BLOCK, BlockType.class, CraftBlockType::new),
 -            entry(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new),
 +            writable(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new, me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items

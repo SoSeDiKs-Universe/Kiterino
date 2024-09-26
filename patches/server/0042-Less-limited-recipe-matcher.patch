@@ -6,7 +6,6 @@ Subject: [PATCH] Less limited recipe matcher
 Adds the options to allow using damaged/enchanted/renamed items in the recipe matcher
 used by e.g. the recipe book autofill or the crafter block.
 
-
 diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
 index c53d495beeda9c057efc5af1b06613be1b5fa9f4..665879a04af47617fe2007348dae94ee27f22fa3 100644
 --- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
