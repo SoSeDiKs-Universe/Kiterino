@@ -5,10 +5,10 @@ Subject: [PATCH] Allow resending entity metadata
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index e3d666cf6271a67df63d7bd2606ae6b9aac0bed8..6e00b1729245be9ceed4cd5ae07ef7c118fef9c0 100644
+index 76e1faf78a1f60534e3d607c5d78086455a4d80a..6ae57e5006dabc7c253cd0ce1386fe2bd08e2ba1 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1280,4 +1280,13 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1293,4 +1293,13 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      boolean setRider(@Nullable Player rider, boolean dismount);
      // Kiterino end - Allow setting entity's rider

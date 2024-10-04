@@ -5,10 +5,10 @@ Subject: [PATCH] More Sound API
 
 
 diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
-index a13c8ddd4a1222e7a16debb61769af3758502d7c..84a2e44fe8a6ff534230f7407b948e70d2dcb0cc 100644
+index 0efd8bb70ebdb86372022c9e12ec89f229ab3b52..a350c87fb480e684e341df4f6b8de1c1421f6081 100644
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -816,4 +816,29 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
+@@ -820,4 +820,29 @@ public interface Block extends Metadatable, Translatable, net.kyori.adventure.tr
          return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
      }
      // Paper end - destroy speed API
@@ -39,10 +39,10 @@ index a13c8ddd4a1222e7a16debb61769af3758502d7c..84a2e44fe8a6ff534230f7407b948e70
 +    // Kiterino end - More Sound API
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 2d12c70b0baa50504619c8e37881a11a56d7df2c..bb1d64df05e9c0727344e35176c00c28aa3cc1a6 100644
+index b7d53973ac4e829a03821d59e0b3a28d6f6a4373..624cbc6fe7500192d7c2ffad3b44d6aa6b3bca99 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1210,4 +1210,35 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1223,4 +1223,35 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end

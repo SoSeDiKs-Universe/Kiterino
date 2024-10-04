@@ -26,10 +26,10 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..5b91aad7102bb66c11c547fce3791710
          return this.isDirty;
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 9a9ed43776e0752fc12922136d49a1f364c615b7..539d8fed68eeb0804f94bf76b2b3367b4d6d12ea 100644
+index 07430e992dc44b28f5b217dac1cf83f913585952..4db3922a79f941957149eb664f0df175c26b9ca4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1465,4 +1465,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1476,4 +1476,11 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return getHandle().setRider(((CraftPlayer) rider).getHandle());
      }
      // Kiterino end - Allow setting entity's rider

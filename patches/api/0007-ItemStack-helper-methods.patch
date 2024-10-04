@@ -5,10 +5,10 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index b6389b82b4eae033e1e770ae3967c88e950926ab..152dccfc9b445e11fa646d070a762d97bd7fdcfb 100644
+index 44a26a768c11f60241010391211a19f6b589f23c..2a0839b0faf54b5a4824d8538035f1ec041563c8 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1678,4 +1678,54 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+@@ -1695,4 +1695,54 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
          return random.nextInt(unbreaking + 1) > 0;
      }
      // Purpur end

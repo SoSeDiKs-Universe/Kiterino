@@ -5,10 +5,10 @@ Subject: [PATCH] Red tint API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 70a80a56ed6fcfd118ad4c51193dbe0c8c0250a8..2977ca0ff996c27810af20f984624ed5210671e7 100644
+index bc8038b920d54e6526e34c194fae2c584cc7abda..901f36320444c8d39a63ac95b0b20b17498ed018 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3980,4 +3980,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3992,4 +3992,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          sendDeathScreen(message);
      }
      // Purpur end

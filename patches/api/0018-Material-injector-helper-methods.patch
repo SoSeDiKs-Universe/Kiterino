@@ -5,13 +5,13 @@ Subject: [PATCH] Material injector helper methods
 
 
 diff --git a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
-index c319f3bbfabdd39ee571c59d7bfc144c58232abc..9f733c13d8b689e4b626926729051e6adceb6d5f 100644
+index 577a9d5aeae55a3b8452b6d873b51b30384c1fea..3f8d4259c73182d0bcfaaabfc78dc917c1b2366b 100644
 --- a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
 +++ b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
-@@ -22,4 +22,15 @@ public interface BootstrapContext extends PluginProviderContext, LifecycleEventO
+@@ -23,4 +23,15 @@ public interface BootstrapContext extends PluginProviderContext, LifecycleEventO
       * @return the lifecycle event manager
       */
-     @NotNull LifecycleEventManager<BootstrapContext> getLifecycleManager();
+     LifecycleEventManager<BootstrapContext> getLifecycleManager();
 +
 +    // Kiterino start - Material injector helper methods
 +    /**
@@ -19,7 +19,7 @@ index c319f3bbfabdd39ee571c59d7bfc144c58232abc..9f733c13d8b689e4b626926729051e6a
 +     *
 +     * @param materialsClass class with public static final Material instances
 +     */
-+    default void injectMaterials(@NotNull Class<?> materialsClass) {
++    default void injectMaterials(Class<?> materialsClass) {
 +        me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector.injectMaterials(materialsClass);
 +    }
 +    // Kiterino end - Material injector helper methods

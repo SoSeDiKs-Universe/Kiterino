@@ -5,10 +5,10 @@ Subject: [PATCH] Forced panic mode API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 93145e96760d9e0a65fa1c0a210890bafc21d7b5..0c7f1481a0a69fc3d9823bf32582b4c5f488a595 100644
+index 624cbc6fe7500192d7c2ffad3b44d6aa6b3bca99..82ca25a345d52f007d47e4fa29a843c38dbc6ae9 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1241,4 +1241,20 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1254,4 +1254,20 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
          getWorld().playSound(this, sound, category, volume, pitch);
      }
      // Kiterino end - More Sound API

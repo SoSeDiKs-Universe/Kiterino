@@ -6,10 +6,10 @@ Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java b/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java
-index 16961aac061e78fb84029f8435ab5f7c493b1362..c8e081b49f3f0f5e8ce21f01eaa8c78149af9798 100644
+index e82446ec3d706c47ac9a544f70d0c19b658665d5..7273fb2c51ae1158483a52311872d0b7decfddb4 100644
 --- a/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java
 +++ b/src/main/java/com/destroystokyo/paper/event/player/PlayerPostRespawnEvent.java
-@@ -16,13 +16,34 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
+@@ -17,14 +17,35 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
  
      private final Location respawnedLocation;
      private final boolean isBedSpawn;
@@ -21,30 +21,34 @@ index 16961aac061e78fb84029f8435ab5f7c493b1362..c8e081b49f3f0f5e8ce21f01eaa8c781
  
      @ApiStatus.Internal
 +    @Deprecated // Kiterino - Parity for respawn events
-     public PlayerPostRespawnEvent(@NotNull final Player respawnPlayer, @NotNull final Location respawnedLocation, final boolean isBedSpawn) {
-+        // Kiterino start - Parity for respawn events
-+        this(respawnPlayer, respawnedLocation, isBedSpawn, false, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.PLUGIN, com.google.common.collect.ImmutableSet.builder());
-+    }
-+
-+    @ApiStatus.Internal
-+    public PlayerPostRespawnEvent(@NotNull final Player respawnPlayer, @NotNull final Location respawnedLocation, final boolean isBedSpawn, final boolean isAnchorSpawn, @NotNull final org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason, @NotNull final com.google.common.collect.ImmutableSet.Builder<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag> respawnFlags) {
-+        // Paper end
-         super(respawnPlayer);
-         this.respawnedLocation = respawnedLocation;
-         this.isBedSpawn = isBedSpawn;
-+        this.isAnchorSpawn = isAnchorSpawn;
-+        this.respawnReason = respawnReason;
-+        // Paper start
-+        if (this.isBedSpawn) { respawnFlags.add(org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag.BED_SPAWN); }
-+        if (this.isAnchorSpawn) { respawnFlags.add(org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag.ANCHOR_SPAWN); }
-+        this.respawnFlags = respawnFlags.build();
-+        // Paper end
+     public PlayerPostRespawnEvent(final Player respawnPlayer, final Location respawnedLocation, final boolean isBedSpawn) {
+-        super(respawnPlayer);
+-        this.respawnedLocation = respawnedLocation;
+-        this.isBedSpawn = isBedSpawn;
++	    // Kiterino start - Parity for respawn events
++	    this(respawnPlayer, respawnedLocation, isBedSpawn, false, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.PLUGIN, com.google.common.collect.ImmutableSet.builder());
      }
-+    // Kiterino end - Parity for respawn events
  
++    @ApiStatus.Internal
++    public PlayerPostRespawnEvent(final Player respawnPlayer, final Location respawnedLocation, final boolean isBedSpawn, final boolean isAnchorSpawn, final org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason, final com.google.common.collect.ImmutableSet.Builder<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag> respawnFlags) {
++		    // Paper end
++		    super(respawnPlayer);
++		    this.respawnedLocation = respawnedLocation;
++		    this.isBedSpawn = isBedSpawn;
++		    this.isAnchorSpawn = isAnchorSpawn;
++		    this.respawnReason = respawnReason;
++		    // Paper start
++		    if (this.isBedSpawn) { respawnFlags.add(org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag.BED_SPAWN); }
++		    if (this.isAnchorSpawn) { respawnFlags.add(org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag.ANCHOR_SPAWN); }
++		    this.respawnFlags = respawnFlags.build();
++		    // Paper end
++	    }
++	    // Kiterino end - Parity for respawn events
++
      /**
       * Returns the location of the respawned player
-@@ -43,6 +64,37 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
+      *
+@@ -43,6 +64,35 @@ public class PlayerPostRespawnEvent extends PlayerEvent {
          return this.isBedSpawn;
      }
  
@@ -63,7 +67,6 @@ index 16961aac061e78fb84029f8435ab5f7c493b1362..c8e081b49f3f0f5e8ce21f01eaa8c781
 +     *
 +     * @return the reason the event was called.
 +     */
-+    @NotNull
 +    public org.bukkit.event.player.PlayerRespawnEvent.RespawnReason getRespawnReason() {
 +        return respawnReason;
 +    }
@@ -73,12 +76,11 @@ index 16961aac061e78fb84029f8435ab5f7c493b1362..c8e081b49f3f0f5e8ce21f01eaa8c781
 +     *
 +     * @return an immutable set of the flags that apply to this respawn
 +     */
-+    @NotNull
 +    public java.util.Set<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag> getRespawnFlags() {
 +        return respawnFlags;
 +    }
 +    // Kiterino end - Parity for respawn events
 +
      @Override
-     @NotNull
      public HandlerList getHandlers() {
+         return HANDLER_LIST;

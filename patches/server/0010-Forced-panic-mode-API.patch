@@ -5,7 +5,7 @@ Subject: [PATCH] Forced panic mode API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 01f23aac7fa1be085c74dacf25cc6240ceb78830..5337c163c194942cd942dae9a99c28ab36f65de6 100644
+index 7aadcaa1785c6560eb1ce2f1179225facca47d84..2e3dde51ea8febe8fb468e100ab89f08b6ebe3b0 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -348,6 +348,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -69,10 +69,10 @@ index 5d13c8827c0746d180b5a838b3f2be2cbd2cba14..425568df843a9b3bc36ea73e85ff7b67
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index bec40e26e17ba6fdefb68c79e2fa7a9593b0f4fe..c29a157bb4ec2148064d1140d6bd2fd169d31c41 100644
+index 770606c4462d85d116f6d0bf91192dc49f438d0f..a7827c4d562b62e271e130a5a296124d4f8b294d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1340,4 +1340,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1351,4 +1351,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return !getHandle().dismountsUnderwater();
      }
      // Purpur end

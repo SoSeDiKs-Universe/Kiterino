@@ -1,0 +1,52 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 28 Sep 2024 01:17:04 +0300
+Subject: [PATCH] Open ender chest API
+
+
+diff --git a/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java b/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java
+index 492fda30f22c8d09271931229ec02bb6f98f5889..50dea7da9ed39113563ff3694cd32defea721ebd 100644
+--- a/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java
+@@ -42,7 +42,7 @@ public class EnderChestBlock extends AbstractChestBlock<EnderChestBlockEntity> i
+     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+     protected static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 14.0, 15.0);
+-    private static final Component CONTAINER_TITLE = Component.translatable("container.enderchest");
++    public static final Component CONTAINER_TITLE = Component.translatable("container.enderchest"); // Kiterino - private -> public - Open ender chest API
+ 
+     @Override
+     public MapCodec<EnderChestBlock> codec() {
+@@ -106,7 +106,7 @@ public class EnderChestBlock extends AbstractChestBlock<EnderChestBlockEntity> i
+     }
+ 
+     // Purpur start
+-    private ChestMenu getEnderChestSixRows(int syncId, net.minecraft.world.entity.player.Inventory inventory, Player player, PlayerEnderChestContainer playerEnderChestContainer) {
++    public static ChestMenu getEnderChestSixRows(int syncId, net.minecraft.world.entity.player.Inventory inventory, Player player, PlayerEnderChestContainer playerEnderChestContainer) { // Kiterino - private -> public static - Open ender chest API
+         if (org.purpurmc.purpur.PurpurConfig.enderChestPermissionRows) {
+             org.bukkit.craftbukkit.entity.CraftHumanEntity bukkitPlayer = player.getBukkitEntity();
+             if (bukkitPlayer.hasPermission("purpur.enderchest.rows.six")) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index eac50b965b0a64cfae8f78382bf16df46a3cf5ca..41299382b8b4c246b0cb5c797e3c717a20a4d694 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -3705,4 +3705,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         net.minecraft.world.entity.monster.piglin.PiglinAi.angerNearbyPiglins(this.getHandle(), blockOpen);
+     }
+     // Kiterino end - Anger nearby piglins API
++
++    // Kiterino start - Open ender chest API
++    /**
++     * Opens ender chest for the player
++     *
++     * @param enderChest ender chest
++     */
++    @Override
++    public boolean openEnderChest(@NotNull org.bukkit.block.EnderChest enderChest) {
++        net.minecraft.world.inventory.PlayerEnderChestContainer playerEnderChestContainer = this.getHandle().getEnderChestInventory();
++        net.minecraft.world.level.block.entity.EnderChestBlockEntity blockEntity = ((org.bukkit.craftbukkit.block.CraftEnderChest) enderChest).getTileEntity();
++        playerEnderChestContainer.setActiveChest(blockEntity);
++        return this.getHandle().openMenu(new net.minecraft.world.SimpleMenuProvider((i, inventory, playerx) -> org.purpurmc.purpur.PurpurConfig.enderChestSixRows ? net.minecraft.world.level.block.EnderChestBlock.getEnderChestSixRows(i, inventory, this.getHandle(), playerEnderChestContainer) : net.minecraft.world.inventory.ChestMenu.threeRows(i, inventory, playerEnderChestContainer), net.minecraft.world.level.block.EnderChestBlock.CONTAINER_TITLE)).isPresent();
++    }
++    // Kiterino end - Open ender chest API
+ }

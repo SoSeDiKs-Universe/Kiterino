@@ -5,10 +5,10 @@ Subject: [PATCH] Allow setting entity's rider
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5337c163c194942cd942dae9a99c28ab36f65de6..cd9c1b07d275c6218a9c0239e6625ad430abcef9 100644
+index 2e3dde51ea8febe8fb468e100ab89f08b6ebe3b0..1b60a1273cdcc4f0f7f0b7c138b2fc0d8b888220 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -3186,6 +3186,21 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -3188,6 +3188,21 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
          }
      }
  
@@ -31,10 +31,10 @@ index 5337c163c194942cd942dae9a99c28ab36f65de6..cd9c1b07d275c6218a9c0239e6625ad4
      protected boolean removePassenger(Entity entity) { return removePassenger(entity, false);}
      protected boolean removePassenger(Entity entity, boolean suppressCancellation) { // CraftBukkit
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index c29a157bb4ec2148064d1140d6bd2fd169d31c41..adc7ae901f217b9b68a92c849390af8e51074f73 100644
+index a7827c4d562b62e271e130a5a296124d4f8b294d..ac41691378a7d5981a780932c3e11044930a8b10 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1352,4 +1352,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1363,4 +1363,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          getHandle().forcePanicTicks = Math.max(0, ticks);
      }
      // Kiterino end - Forced panic mode API
