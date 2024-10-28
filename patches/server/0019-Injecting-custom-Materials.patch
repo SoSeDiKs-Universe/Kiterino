@@ -5,10 +5,10 @@ Subject: [PATCH] Injecting custom Materials
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ecf4434b523fbf74153e273fe4920ec03260c46d..a73b92a9d75a58a318f9b27454197a75b5e91b7d 100644
+index 0e86e7962be82ccc6f77d651f2ce6aa70806b789..33a071b5bdbf84c4529a3293ecd921cac1c8e7d9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -109,6 +109,7 @@ tasks.jar {
+@@ -110,6 +110,7 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
@@ -16,7 +16,7 @@ index ecf4434b523fbf74153e273fe4920ec03260c46d..a73b92a9d75a58a318f9b27454197a75
              "Implementation-Title" to "Kiterino", // Kiterino - Init
              "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date, // Paper
-@@ -184,6 +185,7 @@ fun TaskContainer.registerRunTask(
+@@ -189,6 +190,7 @@ fun TaskContainer.registerRunTask(
          vendor.set(JvmVendorSpec.JETBRAINS)
      })
      jvmArgs("-XX:+AllowEnhancedClassRedefinition", "-XX:+AllowRedefinitionToAddDeleteMethods")
@@ -265,10 +265,10 @@ index 0000000000000000000000000000000000000000..5372d7336d677f6b89b7a7205807a227
 +
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-index af7e7ad028b169bfc80adf32b0194b3988551b52..d7601d20a266d306948143915e65032d95b345de 100644
+index 5505c13d0e602f39fe02dde350082c11a2f2a2e0..ddb4aaf962200d54ad6d00532c5e88dc8b5f145e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -151,7 +151,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
+@@ -153,7 +153,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
          }
  
          for (Item item : BuiltInRegistries.ITEM) {

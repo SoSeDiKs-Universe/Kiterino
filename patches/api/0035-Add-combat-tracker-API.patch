@@ -6,7 +6,7 @@ Subject: [PATCH] Add combat tracker API
 
 diff --git a/src/main/java/me/sosedik/kiterino/world/damagesource/CombatEntry.java b/src/main/java/me/sosedik/kiterino/world/damagesource/CombatEntry.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..0bb907e48738edfdf23208e00982235910987395
+index 0000000000000000000000000000000000000000..b966423643f66b1a34d9d372007e8e37d6491db6
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/world/damagesource/CombatEntry.java
 @@ -0,0 +1,27 @@
@@ -39,7 +39,7 @@ index 0000000000000000000000000000000000000000..0bb907e48738edfdf23208e009822359
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/world/damagesource/CombatTracker.java b/src/main/java/me/sosedik/kiterino/world/damagesource/CombatTracker.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..3567ca69c6fe8053fd033ebcb4ec1044e4d5a5b6
+index 0000000000000000000000000000000000000000..d920f608b9913c267cf55903413c47050cf4539a
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/world/damagesource/CombatTracker.java
 @@ -0,0 +1,80 @@

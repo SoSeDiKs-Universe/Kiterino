@@ -83,56 +83,56 @@ index 0000000000000000000000000000000000000000..d506e6bb0b2c88ffb4e9274672bf8ee4
 +
 +}
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index c7fa497381c5c5d57fda8b9c1ef26f2e89523f66..e4712ac0d7c33dd7cebd348e23b2ce511baf975e 100644
+index 3ec2154956087a370799f0fa485f3b6cae894c69..e7b44dca183a461ebbcc2a259ad1b961e40bdf69 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -4623,6 +4623,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
-     public final Class<?> data;
-     private final boolean legacy;
+@@ -4627,6 +4627,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
      private final NamespacedKey key;
+     private final Supplier<ItemType> itemType;
+     private final Supplier<BlockType> blockType;
 +    private final boolean injected = false; // Kiterino - Injecting custom Materials
  
      private Material(final int id) {
          this(id, 64);
-@@ -4779,6 +4780,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4798,6 +4799,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
       * @return Maximum stack size for this material
       */
      public int getMaxStackSize() {
-+    // Kiterino start - Injecting custom Materials
-+    ItemType type = asItemType();
-+    if (type != null) {
-+        return type.getMaxStackSize();
-+    }
-+    // Kiterino end - Injecting custom Materials
++        // Kiterino start - Injecting custom Materials
++        ItemType type = asItemType();
++        if (type != null) {
++            return type.getMaxStackSize();
++        }
++        // Kiterino end - Injecting custom Materials
          return maxStack;
      }
  
-@@ -4788,6 +4795,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4807,6 +4814,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
       * @return Maximum durability for this material
       */
      public short getMaxDurability() {
-+    // Kiterino start - Injecting custom Materials
-+    ItemType type = asItemType();
-+    if (type != null) {
-+        return type.getMaxDurability();
-+    }
-+    // Kiterino end - Injecting custom Materials
++        // Kiterino start - Injecting custom Materials
++        ItemType type = asItemType();
++        if (type != null) {
++            return type.getMaxDurability();
++        }
++        // Kiterino end - Injecting custom Materials
          return durability;
      }
  
-@@ -4966,6 +4979,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4985,6 +4998,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
-+    // Kiterino start - Injecting custom Materials
-+    else {
-+        filtered = filtered.replace(':', '_');
-+    }
-+    // Kiterino end - Injecting custom Materials
++        // Kiterino start - Injecting custom Materials
++        else {
++            filtered = filtered.replace(':', '_');
++        }
++        // Kiterino end - Injecting custom Materials
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -5661,4 +5679,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5672,4 +5690,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          }
      }
      // Purpur end

@@ -18,7 +18,7 @@ index 3a71f8fe73a2309f57cb06dedf204d3e37b46b03..41fb608fec6d87459483443ef525254a
      public static UnsafeValues getUnsafe() {
          return server.getUnsafe();
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index d0206c9c2f423a9b77237d9a005b9ee139dae70f..9554895987e5b10afdcc5b0d03324c489b4c78db 100644
+index fc64902368a068481f16d5db99c94386caf6b60b..7045cff5e5dc836dd1d1d0262f2e4426e83ebc94 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
 @@ -239,9 +239,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
@@ -85,7 +85,7 @@ index f89edd9c129802f70eac022ff6bf80bef378f5e8..69ed6f14a10f6618e2abac6d653801e2
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index eb79e62e753524d6782842c662b0a50ab5ac0811..70a80a56ed6fcfd118ad4c51193dbe0c8c0250a8 100644
+index 65260b33a13858309356d573dfa2989b92e7437c..bc8038b920d54e6526e34c194fae2c584cc7abda 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -455,13 +455,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM

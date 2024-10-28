@@ -5,7 +5,7 @@ Subject: [PATCH] Init
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 299881d2c9fb7321f4b29c019e9088e024b64689..99ba2fc1fd9d442f26e32ce29bd61b70e07e246d 100644
+index 535b0c6a750cc77fb9340d6e080932f3eb3bde17..9ff4848d9b6f5dfd63058f0dfb01d177f390938d 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -17,7 +17,7 @@ index 299881d2c9fb7321f4b29c019e9088e024b64689..99ba2fc1fd9d442f26e32ce29bd61b70
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -103,14 +103,14 @@ tasks.jar {
+@@ -104,14 +104,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

@@ -5,11 +5,11 @@ Subject: [PATCH] ItemStack helper methods
 
 
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index 44a26a768c11f60241010391211a19f6b589f23c..2a0839b0faf54b5a4824d8538035f1ec041563c8 100644
+index 4414381ac942c040480d53b03565b160eb85c444..9930ed33bc6950c3654009a099265b734cb335b1 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1695,4 +1695,54 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
-         return random.nextInt(unbreaking + 1) > 0;
+@@ -1622,4 +1622,54 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
+         return this.craftDelegate.damage(amount, ignoreUnbreaking);
      }
      // Purpur end
 +

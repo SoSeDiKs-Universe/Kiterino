@@ -19,7 +19,7 @@ index 0000000000000000000000000000000000000000..45d2ddb697562b1cf25d6676bb206b10
 +
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 6e6f4dffceb0032153c5be119303c5809629cfcc..c34a18823ebca51dc9745b7e3c0ff7d8fb770178 100644
+index 6e6f4dffceb0032153c5be119303c5809629cfcc..aeaf4b4ce7ce28c6d2acdef3390b1b89b7adc868 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -232,6 +232,15 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
@@ -59,10 +59,10 @@ index 5057d9d433ba002a22d22adfaf7323b2cfaee9af..f972aecfd1c88da05d547c94ec6ce081
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 479a8422a6786a8ada8536d528e7f57a06c8107a..b1d874edfdb95c758a518a37fae04462c0c85fae 100644
+index 8854e3adca98214697fdfa7f1296e2d66b5afa48..51b19972313fa238c2f006a0860256c4319eb1cc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1085,6 +1085,8 @@ public final class CraftServer implements Server {
+@@ -1087,6 +1087,8 @@ public final class CraftServer implements Server {
          org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
          this.console.paperConfigurations.reloadConfigs(this.console);
          org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur
@@ -71,7 +71,7 @@ index 479a8422a6786a8ada8536d528e7f57a06c8107a..b1d874edfdb95c758a518a37fae04462
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters, config.spawnAnimals); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
-@@ -3066,6 +3068,13 @@ public final class CraftServer implements Server {
+@@ -3068,6 +3070,13 @@ public final class CraftServer implements Server {
          }
          // Purpur end
  
@@ -86,7 +86,7 @@ index 479a8422a6786a8ada8536d528e7f57a06c8107a..b1d874edfdb95c758a518a37fae04462
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index e35a562eec4b65335723c50180fe1471f858ae60..87853c1c20e5c798314667c2e10346f090334f0f 100644
+index 068aa459b4d1dfbbbd80dc0ae5c43b8202474477..fcaa0bbe0aed63c1e2825692a6f8dbba80825278 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -197,6 +197,14 @@ public class Main {

@@ -5,10 +5,10 @@ Subject: [PATCH] Hide irrelevant compilation warnings
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index f4a9915f520fa55a5186caedd355b85d0f631b71..ecf4434b523fbf74153e273fe4920ec03260c46d 100644
+index 1bd15526c70be8e68265a7b89fb5190f96f0ad87..0e86e7962be82ccc6f77d651f2ce6aa70806b789 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -252,3 +252,12 @@ tasks.registerRunTask("runReobfPaperclip") {
+@@ -257,3 +257,12 @@ tasks.registerRunTask("runReobfPaperclip") {
      classpath(rootProject.tasks.named<io.papermc.paperweight.tasks.CreatePaperclipJar>("createReobfPaperclipJar").flatMap { it.outputZip })
      mainClass.set(null as String?)
  }
