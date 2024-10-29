@@ -33,7 +33,6 @@ target/
 dependency-reduced-pom.xml
 
 # various other potential build files
-build/
 bin/
 dist/
 manifest.mf
@@ -58,6 +57,5 @@ build-data/
 paper-api-generator
 test-plugin.settings.gradle.kts
 Kiterino-API
-Kiterino-MojangAPI
 Kiterino-Server
 kiterino.jar

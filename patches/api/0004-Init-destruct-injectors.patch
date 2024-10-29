@@ -3,6 +3,7 @@ From: SoSeDiK <mrsosedik@gmail.com>
 Date: Mon, 28 Oct 2024 12:06:23 +0200
 Subject: [PATCH] Init/destruct injectors
 
+See the server patch for some context.
 
 diff --git a/src/test/java/org/bukkit/support/TestServer.java b/src/test/java/org/bukkit/support/TestServer.java
 index 494419922f11e494c9de6f757bb76f0cfe5d7c81..ab4292e9dcfd172f5cdf42cac960614d68603274 100644

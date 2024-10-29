@@ -26,12 +26,13 @@ index 0e86e7962be82ccc6f77d651f2ce6aa70806b789..33a071b5bdbf84c4529a3293ecd921ca
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c8714a9e3d382827a61c02f61f05b1449d0fa8ea
+index 0000000000000000000000000000000000000000..f365b66ba81ae08dd89072c5c37a42edb0f6ecd8
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
-@@ -0,0 +1,136 @@
+@@ -0,0 +1,144 @@
 +package me.sosedik.kiterino.util;
 +
++import com.google.common.base.Suppliers;
 +import io.papermc.paper.adventure.PaperAdventure;
 +import net.kyori.adventure.key.Key;
 +import net.minecraft.core.component.DataComponents;
@@ -39,6 +40,7 @@ index 0000000000000000000000000000000000000000..c8714a9e3d382827a61c02f61f05b144
 +import net.minecraft.world.item.Item;
 +import org.bukkit.Material;
 +import org.bukkit.NamespacedKey;
++import org.bukkit.Registry;
 +import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 +import org.jetbrains.annotations.NotNull;
 +
@@ -71,6 +73,8 @@ index 0000000000000000000000000000000000000000..c8714a9e3d382827a61c02f61f05b144
 +    private final Field dataField = getField(Material.class, "data");
 +    private final Field legacyField = getField(Material.class, "legacy");
 +    private final Field keyField = getField(Material.class, "key");
++    private final Field itemTypeField = getField(Material.class, "itemType");
++    private final Field blockTypeField = getField(Material.class, "blockType");
 +    private final Field injectedField = getField(Material.class, "injected");
 +
 +    @SuppressWarnings("java:S3011")
@@ -86,7 +90,8 @@ index 0000000000000000000000000000000000000000..c8714a9e3d382827a61c02f61f05b144
 +                if (!Modifier.isFinal(modifiers)) continue;
 +
 +                Material material = (Material) field.get(null);
-+                Item item = BuiltInRegistries.ITEM.get(PaperAdventure.asVanilla(material.getKey()));
++                NamespacedKey materialKey = material.getKey();
++                Item item = BuiltInRegistries.ITEM.get(PaperAdventure.asVanilla(materialKey));
 +
 +                maxStackField.set(material, item.getDefaultMaxStackSize());
 +                durabilityField.set(material, (short) (int) item.components().getOrDefault(DataComponents.MAX_DAMAGE, 0));
@@ -95,6 +100,9 @@ index 0000000000000000000000000000000000000000..c8714a9e3d382827a61c02f61f05b144
 +                legacyField.set(material, false);
 +                ctorField.set(material, org.bukkit.material.MaterialData.class.getConstructor(Material.class, byte.class));
 +                dataField.set(material, org.bukkit.material.MaterialData.class);
++
++                itemTypeField.set(material, Suppliers.memoize(() -> Registry.ITEM.get(materialKey)));
++                blockTypeField.set(material, Suppliers.memoize(() -> Registry.BLOCK.get(materialKey)));
 +
 +                ((Map<Material, Item>) materialItemField.get(null)).put(material, item);
 +                ((Map<Item, Material>) itemMaterialField.get(null)).put(item, material);
