@@ -131,10 +131,10 @@ index 82b232742bd50e51d28dfac2258c60f77b0dd95e..6ef3d3b89139db029e66952339a17ec9
              if (item == null) {
                  var properties = new Item.Properties();
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
-index c8714a9e3d382827a61c02f61f05b1449d0fa8ea..5d8b3b44da3403245157aeadf14dff35cce3362d 100644
+index f365b66ba81ae08dd89072c5c37a42edb0f6ecd8..0a706d30205385ba388a4e3cee955913b873d438 100644
 --- a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
-@@ -115,6 +115,15 @@ public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrap
+@@ -123,6 +123,15 @@ public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrap
              Field enumConstantDirectory = Class.class.getDeclaredField("enumConstantDirectory");
              enumConstantDirectory.setAccessible(true);
              enumConstantDirectory.set(Material.class, null);
