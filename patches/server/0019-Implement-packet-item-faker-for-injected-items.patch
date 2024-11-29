@@ -6,7 +6,7 @@ Subject: [PATCH] Implement packet item faker for injected items
 Forces default item faker for injected items as to not kick the client from the server because of modded items
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 34e4c1ff35c3e976d1a3dc1cb856dae4bee5f0d8..4aa443c600cd41d42c9a68758f1115d200c94d5f 100644
+index ad238f0e17c70bcc0c637ff03ae4a7140ef29dc7..c9bdb7c5128cd64034129446a520b325e04482a9 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -219,7 +219,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
@@ -67,7 +67,7 @@ index 0000000000000000000000000000000000000000..0a27cb17c68901f0d921e2239ac1a174
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index 45efe32181d0050c08e729b49df4569ff62f19e2..73c599c2aa9d8b02614e844b51a615cf001e5a75 100644
+index a71123cbc2cc1b3a4496f4bf0e9a782279f6ce7a..1ad99eadb0d8a47b251719a63c479a101021c11a 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,9 @@
@@ -80,7 +80,7 @@ index 45efe32181d0050c08e729b49df4569ff62f19e2..73c599c2aa9d8b02614e844b51a615cf
  import io.papermc.paper.datacomponent.DataComponentType;
  import io.papermc.paper.datacomponent.PaperComponentType;
  import io.papermc.paper.registry.PaperRegistryBuilder;
-@@ -21,6 +25,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -24,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  	protected @Nullable Float compostChance;
  	protected @Nullable Item nmsItem;
  	protected @Nullable Function<Object, Object> nmsItemFunction;
@@ -88,7 +88,7 @@ index 45efe32181d0050c08e729b49df4569ff62f19e2..73c599c2aa9d8b02614e844b51a615cf
  
  	protected final Conversions conversions;
  	protected final TypedKey<ItemType> itemKey;
-@@ -65,6 +70,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -68,6 +73,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  		return this.nmsItemFunction;
  	}
  
@@ -100,7 +100,7 @@ index 45efe32181d0050c08e729b49df4569ff62f19e2..73c599c2aa9d8b02614e844b51a615cf
  	protected void parseValues(@NonNull Item item) {
  		// Does it make sense to parse?
  		// DataComponentMap components = item.components();
-@@ -109,9 +119,31 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -112,9 +122,31 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  			return this;
  		}
  

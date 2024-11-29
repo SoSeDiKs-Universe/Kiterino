@@ -22,10 +22,10 @@ index ffca3a7df1c5b344dbd77e1db997c76d22a31021..56169e077b0275773953e14bd5016c3d
              if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
                  throw new IllegalStateException("Unable to load registries");
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 9275b4fa6a01c5630ea9218ddb192bb7cece4f20..d5d73e0793758b63e6fbc9c9fe98c8b07840e79c 100644
+index d020f6158228f0399f597dfe40437c557aa73205..dc91da4dbf9f457ee2b5b009b00df9bb5d416031 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -326,6 +326,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+@@ -327,6 +327,11 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
          }
          // Purpur end
  

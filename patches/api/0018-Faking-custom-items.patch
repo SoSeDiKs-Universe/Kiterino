@@ -9,8 +9,18 @@ Overall, to inject custom items, do the following in bootloader:
 context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(), event -> {
     // Registering an item
     event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("namespace", "key")), b -> b
-        .maxStackSize(16) // Modifying default item options
-        .modifier(box -> box.setNewMaterial(Material.DIAMOND)) // (!) Modifying item before sending it to the client
+        // Using direct NMS item
+        .nmsItem(new TestItem())
+        // Alternatively, using pre-build properties (with things like item id already set)
+        .nmsItemFunction(properties -> new Item(
+            ((Item.Properties) properties)
+                .stacksTo(32)
+                .food(new FoodProperties(0, 5F, true))
+                .craftRemainder(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse("custom:item")))
+        ))
+        // Sadly, no NMS-less data components yet upon item initialization
+        // (!) Modifying item before sending it to the client, MUST have vanilla type
+        .modifier(box -> box.setType(Material.DIAMOND))
     );
 
     // Initializing Materials in a class

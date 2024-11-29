@@ -48,10 +48,10 @@ index 1e9a0143bc3b70dfc5e129a0fe849ff3e01447ab..7ed31220736afedd41dabc0343e18e22
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..45efe32181d0050c08e729b49df4569ff62f19e2
+index 0000000000000000000000000000000000000000..a71123cbc2cc1b3a4496f4bf0e9a782279f6ce7a
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,145 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.datacomponent.DataComponentType;
@@ -59,6 +59,9 @@ index 0000000000000000000000000000000000000000..45efe32181d0050c08e729b49df4569f
 +import io.papermc.paper.registry.PaperRegistryBuilder;
 +import io.papermc.paper.registry.TypedKey;
 +import io.papermc.paper.registry.data.util.Conversions;
++import net.minecraft.core.registries.Registries;
++import net.minecraft.resources.ResourceKey;
++import net.minecraft.resources.ResourceLocation;
 +import net.minecraft.world.item.Item;
 +import net.minecraft.world.level.block.ComposterBlock;
 +import org.bukkit.inventory.ItemType;
@@ -138,7 +141,7 @@ index 0000000000000000000000000000000000000000..45efe32181d0050c08e729b49df4569f
 +		}
 +
 +		@Override
-+		public @NonNull <T> Builder setData(DataComponentType.@NonNull NonValued type) {
++		public @NonNull Builder setData(DataComponentType.@NonNull NonValued type) {
 +			this.components.put(type, null);
 +			return this;
 +		}
@@ -169,6 +172,7 @@ index 0000000000000000000000000000000000000000..45efe32181d0050c08e729b49df4569f
 +			Item item = this.nmsItem;
 +			if (item == null) {
 +				var properties = new Item.Properties();
++				properties.setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(this.itemKey.key().namespace(), this.itemKey.key().value())));
 +				this.components.forEach((type, value) -> {
 +					if (type instanceof PaperComponentType.ValuedImpl<?, ?> valued) {
 +						setData(properties, (PaperComponentType<Object, Object>) valued, value);
@@ -194,7 +198,7 @@ index 0000000000000000000000000000000000000000..45efe32181d0050c08e729b49df4569f
 +
 +}
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index f2f1dfe4277ce1e84a9494bee285badc958c8d3f..b31d6d19ee12c6c79792af4220597673000ad44c 100644
+index f2f1dfe4277ce1e84a9494bee285badc958c8d3f..6f3d99ae7a959f53aec2d1a39110782b6db47df5 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -25,6 +25,7 @@ class RegistryBuilderTest {

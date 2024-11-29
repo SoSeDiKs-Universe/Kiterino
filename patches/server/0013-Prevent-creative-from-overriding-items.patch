@@ -23,7 +23,7 @@ index 31b2b21cb4de6cb975d5fbc1480eb32d23ab56f6..f51c974137edad3cb03230e93fbcae74
 +
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 637919f7027057c570eb33b7b56bf98b82bf8eac..6a5a61def44c7c5a3e9fb76c825893e59ef05c54 100644
+index 0a1a088311d473c4c69452db39f563f193a848e8..c6d52745ec4b99191c8bd366d8360316eca9faa2 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -20,6 +20,8 @@ import me.sosedik.kiterino.modifier.item.context.packet.UnknownEntityDataContext
@@ -35,7 +35,7 @@ index 637919f7027057c570eb33b7b56bf98b82bf8eac..6a5a61def44c7c5a3e9fb76c825893e5
  import net.minecraft.network.protocol.Packet;
  import net.minecraft.network.protocol.game.ClientboundBundlePacket;
  import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
-@@ -652,7 +654,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
+@@ -656,7 +658,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
  		var bukkitItem = ItemModifier.modifyItem(contextBox);
  		if (bukkitItem == null) return null;
  
