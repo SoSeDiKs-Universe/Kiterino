@@ -5,10 +5,10 @@ Subject: [PATCH] Material rerouting
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
-index e5c30847297e056782084d81fb9300f98d4a8f75..c8899f77f41edf96e83714f09c377cbe5ba36673 100644
+index e5c30847297e056782084d81fb9300f98d4a8f75..84f1eeac81d2d62ad6fb1e402c4255dca7e4f309 100644
 --- a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
 +++ b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
-@@ -736,4 +736,11 @@ public class MaterialRerouting {
+@@ -736,4 +736,19 @@ public class MaterialRerouting {
          return itemStack.getBlockData(MaterialRerouting.transformToBlockType(material));
      }
      // Purpur end
@@ -17,6 +17,14 @@ index e5c30847297e056782084d81fb9300f98d4a8f75..c8899f77f41edf96e83714f09c377cbe
 +    @RerouteStatic("org/bukkit/inventory/ItemStack")
 +    public static boolean isType(ItemStack item, Material type) {
 +        return ItemStack.isType(item, type);
++    }
++
++    public static Material getInitialType(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox) {
++        return contextBox.getInitialType();
++    }
++
++    public static void setType(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox, Material type) {
++        contextBox.setType(type);
 +    }
 +    // Kiterino end - Material rerouting
  }

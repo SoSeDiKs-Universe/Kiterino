@@ -19,10 +19,10 @@ index b96425fa1dc34df1a8efbf687095010b837e6e36..476bd55ab11af4f10ce518f6e44ce540
          this.playersByName.remove(entityplayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Spigot
          entityplayer.serverLevel().removePlayerImmediately(entityplayer, entity_removalreason);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 241cdc86f3a7c5c8502a904591d699f79e646e86..c9c966926f97cafb3cdd957071af09f318b9c9b8 100644
+index 2ecc051c102e5d4d5f0e75fa3888c5a8e6a9261e..635eb249c27f1ed934126d1354540a524dc116b6 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -312,7 +312,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -268,7 +268,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      public ImmutableList<Entity> passengers;
      protected int boardingCooldown;
      @Nullable
