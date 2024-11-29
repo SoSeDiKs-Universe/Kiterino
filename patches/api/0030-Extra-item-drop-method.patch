@@ -5,10 +5,10 @@ Subject: [PATCH] Extra item drop method
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 261475159221ddd528d13991c06be5eaf908030c..8ff204f95bf47c90c4015a5d7e82d4670597b39d 100644
+index 488604ba1a516b477693877c74712e4a45624a8b..58f6d09a2d7fe9d733df79faa0d6d3273b5feb58 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -812,4 +812,14 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -843,4 +843,14 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
      @Nullable
      public Firework fireworkBoost(@NotNull ItemStack fireworkItemStack);
  

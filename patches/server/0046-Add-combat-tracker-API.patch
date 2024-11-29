@@ -1,0 +1,144 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 28 Sep 2024 06:09:37 +0300
+Subject: [PATCH] Add combat tracker API
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/world/damagesource/CraftCombatTracker.java b/src/main/java/me/sosedik/kiterino/world/damagesource/CraftCombatTracker.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..4a6877c8b0bb9b2f6df0e84c069f00c6faf0ba3d
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/world/damagesource/CraftCombatTracker.java
+@@ -0,0 +1,64 @@
++package me.sosedik.kiterino.world.damagesource;
++
++import io.papermc.paper.adventure.PaperAdventure;
++import net.kyori.adventure.text.Component;
++import net.minecraft.world.damagesource.FallLocation;
++import org.bukkit.craftbukkit.damage.CraftDamageSource;
++import org.bukkit.damage.DamageSource;
++import org.bukkit.entity.LivingEntity;
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++import java.util.List;
++
++public class CraftCombatTracker implements CombatTracker {
++
++    private final net.minecraft.world.damagesource.CombatTracker handle;
++
++    public CraftCombatTracker(@NotNull net.minecraft.world.damagesource.CombatTracker handle) {
++        this.handle = handle;
++    }
++
++    @Override
++    public @NotNull LivingEntity getEntity() {
++        return this.handle.mob.getBukkitLivingEntity();
++    }
++
++    @SuppressWarnings("unchecked")
++    @Override
++    public @NotNull List<CombatEntry> getCombatEntries() {
++        return (List<CombatEntry>) ((List<? extends CombatEntry>) this.handle.entries);
++    }
++
++    @Override
++    public @NotNull CombatEntry createCombatEntry(@NotNull DamageSource damageSource, float damage) {
++        var fallLocation = FallLocation.getCurrentFallLocation(this.handle.mob);
++        return new net.minecraft.world.damagesource.CombatEntry(((CraftDamageSource) damageSource).getHandle(), damage, fallLocation, this.handle.mob.fallDistance);
++    }
++
++    @Override
++    public @Nullable CombatEntry getMostSignificantFall() {
++        return this.handle.getMostSignificantFall();
++    }
++
++    @Override
++    public boolean isInCombat() {
++        return this.handle.inCombat;
++    }
++
++    @Override
++    public int getCombatDuration() {
++        return this.handle.getCombatDuration();
++    }
++
++    @Override
++    public void recordDamage(@NotNull DamageSource damageSource, float damage) {
++        this.handle.recordDamage(((CraftDamageSource) damageSource).getHandle(), damage);
++    }
++
++    @Override
++    public @NotNull Component getDeathMessage() {
++        return PaperAdventure.asAdventure(this.handle.getDeathMessage());
++    }
++
++}
+diff --git a/src/main/java/net/minecraft/world/damagesource/CombatEntry.java b/src/main/java/net/minecraft/world/damagesource/CombatEntry.java
+index 65e86250cb162b12e295b7523af0e90500aca9ec..a9b3de75b3f46f086d317902e5de6deb1892ae6f 100644
+--- a/src/main/java/net/minecraft/world/damagesource/CombatEntry.java
++++ b/src/main/java/net/minecraft/world/damagesource/CombatEntry.java
+@@ -2,5 +2,17 @@ package net.minecraft.world.damagesource;
+ 
+ import javax.annotation.Nullable;
+ 
+-public record CombatEntry(DamageSource source, float damage, @Nullable FallLocation fallLocation, float fallDistance) {
++public record CombatEntry(DamageSource source, float damage, @Nullable FallLocation fallLocation, float fallDistance) implements me.sosedik.kiterino.world.damagesource.CombatEntry { // Kiterino - Add combat tracker API
++
++    // Kiterino start - Add combat tracker API
++    @Override
++    public org.bukkit.damage.DamageSource getDamageSource() {
++        return new org.bukkit.craftbukkit.damage.CraftDamageSource(this.source);
++    }
++
++    @Override
++    public float getDamage() {
++        return this.damage;
++    }
++    // Kiterino end - Add combat tracker API
+ }
+diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
+index 4fb025a63628eb60509d90b680922a0220104bcb..a51a1115ecb3b20006b1cf94ffa3a3894bcba3ca 100644
+--- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
++++ b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
+@@ -21,12 +21,12 @@ public class CombatTracker {
+     private static final Style INTENTIONAL_GAME_DESIGN_STYLE = Style.EMPTY
+         .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://bugs.mojang.com/browse/MCPE-28723"))
+         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("MCPE-28723")));
+-    private final List<CombatEntry> entries = Lists.newArrayList();
+-    private final LivingEntity mob;
++    public final List<CombatEntry> entries = Lists.newArrayList(); // Kiterino - private -> public - Add combat tracker API
++    public final LivingEntity mob; // Kiterino - private -> public - Add combat tracker API
+     private int lastDamageTime;
+     private int combatStartTime;
+     private int combatEndTime;
+-    private boolean inCombat;
++    public boolean inCombat; // Kiterino - private -> public - Add combat tracker API
+     private boolean takingDamage;
+ 
+     public CombatTracker(LivingEntity entity) {
+@@ -111,7 +111,7 @@ public class CombatTracker {
+     }
+ 
+     @Nullable
+-    private CombatEntry getMostSignificantFall() {
++    public CombatEntry getMostSignificantFall() { // Kiterino - private -> public - Add combat tracker API
+         CombatEntry combatEntry = null;
+         CombatEntry combatEntry2 = null;
+         float f = 0.0F;
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 051ffc663317fe5a4fafe0750c89fafdece4d316..8f559bb90c6446d55b4d761676aca11c3f30be9b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -1223,4 +1223,11 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         this.getHandle().setShouldBurnInDay(shouldBurnInDay);
+     }
+     // Purpur end - API for any mob to burn daylight
++
++    // Kiterino start - Add combat tracker API
++    @Override
++    public me.sosedik.kiterino.world.damagesource.CombatTracker getCombatTracker() {
++        return new me.sosedik.kiterino.world.damagesource.CraftCombatTracker(this.getHandle().getCombatTracker());
++    }
++    // Kiterino end - Add combat tracker API
+ }

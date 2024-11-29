@@ -5,10 +5,10 @@ Subject: [PATCH] Anger nearby piglins API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 6696e2ac1716486b3917662f021ad4d3c736869b..af53f2540a54c2c92974cdc7974768e31ee7aff0 100644
+index 05697c0668aafc58c71351dc23eb6f49e592e981..cb5992f7e186be13a0b9e1e72e6a75aefa47086a 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4020,4 +4020,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -4059,4 +4059,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
          sendItem(me.sosedik.kiterino.inventory.InventorySlotHelper.CURSOR, item);
      }
      // Kiterino end - Send ItemStack API

@@ -5,10 +5,10 @@ Subject: [PATCH] Send ItemStack API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 901f36320444c8d39a63ac95b0b20b17498ed018..6696e2ac1716486b3917662f021ad4d3c736869b 100644
+index dcf02cda8444f7d2ed4ac64bedc02b399f034688..05697c0668aafc58c71351dc23eb6f49e592e981 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4001,4 +4001,23 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -4040,4 +4040,23 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       */
      void sendRedTint(double percentage);
      // Kiterino end - Red tint API

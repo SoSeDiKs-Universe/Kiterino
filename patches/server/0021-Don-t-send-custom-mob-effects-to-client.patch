@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 9 Jul 2024 23:01:08 +0300
+Subject: [PATCH] Don't send custom mob effects to client
+
+
+diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
+index 32afc69579a688d17555edd182e0a7dc66ab787f..510f6e70878ff6d8e0e824b947edb2c171d74751 100644
+--- a/src/main/java/net/minecraft/network/Connection.java
++++ b/src/main/java/net/minecraft/network/Connection.java
+@@ -514,6 +514,21 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+             packet = me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.processPacket(player.getBukkitEntity(), packet);
+         }
+         // Kiterino end - Item Modifiers API
++        // Kiterino start - Don't send custom mob effects
++        if (packet instanceof net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket mobEffectPacket) {
++            java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.getEffect().unwrapKey();
++            if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().location().getNamespace())) {
++                packet.onPacketDispatchFinish(player, null);
++                return;
++            }
++        } else if (packet instanceof net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket mobEffectPacket) {
++            java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.effect().unwrapKey();
++            if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().location().getNamespace())) {
++                packet.onPacketDispatchFinish(player, null);
++                return;
++            }
++        }
++        // Kiterino end - Don't send custom mob effects
+         // Paper end - Optimize network
+         ChannelFuture channelfuture = flush ? this.channel.writeAndFlush(packet) : this.channel.write(packet);
+ 

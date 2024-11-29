@@ -5,10 +5,10 @@ Subject: [PATCH] Rework some deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 3a71f8fe73a2309f57cb06dedf204d3e37b46b03..41fb608fec6d87459483443ef525254aaa77a083 100644
+index d42c463ff5e60318470e6c3270ff7bc6f0aaaeb1..23e705fb60bfae324cfdc62178fb8e28dc0816bb 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2592,7 +2592,7 @@ public final class Bukkit {
+@@ -2616,7 +2616,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -36,10 +36,10 @@ index fc64902368a068481f16d5db99c94386caf6b60b..7045cff5e5dc836dd1d1d0262f2e4426
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 10c87b7c19ed3eab28fdce5f225df3767292ee0a..7489263aaf9f5506065f2cb2240d71db8653d541 100644
+index a491dc40093e19b8d1900443ad613223fd7f3119..d7990c66b8bd4b956ebc485b7adc1b0f41aa8de2 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
+@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
   * may be poorly named, throw exceptions, have misleading parameters, or any
   * other bad programming practice.
   */
@@ -49,15 +49,15 @@ index 10c87b7c19ed3eab28fdce5f225df3767292ee0a..7489263aaf9f5506065f2cb2240d71db
      // Paper start
      net.kyori.adventure.text.flattener.ComponentFlattener componentFlattener();
 diff --git a/src/main/java/org/bukkit/entity/Damageable.java b/src/main/java/org/bukkit/entity/Damageable.java
-index f89edd9c129802f70eac022ff6bf80bef378f5e8..69ed6f14a10f6618e2abac6d653801e2c0e8aa87 100644
+index c247b6c671fe384604320123beacfd8269177206..b78ff1dbc4a5fcd07f5e24cf9e21ca1ba64b4336 100644
 --- a/src/main/java/org/bukkit/entity/Damageable.java
 +++ b/src/main/java/org/bukkit/entity/Damageable.java
 @@ -96,9 +96,9 @@ public interface Damageable extends Entity {
       * Gets the maximum health this entity has.
       *
       * @return Maximum health
--     * @deprecated use {@link Attribute#GENERIC_MAX_HEALTH}.
-+     * @see Attribute#GENERIC_MAX_HEALTH
+-     * @deprecated use {@link Attribute#MAX_HEALTH}.
++     * @see Attribute#MAX_HEALTH
       */
 -    @Deprecated
 +    //@Deprecated // Kiterino - Rework some deprecations
@@ -68,8 +68,8 @@ index f89edd9c129802f70eac022ff6bf80bef378f5e8..69ed6f14a10f6618e2abac6d653801e2
       * {@link Wither}, etc...} will have their bar scaled accordingly.
       *
       * @param health amount of health to set the maximum to
--     * @deprecated use {@link Attribute#GENERIC_MAX_HEALTH}.
-+     * @see Attribute#GENERIC_MAX_HEALTH
+-     * @deprecated use {@link Attribute#MAX_HEALTH}.
++     * @see Attribute#MAX_HEALTH
       */
 -    @Deprecated
 +    //@Deprecated // Kiterino - Rework some deprecations
@@ -77,21 +77,22 @@ index f89edd9c129802f70eac022ff6bf80bef378f5e8..69ed6f14a10f6618e2abac6d653801e2
  
      /**
       * Resets the max health to the original amount.
--     * @deprecated use {@link Attribute#GENERIC_MAX_HEALTH}.
-+     * @see Attribute#GENERIC_MAX_HEALTH
+-     * @deprecated use {@link Attribute#MAX_HEALTH}.
++     * @see Attribute#MAX_HEALTH
       */
 -    @Deprecated
 +    //@Deprecated // Kiterino - Rework some deprecations
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 65260b33a13858309356d573dfa2989b92e7437c..bc8038b920d54e6526e34c194fae2c584cc7abda 100644
+index a7f989121c493baff9d2b6910c39145a0e12477d..389005ed6fd4eb82ffad371142531975501e80a9 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -455,13 +455,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -470,14 +470,15 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      * Returns true if the entity is supported by a block.
       *
       * This value is a state updated by the client after each movement.
-      *
+-     *
 -     * @return True if entity is on ground.
 -     * @deprecated This value is controlled only by the client and is therefore
 +     * <p>
@@ -107,7 +108,7 @@ index 65260b33a13858309356d573dfa2989b92e7437c..bc8038b920d54e6526e34c194fae2c58
      public boolean isOnGround();
  
      /**
-@@ -3302,10 +3304,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3342,10 +3343,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale
@@ -139,17 +140,19 @@ index ddea08e4de2198a0a7565e2fd7a05571ed48f27b..c521c0ddacabf03aab972f627a15c181
          return clickedPosistion;
      }
 diff --git a/src/main/java/org/bukkit/inventory/meta/MapMeta.java b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
-index 26a336dade83baee97d20eb39a058925659f5777..0461967d78c0a8f42dc0eaf173a05860f184da30 100644
+index 26a336dade83baee97d20eb39a058925659f5777..c245b75c03f287b65dd22aef4ac248184c585674 100644
 --- a/src/main/java/org/bukkit/inventory/meta/MapMeta.java
 +++ b/src/main/java/org/bukkit/inventory/meta/MapMeta.java
-@@ -36,15 +36,16 @@ public interface MapMeta extends ItemMeta {
+@@ -35,16 +35,17 @@ public interface MapMeta extends ItemMeta {
+ 
      /**
       * Sets the map ID. This is used to determine what map is displayed.
-      *
+-     *
 -     * @param id the map id to set
 -     * @see #setMapView(org.bukkit.map.MapView)
 -     * @deprecated These methods are poor API: They rely on the caller to pass
-+     * <p> Note: These methods are poor API: They rely on the caller to pass
++     * <p>
++     * Note: These methods are poor API: They rely on the caller to pass
       * in an only an integer property, and have poorly defined implementation
       * behavior if that integer is not a valid map (the current implementation
       * for example will generate a new map with a different ID). The xxxMapView

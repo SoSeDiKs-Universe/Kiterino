@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 21 Sep 2024 02:50:38 +0300
+Subject: [PATCH] Less limited recipe matcher
+
+Adds the options to allow using damaged/enchanted/renamed items in the recipe matcher
+used by e.g. the recipe book autofill or the crafter block.
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
+index 48f6ee0a3ac1f3276d90229aafe42e162f757f04..1b84547f4cb4034081bd8e368c7804cdfdc8cae4 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
+@@ -150,4 +150,15 @@ public final class KiterinoConfig {
+     }
+     // Kiterino end - Allow server-side translatables on items
+ 
++    // Kiterino start - Less limited recipe matcher
++    public static boolean allowDamagedItemsInRecipeBook;
++    public static boolean allowEnchantedItemsInRecipeBook;
++    public static boolean allowRenamedItemsInRecipeBook;
++    private static void lessLimitedCraftingBook() {
++        allowDamagedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-damaged-items", false, "Allow using damaged items when searching for items");
++        allowEnchantedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-enchanted-items", false, "Allow using items with enchantments when searching for items");
++        allowRenamedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-renamed-items", false, "Allow using items with custom names (i.e. renamed in anvil) when searching for items");
++    }
++    // Kiterino end - Less limited recipe matcher
++
+ }
+diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
+index 0990bcf65f484b9a019c91fcdae1783bac6388da..76d7bcdd6bfb6f4e29b6edb80a2f2cb8c9babdb3 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
++++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
+@@ -198,7 +198,7 @@ public class Inventory implements Container, Nameable {
+     }
+ 
+     public static boolean isUsableForCrafting(ItemStack stack) {
+-        return !stack.isDamaged() && !stack.isEnchanted() && !stack.has(DataComponents.CUSTOM_NAME);
++        return (me.sosedik.kiterino.KiterinoConfig.allowDamagedItemsInRecipeBook || !stack.isDamaged()) && (me.sosedik.kiterino.KiterinoConfig.allowEnchantedItemsInRecipeBook || !stack.isEnchanted()) && (me.sosedik.kiterino.KiterinoConfig.allowRenamedItemsInRecipeBook || !stack.has(DataComponents.CUSTOM_NAME)); // Kiterino - Less limited recipe matcher
+     }
+ 
+     public int findSlotMatchingCraftingIngredient(io.papermc.paper.inventory.recipe.ItemOrExact item) { // Paper - Improve exact choice recipe ingredients

@@ -67,33 +67,30 @@ index 0000000000000000000000000000000000000000..3d596bbfaa0015a5d2e34207f4065d9a
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14a5ce00af
+index 0000000000000000000000000000000000000000..384e2d1c8dff151116b5f67afe6d49cd0c44ab14
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
-@@ -0,0 +1,240 @@
+@@ -0,0 +1,146 @@
 +package me.sosedik.kiterino.modifier.item;
 +
-+import com.google.common.base.Preconditions;
++import io.papermc.paper.datacomponent.DataComponentTypes;
++import io.papermc.paper.datacomponent.item.ItemLore;
 +import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 +import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
-+import net.kyori.adventure.text.Component;
-+import org.bukkit.Material;
++import net.kyori.adventure.text.ComponentLike;
 +import org.bukkit.entity.Player;
 +import org.bukkit.inventory.ItemStack;
-+import org.bukkit.inventory.meta.ItemMeta;
-+import org.jetbrains.annotations.NotNull;
-+import org.jetbrains.annotations.Nullable;
++import org.jspecify.annotations.NullMarked;
++import org.jspecify.annotations.Nullable;
 +
-+import java.util.ArrayList;
 +import java.util.List;
 +import java.util.Locale;
-+import java.util.Objects;
-+import java.util.function.Consumer;
 +
 +/**
 + * Contains data required for modifying items
 + */
 +@SuppressWarnings("unused")
++@NullMarked
 +public class ItemContextBox {
 +
 +    private final @Nullable Player viewer;
@@ -101,8 +98,6 @@ index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14
 +    private final ItemModifierContextType contextType;
 +    private final ItemModifierContext context;
 +    private ItemStack item;
-+    @Nullable ItemMeta meta;
-+    @Nullable Material newType;
 +
 +    /**
 +     * Creates a new context box with viewer's locale
@@ -112,7 +107,7 @@ index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14
 +     * @param context modification context
 +     * @param item item
 +     */
-+    public ItemContextBox(@NotNull Player viewer, @NotNull ItemModifierContextType contextType, @NotNull ItemModifierContext context, @NotNull ItemStack item) {
++    public ItemContextBox(Player viewer, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
 +        this(viewer, viewer.locale(), contextType, context, item);
 +    }
 +
@@ -125,7 +120,7 @@ index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14
 +     * @param context modification context
 +     * @param item item
 +     */
-+    public ItemContextBox(@Nullable Player viewer, @NotNull Locale locale, @NotNull ItemModifierContextType contextType, @NotNull ItemModifierContext context, @NotNull ItemStack item) {
++    public ItemContextBox(@Nullable Player viewer, Locale locale, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
 +        this.viewer = viewer;
 +        this.locale = locale;
 +        this.contextType = contextType;
@@ -147,7 +142,7 @@ index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14
 +     *
 +     * @return locale
 +     */
-+    public @NotNull Locale getLocale() {
++    public Locale getLocale() {
 +        return this.locale;
 +    }
 +
@@ -156,7 +151,7 @@ index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14
 +     *
 +     * @return context type
 +     */
-+    public @NotNull ItemModifierContextType getContextType() {
++    public ItemModifierContextType getContextType() {
 +        return this.contextType;
 +    }
 +
@@ -165,149 +160,60 @@ index 0000000000000000000000000000000000000000..1c6e912c28a3d69995b24a5713f6ad14
 +     *
 +     * @return modification context
 +     */
-+    public @NotNull ItemModifierContext getContext() {
++    public ItemModifierContext getContext() {
 +        return context;
 +    }
 +
 +    /**
-+     * Gets the modifying item. Changes to item meta
-+     * and item's type should be done only via the
-+     * accessibility methods in this class.
-+     * <p>
-+     * Again, DO NOT modify the item meta of the
-+     * returned item unless you really have to.
++     * Gets the modifying item
 +     *
 +     * @return item
-+     * @see #getMeta()
 +     */
-+    public @NotNull ItemStack getItem() {
++    public ItemStack getItem() {
 +        return this.item;
 +    }
 +
 +    /**
-+     * Completely replaces an item
++     * Completely replaces the item
 +     *
 +     * @param item item
 +     */
-+    public void setItem(@NotNull ItemStack item) {
++    public void setItem(ItemStack item) {
 +        this.item = item;
-+        this.meta = null;
-+        this.newType = null;
 +    }
 +
 +    /**
-+     * Gets the resulting item meta
++     * Helper for adding a line to the item's lore
 +     *
-+     * @return item meta
-+     * @see ItemStack#hasItemMeta()
++     * @param line component
 +     */
-+    public @NotNull ItemMeta getMeta() {
-+        if (this.meta == null) this.meta = this.item.getItemMeta();
-+        return this.meta;
-+    }
-+
-+    /**
-+     * Overrides the item meta used for this item.
-+     * Passing {@code null} will revert any prior changes.
-+     *
-+     * @param meta item meta
-+     */
-+    public void setMeta(@Nullable ItemMeta meta) {
-+        this.meta = meta;
-+    }
-+
-+    /**
-+     * Edits the resulting {@link ItemMeta} of this stack
-+     *
-+     * @param consumer the meta consumer
-+     * @return whether the edit was successful
-+     */
-+    public boolean editMeta(@NotNull Consumer<? super ItemMeta> consumer) {
-+        return editMeta(ItemMeta.class, consumer);
-+    }
-+
-+    /**
-+     * Edits the resulting {@link ItemMeta} of this stack if the meta is of the specified type
-+     *
-+     * @param metaClass the type of meta to edit
-+     * @param consumer the meta consumer
-+     * @param <M> the meta type
-+     * @return whether the edit was successful
-+     */
-+    @SuppressWarnings("unchecked")
-+    public <M extends ItemMeta> boolean editMeta(@NotNull Class<M> metaClass, @NotNull Consumer<? super M> consumer) {
-+        ItemMeta itemMeta = getMeta();
-+        if (metaClass.isInstance(itemMeta)) {
-+            consumer.accept((M) itemMeta);
-+            return true;
++    public void addLore(ComponentLike line) {
++        ItemLore lore;
++        if (this.item.hasData(DataComponentTypes.LORE)) {
++            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
++            assert currentLore != null;
++            lore = ItemLore.lore().lines(currentLore.lines()).addLine(line).build();
++        } else {
++            lore = ItemLore.lore().addLine(line).build();
 +        }
-+        return false;
++        this.item.setData(DataComponentTypes.LORE, lore);
 +    }
 +
 +    /**
-+     * Gets the item's lore if exists, or a new array list otherwise
++     * Helper for adding lines to the item's lore
 +     *
-+     * @return item's lore or empty list
++     * @param lines components
 +     */
-+    public @NotNull List<Component> getLore() {
-+        ItemMeta itemMeta = getMeta();
-+        return itemMeta.hasLore() ? Objects.requireNonNull(itemMeta.lore()) : new ArrayList<>();
-+    }
-+
-+    /**
-+     * Gets the resulting type of the item.
-+     * This will return either {@link #getNewMaterial()} or current item's type.
-+     * If you are interested only in the original item type,
-+     * get it from the item itself instead.
-+     *
-+     * @return resulting item type
-+     */
-+    public @NotNull Material getMaterial() {
-+        return this.newType == null ? this.item.getType() : this.newType;
-+    }
-+
-+    /**
-+     * Gets the new type for the item
-+     *
-+     * @return new item type
-+     */
-+    public @Nullable Material getNewMaterial() {
-+        return this.newType;
-+    }
-+
-+    /**
-+     * Sets the new type for the item
-+     *
-+     * @param type new item type
-+     */
-+    public void setNewMaterial(@Nullable Material type) {
-+        setNewMaterial(type, false);
-+    }
-+
-+    /**
-+     * Sets the new type for the item and optionally
-+     * refreshes meta to match it.
-+     * <p>
-+     * Meta won't be reconstructed if type is {@code null}.
-+     * If you need to reset the item meta,
-+     * use {@link #setMeta(ItemMeta)} instead.
-+     *
-+     * @param type new item type
-+     * @param refreshMeta whether to reconstruct item meta
-+     * @throws IllegalArgumentException if the {@code type} is not {@link Material#isItem()}
-+     */
-+    public void setNewMaterial(@Nullable Material type, boolean refreshMeta) {
-+        Preconditions.checkArgument(type == null || type.isItem(), "New item type must be an item!");
-+
-+        this.newType = type;
-+        if (!refreshMeta) return;
-+        if (type == null) return;
-+
-+        var tempItem = new ItemStack(type);
-+        if (this.meta != null || this.item.getType() != Material.AIR) {
-+            tempItem.setItemMeta(getMeta());
++    public void addLore(List<? extends ComponentLike> lines) {
++        ItemLore lore;
++        if (this.item.hasData(DataComponentTypes.LORE)) {
++            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
++            assert currentLore != null;
++            lore = ItemLore.lore().lines(currentLore.lines()).addLines(lines).build();
++        } else {
++            lore = ItemLore.lore().addLines(lines).build();
 +        }
-+        this.meta = tempItem.getItemMeta();
++        this.item.setData(DataComponentTypes.LORE, lore);
 +    }
 +
 +}
@@ -533,10 +439,10 @@ index 0000000000000000000000000000000000000000..ab1ae078428eca044a7b908f081f5f79
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..6b48a06e401d0cfa3f77690f053e10fb89d303fc
+index 0000000000000000000000000000000000000000..9f1c536f5b9c366f91534866dd86425a3dd10305
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
-@@ -0,0 +1,164 @@
+@@ -0,0 +1,169 @@
 +package me.sosedik.kiterino.modifier.item.context;
 +
 +import me.sosedik.kiterino.modifier.item.context.packet.AdvancementPacketContext;
@@ -571,6 +477,11 @@ index 0000000000000000000000000000000000000000..6b48a06e401d0cfa3f77690f053e10fb
 +     * Item inside the recipe book
 +     */
 +    public static final ItemModifierContextType RECIPE_BOOK = context(RecipeBookPacketContext.class).withName().withLore().build();
++
++    /**
++     * Ghost item as a response for the recipe book
++     */
++    public static final ItemModifierContextType RECIPE_GHOST = context(RecipeBookPacketContext.class).withName().withLore().build();
 +
 +    /**
 +     * Advancement's item (also used in toasts due to lack of distinction)
@@ -1053,29 +964,59 @@ index 0000000000000000000000000000000000000000..6e59e0f8cabd301599bbf6f78747851d
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/RecipeBookPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/RecipeBookPacketContext.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8008add41343f4a00688d0b5ee4b16510001edb5
+index 0000000000000000000000000000000000000000..be6268789b92aca7d10300f9f1829d20b4e251b9
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/RecipeBookPacketContext.java
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,51 @@
 +package me.sosedik.kiterino.modifier.item.context.packet;
 +
 +import me.sosedik.kiterino.modifier.item.context.PacketItemModifierContext;
 +import org.bukkit.NamespacedKey;
-+import org.bukkit.inventory.Recipe;
-+import org.jetbrains.annotations.NotNull;
++import org.jspecify.annotations.NullMarked;
 +
 +/**
 + * Recipe book context
 + *
 + * @param packet nms packet
-+ * @param recipe recipe
-+ * @param recipeKey recipe key
-+ * @param ingredient whether the item is an ingredient
++ * @param displayType item's display position
 + */
-+public record RecipeBookPacketContext(@NotNull Object packet,
-+                                      @NotNull Recipe recipe,
-+                                      @NotNull NamespacedKey recipeKey,
-+                                      boolean ingredient) implements PacketItemModifierContext {
++@NullMarked
++public record RecipeBookPacketContext(Object packet,
++                                      DisplayType displayType) implements PacketItemModifierContext {
++
++	/**
++	 * Represents item's display position
++	 */
++	public enum DisplayType {
++		/**
++		 * Resulting item
++		 */
++		RESULT,
++		/**
++		 * Ingredient item
++		 */
++		INGREDIENT,
++		/**
++		 * Crafting station
++		 */
++		CRAFTING_STATION,
++		/**
++		 * Fuel item
++		 */
++		FUEL,
++		/**
++		 * Smithing template
++		 */
++		SMITHING_TEMPLATE,
++		/**
++		 * Smithing base
++		 */
++		SMITHING_BASE,
++		/**
++		 * Smithing addition
++		 */
++		SMITHING_ADDITION,
++	}
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/SlottedItemPacketContext.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/SlottedItemPacketContext.java

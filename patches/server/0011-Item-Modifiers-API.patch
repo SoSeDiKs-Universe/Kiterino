@@ -1,0 +1,828 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 30 Apr 2024 15:28:45 +0300
+Subject: [PATCH] Item Modifiers API
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
+index 6c77d9c7583ea95e0ad7ffba4aecccb3ccc56d29..31b2b21cb4de6cb975d5fbc1480eb32d23ab56f6 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoConfig.java
+@@ -2,6 +2,7 @@ package me.sosedik.kiterino;
+ 
+ import com.google.common.base.Throwables;
+ import org.bukkit.Bukkit;
++import org.bukkit.NamespacedKey;
+ import org.bukkit.configuration.InvalidConfigurationException;
+ import org.bukkit.configuration.file.YamlConfiguration;
+ import org.jetbrains.annotations.NotNull;
+@@ -12,6 +13,7 @@ import java.io.IOException;
+ import java.lang.reflect.InvocationTargetException;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
++import java.util.ArrayList;
+ import java.util.List;
+ import java.util.logging.Level;
+ 
+@@ -118,4 +120,13 @@ public final class KiterinoConfig {
+         return version;
+     }
+ 
++    // Kiterino start - Item Modifiers API
++    public static boolean itemModifiersLogMissingIds;
++    public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
++    private static void itemModifiers() {
++        itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
++        getList(config, "item-modifiers.modification-order", List.of(), "List of item modifier ids, determines modification order").forEach(id -> itemModifiersOrder.add(NamespacedKey.fromString((String) id)));
++    }
++    // Kiterino end - Item Modifiers API
++
+ }
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
+index 0d0312744369b332ed0dfd171c060fc9019ae8b1..28a086a1fba807518463781563f62acd5f03834a 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
+@@ -3,6 +3,7 @@ package me.sosedik.kiterino;
+ public class KiterinoInitializer {
+ 
+ 	public static void initPostConfig() {
++		me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.init();
+ 	}
+ 
+ }
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..b38d48dea5b63395a9df9ec519e5a2d607bb4193
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
+@@ -0,0 +1,574 @@
++package me.sosedik.kiterino.modifier.item;
++
++import com.mojang.datafixers.util.Pair;
++import me.sosedik.kiterino.KiterinoConfig;
++import me.sosedik.kiterino.inventory.InventorySlotHelper;
++import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
++import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
++import me.sosedik.kiterino.modifier.item.context.packet.AdvancementPacketContext;
++import me.sosedik.kiterino.modifier.item.context.packet.EntityDataPacketContext;
++import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
++import me.sosedik.kiterino.modifier.item.context.packet.ItemPacketContextInitializer;
++import me.sosedik.kiterino.modifier.item.context.packet.MerchantOfferPacketContext;
++import me.sosedik.kiterino.modifier.item.context.packet.RecipeBookPacketContext;
++import me.sosedik.kiterino.modifier.item.context.packet.SlottedItemPacketContext;
++import me.sosedik.kiterino.modifier.item.context.packet.UnknownEntityDataContext;
++import net.minecraft.advancements.Advancement;
++import net.minecraft.advancements.AdvancementHolder;
++import net.minecraft.advancements.DisplayInfo;
++import net.minecraft.network.protocol.Packet;
++import net.minecraft.network.protocol.game.ClientboundBundlePacket;
++import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
++import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
++import net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket;
++import net.minecraft.network.protocol.game.ClientboundPlaceGhostRecipePacket;
++import net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket;
++import net.minecraft.network.protocol.game.ClientboundSetCursorItemPacket;
++import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
++import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
++import net.minecraft.network.protocol.game.ClientboundSetPlayerInventoryPacket;
++import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
++import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
++import net.minecraft.network.syncher.EntityDataSerializers;
++import net.minecraft.network.syncher.SynchedEntityData;
++import net.minecraft.world.entity.Display;
++import net.minecraft.world.entity.Entity;
++import net.minecraft.world.entity.EquipmentSlot;
++import net.minecraft.world.entity.decoration.GlowItemFrame;
++import net.minecraft.world.entity.decoration.ItemFrame;
++import net.minecraft.world.entity.item.ItemEntity;
++import net.minecraft.world.entity.projectile.EyeOfEnder;
++import net.minecraft.world.entity.projectile.Fireball;
++import net.minecraft.world.entity.projectile.FireworkRocketEntity;
++import net.minecraft.world.entity.projectile.LargeFireball;
++import net.minecraft.world.entity.projectile.Snowball;
++import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
++import net.minecraft.world.entity.projectile.ThrownEgg;
++import net.minecraft.world.entity.projectile.ThrownEnderpearl;
++import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
++import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
++import net.minecraft.world.entity.projectile.windcharge.WindCharge;
++import net.minecraft.world.item.ItemStack;
++import net.minecraft.world.item.crafting.Ingredient;
++import net.minecraft.world.item.crafting.RecipeHolder;
++import net.minecraft.world.item.crafting.SelectableRecipe;
++import net.minecraft.world.item.crafting.StonecutterRecipe;
++import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
++import net.minecraft.world.item.crafting.display.RecipeDisplay;
++import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
++import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
++import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
++import net.minecraft.world.item.crafting.display.SlotDisplay;
++import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
++import net.minecraft.world.item.crafting.display.StonecutterRecipeDisplay;
++import net.minecraft.world.item.trading.ItemCost;
++import net.minecraft.world.item.trading.MerchantOffer;
++import net.minecraft.world.item.trading.MerchantOffers;
++import org.bukkit.NamespacedKey;
++import org.bukkit.World;
++import org.bukkit.craftbukkit.CraftEquipmentSlot;
++import org.bukkit.craftbukkit.CraftWorld;
++import org.bukkit.craftbukkit.entity.CraftPlayer;
++import org.bukkit.craftbukkit.inventory.CraftRecipe;
++import org.bukkit.entity.EntityType;
++import org.bukkit.inventory.Recipe;
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.ListIterator;
++import java.util.Map;
++import java.util.Optional;
++import java.util.logging.Level;
++
++public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
++
++	public static final Map<NamespacedKey, ItemModifier> modifiers = new HashMap<>();
++
++	@Override
++	public void registerModifier(@NotNull ItemModifier itemModifier) {
++		boolean log = true;
++		NamespacedKey modifierId = itemModifier.getModifierId();
++		if (KiterinoConfig.itemModifiersLogMissingIds && !KiterinoConfig.itemModifiersOrder.contains(modifierId) && !modifiers.containsKey(modifierId)) {
++			KiterinoConfig.log(Level.INFO, "Skipping item modifier with id: " + modifierId);
++			log = false;
++		}
++
++		synchronized (modifiers) {
++			if (modifiers.put(modifierId, itemModifier) == null && log)
++				KiterinoConfig.log(Level.INFO, "Registering a new item modifier with id: " + modifierId);
++		}
++	}
++
++	@Override
++	public void unregisterModifier(@NotNull ItemModifier itemModifier) {
++		synchronized (modifiers) {
++			modifiers.remove(itemModifier.getModifierId());
++		}
++	}
++
++	@Override
++	public @Nullable org.bukkit.inventory.ItemStack modifyItem(@NotNull ItemContextBox contextBox) {
++		boolean modified = false;
++		for (NamespacedKey modifierId : KiterinoConfig.itemModifiersOrder) {
++			ItemModifier modifier = modifiers.get(modifierId);
++			if (modifier == null) continue;
++			if (modifier.skipAir() && contextBox.getItem().getType().isAir()) continue;
++			if (modifier.skipContext(contextBox.getContextType())) continue;
++
++			ModificationResult result = modifier.modify(contextBox);
++			if (result == ModificationResult.PASS) continue;
++			if (result == ModificationResult.RETURN)
++				return contextBox.getItem();
++
++			modified = true;
++		}
++
++		return modified ? contextBox.getItem() : null;
++	}
++
++	public static void init() {
++		modifiers.clear(); // In case of reload. Not supported, but eh
++		if (ItemModifiersHandler.itemModifiersHandler == null) ItemModifiersHandler.itemModifiersHandler = new ItemModifiersHandlerImpl();
++		ItemPacketContextInitializer.init();
++	}
++
++	public static @NotNull Packet<?> processPacket(@NotNull CraftPlayer player, @NotNull Packet<?> initialPacket) {
++		if (modifiers.isEmpty()) return initialPacket;
++		if (KiterinoConfig.itemModifiersOrder.isEmpty()) return initialPacket;
++
++		return switch (initialPacket) {
++			case ClientboundBundlePacket packet -> handle(player, packet);
++			case ClientboundContainerSetSlotPacket packet -> handle(player, packet);
++			case ClientboundContainerSetContentPacket packet -> handle(player, packet);
++			case ClientboundPlaceGhostRecipePacket packet -> handle(player, packet);
++			case ClientboundSetCursorItemPacket packet -> handle(player, packet);
++			case ClientboundSetEquipmentPacket packet -> handle(player, packet);
++			case ClientboundSetEntityDataPacket packet -> handle(player, packet);
++			case ClientboundSetPlayerInventoryPacket packet -> handle(player, packet);
++			case ClientboundUpdateRecipesPacket packet -> handle(player, packet);
++			case ClientboundRecipeBookAddPacket packet -> handle(player, packet);
++			case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
++			case ClientboundMerchantOffersPacket packet -> handle(player, packet);
++			default -> initialPacket;
++		};
++	}
++
++	@SuppressWarnings({"unchecked"})
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
++		if (!(initialPacket.subPackets() instanceof ArrayList list)) {
++			KiterinoConfig.log(Level.WARNING, "Bundle packets are not in ArrayList: " + initialPacket.subPackets().getClass());
++			return initialPacket;
++		}
++
++		ListIterator<Packet<?>> iterator = list.listIterator();
++		while (iterator.hasNext()) {
++			Packet<?> packet = iterator.next();
++			Packet<?> newPacket = processPacket(player, packet);
++			if (packet != newPacket) {
++				iterator.set(newPacket);
++			}
++		}
++
++		return initialPacket;
++	}
++
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundContainerSetSlotPacket packet) {
++		ItemStack original = packet.getItem();
++		var context = new SlottedItemPacketContext(packet, packet.getSlot());
++		var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
++		ItemStack result = fromBukkit(contextBox, original);
++		if (result != null) packet.itemStack = result;
++		return packet;
++	}
++
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundContainerSetContentPacket packet) {
++		List<ItemStack> items = packet.getItems();
++		for (int i = 0; i < items.size(); i++) {
++			ItemStack original = items.get(i);
++			var context = new SlottedItemPacketContext(packet, i);
++			var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
++			ItemStack result = fromBukkit(contextBox, original);
++			if (result == null) continue;
++
++			items.set(i, result);
++		}
++
++		ItemStack original = packet.getCarriedItem();
++		var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
++		var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
++		ItemStack result = fromBukkit(contextBox, original);
++		if (result != null) packet.carriedItem = result;
++
++		return packet;
++	}
++
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundPlaceGhostRecipePacket packet) {
++		RecipeDisplay display = packet.recipeDisplay();
++		RecipeDisplay newDisplay = replaceRecipeDisplay(packet, ItemModifierContextType.RECIPE_GHOST, player, display); // TODO recipe id :F
++		return display == newDisplay ? packet : new ClientboundPlaceGhostRecipePacket(packet.containerId(), newDisplay);
++	}
++
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetCursorItemPacket packet) {
++		ItemStack original = packet.contents();
++		var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
++		var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
++		ItemStack result = fromBukkit(contextBox, original);
++		return result == null ? packet : new ClientboundSetCursorItemPacket(result);
++	}
++
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEquipmentPacket packet) {
++		List<Pair<EquipmentSlot, ItemStack>> slots = packet.getSlots();
++		int entityId = packet.getEntity();
++		org.bukkit.entity.Entity entity = null;
++		World world = player.getWorld();
++		for (int i = 0; i < slots.size(); i++) {
++			Pair<EquipmentSlot, ItemStack> slot = slots.get(i);
++			ItemStack original = slot.getSecond();
++			var context = new EntityEquipmentPacketContext(packet, world, entityId, entity, CraftEquipmentSlot.getSlot(slot.getFirst()));
++			var contextBox = new ItemContextBox(player, ItemModifierContextType.ENTITY_EQUIPMENT, context, original.asBukkitCopy());
++			ItemStack result = fromBukkit(contextBox, original);
++			if (result != null) slots.set(i, Pair.of(slot.getFirst(), result));
++			if (entity == null && context.isFetched()) entity = context.getEntity();
++		}
++		return packet;
++	}
++
++	// As much as I dislike this, not sure if there's a better way
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetEntityDataPacket packet) {
++		int entityId = packet.id();
++		Entity entity = ((CraftWorld) player.getWorld()).getHandle().moonrise$getEntityLookup().get(entityId);
++		if (entity == null) {
++			List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
++			for (int i = 0; i < dataValues.size(); i++) {
++				SynchedEntityData.DataValue<?> dataValue = dataValues.get(i);
++				if (dataValue.serializer() != EntityDataSerializers.ITEM_STACK) continue;
++
++				ItemStack original = (ItemStack) dataValue.value();
++				var contextType = ItemModifierContextType.UNKNOWN_ENTITY_DATA;
++				var context = new UnknownEntityDataContext(packet, player.getWorld(), entityId);
++				var contextBox = new ItemContextBox(player, contextType, context, original.asBukkitCopy());
++				ItemStack result = fromBukkit(contextBox, original);
++				if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
++				break;
++			}
++			return packet;
++		}
++
++		List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
++		ItemModifierContext context;
++		ItemStack original;
++		switch (entity) {
++			case ItemEntity droppedItem -> {
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM, droppedItem);
++				original = droppedItem.getItem();
++			}
++			case ItemFrame itemFrame -> {
++				var entityType = itemFrame instanceof GlowItemFrame ? EntityType.GLOW_ITEM_FRAME : EntityType.ITEM_FRAME;
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, itemFrame);
++				original = itemFrame.getItem();
++			}
++			case ThrowableItemProjectile throwableProjectile -> {
++				EntityType entityType = switch (throwableProjectile) {
++					case Snowball snowball -> EntityType.SNOWBALL;
++					case ThrownEgg thrownEgg -> EntityType.EGG;
++					case ThrownEnderpearl thrownEnderpearl -> EntityType.ENDER_PEARL;
++					case ThrownExperienceBottle thrownExperienceBottle -> EntityType.EXPERIENCE_BOTTLE;
++					default -> EntityType.POTION;
++				};
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, throwableProjectile);
++				original = throwableProjectile.getItem();
++			}
++			case EyeOfEnder eyeOfEnder -> {
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.EYE_OF_ENDER, eyeOfEnder);
++				original = eyeOfEnder.getItem();
++			}
++			case FireworkRocketEntity firework -> {
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.FIREWORK_ROCKET, firework);
++				original = firework.getItem();
++			}
++			case Fireball fireball -> {
++				var entityType = fireball instanceof LargeFireball ? EntityType.FIREBALL : EntityType.SMALL_FIREBALL;
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, fireball);
++				original = fireball.getItem();
++			}
++			case AbstractWindCharge windCharge -> {
++				var entityType = windCharge instanceof WindCharge ? EntityType.WIND_CHARGE : EntityType.BREEZE_WIND_CHARGE;
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, windCharge);
++				original = windCharge.getItem();
++			}
++			case Display.ItemDisplay itemDisplay -> {
++				context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM_DISPLAY, itemDisplay);
++				original = itemDisplay.getItemStack();
++			}
++			default -> {
++				return packet;
++			}
++		}
++		var contextBox = new ItemContextBox(player, ItemModifierContextType.ENTITY_DATA, context, original.asBukkitCopy());
++		for (int i = 0; i < dataValues.size(); i++) {
++			SynchedEntityData.DataValue<?> dataValue = dataValues.get(i);
++			if (dataValue.serializer() != EntityDataSerializers.ITEM_STACK) continue;
++
++			ItemStack result = fromBukkit(contextBox, original);
++			if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
++			break;
++		}
++		return packet;
++	}
++
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundSetPlayerInventoryPacket packet) {
++		ItemStack original = packet.contents();
++		var context = new SlottedItemPacketContext(packet, packet.slot());
++		var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
++		ItemStack result = fromBukkit(contextBox, original);
++		return result == null ? packet : new ClientboundSetCursorItemPacket(result);
++	}
++
++	// Yes, this also sucks!
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundUpdateRecipesPacket packet) {
++		List<SelectableRecipe.SingleInputEntry<StonecutterRecipe>> stonecutterRecipes = new ArrayList<>();
++		for (SelectableRecipe.SingleInputEntry<StonecutterRecipe> stonecutterRecipeEntry : packet.stonecutterRecipes().entries()) {
++			if (stonecutterRecipeEntry.recipe().recipe().isEmpty()) {
++				stonecutterRecipes.add(stonecutterRecipeEntry);
++				continue;
++			}
++
++			var ingredientContext = new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT);
++			var resultContext = new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT);
++
++			RecipeHolder<StonecutterRecipe> recipe = stonecutterRecipeEntry.recipe().recipe().get();
++			StonecutterRecipe nmsRecipe = recipe.value();
++			Ingredient ingredient = replaceIngredient(player, ItemModifierContextType.RECIPE_BOOK, ingredientContext, nmsRecipe.input());
++
++			ItemStack original = nmsRecipe.result;
++			ItemStack result = replaceItem(player, ItemModifierContextType.RECIPE_BOOK, resultContext, original);
++			if (result == null) {
++				result = original;
++			}
++
++			nmsRecipe = new StonecutterRecipe(nmsRecipe.group(), ingredient, result);
++			stonecutterRecipes.add(new SelectableRecipe.SingleInputEntry<>(ingredient, new SelectableRecipe<>(new SlotDisplay.ItemStackSlotDisplay(result), Optional.of(new RecipeHolder<>(recipe.id(), nmsRecipe)))));
++		}
++
++		return new ClientboundUpdateRecipesPacket(packet.itemSets(), new SelectableRecipe.SingleInputSet<>(stonecutterRecipes));
++	}
++
++	// This one is a real sucker (and I thought the entity data was bad :')
++	// Changing items inside the recipes is a no-go and there's lack of context upon
++	// writing to the buffer, so we have to recreate the recipes in there...
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundRecipeBookAddPacket packet) {
++		List<ClientboundRecipeBookAddPacket.Entry> entries = new ArrayList<>(packet.entries());
++		for (int r = 0; r < entries.size(); r++) {
++			ClientboundRecipeBookAddPacket.Entry entry = entries.get(r);
++			RecipeDisplayEntry contents = entry.contents();
++			RecipeDisplay display = contents.display();
++			RecipeDisplay newDisplay = replaceRecipeDisplay(packet, ItemModifierContextType.RECIPE_BOOK, player, display);
++			if (display != newDisplay) {
++				entries.set(r, new ClientboundRecipeBookAddPacket.Entry(
++					new RecipeDisplayEntry(
++						contents.id(),
++						newDisplay,
++						contents.group(),
++						contents.category(),
++						contents.craftingRequirements()
++					),
++					entry.flags()
++				));
++			}
++		}
++
++		return new ClientboundRecipeBookAddPacket(entries, packet.replace());
++	}
++
++	private static @NotNull RecipeDisplay replaceRecipeDisplay(@NotNull Packet<?> packet, @NotNull ItemModifierContextType contextType, @NotNull CraftPlayer player, @NotNull RecipeDisplay display) {
++		return switch (display) {
++			case FurnaceRecipeDisplay furnaceRecipeDisplay -> {
++				SlotDisplay ingredient = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), furnaceRecipeDisplay.ingredient());
++				SlotDisplay fuel = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), furnaceRecipeDisplay.fuel());
++				SlotDisplay result = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT), furnaceRecipeDisplay.result());
++				SlotDisplay craftingStation = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.CRAFTING_STATION), furnaceRecipeDisplay.craftingStation());
++				yield new FurnaceRecipeDisplay(ingredient, fuel, result, craftingStation, furnaceRecipeDisplay.duration(), furnaceRecipeDisplay.experience());
++			}
++			case ShapedCraftingRecipeDisplay shapedCraftingRecipeDisplay -> {
++				List<SlotDisplay> ingredients = new ArrayList<>(shapedCraftingRecipeDisplay.ingredients());
++				ingredients.replaceAll(slotDisplay -> replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), slotDisplay));
++				SlotDisplay result = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT), shapedCraftingRecipeDisplay.result());
++				SlotDisplay craftingStation = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.CRAFTING_STATION), shapedCraftingRecipeDisplay.craftingStation());
++				yield new ShapedCraftingRecipeDisplay(shapedCraftingRecipeDisplay.width(), shapedCraftingRecipeDisplay.height(), ingredients, result, craftingStation);
++			}
++			case ShapelessCraftingRecipeDisplay shapelessCraftingRecipeDisplay -> {
++				List<SlotDisplay> ingredients = new ArrayList<>(shapelessCraftingRecipeDisplay.ingredients());
++				ingredients.replaceAll(slotDisplay -> replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), slotDisplay));
++				SlotDisplay result = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT), shapelessCraftingRecipeDisplay.result());
++				SlotDisplay craftingStation = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.CRAFTING_STATION), shapelessCraftingRecipeDisplay.craftingStation());
++				yield new ShapelessCraftingRecipeDisplay(ingredients, result, craftingStation);
++			}
++			case SmithingRecipeDisplay smithingRecipeDisplay -> {
++				SlotDisplay template = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.SMITHING_TEMPLATE), smithingRecipeDisplay.template());
++				SlotDisplay base = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.SMITHING_BASE), smithingRecipeDisplay.base());
++				SlotDisplay addition = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.SMITHING_ADDITION), smithingRecipeDisplay.addition());
++				SlotDisplay result = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT), smithingRecipeDisplay.result());
++				SlotDisplay craftingStation = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.CRAFTING_STATION), smithingRecipeDisplay.craftingStation());
++				yield new SmithingRecipeDisplay(template, base, addition, result, craftingStation);
++			}
++			case StonecutterRecipeDisplay stonecutterRecipeDisplay -> {
++				SlotDisplay input = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), stonecutterRecipeDisplay.input());
++				SlotDisplay result = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT), stonecutterRecipeDisplay.result());
++				SlotDisplay craftingStation = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.CRAFTING_STATION), stonecutterRecipeDisplay.craftingStation());
++				yield new StonecutterRecipeDisplay(input, result, craftingStation);
++			}
++			default -> display;
++		};
++	}
++
++	private static @NotNull SlotDisplay replaceSlotDisplay(@NotNull CraftPlayer player, @NotNull ItemModifierContextType contextType, @NotNull RecipeBookPacketContext context, @NotNull SlotDisplay slotDisplay) {
++		return switch (slotDisplay) {
++			case SlotDisplay.Composite composite -> {
++				List<SlotDisplay> displays = new ArrayList<>(composite.contents());
++				displays.replaceAll(display -> replaceSlotDisplay(player, contextType, context, display));
++				yield new SlotDisplay.Composite(displays);
++			}
++			case SlotDisplay.ItemSlotDisplay itemSlotDisplay -> {
++				ItemStack replacement = replaceItem(player, contextType, context, itemSlotDisplay.item().value().getDefaultInstance());
++				yield replacement == null ? itemSlotDisplay : new SlotDisplay.ItemStackSlotDisplay(replacement);
++			}
++			case SlotDisplay.ItemStackSlotDisplay itemStackSlotDisplay -> {
++				ItemStack replacement = replaceItem(player, contextType, context, itemStackSlotDisplay.stack());
++				yield replacement == null ? itemStackSlotDisplay : new SlotDisplay.ItemStackSlotDisplay(replacement);
++			}
++			case SlotDisplay.SmithingTrimDemoSlotDisplay smithingTrimDemoSlotDisplay -> {
++				SlotDisplay base = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.base());
++				SlotDisplay material = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.material());
++				SlotDisplay pattern = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.pattern());
++				if (base == smithingTrimDemoSlotDisplay.base() && material == smithingTrimDemoSlotDisplay.material() && pattern == smithingTrimDemoSlotDisplay.pattern())
++					yield smithingTrimDemoSlotDisplay;
++				yield new SlotDisplay.SmithingTrimDemoSlotDisplay(base, material, pattern);
++			}
++			case SlotDisplay.WithRemainder withRemainder -> {
++				SlotDisplay input = replaceSlotDisplay(player, contextType, context, withRemainder.input());
++				SlotDisplay remainder = replaceSlotDisplay(player, contextType, context, withRemainder.remainder());
++				if (input == withRemainder.input() && remainder == withRemainder.remainder())
++					yield withRemainder;
++				yield new SlotDisplay.WithRemainder(input, remainder);
++			}
++			default -> slotDisplay;
++		};
++	}
++
++	private static @NotNull Ingredient replaceIngredient(@NotNull CraftPlayer player, @NotNull ItemModifierContextType contextType, @NotNull RecipeBookPacketContext context, @NotNull Ingredient ingredient) {
++		Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
++		List<ItemStack> items = superDirtyCopy.itemStacks();
++		for (int i = 0; i < items.size(); i++) {
++			ItemStack result = replaceItem(player, contextType, context, items.get(i));
++			if (result != null) {
++				items.set(i, result);
++			}
++		}
++		return superDirtyCopy;
++	}
++
++	private static @Nullable ItemStack replaceItem(@NotNull CraftPlayer player, @NotNull ItemModifierContextType contextType, @NotNull RecipeBookPacketContext context, @NotNull ItemStack original) {
++		var contextBox = new ItemContextBox(player, contextType, context, original.asBukkitCopy());
++		return fromBukkit(contextBox, original);
++	}
++
++	// I may have sinned, twice
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundUpdateAdvancementsPacket packet) {
++		List<AdvancementHolder> advancements = new ArrayList<>(packet.getAdded());
++		for (int i = 0; i < advancements.size(); i++) {
++			AdvancementHolder oldHolder = advancements.get(i);
++			Advancement oldAdvancement = oldHolder.value();
++			DisplayInfo oldDisplay = oldAdvancement.display().orElse(null);
++			if (oldDisplay == null) continue;
++
++			var namespacedKey = new NamespacedKey(oldHolder.id().getNamespace(), oldHolder.id().getPath());
++			var context = new AdvancementPacketContext(packet, namespacedKey, oldHolder::toBukkit);
++			ItemStack original = oldDisplay.getIcon();
++			var contextBox = new ItemContextBox(player, ItemModifierContextType.ADVANCEMENT, context, original.asBukkitCopy());
++			ItemStack result = fromBukkit(contextBox, original);
++			if (result == null) continue;
++
++			var displayInfo = new DisplayInfo(
++					result,
++					oldDisplay.getTitle(),
++					oldDisplay.getDescription(),
++					oldDisplay.getBackground(),
++					oldDisplay.getType(),
++					oldDisplay.shouldShowToast(),
++					oldDisplay.shouldAnnounceChat(),
++					oldDisplay.isHidden()
++			);
++			var advancement = new Advancement(
++					oldAdvancement.parent(),
++					Optional.of(displayInfo),
++					oldAdvancement.rewards(),
++					oldAdvancement.criteria(),
++					oldAdvancement.requirements(),
++					oldAdvancement.sendsTelemetryEvent()
++			);
++			var holder = new AdvancementHolder(oldHolder.id(), advancement);
++			advancements.set(i, holder);
++		}
++		packet.added = advancements;
++		return packet;
++	}
++
++	// ..thrice?!
++	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundMerchantOffersPacket packet) {
++		MerchantOffers newOffers = new MerchantOffers();
++		MerchantOffers oldOffers = packet.getOffers();
++		for (MerchantOffer merchantOffer : oldOffers) {
++			boolean modified = false;
++			ItemCost itemCost = merchantOffer.getItemCostA();
++			ItemStack original = itemCost.itemStack();
++			var context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.FIRST);
++			var contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
++			ItemStack result = fromBukkit(contextBox, original);
++			if (result != null) {
++				modified = true;
++				merchantOffer = merchantOffer.copy();
++				merchantOffer.baseCostA = new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components());
++			}
++
++			itemCost = merchantOffer.getItemCostB().orElse(null);
++			if (itemCost != null) {
++				original = itemCost.itemStack();
++				context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.SECOND);
++				contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
++				result = fromBukkit(contextBox, original);
++				if (result != null) {
++					if (!modified) {
++						modified = true;
++						merchantOffer = merchantOffer.copy();
++					}
++					merchantOffer.costB = Optional.of(new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components()));
++				}
++			}
++
++			original = merchantOffer.getResult();
++			context = new MerchantOfferPacketContext(packet, merchantOffer.asBukkit(), MerchantOfferPacketContext.Slot.RESULT);
++			contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, context, original.asBukkitCopy());
++			result = fromBukkit(contextBox, original);
++			if (result != null) {
++				if (!modified) {
++					merchantOffer = merchantOffer.copy();
++				}
++				merchantOffer.result = result;
++			}
++			newOffers.add(merchantOffer);
++		}
++		packet.offers = newOffers;
++		return packet;
++	}
++
++	private static @Nullable ItemStack fromBukkit(@NotNull ItemContextBox contextBox, @NotNull ItemStack original) {
++		var bukkitItem = ItemModifier.modifyItem(contextBox);
++		if (bukkitItem == null) return null;
++
++		return ItemStack.fromBukkitCopy(bukkitItem);
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/ItemPacketContextInitializer.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/ItemPacketContextInitializer.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..4f7a04f81d19612e9de609a53504553c1b569612
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/packet/ItemPacketContextInitializer.java
+@@ -0,0 +1,20 @@
++package me.sosedik.kiterino.modifier.item.context.packet;
++
++import net.minecraft.world.entity.Entity;
++
++public class ItemPacketContextInitializer {
++
++	private ItemPacketContextInitializer() {
++		throw new IllegalStateException("Utility class");
++	}
++
++	public static void init() {
++		if (EntityDataPacketContext.entityFetcher == null) EntityDataPacketContext.entityFetcher = (entity) -> {
++			if (entity instanceof org.bukkit.entity.Entity bukkitEntity) return bukkitEntity;
++			if (entity instanceof Entity nmsEntity) return nmsEntity.getBukkitEntity();
++
++			return null;
++		};
++	}
++
++}
+diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
+index 44a31f6f44885598ee06e88b940b84b1e89e5430..32afc69579a688d17555edd182e0a7dc66ab787f 100644
+--- a/src/main/java/net/minecraft/network/Connection.java
++++ b/src/main/java/net/minecraft/network/Connection.java
+@@ -509,6 +509,11 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+             return;
+         }
+         try {
++        // Kiterino start - Item Modifiers API
++        if (player != null) { // The Cake is a Lie
++            packet = me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.processPacket(player.getBukkitEntity(), packet);
++        }
++        // Kiterino end - Item Modifiers API
+         // Paper end - Optimize network
+         ChannelFuture channelfuture = flush ? this.channel.writeAndFlush(packet) : this.channel.write(packet);
+ 
+@@ -531,7 +536,8 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
+ 
+         // Paper start - Optimize network
+         if (packet.hasFinishListener()) {
+-            channelfuture.addListener((ChannelFutureListener) channelFuture -> packet.onPacketDispatchFinish(player, channelFuture));
++            Packet<?> finalPacket = packet; // Kiterino - Item Modifiers API
++            channelfuture.addListener((ChannelFutureListener) channelFuture -> finalPacket.onPacketDispatchFinish(player, channelFuture)); // Kiterino - Item Modifiers API
+         }
+         channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+         } catch (final Exception e) {
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetContentPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetContentPacket.java
+index 8d5939e03a065197af125d95a10134abbccd07ec..c71c938ce0108c7d10189b689c16fbd5c20ca850 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetContentPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetContentPacket.java
+@@ -15,7 +15,7 @@ public class ClientboundContainerSetContentPacket implements Packet<ClientGamePa
+     private final int containerId;
+     private final int stateId;
+     private final List<ItemStack> items;
+-    private final ItemStack carriedItem;
++    public ItemStack carriedItem; // Kiterino - Item Modifiers API
+ 
+     public ClientboundContainerSetContentPacket(int syncId, int revision, NonNullList<ItemStack> contents, ItemStack cursorStack) {
+         this.containerId = syncId;
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetSlotPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetSlotPacket.java
+index 97b6605ba56584a44cfc4361af7389e876496ef2..34f6191f43f51bcb50973998caf05d978114caf4 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetSlotPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundContainerSetSlotPacket.java
+@@ -13,7 +13,7 @@ public class ClientboundContainerSetSlotPacket implements Packet<ClientGamePacke
+     private final int containerId;
+     private final int stateId;
+     private final int slot;
+-    private final ItemStack itemStack;
++    public ItemStack itemStack; // Kiterino - Item Modifiers API
+ 
+     public ClientboundContainerSetSlotPacket(int syncId, int revision, int slot, ItemStack stack) {
+         this.containerId = syncId;
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundMerchantOffersPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundMerchantOffersPacket.java
+index d5391e767f23a1a102fdf4476054e220f1d87e50..571362ee475acc5efe10c858f2669d50f3a0c0af 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundMerchantOffersPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundMerchantOffersPacket.java
+@@ -11,7 +11,7 @@ public class ClientboundMerchantOffersPacket implements Packet<ClientGamePacketL
+         ClientboundMerchantOffersPacket::write, ClientboundMerchantOffersPacket::new
+     );
+     private final int containerId;
+-    private final MerchantOffers offers;
++    public MerchantOffers offers; // Kiterino - Item Modifiers API
+     private final int villagerLevel;
+     private final int villagerXp;
+     private final boolean showProgress;
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAdvancementsPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAdvancementsPacket.java
+index bc46dd38a1cc50af2d19a23b354013260c38be5b..5766078c222794a815112d4f614acf43be24759a 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAdvancementsPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundUpdateAdvancementsPacket.java
+@@ -19,7 +19,7 @@ public class ClientboundUpdateAdvancementsPacket implements Packet<ClientGamePac
+         ClientboundUpdateAdvancementsPacket::write, ClientboundUpdateAdvancementsPacket::new
+     );
+     private final boolean reset;
+-    private final List<AdvancementHolder> added;
++    public List<AdvancementHolder> added; // Kiterino - Item Modifiers API
+     private final Set<ResourceLocation> removed;
+     private final Map<ResourceLocation, AdvancementProgress> progress;
+ 
+diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
+index 980fea65899ef5f37808506b822fd3de5830d2c7..23f8ea3cfaec486d1768d37509b7031fb41f8c53 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
++++ b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
+@@ -26,8 +26,8 @@ import org.bukkit.inventory.RecipeChoice;
+ 
+ public class ShapedRecipe implements CraftingRecipe {
+ 
+-    final ShapedRecipePattern pattern;
+-    final ItemStack result;
++    public final ShapedRecipePattern pattern; // Kiterino - Item Modification API
++    public final ItemStack result; // Kiterino - Item Modification API
+     final String group;
+     final CraftingBookCategory category;
+     final boolean showNotification;
+diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java
+index 2490a42c9c35c7e080279ef8566288a28362d167..c4eb48cfcf363da7968c0022919bc23b91e74995 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java
++++ b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipePattern.java
+@@ -39,7 +39,7 @@ public final class ShapedRecipePattern {
+     private final int width;
+     private final int height;
+     private final List<Optional<Ingredient>> ingredients;
+-    private final Optional<ShapedRecipePattern.Data> data;
++    public final Optional<ShapedRecipePattern.Data> data; // Kiterino - Item Modifiers API
+     private final int ingredientCount;
+     private final boolean symmetrical;
+ 
+diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
+index 12f95bee2a69fd5df7c4a165537e01299e60c5f6..4aa41825806f6baa0c07a1d8c085428a35912bab 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
++++ b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
+@@ -27,8 +27,8 @@ public class ShapelessRecipe implements CraftingRecipe {
+ 
+     final String group;
+     final CraftingBookCategory category;
+-    final ItemStack result;
+-    final List<Ingredient> ingredients;
++    public final ItemStack result; // Kiterino - Item Modification API
++    public final List<Ingredient> ingredients; // Kiterino - Item Modification API
+     @Nullable
+     private PlacementInfo placementInfo;
+ 
+diff --git a/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java b/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java
+index 834a874beedeba65d4f6425189b7e1739a9411bf..d37d53914eeca66d76892f864b55bd81485f70d1 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java
++++ b/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java
+@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
+ 
+ public abstract class SingleItemRecipe implements Recipe<SingleRecipeInput> {
+     private final Ingredient input;
+-    private final ItemStack result;
++    public final ItemStack result; // Kiterino - private -> public - Item Modifiers API
+     private final String group;
+     @Nullable
+     private PlacementInfo placementInfo;
+diff --git a/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java b/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java
+index 017748b26590364d846a5cddaa3490b2293ad276..ad3077d66e16959dd7ae270dfaca23d41260c721 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java
++++ b/src/main/java/net/minecraft/world/item/crafting/SmithingTransformRecipe.java
+@@ -24,13 +24,13 @@ import org.bukkit.inventory.Recipe;
+ 
+ public class SmithingTransformRecipe implements SmithingRecipe {
+ 
+-    final Optional<Ingredient> template;
+-    final Optional<Ingredient> base;
+-    final Optional<Ingredient> addition;
+-    final ItemStack result;
++    public final Optional<Ingredient> template; // Kiterino - Item Modifiers API
++    public final Optional<Ingredient> base; // Kiterino - Item Modifiers API
++    public final Optional<Ingredient> addition; // Kiterino - Item Modifiers API
++    public final ItemStack result; // Kiterino - Item Modifiers API
+     @Nullable
+     private PlacementInfo placementInfo;
+-    final boolean copyDataComponents; // Paper - Option to prevent data components copy
++    public final boolean copyDataComponents; // Paper - Option to prevent data components copy // Kiterino - Item Modifiers API
+ 
+     public SmithingTransformRecipe(Optional<Ingredient> template, Optional<Ingredient> base, Optional<Ingredient> addition, ItemStack result) {
+         // Paper start - Option to prevent data components copy
+diff --git a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
+index af157881d440b34cfe79fbc9b03cc9ef28515eb8..4e03872ccf969f6e843ed65fc8d36c5035e8ba69 100644
+--- a/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
++++ b/src/main/java/net/minecraft/world/item/trading/MerchantOffer.java
+@@ -42,7 +42,7 @@ public class MerchantOffer {
+     public static final StreamCodec<RegistryFriendlyByteBuf, MerchantOffer> STREAM_CODEC = StreamCodec.of(MerchantOffer::writeToStream, MerchantOffer::createFromStream);
+     public ItemCost baseCostA;
+     public Optional<ItemCost> costB;
+-    public final ItemStack result;
++    public ItemStack result; // Kiterino - Item Modifiers API
+     public int uses;
+     public int maxUses;
+     public boolean rewardExp;

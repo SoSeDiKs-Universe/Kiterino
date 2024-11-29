@@ -1,0 +1,105 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 30 Apr 2024 05:26:09 +0300
+Subject: [PATCH] Init Kiterino configs
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..0d0312744369b332ed0dfd171c060fc9019ae8b1
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/KiterinoInitializer.java
+@@ -0,0 +1,8 @@
++package me.sosedik.kiterino;
++
++public class KiterinoInitializer {
++
++	public static void initPostConfig() {
++	}
++
++}
+diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+index e9ad8e2ac267c46df80e884308df8bb12d0deeff..9275b4fa6a01c5630ea9218ddb192bb7cece4f20 100644
+--- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -229,6 +229,14 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
+         }
+         org.purpurmc.purpur.PurpurConfig.registerCommands();
+         // Purpur end
++        // Kiterino start - Kiterino Config
++        try {
++            me.sosedik.kiterino.KiterinoConfig.init((java.io.File) options.valueOf("kiterino-settings"));
++        } catch (Exception e) {
++            DedicatedServer.LOGGER.error("Unable to load Kiterino server configuration", e);
++            return false;
++        }
++        // Kiterino end - Kiterino Config
+         // Paper start - initialize global and world-defaults configuration
+         this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
+         this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
+diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
+index eb52b1eea31a390c5f17a6c6b6e8bc6217d50189..ae90beed577430c2f1f9cd839468174c0f98e548 100644
+--- a/src/main/java/net/minecraft/world/level/Level.java
++++ b/src/main/java/net/minecraft/world/level/Level.java
+@@ -175,6 +175,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
+ 
+     public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
+     public final org.purpurmc.purpur.PurpurWorldConfig purpurConfig; // Purpur
++    public final me.sosedik.kiterino.KiterinoWorldConfig kiterinoConfig; // Kiterino - Kiterino Config
+     public static BlockPos lastPhysicsProblem; // Spigot
+     private org.spigotmc.TickLimiter entityLimiter;
+     private org.spigotmc.TickLimiter tileLimiter;
+@@ -887,6 +888,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
+         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
+         this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
+         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Purpur
++        this.kiterinoConfig = new me.sosedik.kiterino.KiterinoWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Kiterino - Kiterino Config
+         this.playerBreedingCooldowns = this.getNewBreedingCooldownCache(); // Purpur
+         this.generator = gen;
+         this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 81922bf93f8a96e6cf05944ca98a82cc5945a6c6..6031dfd15bacea2eb48c4191901f7aa7a1042bae 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1101,6 +1101,8 @@ public final class CraftServer implements Server {
+         org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
+         this.console.paperConfigurations.reloadConfigs(this.console);
+         org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur
++        me.sosedik.kiterino.KiterinoConfig.init((File) console.options.valueOf("kiterino-settings")); // Kiterino - Kiterino Config
++        me.sosedik.kiterino.KiterinoInitializer.initPostConfig(); // Kiterino - Kiterino Config
+         for (ServerLevel world : this.console.getAllLevels()) {
+             // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
+             world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
+@@ -3112,6 +3114,13 @@ public final class CraftServer implements Server {
+         }
+         // Purpur end
+ 
++        // Kiterino start - Kiterino config
++        @Override
++        public YamlConfiguration getKiterinoConfig() {
++            return me.sosedik.kiterino.KiterinoConfig.config;
++        }
++        // Kiterino end - Kiterino config
++
+         @Override
+         public void restart() {
+             org.spigotmc.RestartCommand.restart();
+diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
+index 5bce26e9671aab15ac4bac9a0d00b5184bef74ea..5fbb2740a21a84dbae3c6ec6d8e144b72021cccd 100644
+--- a/src/main/java/org/bukkit/craftbukkit/Main.java
++++ b/src/main/java/org/bukkit/craftbukkit/Main.java
+@@ -191,6 +191,14 @@ public class Main {
+                         .defaultsTo("Unknown Server")
+                         .describedAs("Name");
+                 // Paper end
++
++                // Kiterino start - Kiterino Config
++                acceptsAll(asList("kiterino", "kiterino-settings"), "File for Kiterino settings")
++                        .withRequiredArg()
++                        .ofType(File.class)
++                        .defaultsTo(new File("kiterino.yml"))
++                        .describedAs("Yml file");
++                // Kiterino end - Kiterino Config
+             }
+         };
+ 

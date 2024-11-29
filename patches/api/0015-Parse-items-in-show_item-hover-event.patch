@@ -7,10 +7,10 @@ Allows parsing items inside hover event. Required to not kick the client when an
 By default only parses hovers in system chat messages, but can be enabled globally via "item-modifiers.apply-modifiers-on-all-hover" option.
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
-index 6b48a06e401d0cfa3f77690f053e10fb89d303fc..92cdfcdc015b443e30fedc9977fec7217ac75ae7 100644
+index 9f1c536f5b9c366f91534866dd86425a3dd10305..d9c5da68aab9fe3c9dbb922ea174726365cd90e9 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/context/ItemModifierContextType.java
-@@ -63,6 +63,11 @@ public class ItemModifierContextType {
+@@ -68,6 +68,11 @@ public class ItemModifierContextType {
       */
      public static final ItemModifierContextType EMPTY_NO_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().build();
  

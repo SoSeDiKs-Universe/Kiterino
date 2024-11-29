@@ -1,0 +1,222 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 9 Jul 2024 19:12:41 +0300
+Subject: [PATCH] Data-driven mob effects
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+index e65060f8361a5bcaa3b8f3e7fe920ab306dc763e..f6735b6e4807f5b2304e407981ffb6624e08a746 100644
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+@@ -85,7 +85,7 @@ public final class PaperRegistries {
+             // built-ins
+             writable(Registries.GAME_EVENT, RegistryKey.GAME_EVENT, GameEvent.class, CraftGameEvent::new, PaperGameEventRegistryEntry.PaperBuilder::new),
+             entry(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE, StructureType.class, CraftStructureType::new),
+-            entry(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new),
++            writable(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new, me.sosedik.kiterino.registry.data.KiterinoMobEffectRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven mob effects
+             entry(Registries.BLOCK, RegistryKey.BLOCK, BlockType.class, CraftBlockType::new),
+             writable(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new, me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             entry(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT, Cat.Type.class, CraftCat.CraftType::new),
+diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+index 7ed31220736afedd41dabc0343e18e22fe47695a..fb151c4b9b8620248ef542d65e7377a3c9f89e74 100644
+--- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
++++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+@@ -50,4 +50,18 @@ public class Conversions {
+         };
+     }
+     // Kiterino end - Data-driven items
++
++    // Kiterino start - Data-driven mob effects
++    public net.minecraft.world.effect.MobEffectCategory asVanilla(final org.bukkit.potion.PotionEffectType.Category category) {
++        return switch (category) {
++            case BENEFICIAL -> net.minecraft.world.effect.MobEffectCategory.BENEFICIAL;
++            case HARMFUL -> net.minecraft.world.effect.MobEffectCategory.HARMFUL;
++            case NEUTRAL -> net.minecraft.world.effect.MobEffectCategory.NEUTRAL;
++        };
++    }
++
++    public org.bukkit.potion.PotionEffectType.Category asBukkit(final net.minecraft.world.effect.MobEffectCategory category) {
++        return org.bukkit.craftbukkit.potion.CraftPotionEffectType.fromNMS(category);
++    }
++    // Kiterino end - Data-driven mob effects
+ }
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoMobEffectRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoMobEffectRegistryEntity.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..67fcc0f43b6faa8c76aebad15c04dc998c1ff112
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoMobEffectRegistryEntity.java
+@@ -0,0 +1,86 @@
++package me.sosedik.kiterino.registry.data;
++
++import io.papermc.paper.registry.PaperRegistryBuilder;
++import io.papermc.paper.registry.TypedKey;
++import io.papermc.paper.registry.data.util.Conversions;
++import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
++import me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper;
++import net.minecraft.world.effect.MobEffect;
++import net.minecraft.world.effect.MobEffectCategory;
++import org.bukkit.potion.PotionEffectType;
++import org.checkerframework.checker.nullness.qual.NonNull;
++import org.checkerframework.checker.nullness.qual.Nullable;
++import org.jetbrains.annotations.NotNull;
++
++public class KiterinoMobEffectRegistryEntity implements MobEffectRegistryEntity {
++
++	protected KiterinoMobEffectBehaviourWrapper wrapper;
++	protected MobEffectCategory category;
++	protected int color;
++
++	protected final Conversions conversions;
++
++	public KiterinoMobEffectRegistryEntity(
++			final @NonNull Conversions conversions,
++			final @NonNull TypedKey<PotionEffectType> ignoredKey,
++			final @Nullable MobEffect internal
++	) {
++		this.conversions = conversions;
++		if (internal == null) {
++			this.wrapper = new KiterinoMobEffectBehaviourWrapper() { };
++			this.category = MobEffectCategory.NEUTRAL;
++			return;
++		}
++
++		this.category = internal.getCategory();
++		this.color = internal.getColor();
++	}
++
++	@Override
++	public @NotNull KiterinoMobEffectBehaviourWrapper wrapper() {
++		return this.wrapper;
++	}
++
++	@Override
++	public PotionEffectType.@NonNull Category category() {
++		return conversions.asBukkit(this.category);
++	}
++
++	@Override
++	public int color() {
++		return this.color;
++	}
++
++	public static final class KiterinoBuilder extends KiterinoMobEffectRegistryEntity implements Builder,
++			PaperRegistryBuilder<MobEffect, PotionEffectType> {
++
++		public KiterinoBuilder(final @NonNull Conversions conversions, final @NonNull TypedKey<PotionEffectType> key, final @Nullable MobEffect internal) {
++			super(conversions, key, internal);
++		}
++
++		@Override
++		public @NonNull Builder wrapper(@NotNull KiterinoMobEffectBehaviourWrapper wrapper) {
++			this.wrapper = wrapper;
++			return this;
++		}
++
++		@Override
++		public @NonNull Builder category(PotionEffectType.@NonNull Category category) {
++			this.category = conversions.asVanilla(category);
++			return this;
++		}
++
++		@Override
++		public @NonNull Builder color(int color) {
++			this.color = color;
++			return this;
++		}
++
++		@Override
++		public @NonNull MobEffect build() {
++			return new KiterinoMobEffectWrapper(this.category, this.color, this.wrapper);
++		}
++
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/world/effect/KiterinoMobEffectWrapper.java b/src/main/java/me/sosedik/kiterino/world/effect/KiterinoMobEffectWrapper.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..e39eeb78f824cdc5b912f1260096d371f7b052da
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/world/effect/KiterinoMobEffectWrapper.java
+@@ -0,0 +1,70 @@
++package me.sosedik.kiterino.world.effect;
++
++import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
++import net.minecraft.server.level.ServerLevel;
++import net.minecraft.world.damagesource.DamageSource;
++import net.minecraft.world.effect.MobEffect;
++import net.minecraft.world.effect.MobEffectCategory;
++import net.minecraft.world.entity.Entity;
++import net.minecraft.world.entity.LivingEntity;
++import org.bukkit.craftbukkit.damage.CraftDamageSource;
++import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
++
++public class KiterinoMobEffectWrapper extends MobEffect {
++
++	private final KiterinoMobEffectBehaviourWrapper mobEffect;
++
++	public KiterinoMobEffectWrapper(@NotNull MobEffectCategory category, int color, @NotNull KiterinoMobEffectBehaviourWrapper mobEffect) {
++		super(category, color);
++		this.mobEffect = mobEffect;
++	}
++
++	@Override
++	public int getBlendDurationTicks() {
++		return this.mobEffect.getBlendDurationTicks();
++	}
++
++	@Override
++	public boolean applyEffectTick(@NotNull ServerLevel world, @NotNull LivingEntity entity, int amplifier) {
++		return this.mobEffect.applyEffectTick(entity.getBukkitLivingEntity(), amplifier);
++	}
++
++	@Override
++	public void applyInstantenousEffect(@NotNull ServerLevel world, @Nullable Entity source, @Nullable Entity attacker, @NotNull LivingEntity target, int amplifier, double proximity) {
++		this.mobEffect.applyInstantaneousEffect(source == null ? null : source.getBukkitEntity(), attacker == null ? null : attacker.getBukkitEntity(), target.getBukkitLivingEntity(), amplifier, proximity);
++	}
++
++	@Override
++	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
++		return this.mobEffect.shouldApplyEffectTickThisTick(duration, amplifier);
++	}
++
++	@Override
++	public void onEffectStarted(@NotNull LivingEntity entity, int amplifier) {
++		this.mobEffect.onEffectStarted(entity.getBukkitLivingEntity(), amplifier);
++	}
++
++	@Override
++	public void onEffectAdded(@NotNull LivingEntity entity, int amplifier) {
++		this.mobEffect.onEffectAdded(entity.getBukkitLivingEntity(), amplifier);
++	}
++
++	@Override
++	public void onMobRemoved(@NotNull ServerLevel world, @NotNull LivingEntity entity, int amplifier, @NotNull Entity.RemovalReason reason) {
++		if (reason == Entity.RemovalReason.KILLED) {
++			this.mobEffect.onMobKilled(entity.getBukkitLivingEntity(), amplifier);
++		}
++	}
++
++	@Override
++	public void onMobHurt(@NotNull ServerLevel world, @NotNull LivingEntity entity, int amplifier, @NotNull DamageSource source, float amount) {
++		this.mobEffect.onMobHurt(entity.getBukkitLivingEntity(), amplifier, new CraftDamageSource(source), amount);
++	}
++
++	@Override
++	public boolean isInstantenous() {
++		return this.mobEffect.isInstantaneous();
++	}
++
++}
+diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+index b31d6d19ee12c6c79792af4220597673000ad44c..d27f4fcab0c6ed05554523a2d47fede80da8dfc8 100644
+--- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
++++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+@@ -26,6 +26,7 @@ class RegistryBuilderTest {
+             .map(RegistryBuilderTest::possiblyUnwrap)
+             .filter(RegistryEntry.BuilderHolder.class::isInstance)
+             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
++            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.MOB_EFFECT.location())) // Kiterino - Data-driven mob effects
+             .map(Arguments::arguments);
+     }
+ 

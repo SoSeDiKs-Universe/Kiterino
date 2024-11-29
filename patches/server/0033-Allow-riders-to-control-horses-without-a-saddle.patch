@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 23 Jun 2024 15:43:34 +0300
+Subject: [PATCH] Allow riders to control horses without a saddle
+
+Requires a saddle on the client's side to actually control the entity.
+This is handled by a plugin on SoSeDiK's Universe.
+
+diff --git a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
+index b258be16f32ffd58ac8406deac9423cb01ca9a5c..0525300947ffd35a0cd8c0766c5745fadd354a1b 100644
+--- a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
++++ b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
+@@ -228,8 +228,8 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+ 
+     protected AbstractHorse(EntityType<? extends AbstractHorse> type, Level world) {
+         super(type, world);
+-        this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this); // Purpur - use vanilla controller
+-        this.lookControl = new net.minecraft.world.entity.ai.control.LookControl(this); // Purpur - use vanilla controller
++        // this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this); // Purpur - use vanilla controller // Kiterino - Allow riders to control horses without a saddle
++        // this.lookControl = new net.minecraft.world.entity.ai.control.LookControl(this); // Purpur - use vanilla controller // Kiterino - Allow riders to control horses without a saddle
+         this.createInventory();
+     }
+ 
+@@ -399,7 +399,7 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+ 
+     @Override
+     public boolean isSaddled() {
+-        return this.getFlag(4);
++        return this.getFlag(4) || hasRider(); // Kiterino - Allow riders to control horses without a saddle
+     }
+ 
+     public int getTemper() {
+@@ -591,7 +591,7 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+ 
+     @Override
+     public void openCustomInventoryScreen(Player player) {
+-        if (!this.level().isClientSide && (!this.isVehicle() || this.hasPassenger((Entity) player)) && this.isTamed()) {
++        if (!this.level().isClientSide && (!this.isVehicle() || this.hasPassenger((Entity) player)) && (this.isTamed() || getRider() == player)) { // Kiterino - Allow riders to control horses without a saddle
+             player.openHorseInventory(this, this.inventory);
+         }
+ 

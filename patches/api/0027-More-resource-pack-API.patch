@@ -5,10 +5,10 @@ Subject: [PATCH] More resource pack API
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 41fb608fec6d87459483443ef525254aaa77a083..db0f7216cfba7d65a1a6ecb853d8437b23010e2e 100644
+index 23e705fb60bfae324cfdc62178fb8e28dc0816bb..1e9193a24e38f79f2265f3968e77dc36cae84fc1 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -3044,4 +3044,30 @@ public final class Bukkit {
+@@ -3091,4 +3091,30 @@ public final class Bukkit {
          server.clearBlockHighlights();
      }
      // Purpur end
@@ -40,10 +40,10 @@ index 41fb608fec6d87459483443ef525254aaa77a083..db0f7216cfba7d65a1a6ecb853d8437b
 +    // Kiterino end - More resource pack API
  }
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index a6815cf155796c12708d04f8fc4309d9e0a28ddc..174184a38e463b65f3d2d383bc98473225f8b24f 100644
+index 49b5c78bdfc09a7c4190cd1be852eed94b99dfc4..fd232e59bb94033bf343d47881b8cb0a5a352d31 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2674,4 +2674,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2727,4 +2727,26 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void clearBlockHighlights();
      // Purpur end

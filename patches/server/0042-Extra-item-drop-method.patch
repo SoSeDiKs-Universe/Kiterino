@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 25 Sep 2024 19:28:18 +0300
+Subject: [PATCH] Extra item drop method
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index 856f12eb276c214f2f57a58a89a4da9eea34db2d..c8679fc1a07f56daf280e7f359e5dd310f678e18 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -895,4 +895,15 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+     public org.bukkit.entity.Entity copy(Location location) {
+         throw new UnsupportedOperationException("Cannot copy human entities");
+     }
++
++    // Kiterino start - Extra item drop method
++    @Override
++    public org.bukkit.entity.Item dropItem(ItemStack item) {
++        if (!(getHandle() instanceof ServerPlayer player)) {
++            return getWorld().dropItemNaturally(getLocation(), item);
++        }
++        var drop = player.drop(CraftItemStack.asNMSCopy(item), false, true);
++        return drop != null && drop.getBukkitEntity() instanceof org.bukkit.entity.Item droppedItem ? droppedItem : null;
++    }
++    // Kiterino end - Extra item drop method
+ }

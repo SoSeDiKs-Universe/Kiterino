@@ -1,0 +1,207 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 10 Sep 2024 21:35:48 +0300
+Subject: [PATCH] Data-driven items
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+index b81d0d906789ef2ff3759395821316462aacf323..e65060f8361a5bcaa3b8f3e7fe920ab306dc763e 100644
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+@@ -87,7 +87,7 @@ public final class PaperRegistries {
+             entry(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE, StructureType.class, CraftStructureType::new),
+             entry(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new),
+             entry(Registries.BLOCK, RegistryKey.BLOCK, BlockType.class, CraftBlockType::new),
+-            entry(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new),
++            writable(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new, me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             entry(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT, Cat.Type.class, CraftCat.CraftType::new),
+             entry(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT, Frog.Variant.class, CraftFrog.CraftVariant::new),
+             entry(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION, Villager.Profession.class, CraftVillager.CraftProfession::new),
+diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+index 1e9a0143bc3b70dfc5e129a0fe849ff3e01447ab..7ed31220736afedd41dabc0343e18e22fe47695a 100644
+--- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
++++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+@@ -30,4 +30,24 @@ public class Conversions {
+     public Component asAdventure(final net.minecraft.network.chat.@Nullable Component vanilla) {
+         return vanilla == null ? Component.empty() : this.serializer.deserialize(vanilla);
+     }
++
++    // Kiterino start - Data-driven items
++    public net.minecraft.world.item.Rarity asVanilla(final org.bukkit.inventory.ItemRarity rarity) {
++        return switch (rarity) {
++            case COMMON -> net.minecraft.world.item.Rarity.COMMON;
++            case UNCOMMON -> net.minecraft.world.item.Rarity.UNCOMMON;
++            case RARE -> net.minecraft.world.item.Rarity.RARE;
++            case EPIC -> net.minecraft.world.item.Rarity.EPIC;
++        };
++    }
++
++    public org.bukkit.inventory.ItemRarity asBukkit(final net.minecraft.world.item.Rarity rarity) {
++        return switch (rarity) {
++            case COMMON -> org.bukkit.inventory.ItemRarity.COMMON;
++            case UNCOMMON -> org.bukkit.inventory.ItemRarity.UNCOMMON;
++            case RARE -> org.bukkit.inventory.ItemRarity.RARE;
++            case EPIC -> org.bukkit.inventory.ItemRarity.EPIC;
++        };
++    }
++    // Kiterino end - Data-driven items
+ }
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..45efe32181d0050c08e729b49df4569ff62f19e2
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
+@@ -0,0 +1,141 @@
++package me.sosedik.kiterino.registry.data;
++
++import io.papermc.paper.datacomponent.DataComponentType;
++import io.papermc.paper.datacomponent.PaperComponentType;
++import io.papermc.paper.registry.PaperRegistryBuilder;
++import io.papermc.paper.registry.TypedKey;
++import io.papermc.paper.registry.data.util.Conversions;
++import net.minecraft.world.item.Item;
++import net.minecraft.world.level.block.ComposterBlock;
++import org.bukkit.inventory.ItemType;
++import org.checkerframework.checker.nullness.qual.NonNull;
++import org.checkerframework.checker.nullness.qual.Nullable;
++
++import java.util.HashMap;
++import java.util.Map;
++import java.util.function.Function;
++
++public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
++
++	protected Map<DataComponentType, Object> components = new HashMap<>();
++	protected @Nullable Float compostChance;
++	protected @Nullable Item nmsItem;
++	protected @Nullable Function<Object, Object> nmsItemFunction;
++
++	protected final Conversions conversions;
++	protected final TypedKey<ItemType> itemKey;
++
++	public KiterinoItemRegistryEntity(
++			final @NonNull Conversions conversions,
++			final @NonNull TypedKey<ItemType> ignoredKey,
++			final @Nullable Item internal
++	) {
++		this.conversions = conversions;
++		this.itemKey = ignoredKey;
++		if (internal == null) {
++			return;
++		}
++
++		parseValues(internal);
++	}
++
++	@Override
++	public boolean hasData(@NonNull DataComponentType type) {
++		return this.components.containsKey(type);
++	}
++
++	@SuppressWarnings("unchecked")
++	@Override
++	public <T> @Nullable T getData(DataComponentType.@NonNull Valued<T> type) {
++		return (T) this.components.get(type);
++	}
++
++	@Override
++	public @Nullable Float compostChance() {
++		return this.compostChance;
++	}
++
++	@Override
++	public @Nullable Object nmsItem() {
++		return this.nmsItem;
++	}
++
++	@Override
++	public @Nullable Function<Object, Object> nmsItemFunction() {
++		return this.nmsItemFunction;
++	}
++
++	protected void parseValues(@NonNull Item item) {
++		// Does it make sense to parse?
++		// DataComponentMap components = item.components();
++	}
++
++	public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
++			PaperRegistryBuilder<Item, ItemType> {
++
++		public KiterinoBuilder(final @NonNull Conversions conversions, final @NonNull TypedKey<ItemType> key, final @Nullable Item internal) {
++			super(conversions, key, internal);
++		}
++
++		@Override
++		public <T> @NonNull Builder setData(DataComponentType.@NonNull Valued<T> type, @Nullable T value) {
++			this.components.put(type, value);
++			return this;
++		}
++
++		@Override
++		public @NonNull <T> Builder setData(DataComponentType.@NonNull NonValued type) {
++			this.components.put(type, null);
++			return this;
++		}
++
++		@Override
++		public @NonNull Builder compostChance(@Nullable Float levelIncreaseChance) {
++			this.compostChance = levelIncreaseChance;
++			return this;
++		}
++
++		@Override
++		public @NonNull Builder nmsItem(@Nullable Object nmsItem) {
++			if (!(nmsItem instanceof Item item)) throw new IllegalArgumentException("NMS item must extend Item");
++			this.nmsItem = item;
++			parseValues(item);
++			return this;
++		}
++
++		@Override
++		public @NonNull Builder nmsItemFunction(@Nullable Function<Object, Object> nmsItemFunction) {
++			this.nmsItemFunction = nmsItemFunction;
++			return this;
++		}
++
++		@SuppressWarnings("unchecked")
++		@Override
++		public @NonNull Item build() {
++			Item item = this.nmsItem;
++			if (item == null) {
++				var properties = new Item.Properties();
++				this.components.forEach((type, value) -> {
++					if (type instanceof PaperComponentType.ValuedImpl<?, ?> valued) {
++						setData(properties, (PaperComponentType<Object, Object>) valued, value);
++					} else {
++						setData(properties, (PaperComponentType.NonValuedImpl<Object, Object>) type, null);
++					}
++				});
++				if (this.nmsItemFunction == null) {
++					item = new Item(properties);
++				} else {
++					item = (Item) this.nmsItemFunction.apply(properties);
++				}
++			}
++			if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
++			return item;
++		}
++
++		private void setData(Item.@NonNull Properties properties, @NonNull PaperComponentType<Object, Object> type, @Nullable Object value) {
++			properties.component(type.getHandle(), type.getAdapter().toVanilla(value));
++		}
++
++	}
++
++}
+diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+index f2f1dfe4277ce1e84a9494bee285badc958c8d3f..b31d6d19ee12c6c79792af4220597673000ad44c 100644
+--- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
++++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+@@ -25,6 +25,7 @@ class RegistryBuilderTest {
+         return PaperRegistries.REGISTRY_ENTRIES.stream()
+             .map(RegistryBuilderTest::possiblyUnwrap)
+             .filter(RegistryEntry.BuilderHolder.class::isInstance)
++            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
+             .map(Arguments::arguments);
+     }
+ 

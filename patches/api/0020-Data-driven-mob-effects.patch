@@ -8,12 +8,12 @@ Displaying effects to the client is done on the plugin's side.
 Vanilla /effect command won't show new effects in auto complete.
 
 diff --git a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
-index 777727f9e8541638f2ed42b26c0793a28d13d896..b057cac19491370282d9ba42e64f3c810b18ce97 100644
+index 0e95fb15bc11aae249dd2fab77cb7785cbff87e5..821f76270303304dc7a4d563f154d424546d3721 100644
 --- a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
 +++ b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
-@@ -21,6 +21,7 @@ public final class RegistryEvents {
-     public static final RegistryEventProvider<GameEvent, GameEventRegistryEntry.Builder> GAME_EVENT = create(RegistryKey.GAME_EVENT);
+@@ -24,6 +24,7 @@ public final class RegistryEvents {
      public static final RegistryEventProvider<Enchantment, EnchantmentRegistryEntry.Builder> ENCHANTMENT = create(RegistryKey.ENCHANTMENT);
+     public static final RegistryEventProvider<Art, PaintingVariantRegistryEntry.Builder> PAINTING_VARIANT = create(RegistryKey.PAINTING_VARIANT);
      public static final RegistryEventProvider<org.bukkit.inventory.ItemType, me.sosedik.kiterino.registry.data.ItemRegistryEntity.Builder> ITEM = create(RegistryKey.ITEM); // Kiterino - Data-driven items
 +    public static final RegistryEventProvider<org.bukkit.potion.PotionEffectType, me.sosedik.kiterino.registry.data.MobEffectRegistryEntity.Builder> MOB_EFFECT = create(RegistryKey.MOB_EFFECT); // Kiterino - Data-driven mob effects
  

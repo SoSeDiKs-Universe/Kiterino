@@ -5,10 +5,10 @@ Subject: [PATCH] Open ender chest API
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index af53f2540a54c2c92974cdc7974768e31ee7aff0..8edb5cc7533a18fd937ff6f05edc947c6c8b7fc7 100644
+index cb5992f7e186be13a0b9e1e72e6a75aefa47086a..413e987db00a1cc6e79ef1702e89fba4ec48bad5 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4029,4 +4029,14 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -4068,4 +4068,14 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       */
      void angerNearbyPiglins(boolean blockOpen);
      // Kiterino end - Anger nearby piglins API
