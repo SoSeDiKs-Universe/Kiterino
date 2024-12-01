@@ -23,7 +23,7 @@ index 25eafe3b3cce238ebd556ac894bb59c549c27e48..48f6ee0a3ac1f3276d90229aafe42e16
      public static boolean preventCreativeItemOverride;
      private static void preventCreativeItemsOverride() {
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 6a5a61def44c7c5a3e9fb76c825893e59ef05c54..34e4c1ff35c3e976d1a3dc1cb856dae4bee5f0d8 100644
+index c6d52745ec4b99191c8bd366d8360316eca9faa2..ad238f0e17c70bcc0c637ff03ae4a7140ef29dc7 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -22,6 +22,8 @@ import net.minecraft.advancements.AdvancementHolder;

@@ -27,7 +27,7 @@ index 48f6ee0a3ac1f3276d90229aafe42e162f757f04..1b84547f4cb4034081bd8e368c7804cd
 +
  }
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index 0990bcf65f484b9a019c91fcdae1783bac6388da..76d7bcdd6bfb6f4e29b6edb80a2f2cb8c9babdb3 100644
+index 99feda30fb85a7615560b6e9a3701d5dfeb3e524..82a00f7e73c438d2b81ceb5e209f8fbbc9365bbb 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
 @@ -198,7 +198,7 @@ public class Inventory implements Container, Nameable {

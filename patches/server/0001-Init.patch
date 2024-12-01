@@ -5,7 +5,7 @@ Subject: [PATCH] Init
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index c673a2cf682378aac38d047b999d8a1731f7569d..691b475a1d5577170e11a69700c2d98dd8192274 100644
+index 77602e4445b1b45a17e5552ac6a769e0ed46ebc7..82ca36909d4f4e4910f23812fbe2c22fdd7ab957 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -25,7 +25,7 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
@@ -17,7 +17,7 @@ index c673a2cf682378aac38d047b999d8a1731f7569d..691b475a1d5577170e11a69700c2d98d
      // Paper start
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -103,14 +103,14 @@ tasks.jar {
+@@ -118,14 +118,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

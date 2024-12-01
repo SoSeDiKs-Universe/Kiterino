@@ -5,7 +5,7 @@ Subject: [PATCH] Forced panic mode API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 31326cc83130e4226aee443be880c00c2adc7ab0..aa51fd2feffec755ef0752d9f66652238876ada6 100644
+index aa171a1afb9800e6ec84f6b4f1b28e44177752f7..201d547b3b004edcdd1b18368eea472a81a90312 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -306,6 +306,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -16,7 +16,7 @@ index 31326cc83130e4226aee443be880c00c2adc7ab0..aa51fd2feffec755ef0752d9f6665223
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
      protected boolean wasEyeInWater;
-@@ -961,6 +962,12 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -964,6 +965,12 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
              this.clearFire();
          }
  

@@ -75,18 +75,18 @@ index 23f8ea3cfaec486d1768d37509b7031fb41f8c53..633ad8ece53a5da27a8d616fcb0827f3
      }
      // CraftBukkit end
 diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
-index 4aa41825806f6baa0c07a1d8c085428a35912bab..86701aa1bc0e18e0b7744fa7dfd59b04f15d539f 100644
+index 4a111a9a71d462c12053ca339b74246c82818484..0a9281721229bca2ebe5da770a7c795fb502eabe 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
-@@ -31,6 +31,7 @@ public class ShapelessRecipe implements CraftingRecipe {
-     public final List<Ingredient> ingredients; // Kiterino - Item Modification API
+@@ -32,6 +32,7 @@ public class ShapelessRecipe implements CraftingRecipe {
      @Nullable
      private PlacementInfo placementInfo;
+     private final boolean isBukkit; // Pufferfish
 +    public boolean special = false; // Kiterino - Extra recipes API
  
+     // Pufferfish start
      public ShapelessRecipe(String group, CraftingBookCategory category, ItemStack result, List<Ingredient> ingredients) {
-         this.group = group;
-@@ -39,6 +40,13 @@ public class ShapelessRecipe implements CraftingRecipe {
+@@ -44,6 +45,13 @@ public class ShapelessRecipe implements CraftingRecipe {
          this.ingredients = ingredients;
      }
  
@@ -100,7 +100,7 @@ index 4aa41825806f6baa0c07a1d8c085428a35912bab..86701aa1bc0e18e0b7744fa7dfd59b04
      // CraftBukkit start
      @SuppressWarnings("unchecked")
      @Override
-@@ -51,6 +59,7 @@ public class ShapelessRecipe implements CraftingRecipe {
+@@ -56,6 +64,7 @@ public class ShapelessRecipe implements CraftingRecipe {
          for (Ingredient list : this.ingredients) {
              recipe.addIngredient(CraftRecipe.toBukkit(list));
          }
@@ -249,7 +249,7 @@ index 31da9c526135ddaf1f1448b9047c0c2e5a64604d..ca26bcce31437a0ee74221bb6c981544
  
      private static String[] replaceUndefinedIngredientsWithEmpty(String[] shape, Map<Character, org.bukkit.inventory.RecipeChoice> ingredients) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java
-index 7c989318dc7ad89bb0d9143fcaac1e4bba6f5907..6a4f2f980c5c08f07240ca1d08aa51fce05c3557 100644
+index 143a4d4efcc989ed4a4c73cc304e1978ad8f0699..5e324b375bb74f350602659b63a5b03a470e996c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftShapelessRecipe.java
 @@ -33,6 +33,7 @@ public class CraftShapelessRecipe extends ShapelessRecipe implements CraftRecipe
@@ -264,9 +264,9 @@ index 7c989318dc7ad89bb0d9143fcaac1e4bba6f5907..6a4f2f980c5c08f07240ca1d08aa51fc
              data.add(this.toNMS(i, true));
          }
  
--        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftRecipe.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.ShapelessRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), CraftItemStack.asNMSCopy(this.getResult()), data)));
+-        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftRecipe.toMinecraft(this.getKey()), new net.minecraft.world.item.crafting.ShapelessRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), CraftItemStack.asNMSCopy(this.getResult()), data, true))); // Pufferfish
 +        // Kiterino start - Extra recipes API
-+        var recipe = new net.minecraft.world.item.crafting.ShapelessRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), CraftItemStack.asNMSCopy(this.getResult()), data);
++        var recipe = new net.minecraft.world.item.crafting.ShapelessRecipe(this.getGroup(), CraftRecipe.getCategory(this.getCategory()), CraftItemStack.asNMSCopy(this.getResult()), data, true); // Pufferfish
 +        recipe.special = isSpecial();
 +        MinecraftServer.getServer().getRecipeManager().addRecipe(new RecipeHolder<>(CraftRecipe.toMinecraft(this.getKey()), recipe));
 +        // Kiterino end - Extra recipes API

@@ -67,7 +67,7 @@ index 0000000000000000000000000000000000000000..0a27cb17c68901f0d921e2239ac1a174
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index a71123cbc2cc1b3a4496f4bf0e9a782279f6ce7a..1ad99eadb0d8a47b251719a63c479a101021c11a 100644
+index eddac4503a7fac252c1c738d50d8363a4890ac89..325b0f62ca5b3ba92f2b403709672a1766ccd1d4 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,9 @@
@@ -78,7 +78,7 @@ index a71123cbc2cc1b3a4496f4bf0e9a782279f6ce7a..1ad99eadb0d8a47b251719a63c479a10
 +import org.bukkit.inventory.ItemStack;
 +
  import io.papermc.paper.datacomponent.DataComponentType;
- import io.papermc.paper.datacomponent.PaperComponentType;
+ import io.papermc.paper.datacomponent.PaperDataComponentType;
  import io.papermc.paper.registry.PaperRegistryBuilder;
 @@ -24,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  	protected @Nullable Float compostChance;

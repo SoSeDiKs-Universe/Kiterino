@@ -5,7 +5,7 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index e65060f8361a5bcaa3b8f3e7fe920ab306dc763e..f6735b6e4807f5b2304e407981ffb6624e08a746 100644
+index ae5850c9f5d4187341c8357a79a7c1a8f9402001..b15ed5e980d852097e4f044aea347136f1e655c9 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 @@ -85,7 +85,7 @@ public final class PaperRegistries {
@@ -209,7 +209,7 @@ index 0000000000000000000000000000000000000000..e39eeb78f824cdc5b912f1260096d371
 +
 +}
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index b31d6d19ee12c6c79792af4220597673000ad44c..d27f4fcab0c6ed05554523a2d47fede80da8dfc8 100644
+index 6f3d99ae7a959f53aec2d1a39110782b6db47df5..7a534c33fd0fb45af9a24b71d3d15405a38f01c9 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -26,6 +26,7 @@ class RegistryBuilderTest {

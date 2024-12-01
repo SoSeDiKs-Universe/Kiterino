@@ -5,7 +5,7 @@ Subject: [PATCH] Data-driven items
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index b81d0d906789ef2ff3759395821316462aacf323..e65060f8361a5bcaa3b8f3e7fe920ab306dc763e 100644
+index 132afec6bceb6c866de0aeb83db9613d4e74e2e7..ae5850c9f5d4187341c8357a79a7c1a8f9402001 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 @@ -87,7 +87,7 @@ public final class PaperRegistries {
@@ -48,14 +48,14 @@ index 1e9a0143bc3b70dfc5e129a0fe849ff3e01447ab..7ed31220736afedd41dabc0343e18e22
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..a71123cbc2cc1b3a4496f4bf0e9a782279f6ce7a
+index 0000000000000000000000000000000000000000..eddac4503a7fac252c1c738d50d8363a4890ac89
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -0,0 +1,145 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.datacomponent.DataComponentType;
-+import io.papermc.paper.datacomponent.PaperComponentType;
++import io.papermc.paper.datacomponent.PaperDataComponentType;
 +import io.papermc.paper.registry.PaperRegistryBuilder;
 +import io.papermc.paper.registry.TypedKey;
 +import io.papermc.paper.registry.data.util.Conversions;
@@ -174,10 +174,10 @@ index 0000000000000000000000000000000000000000..a71123cbc2cc1b3a4496f4bf0e9a7822
 +				var properties = new Item.Properties();
 +				properties.setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(this.itemKey.key().namespace(), this.itemKey.key().value())));
 +				this.components.forEach((type, value) -> {
-+					if (type instanceof PaperComponentType.ValuedImpl<?, ?> valued) {
-+						setData(properties, (PaperComponentType<Object, Object>) valued, value);
++					if (type instanceof PaperDataComponentType.ValuedImpl<?, ?> valued) {
++						setData(properties, (PaperDataComponentType<Object, Object>) valued, value);
 +					} else {
-+						setData(properties, (PaperComponentType.NonValuedImpl<Object, Object>) type, null);
++						setData(properties, (PaperDataComponentType.NonValuedImpl<Object, Object>) type, null);
 +					}
 +				});
 +				if (this.nmsItemFunction == null) {
@@ -190,7 +190,7 @@ index 0000000000000000000000000000000000000000..a71123cbc2cc1b3a4496f4bf0e9a7822
 +			return item;
 +		}
 +
-+		private void setData(Item.@NonNull Properties properties, @NonNull PaperComponentType<Object, Object> type, @Nullable Object value) {
++		private void setData(Item.@NonNull Properties properties, @NonNull PaperDataComponentType<Object, Object> type, @Nullable Object value) {
 +			properties.component(type.getHandle(), type.getAdapter().toVanilla(value));
 +		}
 +

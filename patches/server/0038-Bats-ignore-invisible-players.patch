@@ -20,7 +20,7 @@ index 0e430c0915012eb55ad9f656565499a9071b2064..2979eb09eee76d5b54e118bf5ce7d39c
 +
  }
 diff --git a/src/main/java/net/minecraft/world/entity/ambient/Bat.java b/src/main/java/net/minecraft/world/entity/ambient/Bat.java
-index 2d4fe19da8d53d47df36399531e78da2c961aecd..29a6a34e64c5f3497789353a5b1473f19b790961 100644
+index c8ffbbccbf20ce911a3d75fa860d5a1452c5e590..f9d76becd07f5f9badb49d8c1f69d78dc62c911a 100644
 --- a/src/main/java/net/minecraft/world/entity/ambient/Bat.java
 +++ b/src/main/java/net/minecraft/world/entity/ambient/Bat.java
 @@ -39,7 +39,7 @@ public class Bat extends AmbientCreature {

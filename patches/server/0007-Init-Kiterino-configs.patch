@@ -19,7 +19,7 @@ index 0000000000000000000000000000000000000000..0d0312744369b332ed0dfd171c060fc9
 +
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index e9ad8e2ac267c46df80e884308df8bb12d0deeff..d020f6158228f0399f597dfe40437c557aa73205 100644
+index 7a442fb4cf78bcb1268359ee41a6de138edb76b6..b6c9c7732a9eddec41111cedaec50feaa7cb2abb 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -229,6 +229,15 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
@@ -39,7 +39,7 @@ index e9ad8e2ac267c46df80e884308df8bb12d0deeff..d020f6158228f0399f597dfe40437c55
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index c5311db98e6a5fb48cbbc6f60874fd3edb475dd3..722a8e774fee5433b1e55fae8214e1a1bcaba48a 100644
+index 34e8eb828be517d9ee3973597c74c5cac3d75c99..760f7105d9d4d6277a354d387827c273edb545b5 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -175,6 +175,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
@@ -85,10 +85,10 @@ index 81922bf93f8a96e6cf05944ca98a82cc5945a6c6..6df57f213eca74b00842e9c2ee292ae9
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 5bce26e9671aab15ac4bac9a0d00b5184bef74ea..5fbb2740a21a84dbae3c6ec6d8e144b72021cccd 100644
+index 430407b0cf06ba337c59cd576c7e40a8e5fe8229..31fcdc4e2fecc2fbf03bd53bd881a78e82582b4f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
-@@ -191,6 +191,14 @@ public class Main {
+@@ -197,6 +197,14 @@ public class Main {
                          .defaultsTo("Unknown Server")
                          .describedAs("Name");
                  // Paper end

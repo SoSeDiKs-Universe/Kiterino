@@ -5,7 +5,7 @@ Subject: [PATCH] Anger nearby piglins API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 096597393d5306626eb5f57812d11985a4622168..807303fcc16ac5d7117c5f722aca923baccd009c 100644
+index f40ecca11953fab39ce24816de7e9be1b1f42583..7595bc3764d756ce9709a9fec50be535fbb69126 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -3710,4 +3710,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

@@ -767,7 +767,7 @@ index 2490a42c9c35c7e080279ef8566288a28362d167..c4eb48cfcf363da7968c0022919bc23b
      private final boolean symmetrical;
  
 diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
-index 12f95bee2a69fd5df7c4a165537e01299e60c5f6..4aa41825806f6baa0c07a1d8c085428a35912bab 100644
+index d7ce86752e4138cdd3844b3374609753aa20f9ea..4a111a9a71d462c12053ca339b74246c82818484 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
 @@ -27,8 +27,8 @@ public class ShapelessRecipe implements CraftingRecipe {
@@ -780,7 +780,7 @@ index 12f95bee2a69fd5df7c4a165537e01299e60c5f6..4aa41825806f6baa0c07a1d8c085428a
 +    public final List<Ingredient> ingredients; // Kiterino - Item Modification API
      @Nullable
      private PlacementInfo placementInfo;
- 
+     private final boolean isBukkit; // Pufferfish
 diff --git a/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java b/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java
 index 834a874beedeba65d4f6425189b7e1739a9411bf..d37d53914eeca66d76892f864b55bd81485f70d1 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/SingleItemRecipe.java

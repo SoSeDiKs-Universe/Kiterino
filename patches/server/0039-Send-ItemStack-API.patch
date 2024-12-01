@@ -5,7 +5,7 @@ Subject: [PATCH] Send ItemStack API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index f44d00c29e5597e2edfa4d234cc85928e52c89dc..096597393d5306626eb5f57812d11985a4622168 100644
+index f153af8ae2dba145f03631fa89388dbd42458c5b..f40ecca11953fab39ce24816de7e9be1b1f42583 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -3702,4 +3702,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

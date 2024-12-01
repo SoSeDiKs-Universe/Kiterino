@@ -6,12 +6,12 @@ Subject: [PATCH] Pufferfish's yaml changes
 Include Simple-YAML repo and sync snakeyaml version to API's one
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 99ba2fc1fd9d442f26e32ce29bd61b70e07e246d..f4a9915f520fa55a5186caedd355b85d0f631b71 100644
+index 82ca36909d4f4e4910f23812fbe2c22fdd7ab957..f66407a02d39785b5f6980f1299a4402c14c1b81 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -12,6 +12,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
+@@ -24,6 +24,12 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
  }
- val alsoShade: Configuration by configurations.creating
+ // Paper end - configure mockito agent that is needed in newer java versions
  
 +// Kiterino start - Pufferfish's yaml changes
 +repositories {
@@ -22,12 +22,12 @@ index 99ba2fc1fd9d442f26e32ce29bd61b70e07e246d..f4a9915f520fa55a5186caedd355b85d
  dependencies {
      implementation(project(":kiterino-api")) // Kiterino - Init
      // Paper start
-@@ -48,7 +54,7 @@ dependencies {
+@@ -61,7 +67,7 @@ dependencies {
      runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
      // Pufferfish start
 -    implementation("org.yaml:snakeyaml:1.32")
-+    implementation("org.yaml:snakeyaml:2.2") // Kiterino start - Sync snakeyaml to API's version - Pufferfish's yaml changes
++    implementation("org.yaml:snakeyaml:2.2") // Kiterino - Sync snakeyaml to API's version - Pufferfish's yaml changes
      implementation ("com.github.carleslc.Simple-YAML:Simple-Yaml:1.8.4") { // Purpur
          exclude(group="org.yaml", module="snakeyaml")
      }
