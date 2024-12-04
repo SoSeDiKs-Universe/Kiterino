@@ -69,10 +69,10 @@ index c6d52745ec4b99191c8bd366d8360316eca9faa2..ad238f0e17c70bcc0c637ff03ae4a714
  	private static @NotNull Packet<?> handle(@NotNull CraftPlayer player, @NotNull ClientboundBundlePacket initialPacket) {
  		if (!(initialPacket.subPackets() instanceof ArrayList list)) {
 diff --git a/src/main/java/net/minecraft/network/chat/ComponentSerialization.java b/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
-index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..325401d2287585507569de2dfb39c55bc8432056 100644
+index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..a820af5033d69d3b130569e33454b89330d3258b 100644
 --- a/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
 +++ b/src/main/java/net/minecraft/network/chat/ComponentSerialization.java
-@@ -54,13 +54,85 @@ public class ComponentSerialization {
+@@ -54,13 +54,88 @@ public class ComponentSerialization {
  
              @Override
              public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, Component object) {
@@ -95,7 +95,10 @@ index 22c6a324dedeb315eac2d3d3f55d2f3a9eebb0ad..325401d2287585507569de2dfb39c55b
          };
      }
 +    // Kiterino start - Parse items in show_item hover event
-+    public static Component replaceHoverItems(@org.jetbrains.annotations.Nullable org.bukkit.craftbukkit.entity.CraftPlayer player, java.util.Locale locale, Component component) {
++    public static Component replaceHoverItems(@org.jetbrains.annotations.Nullable org.bukkit.craftbukkit.entity.CraftPlayer player, java.util.Locale locale, @org.jetbrains.annotations.Nullable Component component) {
++        if (component == null) {
++            return component;
++        }
 +        // Go through children first
 +        List<Component> children = component.getSiblings();
 +        if (!children.isEmpty()) {

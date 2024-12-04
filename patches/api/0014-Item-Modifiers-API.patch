@@ -239,7 +239,7 @@ index 0000000000000000000000000000000000000000..4412c28ef6bd3eb08fba2d8f0edf9fc8
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifier.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifier.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..cc2ffdc060f539ec7960ccc8aaabb3b5ff9c1b26
+index 0000000000000000000000000000000000000000..fb6c78fb256d83c472ac504a524a08d953b8d348
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifier.java
 @@ -0,0 +1,112 @@
@@ -339,7 +339,7 @@ index 0000000000000000000000000000000000000000..cc2ffdc060f539ec7960ccc8aaabb3b5
 +     * @return modified item or {@code null}
 +     */
 +    public static @Nullable ItemStack modifyItem(@Nullable Player viewer, @NotNull Locale locale, @NotNull ItemStack item) {
-+        var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item);
++        var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item.clone());
 +        return modifyItem(contextBox);
 +    }
 +
