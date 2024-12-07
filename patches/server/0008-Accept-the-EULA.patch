@@ -6,10 +6,10 @@ Subject: [PATCH] Accept the EULA
 We at SoSeDiK's Universe agree to Mojang's EULA
 
 diff --git a/src/main/java/net/minecraft/server/Main.java b/src/main/java/net/minecraft/server/Main.java
-index ecaec3c7b5768771b00c4c33d48a76ba22653a79..2e41a0b3b1fa8cc5b080384da145c94c41592864 100644
+index a880f4e5cf712654649ad043e58e073e9a87c0fe..530fbaf81e124d61b048d4b45fcf3ae743de5d84 100644
 --- a/src/main/java/net/minecraft/server/Main.java
 +++ b/src/main/java/net/minecraft/server/Main.java
-@@ -169,6 +169,21 @@ public class Main {
+@@ -171,6 +171,21 @@ public class Main {
                  System.err.println( "If you do not agree to the above EULA please stop your server and remove this flag immediately." );
              }
              // Spigot End

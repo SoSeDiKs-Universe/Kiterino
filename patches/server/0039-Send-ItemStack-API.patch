@@ -5,10 +5,10 @@ Subject: [PATCH] Send ItemStack API
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index f153af8ae2dba145f03631fa89388dbd42458c5b..f40ecca11953fab39ce24816de7e9be1b1f42583 100644
+index 9d227820d2730b4b077a70f50a367afe9ce5b41e..3a5e70bf01b8ac865ff7fd591bf012cb586a16f9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3702,4 +3702,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3679,4 +3679,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          connection.send(new ClientboundSetBorderLerpSizePacket(20_000_00D, distance, 14_000L));
      }
      // Kiterino end - Red tint API

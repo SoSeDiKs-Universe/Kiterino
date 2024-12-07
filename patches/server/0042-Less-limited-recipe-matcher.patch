@@ -27,10 +27,10 @@ index 48f6ee0a3ac1f3276d90229aafe42e162f757f04..1b84547f4cb4034081bd8e368c7804cd
 +
  }
 diff --git a/src/main/java/net/minecraft/world/entity/player/Inventory.java b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-index 99feda30fb85a7615560b6e9a3701d5dfeb3e524..82a00f7e73c438d2b81ceb5e209f8fbbc9365bbb 100644
+index 58c8e8f06f5cf028b158350327bf42984fcb4d38..8507fa39f014537df16f6640d840a43a15e6ed8f 100644
 --- a/src/main/java/net/minecraft/world/entity/player/Inventory.java
 +++ b/src/main/java/net/minecraft/world/entity/player/Inventory.java
-@@ -198,7 +198,7 @@ public class Inventory implements Container, Nameable {
+@@ -185,7 +185,7 @@ public class Inventory implements Container, Nameable {
      }
  
      public static boolean isUsableForCrafting(ItemStack stack) {
@@ -38,4 +38,4 @@ index 99feda30fb85a7615560b6e9a3701d5dfeb3e524..82a00f7e73c438d2b81ceb5e209f8fbb
 +        return (me.sosedik.kiterino.KiterinoConfig.allowDamagedItemsInRecipeBook || !stack.isDamaged()) && (me.sosedik.kiterino.KiterinoConfig.allowEnchantedItemsInRecipeBook || !stack.isEnchanted()) && (me.sosedik.kiterino.KiterinoConfig.allowRenamedItemsInRecipeBook || !stack.has(DataComponents.CUSTOM_NAME)); // Kiterino - Less limited recipe matcher
      }
  
-     public int findSlotMatchingCraftingIngredient(io.papermc.paper.inventory.recipe.ItemOrExact item) { // Paper - Improve exact choice recipe ingredients
+     public int findSlotMatchingCraftingIngredient(io.papermc.paper.inventory.recipe.ItemOrExact item, ItemStack stack) { // Paper - Improve exact choice recipe ingredients

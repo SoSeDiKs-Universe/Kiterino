@@ -5,7 +5,7 @@ Subject: [PATCH] Forced panic mode API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index aa171a1afb9800e6ec84f6b4f1b28e44177752f7..201d547b3b004edcdd1b18368eea472a81a90312 100644
+index 904805ada13164ec6989e2451583fcc8d290e51f..94f9eea545f478f409d97f49a2dc9778d3596a15 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -306,6 +306,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -16,7 +16,7 @@ index aa171a1afb9800e6ec84f6b4f1b28e44177752f7..201d547b3b004edcdd1b18368eea472a
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight;
      protected boolean wasEyeInWater;
-@@ -964,6 +965,12 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -968,6 +969,12 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
              this.clearFire();
          }
  
@@ -56,7 +56,7 @@ index 20d4e3fb00a9eaac8484e95329bd64a368872b59..bec81c864a07d53a31da4e6e7437b241
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index ac044be03494c3d6bad6bbc22321445e04d430cc..9378c119cfa9fc5c5f115c501f61b6a5c7eb236f 100644
+index 80b93d50650886a874a8b0b8a27e15b4d4e727f0..0de768d7dc1f07b1f35c1bebb534997695370c48 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
 @@ -939,7 +939,7 @@ public class Fox extends Animal implements VariantHolder<Fox.Variant> {
@@ -69,7 +69,7 @@ index ac044be03494c3d6bad6bbc22321445e04d430cc..9378c119cfa9fc5c5f115c501f61b6a5
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 51aee9a468f4ebfa9672fd9ce84883cf080859e3..d7668cdaa2718968e4b9c5e487a6752c5cef4836 100644
+index 1290c1587fe9e39d9350c1079ab27f3be0c6084f..54bb73bd25146aef3312d842d8b7c135f5e966fe 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -1347,4 +1347,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {

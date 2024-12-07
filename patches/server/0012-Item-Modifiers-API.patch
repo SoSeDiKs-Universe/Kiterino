@@ -52,10 +52,10 @@ index 0d0312744369b332ed0dfd171c060fc9019ae8b1..28a086a1fba807518463781563f62acd
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d316a57091860b8cec8502e8fcef7c15107474f0
+index 0000000000000000000000000000000000000000..8e7dd2e2524e4e2809419b806de65579c4a5208b
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-@@ -0,0 +1,578 @@
+@@ -0,0 +1,580 @@
 +package me.sosedik.kiterino.modifier.item;
 +
 +import com.mojang.datafixers.util.Pair;
@@ -135,10 +135,12 @@ index 0000000000000000000000000000000000000000..d316a57091860b8cec8502e8fcef7c15
 +
 +import java.util.ArrayList;
 +import java.util.HashMap;
++import java.util.HashSet;
 +import java.util.List;
 +import java.util.ListIterator;
 +import java.util.Map;
 +import java.util.Optional;
++import java.util.Set;
 +import java.util.logging.Level;
 +
 +public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
@@ -518,17 +520,17 @@ index 0000000000000000000000000000000000000000..d316a57091860b8cec8502e8fcef7c15
 +
 +	private static @NotNull Ingredient replaceIngredient(@NotNull CraftPlayer player, @NotNull ItemModifierContextType contextType, @NotNull RecipeBookPacketContext context, @NotNull Ingredient ingredient) {
 +		Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
-+		List<ItemStack> items = superDirtyCopy.itemStacks();
++		Set<ItemStack> items = superDirtyCopy.itemStacks();
 +		if (items == null) {
 +			return ingredient;
 +		}
 +
-+		for (int i = 0; i < items.size(); i++) {
-+			ItemStack result = replaceItem(player, contextType, context, items.get(i));
-+			if (result != null) {
-+				items.set(i, result);
-+			}
++		Set<ItemStack> updatedItems = new HashSet<>();
++		for (ItemStack item : items) {
++			ItemStack result = replaceItem(player, contextType, context, item);
++			updatedItems.add(result == null ? item : result);
 +		}
++		superDirtyCopy.itemStacks = updatedItems;
 +		return superDirtyCopy;
 +	}
 +
@@ -661,7 +663,7 @@ index 0000000000000000000000000000000000000000..4f7a04f81d19612e9de609a53504553c
 +
 +}
 diff --git a/src/main/java/net/minecraft/network/Connection.java b/src/main/java/net/minecraft/network/Connection.java
-index 44a31f6f44885598ee06e88b940b84b1e89e5430..32afc69579a688d17555edd182e0a7dc66ab787f 100644
+index 8661c1b1cfe2b3db000e1f08814fd4409c4b7fab..462406f11a4e8da5255098190830a5191876ab67 100644
 --- a/src/main/java/net/minecraft/network/Connection.java
 +++ b/src/main/java/net/minecraft/network/Connection.java
 @@ -509,6 +509,11 @@ public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
@@ -738,6 +740,19 @@ index bc46dd38a1cc50af2d19a23b354013260c38be5b..5766078c222794a815112d4f614acf43
      private final Set<ResourceLocation> removed;
      private final Map<ResourceLocation, AdvancementProgress> progress;
  
+diff --git a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+index 2e3a834643d56543418e9b9beb9d3448bf059d22..405e004c7664f83170f65c92155b890c1d47152e 100644
+--- a/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
++++ b/src/main/java/net/minecraft/world/item/crafting/Ingredient.java
+@@ -44,7 +44,7 @@ public final class Ingredient implements StackedContents.IngredientInfo<io.paper
+     private final HolderSet<Item> values;
+     // CraftBukkit start
+     @Nullable
+-    private java.util.Set<ItemStack> itemStacks; // Paper - Improve exact choice recipe ingredients
++    public java.util.Set<ItemStack> itemStacks; // Paper - Improve exact choice recipe ingredients // Kiterino - private -> public - Item Modifiers API
+     public Predicate<org.bukkit.inventory.ItemStack> predicate; // Purpur
+ 
+     public boolean isExact() {
 diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
 index 980fea65899ef5f37808506b822fd3de5830d2c7..23f8ea3cfaec486d1768d37509b7031fb41f8c53 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/ShapedRecipe.java
@@ -767,7 +782,7 @@ index 2490a42c9c35c7e080279ef8566288a28362d167..c4eb48cfcf363da7968c0022919bc23b
      private final boolean symmetrical;
  
 diff --git a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
-index d7ce86752e4138cdd3844b3374609753aa20f9ea..4a111a9a71d462c12053ca339b74246c82818484 100644
+index 4b3769020a92124bd5677cf75e268b8bc5ba2031..d24e9038630e3caf0c43a70d7bfc8790bd60ff6d 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
 +++ b/src/main/java/net/minecraft/world/item/crafting/ShapelessRecipe.java
 @@ -27,8 +27,8 @@ public class ShapelessRecipe implements CraftingRecipe {

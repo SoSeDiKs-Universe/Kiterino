@@ -5,10 +5,10 @@ Subject: [PATCH] Allow jumping in water as Drowned
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Drowned.java b/src/main/java/net/minecraft/world/entity/monster/Drowned.java
-index 949207eda199c874f2f14074b5a4fff5462b86b9..2b8b50c13b0f16dcf29066c2fb790a8ac2407c77 100644
+index a28a4cd9544ffa58bd03ac901a761c797044629a..af95874f8b6756aca21e2f6549749cdd524ac60c 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Drowned.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Drowned.java
-@@ -89,6 +89,17 @@ public class Drowned extends Zombie implements RangedAttackMob {
+@@ -92,6 +92,17 @@ public class Drowned extends Zombie implements RangedAttackMob {
      }
      // Purpur end
  

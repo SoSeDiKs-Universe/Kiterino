@@ -19,10 +19,10 @@ index 58fa528e4b2589d362eb976afd6221cd94f2623c..832bc0264c051916131d3d6c4dce8ec0
  
                      world.playSound(
 diff --git a/src/main/java/net/minecraft/world/item/CrossbowItem.java b/src/main/java/net/minecraft/world/item/CrossbowItem.java
-index 86204c2ab5bbd5d45ddb1d626f844d91ccae6b4f..2375644dca8953b1dce9c62ac8470d40bb1e7a15 100644
+index cac4de9877b91bd805a5a8f4b84d27449fc5001f..0a2437fbda0996259a8d30a0ad299266c74b51cc 100644
 --- a/src/main/java/net/minecraft/world/item/CrossbowItem.java
 +++ b/src/main/java/net/minecraft/world/item/CrossbowItem.java
-@@ -202,7 +202,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
+@@ -203,7 +203,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
          if (world instanceof ServerLevel serverLevel) {
              ChargedProjectiles chargedProjectiles = stack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
              if (chargedProjectiles != null && !chargedProjectiles.isEmpty()) {

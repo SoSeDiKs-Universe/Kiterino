@@ -83,10 +83,10 @@ index 0000000000000000000000000000000000000000..d506e6bb0b2c88ffb4e9274672bf8ee4
 +
 +}
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index f588307487368ea686f22a50b0a5d79ade3dcb04..688eaf718f95adcf8add2eccdf1aaf4d8c3690f1 100644
+index ba2eff0f2ecffbea4b42d5c6e4485ee0087dc981..75a392b8ad20827367e7fd4d3ab534cae957ba7f 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -4790,6 +4790,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4761,6 +4761,7 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
      private final NamespacedKey key;
      private final Supplier<ItemType> itemType;
      private final Supplier<BlockType> blockType;
@@ -94,7 +94,7 @@ index f588307487368ea686f22a50b0a5d79ade3dcb04..688eaf718f95adcf8add2eccdf1aaf4d
  
      private Material(final int id) {
          this(id, 64);
-@@ -4961,6 +4962,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4932,6 +4933,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
       * @return Maximum stack size for this material
       */
      public int getMaxStackSize() {
@@ -107,7 +107,7 @@ index f588307487368ea686f22a50b0a5d79ade3dcb04..688eaf718f95adcf8add2eccdf1aaf4d
          return maxStack;
      }
  
-@@ -4970,6 +4977,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -4941,6 +4948,12 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
       * @return Maximum durability for this material
       */
      public short getMaxDurability() {
@@ -120,7 +120,7 @@ index f588307487368ea686f22a50b0a5d79ade3dcb04..688eaf718f95adcf8add2eccdf1aaf4d
          return durability;
      }
  
-@@ -5148,6 +5161,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5119,6 +5132,11 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
@@ -132,7 +132,7 @@ index f588307487368ea686f22a50b0a5d79ade3dcb04..688eaf718f95adcf8add2eccdf1aaf4d
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -5876,4 +5894,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
+@@ -5847,4 +5865,16 @@ public enum Material implements Keyed, Translatable, net.kyori.adventure.transla
          }
      }
      // Purpur end

@@ -23,7 +23,7 @@ index 31b2b21cb4de6cb975d5fbc1480eb32d23ab56f6..f51c974137edad3cb03230e93fbcae74
 +
  }
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 0a1a088311d473c4c69452db39f563f193a848e8..c6d52745ec4b99191c8bd366d8360316eca9faa2 100644
+index ff72162914c7a1396f9b3607eee4c7f6dfd392d6..04dc09b1b96ed6044660eb4c781316db1a26fa28 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -20,6 +20,8 @@ import me.sosedik.kiterino.modifier.item.context.packet.UnknownEntityDataContext
@@ -35,7 +35,7 @@ index 0a1a088311d473c4c69452db39f563f193a848e8..c6d52745ec4b99191c8bd366d8360316
  import net.minecraft.network.protocol.Packet;
  import net.minecraft.network.protocol.game.ClientboundBundlePacket;
  import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
-@@ -656,7 +658,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
+@@ -658,7 +660,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
  		var bukkitItem = ItemModifier.modifyItem(contextBox);
  		if (bukkitItem == null) return null;
  
@@ -75,10 +75,10 @@ index 88eb3774f688bcff383efa7f113bd0b1b97d8a11..f52260ba9a98b825bbaef4f7e3ca8246
      }
  
 diff --git a/src/main/java/net/minecraft/world/item/ItemStack.java b/src/main/java/net/minecraft/world/item/ItemStack.java
-index 42b259c3878bd34b8e7cb768887fd1456be8db35..a50fb0dc796e747f4286f9635ea32c851973e36a 100644
+index 5964c2e77e9f21c72d9e0655e5f48d2798317779..00e417c705236de803d58c58351467831f6c3c0c 100644
 --- a/src/main/java/net/minecraft/world/item/ItemStack.java
 +++ b/src/main/java/net/minecraft/world/item/ItemStack.java
-@@ -168,6 +168,15 @@ public final class ItemStack implements DataComponentHolder {
+@@ -169,6 +169,15 @@ public final class ItemStack implements DataComponentHolder {
                  if (false && !datacomponentpatch.isEmpty()) { // Paper - This is no longer needed with raw NBT being handled in metadata
                      CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack));
                  }
@@ -94,7 +94,7 @@ index 42b259c3878bd34b8e7cb768887fd1456be8db35..a50fb0dc796e747f4286f9635ea32c85
                  return itemstack;
                  // CraftBukkit end
              }
-@@ -182,6 +191,19 @@ public final class ItemStack implements DataComponentHolder {
+@@ -183,6 +192,19 @@ public final class ItemStack implements DataComponentHolder {
                  // itemstack = itemstack.copy();
                  // CraftItemStack.setItemMeta(itemstack, CraftItemStack.getItemMeta(itemstack)); // Paper - This is no longer with raw NBT being handled in metadata
                  // Spigot end
@@ -114,7 +114,7 @@ index 42b259c3878bd34b8e7cb768887fd1456be8db35..a50fb0dc796e747f4286f9635ea32c85
                  ITEM_STREAM_CODEC.encode(registryfriendlybytebuf, itemstack.getItemHolder()); // CraftBukkit - decompile error
                  // Paper start - adventure; conditionally render translatable components
                  boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
-@@ -190,6 +212,15 @@ public final class ItemStack implements DataComponentHolder {
+@@ -191,6 +213,15 @@ public final class ItemStack implements DataComponentHolder {
                  DataComponentPatch.STREAM_CODEC.encode(registryfriendlybytebuf, itemstack.components.asPatch());
                  } finally {
                      net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);

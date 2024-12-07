@@ -5,10 +5,10 @@ Subject: [PATCH] Customizing extra item properties
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/ComposterBlock.java b/src/main/java/net/minecraft/world/level/block/ComposterBlock.java
-index ed3a310d56a0cca8c4c11c3768ac2056cd11edea..dc0eb7226854b2f04acdaee5bc22bb73b2996cd2 100644
+index 809a820dd8eec3e48dd3263335c62fbea4cd4f2c..7561ae3037e2144580b14d19092c2875549eea7c 100644
 --- a/src/main/java/net/minecraft/world/level/block/ComposterBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/ComposterBlock.java
-@@ -185,7 +185,7 @@ public class ComposterBlock extends Block implements WorldlyContainerHolder {
+@@ -187,7 +187,7 @@ public class ComposterBlock extends Block implements WorldlyContainerHolder {
          ComposterBlock.add(1.0F, Items.PUMPKIN_PIE);
      }
  

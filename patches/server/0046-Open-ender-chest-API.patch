@@ -5,7 +5,7 @@ Subject: [PATCH] Open ender chest API
 
 
 diff --git a/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java b/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java
-index 6ad4aa371607ab92616626285a7e71757c76a3db..eae3ccbb9d6ae63042a3d12960914a5d0616a0d9 100644
+index bfe79431dc5707677671df5c0787817c6e14a676..b020227337f31edc4f9209f4e87391172548e415 100644
 --- a/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/EnderChestBlock.java
 @@ -43,7 +43,7 @@ public class EnderChestBlock extends AbstractChestBlock<EnderChestBlockEntity> i
@@ -17,7 +17,7 @@ index 6ad4aa371607ab92616626285a7e71757c76a3db..eae3ccbb9d6ae63042a3d12960914a5d
  
      @Override
      public MapCodec<EnderChestBlock> codec() {
-@@ -105,7 +105,7 @@ public class EnderChestBlock extends AbstractChestBlock<EnderChestBlockEntity> i
+@@ -100,7 +100,7 @@ public class EnderChestBlock extends AbstractChestBlock<EnderChestBlockEntity> i
      }
  
      // Purpur start
@@ -27,10 +27,10 @@ index 6ad4aa371607ab92616626285a7e71757c76a3db..eae3ccbb9d6ae63042a3d12960914a5d
              org.bukkit.craftbukkit.entity.CraftHumanEntity bukkitPlayer = player.getBukkitEntity();
              if (bukkitPlayer.hasPermission("purpur.enderchest.rows.six")) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 7595bc3764d756ce9709a9fec50be535fbb69126..95887b7ecc40515aa11c8f196b161686a87ba3bb 100644
+index f2b5fee7e5837d680d4dd68bea76e2be7bc2c97b..f4f3bd814143d639788023025c86772602e77269 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3717,4 +3717,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3694,4 +3694,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          net.minecraft.world.entity.monster.piglin.PiglinAi.angerNearbyPiglins(this.getHandle().serverLevel(), this.getHandle(), blockOpen);
      }
      // Kiterino end - Anger nearby piglins API

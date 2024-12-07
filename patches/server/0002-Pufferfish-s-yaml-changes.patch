@@ -6,7 +6,7 @@ Subject: [PATCH] Pufferfish's yaml changes
 Include Simple-YAML repo and sync snakeyaml version to API's one
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 82ca36909d4f4e4910f23812fbe2c22fdd7ab957..f66407a02d39785b5f6980f1299a4402c14c1b81 100644
+index 34f9243d30e65055bb97697b70b551eff4a1e000..a17382cc4045aa4505e2cfaa5dbcacfefdcedece 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -24,6 +24,12 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
@@ -21,8 +21,8 @@ index 82ca36909d4f4e4910f23812fbe2c22fdd7ab957..f66407a02d39785b5f6980f1299a4402
 +
  dependencies {
      implementation(project(":kiterino-api")) // Kiterino - Init
-     // Paper start
-@@ -61,7 +67,7 @@ dependencies {
+     implementation("ca.spottedleaf:concurrentutil:0.0.2") // Paper - Add ConcurrentUtil dependency
+@@ -62,7 +68,7 @@ dependencies {
      runtimeOnly("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
  
      // Pufferfish start

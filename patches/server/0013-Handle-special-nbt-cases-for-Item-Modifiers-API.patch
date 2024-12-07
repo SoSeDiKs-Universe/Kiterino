@@ -9,7 +9,7 @@ The following cases are currently handled:
 - Use remainders
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index d316a57091860b8cec8502e8fcef7c15107474f0..0a1a088311d473c4c69452db39f563f193a848e8 100644
+index 8e7dd2e2524e4e2809419b806de65579c4a5208b..ff72162914c7a1396f9b3607eee4c7f6dfd392d6 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -1,6 +1,10 @@
@@ -33,7 +33,7 @@ index d316a57091860b8cec8502e8fcef7c15107474f0..0a1a088311d473c4c69452db39f563f1
  import org.bukkit.craftbukkit.CraftEquipmentSlot;
  import org.bukkit.craftbukkit.CraftWorld;
  import org.bukkit.craftbukkit.entity.CraftPlayer;
-@@ -126,6 +133,83 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
+@@ -128,6 +135,83 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
  			modified = true;
  		}
  

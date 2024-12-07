@@ -6,10 +6,10 @@ Subject: [PATCH] Init/destruct injectors
 System property in tests is to bandaid failing tests due to missing "--add-opens java.base/java.lang=ALL-UNNAMED" flag in gradle build task required by Material injector patch.
 
 diff --git a/src/main/java/net/minecraft/server/Bootstrap.java b/src/main/java/net/minecraft/server/Bootstrap.java
-index ffca3a7df1c5b344dbd77e1db997c76d22a31021..56169e077b0275773953e14bd5016c3d472f8690 100644
+index f5bf14bdd5ab7d6d50d835d3631d6b62636d96f0..4d5a5ca7705c39a2792e51e82ba5cb0bc2b4607c 100644
 --- a/src/main/java/net/minecraft/server/Bootstrap.java
 +++ b/src/main/java/net/minecraft/server/Bootstrap.java
-@@ -63,6 +63,11 @@ public class Bootstrap {
+@@ -66,6 +66,11 @@ public class Bootstrap {
              Bootstrap.isBootstrapped = true;
              Instant instant = Instant.now();
  
