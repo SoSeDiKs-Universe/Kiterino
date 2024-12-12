@@ -67,7 +67,7 @@ index 0000000000000000000000000000000000000000..0a27cb17c68901f0d921e2239ac1a174
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index eddac4503a7fac252c1c738d50d8363a4890ac89..325b0f62ca5b3ba92f2b403709672a1766ccd1d4 100644
+index ba8cf283dd9e240d2ceafbb260ea3b987cde937d..52ee11e48ad47d192b94a26e994a3ddb1881014c 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,9 @@
@@ -80,15 +80,15 @@ index eddac4503a7fac252c1c738d50d8363a4890ac89..325b0f62ca5b3ba92f2b403709672a17
  import io.papermc.paper.datacomponent.DataComponentType;
  import io.papermc.paper.datacomponent.PaperDataComponentType;
  import io.papermc.paper.registry.PaperRegistryBuilder;
-@@ -24,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -23,6 +27,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  	protected @Nullable Float compostChance;
  	protected @Nullable Item nmsItem;
  	protected @Nullable Function<Object, Object> nmsItemFunction;
 +	protected @Nullable KiterinoItemModifier modifier;
  
  	protected final Conversions conversions;
- 	protected final TypedKey<ItemType> itemKey;
-@@ -68,6 +73,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+ 	public ResourceLocation itemKey;
+@@ -65,6 +70,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  		return this.nmsItemFunction;
  	}
  
@@ -100,7 +100,7 @@ index eddac4503a7fac252c1c738d50d8363a4890ac89..325b0f62ca5b3ba92f2b403709672a17
  	protected void parseValues(@NonNull Item item) {
  		// Does it make sense to parse?
  		// DataComponentMap components = item.components();
-@@ -112,9 +122,31 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -109,9 +119,31 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
  			return this;
  		}
  
@@ -128,7 +128,7 @@ index eddac4503a7fac252c1c738d50d8363a4890ac89..325b0f62ca5b3ba92f2b403709672a17
  		@SuppressWarnings("unchecked")
  		@Override
  		public @NonNull Item build() {
-+			if (this.modifier != null) KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.key().namespace(), this.itemKey.key().value()), buildModifier());
++			if (this.modifier != null) KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.getNamespace(), this.itemKey.getPath()), buildModifier());
  			Item item = this.nmsItem;
  			if (item == null) {
  				var properties = new Item.Properties();

@@ -5,23 +5,23 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index ae5850c9f5d4187341c8357a79a7c1a8f9402001..b15ed5e980d852097e4f044aea347136f1e655c9 100644
+index dbe3ef9ed46d10076da2ce7158e5b73460165a89..4d998c086d1df0b8e3db0c4344c78b963d61b721 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -85,7 +85,7 @@ public final class PaperRegistries {
+@@ -83,7 +83,7 @@ public final class PaperRegistries {
              // built-ins
-             writable(Registries.GAME_EVENT, RegistryKey.GAME_EVENT, GameEvent.class, CraftGameEvent::new, PaperGameEventRegistryEntry.PaperBuilder::new),
-             entry(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE, StructureType.class, CraftStructureType::new),
--            entry(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new),
-+            writable(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT, PotionEffectType.class, CraftPotionEffectType::new, me.sosedik.kiterino.registry.data.KiterinoMobEffectRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven mob effects
-             entry(Registries.BLOCK, RegistryKey.BLOCK, BlockType.class, CraftBlockType::new),
-             writable(Registries.ITEM, RegistryKey.ITEM, ItemType.class, CraftItemType::new, me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
-             entry(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT, Cat.Type.class, CraftCat.CraftType::new),
+             start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
+             start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
+-            start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
++            start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).writable(me.sosedik.kiterino.registry.data.KiterinoMobEffectRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven mob effects
+             start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
+             start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index 7ed31220736afedd41dabc0343e18e22fe47695a..fb151c4b9b8620248ef542d65e7377a3c9f89e74 100644
+index cadbf29c4667a74d79fdc538e0cca9cc61480d29..d10cea4307d2a398abf899b0f938a674920a0d49 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -50,4 +50,18 @@ public class Conversions {
+@@ -75,4 +75,18 @@ public class Conversions {
          };
      }
      // Kiterino end - Data-driven items
@@ -42,14 +42,13 @@ index 7ed31220736afedd41dabc0343e18e22fe47695a..fb151c4b9b8620248ef542d65e7377a3
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoMobEffectRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoMobEffectRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..67fcc0f43b6faa8c76aebad15c04dc998c1ff112
+index 0000000000000000000000000000000000000000..204c371b0f2cc09c1a70aa2483257f8e087a1a6d
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoMobEffectRegistryEntity.java
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,84 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.registry.PaperRegistryBuilder;
-+import io.papermc.paper.registry.TypedKey;
 +import io.papermc.paper.registry.data.util.Conversions;
 +import me.sosedik.kiterino.registry.wrapper.KiterinoMobEffectBehaviourWrapper;
 +import me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper;
@@ -69,9 +68,8 @@ index 0000000000000000000000000000000000000000..67fcc0f43b6faa8c76aebad15c04dc99
 +	protected final Conversions conversions;
 +
 +	public KiterinoMobEffectRegistryEntity(
-+			final @NonNull Conversions conversions,
-+			final @NonNull TypedKey<PotionEffectType> ignoredKey,
-+			final @Nullable MobEffect internal
++		final @NonNull Conversions conversions,
++		final @Nullable MobEffect internal
 +	) {
 +		this.conversions = conversions;
 +		if (internal == null) {
@@ -102,8 +100,8 @@ index 0000000000000000000000000000000000000000..67fcc0f43b6faa8c76aebad15c04dc99
 +	public static final class KiterinoBuilder extends KiterinoMobEffectRegistryEntity implements Builder,
 +			PaperRegistryBuilder<MobEffect, PotionEffectType> {
 +
-+		public KiterinoBuilder(final @NonNull Conversions conversions, final @NonNull TypedKey<PotionEffectType> key, final @Nullable MobEffect internal) {
-+			super(conversions, key, internal);
++		public KiterinoBuilder(final @NonNull Conversions conversions, final @Nullable MobEffect internal) {
++			super(conversions, internal);
 +		}
 +
 +		@Override
@@ -209,7 +207,7 @@ index 0000000000000000000000000000000000000000..e39eeb78f824cdc5b912f1260096d371
 +
 +}
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index 6f3d99ae7a959f53aec2d1a39110782b6db47df5..7a534c33fd0fb45af9a24b71d3d15405a38f01c9 100644
+index 917182868cdfdd868748a26d9eeebd7ef772e628..aaca1e8722867823fb44e6f6edb5f240557d6a7d 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -26,6 +26,7 @@ class RegistryBuilderTest {
