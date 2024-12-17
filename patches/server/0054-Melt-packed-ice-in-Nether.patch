@@ -1,0 +1,81 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 17 Dec 2024 04:46:20 +0200
+Subject: [PATCH] Melt packed ice in Nether
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
+index b6297cb9b5cf34c87923a358c2bf4104ba979015..96e104db5632efa3c55ef9e7138bb73f2354d1ae 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
+@@ -22,8 +22,10 @@ public final class KiterinoWorldConfig extends WorldConfig {
+     }
+ 
+     public boolean iceAlwaysMeltInNether = false;
++    public boolean meltPackedIceInNether = false;
+     private void iceBlockSettings() {
+         iceAlwaysMeltInNether = getBoolean("blocks.ice.always-melt-in-nether", iceAlwaysMeltInNether, "Make ice melt in Nether regardless of melting requirements");
++        meltPackedIceInNether = getBoolean("blocks.packed_ice.melt-in-nether", meltPackedIceInNether, "Ticks packed ice in Nether to allow melting it");
+     }
+ 
+ }
+diff --git a/src/main/java/me/sosedik/kiterino/world/level/block/PackedIceBlock.java b/src/main/java/me/sosedik/kiterino/world/level/block/PackedIceBlock.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..78313b3e77efa3d9081d59b64f2327e2bcd8544c
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/world/level/block/PackedIceBlock.java
+@@ -0,0 +1,24 @@
++package me.sosedik.kiterino.world.level.block;
++
++import net.minecraft.core.BlockPos;
++import net.minecraft.server.level.ServerLevel;
++import net.minecraft.util.RandomSource;
++import net.minecraft.world.level.block.Block;
++import net.minecraft.world.level.block.IceBlock;
++import net.minecraft.world.level.block.state.BlockState;
++
++public class PackedIceBlock extends Block {
++
++	public PackedIceBlock(Properties settings) {
++		super(settings);
++	}
++
++	@Override
++	protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
++		if (world.kiterinoConfig.meltPackedIceInNether && world.dimensionType().ultraWarm()) {
++			IceBlock.meltBlock(state, world, pos);
++		}
++
++	}
++
++}
+diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
+index a15d77d1bdcfddcb4077ab6e90aa412982864690..e475e1dd855ade11078c85609d287ef847bb4e3a 100644
+--- a/src/main/java/net/minecraft/world/level/block/Blocks.java
++++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
+@@ -3228,7 +3228,9 @@ public class Blocks {
+     );
+     public static final Block PACKED_ICE = register(
+         "packed_ice",
++        me.sosedik.kiterino.world.level.block.PackedIceBlock::new, // Kiterino - Melt packed ice in Nether
+         BlockBehaviour.Properties.of().mapColor(MapColor.ICE).instrument(NoteBlockInstrument.CHIME).friction(0.98F).strength(0.5F).sound(SoundType.GLASS)
++            .randomTicks() // Kiterino - Melt packed ice in Nether
+     );
+     public static final Block SUNFLOWER = register(
+         "sunflower",
+diff --git a/src/main/java/net/minecraft/world/level/block/IceBlock.java b/src/main/java/net/minecraft/world/level/block/IceBlock.java
+index bad2b9cabade735bf27afc8f5bc6dae12f877ddb..1a74f47044ab39698670db36de243941f1cfafc6 100644
+--- a/src/main/java/net/minecraft/world/level/block/IceBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/IceBlock.java
+@@ -65,6 +65,11 @@ public class IceBlock extends HalfTransparentBlock {
+     }
+ 
+     protected void melt(BlockState state, Level world, BlockPos pos) {
++        // Kiterino start - Melt packed ice in Nether
++        meltBlock(state, world, pos);
++    }
++    public static void meltBlock(BlockState state, Level world, BlockPos pos) {
++        // Kiterino end - Melt packed ice in Nether
+         // CraftBukkit start
+         if (org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFadeEvent(world, pos, world.dimensionType().ultraWarm() ? Blocks.AIR.defaultBlockState() : Blocks.WATER.defaultBlockState()).isCancelled()) {
+             return;

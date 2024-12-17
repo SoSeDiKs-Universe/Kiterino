@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 17 Dec 2024 04:44:13 +0200
+Subject: [PATCH] Always melt ice in Nether
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
+index 2979eb09eee76d5b54e118bf5ce7d39ccc6d5eb3..b6297cb9b5cf34c87923a358c2bf4104ba979015 100644
+--- a/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
++++ b/src/main/java/me/sosedik/kiterino/KiterinoWorldConfig.java
+@@ -21,4 +21,9 @@ public final class KiterinoWorldConfig extends WorldConfig {
+         batsIgnoreInvisiblePlayers = getBoolean("gameplay-mechanics.bat.ignore-invisible-players", batsIgnoreInvisiblePlayers, "Make resting bats ignore players that are marked invisible by API");
+     }
+ 
++    public boolean iceAlwaysMeltInNether = false;
++    private void iceBlockSettings() {
++        iceAlwaysMeltInNether = getBoolean("blocks.ice.always-melt-in-nether", iceAlwaysMeltInNether, "Make ice melt in Nether regardless of melting requirements");
++    }
++
+ }
+diff --git a/src/main/java/net/minecraft/world/level/block/IceBlock.java b/src/main/java/net/minecraft/world/level/block/IceBlock.java
+index 38633e168a9b36e37feea00964d53e657926639e..bad2b9cabade735bf27afc8f5bc6dae12f877ddb 100644
+--- a/src/main/java/net/minecraft/world/level/block/IceBlock.java
++++ b/src/main/java/net/minecraft/world/level/block/IceBlock.java
+@@ -58,7 +58,7 @@ public class IceBlock extends HalfTransparentBlock {
+ 
+     @Override
+     protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+-        if (world.getBrightness(LightLayer.BLOCK, pos) > 11 - state.getLightBlock()) {
++        if ((world.kiterinoConfig.iceAlwaysMeltInNether && world.dimensionType().ultraWarm()) || world.getBrightness(LightLayer.BLOCK, pos) > 11 - state.getLightBlock()) { // Kiterino - Always melt ice in Nether
+             this.melt(state, world, pos);
+         }
+ 

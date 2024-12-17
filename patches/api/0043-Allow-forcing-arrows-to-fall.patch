@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 17 Dec 2024 11:10:01 +0200
+Subject: [PATCH] Allow forcing arrows to fall
+
+
+diff --git a/src/main/java/org/bukkit/entity/AbstractArrow.java b/src/main/java/org/bukkit/entity/AbstractArrow.java
+index e63353ff70c0a9b20156bdb674bf6bc529212855..2ec76bc063c8318ec22abb4717934b9865a5f33e 100644
+--- a/src/main/java/org/bukkit/entity/AbstractArrow.java
++++ b/src/main/java/org/bukkit/entity/AbstractArrow.java
+@@ -282,4 +282,11 @@ public interface AbstractArrow extends Projectile {
+      */
+     void setShooter(@Nullable org.bukkit.projectiles.ProjectileSource source, boolean resetPickupStatus);
+     // Paper end - Fix PickupStatus getting reset
++
++    // Kiterino start - Allow forcing arrows to fall
++    /**
++     * Asks projectile to start falling if possible
++     */
++    void startFalling();
++    // Kiterino end - Allow forcing arrows to fall
+ }

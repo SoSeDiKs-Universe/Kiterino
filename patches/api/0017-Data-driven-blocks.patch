@@ -1,0 +1,148 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 14 Dec 2024 10:10:12 +0200
+Subject: [PATCH] Data-driven blocks
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
+index 0e95fb15bc11aae249dd2fab77cb7785cbff87e5..5972abc569e5c86089a28473edbb411e86f55ac7 100644
+--- a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
++++ b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
+@@ -24,6 +24,7 @@ public final class RegistryEvents {
+     public static final RegistryEventProvider<Enchantment, EnchantmentRegistryEntry.Builder> ENCHANTMENT = create(RegistryKey.ENCHANTMENT);
+     public static final RegistryEventProvider<Art, PaintingVariantRegistryEntry.Builder> PAINTING_VARIANT = create(RegistryKey.PAINTING_VARIANT);
+     public static final RegistryEventProvider<org.bukkit.inventory.ItemType, me.sosedik.kiterino.registry.data.ItemRegistryEntity.Builder> ITEM = create(RegistryKey.ITEM); // Kiterino - Data-driven items
++    public static final RegistryEventProvider<org.bukkit.block.BlockType, me.sosedik.kiterino.registry.data.BlockRegistryEntity.Builder> BLOCK = create(RegistryKey.BLOCK); // Kiterino - Data-driven blocks
+ 
+     private RegistryEvents() {
+     }
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/BlockRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/BlockRegistryEntity.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..c75a0f1529823f2299a6519a87ff934549be9c5f
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/registry/data/BlockRegistryEntity.java
+@@ -0,0 +1,51 @@
++package me.sosedik.kiterino.registry.data;
++
++import io.papermc.paper.registry.RegistryBuilder;
++import me.sosedik.kiterino.world.block.KiterinoBlock;
++import org.bukkit.block.BlockType;
++import org.jetbrains.annotations.ApiStatus;
++import org.jetbrains.annotations.Contract;
++import org.jspecify.annotations.NullMarked;
++import org.jspecify.annotations.Nullable;
++
++/**
++ * A data-centric version-specific registry entry for the {@link BlockType} type.
++ */
++@ApiStatus.Experimental
++@ApiStatus.NonExtendable
++@NullMarked
++public interface BlockRegistryEntity {
++
++	/**
++	 * Provides the block's nms implementation
++	 *
++	 * @return the block's nms implementation
++	 */
++	@Nullable KiterinoBlock nmsBlock();
++
++	/**
++	 * Constructs block properties with block id already set
++	 *
++	 * @return block properties
++	 */
++	Object constructBlockProperties();
++
++	/**
++	 * A mutable builder for the {@link BlockRegistryEntity} plugins may change in applicable registry events.
++	 */
++	@ApiStatus.Experimental
++	@ApiStatus.NonExtendable
++	interface Builder extends BlockRegistryEntity, RegistryBuilder<BlockType> {
++
++		/**
++		 * Configures the block's nms implementation
++		 *
++		 * @param nmsBlock the block's nms implementation
++		 * @return this builder
++		 */
++		@Contract(value = "_ -> this", mutates = "this")
++		Builder nmsBlock(KiterinoBlock nmsBlock);
++
++	}
++
++}
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
+index fd8e781980e3bd585269c0816743127c2de7db2b..99fd597b5dbc4bad613ecf7e82aba9ae4da52359 100644
+--- a/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
++++ b/src/main/java/me/sosedik/kiterino/registry/data/ItemRegistryEntity.java
+@@ -52,6 +52,21 @@ public interface ItemRegistryEntity {
+      */
+     @NonNull Object constructItemProperties();
+ 
++    /**
++     * Checks whether this item has a block with the same id
++     *
++     * @return whether this item has a block variant
++     */
++    boolean hasAttachedBlock();
++
++    /**
++     * Tries to find the matching block with the same id
++     *
++     * @return matching block
++     * @throws IllegalArgumentException if block does not exist
++     */
++    @NonNull Object asBlockOrThrow();
++
+     /**
+      * A mutable builder for the {@link ItemRegistryEntity} plugins may change in applicable registry events.
+      */
+diff --git a/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlock.java b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlock.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..149b6577a9427747346a1ee9ae5483e11582361c
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlock.java
+@@ -0,0 +1,41 @@
++package me.sosedik.kiterino.world.block;
++
++import it.unimi.dsi.fastutil.Pair;
++import org.bukkit.block.BlockState;
++import org.jspecify.annotations.NullMarked;
++import org.jspecify.annotations.Nullable;
++
++/**
++ * Represents Kiterino NMS block.
++ * <br>
++ * Extend this class with your NMS block to use it with
++ * Kiterino registry methods.
++ */
++@NullMarked
++public interface KiterinoBlock {
++
++	/**
++	 * Serializes custom block to client.
++	 * <br>
++	 * If the resulting block state is null, you MUST
++	 * replace the block in some other way, e.g. via
++	 * packet listener plugins.
++	 * <br>
++	 * Note: this will be called for each serialization, so
++	 * caching the block state is preferable.
++	 *
++	 * @return serialized block
++	 */
++	@Nullable BlockState serializeBlockToClient();
++
++	/**
++	 * Gets the block data classes for this block.
++	 * Left is bukkit interface, right is craft implementation.
++	 *
++	 * @return block data classes
++	 */
++	default @Nullable Pair<Class<?>, Class<?>> getBlockDataClasses() {
++		return null;
++	}
++
++}

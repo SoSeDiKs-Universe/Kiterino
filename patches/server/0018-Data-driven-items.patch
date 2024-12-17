@@ -18,7 +18,7 @@ index 3ebc3dbc86f3f448f0c555366b55a77876ef5d6f..dbe3ef9ed46d10076da2ce7158e5b734
              start(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT).craft(Frog.Variant.class, CraftFrog.CraftVariant::new).build(),
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
-index f201f142505db8f5a87c20346f6e2998263372fd..f4d75526ddf84a68403ed58db2e4b85e50cc02a0 100644
+index f201f142505db8f5a87c20346f6e2998263372fd..4918b43e691e6c5d5f289a32671197a1bdda413d 100644
 --- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
 +++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
 @@ -42,6 +42,11 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
@@ -27,7 +27,7 @@ index f201f142505db8f5a87c20346f6e2998263372fd..f4d75526ddf84a68403ed58db2e4b85e
          final B builder = this.newBuilder(conversions);
 +        // Kiterino start - Data-driven items
 +        if (builder instanceof me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder b) {
-+            b.itemKey = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(key.key().namespace(), key.key().value());
++            b.itemKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
 +        }
 +        // Kiterino end - Data-driven items
          value.accept(builder);
@@ -64,10 +64,10 @@ index b1710da835cee3333bfb1c238b37ec0c4d16ba09..cadbf29c4667a74d79fdc538e0cca9cc
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ba8cf283dd9e240d2ceafbb260ea3b987cde937d
+index 0000000000000000000000000000000000000000..a0b6844d1ab558cf7dc271122c8402a878a1513c
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,142 @@
+@@ -0,0 +1,129 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.datacomponent.DataComponentType;
@@ -85,14 +85,12 @@ index 0000000000000000000000000000000000000000..ba8cf283dd9e240d2ceafbb260ea3b98
 +
 +import java.util.HashMap;
 +import java.util.Map;
-+import java.util.function.Function;
 +
 +public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
 +
 +	protected Map<DataComponentType, Object> components = new HashMap<>();
 +	protected @Nullable Float compostChance;
 +	protected @Nullable Item nmsItem;
-+	protected @Nullable Function<Object, Object> nmsItemFunction;
 +
 +	protected final Conversions conversions;
 +	public ResourceLocation itemKey;
@@ -131,8 +129,8 @@ index 0000000000000000000000000000000000000000..ba8cf283dd9e240d2ceafbb260ea3b98
 +	}
 +
 +	@Override
-+	public @Nullable Function<Object, Object> nmsItemFunction() {
-+		return this.nmsItemFunction;
++	public @NonNull Object constructItemProperties() {
++		return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
 +	}
 +
 +	protected void parseValues(@NonNull Item item) {
@@ -173,19 +171,12 @@ index 0000000000000000000000000000000000000000..ba8cf283dd9e240d2ceafbb260ea3b98
 +			return this;
 +		}
 +
-+		@Override
-+		public @NonNull Builder nmsItemFunction(@Nullable Function<Object, Object> nmsItemFunction) {
-+			this.nmsItemFunction = nmsItemFunction;
-+			return this;
-+		}
-+
 +		@SuppressWarnings("unchecked")
 +		@Override
 +		public @NonNull Item build() {
 +			Item item = this.nmsItem;
 +			if (item == null) {
-+				var properties = new Item.Properties();
-+				properties.setId(ResourceKey.create(Registries.ITEM, this.itemKey));
++				Item.Properties properties = (Item.Properties) constructItemProperties();
 +				this.components.forEach((type, value) -> {
 +					if (type instanceof PaperDataComponentType.ValuedImpl<?, ?> valued) {
 +						setData(properties, (PaperDataComponentType<Object, Object>) valued, value);
@@ -193,11 +184,7 @@ index 0000000000000000000000000000000000000000..ba8cf283dd9e240d2ceafbb260ea3b98
 +						setData(properties, (PaperDataComponentType.NonValuedImpl<Object, Object>) type, null);
 +					}
 +				});
-+				if (this.nmsItemFunction == null) {
-+					item = new Item(properties);
-+				} else {
-+					item = (Item) this.nmsItemFunction.apply(properties);
-+				}
++				item = new Item(properties);
 +			}
 +			if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
 +			return item;

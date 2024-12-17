@@ -1,0 +1,105 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 15 Dec 2024 01:12:43 +0200
+Subject: [PATCH] Fake some vanilla block states
+
+
+diff --git a/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
+index 46f1582e9a0b774c9ce9c9e781f4c480461c490b..2280c2734f01ec08104872a020784ac898f8b3d6 100644
+--- a/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
++++ b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
+@@ -1,7 +1,19 @@
+ package me.sosedik.kiterino.world.block;
+ 
+ import net.minecraft.core.IdMapper;
++import net.minecraft.tags.BlockTags;
++import net.minecraft.world.level.block.Blocks;
++import net.minecraft.world.level.block.ChorusFlowerBlock;
++import net.minecraft.world.level.block.FarmBlock;
++import net.minecraft.world.level.block.FireBlock;
++import net.minecraft.world.level.block.GrowingPlantHeadBlock;
++import net.minecraft.world.level.block.LeavesBlock;
++import net.minecraft.world.level.block.NoteBlock;
++import net.minecraft.world.level.block.SculkSensorBlock;
++import net.minecraft.world.level.block.TripWireBlock;
+ import net.minecraft.world.level.block.state.BlockState;
++import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
++import net.minecraft.world.level.block.state.properties.SculkSensorPhase;
+ import org.bukkit.craftbukkit.block.CraftBlockState;
+ import org.jspecify.annotations.NullMarked;
+ 
+@@ -17,6 +29,7 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
+ 	@Override
+ 	public int getId(BlockState value) {
+ 		if (!(value.getBlock() instanceof KiterinoBlock kiterinoBlock)) {
++			value = replaceVanillaState(value);
+ 			return super.getId(value);
+ 		}
+ 
+@@ -24,4 +37,66 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
+ 		return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
+ 	}
+ 
++	public BlockState replaceVanillaState(BlockState value) {
++		if (value.is(Blocks.NOTE_BLOCK)) {
++			return value.setValue(NoteBlock.INSTRUMENT, NoteBlockInstrument.BANJO)
++					.setValue(NoteBlock.NOTE, 0)
++					.setValue(NoteBlock.POWERED, true);
++		}
++		if (value.is(BlockTags.LEAVES)) {
++			return value.setValue(LeavesBlock.DISTANCE, 7)
++					.setValue(LeavesBlock.PERSISTENT, false);
++		}
++		if (value.is(Blocks.TRIPWIRE)) {
++			return value.setValue(TripWireBlock.ATTACHED, true)
++					.setValue(TripWireBlock.POWERED, false);
++		}
++		if (value.is(Blocks.SCULK_SENSOR)) {
++			if (value.getValue(SculkSensorBlock.PHASE) != SculkSensorPhase.ACTIVE) {
++				return value.setValue(SculkSensorBlock.POWER, 0);
++			}
++			return value;
++		}
++		if (value.is(Blocks.FIRE)) {
++			return value.setValue(FireBlock.AGE, 0);
++		}
++		if (value.is(Blocks.TWISTING_VINES) || value.is(Blocks.WEEPING_VINES)) {
++			return value.setValue(GrowingPlantHeadBlock.AGE, 0);
++		}
++		if (value.is(Blocks.FARMLAND)) {
++			if (value.getValue(FarmBlock.MOISTURE) != FarmBlock.MAX_MOISTURE) {
++				return value.setValue(FarmBlock.MOISTURE, 0);
++			}
++			return value;
++		}
++		if (value.is(Blocks.CHORUS_FLOWER)) {
++			if (value.getValue(ChorusFlowerBlock.AGE) != ChorusFlowerBlock.DEAD_AGE) {
++				return value.setValue(ChorusFlowerBlock.AGE, 0);
++			}
++			return value;
++		}
++		if (value.is(Blocks.INFESTED_CHISELED_STONE_BRICKS)) {
++			return Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
++		}
++		if (value.is(Blocks.INFESTED_COBBLESTONE)) {
++			return Blocks.COBBLESTONE.defaultBlockState();
++		}
++		if (value.is(Blocks.INFESTED_CRACKED_STONE_BRICKS)) {
++			return Blocks.CRACKED_STONE_BRICKS.defaultBlockState();
++		}
++		if (value.is(Blocks.INFESTED_DEEPSLATE)) {
++			return Blocks.DEEPSLATE.defaultBlockState();
++		}
++		if (value.is(Blocks.INFESTED_STONE)) {
++			return Blocks.STONE.defaultBlockState();
++		}
++		if (value.is(Blocks.INFESTED_STONE_BRICKS)) {
++			return Blocks.STONE_BRICKS.defaultBlockState();
++		}
++		if (value.is(Blocks.INFESTED_MOSSY_STONE_BRICKS)) {
++			return Blocks.MOSSY_STONE_BRICKS.defaultBlockState();
++		}
++		return value;
++	}
++
+ }

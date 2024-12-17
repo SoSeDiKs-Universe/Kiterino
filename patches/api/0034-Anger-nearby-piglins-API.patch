@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 28 Sep 2024 01:03:13 +0300
+Subject: [PATCH] Anger nearby piglins API
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index ecab002941f027a3eb168544e2e1592eaa8c3e74..3d12c176699f86ac395f9ad1c405262a6e8c288b 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -4059,4 +4059,13 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+         sendItem(me.sosedik.kiterino.inventory.InventorySlotHelper.CURSOR, item);
+     }
+     // Kiterino end - Send ItemStack API
++
++    // Kiterino start - Anger nearby piglins API
++    /**
++     * Triggers piglins angrying AI
++     *
++     * @param blockOpen whether the cause of anger is an opened block
++     */
++    void angerNearbyPiglins(boolean blockOpen);
++    // Kiterino end - Anger nearby piglins API
+ }
