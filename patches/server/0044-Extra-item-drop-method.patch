@@ -4,23 +4,75 @@ Date: Wed, 25 Sep 2024 19:28:18 +0300
 Subject: [PATCH] Extra item drop method
 
 
+diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+index 6f39fd99ffb28d6c0267f4251c54af0c519289db..914862bd6a8b8e1c253a6477af5756a3df3e9d40 100644
+--- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
++++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
+@@ -2924,12 +2924,17 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
+     }
+ 
+     @Override
+-    public ItemEntity drop(ItemStack itemstack, boolean flag, boolean flag1, boolean callEvent) { // CraftBukkit - SPIGOT-2942: Add boolean to call event
++    public ItemEntity drop(ItemStack itemstack, boolean flag, boolean flag1, boolean callEvent, @Nullable java.util.function.Consumer<? super org.bukkit.entity.Item> function, boolean noRestore) { // CraftBukkit - SPIGOT-2942: Add boolean to call event // Kiterino - Extra item drop method
+         ItemEntity entityitem = this.createItemStackToDrop(itemstack, flag, flag1);
+ 
+         if (entityitem == null) {
+             return null;
+         } else {
++            // Kiterino start - Extra item drop method
++            if (function != null) {
++                function.accept((org.bukkit.entity.Item) entityitem.getBukkitEntity());
++            }
++            // Kiterino end - Extra item drop method
+             // CraftBukkit start - fire PlayerDropItemEvent
+             if (callEvent) {
+                 Player player = (Player) this.getBukkitEntity();
+@@ -2940,6 +2945,7 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
+ 
+                 if (event.isCancelled()) {
+                     org.bukkit.inventory.ItemStack cur = player.getInventory().getItemInHand();
++                    if (!noRestore) { // Kiterino - Extra item drop method
+                     if (flag1 && (cur == null || cur.getAmount() == 0)) {
+                         // The complete stack was dropped
+                         player.getInventory().setItemInHand(drop.getItemStack());
+@@ -2951,6 +2957,7 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
+                         // Fallback
+                         player.getInventory().addItem(drop.getItemStack());
+                     }
++                    } // Kiterino - Extra item drop method
+                     return null;
+                 }
+             }
+diff --git a/src/main/java/net/minecraft/world/entity/player/Player.java b/src/main/java/net/minecraft/world/entity/player/Player.java
+index 16025d30d0d92857c2fd41edad3b54c19d0f7d4c..d50435b9c5c2e796ecb2e8030595383541e4cbab 100644
+--- a/src/main/java/net/minecraft/world/entity/player/Player.java
++++ b/src/main/java/net/minecraft/world/entity/player/Player.java
+@@ -813,6 +813,11 @@ public abstract class Player extends LivingEntity {
+ 
+     @Nullable
+     public ItemEntity drop(ItemStack itemstack, boolean flag, boolean flag1, boolean callEvent) {
++        // Kiterino start - Extra item drop method
++        return this.drop(itemstack, flag, flag1, callEvent, null, false);
++    }
++    public @Nullable ItemEntity drop(ItemStack itemstack, boolean flag, boolean flag1, boolean callEvent, @Nullable java.util.function.Consumer<? super org.bukkit.entity.Item> function, boolean noRestore) {
++        // Kiterino end - Extra item drop method
+         // CraftBukkit end
+         if (!itemstack.isEmpty() && this.level().isClientSide) {
+             this.swing(InteractionHand.MAIN_HAND);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 856f12eb276c214f2f57a58a89a4da9eea34db2d..c8679fc1a07f56daf280e7f359e5dd310f678e18 100644
+index 856f12eb276c214f2f57a58a89a4da9eea34db2d..202f5f315f896ad2aa28871d660e51c7f2e899a9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -895,4 +895,15 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -895,4 +895,12 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      public org.bukkit.entity.Entity copy(Location location) {
          throw new UnsupportedOperationException("Cannot copy human entities");
      }
 +
 +    // Kiterino start - Extra item drop method
 +    @Override
-+    public org.bukkit.entity.Item dropItem(ItemStack item) {
-+        if (!(getHandle() instanceof ServerPlayer player)) {
-+            return getWorld().dropItemNaturally(getLocation(), item);
-+        }
-+        var drop = player.drop(CraftItemStack.asNMSCopy(item), false, true);
-+        return drop != null && drop.getBukkitEntity() instanceof org.bukkit.entity.Item droppedItem ? droppedItem : null;
++    public org.bukkit.entity.Item dropItem(ItemStack item, java.util.function.Consumer<? super org.bukkit.entity.Item> function) {
++        var drop = this.getHandle().drop(CraftItemStack.asNMSCopy(item), false, true, true, function, true);
++        return drop == null ? null : (org.bukkit.entity.Item) drop.getBukkitEntity();
 +    }
 +    // Kiterino end - Extra item drop method
  }

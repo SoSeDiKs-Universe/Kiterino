@@ -5,14 +5,14 @@ Subject: [PATCH] Init
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 74d7aaae57e0e9ea9e31c4b2189ba50a0ac83bea..34f9243d30e65055bb97697b70b551eff4a1e000 100644
+index 624588207afdc52adae14e5de3d18fe1c330d832..ff64045a070537bf1c3d9b5a3cc6569ece16b249 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -25,7 +25,7 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
  // Paper end - configure mockito agent that is needed in newer java versions
  
  dependencies {
--    implementation(project(":purpur-api")) // Pufferfish // Paper // Purpur
+-    implementation(project(":purpur-api")) // Pufferfish // Paper // Purpur - Rebrand
 +    implementation(project(":kiterino-api")) // Kiterino - Init
      implementation("ca.spottedleaf:concurrentutil:0.0.2") // Paper - Add ConcurrentUtil dependency
      // Paper start
@@ -21,16 +21,16 @@ index 74d7aaae57e0e9ea9e31c4b2189ba50a0ac83bea..34f9243d30e65055bb97697b70b551ef
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
--            "Implementation-Title" to "Purpur", // Pufferfish // Purpur
+-            "Implementation-Title" to "Purpur", // Pufferfish // Purpur - Rebrand
 +            "Implementation-Title" to "Kiterino", // Kiterino - Init
              "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date, // Paper
--            "Specification-Title" to "Purpur", // Pufferfish // Purpur
+-            "Specification-Title" to "Purpur", // Pufferfish // Purpur - Rebrand
 +            "Specification-Title" to "Kiterino", // Kiterino - Init
              "Specification-Version" to project.version,
--            "Specification-Vendor" to "Purpur Team", // Pufferfish // Purpur
--            "Brand-Id" to "purpurmc:purpur", // Pufferfish // Purpur
--            "Brand-Name" to "Purpur", // Pufferfish // Purpur
+-            "Specification-Vendor" to "Purpur Team", // Pufferfish // Purpur - Rebrand
+-            "Brand-Id" to "purpurmc:purpur", // Pufferfish // Purpur - Rebrand
+-            "Brand-Name" to "Purpur", // Pufferfish // Purpur - Rebrand
 +            "Specification-Vendor" to "SoSeDiK", // Kiterino - Init
 +            "Brand-Id" to "kiterino:kiterino", // Kiterino - Init
 +            "Brand-Name" to "Kiterino", // Kiterino - Init
@@ -38,14 +38,14 @@ index 74d7aaae57e0e9ea9e31c4b2189ba50a0ac83bea..34f9243d30e65055bb97697b70b551ef
              "Build-Time" to Instant.now().toString(),
              "Git-Branch" to gitBranch, // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 99597258e8e88cd9e2c901c4ac3ff7faeeabee2b..df65a68740089f3367d9084b75f938aaa53041f5 100644
+index 99eb04643fce44c37fd96c99756837ccafe7b559..df65a68740089f3367d9084b75f938aaa53041f5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
      public static String getBukkitVersion() {
          String result = "Unknown-Version";
  
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur - Rebrand
 +        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik.kiterino/kiterino-api/pom.properties"); // Kiterino - Init
          Properties properties = new Properties();
  

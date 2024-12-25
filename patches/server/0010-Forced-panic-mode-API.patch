@@ -5,7 +5,7 @@ Subject: [PATCH] Forced panic mode API
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 904805ada13164ec6989e2451583fcc8d290e51f..94f9eea545f478f409d97f49a2dc9778d3596a15 100644
+index 305a569f8cd83f3c67a4d4377f2881d36961dacd..77d4322d64b68e72e6fd749686ae98927522ccdf 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -306,6 +306,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -56,10 +56,10 @@ index 20d4e3fb00a9eaac8484e95329bd64a368872b59..bec81c864a07d53a31da4e6e7437b241
  
      protected boolean findRandomPosition() {
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Fox.java b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-index 80b93d50650886a874a8b0b8a27e15b4d4e727f0..0de768d7dc1f07b1f35c1bebb534997695370c48 100644
+index fb75b983f7c522708964a9352546ae29611bf4e9..007508a35864275b542301797edfb52fc90b07b8 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Fox.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Fox.java
-@@ -939,7 +939,7 @@ public class Fox extends Animal implements VariantHolder<Fox.Variant> {
+@@ -943,7 +943,7 @@ public class Fox extends Animal implements VariantHolder<Fox.Variant> {
  
          @Override
          public boolean shouldPanic() {
@@ -69,13 +69,13 @@ index 80b93d50650886a874a8b0b8a27e15b4d4e727f0..0de768d7dc1f07b1f35c1bebb5349976
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 1290c1587fe9e39d9350c1079ab27f3be0c6084f..54bb73bd25146aef3312d842d8b7c135f5e966fe 100644
+index 0e1b3f64d1a828b9c69efe45c511582880bdcb92..ccdb1e8e40c57936282047ae96c0f7d5d8cab369 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -1347,4 +1347,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return !getHandle().dismountsUnderwater();
      }
-     // Purpur end
+     // Purpur end - Ridables
 +
 +    // Kiterino start - Forced panic mode API
 +    @Override

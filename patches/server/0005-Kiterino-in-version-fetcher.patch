@@ -5,29 +5,29 @@ Subject: [PATCH] Kiterino in version fetcher
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index 6d36fc6d8e22d9b68dea3830f6ecc8763184c343..e1b76cf1eba24b1c2976e5b950fd5e79774dbf49 100644
+index fe66e43c27e0798770e102d1385bacbaa90bda07..5cc92f32487fdf79dba33f6d84927436db913be9 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -36,7 +36,7 @@ public class PaperVersionFetcher implements VersionFetcher {
      private static final int DISTANCE_ERROR = -1;
      private static final int DISTANCE_UNKNOWN = -2;
-     // Purpur start
+     // Purpur start - Rebrand
 -    private static final String DOWNLOAD_PAGE = "https://purpurmc.org/downloads";
 +    private static final String DOWNLOAD_PAGE = "https://github.com/SoSeDiKs-Universe/Kiterino"; // Kiterino - Kiterino in version fetcher
      private static int distance = DISTANCE_UNKNOWN; public int distance() { return distance; }
-     // Purpur end
+     // Purpur end - Rebrand
  
 @@ -52,7 +52,7 @@ public class PaperVersionFetcher implements VersionFetcher {
          if (build.buildNumber().isEmpty() && build.gitCommit().isEmpty()) {
              updateMessage = text("You are running a development version without access to version information", color(0xFF5300));
          } else {
--            updateMessage = getUpdateStatusMessage("PurpurMC/Purpur", build); // Purpur
+-            updateMessage = getUpdateStatusMessage("PurpurMC/Purpur", build); // Purpur - Rebrand
 +            updateMessage = getUpdateStatusMessage("SoSeDiKs-Universe/Kiterino", build); // Kiterino - Kiterino in version fetcher
          }
          final @Nullable Component history = this.getHistory();
  
 @@ -63,7 +63,7 @@ public class PaperVersionFetcher implements VersionFetcher {
-         //int distance = DISTANCE_ERROR; // Purpur - use field
+         //int distance = DISTANCE_ERROR; // Purpur - use field - Rebrand
  
          final OptionalInt buildNumber = build.buildNumber();
 -        if (buildNumber.isPresent()) {

@@ -64,7 +64,7 @@ index b1710da835cee3333bfb1c238b37ec0c4d16ba09..cadbf29c4667a74d79fdc538e0cca9cc
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..a0b6844d1ab558cf7dc271122c8402a878a1513c
+index 0000000000000000000000000000000000000000..b570e05a15274f7582f3363990d077a9e927e3c6
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -0,0 +1,129 @@
@@ -88,113 +88,113 @@ index 0000000000000000000000000000000000000000..a0b6844d1ab558cf7dc271122c8402a8
 +
 +public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
 +
-+	protected Map<DataComponentType, Object> components = new HashMap<>();
-+	protected @Nullable Float compostChance;
-+	protected @Nullable Item nmsItem;
++    protected Map<DataComponentType, Object> components = new HashMap<>();
++    protected @Nullable Float compostChance;
++    protected @Nullable Item nmsItem;
 +
-+	protected final Conversions conversions;
-+	public ResourceLocation itemKey;
++    protected final Conversions conversions;
++    public ResourceLocation itemKey;
 +
-+	public KiterinoItemRegistryEntity(
-+		final @NonNull Conversions conversions,
-+		final @Nullable Item internal
-+	) {
-+		this.conversions = conversions;
-+		if (internal == null) {
-+			return;
-+		}
++    public KiterinoItemRegistryEntity(
++        final @NonNull Conversions conversions,
++        final @Nullable Item internal
++    ) {
++        this.conversions = conversions;
++        if (internal == null) {
++            return;
++        }
 +
-+		parseValues(internal);
-+	}
++        parseValues(internal);
++    }
 +
-+	@Override
-+	public boolean hasData(@NonNull DataComponentType type) {
-+		return this.components.containsKey(type);
-+	}
++    @Override
++    public boolean hasData(@NonNull DataComponentType type) {
++        return this.components.containsKey(type);
++    }
 +
-+	@SuppressWarnings("unchecked")
-+	@Override
-+	public <T> @Nullable T getData(DataComponentType.@NonNull Valued<T> type) {
-+		return (T) this.components.get(type);
-+	}
++    @SuppressWarnings("unchecked")
++    @Override
++    public <T> @Nullable T getData(DataComponentType.@NonNull Valued<T> type) {
++        return (T) this.components.get(type);
++    }
 +
-+	@Override
-+	public @Nullable Float compostChance() {
-+		return this.compostChance;
-+	}
++    @Override
++    public @Nullable Float compostChance() {
++        return this.compostChance;
++    }
 +
-+	@Override
-+	public @Nullable Object nmsItem() {
-+		return this.nmsItem;
-+	}
++    @Override
++    public @Nullable Object nmsItem() {
++        return this.nmsItem;
++    }
 +
-+	@Override
-+	public @NonNull Object constructItemProperties() {
-+		return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
-+	}
++    @Override
++    public @NonNull Object constructItemProperties() {
++        return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
++    }
 +
-+	protected void parseValues(@NonNull Item item) {
-+		// Does it make sense to parse?
-+		// DataComponentMap components = item.components();
-+	}
++    protected void parseValues(@NonNull Item item) {
++        // Does it make sense to parse?
++        // DataComponentMap components = item.components();
++    }
 +
-+	public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
-+			PaperRegistryBuilder<Item, ItemType> {
++    public static final class KiterinoBuilder extends KiterinoItemRegistryEntity implements Builder,
++            PaperRegistryBuilder<Item, ItemType> {
 +
-+		public KiterinoBuilder(final @NonNull Conversions conversions, final @Nullable Item internal) {
-+			super(conversions, internal);
-+		}
++        public KiterinoBuilder(final @NonNull Conversions conversions, final @Nullable Item internal) {
++            super(conversions, internal);
++        }
 +
-+		@Override
-+		public <T> @NonNull Builder setData(DataComponentType.@NonNull Valued<T> type, @Nullable T value) {
-+			this.components.put(type, value);
-+			return this;
-+		}
++        @Override
++        public <T> @NonNull Builder setData(DataComponentType.@NonNull Valued<T> type, @Nullable T value) {
++            this.components.put(type, value);
++            return this;
++        }
 +
-+		@Override
-+		public @NonNull Builder setData(DataComponentType.@NonNull NonValued type) {
-+			this.components.put(type, null);
-+			return this;
-+		}
++        @Override
++        public @NonNull Builder setData(DataComponentType.@NonNull NonValued type) {
++            this.components.put(type, null);
++            return this;
++        }
 +
-+		@Override
-+		public @NonNull Builder compostChance(@Nullable Float levelIncreaseChance) {
-+			this.compostChance = levelIncreaseChance;
-+			return this;
-+		}
++        @Override
++        public @NonNull Builder compostChance(@Nullable Float levelIncreaseChance) {
++            this.compostChance = levelIncreaseChance;
++            return this;
++        }
 +
-+		@Override
-+		public @NonNull Builder nmsItem(@Nullable Object nmsItem) {
-+			if (!(nmsItem instanceof Item item)) throw new IllegalArgumentException("NMS item must extend Item");
-+			this.nmsItem = item;
-+			parseValues(item);
-+			return this;
-+		}
++        @Override
++        public @NonNull Builder nmsItem(@Nullable Object nmsItem) {
++            if (!(nmsItem instanceof Item item)) throw new IllegalArgumentException("NMS item must extend Item");
++            this.nmsItem = item;
++            parseValues(item);
++            return this;
++        }
 +
-+		@SuppressWarnings("unchecked")
-+		@Override
-+		public @NonNull Item build() {
-+			Item item = this.nmsItem;
-+			if (item == null) {
-+				Item.Properties properties = (Item.Properties) constructItemProperties();
-+				this.components.forEach((type, value) -> {
-+					if (type instanceof PaperDataComponentType.ValuedImpl<?, ?> valued) {
-+						setData(properties, (PaperDataComponentType<Object, Object>) valued, value);
-+					} else {
-+						setData(properties, (PaperDataComponentType.NonValuedImpl<Object, Object>) type, null);
-+					}
-+				});
-+				item = new Item(properties);
-+			}
-+			if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
-+			return item;
-+		}
++        @SuppressWarnings("unchecked")
++        @Override
++        public @NonNull Item build() {
++            Item item = this.nmsItem;
++            if (item == null) {
++                Item.Properties properties = (Item.Properties) constructItemProperties();
++                this.components.forEach((type, value) -> {
++                    if (type instanceof PaperDataComponentType.ValuedImpl<?, ?> valued) {
++                        setData(properties, (PaperDataComponentType<Object, Object>) valued, value);
++                    } else {
++                        setData(properties, (PaperDataComponentType.NonValuedImpl<Object, Object>) type, null);
++                    }
++                });
++                item = new Item(properties);
++            }
++            if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
++            return item;
++        }
 +
-+		private void setData(Item.@NonNull Properties properties, @NonNull PaperDataComponentType<Object, Object> type, @Nullable Object value) {
-+			properties.component(type.getHandle(), type.getAdapter().toVanilla(value));
-+		}
++        private void setData(Item.@NonNull Properties properties, @NonNull PaperDataComponentType<Object, Object> type, @Nullable Object value) {
++            properties.component(type.getHandle(), type.getAdapter().toVanilla(value));
++        }
 +
-+	}
++    }
 +
 +}
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java

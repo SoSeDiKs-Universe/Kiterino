@@ -27,10 +27,10 @@ index bfe79431dc5707677671df5c0787817c6e14a676..b020227337f31edc4f9209f4e8739117
              org.bukkit.craftbukkit.entity.CraftHumanEntity bukkitPlayer = player.getBukkitEntity();
              if (bukkitPlayer.hasPermission("purpur.enderchest.rows.six")) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 415e95c7665ecf159651814cb96d6eb0e4b12931..dcd6cc10d722e5d32fbe10aa53a77e4abb3b5130 100644
+index 19113db7e865c7f3e56de679c4862d12df209e8c..278a5a98a8180239c1e26fcd4b3bb993648f423e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3702,4 +3702,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3705,4 +3705,19 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          net.minecraft.world.entity.monster.piglin.PiglinAi.angerNearbyPiglins(this.getHandle().serverLevel(), this.getHandle(), blockOpen);
      }
      // Kiterino end - Anger nearby piglins API

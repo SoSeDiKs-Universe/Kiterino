@@ -14,7 +14,7 @@ index 35599aac72c50273abb9efe35bcb6406d9b1aba6..3107ff26ffbea58447717bdde8a39e7d
  
 +    // Kiterino start - Allow checking task schedule
 +    /**
-+     * Checks wthether this task has been scheduled
++     * Checks whether this task has been scheduled
 +     *
 +     * @return true if the task has been scheduled
 +     */

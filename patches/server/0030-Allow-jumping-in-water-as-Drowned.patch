@@ -5,24 +5,24 @@ Subject: [PATCH] Allow jumping in water as Drowned
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Drowned.java b/src/main/java/net/minecraft/world/entity/monster/Drowned.java
-index a28a4cd9544ffa58bd03ac901a761c797044629a..af95874f8b6756aca21e2f6549749cdd524ac60c 100644
+index 76db5a2d27ab435fdfd1e0ec0c77ef5012e128d4..7903e712f05d1263201e07cf79ea4e6d3fa76c43 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Drowned.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Drowned.java
 @@ -92,6 +92,17 @@ public class Drowned extends Zombie implements RangedAttackMob {
      }
-     // Purpur end
+     // Purpur end - Ridables
  
 +    // Kiterino start - Allow jumping in water as Drowned
 +    @Override
 +    public boolean onSpacebar() {
-+        if (isInWater()) {
-+            jumpFromGround();
-+            return true;
-+        }
-+        return false;
++	    if (isInWater()) {
++		    jumpFromGround();
++		    return true;
++	    }
++	    return false;
 +    }
-+    // Kiterino end - Allow jumping in water as Drowned
++	// Kiterino end - Allow jumping in water as Drowned
 +
+     // Purpur start - Configurable entity base attributes
      @Override
      public void initAttributes() {
-         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.level().purpurConfig.drownedMaxHealth);

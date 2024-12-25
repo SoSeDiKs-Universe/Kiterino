@@ -19,7 +19,7 @@ index 0000000000000000000000000000000000000000..0d0312744369b332ed0dfd171c060fc9
 +
 +}
 diff --git a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
-index 7a442fb4cf78bcb1268359ee41a6de138edb76b6..b6c9c7732a9eddec41111cedaec50feaa7cb2abb 100644
+index 0a579af1f1ecd6e73a8440e6821c41338dd28829..ca77245bd296b245cabaffc1f0af7a4a7e68a56a 100644
 --- a/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/src/main/java/net/minecraft/server/dedicated/DedicatedServer.java
 @@ -229,6 +229,15 @@ public class DedicatedServer extends MinecraftServer implements ServerInterface
@@ -39,13 +39,13 @@ index 7a442fb4cf78bcb1268359ee41a6de138edb76b6..b6c9c7732a9eddec41111cedaec50fea
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 1a808fc381c0c3ea1fc49bbffebddf2c550e817a..d6e0ab01c21867e84792d2d6f9ebef56e4758206 100644
+index 72c9b9d8f520aa29106dd28a48dcdaf9bf8ea9e6..15407b7760fb8b43b87ab45927106cb3409bc3b9 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -176,6 +176,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
  
      public final com.destroystokyo.paper.antixray.ChunkPacketBlockController chunkPacketBlockController; // Paper - Anti-Xray
-     public final org.purpurmc.purpur.PurpurWorldConfig purpurConfig; // Purpur
+     public final org.purpurmc.purpur.PurpurWorldConfig purpurConfig; // Purpur - Purpur config files
 +    public final me.sosedik.kiterino.KiterinoWorldConfig kiterinoConfig; // Kiterino - Kiterino Config
      public static BlockPos lastPhysicsProblem; // Spigot
      private org.spigotmc.TickLimiter entityLimiter;
@@ -53,26 +53,26 @@ index 1a808fc381c0c3ea1fc49bbffebddf2c550e817a..d6e0ab01c21867e84792d2d6f9ebef56
 @@ -888,6 +889,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable, ca.spottedl
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
-         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Purpur
+         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Purpur - Purpur config files
 +        this.kiterinoConfig = new me.sosedik.kiterino.KiterinoWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) worlddatamutable).getLevelName(), env); // Kiterino - Kiterino Config
          this.playerBreedingCooldowns = this.getNewBreedingCooldownCache(); // Purpur
          this.generator = gen;
          this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index d74591cd30b19f0d5cbfdb81e0607ccd4bdd91d4..d80f3cd75d56cbb55f02bc5f9da684c630ae5c6e 100644
+index badf280a6b01b06e8148c552330872d64e6256b7..b6ac56c11e40a20f0bf2970ac792df4f0e8d2d0f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1101,6 +1101,7 @@ public final class CraftServer implements Server {
          org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
          this.console.paperConfigurations.reloadConfigs(this.console);
-         org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur
+         org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur - Purpur config files
 +        me.sosedik.kiterino.KiterinoConfig.init((File) console.options.valueOf("kiterino-settings")); // Kiterino - Kiterino Config
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
-@@ -3112,6 +3113,13 @@ public final class CraftServer implements Server {
+@@ -3113,6 +3114,13 @@ public final class CraftServer implements Server {
          }
-         // Purpur end
+         // Purpur end - Purpur config files
  
 +        // Kiterino start - Kiterino config
 +        @Override
@@ -85,7 +85,7 @@ index d74591cd30b19f0d5cbfdb81e0607ccd4bdd91d4..d80f3cd75d56cbb55f02bc5f9da684c6
          public void restart() {
              org.spigotmc.RestartCommand.restart();
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index c471a8c81ba067abcb22956ad1a30b5a9b64fc87..74d3be91b9ee511adbede9bdc16b71e540d271fc 100644
+index 10aa600fab7146b330d46b5fd2fe596da222a70a..9f1fa2a4b23e99174f2d821cf6d81692daed9be7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -197,6 +197,14 @@ public class Main {

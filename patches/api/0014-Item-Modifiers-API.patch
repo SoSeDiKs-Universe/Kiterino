@@ -67,10 +67,10 @@ index 0000000000000000000000000000000000000000..3d596bbfaa0015a5d2e34207f4065d9a
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..4412c28ef6bd3eb08fba2d8f0edf9fc8c0f155b6
+index 0000000000000000000000000000000000000000..049ab18c07a36163f0dd13ac5acc628215bf4baf
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemContextBox.java
-@@ -0,0 +1,166 @@
+@@ -0,0 +1,165 @@
 +package me.sosedik.kiterino.modifier.item;
 +
 +import io.papermc.paper.datacomponent.DataComponentTypes;
@@ -179,9 +179,8 @@ index 0000000000000000000000000000000000000000..4412c28ef6bd3eb08fba2d8f0edf9fc8
 +    /**
 +     * Sets the item's new type
 +     */
-+    @SuppressWarnings("deprecation")
 +    public void setType(Material type) {
-+        this.item.setType(type);
++        this.item = this.item.withType(type);
 +    }
 +
 +    /**

@@ -27,13 +27,13 @@ index 05e16103af3fd276f0196ddf1a2e5b729b025c34..4bde7dddfa6d62b407e9e7128c999c49
              return Optional.empty();
          } else {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index d80f3cd75d56cbb55f02bc5f9da684c630ae5c6e..1833d39b555beaf418d2ced39cc02c092587ee2a 100644
+index b6ac56c11e40a20f0bf2970ac792df4f0e8d2d0f..6f9c113c59a45c77cd481dce4d18278284898c82 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3372,4 +3372,20 @@ public final class CraftServer implements Server {
+@@ -3374,4 +3374,20 @@ public final class CraftServer implements Server {
          return getServer().lagging;
      }
-     // Purpur end
+     // Purpur end - Lagging threshold
 +
 +    // Kiterino start - More resource pack API
 +    @Override

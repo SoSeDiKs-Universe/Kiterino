@@ -5,21 +5,36 @@ Subject: [PATCH] Extra item drop method
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 188c8e27d724a1593dc586b58c7dcb74a1b3d926..9819d4c35064d5bac605d6ba8630156a5955df6f 100644
+index 188c8e27d724a1593dc586b58c7dcb74a1b3d926..6663e5acfe813bc167f962dfb3befd7c5fd1c636 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -843,4 +843,14 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -843,4 +843,29 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
      @Nullable
      public Firework fireworkBoost(@NotNull ItemStack fireworkItemStack);
  
 +    // Kiterino start - Extra item drop method
 +    /**
-+     * Drops an item at the location of the entity.
++     * Make the entity drop the provided item. The dropped item will be cloned from the provided item.
++     * <br>
++     * This will produce {@link org.bukkit.event.player.PlayerDropItemEvent}.
 +     *
 +     * @param item ItemStack to drop
-+     * @return ItemDrop entity created as a result of this method
++     * @return Item entity created as a result of this method
 +     */
-+    @NotNull Item dropItem(@NotNull org.bukkit.inventory.ItemStack item);
++    default @Nullable Item dropItem(@NotNull org.bukkit.inventory.ItemStack item) {
++        return dropItem(item, null);
++    }
++
++    /**
++     * Make the entity drop the provided item. The dropped item will be cloned from the provided item.
++     * <br>
++     * This will produce {@link org.bukkit.event.player.PlayerDropItemEvent}.
++     *
++     * @param item ItemStack to drop
++     * @param function the function to be run before the entity is spawned
++     * @return Item entity created as a result of this method
++     */
++    @Nullable Item dropItem(@NotNull org.bukkit.inventory.ItemStack item, @Nullable java.util.function.Consumer<? super Item> function);
 +    // Kiterino end - Extra item drop method
 +
  }

@@ -6,24 +6,24 @@ Subject: [PATCH] Implement packet item faker for injected items
 Forces default item faker for injected items as to not kick the client from the server because of modded items
 
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
-index 573c389779c581a70d9196596b4c63d587e9ffd2..68e40cecca87b25cd91b4383ce497c632a2d4527 100644
+index 573c389779c581a70d9196596b4c63d587e9ffd2..249fd0f184fede1cc90464524eb43fca508b096c 100644
 --- a/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/ItemModifiersHandlerImpl.java
 @@ -221,7 +221,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
  	}
  
  	public static void init() {
-+		ItemModifier itemFaker = modifiers.get(KiterinoItemModifierImpl.MODIFIER_KEY);
++        ItemModifier itemFaker = modifiers.get(KiterinoItemModifierImpl.MODIFIER_KEY);
  		modifiers.clear(); // In case of reload. Not supported, but eh
-+		if (itemFaker != null) {
-+			modifiers.put(itemFaker.getModifierId(), itemFaker);
-+		}
++        if (itemFaker != null) {
++            modifiers.put(itemFaker.getModifierId(), itemFaker);
++        }
  		if (ItemModifiersHandler.itemModifiersHandler == null) ItemModifiersHandler.itemModifiersHandler = new ItemModifiersHandlerImpl();
  		ItemPacketContextInitializer.init();
  	}
 diff --git a/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifierImpl.java b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifierImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..0a27cb17c68901f0d921e2239ac1a174d8d7205f
+index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d9e9f8061
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/modifier/item/KiterinoItemModifierImpl.java
 @@ -0,0 +1,39 @@
@@ -42,104 +42,106 @@ index 0000000000000000000000000000000000000000..0a27cb17c68901f0d921e2239ac1a174
 +@ApiStatus.Internal
 +public final class KiterinoItemModifierImpl extends ItemModifier {
 +
-+	public static final NamespacedKey MODIFIER_KEY = new NamespacedKey(NamespacedKey.KITERINO, "item_faker");
-+	public static final KiterinoItemModifierImpl MODIFIER_IMPL = new KiterinoItemModifierImpl();
++    public static final NamespacedKey MODIFIER_KEY = new NamespacedKey(NamespacedKey.KITERINO, "item_faker");
++    public static final KiterinoItemModifierImpl MODIFIER_IMPL = new KiterinoItemModifierImpl();
 +
-+	private final Map<NamespacedKey, KiterinoItemModifier> modifiers = new HashMap<>();
++    private final Map<NamespacedKey, KiterinoItemModifier> modifiers = new HashMap<>();
 +
-+	private KiterinoItemModifierImpl() {
-+		super(MODIFIER_KEY);
-+	}
++    private KiterinoItemModifierImpl() {
++        super(MODIFIER_KEY);
++    }
 +
-+	public void add(@NotNull NamespacedKey key, @NotNull KiterinoItemModifier modifier) {
-+		this.modifiers.put(key, modifier);
-+	}
++    public void add(@NotNull NamespacedKey key, @NotNull KiterinoItemModifier modifier) {
++        this.modifiers.put(key, modifier);
++    }
 +
-+	@Override
-+	public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
-+		KiterinoItemModifier modifier = modifiers.get(contextBox.getItem().getType().getKey());
-+		if (modifier != null) {
-+			modifier.modify(contextBox);
-+			return ModificationResult.OK;
-+		}
-+		return ModificationResult.PASS;
-+	}
++    @Override
++    public @NotNull ModificationResult modify(@NotNull ItemContextBox contextBox) {
++        KiterinoItemModifier modifier = modifiers.get(contextBox.getItem().getType().getKey());
++        if (modifier != null) {
++            modifier.modify(contextBox);
++            return ModificationResult.OK;
++        }
++        return ModificationResult.PASS;
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index e86cee8ab98269ec08054641287ed759bc98eafa..3bef91251f6556e43e79dc9d1a37d82978109cfe 100644
+index 01b2058573b0104a3618b42586b27bfb1a528154..255adb3a27c38cf8a9c7a759588c824c3b9d9622 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,10 @@
  package me.sosedik.kiterino.registry.data;
  
-+import io.papermc.paper.datacomponent.DataComponentTypes;
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
++import net.minecraft.core.component.DataComponents;
 +import org.bukkit.inventory.ItemStack;
 +
  import net.minecraft.core.registries.BuiltInRegistries;
  
  import io.papermc.paper.datacomponent.DataComponentType;
 @@ -23,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 	protected Map<DataComponentType, Object> components = new HashMap<>();
- 	protected @Nullable Float compostChance;
- 	protected @Nullable Item nmsItem;
-+	protected @Nullable KiterinoItemModifier modifier;
+     protected Map<DataComponentType, Object> components = new HashMap<>();
+     protected @Nullable Float compostChance;
+     protected @Nullable Item nmsItem;
++    protected @Nullable KiterinoItemModifier modifier;
  
- 	protected final Conversions conversions;
- 	public ResourceLocation itemKey;
+     protected final Conversions conversions;
+     public ResourceLocation itemKey;
 @@ -75,6 +81,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 		return BuiltInRegistries.BLOCK.getValueOrThrow(ResourceKey.create(Registries.BLOCK, this.itemKey));
- 	}
+         return BuiltInRegistries.BLOCK.getValueOrThrow(ResourceKey.create(Registries.BLOCK, this.itemKey));
+     }
  
-+	@Override
-+	public @Nullable KiterinoItemModifier modifier() {
-+		return this.modifier;
-+	}
++    @Override
++    public @Nullable KiterinoItemModifier modifier() {
++        return this.modifier;
++    }
 +
- 	protected void parseValues(@NonNull Item item) {
- 		// Does it make sense to parse?
- 		// DataComponentMap components = item.components();
-@@ -113,6 +124,31 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 			return this;
- 		}
+     protected void parseValues(@NonNull Item item) {
+         // Does it make sense to parse?
+         // DataComponentMap components = item.components();
+@@ -113,6 +124,33 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+             return this;
+         }
  
-+		@Override
-+		public @NonNull Builder modifier(@Nullable KiterinoItemModifier modifier) {
-+			this.modifier = modifier;
-+			return this;
-+		}
++        @Override
++        public @NonNull Builder modifier(@Nullable KiterinoItemModifier modifier) {
++            this.modifier = modifier;
++            return this;
++        }
 +
-+		@SuppressWarnings("unchecked")
-+		private @NonNull KiterinoItemModifier buildModifier(@NonNull Item nmsItem) {
-+			return box -> {
-+				ItemStack item = box.getItem();
-+				if (this.modifier != null) this.modifier.modify(box);
-+				// TODO this is dumb
-+				nmsItem.components().keySet().forEach(dataType -> {
-+					DataComponentType type = PaperDataComponentType.minecraftToBukkit(dataType);
-+					if (item.hasData(type)) return;
++        @SuppressWarnings("unchecked")
++        private @NonNull KiterinoItemModifier buildModifier(@NonNull Item nmsItem) {
++            return box -> {
++                if (this.modifier != null) this.modifier.modify(box);
++                ItemStack item = box.getItem();
++                // TODO this is dumb
++                nmsItem.components().keySet().forEach(dataType -> {
++                    if (dataType == DataComponents.ITEM_MODEL) return;
 +
-+					if (type instanceof DataComponentType.Valued<?> valued) {
-+						item.setData((DataComponentType.Valued<Object>) valued, PaperDataComponentType.convertDataComponentValue(nmsItem.components(), (PaperDataComponentType.ValuedImpl) valued));
-+					} else if (type instanceof DataComponentType.NonValued nonValued) {
-+						item.setData(nonValued);
-+					}
-+				});
-+			};
-+		}
++                    DataComponentType type = PaperDataComponentType.minecraftToBukkit(dataType);
++                    if (item.isDataOverridden(type)) return;
 +
- 		@SuppressWarnings("unchecked")
- 		@Override
- 		public @NonNull Item build() {
-@@ -129,6 +165,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 				item = new Item(properties);
- 			}
- 			if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
-+			KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.getNamespace(), this.itemKey.getPath()), buildModifier(item));
- 			return item;
- 		}
++                    if (type instanceof DataComponentType.Valued<?> valued) {
++                        item.setData((DataComponentType.Valued<Object>) valued, PaperDataComponentType.convertDataComponentValue(nmsItem.components(), (PaperDataComponentType.ValuedImpl) valued));
++                    } else if (type instanceof DataComponentType.NonValued nonValued) {
++                        item.setData(nonValued);
++                    }
++                });
++            };
++        }
++
+         @SuppressWarnings("unchecked")
+         @Override
+         public @NonNull Item build() {
+@@ -129,6 +167,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+                 item = new Item(properties);
+             }
+             if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
++            KiterinoItemModifierImpl.MODIFIER_IMPL.add(new org.bukkit.NamespacedKey(this.itemKey.getNamespace(), this.itemKey.getPath()), buildModifier(item));
+             return item;
+         }
  
 diff --git a/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java b/src/main/java/me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjectorImpl.java
 index a35b5265681c6c535fc5a72a548b4dbeb5d6afca..66be336c6c00b16c627f1b22586b590839f2ea4e 100644

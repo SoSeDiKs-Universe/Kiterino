@@ -5,7 +5,7 @@ Subject: [PATCH] Fake some vanilla block states
 
 
 diff --git a/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
-index 46f1582e9a0b774c9ce9c9e781f4c480461c490b..2280c2734f01ec08104872a020784ac898f8b3d6 100644
+index a7ec3a95517da666907dccd50c01e2928fb388c0..c1bdecfc51215ed90b0f270fd6b36393906491fc 100644
 --- a/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
 +++ b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
 @@ -1,7 +1,19 @@
@@ -29,16 +29,16 @@ index 46f1582e9a0b774c9ce9c9e781f4c480461c490b..2280c2734f01ec08104872a020784ac8
  import org.jspecify.annotations.NullMarked;
  
 @@ -17,6 +29,7 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
- 	@Override
- 	public int getId(BlockState value) {
- 		if (!(value.getBlock() instanceof KiterinoBlock kiterinoBlock)) {
+     @Override
+     public int getId(BlockState value) {
+         if (!(value.getBlock() instanceof KiterinoBlock kiterinoBlock)) {
 +			value = replaceVanillaState(value);
- 			return super.getId(value);
- 		}
+             return super.getId(value);
+         }
  
 @@ -24,4 +37,66 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
- 		return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
- 	}
+         return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
+     }
  
 +	public BlockState replaceVanillaState(BlockState value) {
 +		if (value.is(Blocks.NOTE_BLOCK)) {

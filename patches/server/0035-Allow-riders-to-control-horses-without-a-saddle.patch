@@ -7,7 +7,7 @@ Requires a saddle on the client's side to actually control the entity.
 This is handled by a plugin on SoSeDiK's Universe.
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
-index b258be16f32ffd58ac8406deac9423cb01ca9a5c..0525300947ffd35a0cd8c0766c5745fadd354a1b 100644
+index f58a0f50d04004587d342c1bb5f681cd485cf302..343ad5bb780b15d7d90bb4c38a4ea114761b2fcb 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/horse/AbstractHorse.java
 @@ -228,8 +228,8 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
@@ -21,7 +21,7 @@ index b258be16f32ffd58ac8406deac9423cb01ca9a5c..0525300947ffd35a0cd8c0766c5745fa
          this.createInventory();
      }
  
-@@ -399,7 +399,7 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+@@ -400,7 +400,7 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
  
      @Override
      public boolean isSaddled() {
@@ -30,7 +30,7 @@ index b258be16f32ffd58ac8406deac9423cb01ca9a5c..0525300947ffd35a0cd8c0766c5745fa
      }
  
      public int getTemper() {
-@@ -591,7 +591,7 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
+@@ -592,7 +592,7 @@ public abstract class AbstractHorse extends Animal implements ContainerListener,
  
      @Override
      public void openCustomInventoryScreen(Player player) {

@@ -5,7 +5,7 @@ Subject: [PATCH] Data-driven blocks
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index dbe3ef9ed46d10076da2ce7158e5b73460165a89..699db2b94d1968253f3835451c52f4a8a8ce577d 100644
+index dbe3ef9ed46d10076da2ce7158e5b73460165a89..b59169e47e163029848226749fdbcc4acd3cc045 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 @@ -84,7 +84,7 @@ public final class PaperRegistries {
@@ -13,7 +13,7 @@ index dbe3ef9ed46d10076da2ce7158e5b73460165a89..699db2b94d1968253f3835451c52f4a8
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
 -            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
-+	        start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven blocks
++            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven blocks
              start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
              start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
              start(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT).craft(Frog.Variant.class, CraftFrog.CraftVariant::new).build(),
@@ -35,7 +35,7 @@ index 4918b43e691e6c5d5f289a32671197a1bdda413d..42ce7f618f69f04791e23e76c325c2d3
              this.registry,
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoBlockRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoBlockRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f53420b08666bfa95dcc3f618a77ca669250657e
+index 0000000000000000000000000000000000000000..4f9365a06cd4d61218b48aba812763ca647caeea
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoBlockRegistryEntity.java
 @@ -0,0 +1,79 @@
@@ -61,65 +61,65 @@ index 0000000000000000000000000000000000000000..f53420b08666bfa95dcc3f618a77ca66
 +@NullMarked
 +public class KiterinoBlockRegistryEntity implements BlockRegistryEntity {
 +
-+	protected @Nullable KiterinoBlock nmsBlock;
++    protected @Nullable KiterinoBlock nmsBlock;
 +
-+	protected final Conversions conversions;
-+	public ResourceLocation blockKey;
++    protected final Conversions conversions;
++    public ResourceLocation blockKey;
 +
-+	public KiterinoBlockRegistryEntity(
-+		Conversions conversions,
-+		@Nullable Block internal
-+	) {
-+		this.conversions = conversions;
-+	}
++    public KiterinoBlockRegistryEntity(
++        Conversions conversions,
++        @Nullable Block internal
++    ) {
++        this.conversions = conversions;
++    }
 +
-+	@Override
-+	public @Nullable KiterinoBlock nmsBlock() {
-+		return this.nmsBlock;
-+	}
++    @Override
++    public @Nullable KiterinoBlock nmsBlock() {
++        return this.nmsBlock;
++    }
 +
-+	@Override
-+	public Object constructBlockProperties() {
-+		return BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, this.blockKey));
-+	}
++    @Override
++    public Object constructBlockProperties() {
++        return BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, this.blockKey));
++    }
 +
-+	public static final class KiterinoBuilder extends KiterinoBlockRegistryEntity implements Builder,
-+			PaperRegistryBuilder<Block, BlockType> {
++    public static final class KiterinoBuilder extends KiterinoBlockRegistryEntity implements Builder,
++            PaperRegistryBuilder<Block, BlockType> {
 +
-+		public KiterinoBuilder(Conversions conversions, @Nullable Block internal) {
-+			super(conversions, internal);
-+		}
++        public KiterinoBuilder(Conversions conversions, @Nullable Block internal) {
++            super(conversions, internal);
++        }
 +
-+		@Override
-+		public Block build() {
-+			Block block = (Block) this.nmsBlock;
-+			assert block != null;
-+			if (this.nmsBlock.getBlockDataClasses() != null) {
-+				CraftBlockData.register(block.getClass(), state -> {
-+					try {
-+						return (CraftBlockData) this.nmsBlock.getBlockDataClasses().second().getDeclaredConstructor(BlockState.class).newInstance(state);
-+					} catch (NoSuchMethodException e) {
-+						throw new KiterinoDataInjectorRuntimeException("Invalid block data constructor", e);
-+					} catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
-+						throw new KiterinoDataInjectorRuntimeException("Something went wrong constructing block data", e);
-+					}
-+				});
-+			}
-+			return block;
-+		}
++        @Override
++        public Block build() {
++            Block block = (Block) this.nmsBlock;
++            assert block != null;
++            if (this.nmsBlock.getBlockDataClasses() != null) {
++                CraftBlockData.register(block.getClass(), state -> {
++                    try {
++                        return (CraftBlockData) this.nmsBlock.getBlockDataClasses().second().getDeclaredConstructor(BlockState.class).newInstance(state);
++                    } catch (NoSuchMethodException e) {
++                        throw new KiterinoDataInjectorRuntimeException("Invalid block data constructor", e);
++                    } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
++                        throw new KiterinoDataInjectorRuntimeException("Something went wrong constructing block data", e);
++                    }
++                });
++            }
++            return block;
++        }
 +
-+		@Override
-+		public Builder nmsBlock(KiterinoBlock nmsBlock) {
-+			if (!(nmsBlock instanceof Block)) throw new IllegalArgumentException("NMS block must extend Block");
-+			this.nmsBlock = nmsBlock;
-+			return this;
-+		}
++        @Override
++        public Builder nmsBlock(KiterinoBlock nmsBlock) {
++            if (!(nmsBlock instanceof Block)) throw new IllegalArgumentException("NMS block must extend Block");
++            this.nmsBlock = nmsBlock;
++            return this;
++        }
 +
-+	}
++    }
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index a0b6844d1ab558cf7dc271122c8402a878a1513c..e86cee8ab98269ec08054641287ed759bc98eafa 100644
+index b570e05a15274f7582f3363990d077a9e927e3c6..01b2058573b0104a3618b42586b27bfb1a528154 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,7 @@
@@ -131,25 +131,25 @@ index a0b6844d1ab558cf7dc271122c8402a878a1513c..e86cee8ab98269ec08054641287ed759
  import io.papermc.paper.datacomponent.PaperDataComponentType;
  import io.papermc.paper.registry.PaperRegistryBuilder;
 @@ -63,6 +65,16 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
- 		return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
- 	}
+         return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
+     }
  
-+	@Override
-+	public boolean hasAttachedBlock() {
-+		return BuiltInRegistries.BLOCK.containsKey(ResourceKey.create(Registries.BLOCK, this.itemKey));
-+	}
++    @Override
++    public boolean hasAttachedBlock() {
++        return BuiltInRegistries.BLOCK.containsKey(ResourceKey.create(Registries.BLOCK, this.itemKey));
++    }
 +
-+	@Override
-+	public @NonNull Object asBlockOrThrow() {
-+		return BuiltInRegistries.BLOCK.getValueOrThrow(ResourceKey.create(Registries.BLOCK, this.itemKey));
-+	}
++    @Override
++    public @NonNull Object asBlockOrThrow() {
++        return BuiltInRegistries.BLOCK.getValueOrThrow(ResourceKey.create(Registries.BLOCK, this.itemKey));
++    }
 +
- 	protected void parseValues(@NonNull Item item) {
- 		// Does it make sense to parse?
- 		// DataComponentMap components = item.components();
+     protected void parseValues(@NonNull Item item) {
+         // Does it make sense to parse?
+         // DataComponentMap components = item.components();
 diff --git a/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..46f1582e9a0b774c9ce9c9e781f4c480461c490b
+index 0000000000000000000000000000000000000000..a7ec3a95517da666907dccd50c01e2928fb388c0
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/world/block/KiterinoBlockStateIdMapper.java
 @@ -0,0 +1,27 @@
@@ -163,25 +163,25 @@ index 0000000000000000000000000000000000000000..46f1582e9a0b774c9ce9c9e781f4c480
 +@NullMarked
 +public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
 +
-+	public static int lastVanillaBlockStateId = 0;
++    public static int lastVanillaBlockStateId = 0;
 +
-+	public KiterinoBlockStateIdMapper() {
-+		super();
-+	}
++    public KiterinoBlockStateIdMapper() {
++        super();
++    }
 +
-+	@Override
-+	public int getId(BlockState value) {
-+		if (!(value.getBlock() instanceof KiterinoBlock kiterinoBlock)) {
-+			return super.getId(value);
-+		}
++    @Override
++    public int getId(BlockState value) {
++        if (!(value.getBlock() instanceof KiterinoBlock kiterinoBlock)) {
++            return super.getId(value);
++        }
 +
-+		org.bukkit.block.BlockState bukkitState = kiterinoBlock.serializeBlockToClient();
-+		return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
-+	}
++        org.bukkit.block.BlockState bukkitState = kiterinoBlock.serializeBlockToClient();
++        return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
++    }
 +
 +}
 diff --git a/src/main/java/net/minecraft/world/level/block/Block.java b/src/main/java/net/minecraft/world/level/block/Block.java
-index 91e68335d7007e3c1fe13eec0060db01c5f659ac..7d6a48661808d488cd77ee94f08be79ae0cc7d86 100644
+index f00526753a83f95689fad2a132bef79f4479eec6..548811c2dabc104b43d50459221e8ca89a354a78 100644
 --- a/src/main/java/net/minecraft/world/level/block/Block.java
 +++ b/src/main/java/net/minecraft/world/level/block/Block.java
 @@ -66,7 +66,7 @@ public class Block extends BlockBehaviour implements ItemLike {
@@ -194,7 +194,7 @@ index 91e68335d7007e3c1fe13eec0060db01c5f659ac..7d6a48661808d488cd77ee94f08be79a
          public Boolean load(VoxelShape voxelshape) {
              return !Shapes.joinIsNotEmpty(Shapes.block(), voxelshape, BooleanOp.NOT_SAME);
 diff --git a/src/main/java/net/minecraft/world/level/block/Blocks.java b/src/main/java/net/minecraft/world/level/block/Blocks.java
-index 1c34691da51d7f7ba3d54e095a3b58b74a5f2263..a15d77d1bdcfddcb4077ab6e90aa412982864690 100644
+index c5f8227cd9631d98cc8404e3f6d6109a55c617aa..b5a8aace580079354ff171e9595147077f40da4e 100644
 --- a/src/main/java/net/minecraft/world/level/block/Blocks.java
 +++ b/src/main/java/net/minecraft/world/level/block/Blocks.java
 @@ -6920,5 +6920,6 @@ public class Blocks {
@@ -235,14 +235,14 @@ index 66e40149a59c4bd5d5ca3b5a69c733eea49fb86b..e8fec76a821206b1156cf4b9518bc50a
      }
  
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index 917182868cdfdd868748a26d9eeebd7ef772e628..a2f52f9c4c12d9c3b00c06c1d74f3a66892975b4 100644
+index 917182868cdfdd868748a26d9eeebd7ef772e628..de503146ae81e540dfcfcc9812d7a68452442c5f 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -26,6 +26,7 @@ class RegistryBuilderTest {
              .map(RegistryBuilderTest::possiblyUnwrap)
              .filter(RegistryEntry.BuilderHolder.class::isInstance)
              .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
-+	        .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks
++            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks
              .map(Arguments::arguments);
      }
  

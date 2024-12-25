@@ -98,7 +98,7 @@ index 65e86250cb162b12e295b7523af0e90500aca9ec..a9b3de75b3f46f086d317902e5de6deb
 +    // Kiterino end - Add combat tracker API
  }
 diff --git a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
-index 4fb025a63628eb60509d90b680922a0220104bcb..a51a1115ecb3b20006b1cf94ffa3a3894bcba3ca 100644
+index 6853b91e047b92ae4042a26d6aad84874be11709..75cf1eab13278041941f6e038ea41bd7613c6115 100644
 --- a/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 +++ b/src/main/java/net/minecraft/world/damagesource/CombatTracker.java
 @@ -21,12 +21,12 @@ public class CombatTracker {
@@ -117,7 +117,7 @@ index 4fb025a63628eb60509d90b680922a0220104bcb..a51a1115ecb3b20006b1cf94ffa3a389
      private boolean takingDamage;
  
      public CombatTracker(LivingEntity entity) {
-@@ -111,7 +111,7 @@ public class CombatTracker {
+@@ -113,7 +113,7 @@ public class CombatTracker {
      }
  
      @Nullable

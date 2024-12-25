@@ -42,13 +42,13 @@ index 802de2ff74b490ea73c415739375a0169fce9f2f..f191e86c6d3a76225be95914ba521492
          this.oldSize = buf.readDouble();
          this.newSize = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 029d6daa003f90999afa4e5070eabf6e0ada473a..32f245200488c4f9163ebfa882df5423ede0a350 100644
+index c2df3c38f58d8dcb5e3d62077655af56a3bffd65..401194e991d088c695414b33c3dd97a7d9315869 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3660,4 +3660,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3663,4 +3663,17 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
      }
-     // Purpur end
+     // Purpur end - Add death screen API
 +
 +    // Kiterino start - Red tint API
 +    @Override
