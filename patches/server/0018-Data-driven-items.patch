@@ -64,10 +64,10 @@ index b1710da835cee3333bfb1c238b37ec0c4d16ba09..cadbf29c4667a74d79fdc538e0cca9cc
  }
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..b570e05a15274f7582f3363990d077a9e927e3c6
+index 0000000000000000000000000000000000000000..5c665a7b431314c3dcb16c4d11643434181a8763
 --- /dev/null
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -0,0 +1,129 @@
+@@ -0,0 +1,130 @@
 +package me.sosedik.kiterino.registry.data;
 +
 +import io.papermc.paper.datacomponent.DataComponentType;
@@ -130,7 +130,8 @@ index 0000000000000000000000000000000000000000..b570e05a15274f7582f3363990d077a9
 +
 +    @Override
 +    public @NonNull Object constructItemProperties() {
-+        return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
++        return new Item.Properties()
++                .setId(ResourceKey.create(Registries.ITEM, this.itemKey));
 +    }
 +
 +    protected void parseValues(@NonNull Item item) {

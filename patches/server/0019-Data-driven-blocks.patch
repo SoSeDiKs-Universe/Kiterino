@@ -119,7 +119,7 @@ index 0000000000000000000000000000000000000000..4f9365a06cd4d61218b48aba812763ca
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index b570e05a15274f7582f3363990d077a9e927e3c6..01b2058573b0104a3618b42586b27bfb1a528154 100644
+index 5c665a7b431314c3dcb16c4d11643434181a8763..53885600bdd389949aca90a01a039737e4dd3a0b 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 @@ -1,5 +1,7 @@
@@ -130,8 +130,8 @@ index b570e05a15274f7582f3363990d077a9e927e3c6..01b2058573b0104a3618b42586b27bfb
  import io.papermc.paper.datacomponent.DataComponentType;
  import io.papermc.paper.datacomponent.PaperDataComponentType;
  import io.papermc.paper.registry.PaperRegistryBuilder;
-@@ -63,6 +65,16 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
-         return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, this.itemKey));
+@@ -64,6 +66,16 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+                 .setId(ResourceKey.create(Registries.ITEM, this.itemKey));
      }
  
 +    @Override

@@ -67,21 +67,23 @@ index 0000000000000000000000000000000000000000..16242986d124173007c4e18dd6219e5d
 +
 +}
 diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-index 01b2058573b0104a3618b42586b27bfb1a528154..255adb3a27c38cf8a9c7a759588c824c3b9d9622 100644
+index 53885600bdd389949aca90a01a039737e4dd3a0b..2a60bf487fe0a5e6cb7be88fef2d68078e9af3ce 100644
 --- a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
 +++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoItemRegistryEntity.java
-@@ -1,5 +1,10 @@
+@@ -1,5 +1,12 @@
  package me.sosedik.kiterino.registry.data;
  
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifier;
 +import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
 +import net.minecraft.core.component.DataComponents;
 +import org.bukkit.inventory.ItemStack;
++import net.minecraft.world.item.component.UseCooldown;
++import java.util.Optional;
 +
  import net.minecraft.core.registries.BuiltInRegistries;
  
  import io.papermc.paper.datacomponent.DataComponentType;
-@@ -23,6 +28,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -23,6 +30,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
      protected Map<DataComponentType, Object> components = new HashMap<>();
      protected @Nullable Float compostChance;
      protected @Nullable Item nmsItem;
@@ -89,7 +91,17 @@ index 01b2058573b0104a3618b42586b27bfb1a528154..255adb3a27c38cf8a9c7a759588c824c
  
      protected final Conversions conversions;
      public ResourceLocation itemKey;
-@@ -75,6 +81,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -63,7 +71,8 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+     @Override
+     public @NonNull Object constructItemProperties() {
+         return new Item.Properties()
+-                .setId(ResourceKey.create(Registries.ITEM, this.itemKey));
++                .setId(ResourceKey.create(Registries.ITEM, this.itemKey))
++                .component(DataComponents.USE_COOLDOWN, new UseCooldown(0F, Optional.of(this.itemKey)));
+     }
+ 
+     @Override
+@@ -76,6 +85,11 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
          return BuiltInRegistries.BLOCK.getValueOrThrow(ResourceKey.create(Registries.BLOCK, this.itemKey));
      }
  
@@ -101,7 +113,7 @@ index 01b2058573b0104a3618b42586b27bfb1a528154..255adb3a27c38cf8a9c7a759588c824c
      protected void parseValues(@NonNull Item item) {
          // Does it make sense to parse?
          // DataComponentMap components = item.components();
-@@ -113,6 +124,33 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -114,6 +128,33 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
              return this;
          }
  
@@ -135,7 +147,7 @@ index 01b2058573b0104a3618b42586b27bfb1a528154..255adb3a27c38cf8a9c7a759588c824c
          @SuppressWarnings("unchecked")
          @Override
          public @NonNull Item build() {
-@@ -129,6 +167,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
+@@ -130,6 +171,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
                  item = new Item(properties);
              }
              if (this.compostChance != null) ComposterBlock.add(this.compostChance, item);
