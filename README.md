@@ -9,7 +9,7 @@
   
   There are also hardcoded vanilla mechanics changes that were considered suitable for our server.
   
-  [![Made with Love](https://img.shields.io/badge/made%20with-Love%20%E2%9D%A4%EF%B8%8F-%23ffcdd2)]() [![and Milk](https://img.shields.io/badge/combined%20with-Milk%20%F0%9F%A5%9B-%23e1bee7)]() [![and Milk](https://img.shields.io/badge/and%20lots%20of-Cookies%20%F0%9F%8D%AA-%23bbdefb)]()
+  [![made with Love](https://img.shields.io/badge/made%20with-Love%20%E2%9D%A4%EF%B8%8F-%23ffcdd2)]() [![combined with Milk](https://img.shields.io/badge/combined%20with-Milk%20%F0%9F%A5%9B-%23e1bee7)]() [![and lots of Cookies](https://img.shields.io/badge/and%20lots%20of-Cookies%20%F0%9F%8D%AA-%23bbdefb)]()
 
 </div>
 
@@ -31,7 +31,7 @@ Publishing the dev bundle:
 ./gradlew publishToMavenLocal -PpublishDevBundle
 ```
 
-For anything else you can refer to [Paper](https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md)'s/[Purpur](https://github.com/PurpurMC/Purpur/blob/HEAD/CONTRIBUTING.md)'s documentation on how to contribute.
+For anything else, refer to [Paper](https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md)'s/[Purpur](https://github.com/PurpurMC/Purpur/blob/HEAD/CONTRIBUTING.md)'s documentation on how to contribute.
 
 License
 ---

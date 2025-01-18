@@ -3,12 +3,12 @@ import java.util.*
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
 if (!file(".git").exists()) {
@@ -29,7 +29,7 @@ if (!file(".git").exists()) {
 }
 
 rootProject.name = "kiterino"
-for (name in listOf("Kiterino-API", "Kiterino-Server")) {
+for (name in listOf("kiterino-api", "kiterino-server")) {
     val projName = name.lowercase(Locale.ENGLISH)
     include(projName)
     findProject(":$projName")!!.projectDir = file(name)

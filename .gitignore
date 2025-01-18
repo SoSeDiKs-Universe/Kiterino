@@ -1,62 +1,20 @@
-# JVM crash related
-core.*
-hs_err_pid*
+# Gradle
+.gradle
+build
 
 # Intellij
 .idea/
-*.iml
-*.ipr
-*.iws
-out/
 
-# Eclipse
-.classpath
-.project
-.settings/
-
-# netbeans
-nbproject/
-nbactions.xml
-
-# Gradle
-!gradle-wrapper.jar
-.gradle/
-build/
-*/build/
-
-# we use maven!
-build.xml
-
-# Maven
-log/
-target/
-dependency-reduced-pom.xml
-
-# various other potential build files
-bin/
-dist/
-manifest.mf
-
-# Mac
-.DS_Store/
-.DS_Store
-
-# vim
-.*.sw[a-p]
-
-# Linux temp files
-*~
-
-# other stuff
-run/
-.envrc
-*.nix
+# Other stuff
+/run
 
 # Kiterino build files
-build-data/
-paper-api-generator
+/kiterino-server/build.gradle.kts
+/kiterino-server/src/minecraft
+/paper-server
+/purpur-server
+/kiterino-api/build.gradle.kts
+/paper-api
+/purpur-api
+*.jar
 test-plugin.settings.gradle.kts
-patches/ignored/
-Kiterino-API
-Kiterino-Server
-kiterino.jar

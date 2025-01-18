@@ -1,7 +1,7 @@
 version = "1.0.0-SNAPSHOT"
 
 //plugins {
-//    id("io.papermc.paperweight.userdev") version "1.7.7"
+//    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
 //}
 //
 //repositories {
