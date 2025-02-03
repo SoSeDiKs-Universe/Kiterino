@@ -1,0 +1,40 @@
+--- a/src/main/java/org/bukkit/DyeColor.java
++++ b/src/main/java/org/bukkit/DyeColor.java
+@@ -8,7 +_,7 @@
+ /**
+  * All supported color values for dyes and cloth
+  */
+-public enum DyeColor {
++public enum DyeColor implements net.kyori.adventure.util.RGBLike, net.kyori.adventure.text.format.StyleBuilderApplicable { // Kiterino - Parchment - Expanded Adventure support
+ 
+     /**
+      * Represents white dye.
+@@ -134,6 +_,28 @@
+     public Color getFireworkColor() {
+         return firework;
+     }
++
++    // Kiterino start - Parchment - Expanded Adventure support
++    @Override
++    public @org.jetbrains.annotations.Range(from = 0L, to = 255L) int red() {
++        return this.color.getRed();
++    }
++
++    @Override
++    public @org.jetbrains.annotations.Range(from = 0L, to = 255L) int green() {
++        return this.color.getGreen();
++    }
++
++    @Override
++    public @org.jetbrains.annotations.Range(from = 0L, to = 255L) int blue() {
++        return this.color.getBlue();
++    }
++
++    @Override
++    public void styleApply(net.kyori.adventure.text.format.Style.@org.jetbrains.annotations.NotNull Builder style) {
++        style.color(net.kyori.adventure.text.format.TextColor.color(this.color));
++    }
++    // Kiterino end - Parchment - Expanded Adventure support
+ 
+     /**
+      * Gets the DyeColor with the given wool data value.

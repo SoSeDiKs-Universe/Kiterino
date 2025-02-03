@@ -1,0 +1,45 @@
+--- a/net/minecraft/world/entity/Entity.java
++++ b/net/minecraft/world/entity/Entity.java
+@@ -259,6 +_,7 @@
+     public final RandomSource random; // Paper - Share random for entities to make them more random // Add toggle for RNG manipulation
+     public int tickCount;
+     private int remainingFireTicks = -this.getFireImmuneTicks();
++    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino - Forced panic mode API
+     public boolean wasTouchingWater;
+     protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
+     protected boolean wasEyeInWater;
+@@ -902,6 +_,12 @@
+             this.clearFire();
+         }
+ 
++        // Kiterino start - Forced panic mode API
++        if (this.forcePanicTicks > 0) {
++            this.forcePanicTicks--;
++        }
++        // Kiterino end - Forced panic mode API
++
+         if (this.isInLava()) {
+             this.lavaHurt();
+             this.fallDistance *= 0.5F;
+@@ -3179,6 +_,21 @@
+             this.gameEvent(GameEvent.ENTITY_MOUNT, passenger);
+         }
+     }
++
++    // Kiterino start - Allow setting entity's rider
++    public boolean setRider(Player rider) {
++        if (!new org.bukkit.event.entity.EntityMountEvent(rider.getBukkitEntity(), this.getBukkitEntity()).callEvent()) return false;
++        if (!rider.startRiding(this, true)) return false;
++
++        onMount(rider);
++        this.rider = rider;
++        return true;
++    }
++
++    public boolean hasRider() {
++        return getRider() != null;
++    }
++    // Kiterino end - Allow setting entity's rider
+ 
+     // Paper start - Force entity dismount during teleportation
+     protected boolean removePassenger(Entity passenger) {

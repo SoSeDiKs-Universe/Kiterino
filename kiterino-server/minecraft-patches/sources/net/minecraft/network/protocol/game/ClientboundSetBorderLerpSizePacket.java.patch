@@ -1,0 +1,17 @@
+--- a/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
+@@ -20,6 +_,14 @@
+         this.lerpTime = worldBorder.getLerpRemainingTime();
+     }
+ 
++    // Kiterino start - Red tint API
++    public ClientboundSetBorderLerpSizePacket(double oldSize, double newSize, long lerpTime) {
++        this.oldSize = oldSize;
++        this.newSize = newSize;
++        this.lerpTime = lerpTime;
++    }
++    // Kiterino end - Red tint API
++
+     private ClientboundSetBorderLerpSizePacket(FriendlyByteBuf buffer) {
+         this.oldSize = buffer.readDouble();
+         this.newSize = buffer.readDouble();

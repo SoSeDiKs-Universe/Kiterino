@@ -1,0 +1,57 @@
+--- a/src/main/java/org/bukkit/inventory/ItemStack.java
++++ b/src/main/java/org/bukkit/inventory/ItemStack.java
+@@ -1814,4 +_,54 @@
+         return this.craftDelegate.damage(amount, ignoreUnbreaking);
+     }
+     // Purpur end - ItemStack convenience methods
++
++    // Kiterino start - ItemStack convenience methods
++    /**
++     * Returns clone of this item with colored
++     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
++     *
++     * @param color color
++     * @return colored cloned item
++     */
++    public @NotNull ItemStack withColor(@NotNull net.kyori.adventure.util.RGBLike color) {
++        ItemStack clone = clone();
++        org.bukkit.Color _color = switch (color) {
++            case org.bukkit.Color bukkitColor -> bukkitColor;
++            case org.bukkit.DyeColor dyeColor -> dyeColor.getColor();
++            default -> org.bukkit.Color.fromRGB(color.red(), color.green(), color.blue());
++        };
++        ItemMeta meta = clone.getItemMeta();
++        if (meta instanceof org.bukkit.inventory.meta.LeatherArmorMeta leatherMeta) {
++            leatherMeta.setColor(_color);
++            clone.setItemMeta(leatherMeta);
++        } else if (meta instanceof org.bukkit.inventory.meta.PotionMeta potionMeta) {
++            potionMeta.setColor(_color);
++            clone.setItemMeta(potionMeta);
++        }
++        return clone;
++    }
++
++    /**
++     * Checks whether the item is {@code null}, air, or has amount equal to 0
++     *
++     * @param item item to check
++     * @return whether item is empty
++     */
++    @org.jetbrains.annotations.Contract("null -> true")
++    public static boolean isEmpty(@Nullable ItemStack item) {
++        return item == null || item.isEmpty();
++    }
++
++    /**
++     * Checks whether the item is not empty and has the provided {@link Material}
++     *
++     * @param item item to check
++     * @param type required type
++     * @return whether the item has the same type
++     */
++    @org.jetbrains.annotations.Contract("null, _ -> false")
++    public static boolean isType(@Nullable ItemStack item, @NotNull Material type) {
++        return item != null && item.getType() == type && item.getAmount() > 0;
++    }
++    // Kiterino end - ItemStack convenience methods
+ }

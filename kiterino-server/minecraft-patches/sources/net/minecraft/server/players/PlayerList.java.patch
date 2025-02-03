@@ -1,0 +1,24 @@
+--- a/net/minecraft/server/players/PlayerList.java
++++ b/net/minecraft/server/players/PlayerList.java
+@@ -221,7 +_,12 @@
+             player.spawnReason = org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.DEFAULT; // set Player SpawnReason to DEFAULT on first login
+             // Paper start - reset to main world spawn if first spawn or invalid world
+         }
++        // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
++        org.bukkit.Location initialLocation = null;
++        String initialDimensionId = optional.map(compoundTag -> compoundTag.getString("Dimension")).orElse(null);
++        // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
+         if (optional.isEmpty() || invalidPlayerWorld[0]) {
++            initialLocation = org.bukkit.craftbukkit.util.CraftLocation.toBukkit(player.position(), null, player.getBukkitYaw(), player.getXRot()); // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
+             // Paper end - reset to main world spawn if first spawn or invalid world
+             player.moveTo(player.adjustSpawnLocation(serverLevel, serverLevel.getSharedSpawnPos()).getBottomCenter(), serverLevel.getSharedSpawnAngle(), 0.0F); // Paper - MC-200092 - fix first spawn pos yaw being ignored
+         }
+@@ -230,7 +_,7 @@
+         String loggableAddress = connection.getLoggableAddress(this.server.logIPs());
+         // Spigot start - spawn location event
+         org.bukkit.entity.Player spawnPlayer = player.getBukkitEntity();
+-        org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(spawnPlayer, spawnPlayer.getLocation());
++        org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(spawnPlayer, spawnPlayer.getLocation(), initialLocation, initialDimensionId); // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
+         this.cserver.getPluginManager().callEvent(ev);
+ 
+         org.bukkit.Location loc = ev.getSpawnLocation();

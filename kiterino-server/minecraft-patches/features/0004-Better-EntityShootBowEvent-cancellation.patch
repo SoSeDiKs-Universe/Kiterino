@@ -1,0 +1,72 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 29 Jan 2025 18:29:19 +0200
+Subject: [PATCH] Better EntityShootBowEvent cancellation
+
+Don't increase stats / play bow sound if event was cancelled
+
+diff --git a/net/minecraft/world/item/BowItem.java b/net/minecraft/world/item/BowItem.java
+index b3e003694ce0da357e91ab3ce2b1380f9ab0a32a..977df16410eb4c10ef651f85dd21aad6d6a9990d 100644
+--- a/net/minecraft/world/item/BowItem.java
++++ b/net/minecraft/world/item/BowItem.java
+@@ -43,7 +43,7 @@ public class BowItem extends ProjectileWeaponItem {
+                 } else {
+                     List<ItemStack> list = draw(stack, projectile, player);
+                     if (level instanceof ServerLevel serverLevel && !list.isEmpty()) {
+-                        this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null); // Purpur - Projectile offset config
++                        if (!this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null)); // Purpur - Projectile offset config // Kiterino - Better EntityShootBowEvent cancellation
+                     }
+ 
+                     level.playSound(
+diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
+index 1131e984fd30e40c1b99054b5db9462ffe55b5f1..b3464c827d3fb8a158c82c23cc95bcb24794b22c 100644
+--- a/net/minecraft/world/item/CrossbowItem.java
++++ b/net/minecraft/world/item/CrossbowItem.java
+@@ -203,7 +203,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
+         if (level instanceof ServerLevel serverLevel) {
+             ChargedProjectiles chargedProjectiles = weapon.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+             if (chargedProjectiles != null && !chargedProjectiles.isEmpty()) {
+-                this.shoot(serverLevel, shooter, hand, weapon, chargedProjectiles.getItems(), velocity, inaccuracy, shooter instanceof Player, target);
++                if (!this.shoot(serverLevel, shooter, hand, weapon, chargedProjectiles.getItems(), velocity, inaccuracy, shooter instanceof Player, target)); // Kiterino - Better EntityShootBowEvent cancellation
+                 if (shooter instanceof ServerPlayer serverPlayer) {
+                     CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, weapon);
+                     serverPlayer.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
+diff --git a/net/minecraft/world/item/ProjectileWeaponItem.java b/net/minecraft/world/item/ProjectileWeaponItem.java
+index f20c38c1ff978d00dc0c9810c050506deed44ebd..b0c85c522e231fcd938ae2c7c487449130181422 100644
+--- a/net/minecraft/world/item/ProjectileWeaponItem.java
++++ b/net/minecraft/world/item/ProjectileWeaponItem.java
+@@ -40,7 +40,7 @@ public abstract class ProjectileWeaponItem extends Item {
+ 
+     public abstract int getDefaultProjectileRange();
+ 
+-    protected void shoot(
++    protected boolean shoot( // Kiterino - void -> boolean - Better EntityShootBowEvent cancellation
+         ServerLevel level,
+         LivingEntity shooter,
+         InteractionHand hand,
+@@ -69,7 +69,7 @@ public abstract class ProjectileWeaponItem extends Item {
+                 org.bukkit.event.entity.EntityShootBowEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callEntityShootBowEvent(shooter, weapon, itemStack, projectile, hand, velocity, true);
+                 if (event.isCancelled()) {
+                     event.getProjectile().remove();
+-                    return;
++                    return false; // Kiterino - Better EntityShootBowEvent cancellation
+                 }
+ 
+                 if (event.getProjectile() == projectile.getBukkitEntity()) {
+@@ -81,7 +81,7 @@ public abstract class ProjectileWeaponItem extends Item {
+                         if (shooter instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                             serverPlayer.getBukkitEntity().updateInventory();
+                         }
+-                        return;
++                        return false; // Kiterino - Better EntityShootBowEvent cancellation
+                     }
+                 }
+                 // CraftBukkit end
+@@ -91,6 +91,7 @@ public abstract class ProjectileWeaponItem extends Item {
+                 }
+             }
+         }
++        return true; // Kiterino - Better EntityShootBowEvent cancellation
+     }
+ 
+     protected int getDurabilityUse(ItemStack stack) {

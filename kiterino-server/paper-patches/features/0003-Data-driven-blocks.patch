@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 23 Jan 2025 13:14:09 +0200
+Subject: [PATCH] Data-driven blocks
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+index 4eccba3c7e2cc4d18f428cddd25fe02b5f3052bd..e44653c241f7bfa380053f6b27309a9280e3b25c 100644
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+@@ -87,7 +87,7 @@ public final class PaperRegistries {
+             start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
+             start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
+             start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
+-            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
++            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven blocks
+             start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
+             start(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT).craft(Frog.Variant.class, CraftFrog.CraftVariant::new).build(),
+diff --git a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+index e963e3336d075493b21651085b0d523fb296889f..37ab2684a2ce67c3992759be7faf39128b473dd0 100644
+--- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
++++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+@@ -37,6 +37,11 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
+             b.itemKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
+         }
+         // Kiterino end - Data-driven items
++        // Kiterino start - Data-driven blocks
++        if (builderFactory.requireBuilder() instanceof me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder b) {
++            b.blockKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
++        }
++        // Kiterino end - Data-driven blocks
+         value.accept(builderFactory);
+         PaperRegistryListenerManager.INSTANCE.registerWithListeners(
+             this.registry,
+diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+index 6377057ef2b5d832367f5d736fa5e6acd9da01ea..26b888be78dc11dc61f5cef7fb8bf75765d7335f 100644
+--- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
++++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+@@ -25,6 +25,7 @@ class RegistryBuilderTest {
+             .map(RegistryEntry::meta)
+             .filter(RegistryEntryMeta.Buildable.class::isInstance)
+             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
++            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks
+             .map(Arguments::arguments);
+     }
+ 

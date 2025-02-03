@@ -1,0 +1,39 @@
+--- a/net/minecraft/network/Connection.java
++++ b/net/minecraft/network/Connection.java
+@@ -488,6 +_,26 @@
+             return;
+         }
+         try {
++            // Kiterino start - Item Modifiers API
++            if (player != null) { // The Cake is a Lie
++                packet = me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.processPacket(player.getBukkitEntity(), packet);
++            }
++            // Kiterino end - Item Modifiers API
++            // Kiterino start - Don't send custom mob effects - Data-driven mob effects
++            if (packet instanceof net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket mobEffectPacket) {
++                java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.getEffect().unwrapKey();
++                if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().location().getNamespace())) {
++                    packet.onPacketDispatchFinish(player, null);
++                    return;
++                }
++            } else if (packet instanceof net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket mobEffectPacket) {
++                java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.effect().unwrapKey();
++                if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().location().getNamespace())) {
++                    packet.onPacketDispatchFinish(player, null);
++                    return;
++                }
++            }
++            // Kiterino end - Don't send custom mob effects - Data-driven mob effects
+         // Paper end - Optimize network
+         ChannelFuture channelFuture = flush ? this.channel.writeAndFlush(packet) : this.channel.write(packet);
+         if (sendListener != null) {
+@@ -506,7 +_,8 @@
+ 
+         // Paper start - Optimize network
+         if (packet.hasFinishListener()) {
+-            channelFuture.addListener((ChannelFutureListener) future -> packet.onPacketDispatchFinish(player, future));
++            Packet<?> finalPacket = packet; // Kiterino - Item Modifiers API
++            channelFuture.addListener((ChannelFutureListener) future -> finalPacket.onPacketDispatchFinish(player, future)); // Kiterino - Item Modifiers API
+         }
+         channelFuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+         } catch (final Exception e) {

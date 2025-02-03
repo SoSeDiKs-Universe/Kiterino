@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/animal/Fox.java
++++ b/net/minecraft/world/entity/animal/Fox.java
+@@ -1230,7 +_,7 @@
+ 
+         @Override
+         public boolean shouldPanic() {
+-            return !Fox.this.isDefending() && super.shouldPanic();
++            return (!Fox.this.isDefending() && super.shouldPanic()) || this.mob.isForcePanicking(); // Kiterino - Forced panic mode API
+         }
+     }
+ 

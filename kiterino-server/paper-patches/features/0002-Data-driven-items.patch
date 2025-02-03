@@ -1,0 +1,76 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 23 Jan 2025 13:04:56 +0200
+Subject: [PATCH] Data-driven items
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+index c0b17315a32bd68917abc991b2811b6ad51ff963..4eccba3c7e2cc4d18f428cddd25fe02b5f3052bd 100644
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+@@ -88,7 +88,7 @@ public final class PaperRegistries {
+             start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
+             start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
+             start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
+-            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).build(),
++            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
+             start(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT).craft(Frog.Variant.class, CraftFrog.CraftVariant::new).build(),
+             start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
+diff --git a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+index a294ec37b6f593d502d2e044f63b54ec36878c33..e963e3336d075493b21651085b0d523fb296889f 100644
+--- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
++++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+@@ -32,6 +32,11 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
+         final ResourceKey<M> resourceKey = PaperRegistries.toNms(key);
+         this.registry.validateWrite(resourceKey);
+         final PaperRegistryBuilderFactory<M, T, B> builderFactory = new PaperRegistryBuilderFactory<>(conversions, this.meta.builderFiller(), this.registry.temporaryUnfrozenMap::get);
++        // Kiterino start - Data-driven items
++        if (builderFactory.requireBuilder() instanceof me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder b) {
++            b.itemKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
++        }
++        // Kiterino end - Data-driven items
+         value.accept(builderFactory);
+         PaperRegistryListenerManager.INSTANCE.registerWithListeners(
+             this.registry,
+diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+index b1710da835cee3333bfb1c238b37ec0c4d16ba09..cadbf29c4667a74d79fdc538e0cca9cc61480d29 100644
+--- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
++++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+@@ -55,4 +55,24 @@ public class Conversions {
+     public Component asAdventure(final net.minecraft.network.chat.@Nullable Component vanilla) {
+         return vanilla == null ? Component.empty() : this.serializer.deserialize(vanilla);
+     }
++
++    // Kiterino start - Data-driven items
++    public net.minecraft.world.item.Rarity asVanilla(final org.bukkit.inventory.ItemRarity rarity) {
++        return switch (rarity) {
++            case COMMON -> net.minecraft.world.item.Rarity.COMMON;
++            case UNCOMMON -> net.minecraft.world.item.Rarity.UNCOMMON;
++            case RARE -> net.minecraft.world.item.Rarity.RARE;
++            case EPIC -> net.minecraft.world.item.Rarity.EPIC;
++        };
++    }
++
++    public org.bukkit.inventory.ItemRarity asBukkit(final net.minecraft.world.item.Rarity rarity) {
++        return switch (rarity) {
++            case COMMON -> org.bukkit.inventory.ItemRarity.COMMON;
++            case UNCOMMON -> org.bukkit.inventory.ItemRarity.UNCOMMON;
++            case RARE -> org.bukkit.inventory.ItemRarity.RARE;
++            case EPIC -> org.bukkit.inventory.ItemRarity.EPIC;
++        };
++    }
++    // Kiterino end - Data-driven items
+ }
+diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+index 7fa18dd100f92cc866ba71270ead883373fda2d9..6377057ef2b5d832367f5d736fa5e6acd9da01ea 100644
+--- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
++++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+@@ -24,6 +24,7 @@ class RegistryBuilderTest {
+         return PaperRegistries.REGISTRY_ENTRIES.stream()
+             .map(RegistryEntry::meta)
+             .filter(RegistryEntryMeta.Buildable.class::isInstance)
++            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
+             .map(Arguments::arguments);
+     }
+ 

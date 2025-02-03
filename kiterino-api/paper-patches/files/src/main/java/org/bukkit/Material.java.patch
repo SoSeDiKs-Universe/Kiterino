@@ -1,0 +1,65 @@
+--- a/src/main/java/org/bukkit/Material.java
++++ b/src/main/java/org/bukkit/Material.java
+@@ -4761,6 +_,7 @@
+     private final NamespacedKey key;
+     private final Supplier<ItemType> itemType;
+     private final Supplier<BlockType> blockType;
++    private final boolean injected = false; // Kiterino - Injecting custom Materials
+ 
+     private Material(final int id) {
+         this(id, 64);
+@@ -4932,6 +_,12 @@
+      * @return Maximum stack size for this material
+      */
+     public int getMaxStackSize() {
++        // Kiterino start - Support changing default item stack sizes
++        ItemType type = asItemType();
++        if (type != null) {
++            return type.getMaxStackSize();
++        }
++        // Kiterino end - Support changing default item stack sizes
+         return maxStack;
+     }
+ 
+@@ -4941,6 +_,12 @@
+      * @return Maximum durability for this material
+      */
+     public short getMaxDurability() {
++        // Kiterino start - Support changing default item durability
++        ItemType type = asItemType();
++        if (type != null) {
++            return type.getMaxDurability();
++        }
++        // Kiterino end - Support changing default item durability
+         return durability;
+     }
+ 
+@@ -5119,6 +_,11 @@
+         if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
+             filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
+         }
++        // Kiterino start - Injecting custom Materials
++        else {
++            filtered = filtered.replace(':', '_');
++        }
++        // Kiterino end - Injecting custom Materials
+ 
+         filtered = filtered.toUpperCase(Locale.ROOT);
+ 
+@@ -5848,4 +_,16 @@
+         }
+     }
+     // Purpur end - ItemStack convenience methods
++
++    // Kiterino start - Injecting custom Materials
++    /**
++     * Checks whether this item is injected
++     * (i.e., is a non-vanilla one)
++     *
++     * @return whether this item is injected
++     */
++    public boolean isInjected() {
++        return this.injected;
++    }
++    // Kiterino end - Injecting custom Materials
+ }

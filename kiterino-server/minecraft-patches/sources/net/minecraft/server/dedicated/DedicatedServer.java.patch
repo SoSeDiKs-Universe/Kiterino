@@ -1,0 +1,31 @@
+--- a/net/minecraft/server/dedicated/DedicatedServer.java
++++ b/net/minecraft/server/dedicated/DedicatedServer.java
+@@ -218,6 +_,15 @@
+         }
+         org.purpurmc.purpur.PurpurConfig.registerCommands();
+         // Purpur end - Configurable void damage height and damage
++        // Kiterino start - Kiterino Config
++        try {
++            me.sosedik.kiterino.KiterinoConfig.init((java.io.File) options.valueOf("kiterino-settings"));
++            me.sosedik.kiterino.KiterinoInitializer.initPostConfig();
++        } catch (Exception e) {
++            DedicatedServer.LOGGER.error("Unable to load Kiterino server configuration", e);
++            return false;
++        }
++        // Kiterino end - Kiterino Config
+         // Paper start - initialize global and world-defaults configuration
+         this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
+         this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
+@@ -314,6 +_,12 @@
+             }
+         }
+         // Purpur end - UPnP Port Forwarding
++
++        // Kiterino start - Init/destruct injectors
++        if (!Boolean.getBoolean("Kiterino.testingBase")) {
++            me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.destruct(); // Kiterino - Injecting custom Materials
++        }
++        // Kiterino end - Init/destruct injectors
+ 
+         // CraftBukkit start
+         // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up

@@ -1,0 +1,22 @@
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
+@@ -736,4 +_,19 @@
+         return itemStack.getBlockData(MaterialRerouting.transformToBlockType(material));
+     }
+     // Purpur end - Adopt MaterialRerouting
++
++    // Kiterino start - Adopt MaterialRerouting
++    @RerouteStatic("org/bukkit/inventory/ItemStack")
++    public static boolean isType(ItemStack item, Material type) {
++        return ItemStack.isType(item, type);
++    }
++
++    public static Material getInitialType(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox) {
++        return contextBox.getInitialType();
++    }
++
++    public static void setType(me.sosedik.kiterino.modifier.item.ItemContextBox contextBox, Material type) {
++        contextBox.setType(type);
++    }
++    // Kiterino end - Adopt MaterialRerouting
+ }

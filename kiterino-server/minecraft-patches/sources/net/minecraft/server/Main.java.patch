@@ -1,0 +1,24 @@
+--- a/net/minecraft/server/Main.java
++++ b/net/minecraft/server/Main.java
+@@ -153,6 +_,21 @@
+                 LOGGER.error("By using this setting you are indicating your agreement to Mojang's EULA (https://aka.ms/MinecraftEULA).");
+                 LOGGER.error("If you do not agree to the above EULA please stop your server and remove this flag immediately.");
+             }
++
++            // Kiterino start - Accept the EULA
++            if (!eula.hasAgreedToEULA() && !eulaAgreed) {
++                Main.LOGGER.warn("Automatically accepting Mojang's EULA (https://aka.ms/MinecraftEULA).");
++                Main.LOGGER.warn("Please, stop using this Software immediately if you do not agree with this.");
++                Main.LOGGER.warn("Note: this is a persistent change and will be stored in eula.txt from now on.");
++                try (java.io.OutputStream outputStream = java.nio.file.Files.newOutputStream(path2)) {
++                    var properties = new java.util.Properties();
++                    properties.setProperty("eula", "true");
++                    properties.store(outputStream, null);
++                }
++                eulaAgreed = true;
++            }
++            // Kiterino end - Accept the EULA
++
+             if (!eula.hasAgreedToEULA() && !eulaAgreed) {
+                 // Spigot end
+                 LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");

@@ -1,0 +1,41 @@
+--- a/src/main/java/org/bukkit/event/block/NotePlayEvent.java
++++ b/src/main/java/org/bukkit/event/block/NotePlayEvent.java
+@@ -17,12 +_,20 @@
+     private Instrument instrument;
+     private Note note;
+     private boolean cancelled = false;
++    private final @org.jetbrains.annotations.Nullable org.bukkit.entity.Player player; // Kiterino - Add player to NotePlayEvent
+ 
+     public NotePlayEvent(@NotNull Block block, @NotNull Instrument instrument, @NotNull Note note) {
++        // Kiterino start - Add player to NotePlayEvent
++        this(block, instrument, note, null);
++    }
++
++    public NotePlayEvent(@NotNull Block block, @NotNull Instrument instrument, @NotNull Note note, @org.jetbrains.annotations.Nullable org.bukkit.entity.Player player) {
+         super(block);
+         this.instrument = instrument;
+         this.note = note;
++        this.player = player;
+     }
++    // Kiterino end - Add player to NotePlayEvent
+ 
+     @Override
+     public boolean isCancelled() {
+@@ -79,6 +_,17 @@
+             this.note = note;
+         }
+     }
++
++    // Kiterino start - Add player to NotePlayEvent
++    /**
++     * Gets the {@link org.bukkit.entity.Player} who played the note
++     *
++     * @return player who played the note, if present
++     */
++    public @org.jetbrains.annotations.Nullable org.bukkit.entity.Player getWhoPlayed() {
++        return this.player;
++    }
++    // Kiterino end - Add player to NotePlayEvent
+ 
+     @NotNull
+     @Override

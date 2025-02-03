@@ -1,0 +1,54 @@
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -4047,4 +_,51 @@
+         sendDeathScreen(message);
+     }
+     // Purpur end
++
++    // Kiterino start - Red tint API
++    /**
++     * Abuses world border packets to apply red tint on screen
++     *
++     * @param percentage tint percentage
++     */
++    void sendRedTint(double percentage);
++    // Kiterino end - Red tint API
++
++    // Kiterino start - Send ItemStack API
++    /**
++     * Sends set item packet. This will not actually set the item in the provided slot.
++     *
++     * @param slot item slot
++     * @param item item
++     */
++    void sendItem(int slot, @Nullable ItemStack item);
++
++    /**
++     * Sends set item packet for item on the cursor. This will not actually set the item on the cursor.
++     *
++     * @param item item
++     */
++    default void sendCursorItem(@Nullable ItemStack item) {
++        sendItem(me.sosedik.kiterino.inventory.InventorySlotHelper.CURSOR, item);
++    }
++    // Kiterino end - Send ItemStack API
++
++    // Kiterino start - Anger nearby piglins API
++    /**
++     * Triggers piglins angrying AI
++     *
++     * @param blockOpen whether the cause of anger is an opened block
++     */
++    void angerNearbyPiglins(boolean blockOpen);
++    // Kiterino end - Anger nearby piglins API
++
++    // Kiterino start - Open ender chest API
++    /**
++     * Opens ender chest for the player
++     *
++     * @param enderChest ender chest
++     * @return whether the chest was opened
++     */
++    boolean openEnderChest(@NotNull org.bukkit.block.EnderChest enderChest);
++    // Kiterino end - Open ender chest API
+ }

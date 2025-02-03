@@ -1,0 +1,45 @@
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1102,6 +_,7 @@
+         org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
+         this.console.paperConfigurations.reloadConfigs(this.console);
+         org.purpurmc.purpur.PurpurConfig.init((File) console.options.valueOf("purpur-settings")); // Purpur - Purpur config files
++        me.sosedik.kiterino.KiterinoConfig.init((File) console.options.valueOf("kiterino-settings")); // Kiterino - Kiterino Config
+         for (ServerLevel world : this.console.getAllLevels()) {
+             // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
+             world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && config.spawnMonsters); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
+@@ -3138,6 +_,13 @@
+         }
+         // Purpur end - Purpur config files
+ 
++        // Kiterino start - Kiterino config
++        @Override
++        public YamlConfiguration getKiterinoConfig() {
++            return me.sosedik.kiterino.KiterinoConfig.config;
++        }
++        // Kiterino end - Kiterino config
++
+         @Override
+         public void restart() {
+             org.spigotmc.RestartCommand.restart();
+@@ -3392,4 +_,20 @@
+         return getServer().lagging;
+     }
+     // Purpur end - Lagging threshold
++
++    // Kiterino start - More resource pack API
++    @Override
++    public ResourcePack createResourcePack(UUID uuid, String url, String hash, boolean required, net.kyori.adventure.text.Component prompt) {
++        return new CraftResourcePack(new MinecraftServer.ServerResourcePackInfo(uuid, url, hash, required, io.papermc.paper.adventure.PaperAdventure.asVanilla(prompt)));
++    }
++
++    @Override
++    public void setServerResourcePack(ResourcePack resourcePack) {
++        if (resourcePack == null) {
++            getServer().getProperties().serverResourcePackInfo = Optional.empty();
++            return;
++        }
++        getServer().getProperties().serverResourcePackInfo = Optional.of(((CraftResourcePack) resourcePack).getHandle());
++    }
++    // Kiterino end - More resource pack API
+ }

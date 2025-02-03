@@ -1,0 +1,38 @@
+--- a/src/main/java/org/bukkit/inventory/CraftingRecipe.java
++++ b/src/main/java/org/bukkit/inventory/CraftingRecipe.java
+@@ -16,6 +_,7 @@
+     private final ItemStack output;
+     private String group = "";
+     private CraftingBookCategory category = CraftingBookCategory.MISC;
++    private boolean special = false; // Kiterino - Extra recipes API
+ 
+     protected CraftingRecipe(@NotNull NamespacedKey key, @NotNull ItemStack result) {
+         Preconditions.checkArgument(key != null, "key cannot be null");
+@@ -102,4 +_,27 @@
+         Preconditions.checkArgument(!result.isEmpty(), "Recipe cannot have an empty result."); // Paper
+         return result;
+     }
++
++    // Kiterino start - Extra recipes API
++    /**
++     * Checks whether this recipe is special.
++     * <br>Special recipes do not get sent to the client
++     * and bypass the limited crafting game rule.
++     *
++     * @return whether this recipe is special
++     */
++    public boolean isSpecial() {
++        return this.special;
++    }
++
++    /**
++     * Sets whether this recipe is special
++     *
++     * @param special whether this recipe is special
++     * @see #isSpecial()
++     */
++    public void setSpecial(boolean special) {
++        this.special = special;
++    }
++    // Kiterino end - Extra recipes API
+ }

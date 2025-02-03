@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/ai/goal/PanicGoal.java
++++ b/net/minecraft/world/entity/ai/goal/PanicGoal.java
+@@ -59,7 +_,7 @@
+     }
+ 
+     protected boolean shouldPanic() {
+-        return this.mob.getLastDamageSource() != null && this.mob.getLastDamageSource().is(this.panicCausingDamageTypes.apply(this.mob));
++        return (this.mob.getLastDamageSource() != null && this.mob.getLastDamageSource().is(this.panicCausingDamageTypes.apply(this.mob))) || this.mob.isForcePanicking(); // Kiterino - Forced panic mode API
+     }
+ 
+     protected boolean findRandomPosition() {

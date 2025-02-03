@@ -1,0 +1,12 @@
+--- a/net/minecraft/world/level/block/Blocks.java
++++ b/net/minecraft/world/level/block/Blocks.java
+@@ -3252,7 +_,9 @@
+     );
+     public static final Block PACKED_ICE = register(
+         "packed_ice",
++        me.sosedik.kiterino.world.level.block.PackedIceBlock::new, // Kiterino - Melt packed ice in Nether
+         BlockBehaviour.Properties.of().mapColor(MapColor.ICE).instrument(NoteBlockInstrument.CHIME).friction(0.98F).strength(0.5F).sound(SoundType.GLASS)
++            .randomTicks() // Kiterino - Melt packed ice in Nether
+     );
+     public static final Block SUNFLOWER = register(
+         "sunflower",

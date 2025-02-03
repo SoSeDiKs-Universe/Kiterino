@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 11 Oct 2022 14:28:39 +0300
+Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
+
+https://github.com/PaperMC/Paper/pull/8074
+
+diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
+index 6e80b855ad216548738369c3027a220c26027028..7710272cc860871a23d90b096954a455ed3fc77c 100644
+--- a/net/minecraft/server/players/PlayerList.java
++++ b/net/minecraft/server/players/PlayerList.java
+@@ -305,10 +305,15 @@ public abstract class PlayerList {
+         mutableComponent.withStyle(ChatFormatting.YELLOW);
+         Component joinMessage = mutableComponent; // Paper - Adventure
+         serverGamePacketListenerImpl.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+-        ServerStatus status = this.server.getStatus();
+-        if (status != null && !cookie.transferred()) {
+-            player.sendServerStatus(status);
+-        }
++        // Paper start - fire ServerListPingEvent
++        if (!cookie.transferred()) {
++            io.papermc.paper.util.MCUtil.scheduleAsyncTask(() -> {
++                if (player.hasDisconnected()) return;
++                net.minecraft.network.protocol.status.ServerStatus status = com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl.getEventResponse(this.server, player.connection.connection);
++                if (status != null) player.sendServerStatus(status);
++            });
++        }
++        // Paper end - fire ServerListPingEvent
+ 
+         // player.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players)); // CraftBukkit - replaced with loop below
+         this.players.add(player);

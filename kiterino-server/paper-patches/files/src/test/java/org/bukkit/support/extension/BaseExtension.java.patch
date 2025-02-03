@@ -1,0 +1,11 @@
+--- a/src/test/java/org/bukkit/support/extension/BaseExtension.java
++++ b/src/test/java/org/bukkit/support/extension/BaseExtension.java
+@@ -98,7 +_,7 @@
+         if (BaseExtension.run) {
+             return;
+         }
+-
++        System.setProperty("Kiterino.testingBase", "true"); // Kiterino - Ignore custom injectors during tests - Init/destruct injectors
+         this.init(extensionContext);
+         BaseExtension.run = true;
+     }

@@ -1,0 +1,40 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1376,4 +_,37 @@
+         return !getHandle().dismountsUnderwater();
+     }
+     // Purpur end - Ridables
++
++    // Kiterino start - Forced panic mode API
++    @Override
++    public int getPanicTicks() {
++        return getHandle().forcePanicTicks;
++    }
++
++    @Override
++    public void setPanicTicks(int ticks) {
++        getHandle().forcePanicTicks = Math.max(0, ticks);
++    }
++    // Kiterino end - Forced panic mode API
++
++    // Kiterino start - Allow setting entity's rider
++    @Override
++    public boolean setRider(Player rider, boolean dismount) {
++        Player currentRider = getRider();
++        if (rider == currentRider) {
++            return true;
++        }
++        if (currentRider != null && (!dismount || !currentRider.leaveVehicle())) {
++            return false;
++        }
++        return getHandle().setRider(((CraftPlayer) rider).getHandle());
++    }
++    // Kiterino end - Allow setting entity's rider
++
++    // Kiterino start - Allow resending entity metadata
++    @Override
++    public void resendMetadata(int index) {
++        getHandle().getEntityData().markDirty(index);
++    }
++    // Kiterino end - Allow resending entity metadata
+ }

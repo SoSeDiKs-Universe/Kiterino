@@ -1,0 +1,13 @@
+--- a/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
++++ b/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
+@@ -134,4 +_,10 @@
+         this.unseenMemoryTicks = unseenMemoryTicks;
+         return this;
+     }
++
++    // Kiterino start - Update goal target when changing target
++    public void setTargetMob(@Nullable LivingEntity targetMob) {
++        this.targetMob = targetMob;
++    }
++    // Kiterino end - Update goal target when changing target
+ }

@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 29 Jan 2025 18:01:34 +0200
+Subject: [PATCH] Keep rider when teleporting
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index 6a8d799e80c47468fb1fc2ce997b38df334b1db6..18464e2406240606d6051c3d7156aee01238042f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -254,11 +254,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     // Kiterino start - EMC - Vehicle passenger teleporting
+     private static CraftEntity teleportingEntity;
+     private CraftEntity storedRoot;
++    private CraftHumanEntity storedRider; // Kiterino - Keep rider when teleporting
+     private com.google.common.collect.ImmutableList<CraftEntity> storedPassengers;
+     void detachEntities() {
+         if (teleportingEntity == null) {
+             teleportingEntity = this;
+             this.storedRoot = entity.getRootVehicle().getBukkitEntity();
++            // Kiterino start - Keep rider when teleporting
++            CraftEntity vehicle = (CraftEntity) getVehicle();
++            if (vehicle != null) {
++                this.storedRider = (CraftHumanEntity) vehicle.getRider();
++            }
++            // Kiterino end - Keep rider when teleporting
+             this.storedRoot.detachEntities();
+             teleportingEntity = null;
+             return;
+@@ -282,6 +289,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+                 teleportingEntity = this;
+                 this.storedRoot.teleportAndReattachEntities(location);
+                 this.storedRoot.reattachPassengers();
++                // Kiterino start - Keep rider when teleporting
++                if (this.storedRider != null) {
++                    CraftEntity vehicle = (CraftEntity) getVehicle();
++                    if (vehicle != null) {
++                        vehicle.getHandle().rider = this.storedRider.getHandle();
++                    }
++                    this.storedRider = null;
++                }
++                // Kiterino end - Keep rider when teleporting
+                 this.storedRoot = null;
+                 teleportingEntity = null;
+             }

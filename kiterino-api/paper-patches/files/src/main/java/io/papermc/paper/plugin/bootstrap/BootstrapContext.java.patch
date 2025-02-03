@@ -1,0 +1,18 @@
+--- a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
++++ b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
+@@ -23,4 +_,15 @@
+      * @return the lifecycle event manager
+      */
+     LifecycleEventManager<BootstrapContext> getLifecycleManager();
++
++    // Kiterino start - Material injector helper methods
++    /**
++     * Inject materials in the class
++     *
++     * @param materialsClass class with public static final Material instances
++     */
++    default void injectMaterials(Class<?> materialsClass) {
++        me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector.injectMaterials(materialsClass);
++    }
++    // Kiterino end - Material injector helper methods
+ }

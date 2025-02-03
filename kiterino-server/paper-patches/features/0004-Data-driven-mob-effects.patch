@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 28 Jan 2025 20:36:45 +0200
+Subject: [PATCH] Data-driven mob effects
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+index e44653c241f7bfa380053f6b27309a9280e3b25c..8ec675fc2828dd1eecbbafac375685796bc6be5c 100644
+--- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
++++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
+@@ -86,7 +86,7 @@ public final class PaperRegistries {
+             // built-ins
+             start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
+             start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
+-            start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
++            start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).writable(me.sosedik.kiterino.registry.data.KiterinoMobEffectRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven mob effects
+             start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven blocks
+             start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
+             start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
+diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+index cadbf29c4667a74d79fdc538e0cca9cc61480d29..d10cea4307d2a398abf899b0f938a674920a0d49 100644
+--- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
++++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
+@@ -75,4 +75,18 @@ public class Conversions {
+         };
+     }
+     // Kiterino end - Data-driven items
++
++    // Kiterino start - Data-driven mob effects
++    public net.minecraft.world.effect.MobEffectCategory asVanilla(final org.bukkit.potion.PotionEffectType.Category category) {
++        return switch (category) {
++            case BENEFICIAL -> net.minecraft.world.effect.MobEffectCategory.BENEFICIAL;
++            case HARMFUL -> net.minecraft.world.effect.MobEffectCategory.HARMFUL;
++            case NEUTRAL -> net.minecraft.world.effect.MobEffectCategory.NEUTRAL;
++        };
++    }
++
++    public org.bukkit.potion.PotionEffectType.Category asBukkit(final net.minecraft.world.effect.MobEffectCategory category) {
++        return org.bukkit.craftbukkit.potion.CraftPotionEffectType.fromNMS(category);
++    }
++    // Kiterino end - Data-driven mob effects
+ }
+diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+index 26b888be78dc11dc61f5cef7fb8bf75765d7335f..d018ad8c4869f689542b6ac2f5c5f52da920ae44 100644
+--- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
++++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
+@@ -26,6 +26,7 @@ class RegistryBuilderTest {
+             .filter(RegistryEntryMeta.Buildable.class::isInstance)
+             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
+             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks
++            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.MOB_EFFECT.location())) // Kiterino - Data-driven mob effects
+             .map(Arguments::arguments);
+     }
+ 

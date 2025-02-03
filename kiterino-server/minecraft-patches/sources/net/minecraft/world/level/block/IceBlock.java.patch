@@ -1,0 +1,21 @@
+--- a/net/minecraft/world/level/block/IceBlock.java
++++ b/net/minecraft/world/level/block/IceBlock.java
+@@ -54,12 +_,17 @@
+ 
+     @Override
+     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+-        if (level.getBrightness(LightLayer.BLOCK, pos) > 11 - state.getLightBlock()) {
++        if ((level.kiterinoConfig.iceAlwaysMeltInNether && level.dimensionType().ultraWarm()) || level.getBrightness(LightLayer.BLOCK, pos) > 11 - state.getLightBlock()) { // Kiterino - Always melt ice in Nether
+             this.melt(state, level, pos);
+         }
+     }
+ 
+     protected void melt(BlockState state, Level level, BlockPos pos) {
++        // Kiterino start - Melt packed ice in Nether
++        meltBlock(state, level, pos);
++    }
++    public static void meltBlock(BlockState state, Level level, BlockPos pos) {
++        // Kiterino end - Melt packed ice in Nether
+         // CraftBukkit start
+         if (org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFadeEvent(level, pos, level.dimensionType().ultraWarm() ? Blocks.AIR.defaultBlockState() : Blocks.WATER.defaultBlockState()).isCancelled()) {
+             return;

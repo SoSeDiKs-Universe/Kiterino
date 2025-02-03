@@ -1,0 +1,33 @@
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -3109,4 +_,30 @@
+         server.clearBlockHighlights();
+     }
+     // Purpur end - Debug Marker API
++
++    // Kiterino start - More resource pack API
++    /**
++     * Creates server resource pack
++     *
++     * @param uuid pack id
++     * @param url pack url
++     * @param hash pack sha-1 hash
++     * @param required whether the resource pack is required
++     * @param prompt pack prompt
++     * @return resource pack data
++     */
++    public static @NotNull ResourcePack createResourcePack(@NotNull UUID uuid, @NotNull String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt) {
++        return server.createResourcePack(uuid, url, hash, required, prompt);
++    }
++
++    /**
++     * Sets (or removes if null) the server resource pack
++     *
++     * @param resourcePack resource pack
++     * @see #createResourcePack(UUID, String, String, boolean, net.kyori.adventure.text.Component)
++     */
++    public static void setServerResourcePack(@Nullable ResourcePack resourcePack) {
++        server.setServerResourcePack(resourcePack);
++    }
++    // Kiterino end - More resource pack API
+ }

@@ -1,0 +1,45 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -3682,4 +_,42 @@
+         this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
+     }
+     // Purpur end - Death screen API
++
++    // Kiterino start - Red tint API
++    @Override
++    public void sendRedTint(double percentage) {
++        percentage = 1D - Math.clamp(percentage, 0D, 1D);
++        Location loc = this.getLocation();
++        ServerGamePacketListenerImpl connection = this.getHandle().connection;
++        connection.send(new ClientboundSetBorderCenterPacket(loc.getX(), loc.getZ()));
++
++        double distance = 13_000_000 - 10_000_000 * percentage;
++        connection.send(new ClientboundSetBorderLerpSizePacket(20_000_00D, distance, 14_000L));
++    }
++    // Kiterino end - Red tint API
++
++    // Kiterino start - Send ItemStack API
++    @Override
++    public void sendItem(int slot, ItemStack item) {
++        int stateId = this.getHandle().containerMenu.getStateId();
++        this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket(0, stateId, slot, CraftItemStack.asNMSCopy(item)));
++    }
++    // Kiterino end - Send ItemStack API
++
++    // Kiterino start - Anger nearby piglins API
++    @Override
++    public void angerNearbyPiglins(boolean blockOpen) {
++        net.minecraft.world.entity.monster.piglin.PiglinAi.angerNearbyPiglins(this.getHandle().serverLevel(), this.getHandle(), blockOpen);
++    }
++    // Kiterino end - Anger nearby piglins API
++
++    // Kiterino start - Open ender chest API
++    @Override
++    public boolean openEnderChest(org.bukkit.block.EnderChest enderChest) {
++        net.minecraft.world.inventory.PlayerEnderChestContainer playerEnderChestContainer = this.getHandle().getEnderChestInventory();
++        net.minecraft.world.level.block.entity.EnderChestBlockEntity blockEntity = ((org.bukkit.craftbukkit.block.CraftEnderChest) enderChest).getTileEntity();
++        playerEnderChestContainer.setActiveChest(blockEntity);
++        return this.getHandle().openMenu(new net.minecraft.world.SimpleMenuProvider((i, inventory, playerx) -> org.purpurmc.purpur.PurpurConfig.enderChestSixRows ? net.minecraft.world.level.block.EnderChestBlock.getEnderChestSixRows(i, inventory, this.getHandle(), playerEnderChestContainer) : net.minecraft.world.inventory.ChestMenu.threeRows(i, inventory, playerEnderChestContainer), net.minecraft.world.level.block.EnderChestBlock.CONTAINER_TITLE)).isPresent();
++    }
++    // Kiterino end - Open ender chest API
+ }

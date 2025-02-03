@@ -22,3 +22,16 @@
          }
      }
  }
+@@ -260,3 +_,12 @@
+ tasks.check {
+     dependsOn(scanJarForOldGeneratedCode)
+ }
++
++// Kiterino start - Hide irrelevant compilation warnings
++tasks.withType<JavaCompile> {
++    val compilerArgs = options.compilerArgs
++    compilerArgs.add("-Xlint:-module")
++    compilerArgs.add("-Xlint:-removal")
++    compilerArgs.add("-Xlint:-dep-ann")
++}
++// Kiterino end - Hide irrelevant compilation warnings

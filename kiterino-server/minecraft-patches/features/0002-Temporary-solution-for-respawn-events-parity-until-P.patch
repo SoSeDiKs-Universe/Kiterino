@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 19 Jun 2024 01:40:24 +0300
+Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
+ 11792 is merged
+
+
+diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
+index c0b8715c402041d5584ba831cda21b5578064778..ef574e6d2772330a25bf43011ccd6d8f7eea4c59 100644
+--- a/net/minecraft/server/players/PlayerList.java
++++ b/net/minecraft/server/players/PlayerList.java
+@@ -746,6 +746,7 @@ public abstract class PlayerList {
+         }
+         // Paper start - Add PlayerPostRespawnEvent
+         boolean isBedSpawn = false;
++        boolean isAnchorSpawn = false; // Kiterino - Parity for respawn events
+         boolean isRespawn = false;
+         // Paper end - Add PlayerPostRespawnEvent
+ 
+@@ -809,6 +810,7 @@ public abstract class PlayerList {
+         if (!keepInventory && respawnPosition != null && level1 != null) {
+             BlockState blockState = level1.getBlockState(respawnPosition);
+             if (blockState.is(Blocks.RESPAWN_ANCHOR)) {
++                isAnchorSpawn = true; // Kiterino - Parity for respawn events
+                 serverPlayer.connection
+                     .send(
+                         new ClientboundSoundPacket(
+@@ -852,7 +854,13 @@ public abstract class PlayerList {
+ 
+         // Paper start - Add PlayerPostRespawnEvent
+         if (isRespawn) {
+-            cserver.getPluginManager().callEvent(new com.destroystokyo.paper.event.player.PlayerPostRespawnEvent(player.getBukkitEntity(), location, isBedSpawn));
++            // Kiterino start - Parity for respawn events
++            var flags = com.google.common.collect.ImmutableSet.<org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag>builder();
++            if (eventReason == org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL) {
++                flags.add(org.bukkit.event.player.PlayerRespawnEvent.RespawnFlag.END_PORTAL);
++            }
++            cserver.getPluginManager().callEvent(new com.destroystokyo.paper.event.player.PlayerPostRespawnEvent(player.getBukkitEntity(), location, isBedSpawn && !isAnchorSpawn, isAnchorSpawn, eventReason, flags));
++            // Kiterino end - Parity for respawn events
+         }
+         // Paper end - Add PlayerPostRespawnEvent
+ 

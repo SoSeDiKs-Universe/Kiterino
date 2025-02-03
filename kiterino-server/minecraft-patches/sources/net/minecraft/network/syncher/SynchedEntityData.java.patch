@@ -1,0 +1,19 @@
+--- a/net/minecraft/network/syncher/SynchedEntityData.java
++++ b/net/minecraft/network/syncher/SynchedEntityData.java
+@@ -74,6 +_,16 @@
+     }
+     // CraftBukkit end
+ 
++    // Kiterino start - Allow resending entity metadata
++    public void markDirty(int index) {
++        if (index >= this.itemsById.length) {
++            return;
++        }
++        this.itemsById[index].setDirty(true);
++        this.isDirty = true;
++    }
++    // Kiterino end - Allow resending entity metadata
++
+     public boolean isDirty() {
+         return this.isDirty;
+     }

@@ -1,0 +1,86 @@
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -1251,4 +_,83 @@
+      */
+     void setImmuneToFire(@Nullable Boolean fireImmune);
+     // Purpur end - Fire Immunity API
++
++    // Kiterino start - More Sound API
++    /**
++     * Plays a sound at the location of the entity
++     *
++     * @param sound sound to play
++     * @param volume volume of the sound
++     * @param pitch pitch of the sound
++     */
++    default void emitSound(@NotNull org.bukkit.Sound sound, float volume, float pitch) {
++        org.bukkit.SoundCategory soundGroup = switch (this) {
++            case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
++            case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
++            case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
++            default -> org.bukkit.SoundCategory.NEUTRAL;
++        };
++        emitSound(sound, soundGroup, volume, pitch);
++    }
++
++    /**
++     * Plays a sound at the location of the block
++     *
++     * @param sound sound to play
++     * @param category category of the sound
++     * @param volume volume of the sound
++     * @param pitch pitch of the sound
++     */
++    default void emitSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
++        getWorld().playSound(this, sound, category, volume, pitch);
++    }
++    // Kiterino end - More Sound API
++
++    // Kiterino start - Forced panic mode API
++    /**
++     * Gets the number of forced panic ticks left
++     *
++     * @return the number of panic ticks
++     */
++    int getPanicTicks();
++
++    /**
++     * Sets the number of forced panic ticks
++     *
++     * @param ticks ticks
++     */
++    void setPanicTicks(int ticks);
++    // Kiterino end - Forced panic mode API
++
++    // Kiterino start - Allow setting entity's rider
++    /**
++     * Set the riding player. The player has to be the first passenger.
++     * <br> Note: this will call {@link org.bukkit.event.entity.EntityMountEvent}.
++     *
++     * @param rider rider
++     * @return whether the rider was set
++     */
++    default boolean setRider(@Nullable Player rider) {
++        return setRider(rider, true);
++    }
++
++    /**
++     * Set the riding player and optionally dismount the previous one.
++     * <br> Note: this will call {@link org.bukkit.event.entity.EntityMountEvent}.
++     *
++     * @param rider rider
++     * @param dismount whether to dismount the current rider
++     * @return whether rider was set
++     */
++    boolean setRider(@Nullable Player rider, boolean dismount);
++    // Kiterino end - Allow setting entity's rider
++
++    // Kiterino start - Allow resending entity metadata
++    /**
++     * Makes entity resend metadata on the next tick
++     *
++     * @param index metadata index
++     */
++    void resendMetadata(int index);
++    // Kiterino end - Allow resending entity metadata
+ }

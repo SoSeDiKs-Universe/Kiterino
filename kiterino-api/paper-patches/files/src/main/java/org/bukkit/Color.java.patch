@@ -1,0 +1,25 @@
+--- a/src/main/java/org/bukkit/Color.java
++++ b/src/main/java/org/bukkit/Color.java
+@@ -17,7 +_,7 @@
+  * but subject to change.
+  */
+ @SerializableAs("Color")
+-public final class Color implements ConfigurationSerializable {
++public final class Color implements ConfigurationSerializable, net.kyori.adventure.text.format.TextColor { // Kiterino - Parchment - Expanded Adventure support
+     private static final int BIT_MASK = 0xff;
+     private static final int DEFAULT_ALPHA = 255;
+ 
+@@ -309,6 +_,13 @@
+     public int asARGB() {
+         return getAlpha() << 24 | getRed() << 16 | getGreen() << 8 | getBlue();
+     }
++
++    // Kiterino start - Parchment - Expanded Adventure support
++    @Override
++    public int value() {
++        return asRGB();
++    }
++    // Kiterino end - Parchment - Expanded Adventure support
+ 
+     /**
+      * Gets the color as an BGR integer.

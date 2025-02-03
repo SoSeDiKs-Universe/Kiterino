@@ -1,0 +1,13 @@
+--- a/src/main/java/org/bukkit/craftbukkit/packs/CraftResourcePack.java
++++ b/src/main/java/org/bukkit/craftbukkit/packs/CraftResourcePack.java
+@@ -42,4 +_,10 @@
+     public String toString() {
+         return "CraftResourcePack{id=" + this.getId() + ",url=" + this.getUrl() + ",hash=" + this.getHash() + ",prompt=" + this.getPrompt() + ",required=" + this.isRequired() + "}";
+     }
++
++    // Kiterino - More resource pack API
++    public MinecraftServer.ServerResourcePackInfo getHandle() {
++        return this.handle;
++    }
++    // Kiterino end - More resource pack API
+ }

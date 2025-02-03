@@ -1,0 +1,14 @@
+--- a/net/minecraft/server/Bootstrap.java
++++ b/net/minecraft/server/Bootstrap.java
+@@ -43,6 +_,11 @@
+         if (!isBootstrapped) {
+             isBootstrapped = true;
+             Instant instant = Instant.now();
++            // Kiterino start - Init/destruct injectors
++            if (!Boolean.getBoolean("Kiterino.testingBase")) {
++                me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.init(); // Kiterino - Injecting custom Materials
++            }
++            // Kiterino end - Init/destruct injectors
+             io.papermc.paper.plugin.entrypoint.LaunchEntryPointHandler.enterBootstrappers(); // Paper - Entrypoint for bootstrapping
+             if (BuiltInRegistries.REGISTRY.keySet().isEmpty()) {
+                 throw new IllegalStateException("Unable to load registries");

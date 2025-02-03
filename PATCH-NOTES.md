@@ -1,0 +1,8 @@
+- Data-driven items
+  - Require spoofing items to the client
+  - Do not appear in /give 
+- Data-driven mob effects
+  - Require rendering via plugins
+  - Do not appear in /effect
+- Allow riders to control horses without a saddle
+  - Requires a saddle on the client's side to actually control the entity. Handled by a plugin on SoSeDiK's Universe.

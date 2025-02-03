@@ -1,0 +1,14 @@
+--- a/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
++++ b/src/test/java/org/bukkit/craftbukkit/legacy/MaterialReroutingTest.java
+@@ -59,6 +_,11 @@
+                 // Paper start - types that cannot be translated to ItemType/BlockType
+                 .filter(entry -> !entry.getName().equals("com/destroystokyo/paper/MaterialSetTag.class"))
+                 // Paper end - types that cannot be translated to ItemType/BlockType
++                // Kiterino start - Adopt MaterialRerouting
++                .filter(entry -> !entry.getName().equals("me/sosedik/kiterino/util/IKiterinoBootstrapMaterialInjector.class"))
++                .filter(entry -> !entry.getName().equals("me/sosedik/kiterino/util/KiterinoBootstrapMaterialInjector.class"))
++                .filter(entry -> !entry.getName().equals("me/sosedik/kiterino/world/item/KiterinoItem.class"))
++                // Kiterino end - Adopt MaterialRerouting
+                 .map(entry -> {
+                     try {
+                         return MaterialReroutingTest.jarFile.getInputStream(entry);

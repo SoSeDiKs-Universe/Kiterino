@@ -1,0 +1,9 @@
+--- a/src/test/java/org/bukkit/support/TestServer.java
++++ b/src/test/java/org/bukkit/support/TestServer.java
+@@ -59,5 +_,6 @@
+     }
+ 
+     public static void setup() {
++        System.setProperty("Kiterino.testingBase", "true"); // Kiterino - Ignore custom injectors during tests - Init/destruct injectors
+     }
+ }

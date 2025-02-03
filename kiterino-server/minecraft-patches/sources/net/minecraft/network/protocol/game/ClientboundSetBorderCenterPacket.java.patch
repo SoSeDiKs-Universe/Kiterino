@@ -1,0 +1,16 @@
+--- a/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
+@@ -20,6 +_,13 @@
+         // CraftBukkit end
+     }
+ 
++    // Kiterino start - Red tint API
++    public ClientboundSetBorderCenterPacket(double newCenterX, double newCenterZ) {
++        this.newCenterX = newCenterX;
++        this.newCenterZ = newCenterZ;
++    }
++    // Kiterino ens - Red tint API
++
+     private ClientboundSetBorderCenterPacket(FriendlyByteBuf buffer) {
+         this.newCenterX = buffer.readDouble();
+         this.newCenterZ = buffer.readDouble();

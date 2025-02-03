@@ -1,0 +1,61 @@
+--- a/src/main/java/org/spigotmc/event/player/PlayerSpawnLocationEvent.java
++++ b/src/main/java/org/spigotmc/event/player/PlayerSpawnLocationEvent.java
+@@ -12,9 +_,21 @@
+ public class PlayerSpawnLocationEvent extends PlayerEvent {
+     private static final HandlerList handlers = new HandlerList();
+     private Location spawnLocation;
++    // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
++    private final Location initialLocation;
++    private final org.bukkit.NamespacedKey initialDimensionId;
++    // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
+ 
+     public PlayerSpawnLocationEvent(@NotNull final Player who, @NotNull Location spawnLocation) {
++        // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
++        this(who, spawnLocation, null, null);
++    }
++
++    public PlayerSpawnLocationEvent(@NotNull final Player who, @NotNull Location spawnLocation, @org.jetbrains.annotations.Nullable Location initialLocation, @org.jetbrains.annotations.Nullable String initialDimensionId) {
+         super(who);
++        this.initialLocation = initialLocation == null ? spawnLocation.clone() : initialLocation;
++        this.initialDimensionId = initialDimensionId == null ? null : org.bukkit.NamespacedKey.fromString(initialDimensionId);
++        // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
+         this.spawnLocation = spawnLocation;
+     }
+ 
+@@ -39,6 +_,36 @@
+     public void setSpawnLocation(@NotNull Location location) {
+         this.spawnLocation = location.clone();
+     }
++
++    // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
++    /**
++     * Gets the initial spawn location the player had.
++     * <br>The initial location might have a nullable world in case the world isn't loaded.
++     *
++     * @return initial spawn location
++     */
++    public @NotNull Location getInitialLocation() {
++        return this.initialLocation.clone();
++    }
++
++    /**
++     * Checks whether the player is initially in an unloaded world
++     *
++     * @return whether the player is initially in an unloaded world
++     */
++    public boolean isInitiallyInUnloadedWorld() {
++        return this.initialLocation.getWorld() == null;
++    }
++
++    /**
++     * Gets the initial dimension id, if present
++     *
++     * @return the initial dimension id
++     */
++    public @org.jetbrains.annotations.Nullable org.bukkit.NamespacedKey getInitialDimensionId() {
++        return this.initialDimensionId;
++    }
++    // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
+ 
+     @NotNull
+     @Override

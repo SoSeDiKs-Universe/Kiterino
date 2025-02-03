@@ -1,0 +1,42 @@
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2342,6 +_,12 @@
+         }
+         // Purpur end
+ 
++        // Kiterino start - Add Kiterino config
++        public @NotNull org.bukkit.configuration.file.YamlConfiguration getKiterinoConfig() {
++            throw new UnsupportedOperationException("Not supported yet.");
++        }
++        // Kiterino end - Add Kiterino config
++
+         /**
+          * Sends the component to the player
+          *
+@@ -2773,4 +_,26 @@
+      */
+     void clearBlockHighlights();
+     // Purpur end - Debug Marker API
++
++    // Kiterino start - More resource pack API
++    /**
++     * Creates server resource pack
++     *
++     * @param uuid pack id
++     * @param url pack url
++     * @param hash pack sha-1 hash
++     * @param required whether the resource pack is required
++     * @param prompt pack prompt
++     * @return resource pack data
++     */
++    @NotNull ResourcePack createResourcePack(@NotNull UUID uuid, @NotNull String url, @Nullable String hash, boolean required, @Nullable net.kyori.adventure.text.Component prompt);
++
++    /**
++     * Sets (or removes if null) the server resource pack
++     *
++     * @param resourcePack resource pack
++     * @see #createResourcePack(UUID, String, String, boolean, net.kyori.adventure.text.Component)
++     */
++    void setServerResourcePack(@Nullable ResourcePack resourcePack);
++    // Kiterino end - More resource pack API
+ }
