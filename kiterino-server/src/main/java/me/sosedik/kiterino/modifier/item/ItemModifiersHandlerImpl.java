@@ -667,6 +667,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return packet;
     }
 
+    // Kiterino start - Parse items in show_item hover event
     private static Packet<?> handle(CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
         if (initialPacket.overlay()) {
             return initialPacket;
@@ -679,6 +680,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
         return new ClientboundSystemChatPacket(component, false);
     }
+    // Kiterino end - Parse items in show_item hover event
 
     private static @Nullable ItemStack fromBukkit(ItemContextBox contextBox, ItemStack original) {
         var bukkitItem = ItemModifier.modifyItem(contextBox);

@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 4 Feb 2025 16:51:22 +0200
+Subject: [PATCH] Automatically provide registry ids
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+index a294ec37b6f593d502d2e044f63b54ec36878c33..98e0def2cce35a8d56b253503c8f6745fe776a05 100644
+--- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
++++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+@@ -55,6 +55,26 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
+             this.conversions = conversions;
+         }
+ 
++        // Kiterino start - Automatically provide registry ids
++        @Override
++        public void register(final TypedKey<T> key, final Consumer<? super B> value) {
++            this.registerWith(key, factory -> {
++                var builder = factory.empty();
++                // Kiterino start - Data-driven items
++                if (builder instanceof me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder b) {
++                    b.itemKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
++                }
++                // Kiterino end - Data-driven items
++                // Kiterino start - Data-driven blocks
++                if (builder instanceof me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder b) {
++                    b.blockKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
++                }
++                // Kiterino end - Data-driven blocks
++                value.accept(builder);
++            });
++        }
++        // Kiterino end - Automatically provide registry ids
++
+         @Override
+         public void registerWith(final TypedKey<T> key, final Consumer<RegistryBuilderFactory<T, B>> value) {
+             WritableCraftRegistry.this.register(key, value, this.conversions);

@@ -75,27 +75,6 @@ subprojects {
     }
 }
 
-//tasks.generateDevelopmentBundle {
-//    apiCoordinates = "me.sosedik.kiterino:kiterino-api"
-//    libraryRepositories.set(
-//        listOf(
-//            "https://repo.maven.apache.org/maven2/",
-//            paperMavenPublicUrl,
-//            "https://repo.purpurmc.org/snapshots",
-//        )
-//    )
-//}
-//
-//publishing {
-//    if (project.providers.gradleProperty("publishDevBundle").isPresent) {
-//        publications.create<MavenPublication>("devBundle") {
-//            artifact(tasks.generateDevelopmentBundle) {
-//                artifactId = "dev-bundle"
-//            }
-//        }
-//    }
-//}
-
 tasks.register("printMinecraftVersion") {
     doLast {
         println(providers.gradleProperty("mcVersion").get().trim())
@@ -107,7 +86,3 @@ tasks.register("printKiterinoVersion") {
         println(project.version)
     }
 }
-
-//tasks.createMojmapPaperclipJar {
-//    outputZip.set(rootProject.layout.projectDirectory.file("kiterino.jar"))
-//}

@@ -17,22 +17,6 @@ index c0b17315a32bd68917abc991b2811b6ad51ff963..4eccba3c7e2cc4d18f428cddd25fe02b
              start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
              start(Registries.FROG_VARIANT, RegistryKey.FROG_VARIANT).craft(Frog.Variant.class, CraftFrog.CraftVariant::new).build(),
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
-diff --git a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
-index a294ec37b6f593d502d2e044f63b54ec36878c33..e963e3336d075493b21651085b0d523fb296889f 100644
---- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
-+++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
-@@ -32,6 +32,11 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
-         final ResourceKey<M> resourceKey = PaperRegistries.toNms(key);
-         this.registry.validateWrite(resourceKey);
-         final PaperRegistryBuilderFactory<M, T, B> builderFactory = new PaperRegistryBuilderFactory<>(conversions, this.meta.builderFiller(), this.registry.temporaryUnfrozenMap::get);
-+        // Kiterino start - Data-driven items
-+        if (builderFactory.requireBuilder() instanceof me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder b) {
-+            b.itemKey = io.papermc.paper.adventure.PaperAdventure.asVanilla(key.key());
-+        }
-+        // Kiterino end - Data-driven items
-         value.accept(builderFactory);
-         PaperRegistryListenerManager.INSTANCE.registerWithListeners(
-             this.registry,
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 index b1710da835cee3333bfb1c238b37ec0c4d16ba09..cadbf29c4667a74d79fdc538e0cca9cc61480d29 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java

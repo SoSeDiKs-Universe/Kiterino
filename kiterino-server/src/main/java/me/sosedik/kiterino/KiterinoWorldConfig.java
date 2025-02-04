@@ -22,8 +22,8 @@ public final class KiterinoWorldConfig {
 		init();
 	}
 
-	private void init() {
-		log("-------- World Settings For [" + worldName + "] --------");
+	public void init() {
+		log("-------- World Settings For [" + this.worldName + "] --------");
 		KiterinoConfig.readConfig(KiterinoWorldConfig.class, this);
 	}
 
@@ -32,27 +32,27 @@ public final class KiterinoWorldConfig {
 	}
 
 	public @Nullable String getString(String path, String def, String... comments) {
-		config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
-		return config.getString("world-settings." + worldName + "." + path, config.getString("world-settings.default." + path));
+		this.config.addDefault("world-settings.default." + path, def);
+		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+		return this.config.getString("world-settings." + this.worldName + "." + path, this.config.getString("world-settings.default." + path));
 	}
 
 	public boolean getBoolean(String path, boolean def, String... comments) {
-		config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
-		return config.getBoolean("world-settings." + worldName + "." + path, config.getBoolean("world-settings.default." + path));
+		this.config.addDefault("world-settings.default." + path, def);
+		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+		return this.config.getBoolean("world-settings." + this.worldName + "." + path, this.config.getBoolean("world-settings.default." + path));
 	}
 
 	public double getDouble(String path, double def, String... comments) {
-		config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
-		return config.getDouble("world-settings." + worldName + "." + path, config.getDouble("world-settings.default." + path));
+		this.config.addDefault("world-settings.default." + path, def);
+		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+		return this.config.getDouble("world-settings." + this.worldName + "." + path, this.config.getDouble("world-settings.default." + path));
 	}
 
 	public int getInt(String path, int def, String... comments) {
-		config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) config.setComments("world-settings.default." + path, List.of(comments));
-		return config.getInt("world-settings." + worldName + "." + path, config.getInt("world-settings.default." + path));
+		this.config.addDefault("world-settings.default." + path, def);
+		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+		return this.config.getInt("world-settings." + this.worldName + "." + path, this.config.getInt("world-settings.default." + path));
 	}
 
 	// Kiterino start - Bat options

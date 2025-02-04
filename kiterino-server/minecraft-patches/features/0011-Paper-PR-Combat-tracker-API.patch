@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 28 Sep 2024 06:09:37 +0300
+Subject: [PATCH] Paper PR - Combat tracker API
+
+https://github.com/PaperMC/Paper/pull/11853
+
+diff --git a/net/minecraft/world/damagesource/CombatTracker.java b/net/minecraft/world/damagesource/CombatTracker.java
+index 37f1eabe3362443db86da715f006e93723092779..c4082ee6d22e78689ac4aad6aaf67cdbc71de2ec 100644
+--- a/net/minecraft/world/damagesource/CombatTracker.java
++++ b/net/minecraft/world/damagesource/CombatTracker.java
+@@ -37,6 +37,13 @@ public class CombatTracker {
+         this.recheckStatus();
+         FallLocation currentFallLocation = FallLocation.getCurrentFallLocation(this.mob);
+         CombatEntry combatEntry = new CombatEntry(source, damage, currentFallLocation, this.mob.fallDistance);
++        // Kiterino start - Paper PR - Combat tracker API
++        recordDamageAndCheckCombatState(combatEntry);
++    }
++
++    public void recordDamageAndCheckCombatState(CombatEntry combatEntry) {
++        DamageSource source = combatEntry.source();
++        // Kiterino end - Paper PR - Combat tracker API
+         this.entries.add(combatEntry);
+         this.lastDamageTime = this.mob.tickCount;
+         this.takingDamage = true;
+@@ -155,15 +162,21 @@ public class CombatTracker {
+     public void recheckStatus() {
+         int i = this.inCombat ? 300 : 100;
+         if (this.takingDamage && (!this.mob.isAlive() || this.mob.tickCount - this.lastDamageTime > i)) {
+-            boolean flag = this.inCombat;
+-            this.takingDamage = false;
+-            this.inCombat = false;
+-            this.combatEndTime = this.mob.tickCount;
+-            if (flag) {
+-                this.mob.onLeaveCombat();
+-            }
++            // Kiterino start - Paper PR - Combat tracker API
++            resetCombatState();
++        }
++    }
+ 
+-            this.entries.clear();
++    public void resetCombatState() {
++        // Kiterino end - Paper PR - Combat tracker API
++        boolean flag = this.inCombat;
++        this.takingDamage = false;
++        this.inCombat = false;
++        this.combatEndTime = this.mob.tickCount;
++        if (flag) {
++            this.mob.onLeaveCombat();
+         }
++
++        this.entries.clear();
+     }
+ }

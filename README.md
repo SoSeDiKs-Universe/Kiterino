@@ -14,24 +14,11 @@
 </div>
 
 > [!WARNING]  
-> Highly experimental branch, not ready for production.
+> Experimental branch, likely not ready for production.
 
 ## Building and setting up
 
-Run the following commands in the root directory:
-
-```
-./gradlew applyPatches
-./gradlew createMojmapPaperclipJar
-```
-
-Publishing the dev bundle:
-
-```
-./gradlew publishToMavenLocal -PpublishDevBundle
-```
-
-For anything else, refer to [Paper](https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md)'s/[Purpur](https://github.com/PurpurMC/Purpur/blob/HEAD/CONTRIBUTING.md)'s documentation on how to contribute.
+Refer to [Paper](https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md)'s/[Purpur](https://github.com/PurpurMC/Purpur/blob/HEAD/CONTRIBUTING.md)'s documentation on how to build/contribute.
 
 License
 ---

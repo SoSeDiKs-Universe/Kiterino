@@ -1,0 +1,242 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 28 Sep 2024 06:09:37 +0300
+Subject: [PATCH] Paper PR - Combat tracker API
+
+https://github.com/PaperMC/Paper/pull/11853
+
+diff --git a/src/main/java/io/papermc/paper/PaperServerInternalAPIBridge.java b/src/main/java/io/papermc/paper/PaperServerInternalAPIBridge.java
+index d3c216f449a6285694ef37be0ce4aff0feabeeda..73111f322506b908fd9189eafc6e81685db1ddae 100644
+--- a/src/main/java/io/papermc/paper/PaperServerInternalAPIBridge.java
++++ b/src/main/java/io/papermc/paper/PaperServerInternalAPIBridge.java
+@@ -4,6 +4,18 @@ import org.bukkit.craftbukkit.damage.CraftDamageEffect;
+ import org.bukkit.damage.DamageEffect;
+ import org.jspecify.annotations.NullMarked;
+ 
++// Kiterino start - Paper PR - Combat tracker API
++import io.papermc.paper.world.damagesource.CombatEntry;
++import io.papermc.paper.world.damagesource.PaperCombatEntryWrapper;
++import io.papermc.paper.world.damagesource.PaperCombatTrackerWrapper;
++import io.papermc.paper.world.damagesource.FallLocationType;
++import org.bukkit.craftbukkit.damage.CraftDamageSource;
++import org.bukkit.craftbukkit.entity.CraftLivingEntity;
++import org.bukkit.damage.DamageSource;
++import org.bukkit.entity.LivingEntity;
++import org.jspecify.annotations.Nullable;
++// Kiterino end - Paper PR - Combat tracker API
++
+ @NullMarked
+ public class PaperServerInternalAPIBridge implements InternalAPIBridge {
+     public static final PaperServerInternalAPIBridge INSTANCE = new PaperServerInternalAPIBridge();
+@@ -12,4 +24,19 @@ public class PaperServerInternalAPIBridge implements InternalAPIBridge {
+     public DamageEffect getDamageEffect(final String key) {
+         return CraftDamageEffect.getById(key);
+     }
++
++    // Kiterino start - Paper PR - Combat tracker API
++    @Override
++    public CombatEntry createCombatEntry(LivingEntity entity, DamageSource damageSource, float damage) {
++        net.minecraft.world.entity.LivingEntity mob = ((CraftLivingEntity) entity).getHandle();
++        net.minecraft.world.damagesource.FallLocation fallLocation = net.minecraft.world.damagesource.FallLocation.getCurrentFallLocation(mob);
++        float fallDistance = mob.fallDistance;
++        return new PaperCombatEntryWrapper(new net.minecraft.world.damagesource.CombatEntry(((CraftDamageSource) damageSource).getHandle(), damage, fallLocation, fallDistance));
++    }
++
++    @Override
++    public CombatEntry createCombatEntry(DamageSource damageSource, float damage, @Nullable FallLocationType fallLocationType, float fallDistance) {
++        return new PaperCombatEntryWrapper(new net.minecraft.world.damagesource.CombatEntry(((CraftDamageSource) damageSource).getHandle(), damage, fallLocationType == null ? null : PaperCombatTrackerWrapper.paperToMinecraft(fallLocationType), fallDistance));
++    }
++    // Kiterino end - Paper PR - Combat tracker API
+ }
+diff --git a/src/main/java/io/papermc/paper/world/damagesource/PaperCombatEntryWrapper.java b/src/main/java/io/papermc/paper/world/damagesource/PaperCombatEntryWrapper.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..83395b68cecd7c2304f80a5045530dcae59aee24
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/world/damagesource/PaperCombatEntryWrapper.java
+@@ -0,0 +1,32 @@
++package io.papermc.paper.world.damagesource;
++
++import org.bukkit.craftbukkit.damage.CraftDamageSource;
++import org.bukkit.damage.DamageSource;
++import org.jspecify.annotations.NullMarked;
++import org.jspecify.annotations.Nullable;
++
++@NullMarked
++public record PaperCombatEntryWrapper(net.minecraft.world.damagesource.CombatEntry handle) implements CombatEntry {
++
++    @Override
++    public DamageSource getDamageSource() {
++        return new CraftDamageSource(this.handle.source());
++    }
++
++    @Override
++    public float getDamage() {
++        return this.handle.damage();
++    }
++
++    @Override
++    public @Nullable FallLocationType getFallLocation() {
++        net.minecraft.world.damagesource.FallLocation fallLocation = this.handle.fallLocation();
++        return fallLocation == null ? null : PaperCombatTrackerWrapper.minecraftToPaper(fallLocation);
++    }
++
++    @Override
++    public float getFallDistance() {
++        return this.handle.fallDistance();
++    }
++
++}
+diff --git a/src/main/java/io/papermc/paper/world/damagesource/PaperCombatTrackerWrapper.java b/src/main/java/io/papermc/paper/world/damagesource/PaperCombatTrackerWrapper.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..45f69dd104b605643c4825ff44edc2a1440abb77
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/world/damagesource/PaperCombatTrackerWrapper.java
+@@ -0,0 +1,114 @@
++package io.papermc.paper.world.damagesource;
++
++import io.papermc.paper.adventure.PaperAdventure;
++import net.kyori.adventure.text.Component;
++import org.bukkit.entity.LivingEntity;
++import org.jspecify.annotations.NullMarked;
++import org.jspecify.annotations.Nullable;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@NullMarked
++public record PaperCombatTrackerWrapper(net.minecraft.world.damagesource.CombatTracker handle) implements CombatTracker {
++
++    @Override
++    public LivingEntity getEntity() {
++        return this.handle.mob.getBukkitLivingEntity();
++    }
++
++    @Override
++    public List<CombatEntry> getCombatEntries() {
++        List<CombatEntry> combatEntries = new ArrayList<>();
++        this.handle.entries.forEach(combatEntry -> combatEntries.add(new PaperCombatEntryWrapper(combatEntry)));
++        return combatEntries;
++    }
++
++    @Override
++    public void setCombatEntries(List<CombatEntry> combatEntries) {
++        this.handle.entries.clear();
++        combatEntries.forEach(combatEntry -> this.handle.entries.add(((PaperCombatEntryWrapper) combatEntry).handle()));
++    }
++
++    @Override
++    public @Nullable CombatEntry getMostSignificantFall() {
++        net.minecraft.world.damagesource.CombatEntry combatEntry = this.handle.getMostSignificantFall();
++        return combatEntry == null ? null : new PaperCombatEntryWrapper(combatEntry);
++    }
++
++    @Override
++    public boolean isInCombat() {
++        return this.handle.inCombat;
++    }
++
++    @Override
++    public boolean isTakingDamage() {
++        return this.handle.takingDamage;
++    }
++
++    @Override
++    public int getCombatDuration() {
++        return this.handle.getCombatDuration();
++    }
++
++    @Override
++    public void addCombatEntry(CombatEntry combatEntry) {
++        net.minecraft.world.damagesource.CombatEntry entry = ((PaperCombatEntryWrapper) combatEntry).handle();
++        this.handle.recordDamageAndCheckCombatState(entry);
++    }
++
++    @Override
++    public Component getDeathMessage() {
++        return PaperAdventure.asAdventure(this.handle.getDeathMessage());
++    }
++
++    @Override
++    public void resetCombatState() {
++        this.handle.resetCombatState();
++    }
++
++    public static net.minecraft.world.damagesource.FallLocation paperToMinecraft(FallLocationType fallLocationType) {
++        return switch (fallLocationType) {
++            case FallLocationType fl when fl == FallLocationType.GENERIC -> net.minecraft.world.damagesource.FallLocation.GENERIC;
++            case FallLocationType fl when fl == FallLocationType.LADDER -> net.minecraft.world.damagesource.FallLocation.LADDER;
++            case FallLocationType fl when fl == FallLocationType.VINES -> net.minecraft.world.damagesource.FallLocation.VINES;
++            case FallLocationType fl when fl == FallLocationType.WEEPING_VINES -> net.minecraft.world.damagesource.FallLocation.WEEPING_VINES;
++            case FallLocationType fl when fl == FallLocationType.TWISTING_VINES -> net.minecraft.world.damagesource.FallLocation.TWISTING_VINES;
++            case FallLocationType fl when fl == FallLocationType.SCAFFOLDING -> net.minecraft.world.damagesource.FallLocation.SCAFFOLDING;
++            case FallLocationType fl when fl == FallLocationType.OTHER_CLIMBABLE -> net.minecraft.world.damagesource.FallLocation.OTHER_CLIMBABLE;
++            case FallLocationType fl when fl == FallLocationType.WATER -> net.minecraft.world.damagesource.FallLocation.WATER;
++            default -> throw new IllegalArgumentException("Unknown fall location: " + fallLocationType.id());
++        };
++    }
++
++    public static FallLocationType minecraftToPaper(net.minecraft.world.damagesource.FallLocation fallLocation) {
++        return switch (fallLocation) {
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.GENERIC ->
++                    FallLocationType.GENERIC;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.LADDER ->
++                    FallLocationType.LADDER;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.VINES ->
++                    FallLocationType.VINES;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.WEEPING_VINES ->
++                    FallLocationType.WEEPING_VINES;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.TWISTING_VINES ->
++                    FallLocationType.TWISTING_VINES;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.SCAFFOLDING ->
++                    FallLocationType.SCAFFOLDING;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.OTHER_CLIMBABLE ->
++                    FallLocationType.OTHER_CLIMBABLE;
++            case
++                    net.minecraft.world.damagesource.FallLocation fl when fl == net.minecraft.world.damagesource.FallLocation.WATER ->
++                    FallLocationType.WATER;
++            default -> throw new IllegalArgumentException("Unknown fall location: " + fallLocation.id());
++        };
++    }
++
++}
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 3a9d9b7526b2bf0fbd4e0d7886b3d849a6dcfee9..7b531eb8077e0886931a03f1349acd2e9249873a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -91,9 +91,11 @@ import org.bukkit.util.Vector;
+ 
+ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+     private CraftEntityEquipment equipment;
++    private final io.papermc.paper.world.damagesource.PaperCombatTrackerWrapper combatTracker;
+ 
+     public CraftLivingEntity(final CraftServer server, final net.minecraft.world.entity.LivingEntity entity) {
+         super(server, entity);
++        this.combatTracker = new io.papermc.paper.world.damagesource.PaperCombatTrackerWrapper(entity.getCombatTracker());
+ 
+         if (entity instanceof Mob || entity instanceof ArmorStand) {
+             this.equipment = new CraftEntityEquipment(this);
+@@ -1223,4 +1225,17 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         this.getHandle().setShouldBurnInDay(shouldBurnInDay);
+     }
+     // Purpur end - API for any mob to burn daylight
++
++    // Kiterino start - Combat tracker API
++    @Override
++    public io.papermc.paper.world.damagesource.CombatTracker getCombatTracker() {
++        return this.combatTracker;
++    }
++
++    @Override
++    public io.papermc.paper.world.damagesource.FallLocationType calculateFallLocationType() {
++        net.minecraft.world.damagesource.FallLocation fallLocation = net.minecraft.world.damagesource.FallLocation.getCurrentFallLocation(this.getHandle());
++        return fallLocation == null ? io.papermc.paper.world.damagesource.FallLocationType.GENERIC : io.papermc.paper.world.damagesource.PaperCombatTrackerWrapper.minecraftToPaper(fallLocation);
++    }
++    // Kiterino end - Combat tracker API
+ }

@@ -6,3 +6,5 @@
   - Do not appear in /effect
 - Allow riders to control horses without a saddle
   - Requires a saddle on the client's side to actually control the entity. Handled by a plugin on SoSeDiK's Universe.
+- Add EntityLoadsProjectileEvent
+  - Does not trigger when aiming the block without a projectile. Can be worked around by listening to interact event and forcing item use in there.

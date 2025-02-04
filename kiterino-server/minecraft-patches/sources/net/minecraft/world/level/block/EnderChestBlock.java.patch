@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/level/block/EnderChestBlock.java
++++ b/net/minecraft/world/level/block/EnderChestBlock.java
+@@ -101,7 +_,7 @@
+     }
+ 
+     // Purpur start - Barrels and enderchests 6 rows
+-    public ChestMenu getEnderChestSixRows(int syncId, net.minecraft.world.entity.player.Inventory inventory, Player player, PlayerEnderChestContainer playerEnderChestContainer) {
++    public static ChestMenu getEnderChestSixRows(int syncId, net.minecraft.world.entity.player.Inventory inventory, Player player, PlayerEnderChestContainer playerEnderChestContainer) { // Kiterino - make static - Open ender chest API
+         if (org.purpurmc.purpur.PurpurConfig.enderChestPermissionRows) {
+             org.bukkit.craftbukkit.entity.CraftHumanEntity bukkitPlayer = player.getBukkitEntity();
+             if (bukkitPlayer.hasPermission("purpur.enderchest.rows.six")) {

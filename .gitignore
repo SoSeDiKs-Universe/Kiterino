@@ -18,3 +18,5 @@ build
 /purpur-api
 *.jar
 test-plugin.settings.gradle.kts
+
+ignored/

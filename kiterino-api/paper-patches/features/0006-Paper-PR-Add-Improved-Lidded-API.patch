@@ -1,26 +1,24 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Isaac - The456 <the456@the456gamer.dev>
 Date: Sun, 8 Sep 2024 23:57:54 +0100
-Subject: [PATCH] Paper PR - New and Improved Lidded API
+Subject: [PATCH] Paper PR - Add Improved Lidded API
 
-Featuring
-- 5 LidModes, 3 of which were not possible before
-- The ability to get if the lid actually should be open, if a player is in the container
-- The ability to get if the is open, from api or the player itself
-
-This also deprecates Bukkits api because of the confusing and outright incorrect javadocs (so those now accurately represent the behaviour)
+https://github.com/PaperMC/Paper/pull/11814
 
 diff --git a/src/main/java/io/papermc/paper/block/LidMode.java b/src/main/java/io/papermc/paper/block/LidMode.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..fb7eea1ddda3cded5c4416d32bb48ef71aa25343
+index 0000000000000000000000000000000000000000..a4f85cf32aadc576f81e26a2146cb1cb3c36fe1b
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/block/LidMode.java
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,50 @@
 +package io.papermc.paper.block;
++
++import org.jspecify.annotations.NullMarked;
 +
 +/**
 + * Represents how the lid of a block behaves.
 + */
++@NullMarked
 +public enum LidMode {
 +    /**
 +     * The default lid mode, the lid will open and close based on player interaction.
@@ -65,27 +63,31 @@ index 0000000000000000000000000000000000000000..fb7eea1ddda3cded5c4416d32bb48ef7
 +}
 diff --git a/src/main/java/io/papermc/paper/block/LidState.java b/src/main/java/io/papermc/paper/block/LidState.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ea775e7cd28b68e520d1381eee8c732f3fa17bfc
+index 0000000000000000000000000000000000000000..b6e86005ce947298892dad45d16328f04679eeb6
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/block/LidState.java
-@@ -0,0 +1,6 @@
+@@ -0,0 +1,9 @@
 +package io.papermc.paper.block;
 +
++import org.jspecify.annotations.NullMarked;
++
++@NullMarked
 +public enum LidState {
 +    OPEN,
 +    CLOSED
 +}
 diff --git a/src/main/java/io/papermc/paper/block/Lidded.java b/src/main/java/io/papermc/paper/block/Lidded.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..0f73d78a95cde2326aed4885d01282d177c2f245
+index 0000000000000000000000000000000000000000..23c97fd9b89aca1f229be12a66a31116c9b45342
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/block/Lidded.java
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,37 @@
 +package io.papermc.paper.block;
 +
 +import org.bukkit.block.TileState;
-+import org.jetbrains.annotations.NotNull;
++import org.jspecify.annotations.NullMarked;
 +
++@NullMarked
 +public interface Lidded extends TileState {
 +
 +    /**
@@ -93,14 +95,12 @@ index 0000000000000000000000000000000000000000..0f73d78a95cde2326aed4885d01282d1
 +     *
 +     * @return the effective lid state
 +     */
-+    @NotNull
 +    LidState getEffectiveLidState();
 +
 +    /**
 +     * Gets how the lid would be without any lidded mode, based on players interacting with the block.
 +     * @return the true lid state
 +     */
-+    @NotNull
 +    LidState getTrueLidState();
 +
 +    /**
@@ -108,7 +108,6 @@ index 0000000000000000000000000000000000000000..0f73d78a95cde2326aed4885d01282d1
 +     *
 +     * @return the lid mode
 +     */
-+    @NotNull
 +    LidMode getLidMode();
 +
 +    /**
@@ -117,12 +116,106 @@ index 0000000000000000000000000000000000000000..0f73d78a95cde2326aed4885d01282d1
 +     * @param mode the new lid mode
 +     * @return the actually set lid mode
 +     */
-+    @NotNull
-+    LidMode setLidMode(@NotNull LidMode mode);
++    LidMode setLidMode(LidMode mode);
 +
 +}
+diff --git a/src/main/java/io/papermc/paper/event/player/PlayerLiddedOpenEvent.java b/src/main/java/io/papermc/paper/event/player/PlayerLiddedOpenEvent.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..3dbb9c1c17d77fba55b3830b54a540ddccb6c060
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/event/player/PlayerLiddedOpenEvent.java
+@@ -0,0 +1,89 @@
++package io.papermc.paper.event.player;
++
++import io.papermc.paper.block.LidMode;
++import io.papermc.paper.block.LidState;
++import io.papermc.paper.block.Lidded;
++import org.bukkit.block.Block;
++import org.bukkit.entity.Player;
++import org.bukkit.event.Cancellable;
++import org.bukkit.event.HandlerList;
++import org.bukkit.event.player.PlayerEvent;
++import org.jetbrains.annotations.ApiStatus;
++import org.jetbrains.annotations.NotNull;
++import org.jspecify.annotations.NullMarked;
++
++/**
++ * Called when a player opens a {@link Lidded} block.
++ *
++ * <p>
++ * This is called every time a player opens a {@link Lidded} block
++ * regardless of if the lid is already open (e.g. multiple players).
++ * <p>
++ * Cancelling this event prevents the player from being considered in other {@link Lidded} methods:
++ * they will not contribute to the {@link Lidded#getTrueLidState()} and {@link Lidded#getEffectiveLidState()}.
++ * <p>
++ * This event is called twice for double chests, once for each half.
++ */
++@NullMarked
++public class PlayerLiddedOpenEvent extends PlayerEvent implements Cancellable {
++
++    private static final HandlerList HANDLER_LIST = new HandlerList();
++    private final Lidded blockState;
++    private final Block block;
++    private boolean cancelled;
++
++    @ApiStatus.Internal
++    public PlayerLiddedOpenEvent(final @NotNull Player who, final @NotNull Lidded blockState, final @NotNull Block block) {
++        super(who);
++        this.cancelled = false;
++        this.blockState = blockState;
++        this.block = block;
++    }
++
++
++    @Override
++    public boolean isCancelled() {
++        return cancelled;
++    }
++
++    @Override
++    public void setCancelled(final boolean cancel) {
++        this.cancelled = cancel;
++    }
++
++    /**
++     * Gets the {@link Lidded} block involved in this event.
++     * @return the lidded block
++     */
++    @NotNull
++    public Lidded getLidded() {
++        return blockState;
++    }
++
++    /**
++     * Gets the block involved in this event.
++     * @return the block
++     */
++    @NotNull
++    public Block getBlock() {
++        return block;
++    }
++
++    /**
++     * Gets if the block would appear to open, if this event is not cancelled.
++     * return if the block would appear to open
++     */
++    public boolean isOpening() {
++        return blockState.getLidMode() == LidMode.DEFAULT && blockState.getTrueLidState() == LidState.CLOSED;
++    }
++
++    @Override
++    @NotNull
++    public HandlerList getHandlers() {
++        return HANDLER_LIST;
++    }
++
++    public static @NotNull HandlerList getHandlerList() {
++        return HANDLER_LIST;
++    }
++}
 diff --git a/src/main/java/org/bukkit/block/Barrel.java b/src/main/java/org/bukkit/block/Barrel.java
-index d3789b2b7dd71d7c1872a0d84698d35a1884101b..b5a6d961327547a5424a34608d07f2e9d606fa6c 100644
+index d3789b2b7dd71d7c1872a0d84698d35a1884101b..c714361ba5163cf68a91d193b623c163a27eab9a 100644
 --- a/src/main/java/org/bukkit/block/Barrel.java
 +++ b/src/main/java/org/bukkit/block/Barrel.java
 @@ -5,4 +5,4 @@ import org.bukkit.loot.Lootable;
@@ -130,9 +223,9 @@ index d3789b2b7dd71d7c1872a0d84698d35a1884101b..b5a6d961327547a5424a34608d07f2e9
   * Represents a captured state of a Barrel.
   */
 -public interface Barrel extends Container, com.destroystokyo.paper.loottable.LootableBlockInventory, Lidded { } // Paper
-+public interface Barrel extends Container, com.destroystokyo.paper.loottable.LootableBlockInventory, Lidded, io.papermc.paper.block.Lidded { } // Paper  // Paper - Add Improved Lidded Api
++public interface Barrel extends Container, com.destroystokyo.paper.loottable.LootableBlockInventory, Lidded, io.papermc.paper.block.Lidded { } // Paper
 diff --git a/src/main/java/org/bukkit/block/Chest.java b/src/main/java/org/bukkit/block/Chest.java
-index 5d02f9c938d0d7d0f4e491ccfaf6beb0a7a61aa4..c49553b586009904b34e58d3e173e47bb51f9f36 100644
+index 5d02f9c938d0d7d0f4e491ccfaf6beb0a7a61aa4..85fb81c77f28760c413220cc99f75e69025a49c7 100644
 --- a/src/main/java/org/bukkit/block/Chest.java
 +++ b/src/main/java/org/bukkit/block/Chest.java
 @@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
@@ -140,12 +233,12 @@ index 5d02f9c938d0d7d0f4e491ccfaf6beb0a7a61aa4..c49553b586009904b34e58d3e173e47b
   * Represents a captured state of a chest.
   */
 -public interface Chest extends Container, LootableBlockInventory, Lidded { // Paper
-+public interface Chest extends Container, LootableBlockInventory, Lidded, io.papermc.paper.block.Lidded { // Paper // Paper - Add Improved Lidded Api
++public interface Chest extends Container, LootableBlockInventory, Lidded, io.papermc.paper.block.Lidded { // Paper
  
      /**
       * Gets the inventory of the chest block represented by this block state.
 diff --git a/src/main/java/org/bukkit/block/EnderChest.java b/src/main/java/org/bukkit/block/EnderChest.java
-index 6b66f38e5509f90aad5ee1fffca01003dcbe9896..c155e01136227c9334d0e9cd9d912b014b86c5e5 100644
+index 6b66f38e5509f90aad5ee1fffca01003dcbe9896..9ec76ad38d672fa999673af063c0fa51f4d9f262 100644
 --- a/src/main/java/org/bukkit/block/EnderChest.java
 +++ b/src/main/java/org/bukkit/block/EnderChest.java
 @@ -3,7 +3,7 @@ package org.bukkit.block;
@@ -153,17 +246,19 @@ index 6b66f38e5509f90aad5ee1fffca01003dcbe9896..c155e01136227c9334d0e9cd9d912b01
   * Represents a captured state of an ender chest.
   */
 -public interface EnderChest extends Lidded, TileState {
-+public interface EnderChest extends Lidded, TileState, io.papermc.paper.block.Lidded {  // Paper - Add Improved Lidded Api
++public interface EnderChest extends Lidded, TileState, io.papermc.paper.block.Lidded {
      // Paper start - More Chest Block API
      /**
       * Checks whether this ender chest is blocked by a block above
 diff --git a/src/main/java/org/bukkit/block/Lidded.java b/src/main/java/org/bukkit/block/Lidded.java
-index 30c7df0021df44a411e50636d906d4a1d30fd927..e867187db2d0752d8b18baaebcdbf0ecdbdac833 100644
+index 30c7df0021df44a411e50636d906d4a1d30fd927..3f568ba3871b443ee036124c7593f1123cf1d00c 100644
 --- a/src/main/java/org/bukkit/block/Lidded.java
 +++ b/src/main/java/org/bukkit/block/Lidded.java
-@@ -1,25 +1,34 @@
+@@ -1,25 +1,36 @@
  package org.bukkit.block;
  
++import io.papermc.paper.block.LidMode;
++
 +/**
 + * @deprecated Incomplete api. Use {@link io.papermc.paper.block.Lidded} instead.
 + */
@@ -173,35 +268,35 @@ index 30c7df0021df44a411e50636d906d4a1d30fd927..e867187db2d0752d8b18baaebcdbf0ec
      /**
       * Sets the block's animated state to open and prevents it from being closed
       * until {@link #close()} is called.
-+     * @deprecated Use {@link io.papermc.paper.block.Lidded#setLidMode(io.papermc.paper.block.LidMode)}
++     * @deprecated Use {@link io.papermc.paper.block.Lidded#setLidMode(LidMode)}
       */
-+    @Deprecated // Paper - Deprecate Bukkit's Lidded API
++    @Deprecated
      void open();
  
      /**
 -     * Sets the block's animated state to closed even if a player is currently
 -     * viewing this block.
 +     * Unsets a corresponding call to {@link #open()}.
-+     * @deprecated Misleading name. Use {@link io.papermc.paper.block.Lidded#setLidMode(io.papermc.paper.block.LidMode)}
++     * @deprecated Misleading name. Use {@link io.papermc.paper.block.Lidded#setLidMode(LidMode)}
       */
-+    @Deprecated // Paper - Deprecate Bukkit's Lidded API
++    @Deprecated
      void close();
  
      // Paper start - More Lidded Block API
      /**
 -     * Checks if the block's animation state.
-+     * Checks is the Lid is currently forced open.
++     * Checks if the Lid is currently forced open
       *
 -     * @return true if the block's animation state is set to open.
 +     * @return true if the block's animation state is force open.
-+     * @deprecated Misleading name. Use {@link io.papermc.paper.block.Lidded#getLidMode()} for the direct replacement, or {@link io.papermc.paper.block.Lidded#getEffectiveLidState()} to tell if the lid is visibly open to the player Instead.
++     * @deprecated Misleading name. Use {@link io.papermc.paper.block.Lidded#getLidMode()} for the direct replacement, or {@link io.papermc.paper.block.Lidded#getEffectiveLidState()} to tell if the lid is visibly open to the player instead.
       */
-+    @Deprecated // Paper - Deprecate Bukkit's Lidded API
++    @Deprecated
      boolean isOpen();
      // Paper end - More Lidded Block API
  }
 diff --git a/src/main/java/org/bukkit/block/ShulkerBox.java b/src/main/java/org/bukkit/block/ShulkerBox.java
-index 5dc5318b0a451937228a8a059dfec1cd9de389a6..e82501813ce1fac49d1f9bf2c63c3b6e2dfdd76f 100644
+index 5dc5318b0a451937228a8a059dfec1cd9de389a6..23995c48f26b9ac962c74c37eb88d23d97edaacf 100644
 --- a/src/main/java/org/bukkit/block/ShulkerBox.java
 +++ b/src/main/java/org/bukkit/block/ShulkerBox.java
 @@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
@@ -209,7 +304,7 @@ index 5dc5318b0a451937228a8a059dfec1cd9de389a6..e82501813ce1fac49d1f9bf2c63c3b6e
   * Represents a captured state of a ShulkerBox.
   */
 -public interface ShulkerBox extends Container, LootableBlockInventory, Lidded { // Paper
-+public interface ShulkerBox extends Container, LootableBlockInventory, Lidded, io.papermc.paper.block.Lidded { // Paper  // Paper - Add Improved Lidded Api
++public interface ShulkerBox extends Container, LootableBlockInventory, Lidded, io.papermc.paper.block.Lidded { // Paper
  
      /**
       * Get the {@link DyeColor} corresponding to this ShulkerBox

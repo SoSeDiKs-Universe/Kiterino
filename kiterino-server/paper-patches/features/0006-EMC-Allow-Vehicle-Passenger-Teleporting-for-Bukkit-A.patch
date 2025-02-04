@@ -6,7 +6,7 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 0b61ca7511bbc94b94eebca83020fcdc880c5439..6a8d799e80c47468fb1fc2ce997b38df334b1db6 100644
+index 8b895b9b93d1b2731de98a24e18131d7d396ff02..97cecd7eb6cc9245bfe190f4f0e80cc4635ab166 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -251,6 +251,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {

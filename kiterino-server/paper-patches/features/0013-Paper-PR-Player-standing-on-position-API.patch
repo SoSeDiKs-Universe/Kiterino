@@ -1,32 +1,31 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Owen1212055 <23108066+Owen1212055@users.noreply.github.com>
-Date: Fri, 9 Jun 2023 22:49:38 -0400
+Date: Fri, 9 Jun 2023 22:49:45 -0400
 Subject: [PATCH] Paper PR - Player standing on position API
 
-== AT ==
-public net.minecraft.world.entity.Entity getBlockPosBelowThatAffectsMyMovement()Lnet/minecraft/core/BlockPos;
+https://github.com/PaperMC/Paper/pull/9298
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 5622057f9ab4b389ed207426c4ce6933638e4684..2464b4dbf9348c36154279a4e02bbb90439a0b26 100644
+index 39f13ca7be830ec7af1a5b8b6cbe1ae33e92e1bb..929b215f3d56ad43a7f453b97945f836381388ed 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1424,6 +1424,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1453,6 +1453,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      }
      // Paper end - broadcast hurt animation
  
 +    // Paper start - Player standing on position API
 +    @Override
 +    public org.bukkit.block.Block getMovementAffectingBlock() {
-+	    return CraftBlock.at(this.getHandle().level(), this.getHandle().getBlockPosBelowThatAffectsMyMovement());
++        return CraftBlock.at(this.getHandle().level(), this.getHandle().getBlockPosBelowThatAffectsMyMovement());
 +    }
 +
-+	@Override
-+	public org.bukkit.block.Block getSupportingBlock() {
-+		return this.getHandle().mainSupportingBlockPos
-+				.map((pos) -> CraftBlock.at(this.getHandle().level(), pos))
-+				.orElse(null);
-+	}
-+	// Paper end - Player standing on position API
++    @Override
++    public org.bukkit.block.Block getSupportingBlock() {
++        return this.getHandle().mainSupportingBlockPos
++                .map((pos) -> CraftBlock.at(this.getHandle().level(), pos))
++                .orElse(null);
++    }
++    // Paper end - Player standing on position API
 +
      // Purpur start - Ridables
      @Override

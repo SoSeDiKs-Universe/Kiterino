@@ -3,6 +3,7 @@ From: Jake Potrebic <jake.m.potrebic@gmail.com>
 Date: Tue, 22 Mar 2022 22:14:10 -0700
 Subject: [PATCH] Paper PR - Improve LootContext API
 
+https://github.com/PaperMC/Paper/pull/7655
 
 diff --git a/src/main/java/io/papermc/paper/loot/LootContextKey.java b/src/main/java/io/papermc/paper/loot/LootContextKey.java
 new file mode 100644
@@ -46,22 +47,21 @@ index 0000000000000000000000000000000000000000..67f8d027d68c0af5c26ee23d625da691
 +}
 diff --git a/src/main/java/io/papermc/paper/loot/LootContextKeyImpl.java b/src/main/java/io/papermc/paper/loot/LootContextKeyImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..941a490e1b8f865a6ec9fdfb57215f1674ce40ff
+index 0000000000000000000000000000000000000000..d66d655c0b9d8aca8f4c82c01002851c6237d01e
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/loot/LootContextKeyImpl.java
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,23 @@
 +package io.papermc.paper.loot;
 +
 +import java.util.HashSet;
 +import java.util.Set;
 +import net.kyori.adventure.key.Key;
 +import net.kyori.adventure.key.KeyPattern;
-+import org.checkerframework.checker.nullness.qual.NonNull;
-+import org.checkerframework.framework.qual.DefaultQualifier;
 +import org.jetbrains.annotations.ApiStatus;
++import org.jspecify.annotations.NullMarked;
 +
 +@ApiStatus.Internal
-+@DefaultQualifier(NonNull.class)
++@NullMarked
 +record LootContextKeyImpl<T>(Key key) implements LootContextKey<T> {
 +
 +    static final Set<LootContextKey<?>> KEYS = new HashSet<>();
@@ -75,7 +75,7 @@ index 0000000000000000000000000000000000000000..941a490e1b8f865a6ec9fdfb57215f16
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/loot/LootContext.java b/src/main/java/org/bukkit/loot/LootContext.java
-index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc803b46b6f 100644
+index 470f712e8dda61dadf6eee02751e84ec678b293e..d6fb0359ad2d325786e74c803f69462e1cd9308a 100644
 --- a/src/main/java/org/bukkit/loot/LootContext.java
 +++ b/src/main/java/org/bukkit/loot/LootContext.java
 @@ -15,30 +15,124 @@ public final class LootContext {
@@ -93,7 +93,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
 -    private LootContext(@NotNull Location location, float luck, int lootingModifier, @Nullable Entity lootedEntity, @Nullable HumanEntity killer) {
 -        Preconditions.checkArgument(location != null, "LootContext location cannot be null");
 -        Preconditions.checkArgument(location.getWorld() != null, "LootContext World cannot be null");
--        this.location = location;
+-        this.location = location.clone();
 +    private final java.util.Random random;
 +    private final java.util.Map<io.papermc.paper.loot.LootContextKey<?>, Object> contextMap;
 +    // TODO dynamic drops API
@@ -198,7 +198,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
      @NotNull
 +    @Deprecated // Paper
      public Location getLocation() {
--        return location;
+-        return location.clone();
 +        // Paper start - fallback to legacy location
 +        if (this.legacyLocation == null) {
 +            if (contextMap.containsKey(io.papermc.paper.loot.LootContextKey.ORIGIN)) {
@@ -210,33 +210,31 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
 +                throw new IllegalStateException("All known context key sets require \"origin\" or \"this_entity\" and this one doesn't have either");
 +            }
 +        }
-+        return this.legacyLocation;
++        return this.legacyLocation.clone();
 +        // Paper end
      }
  
      /**
-@@ -73,10 +167,12 @@ public final class LootContext {
+@@ -73,10 +167,11 @@ public final class LootContext {
       * Get the {@link Entity} that was killed. Can be null.
       *
       * @return the looted entity or null
 +     * @deprecated use {@link #get(io.papermc.paper.loot.LootContextKey)} methods
       */
      @Nullable
-+    @Deprecated // Paper
      public Entity getLootedEntity() {
 -        return lootedEntity;
 +        return this.get(io.papermc.paper.loot.LootContextKey.THIS_ENTITY); // Paper
      }
  
      /**
-@@ -84,41 +180,89 @@ public final class LootContext {
+@@ -84,41 +179,88 @@ public final class LootContext {
       * Can be null.
       *
       * @return the killer entity, or null.
 +     * @deprecated use {@link #get(io.papermc.paper.loot.LootContextKey)} methods
       */
      @Nullable
-+    @Deprecated // Paper
      public HumanEntity getKiller() {
 -        return killer;
 +        return this.get(io.papermc.paper.loot.LootContextKey.ATTACKING_ENTITY) instanceof HumanEntity humanEntity ? humanEntity : null; // Paper
@@ -270,7 +268,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
           */
 +        @Deprecated // Paper
          public Builder(@NotNull Location location) {
--            this.location = location;
+-            this.location = location.clone();
 +            // Paper start
 +            com.google.common.base.Preconditions.checkArgument(location.getWorld() != null, "location missing world");
 +            this.world = location.getWorld();
@@ -326,7 +324,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
          @NotNull
          public Builder luck(float luck) {
              this.luck = luck;
-@@ -138,6 +282,7 @@ public final class LootContext {
+@@ -138,6 +280,7 @@ public final class LootContext {
          @NotNull
          @Deprecated(since = "1.21")
          public Builder lootingModifier(int modifier) {
@@ -334,7 +332,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
              this.lootingModifier = modifier;
              return this;
          }
-@@ -147,11 +292,14 @@ public final class LootContext {
+@@ -147,11 +290,14 @@ public final class LootContext {
           *
           * @param lootedEntity the looted entity
           * @return the Builder
@@ -351,7 +349,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
          }
  
          /**
-@@ -161,11 +309,14 @@ public final class LootContext {
+@@ -161,11 +307,14 @@ public final class LootContext {
           *
           * @param killer the killer entity
           * @return the Builder
@@ -368,7 +366,7 @@ index 4a8b2538a83c8446ea7bf14bc157e975cd6bdd71..e72fd2bbd49f56bd35d7a2c77bfc8fc8
          }
  
          /**
-@@ -175,8 +326,9 @@ public final class LootContext {
+@@ -175,8 +324,9 @@ public final class LootContext {
           * @return a new {@link LootContext} instance
           */
          @NotNull

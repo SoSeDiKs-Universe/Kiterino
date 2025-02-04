@@ -3,12 +3,13 @@ From: Owen1212055 <23108066+Owen1212055@users.noreply.github.com>
 Date: Fri, 9 Jun 2023 22:49:45 -0400
 Subject: [PATCH] Paper PR - Player standing on position API
 
+https://github.com/PaperMC/Paper/pull/9298
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 5031221c1208da397db1af35341f20690d30538e..811e29d973e097e72d1b6c2c695f551b6f87f1cb 100644
+index 6304af4c8f90a289d3d51e6ba5796445ac35375d..e95a3f556935811d4c4b7dc2ea7e326463f9bdc1 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1173,6 +1173,33 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1197,6 +1197,33 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      void broadcastHurtAnimation(@NotNull java.util.Collection<Player> players);
      // Paper end - broadcast hurt animation
  
@@ -39,6 +40,6 @@ index 5031221c1208da397db1af35341f20690d30538e..811e29d973e097e72d1b6c2c695f551b
 +    org.bukkit.block.Block getSupportingBlock();
 +    // Paper end
 +
-     // Purpur start
+     // Purpur start - Ridables
      /**
       * Get the riding player
