@@ -127,12 +127,12 @@ index 0000000000000000000000000000000000000000..314ef91f5693ae1d9229b6fcefddde33
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
-index 5fd22a80e9d05afbea273471cee991732a9485fd..9f85300a5dd0c7824dcf44763cc06aa5a9d9171b 100644
+index 4f29e9af057f5f885bbb83b130687272335a9ff6..a24a6fe709d32ae735d7b4d3d25848bf87ad7fb2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
-@@ -101,6 +101,22 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
+@@ -102,6 +102,22 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
  
-     private LootParams convertContext(LootContext context, Random random) {
+     private LootParams convertContext(LootContext context) {
          Preconditions.checkArgument(context != null, "LootContext cannot be null");
 +        // Paper start - Improve LootContext API
 +        if (!context.isLegacy()) {
@@ -144,16 +144,16 @@ index 5fd22a80e9d05afbea273471cee991732a9485fd..9f85300a5dd0c7824dcf44763cc06aa5
 +            //     // .withRandom(new RandomSourceWrapper(random != null ? random : context.getRandom()))
 +            // return contextBuilder.create(java.util.Optional.empty());
 +        } else {
-+            return this.convertLegacyContext(context, random);
++            return this.convertLegacyContext(context);
 +        }
 +    }
 +    @Deprecated
-+    private LootParams convertLegacyContext(final LootContext context, final Random random) {
++    private LootParams convertLegacyContext(final LootContext context) {
 +        // Paper end - Improve LootContext API
          Location loc = context.getLocation();
          Preconditions.checkArgument(loc.getWorld() != null, "LootContext.getLocation#getWorld cannot be null");
          ServerLevel handle = ((CraftWorld) loc.getWorld()).getHandle();
-@@ -151,6 +167,20 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
+@@ -149,6 +165,20 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
      }
  
      public static LootContext convertContext(net.minecraft.world.level.storage.loot.LootContext info) {

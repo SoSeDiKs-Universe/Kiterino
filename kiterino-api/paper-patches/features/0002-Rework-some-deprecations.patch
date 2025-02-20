@@ -5,10 +5,10 @@ Subject: [PATCH] Rework some deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index b2875fca1fd4c8d1e648c5506af47c9af393633d..e20ea4a49c4f0d0328928959e402e047bf9b065e 100644
+index 598353f5624d404dc7266ccf33a34e073040b26a..0da29365086a1a5da7676b1657e6b8353120cc7f 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2628,7 +2628,7 @@ public final class Bukkit {
+@@ -2632,7 +2632,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -18,10 +18,10 @@ index b2875fca1fd4c8d1e648c5506af47c9af393633d..e20ea4a49c4f0d0328928959e402e047
      public static UnsafeValues getUnsafe() {
          return server.getUnsafe();
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 6d31b561d915180fcd473b317721064feed28f37..459997be6968568b99c04436d430939eb06aac5c 100644
+index c597c298795fb9893447bc822d941c1748dcb9c5..745c6b73f82949f7cd64d26b6771507784f1a598 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
-@@ -239,9 +239,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
+@@ -233,9 +233,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
       * UTC.
       *
       * @return Date of last log-in for this player, or 0
@@ -85,17 +85,16 @@ index 4b94f1ed620c57bebca7cf0a5a0d478a93952d36..32ce88d2d8ebc5c15c9a10bda06215d1
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 0a1cbdb1daf1691a59a9e7acd5edc637cd4720bd..5a1b52d10bbefdc6654d8dc8f3dde58fe6d14fb3 100644
+index 65196f51d2ec50be9513123aeb5a548f573ffdac..58cabc02de3d3c4d3b34b4f6b53ef06fc8bc3cfc 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3345,10 +3345,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3324,9 +3324,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale
 -     * @deprecated in favour of {@link #locale()}
 +     * @see #locale()
       */
-     @NotNull
 -    @Deprecated // Paper
 +    //@Deprecated // Paper // Kiterino - Rework some deprecations
      public String getLocale();

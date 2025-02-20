@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index db5a2227009bc4d655fc781d5850221f36f2d112..73884c567d7b97eefa529caaa2c582582f4c3cf7 100644
+index b38bd29e9c3c1565abb3452ffbbaa54cd924961d..eecb0a58fb36dfdfc4143f3ff38a96e2f38ef0c0 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4459,6 +4459,23 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4477,6 +4477,23 @@ public abstract class LivingEntity extends Entity implements Attackable {
          return ItemStack.EMPTY;
      }
  
@@ -46,17 +46,17 @@ index c1ebb74b0d4a8e2eb8880ccaf20f0f9bc1940094..8d076340357ccf40149f10c82c7bbbdf
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 43657822f0660613078e9afa512000b5255a1537..66075178b77c2a24c003900eb56edf7d79627048 100644
+index 3aab8856b07389a8d7a06a9f66f21771a3f2d122..e191e25784e4867be98032ed5029d280934c9652 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -2300,18 +2300,18 @@ public abstract class Player extends LivingEntity {
-             Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(shootable, item)); // Paper - PlayerReadyArrowEvent
+@@ -2306,19 +2306,19 @@ public abstract class Player extends LivingEntity {
+             Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(shootable, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);
              if (!heldProjectile.isEmpty()) {
 -                return heldProjectile;
 +                return getProjectile(shootable, heldProjectile, supportedHeldProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
              } else {
-                 supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getAllSupportedProjectiles().and(item -> this.tryReadyArrow(shootable, item)); // Paper - PlayerReadyArrowEvent
+                 supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getAllSupportedProjectiles().and(item -> this.tryReadyArrow(shootable, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
  
                  for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                      ItemStack item = this.inventory.getItem(i);
@@ -66,6 +66,7 @@ index 43657822f0660613078e9afa512000b5255a1537..66075178b77c2a24c003900eb56edf7d
                      }
                  }
  
+                 if (anyEventCancelled.booleanValue() && !this.abilities.instabuild && this instanceof final ServerPlayer player) this.resyncUsingItem(player); // Paper - resync if no item matched the Predicate
 -                return this.abilities.instabuild ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
 +                return getProjectile(shootable, this.abilities.instabuild ? new ItemStack(Items.ARROW) : ItemStack.EMPTY, supportedHeldProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
              }

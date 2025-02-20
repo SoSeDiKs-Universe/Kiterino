@@ -8,7 +8,7 @@
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
      protected boolean wasEyeInWater;
-@@ -902,6 +_,12 @@
+@@ -903,6 +_,12 @@
              this.clearFire();
          }
  
@@ -21,7 +21,7 @@
          if (this.isInLava()) {
              this.lavaHurt();
              this.fallDistance *= 0.5F;
-@@ -3179,6 +_,21 @@
+@@ -3180,6 +_,21 @@
              this.gameEvent(GameEvent.ENTITY_MOUNT, passenger);
          }
      }

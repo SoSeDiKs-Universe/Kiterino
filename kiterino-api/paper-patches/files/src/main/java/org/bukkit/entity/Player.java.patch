@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4047,4 +_,51 @@
+@@ -4021,4 +_,51 @@
          sendDeathScreen(message);
      }
      // Purpur end
@@ -49,6 +49,6 @@
 +     * @param enderChest ender chest
 +     * @return whether the chest was opened
 +     */
-+    boolean openEnderChest(@NotNull org.bukkit.block.EnderChest enderChest);
++    boolean openEnderChest(org.bukkit.block.EnderChest enderChest);
 +    // Kiterino end - Open ender chest API
  }

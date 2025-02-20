@@ -344,10 +344,10 @@ index 0000000000000000000000000000000000000000..c5b97cea39ed0186deee042a9f16e0fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index a4acc3578e935cd1174474bd1f6ff14db4294fe7..38024224438f3a3b235206c925b5ad812341e749 100644
+index a04b6603a64cd6bf1049fd684407dcf9d9d7b5e9..d9af95d928b693ea3a8fc8419adb112efb2054b1 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1484,4 +1484,24 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1492,4 +1492,24 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);
      // Purpur end - API for any mob to burn daylight
