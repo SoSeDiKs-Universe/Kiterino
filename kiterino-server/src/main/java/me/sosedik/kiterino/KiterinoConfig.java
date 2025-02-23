@@ -158,7 +158,7 @@ public final class KiterinoConfig {
 	private static void lessLimitedCraftingBook() {
 		allowDamagedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-damaged-items", false, "Allow using damaged items when searching for items");
 		allowEnchantedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-enchanted-items", false, "Allow using items with enchantments when searching for items");
-		allowRenamedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-renamed-items", false, "Allow using items with custom names (i.e. renamed in anvil) when searching for items");
+		allowRenamedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-renamed-items", false, "Allow using items with custom names (i.e., renamed in anvil) when searching for items");
 	}
 	// Kiterino end - Less limited recipe matcher
 

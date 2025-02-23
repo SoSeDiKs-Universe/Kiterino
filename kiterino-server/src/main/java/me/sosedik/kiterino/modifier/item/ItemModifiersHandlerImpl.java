@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import io.papermc.paper.datacomponent.item.BundleContents;
+import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.datacomponent.item.UseRemainder;
 import me.sosedik.kiterino.KiterinoConfig;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
@@ -17,6 +18,7 @@ import me.sosedik.kiterino.modifier.item.context.packet.MerchantOfferPacketConte
 import me.sosedik.kiterino.modifier.item.context.packet.RecipeBookPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.SlottedItemPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.UnknownEntityDataContext;
+import net.kyori.adventure.key.Key;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.DisplayInfo;
@@ -58,6 +60,7 @@ import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
 import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
 import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SelectableRecipe;
@@ -84,6 +87,7 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -144,6 +148,23 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 	    // Special nbt cases
 	    org.bukkit.inventory.ItemStack item = contextBox.getItem();
 	    if (!item.isEmpty()) {
+            // Kiterino start - Implement packet item faker for injected items
+            Player viewer = contextBox.getViewer();
+            // Cooldown for custom items
+            if (viewer != null && viewer.hasCooldown(contextBox.getInitialType())) {
+                boolean applyCooldown = true;
+                if (item.hasData(DataComponentTypes.USE_COOLDOWN)) {
+                    UseCooldown useCooldown = item.getData(DataComponentTypes.USE_COOLDOWN);
+                    assert useCooldown != null;
+                    applyCooldown = contextBox.getInitialType().key().equals(useCooldown.cooldownGroup());
+                }
+                if (applyCooldown) {
+                    UseCooldown useCooldown = UseCooldown.useCooldown(viewer.getCooldown(contextBox.getInitialType()) / 20F).cooldownGroup(contextBox.getInitialType().getKey()).build();
+                    item.setData(DataComponentTypes.USE_COOLDOWN, useCooldown);
+                    modified = true;
+                }
+            }
+            // Kiterino end - Implement packet item faker for injected items
 		    // Bundles
 		    if (item.hasData(DataComponentTypes.BUNDLE_CONTENTS)) {
 			    BundleContents bundleContents = item.getData(DataComponentTypes.BUNDLE_CONTENTS);
@@ -311,10 +332,12 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     private static Packet<?> handle(CraftPlayer player, ClientboundSetCursorItemPacket packet) {
-        ItemStack original = packet.contents();
+        // For some reason, the packet desyncs sometimes for custom items, hence grabbing the real cursor item // TODO remove this…
+        ItemStack original = /* packet.contents() */ player.getHandle().containerMenu.getCarried();
         var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
         var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
         ItemStack result = fromBukkit(contextBox, original);
+        if (result == null && original.is(Items.AIR)) result = ItemStack.EMPTY; // Otherwise, the client is getting kicked with the carried workaround above. Why? Good question! // TODO remove this…
         return result == null ? packet : new ClientboundSetCursorItemPacket(result);
     }
 
@@ -420,10 +443,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     private static Packet<?> handle(CraftPlayer player, ClientboundSetPlayerInventoryPacket packet) {
         ItemStack original = packet.contents();
-        var context = new SlottedItemPacketContext(packet, packet.slot());
+        int slot = packet.slot();
+        var context = new SlottedItemPacketContext(packet, slot);
         var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
         ItemStack result = fromBukkit(contextBox, original);
-        return result == null ? packet : new ClientboundSetCursorItemPacket(result);
+        return result == null ? packet : new ClientboundSetPlayerInventoryPacket(slot, result);
     }
 
     // Yes, this also sucks!

@@ -71,8 +71,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
     @Override
     public Object constructItemProperties() {
         return new Item.Properties()
-                .setId(ResourceKey.create(Registries.ITEM, this.itemKey))
-                .component(DataComponents.USE_COOLDOWN, new UseCooldown(0F, Optional.of(this.itemKey))); // Kiterino - Implement packet item faker for injected items
+                .setId(ResourceKey.create(Registries.ITEM, this.itemKey));
     }
 
     // Kiterino start - Data-driven blocks
