@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityStartUsingItemEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index eecb0a58fb36dfdfc4143f3ff38a96e2f38ef0c0..f2e543ebb52a5e05d17973c20dc7bf95f0ec31a7 100644
+index 12378d28a23761363bd51072452250559bf83ef2..4ca0bea6270534fcb979dd9172718cb860160009 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4028,8 +4028,16 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4035,8 +4035,16 @@ public abstract class LivingEntity extends Entity implements Attackable {
          ItemStack itemInHand = this.getItemInHand(hand);
          if (!itemInHand.isEmpty() && !this.isUsingItem() || forceUpdate) { // Paper - Prevent consuming the wrong itemstack
              this.useItem = itemInHand;
