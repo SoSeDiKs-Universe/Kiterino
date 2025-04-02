@@ -136,10 +136,10 @@ index 08bbbb9de5743aed6dcd362e8d7862b8cd1bb5ba..10f942c65ffb9b406b7936eb20d25fd1
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index a7355e673f2496654f0a20944263bbd7035b1993..02546b6554f1546b94f73e4d502a11db26a32df5 100644
+index d196f55231cf4cb9c53cc69bee9a71a0a9301c2a..d3956ceae0229498d69cc3055acb2c59da2ace95 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1438,13 +1438,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1435,13 +1435,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          Preconditions.checkArgument(location.getWorld() != null, "location.world");
          // Paper start - Teleport passenger API
          // Don't allow teleporting between worlds while keeping passengers
@@ -155,7 +155,7 @@ index a7355e673f2496654f0a20944263bbd7035b1993..02546b6554f1546b94f73e4d502a11db
              return false;
          }
          // Paper end
-@@ -1499,6 +1499,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1496,6 +1496,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              this.getHandle().closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.TELEPORT); // Paper - Inventory close reason
          }
  
@@ -163,7 +163,7 @@ index a7355e673f2496654f0a20944263bbd7035b1993..02546b6554f1546b94f73e4d502a11db
          // Check if the fromWorld and toWorld are the same.
          if (fromWorld == toWorld) {
              // Paper start - Teleport API
-@@ -1515,9 +1516,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1512,9 +1513,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              // The respawn reason should never be used if the passed location is non null.
              this.server.getHandle().respawn(entity, true, Entity.RemovalReason.CHANGED_DIMENSION, null, to);
          }

@@ -75,7 +75,7 @@ index 0000000000000000000000000000000000000000..d66d655c0b9d8aca8f4c82c01002851c
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/loot/LootContext.java b/src/main/java/org/bukkit/loot/LootContext.java
-index 470f712e8dda61dadf6eee02751e84ec678b293e..d6fb0359ad2d325786e74c803f69462e1cd9308a 100644
+index bdc21b3dd890330f038f21f5fdd083a63530b5ed..2f9ed774a47350acb84a79043fa3fe7cc64f7c4d 100644
 --- a/src/main/java/org/bukkit/loot/LootContext.java
 +++ b/src/main/java/org/bukkit/loot/LootContext.java
 @@ -15,30 +15,124 @@ public final class LootContext {
@@ -326,7 +326,7 @@ index 470f712e8dda61dadf6eee02751e84ec678b293e..d6fb0359ad2d325786e74c803f69462e
              this.luck = luck;
 @@ -138,6 +280,7 @@ public final class LootContext {
          @NotNull
-         @Deprecated(since = "1.21")
+         @Deprecated(since = "1.21", forRemoval = true)
          public Builder lootingModifier(int modifier) {
 +            this.isLegacy = true; // Paper
              this.lootingModifier = modifier;

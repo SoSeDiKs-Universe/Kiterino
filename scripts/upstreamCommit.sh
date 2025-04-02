@@ -14,7 +14,7 @@ PS1="$"
 
 # Purpur updates
 purpurHash="$1"
-purpur=$(getCommits "PurpurMC/Purpur" "$purpurHash")
+purpur=$(getCommits "PurpurMC/Purpur" "$purpurHash" "HEAD")
 updated="Purpur"
 logsuffix="\n\nPurpur Changes:\n$purpur"
 
