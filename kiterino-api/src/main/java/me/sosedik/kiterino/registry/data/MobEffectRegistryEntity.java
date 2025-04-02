@@ -17,9 +17,9 @@ import org.jspecify.annotations.NullMarked;
 public interface MobEffectRegistryEntity {
 
 	/**
-	 * Provides wrapper around the effect's behaviour
+	 * Provides wrapper around the effect's behavior
 	 *
-	 * @return the wrapper around the effect's behaviour
+	 * @return the wrapper around the effect's behavior
 	 */
 	KiterinoMobEffectBehaviourWrapper wrapper();
 

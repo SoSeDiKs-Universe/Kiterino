@@ -1,29 +1,29 @@
 --- a/net/minecraft/network/chat/ComponentSerialization.java
 +++ b/net/minecraft/network/chat/ComponentSerialization.java
-@@ -54,13 +_,88 @@
+@@ -54,13 +_,95 @@
  
              @Override
              public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, Component object) {
-+                // Kiterino start - Parse items in show_item hover event
++                // Kiterino start - Parse hover events
 +                if (me.sosedik.kiterino.KiterinoConfig.parseItemHoversEverywhere && !DONT_RENDER_TRANSLATABLES.get()) {
 +                    java.util.Locale locale = registryFriendlyByteBuf.adventure$locale;
 +                    if (locale == null) {
 +                        locale = java.util.Locale.US;
 +                    }
-+                    object = replaceHoverItems(null, locale, object);
++                    object = replaceHoverEvent(null, locale, object);
 +                }
 +                Component finalObject = object;
-+                // Kiterino end - Parse items in show_item hover event
++                // Kiterino end - Parse hover events
                  RegistryOps<net.minecraft.nbt.Tag> registryOps = registryFriendlyByteBuf.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE);
                  net.minecraft.nbt.Tag tag = (DONT_RENDER_TRANSLATABLES.get() ? CODEC : ComponentSerialization.localizedCodec(registryFriendlyByteBuf.adventure$locale))
 -                    .encodeStart(registryOps, object).getOrThrow(error -> new io.netty.handler.codec.EncoderException("Failed to encode: " + error + " " + object));
-+                    .encodeStart(registryOps, object).getOrThrow(error -> new io.netty.handler.codec.EncoderException("Failed to encode: " + error + " " + finalObject)); // Kiterino - Parse items in show_item hover event
++                    .encodeStart(registryOps, object).getOrThrow(error -> new io.netty.handler.codec.EncoderException("Failed to encode: " + error + " " + finalObject)); // Kiterino - Parse hover events
                  this.streamCodec.encode(registryFriendlyByteBuf, tag);
              }
          };
      }
-+    // Kiterino start - Parse items in show_item hover event
-+    public static @org.jetbrains.annotations.Nullable Component replaceHoverItems(@org.jetbrains.annotations.Nullable org.bukkit.craftbukkit.entity.CraftPlayer player, java.util.Locale locale, @org.jetbrains.annotations.Nullable Component component) {
++    // Kiterino start - Parse hover events
++    public static @org.jetbrains.annotations.Nullable Component replaceHoverEvent(@org.jetbrains.annotations.Nullable org.bukkit.craftbukkit.entity.CraftPlayer player, java.util.Locale locale, @org.jetbrains.annotations.Nullable Component component) {
 +        if (component == null) {
 +            return null;
 +        }
@@ -36,13 +36,13 @@
 +                children = component.getSiblings();
 +            }
 +            try {
-+                children.replaceAll(child -> replaceHoverItems(player, locale, child));
++                children.replaceAll(child -> replaceHoverEvent(player, locale, child));
 +                // Mutable component with immutable children?
 +            } catch (UnsupportedOperationException ignored1) {
 +                component = component.copy();
 +                children = component.getSiblings();
 +                try {
-+                    children.replaceAll(child -> replaceHoverItems(player, locale, child));
++                    children.replaceAll(child -> replaceHoverEvent(player, locale, child));
 +                    // Shouldn't happen, but just in case
 +                } catch (UnsupportedOperationException ignored2) {
 +                    return component;
@@ -56,37 +56,44 @@
 +            for (int i = 0; i < args.length; i++) {
 +                if (!(args[i] instanceof Component arg)) continue;
 +
-+                args[i] = replaceHoverItems(player, locale, arg);
++                args[i] = replaceHoverEvent(player, locale, arg);
 +            }
 +        }
 +
-+        // Finally replace hover item if found
++        // Finally replace hover if needed
 +        HoverEvent hoverEvent = component.getStyle().hoverEvent;
 +        if (hoverEvent == null) {
 +            return component;
 +        }
 +
-+        HoverEvent.ItemStackInfo value = hoverEvent.getValue(HoverEvent.Action.SHOW_ITEM);
-+        if (value == null) {
-+            return component;
++        HoverEvent.ItemStackInfo showItemValue = hoverEvent.getValue(HoverEvent.Action.SHOW_ITEM);
++        if (showItemValue != null) {
++            var original = showItemValue.getItemStack();
++            var context = me.sosedik.kiterino.modifier.item.context.ItemModifierContext.EMPTY;
++            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, context, original.asBukkitCopy());
++            var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
++            if (bukkitItem != null) {
++                Style style = component.getStyle().withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem))));
++                if (component instanceof MutableComponent mutableComponent) {
++                    mutableComponent.setStyle(style);
++                } else {
++                    component = component.copy().setStyle(style);
++                }
++            }
 +        }
 +
-+        var original = value.getItemStack();
-+        var context = me.sosedik.kiterino.modifier.item.context.ItemModifierContext.EMPTY;
-+        var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, context, original.asBukkitCopy());
-+        var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
-+        if (bukkitItem != null) {
-+            Style style = component.getStyle().withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem))));
-+            if (component instanceof MutableComponent mutableComponent) {
-+                mutableComponent.setStyle(style);
-+            } else {
-+                component = component.copy().setStyle(style);
++        HoverEvent.EntityTooltipInfo showEntityValue = hoverEvent.getValue(HoverEvent.Action.SHOW_ENTITY);
++        if (showEntityValue != null) {
++            net.minecraft.world.entity.EntityType<?> entityType = showEntityValue.type;
++            var bukkitType = org.bukkit.craftbukkit.entity.CraftEntityType.minecraftToBukkit(entityType);
++            if (bukkitType != null && !org.bukkit.NamespacedKey.MINECRAFT.equals(bukkitType.key().namespace())) {
++                component = component.copy().setStyle(component.getStyle().withHoverEvent(null));
 +            }
 +        }
 +
 +        return component;
 +    }
-+    // Kiterino end - Parse items in show_item hover event
++    // Kiterino end - Parse hover events
      // Paper end - adventure; use locale from bytebuf for translation
      public static final StreamCodec<RegistryFriendlyByteBuf, Optional<Component>> TRUSTED_OPTIONAL_STREAM_CODEC = TRUSTED_STREAM_CODEC.apply(
          ByteBufCodecs::optional

@@ -23,7 +23,6 @@ public-f net.minecraft.network.protocol.game.ClientboundContainerSetContentPacke
 public-f net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket itemStack
 public-f net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket offers
 public-f net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket added
-public-f net.minecraft.server.dedicated.DedicatedServerProperties getServerPackInfo(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)Ljava/util/Optional;
 public-f net.minecraft.server.dedicated.DedicatedServerProperties serverResourcePackInfo
 public-f net.minecraft.world.damagesource.CombatTracker entries
 public-f net.minecraft.world.damagesource.CombatTracker inCombat

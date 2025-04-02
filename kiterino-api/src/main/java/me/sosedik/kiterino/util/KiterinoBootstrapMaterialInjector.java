@@ -17,7 +17,7 @@ public class KiterinoBootstrapMaterialInjector {
 		throw new IllegalStateException("Utility class");
 	}
 
-	static @Nullable IKiterinoBootstrapMaterialInjector injector;
+	static @Nullable IKiterinoBootstrapEnumInjector injector;
 
 	/**
 	 * Inject materials in the class using the plugin's name as namespace.
@@ -30,7 +30,7 @@ public class KiterinoBootstrapMaterialInjector {
 	 */
 	public static void injectMaterials(Class<?> materialsClass) {
 		if (injector == null) throw new IllegalStateException("Can't inject Materials outside bootstrap phase!");
-		injector.injectMaterials(materialsClass);
+		injector.injectEnums(materialsClass);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class KiterinoBootstrapMaterialInjector {
 	 */
 	public static Material injectMaterial(Key key) {
 		if (injector == null) throw new IllegalStateException("Can't inject Materials outside bootstrap phase!");
-		return injector.allocateMaterial(key);
+		return (Material) injector.allocateEnum(key);
 	}
 
 }

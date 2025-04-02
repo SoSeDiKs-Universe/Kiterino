@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
++++ b/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
+@@ -86,7 +_,7 @@
+ 
+ public class DefaultAttributes {
+     private static final Logger LOGGER = LogUtils.getLogger();
+-    private static final Map<EntityType<? extends LivingEntity>, AttributeSupplier> SUPPLIERS = ImmutableMap.<EntityType<? extends LivingEntity>, AttributeSupplier>builder()
++    private static final Map<EntityType<? extends LivingEntity>, AttributeSupplier> SUPPLIERS = new java.util.HashMap<>(ImmutableMap.<EntityType<? extends LivingEntity>, AttributeSupplier>builder() // Kiterino - Injecting custom entities
+         .put(EntityType.ALLAY, Allay.createAttributes().build())
+         .put(EntityType.ARMADILLO, Armadillo.createAttributes().build())
+         .put(EntityType.ARMOR_STAND, ArmorStand.createAttributes().build())
+@@ -172,7 +_,17 @@
+         .put(EntityType.ZOMBIE_HORSE, ZombieHorse.createAttributes().build())
+         .put(EntityType.ZOMBIE_VILLAGER, Zombie.createAttributes().build())
+         .put(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglin.createAttributes().build())
+-        .build();
++        .build()); // Kiterino - Injecting custom entities
++
++    // Kiterino start - Injecting custom entities
++    static {
++        me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.attributes();
++    }
++
++    public static void register(EntityType<? extends LivingEntity> entityType, AttributeSupplier supplier) {
++        SUPPLIERS.put(entityType, supplier);
++    }
++    // Kiterino end - Injecting custom entities
+ 
+     public static AttributeSupplier getSupplier(EntityType<? extends LivingEntity> livingEntity) {
+         return SUPPLIERS.get(livingEntity);

@@ -16,7 +16,7 @@
          // Paper start - initialize global and world-defaults configuration
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
-@@ -314,6 +_,12 @@
+@@ -314,6 +_,13 @@
              }
          }
          // Purpur end - UPnP Port Forwarding
@@ -24,6 +24,7 @@
 +        // Kiterino start - Init/destruct injectors
 +        if (!Boolean.getBoolean("Kiterino.testingBase")) {
 +            me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.destruct(); // Kiterino - Injecting custom Materials
++            me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.destruct(); // Kiterino - Injecting custom entities
 +        }
 +        // Kiterino end - Init/destruct injectors
  

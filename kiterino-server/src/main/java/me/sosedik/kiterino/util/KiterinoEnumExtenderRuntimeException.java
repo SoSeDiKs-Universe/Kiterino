@@ -5,9 +5,10 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 // Kiterino - Injecting custom Materials
-public class KiterinoMaterialExtenderRuntimeException extends RuntimeException {
+// Kiterino - Injecting custom entities
+public class KiterinoEnumExtenderRuntimeException extends RuntimeException {
 
-	public KiterinoMaterialExtenderRuntimeException(String message, @Nullable Throwable cause) {
+	public KiterinoEnumExtenderRuntimeException(String message, @Nullable Throwable cause) {
 		super(message, cause);
 	}
 

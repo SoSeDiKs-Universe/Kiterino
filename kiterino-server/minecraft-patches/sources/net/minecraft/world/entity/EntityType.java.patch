@@ -1,0 +1,19 @@
+--- a/net/minecraft/world/entity/EntityType.java
++++ b/net/minecraft/world/entity/EntityType.java
+@@ -1071,6 +_,16 @@
+     private final float spawnDimensionsScale;
+     private final FeatureFlagSet requiredFeatures;
+ 
++    // Kiterino start - Injecting custom entities
++    static {
++        me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.setup();
++    }
++
++    public static <T extends Entity> EntityType<T> register(net.kyori.adventure.key.Key key, EntityType.Builder<T> builder) {
++        return register(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(key.namespace(), key.value())), builder);
++    }
++    // Kiterino end - Injecting custom entities
++
+     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType.Builder<T> builder) {
+         return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, builder.build(key));
+     }

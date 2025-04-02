@@ -18,7 +18,6 @@ import me.sosedik.kiterino.modifier.item.context.packet.MerchantOfferPacketConte
 import me.sosedik.kiterino.modifier.item.context.packet.RecipeBookPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.SlottedItemPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.UnknownEntityDataContext;
-import net.kyori.adventure.key.Key;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.DisplayInfo;
@@ -691,7 +690,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return packet;
     }
 
-    // Kiterino start - Parse items in show_item hover event
+    // Kiterino start - Parse hover events
     private static Packet<?> handle(CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
         if (initialPacket.overlay()) {
             return initialPacket;
@@ -700,11 +699,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
         Component component = initialPacket.content();
-        component = ComponentSerialization.replaceHoverItems(player, player.locale(), component);
+        component = ComponentSerialization.replaceHoverEvent(player, player.locale(), component);
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
         return new ClientboundSystemChatPacket(component, false);
     }
-    // Kiterino end - Parse items in show_item hover event
+    // Kiterino end - Parse hover events
 
     private static @Nullable ItemStack fromBukkit(ItemContextBox contextBox, ItemStack original) {
         var bukkitItem = ItemModifier.modifyItem(contextBox);

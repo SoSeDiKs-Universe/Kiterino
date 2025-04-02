@@ -1,12 +1,13 @@
 --- a/net/minecraft/server/Bootstrap.java
 +++ b/net/minecraft/server/Bootstrap.java
-@@ -43,6 +_,11 @@
+@@ -43,6 +_,12 @@
          if (!isBootstrapped) {
              isBootstrapped = true;
              Instant instant = Instant.now();
 +            // Kiterino start - Init/destruct injectors
 +            if (!Boolean.getBoolean("Kiterino.testingBase")) {
 +                me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.init(); // Kiterino - Injecting custom Materials
++                me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.init(); // Kiterino - Injecting custom entities
 +            }
 +            // Kiterino end - Init/destruct injectors
              io.papermc.paper.plugin.entrypoint.LaunchEntryPointHandler.enterBootstrappers(); // Paper - Entrypoint for bootstrapping

@@ -1,0 +1,11 @@
+--- a/net/minecraft/network/protocol/game/ClientboundAddEntityPacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundAddEntityPacket.java
+@@ -83,7 +_,7 @@
+         this.xRot = Mth.packDegrees(xRot);
+         this.yRot = Mth.packDegrees(yRot);
+         this.yHeadRot = Mth.packDegrees((float)yHeadRot);
+-        this.type = type;
++        this.type = me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.getOrDefault(type, type); // Kiterino - Injecting custom entities
+         this.data = data;
+         this.xa = (int)(Mth.clamp(deltaMovement.x, -3.9, 3.9) * 8000.0);
+         this.ya = (int)(Mth.clamp(deltaMovement.y, -3.9, 3.9) * 8000.0);

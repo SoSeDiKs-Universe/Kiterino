@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
 +++ b/src/main/java/io/papermc/paper/plugin/bootstrap/BootstrapContext.java
-@@ -23,4 +_,15 @@
+@@ -23,4 +_,29 @@
       * @return the lifecycle event manager
       */
      LifecycleEventManager<BootstrapContext> getLifecycleManager();
@@ -15,4 +15,18 @@
 +        me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjector.injectMaterials(materialsClass);
 +    }
 +    // Kiterino end - Material injector helper methods
++
++    // Kiterino start - Injecting custom entities
++    /**
++     * Inject entity types in the class
++     *
++     * @param entityTypesClass class with public static final EntityType instances
++     * @param nmsEntityTypesClass class with public static final NMS EntityType instances
++     * @param entityTypeDataProvider provides EntityTypeData for the entity
++     * @param attributeProvider provides AttributeSupplier for the entity
++     */
++    default void injectEntityTypes(Class<?> entityTypesClass, Class<?> nmsEntityTypesClass, java.util.function.Function<net.kyori.adventure.key.Key, Object> entityTypeDataProvider, java.util.function.Consumer<net.kyori.adventure.key.Key> attributeProvider) {
++        me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjector.injectEntityTypes(entityTypesClass, nmsEntityTypesClass, entityTypeDataProvider, attributeProvider);
++    }
++    // Kiterino end - Injecting custom entities
  }

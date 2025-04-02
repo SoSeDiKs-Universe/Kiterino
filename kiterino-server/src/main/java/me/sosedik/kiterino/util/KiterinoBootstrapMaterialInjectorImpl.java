@@ -21,10 +21,6 @@ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -36,16 +32,12 @@ import static me.sosedik.kiterino.util.KiterinoUnsafeUtil.getField;
  */
 @NullMarked
 // Kiterino - Injecting custom Materials
-public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrapMaterialInjector {
+public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<Material> {
 
-	private final int originalMaterialCount = Material.values().length;
-	private final List<Material> allocated = new ArrayList<>();
 	private final Field materialItemField = getField(CraftMagicNumbers.class, "MATERIAL_ITEM");
 	private final Field itemMaterialField = getField(CraftMagicNumbers.class, "ITEM_MATERIAL");
 	private final Field materialBlockField = getField(CraftMagicNumbers.class, "MATERIAL_BLOCK");
 	private final Field blockMaterialField = getField(CraftMagicNumbers.class, "BLOCK_MATERIAL");
-	private final Field nameField = getField(Enum.class, "name");
-	private final Field ordinalField = getField(Enum.class, "ordinal");
 	private final Field byNameField = getField(Material.class, "BY_NAME");
 	private final Field maxStackField = getField(Material.class, "maxStack");
 	private final Field durabilityField = getField(Material.class, "durability");
@@ -58,112 +50,69 @@ public class KiterinoBootstrapMaterialInjectorImpl implements IKiterinoBootstrap
 	private final Field blockTypeField = getField(Material.class, "blockType");
 	private final Field injectedField = getField(Material.class, "injected");
 
-	@SuppressWarnings("java:S3011")
 	@Override
-	public void injectMaterials(Class<?> materialsClass) {
-		try {
-			for (Field field : materialsClass.getDeclaredFields()) {
-				if (field.getType() != Material.class) continue;
+	public void injectEnum(Material value) throws Exception {
+		NamespacedKey materialKey = value.getKey();
+		Item item = BuiltInRegistries.ITEM.getValueOrThrow(ResourceKey.create(Registries.ITEM, PaperAdventure.asVanilla(materialKey)));
 
-				int modifiers = field.getModifiers();
-				if (!Modifier.isPublic(modifiers)) continue;
-				if (!Modifier.isStatic(modifiers)) continue;
-				if (!Modifier.isFinal(modifiers)) continue;
+		maxStackField.set(value, item.getDefaultMaxStackSize());
+		durabilityField.set(value, (short) (int) item.components().getOrDefault(DataComponents.MAX_DAMAGE, 0));
 
-				Material material = (Material) field.get(null);
-				NamespacedKey materialKey = material.getKey();
-				Item item = BuiltInRegistries.ITEM.getValueOrThrow(ResourceKey.create(Registries.ITEM, PaperAdventure.asVanilla(materialKey)));
+		idField.set(value, 1);
+		legacyField.set(value, false);
+		if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KiterinoBlock kiterinoBlock && kiterinoBlock.getBlockDataClasses() != null) {
+			Class<?> dataClass = kiterinoBlock.getBlockDataClasses().first();
+			ctorField.set(value, dataClass.getConstructor(Material.class, byte.class));
+			dataField.set(value, dataClass);
+		} else {
+			ctorField.set(value, org.bukkit.material.MaterialData.class.getConstructor(Material.class, byte.class));
+			dataField.set(value, org.bukkit.material.MaterialData.class);
+		}
 
-				maxStackField.set(material, item.getDefaultMaxStackSize());
-				durabilityField.set(material, (short) (int) item.components().getOrDefault(DataComponents.MAX_DAMAGE, 0));
+		itemTypeField.set(value, Suppliers.memoize(() -> Registry.ITEM.get(materialKey)));
+		blockTypeField.set(value, Suppliers.memoize(() -> Registry.BLOCK.get(materialKey)));
 
-				idField.set(material, 1);
-				legacyField.set(material, false);
-				if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KiterinoBlock kiterinoBlock && kiterinoBlock.getBlockDataClasses() != null) {
-					Class<?> dataClass = kiterinoBlock.getBlockDataClasses().first();
-					ctorField.set(material, dataClass.getConstructor(Material.class, byte.class));
-					dataField.set(material, dataClass);
-				} else {
-					ctorField.set(material, org.bukkit.material.MaterialData.class.getConstructor(Material.class, byte.class));
-					dataField.set(material, org.bukkit.material.MaterialData.class);
-				}
-
-				itemTypeField.set(material, Suppliers.memoize(() -> Registry.ITEM.get(materialKey)));
-				blockTypeField.set(material, Suppliers.memoize(() -> Registry.BLOCK.get(materialKey)));
-
-				((Map<Material, Item>) materialItemField.get(null)).put(material, item);
-				((Map<Item, Material>) itemMaterialField.get(null)).put(item, material);
-				if (item instanceof BlockItem blockItem) {
-					((Map<Material, Block>) materialBlockField.get(null)).put(material, blockItem.getBlock());
-					((Map<Block, Material>) blockMaterialField.get(null)).put(blockItem.getBlock(), material);
-				}
-
-				allocated.add(material);
-			}
-		} catch (Exception e) {
-			throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material in " + materialsClass, e);
+		((Map<Material, Item>) materialItemField.get(null)).put(value, item);
+		((Map<Item, Material>) itemMaterialField.get(null)).put(item, value);
+		if (item instanceof BlockItem blockItem) {
+			((Map<Material, Block>) materialBlockField.get(null)).put(value, blockItem.getBlock());
+			((Map<Block, Material>) blockMaterialField.get(null)).put(blockItem.getBlock(), value);
 		}
 	}
 
 	@SuppressWarnings({"unchecked", "java:S3011"})
 	@Override
-	public Material allocateMaterial(Key key) {
+	public Material allocateEnum(Key key) {
 		try {
-			Material material = KiterinoUnsafeUtil.allocateInstance(Material.class);
+			Material material = super.allocateEnum(key);
 			injectedField.set(material, true);
 			keyField.set(material, new NamespacedKey(key.namespace(), key.value()));
 
-			String enumName = toMaterialName(key);
-			nameField.set(material, enumName);
+			String enumName = material.name();
+			enumNameField.set(material, enumName);
 			((Map<String, Material>) byNameField.get(null)).put(enumName, material);
 
 			return material;
 		} catch (Exception e) {
-			throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material: " + key, e);
+			throw new KiterinoEnumExtenderRuntimeException("Couldn't extend Material: " + key, e);
 		}
 	}
 
-	@SuppressWarnings("java:S3011")
 	private void finalizeInject() {
-		try {
-			if (allocated.isEmpty()) return;
+		if (allocated.isEmpty()) return;
 
-			Material[] newValues = new Material[originalMaterialCount + allocated.size()];
-			for (int i = 0; i < allocated.size(); i++) {
-				Material material = allocated.get(i);
-				int ordinal = originalMaterialCount + i;
-				ordinalField.set(material, ordinal);
-				newValues[ordinal] = material;
-			}
+		injectAllocated();
 
-			System.arraycopy(Material.values(), 0, newValues, 0, originalMaterialCount);
-			Field valuesField = Material.class.getDeclaredField("$VALUES");
-			KiterinoUnsafeUtil.setField(valuesField, newValues);
-
-			Field enumConstants = Class.class.getDeclaredField("enumConstants");
-			enumConstants.setAccessible(true);
-			enumConstants.set(Material.class, null);
-			Field enumConstantDirectory = Class.class.getDeclaredField("enumConstantDirectory");
-			enumConstantDirectory.setAccessible(true);
-			enumConstantDirectory.set(Material.class, null);
-
-			// Kiterino start - Implement packet item faker for injected items
-			var modifier = KiterinoItemModifierImpl.MODIFIER_IMPL;
-			if (!KiterinoConfig.itemModifiersOrder.contains(modifier.getModifierId())) {
-				ItemModifiersHandlerImpl.modifiers.put(modifier.getModifierId(), modifier);
-				KiterinoConfig.itemModifiersOrder.addLast(modifier.getModifierId());
-				KiterinoConfig.log(Level.WARNING, "Item modifier with id " + modifier.getModifierId() + " is missing from \"item-modifiers.modification-order\" option, but custom item was injected. Forcing the modifier automatically.");
-			} else {
-				modifier.register();
-			}
-			// Kiterino end - Implement packet item faker for injected items
-		} catch (Exception e) {
-			throw new KiterinoMaterialExtenderRuntimeException("Couldn't extend Material", e);
+		// Kiterino start - Implement packet item faker for injected items
+		var modifier = KiterinoItemModifierImpl.MODIFIER_IMPL;
+		if (!KiterinoConfig.itemModifiersOrder.contains(modifier.getModifierId())) {
+			ItemModifiersHandlerImpl.modifiers.put(modifier.getModifierId(), modifier);
+			KiterinoConfig.itemModifiersOrder.addLast(modifier.getModifierId());
+			KiterinoConfig.log(Level.WARNING, "Item modifier with id " + modifier.getModifierId() + " is missing from \"item-modifiers.modification-order\" option, but custom item was injected. Forcing the modifier automatically.");
+		} else {
+			modifier.register();
 		}
-	}
-
-	private static String toMaterialName(Key key) {
-		return key.asString().toUpperCase(Locale.ROOT).replace(':', '_');
+		// Kiterino end - Implement packet item faker for injected items
 	}
 
 	public static void init() {

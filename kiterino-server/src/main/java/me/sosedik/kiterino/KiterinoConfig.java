@@ -130,12 +130,12 @@ public final class KiterinoConfig {
 	}
 	// Kiterino end - Item Modifiers API
 
-	// Kiterino start - Parse items in show_item hover event
+	// Kiterino start - Parse hover events
 	public static boolean parseItemHoversEverywhere;
 	private static void parseItemHoversEverywhere() {
 		parseItemHoversEverywhere = getBoolean(config, "item-modifiers.apply-modifiers-on-all-hover", false, "Apply item modifiers on all show_item hover events in text components.", "By default, they are applied only to system chat messages.", "Only enable if your client is getting kicked due to injected items.");
 	}
-	// Kiterino end - Parse items in show_item hover event
+	// Kiterino end - Parse hover events
 
 	// Kiterino start - Prevent creative from overriding items
 	public static boolean preventCreativeItemOverride;

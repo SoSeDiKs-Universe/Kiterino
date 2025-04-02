@@ -7,10 +7,10 @@ import org.jspecify.annotations.NullMarked;
 
 @ApiStatus.Internal
 @NullMarked
-interface IKiterinoBootstrapMaterialInjector {
+interface IKiterinoBootstrapEnumInjector {
 
-	void injectMaterials(Class<?> materialsClass);
+	void injectEnums(Class<?> enumsClass);
 
-	Material allocateMaterial(Key key);
+	Object allocateEnum(Key key);
 
 }

@@ -1,0 +1,57 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityTypes.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityTypes.java
+@@ -480,7 +_,7 @@
+         register(new EntityTypeData<>(EntityType.PLAYER, Player.class, CraftPlayer::new, null)); // Cannot spawn a player
+     }
+ 
+-    private static void register(EntityTypeData<?, ?> typeData) {
++    public static void register(EntityTypeData<?, ?> typeData) { // Kiterino - private -> public - Injecting custom entities
+         EntityTypeData<?, ?> other = CraftEntityTypes.CLASS_TYPE_DATA.put(typeData.entityClass(), typeData);
+         if (other != null) {
+             Bukkit.getLogger().warning(String.format("Found multiple entity type data for class %s, replacing '%s' with new value '%s'", typeData.entityClass().getName(), other, typeData));
+@@ -496,15 +_,15 @@
+         return spawnData -> entityTypes.create(spawnData.minecraftWorld(), EntitySpawnReason.COMMAND);
+     }
+ 
+-    private static <R extends net.minecraft.world.entity.LivingEntity> Function<SpawnData, R> createLiving(net.minecraft.world.entity.EntityType<R> entityTypes) {
++    public static <R extends net.minecraft.world.entity.LivingEntity> Function<SpawnData, R> createLiving(net.minecraft.world.entity.EntityType<R> entityTypes) { // Kiterino - private -> public - Injecting custom entities
+         return CraftEntityTypes.combine(CraftEntityTypes.fromEntityType(entityTypes), CraftEntityTypes.ABS_MOVE);
+     }
+ 
+-    private static <R extends AbstractHurtingProjectile> Function<SpawnData, R> createFireball(net.minecraft.world.entity.EntityType<R> entityTypes) {
++    public static <R extends AbstractHurtingProjectile> Function<SpawnData, R> createFireball(net.minecraft.world.entity.EntityType<R> entityTypes) { // Kiterino - private -> public - Injecting custom entities
+         return CraftEntityTypes.combine(CraftEntityTypes.createAndMove(entityTypes), CraftEntityTypes.DIRECTION);
+     }
+ 
+-    private static <R extends AbstractMinecart> Function<SpawnData, R> createMinecart(net.minecraft.world.entity.EntityType<R> entityTypes) {
++    public static <R extends AbstractMinecart> Function<SpawnData, R> createMinecart(net.minecraft.world.entity.EntityType<R> entityTypes) { // Kiterino - private -> public - Injecting custom entities
+         return spawnData -> {
+             if (spawnData.normalWorld()) {
+                 return AbstractMinecart.createMinecart(spawnData.minecraftWorld(), spawnData.x(), spawnData.y(), spawnData.z(), entityTypes, EntitySpawnReason.TRIGGERED, ItemStack.EMPTY, null);
+@@ -514,22 +_,22 @@
+         };
+     }
+ 
+-    private static <R extends net.minecraft.world.entity.Entity> Function<SpawnData, R> createAndMove(net.minecraft.world.entity.EntityType<R> entityTypes) {
++    public static <R extends net.minecraft.world.entity.Entity> Function<SpawnData, R> createAndMove(net.minecraft.world.entity.EntityType<R> entityTypes) { // Kiterino - private -> public - Injecting custom entities
+         return CraftEntityTypes.combine(CraftEntityTypes.fromEntityType(entityTypes), CraftEntityTypes.MOVE);
+     }
+ 
+-    private static <R extends net.minecraft.world.entity.Entity> Function<SpawnData, R> createAndMoveEmptyRot(net.minecraft.world.entity.EntityType<R> entityTypes) {
++    public static <R extends net.minecraft.world.entity.Entity> Function<SpawnData, R> createAndMoveEmptyRot(net.minecraft.world.entity.EntityType<R> entityTypes) { // Kiterino - private -> public - Injecting custom entities
+         return CraftEntityTypes.combine(CraftEntityTypes.fromEntityType(entityTypes), CraftEntityTypes.MOVE_EMPTY_ROT);
+     }
+ 
+-    private static <R extends net.minecraft.world.entity.Entity> Function<SpawnData, R> createAndSetPos(net.minecraft.world.entity.EntityType<R> entityTypes) {
++    public static <R extends net.minecraft.world.entity.Entity> Function<SpawnData, R> createAndSetPos(net.minecraft.world.entity.EntityType<R> entityTypes) { // Kiterino - private -> public - Injecting custom entities
+         return CraftEntityTypes.combine(CraftEntityTypes.fromEntityType(entityTypes), CraftEntityTypes.POS);
+     }
+ 
+     private record HangingData(boolean randomize, BlockPos position, Direction direction) {
+     }
+ 
+-    private static <E extends Hanging, R extends HangingEntity> Function<SpawnData, R> createHanging(Class<E> clazz, BiFunction<SpawnData, HangingData, R> spawnFunction) {
++    public static <E extends Hanging, R extends HangingEntity> Function<SpawnData, R> createHanging(Class<E> clazz, BiFunction<SpawnData, HangingData, R> spawnFunction) { // Kiterino - private -> public - Injecting custom entities
+         return spawnData -> {
+             boolean randomizeData = spawnData.randomizeData();
+             BlockFace face = BlockFace.SELF;
