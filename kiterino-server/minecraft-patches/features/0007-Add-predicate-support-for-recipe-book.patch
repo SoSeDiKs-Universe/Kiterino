@@ -10,51 +10,42 @@ Implementation details:
 - Vanilla limitations still apply: no damaged/enchanted/renamed items.
 
 diff --git a/io/papermc/paper/inventory/recipe/ItemOrExact.java b/io/papermc/paper/inventory/recipe/ItemOrExact.java
-index ce745e49cd54fe3ae187785563a1bd311d14b5b2..ec577c5fa6d4b295790d0b6044785e4ee02a8164 100644
+index ce745e49cd54fe3ae187785563a1bd311d14b5b2..4e9e881ffb7ef09a458482ae7167ec658477a46c 100644
 --- a/io/papermc/paper/inventory/recipe/ItemOrExact.java
 +++ b/io/papermc/paper/inventory/recipe/ItemOrExact.java
-@@ -3,7 +3,7 @@ package io.papermc.paper.inventory.recipe;
- import net.minecraft.core.Holder;
- import net.minecraft.world.item.ItemStack;
- 
--public sealed interface ItemOrExact permits ItemOrExact.Item, ItemOrExact.Exact {
-+public sealed interface ItemOrExact permits ItemOrExact.Item, ItemOrExact.Exact, ItemOrExact.Predicate { // Kiterino - Add predicate support for the recipe book
- 
-     int getMaxStackSize();
- 
-@@ -60,4 +60,30 @@ public sealed interface ItemOrExact permits ItemOrExact.Item, ItemOrExact.Exact
-             return ItemStack.hashItemAndComponents(this.stack);
+@@ -37,7 +37,13 @@ public sealed interface ItemOrExact permits ItemOrExact.Item, ItemOrExact.Exact
          }
      }
+ 
+-    record Exact(ItemStack stack) implements ItemOrExact {
++    record Exact(ItemStack stack, java.util.function.@org.jspecify.annotations.Nullable Predicate<org.bukkit.inventory.ItemStack> predicate) implements ItemOrExact { // Kiterino - Add predicate support for the recipe book
 +
-+    // Kiterino start - Add predicate support for the recipe book
-+    record Predicate(ItemStack stack, java.util.function.Predicate<org.bukkit.inventory.ItemStack> predicate) implements ItemOrExact {
-+
-+        @Override
-+        public int getMaxStackSize() {
-+            return this.stack.getMaxStackSize();
++        // Kiterino start - Add predicate support for the recipe book
++        public Exact(ItemStack stack) {
++            this(stack, null);
 +        }
-+
-+        @Override
-+        public boolean matches(final ItemStack stack) {
-+            return this.predicate.test(stack.asBukkitMirror());
-+        }
-+
-+        @Override
-+        public boolean equals(final Object obj) {
-+            if (!(obj instanceof final Predicate other)) return false;
-+            return ItemStack.isSameItemSameComponents(this.stack, other.stack) && java.util.Objects.equals(this.predicate, other.predicate);
-+        }
-+
-+        @Override
-+        public int hashCode() {
-+            return ItemStack.hashItemAndComponents(this.stack);
-+        }
-+    }
-+    // Kiterino end - Add predicate support for the recipe book
- }
++        // Kiterino end - Add predicate support for the recipe book
+ 
+         @Override
+         public int getMaxStackSize() {
+@@ -46,13 +52,14 @@ public sealed interface ItemOrExact permits ItemOrExact.Item, ItemOrExact.Exact
+ 
+         @Override
+         public boolean matches(final ItemStack stack) {
++            if (this.predicate != null) return this.predicate.test(stack.asBukkitMirror()); // Kiterino - Add predicate support for the recipe book
+             return ItemStack.isSameItemSameComponents(this.stack, stack);
+         }
+ 
+         @Override
+         public boolean equals(final Object obj) {
+             if (!(obj instanceof final Exact otherExact)) return false;
+-            return ItemStack.isSameItemSameComponents(this.stack, otherExact.stack);
++            return ItemStack.isSameItemSameComponents(this.stack, otherExact.stack) && java.util.Objects.equals(this.predicate, otherExact.predicate); // Kiterino - Add predicate support for the recipe book
+         }
+ 
+         @Override
 diff --git a/io/papermc/paper/inventory/recipe/StackedContentsExtrasMap.java b/io/papermc/paper/inventory/recipe/StackedContentsExtrasMap.java
-index f47c12e9dd6cfa857ca07a764edc22de372e25b6..41f880763b148a80d6ab9bb6b6e236915606ca3c 100644
+index f47c12e9dd6cfa857ca07a764edc22de372e25b6..487d3b3f25aa4c73d7e5d957b06a90c7df200ae5 100644
 --- a/io/papermc/paper/inventory/recipe/StackedContentsExtrasMap.java
 +++ b/io/papermc/paper/inventory/recipe/StackedContentsExtrasMap.java
 @@ -16,6 +16,7 @@ public final class StackedContentsExtrasMap {
@@ -65,20 +56,28 @@ index f47c12e9dd6cfa857ca07a764edc22de372e25b6..41f880763b148a80d6ab9bb6b6e23691
  
      public StackedContentsExtrasMap(final StackedContents<ItemOrExact> contents) {
          this.contents = contents;
-@@ -24,6 +25,12 @@ public final class StackedContentsExtrasMap {
+@@ -23,7 +24,13 @@ public final class StackedContentsExtrasMap {
+ 
      public void initialize(final Recipe<?> recipe) {
          this.exactIngredients.clear();
++        this.predicateIngredients.clear(); // Kiterino - Add predicate support for the recipe book
          for (final Ingredient ingredient : recipe.placementInfo().ingredients()) {
 +            // Kiterino start - Add predicate support for the recipe book
 +            if (ingredient.predicate != null) {
 +                ingredient.itemStacks().forEach(item -> this.predicateIngredients.put(item, ingredient.predicate));
-+                continue;
 +            }
 +            // Kiterino end - Add predicate support for the recipe book
              if (ingredient.isExact()) {
                  this.exactIngredients.addAll(ingredient.itemStacks());
              }
-@@ -55,10 +62,18 @@ public final class StackedContentsExtrasMap {
+@@ -49,18 +56,33 @@ public final class StackedContentsExtrasMap {
+     public void resetExtras() {
+         // clear previous extra ids
+         for (final ItemStack extra : this.exactIngredients) {
+-            this.contents.amounts.removeInt(new ItemOrExact.Exact(extra));
++            this.contents.amounts.removeInt(new ItemOrExact.Exact(extra, this.predicateIngredients.get(extra))); // Kiterino - Add predicate support for the recipe book
+         }
+         for (final Object2IntMap.Entry<ItemOrExact.Item> entry : this.regularRemoved.object2IntEntrySet()) {
              this.contents.amounts.addTo(entry.getKey(), entry.getIntValue());
          }
          this.exactIngredients.clear();
@@ -87,18 +86,42 @@ index f47c12e9dd6cfa857ca07a764edc22de372e25b6..41f880763b148a80d6ab9bb6b6e23691
      }
  
      public boolean accountStack(final ItemStack stack, final int count) {
+-        if (this.exactIngredients.contains(stack)) {
+-            this.contents.account(new ItemOrExact.Exact(stack), count);
 +        // Kiterino start - Add predicate support for the recipe book
 +        java.util.function.Predicate<org.bukkit.inventory.ItemStack> predicate = this.predicateIngredients.get(stack);
-+        if (predicate != null) {
-+            this.contents.account(new ItemOrExact.Predicate(stack, predicate), count);
-+            return true;
++        if (predicate != null && !predicate.test(stack.asBukkitMirror())) {
++            return false;
 +        }
-+        // Kiterino end - Add predicate support for the recipe book
-         if (this.exactIngredients.contains(stack)) {
-             this.contents.account(new ItemOrExact.Exact(stack), count);
++        if (predicate == null) {
++            for (java.util.function.Predicate<org.bukkit.inventory.ItemStack> p : this.predicateIngredients.values()) {
++                if (p.test(stack.asBukkitMirror())) {
++                    predicate = p;
++                    break;
++                }
++            }
++        }
++        if (predicate != null || this.exactIngredients.contains(stack)) {
++            this.contents.account(new ItemOrExact.Exact(stack, predicate), count);
++            // Kiterino end - Add predicate support for the recipe book
              return true;
+         }
+         return false;
+diff --git a/net/minecraft/world/entity/player/StackedItemContents.java b/net/minecraft/world/entity/player/StackedItemContents.java
+index 83ccde54c625d40dc595e000c533f60aa929bd5a..ac5d668f9e05124a7338df51054db41c1b2bebe0 100644
+--- a/net/minecraft/world/entity/player/StackedItemContents.java
++++ b/net/minecraft/world/entity/player/StackedItemContents.java
+@@ -29,7 +29,7 @@ public class StackedItemContents {
+     public void accountStack(ItemStack stack, int maxStackSize) {
+         if (!stack.isEmpty()) {
+             int min = Math.min(maxStackSize, stack.getCount());
+-            if (this.extrasMap != null && !stack.getComponentsPatch().isEmpty() && this.extrasMap.accountStack(stack, min)) return; // Paper - Improve exact choice recipe ingredients; if an exact ingredient, don't include it
++            if (this.extrasMap != null /*&& !stack.getComponentsPatch().isEmpty() */&& this.extrasMap.accountStack(stack, min)) return; // Paper - Improve exact choice recipe ingredients; if an exact ingredient, don't include it // Kiterino - Add predicate support for the recipe book
+             this.raw.account(new io.papermc.paper.inventory.recipe.ItemOrExact.Item(stack.getItemHolder()), min);
+         }
+     }
 diff --git a/net/minecraft/world/item/crafting/Ingredient.java b/net/minecraft/world/item/crafting/Ingredient.java
-index 4ef10f452905ff66d74ff20052d6bbf4ae66e44f..1dc013c06f23c99d26ce79ef3d67ec16eb00b2e4 100644
+index 4ef10f452905ff66d74ff20052d6bbf4ae66e44f..57bad6198405597dc9350b91f4241f10643e434b 100644
 --- a/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/net/minecraft/world/item/crafting/Ingredient.java
 @@ -36,7 +36,7 @@ public final class Ingredient implements StackedContents.IngredientInfo<io.paper
@@ -106,18 +129,35 @@ index 4ef10f452905ff66d74ff20052d6bbf4ae66e44f..1dc013c06f23c99d26ce79ef3d67ec16
      @javax.annotation.Nullable
      public java.util.Set<ItemStack> itemStacks; // Paper - Improve exact choice recipe ingredients
 -    public Predicate<org.bukkit.inventory.ItemStack> predicate; // Purpur - Add predicate to recipe's ExactChoice ingredient
-+    public @javax.annotation.Nullable Predicate<org.bukkit.inventory.ItemStack> predicate; // Purpur - Add predicate to recipe's ExactChoice ingredient // Kiterino - Mark nullable - Add predicate support for the recipe book
++    public @org.jspecify.annotations.Nullable Predicate<org.bukkit.inventory.ItemStack> predicate; // Purpur - Add predicate to recipe's ExactChoice ingredient // Kiterino - Mark nullable - Add predicate support for the recipe book
  
      public boolean isExact() {
          return this.itemStacks != null;
-@@ -105,6 +105,10 @@ public final class Ingredient implements StackedContents.IngredientInfo<io.paper
+@@ -85,7 +85,7 @@ public final class Ingredient implements StackedContents.IngredientInfo<io.paper
+     @Override
+     public boolean test(ItemStack stack) {
+         // CraftBukkit start
+-        if (this.isExact()) {
++        if (this.predicate == null && this.isExact()) { // Kiterino - Add predicate support for the recipe book
+             return this.itemStacks.contains(stack); // Paper - Improve exact choice recipe ingredients (hashing FTW!)
+         }
+         // Purpur start - Add predicate to recipe's ExactChoice ingredient
+@@ -103,15 +103,15 @@ public final class Ingredient implements StackedContents.IngredientInfo<io.paper
+         return switch (itemOrExact) {
+             case io.papermc.paper.inventory.recipe.ItemOrExact.Item(final Holder<Item> item) ->
                  !this.isExact() && this.values.contains(item);
-             case io.papermc.paper.inventory.recipe.ItemOrExact.Exact(final ItemStack exact) ->
-                 this.isExact() && this.itemStacks.contains(exact);
-+            // Kiterino start - Add predicate support for the recipe book
-+            case io.papermc.paper.inventory.recipe.ItemOrExact.Predicate p ->
-+                this.predicate != null && this.predicate.test(p.stack().asBukkitMirror());
-+            // Kiterino end - Add predicate support for the recipe book
+-            case io.papermc.paper.inventory.recipe.ItemOrExact.Exact(final ItemStack exact) ->
+-                this.isExact() && this.itemStacks.contains(exact);
++            case io.papermc.paper.inventory.recipe.ItemOrExact.Exact(final ItemStack exact, java.util.function.@org.jspecify.annotations.Nullable Predicate<org.bukkit.inventory.ItemStack> predicate) -> // Kiterino - Add predicate support for the recipe book
++                predicate == null ? (this.isExact() && this.itemStacks.contains(exact)) : predicate.test(exact.asBukkitMirror()); // Kiterino - Add predicate support for the recipe book
          };
          // Paper end - Improve exact choice recipe ingredients
      }
+ 
+     @Override
+     public boolean equals(Object other) {
+-        return other instanceof Ingredient ingredient && Objects.equals(this.values, ingredient.values) && Objects.equals(this.itemStacks, ingredient.itemStacks); // CraftBukkit
++        return other instanceof Ingredient ingredient && Objects.equals(this.values, ingredient.values) && Objects.equals(this.itemStacks, ingredient.itemStacks) && Objects.equals(this.predicate, ingredient.predicate); // CraftBukkit // Kiterino - Add predicate support for the recipe book
+     }
+ 
+     public static Ingredient of(ItemLike item) {

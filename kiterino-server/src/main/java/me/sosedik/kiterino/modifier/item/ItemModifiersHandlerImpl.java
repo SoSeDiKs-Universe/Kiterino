@@ -56,6 +56,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
 import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.item.ItemStack;
@@ -83,6 +84,7 @@ import org.bukkit.block.BlockType;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftEquipmentSlot;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
 import org.bukkit.entity.EntityType;
@@ -383,45 +385,35 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         ItemStack original;
         switch (entity) {
             case ItemEntity droppedItem -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM, droppedItem);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), droppedItem);
                 original = droppedItem.getItem();
             }
             case ItemFrame itemFrame -> {
-                var entityType = itemFrame instanceof GlowItemFrame ? EntityType.GLOW_ITEM_FRAME : EntityType.ITEM_FRAME;
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, itemFrame);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemFrame);
                 original = itemFrame.getItem();
             }
             case ThrowableItemProjectile throwableProjectile -> {
-                EntityType entityType = switch (throwableProjectile) {
-                    case Snowball snowball -> EntityType.SNOWBALL;
-                    case ThrownEgg thrownEgg -> EntityType.EGG;
-                    case ThrownEnderpearl thrownEnderpearl -> EntityType.ENDER_PEARL;
-                    case ThrownExperienceBottle thrownExperienceBottle -> EntityType.EXPERIENCE_BOTTLE;
-                    default -> EntityType.POTION;
-                };
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, throwableProjectile);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), throwableProjectile);
                 original = throwableProjectile.getItem();
             }
             case EyeOfEnder eyeOfEnder -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.EYE_OF_ENDER, eyeOfEnder);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), eyeOfEnder);
                 original = eyeOfEnder.getItem();
             }
             case FireworkRocketEntity firework -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.FIREWORK_ROCKET, firework);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), firework);
                 original = firework.getItem();
             }
             case Fireball fireball -> {
-                var entityType = fireball instanceof LargeFireball ? EntityType.FIREBALL : EntityType.SMALL_FIREBALL;
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, fireball);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), fireball);
                 original = fireball.getItem();
             }
             case AbstractWindCharge windCharge -> {
-                var entityType = windCharge instanceof WindCharge ? EntityType.WIND_CHARGE : EntityType.BREEZE_WIND_CHARGE;
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, entityType, windCharge);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), windCharge);
                 original = windCharge.getItem();
             }
             case Display.ItemDisplay itemDisplay -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, EntityType.ITEM_DISPLAY, itemDisplay);
+                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemDisplay);
                 original = itemDisplay.getItemStack();
             }
             default -> {
