@@ -5,7 +5,6 @@ import org.bukkit.entity.EntityType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

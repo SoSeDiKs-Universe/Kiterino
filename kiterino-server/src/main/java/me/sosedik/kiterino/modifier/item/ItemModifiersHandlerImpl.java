@@ -21,6 +21,8 @@ import me.sosedik.kiterino.modifier.item.context.packet.UnknownEntityDataContext
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -44,21 +46,14 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.EyeOfEnder;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
-import net.minecraft.world.entity.projectile.LargeFireball;
-import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.entity.projectile.ThrownEgg;
-import net.minecraft.world.entity.projectile.ThrownEnderpearl;
-import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
-import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
-import net.minecraft.world.entity.projectile.windcharge.WindCharge;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -87,7 +82,6 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -480,16 +474,34 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             RecipeDisplayEntry contents = entry.contents();
             RecipeDisplay display = contents.display();
             RecipeDisplay newDisplay = replaceRecipeDisplay(packet, ItemModifierContextType.RECIPE_BOOK, player, display);
-            if (display != newDisplay) {
+
+            boolean modifiedRemainders = false;
+            Optional<List<Ingredient>> craftingRemainders = contents.craftingRequirements();
+            if (craftingRemainders.isPresent()) {
+                List<Ingredient> ingredients = new ArrayList<>(craftingRemainders.get());
+                var ingredientContext = new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT);
+                for (int i = 0; i < ingredients.size(); i++) {
+                    Ingredient ingredient = ingredients.get(i);
+                    Ingredient newIngredient = replaceIngredient(player, ItemModifierContextType.RECIPE_BOOK, ingredientContext, ingredient);
+                    if (ingredient != newIngredient) {
+                        ingredients.set(i, newIngredient);
+                        modifiedRemainders = true;
+                    }
+                }
+                if (modifiedRemainders)
+                    craftingRemainders = Optional.of(ingredients);
+            }
+
+            if (display != newDisplay || modifiedRemainders) {
                 entries.set(r, new ClientboundRecipeBookAddPacket.Entry(
-                        new RecipeDisplayEntry(
-                                contents.id(),
-                                newDisplay,
-                                contents.group(),
-                                contents.category(),
-                                contents.craftingRequirements()
-                        ),
-                        entry.flags()
+                    new RecipeDisplayEntry(
+                        contents.id(),
+                        newDisplay,
+                        contents.group(),
+                        contents.category(),
+                        craftingRemainders
+                    ),
+                    entry.flags()
                 ));
             }
         }
@@ -573,17 +585,44 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     private static Ingredient replaceIngredient(CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, Ingredient ingredient) {
+        final boolean[] modified = {false};
+
         Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
+
+        List<Holder<Item>> values = superDirtyCopy.values.stream().toList();
+        List<Holder<Item>> valuesCleaned = values.stream().map(holder -> {
+            if (holder.unwrapKey().map(itemResourceKey -> "minecraft".equals(itemResourceKey.location().getNamespace())).orElse(true)) {
+                return holder;
+            }
+
+            Item item = holder.value();
+            org.bukkit.inventory.ItemStack parsed = ItemModifier.modifyItem(player, new ItemStack(item).asBukkitMirror());
+            if (parsed == null) {
+                return holder;
+            }
+
+            modified[0] = true;
+	        return Holder.direct(ItemStack.fromBukkitCopy(parsed).getItem());
+        }).toList();
+        if (modified[0]) {
+            superDirtyCopy.values = HolderSet.direct(valuesCleaned.stream().map(item -> item.value().builtInRegistryHolder()).toList());
+        }
+
         Set<ItemStack> items = superDirtyCopy.itemStacks();
         if (items == null) {
-            return ingredient;
+            return modified[0] ? superDirtyCopy : ingredient;
         }
 
         Set<ItemStack> updatedItems = new HashSet<>();
         for (ItemStack item : items) {
             ItemStack result = replaceItem(player, contextType, context, item);
             updatedItems.add(result == null ? item : result);
+            if (result != null) modified[0] = true;
         }
+        if (!modified[0]) {
+            return ingredient;
+        }
+
         superDirtyCopy.itemStacks = updatedItems;
         return superDirtyCopy;
     }

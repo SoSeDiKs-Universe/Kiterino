@@ -28,4 +28,5 @@ public-f net.minecraft.world.damagesource.CombatTracker entries
 public-f net.minecraft.world.damagesource.CombatTracker inCombat
 public-f net.minecraft.world.damagesource.CombatTracker mob
 public-f net.minecraft.world.damagesource.CombatTracker takingDamage
+public-f net.minecraft.world.item.crafting.Ingredient values
 public-f net.minecraft.world.item.trading.MerchantOffer result
