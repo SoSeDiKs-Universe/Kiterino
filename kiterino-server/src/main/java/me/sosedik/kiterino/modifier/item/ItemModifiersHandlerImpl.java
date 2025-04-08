@@ -649,22 +649,22 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             if (result == null) continue;
 
             var displayInfo = new DisplayInfo(
-                    result,
-                    oldDisplay.getTitle(),
-                    oldDisplay.getDescription(),
-                    oldDisplay.getBackground(),
-                    oldDisplay.getType(),
-                    oldDisplay.shouldShowToast(),
-                    oldDisplay.shouldAnnounceChat(),
-                    oldDisplay.isHidden()
+                result,
+                oldDisplay.getTitle(),
+                oldDisplay.getDescription(),
+                oldDisplay.getBackground(),
+                oldDisplay.getType(),
+                oldDisplay.shouldShowToast(),
+                oldDisplay.shouldAnnounceChat(),
+                oldDisplay.isHidden()
             );
             var advancement = new Advancement(
-                    oldAdvancement.parent(),
-                    Optional.of(displayInfo),
-                    oldAdvancement.rewards(),
-                    oldAdvancement.criteria(),
-                    oldAdvancement.requirements(),
-                    oldAdvancement.sendsTelemetryEvent()
+                oldAdvancement.parent(),
+                Optional.of(displayInfo),
+                oldAdvancement.rewards(),
+                oldAdvancement.criteria(),
+                oldAdvancement.requirements(),
+                oldAdvancement.sendsTelemetryEvent()
             );
             var holder = new AdvancementHolder(oldHolder.id(), advancement);
             advancements.set(i, holder);

@@ -77,16 +77,3 @@
  
      if (rootProject.childProjects["test-plugin"] != null) {
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
-@@ -354,3 +_,12 @@
-     classpath(tasks.createReobfPaperclipJar.flatMap { it.outputZip })
-     mainClass.set(null as String?)
- }
-+
-+// Kiterino start - Hide irrelevant compilation warnings
-+tasks.withType<JavaCompile> {
-+    val compilerArgs = options.compilerArgs
-+    compilerArgs.add("-Xlint:-module")
-+    compilerArgs.add("-Xlint:-removal")
-+    compilerArgs.add("-Xlint:-dep-ann")
-+}
-+// Kiterino end - Hide irrelevant compilation warnings
