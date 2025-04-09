@@ -6,10 +6,10 @@ Subject: [PATCH] Paper PR - Combat tracker API
 https://github.com/PaperMC/Paper/pull/11853
 
 diff --git a/src/main/java/io/papermc/paper/InternalAPIBridge.java b/src/main/java/io/papermc/paper/InternalAPIBridge.java
-index 511da534a02b78efa0d46a6b3405c183984a4b14..acc210287cadfc7aca475d68694241f5749fa05f 100644
+index 861c42cbfa96f246004a01fa516c199b32833e26..1d3a39a808ab7891ac4253cec33c2c19d326e8ec 100644
 --- a/src/main/java/io/papermc/paper/InternalAPIBridge.java
 +++ b/src/main/java/io/papermc/paper/InternalAPIBridge.java
-@@ -5,6 +5,14 @@ import org.bukkit.damage.DamageEffect;
+@@ -6,6 +6,14 @@ import org.bukkit.damage.DamageEffect;
  import org.jetbrains.annotations.ApiStatus;
  import org.jspecify.annotations.NullMarked;
  
@@ -24,10 +24,10 @@ index 511da534a02b78efa0d46a6b3405c183984a4b14..acc210287cadfc7aca475d68694241f5
  /**
   * Static bridge to the server internals.
   * <p>
-@@ -35,5 +43,30 @@ public interface InternalAPIBridge {
-      * @return the damage effect.
-      */
-     DamageEffect getDamageEffect(String key);
+@@ -45,5 +53,30 @@ public interface InternalAPIBridge {
+     @Deprecated(forRemoval = true, since = "1.21.5")
+     @ApiStatus.ScheduledForRemoval(inVersion = "1.22")
+     Biome constructLegacyCustomBiome();
 +
 +    // Kiterino start - Paper PR - Combat tracker API
 +    /**
@@ -57,7 +57,7 @@ index 511da534a02b78efa0d46a6b3405c183984a4b14..acc210287cadfc7aca475d68694241f5
  
 diff --git a/src/main/java/io/papermc/paper/world/damagesource/CombatEntry.java b/src/main/java/io/papermc/paper/world/damagesource/CombatEntry.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..bbd6cc1d9c950843c4ecca0866c2981d5c178433
+index 0000000000000000000000000000000000000000..597d009611afecff3e6097d20ac0e2a9e5e9754e
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/world/damagesource/CombatEntry.java
 @@ -0,0 +1,79 @@
@@ -81,68 +81,68 @@ index 0000000000000000000000000000000000000000..bbd6cc1d9c950843c4ecca0866c2981d
 +@ApiStatus.NonExtendable
 +public interface CombatEntry {
 +
-+    /**
-+     * Gets the damage source
-+     *
-+     * @return the damage source
-+     */
-+    DamageSource getDamageSource();
++	/**
++	 * Gets the damage source
++	 *
++	 * @return the damage source
++	 */
++	DamageSource getDamageSource();
 +
-+    /**
-+     * Gets the amount of damage caused
-+     *
-+     * @return the amount of damage caused
-+     */
-+    float getDamage();
++	/**
++	 * Gets the amount of damage caused
++	 *
++	 * @return the amount of damage caused
++	 */
++	float getDamage();
 +
-+    /**
-+     * Gets the fall location at the time of this damage
-+     *
-+     * @return the fall location
-+     */
-+    @Nullable FallLocationType getFallLocation();
++	/**
++	 * Gets the fall location at the time of this damage
++	 *
++	 * @return the fall location
++	 */
++	@Nullable FallLocationType getFallLocation();
 +
-+    /**
-+     * Gets the fall distance at the time of this damage
-+     *
-+     * @return the fall distance
-+     */
-+    float getFallDistance();
++	/**
++	 * Gets the fall distance at the time of this damage
++	 *
++	 * @return the fall distance
++	 */
++	float getFallDistance();
 +
-+    /**
-+     * Creates a new combat entry.
-+     * <br>
-+     * The fall location and fall distance will be calculated from the entity's current state.
-+     *
-+     * @param entity entity
-+     * @param damageSource damage source
-+     * @param damage damage amount
-+     * @return combat entry
-+     * @see #combatEntry(DamageSource, float, FallLocationType, float)
-+     */
-+    static CombatEntry combatEntry(LivingEntity entity, DamageSource damageSource, float damage) {
-+        return InternalAPIBridge.get().createCombatEntry(entity, damageSource, damage);
-+    }
++	/**
++	 * Creates a new combat entry.
++	 * <br>
++	 * The fall location and fall distance will be calculated from the entity's current state.
++	 *
++	 * @param entity entity
++	 * @param damageSource damage source
++	 * @param damage damage amount
++	 * @return combat entry
++	 * @see #combatEntry(DamageSource, float, FallLocationType, float)
++	 */
++	static CombatEntry combatEntry(LivingEntity entity, DamageSource damageSource, float damage) {
++		return InternalAPIBridge.get().createCombatEntry(entity, damageSource, damage);
++	}
 +
-+    /**
-+     * Creates a new combat entry
-+     *
-+     * @param damageSource damage source
-+     * @param damage damage amount
-+     * @param fallLocationType fall location type
-+     * @param fallDistance fall distance
-+     * @return a new combat entry
-+     * @see LivingEntity#calculateFallLocationType()
-+     * @see Entity#getFallDistance()
-+     */
-+    static CombatEntry combatEntry(DamageSource damageSource, float damage, @Nullable FallLocationType fallLocationType, float fallDistance) {
-+        return InternalAPIBridge.get().createCombatEntry(damageSource, damage, fallLocationType, fallDistance);
-+    }
++	/**
++	 * Creates a new combat entry
++	 *
++	 * @param damageSource damage source
++	 * @param damage damage amount
++	 * @param fallLocationType fall location type
++	 * @param fallDistance fall distance
++	 * @return a new combat entry
++	 * @see LivingEntity#calculateFallLocationType()
++	 * @see Entity#getFallDistance()
++	 */
++	static CombatEntry combatEntry(DamageSource damageSource, float damage, @Nullable FallLocationType fallLocationType, float fallDistance) {
++		return InternalAPIBridge.get().createCombatEntry(damageSource, damage, fallLocationType, fallDistance);
++	}
 +
 +}
 diff --git a/src/main/java/io/papermc/paper/world/damagesource/CombatTracker.java b/src/main/java/io/papermc/paper/world/damagesource/CombatTracker.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e3675324f9efaefd956f0368ad88bcc4f93c7727
+index 0000000000000000000000000000000000000000..116e0227765b294a88c98d44b2617b282574fd4e
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/world/damagesource/CombatTracker.java
 @@ -0,0 +1,106 @@
@@ -166,95 +166,95 @@ index 0000000000000000000000000000000000000000..e3675324f9efaefd956f0368ad88bcc4
 +@ApiStatus.NonExtendable
 +public interface CombatTracker {
 +
-+    /**
-+     * Gets the entity behind this combat tracker
-+     *
-+     * @return the entity behind this combat tracker
-+     */
-+    LivingEntity getEntity();
++	/**
++	 * Gets the entity behind this combat tracker
++	 *
++	 * @return the entity behind this combat tracker
++	 */
++	LivingEntity getEntity();
 +
-+    /**
-+     * Gets the list of recorded combat entries.
-+     * <br>
-+     * The returned list is a copy, so any modifications
-+     * to its contents won't have an effect on this entity's
-+     * combat history.
-+     *
-+     * @return the list of combat entries
-+     * @see #setCombatEntries(List)
-+     */
-+    List<CombatEntry> getCombatEntries();
++	/**
++	 * Gets the list of recorded combat entries.
++	 * <br>
++	 * The returned list is a copy, so any modifications
++	 * to its contents won't have an effect on this entity's
++	 * combat history.
++	 *
++	 * @return the list of combat entries
++	 * @see #setCombatEntries(List)
++	 */
++	List<CombatEntry> getCombatEntries();
 +
-+    /**
-+     * Sets the entity's combat history.
-+     * <br>
-+     * Note that overriding the entity's combat history won't
-+     * have an effect on the entity's current or new combat state.
-+     * Reset the current combat state and register new combat entries instead
-+     * if you want the new history to have an effect on the combat state.
-+     *
-+     * @param combatEntries combat entries
-+     * @see #resetCombatState()
-+     * @see #addCombatEntry(CombatEntry)
-+     */
-+    void setCombatEntries(List<CombatEntry> combatEntries);
++	/**
++	 * Sets the entity's combat history.
++	 * <br>
++	 * Note that overriding the entity's combat history won't
++	 * have an effect on the entity's current or new combat state.
++	 * Reset the current combat state and register new combat entries instead
++	 * if you want the new history to have an effect on the combat state.
++	 *
++	 * @param combatEntries combat entries
++	 * @see #resetCombatState()
++	 * @see #addCombatEntry(CombatEntry)
++	 */
++	void setCombatEntries(List<CombatEntry> combatEntries);
 +
-+    /**
-+     * Calculates the most significant fall damage entry
-+     *
-+     * @return the most significant fall damage entry
-+     */
-+    @Nullable CombatEntry getMostSignificantFall();
++	/**
++	 * Calculates the most significant fall damage entry
++	 *
++	 * @return the most significant fall damage entry
++	 */
++	@Nullable CombatEntry getMostSignificantFall();
 +
-+    /**
-+     * Checks whether the entity is in combat,
-+     * i.e. has taken damage from an entity
-+     * since the combat tracking has begun
-+     *
-+     * @return whether the entity is in combat
-+     */
-+    boolean isInCombat();
++	/**
++	 * Checks whether the entity is in combat,
++	 * i.e. has taken damage from an entity
++	 * since the combat tracking has begun
++	 *
++	 * @return whether the entity is in combat
++	 */
++	boolean isInCombat();
 +
-+    /**
-+     * Checks whether the entity has started recording damage,
-+     * i.e. its combat tracking is active
-+     *
-+     * @return whether the entity has started recording damage
-+     */
-+    boolean isTakingDamage();
++	/**
++	 * Checks whether the entity has started recording damage,
++	 * i.e. its combat tracking is active
++	 *
++	 * @return whether the entity has started recording damage
++	 */
++	boolean isTakingDamage();
 +
-+    /**
-+     * Gets the last or current combat duration
-+     *
-+     * @return the combat duration
-+     * @see #isInCombat()
-+     */
-+    int getCombatDuration();
++	/**
++	 * Gets the last or current combat duration
++	 *
++	 * @return the combat duration
++	 * @see #isInCombat()
++	 */
++	int getCombatDuration();
 +
-+    /**
-+     * Adds a new entry the pool of combat entries,
-+     * updating the entity's combat state
-+     *
-+     * @param combatEntry combat entry
-+     */
-+    void addCombatEntry(CombatEntry combatEntry);
++	/**
++	 * Adds a new entry the pool of combat entries,
++	 * updating the entity's combat state
++	 *
++	 * @param combatEntry combat entry
++	 */
++	void addCombatEntry(CombatEntry combatEntry);
 +
-+    /**
-+     * Constructs a death message based on the current combat history
-+     *
-+     * @return a death message
-+     */
-+    Component getDeathMessage();
++	/**
++	 * Constructs a death message based on the current combat history
++	 *
++	 * @return a death message
++	 */
++	Component getDeathMessage();
 +
-+    /**
-+     * Resets entity's combat state, clearing combat history
-+     */
-+    void resetCombatState();
++	/**
++	 * Resets entity's combat state, clearing combat history
++	 */
++	void resetCombatState();
 +
 +}
 diff --git a/src/main/java/io/papermc/paper/world/damagesource/FallLocationType.java b/src/main/java/io/papermc/paper/world/damagesource/FallLocationType.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..766d90087cf55b7d9db77fd4501329dd7363d780
+index 0000000000000000000000000000000000000000..7afbbc09ee5b6b759e0ba6d23e5c306875ae0d5c
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/world/damagesource/FallLocationType.java
 @@ -0,0 +1,65 @@
@@ -273,59 +273,59 @@ index 0000000000000000000000000000000000000000..766d90087cf55b7d9db77fd4501329dd
 +@ApiStatus.Experimental
 +public sealed interface FallLocationType extends Translatable permits FallLocationTypeImpl {
 +
-+    /**
-+     * Gets the fall location id
-+     *
-+     * @return the fall location id
-+     */
-+    String id();
++	/**
++	 * Gets the fall location id
++	 *
++	 * @return the fall location id
++	 */
++	String id();
 +
-+    /**
-+     * Gets the translation key used for a fall death message
-+     * caused by falling from this location
-+     *
-+     * @return the translation key
-+     */
-+    @Override
-+    String translationKey();
++	/**
++	 * Gets the translation key used for a fall death message
++	 * caused by falling from this location
++	 *
++	 * @return the translation key
++	 */
++	@Override
++	String translationKey();
 +
-+    /**
-+     * The entity is not within a special fall location
-+     */
-+    FallLocationType GENERIC = new FallLocationTypeImpl("generic");
-+    /**
-+     * The entity is within the ladder
-+     */
-+    FallLocationType LADDER = new FallLocationTypeImpl("ladder");
-+    /**
-+     * The entity is in vines
-+     */
-+    FallLocationType VINES = new FallLocationTypeImpl("vines");
-+    /**
-+     * The entity is in weeping wines
-+     */
-+    FallLocationType WEEPING_VINES = new FallLocationTypeImpl("weeping_vines");
-+    /**
-+     * The entity is in twisting vines
-+     */
-+    FallLocationType TWISTING_VINES = new FallLocationTypeImpl("twisting_vines");
-+    /**
-+     * The entity is in scaffolding
-+     */
-+    FallLocationType SCAFFOLDING = new FallLocationTypeImpl("scaffolding");
-+    /**
-+     * The entity is within some other climable block
-+     */
-+    FallLocationType OTHER_CLIMBABLE = new FallLocationTypeImpl("other_climbable");
-+    /**
-+     * The entity is in water
-+     */
-+    FallLocationType WATER = new FallLocationTypeImpl("water");
++	/**
++	 * The entity is not within a special fall location
++	 */
++	FallLocationType GENERIC = new FallLocationTypeImpl("generic");
++	/**
++	 * The entity is within the ladder
++	 */
++	FallLocationType LADDER = new FallLocationTypeImpl("ladder");
++	/**
++	 * The entity is in vines
++	 */
++	FallLocationType VINES = new FallLocationTypeImpl("vines");
++	/**
++	 * The entity is in weeping wines
++	 */
++	FallLocationType WEEPING_VINES = new FallLocationTypeImpl("weeping_vines");
++	/**
++	 * The entity is in twisting vines
++	 */
++	FallLocationType TWISTING_VINES = new FallLocationTypeImpl("twisting_vines");
++	/**
++	 * The entity is in scaffolding
++	 */
++	FallLocationType SCAFFOLDING = new FallLocationTypeImpl("scaffolding");
++	/**
++	 * The entity is within some other climable block
++	 */
++	FallLocationType OTHER_CLIMBABLE = new FallLocationTypeImpl("other_climbable");
++	/**
++	 * The entity is in water
++	 */
++	FallLocationType WATER = new FallLocationTypeImpl("water");
 +
 +}
 diff --git a/src/main/java/io/papermc/paper/world/damagesource/FallLocationTypeImpl.java b/src/main/java/io/papermc/paper/world/damagesource/FallLocationTypeImpl.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c5b97cea39ed0186deee042a9f16e0fafeb46625
+index 0000000000000000000000000000000000000000..063cd45b75a1017197c08dcde42df92e5261c190
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/world/damagesource/FallLocationTypeImpl.java
 @@ -0,0 +1,14 @@
@@ -336,18 +336,18 @@ index 0000000000000000000000000000000000000000..c5b97cea39ed0186deee042a9f16e0fa
 +@NullMarked
 +record FallLocationTypeImpl(String id) implements FallLocationType {
 +
-+    @Override
-+    public String translationKey() {
-+        // Same as net.minecraft.world.damagesource.FallLocation#languageKey
-+        return "death.fell.accident." + this.id;
-+    }
++	@Override
++	public String translationKey() {
++		// Same as net.minecraft.world.damagesource.FallLocation#languageKey
++		return "death.fell.accident." + this.id;
++	}
 +
 +}
 diff --git a/src/main/java/org/bukkit/entity/LivingEntity.java b/src/main/java/org/bukkit/entity/LivingEntity.java
-index a04b6603a64cd6bf1049fd684407dcf9d9d7b5e9..d9af95d928b693ea3a8fc8419adb112efb2054b1 100644
+index cfbd9344e1055f9fbb955721f7a3be71c2e412da..49d91493e8d8c911998d6b1d5917980d69cb342b 100644
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1492,4 +1492,24 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
+@@ -1468,4 +1468,24 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);
      // Purpur end - API for any mob to burn daylight

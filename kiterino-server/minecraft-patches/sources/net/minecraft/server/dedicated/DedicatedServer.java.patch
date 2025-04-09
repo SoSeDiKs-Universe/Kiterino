@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -218,6 +_,15 @@
+@@ -177,6 +_,15 @@
          }
          org.purpurmc.purpur.PurpurConfig.registerCommands();
          // Purpur end - Configurable void damage height and damage
@@ -16,7 +16,7 @@
          // Paper start - initialize global and world-defaults configuration
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
-@@ -314,6 +_,13 @@
+@@ -273,6 +_,13 @@
              }
          }
          // Purpur end - UPnP Port Forwarding
@@ -29,4 +29,4 @@
 +        // Kiterino end - Init/destruct injectors
  
          // CraftBukkit start
-         // this.setPlayerList(new DedicatedPlayerList(this, this.registries(), this.playerDataStorage)); // Spigot - moved up
+         this.server.loadPlugins();

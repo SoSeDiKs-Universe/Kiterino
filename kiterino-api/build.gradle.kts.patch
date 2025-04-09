@@ -2,23 +2,23 @@
 +++ b/purpur-api/build.gradle.kts
 @@ -104,17 +_,21 @@
          java {
-             srcDir(generatedApiPath)
+             srcDir(generatedDir)
              srcDir(file("../paper-api/src/main/java"))
-+            srcDir(file("../purpur-api/src/main/java"))
++            srcDir(file("../purpur-api/src/main/java")) // Kiterino - Init
          }
          resources {
              srcDir(file("../paper-api/src/main/resources"))
-+            srcDir(file("../purpur-api/src/main/resources"))
++            srcDir(file("../purpur-api/src/main/resources")) // Kiterino - Init
          }
      }
      test {
          java {
              srcDir(file("../paper-api/src/test/java"))
-+            srcDir(file("../purpur-api/src/test/java"))
++            srcDir(file("../purpur-api/src/test/java")) // Kiterino - Init
          }
          resources {
              srcDir(file("../paper-api/src/test/resources"))
-+            srcDir(file("../purpur-api/src/test/resources"))
++            srcDir(file("../purpur-api/src/test/resources")) // Kiterino - Init
          }
      }
  }

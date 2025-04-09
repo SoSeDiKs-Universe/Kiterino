@@ -9,13 +9,13 @@
 +    private final org.bukkit.NamespacedKey initialDimensionId;
 +    // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
  
-     public PlayerSpawnLocationEvent(@NotNull final Player who, @NotNull Location spawnLocation) {
+     public PlayerSpawnLocationEvent(@NotNull final Player player, @NotNull Location spawnLocation) {
 +        // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
-+        this(who, spawnLocation, null, null);
++        this(player, spawnLocation, null, null);
 +    }
 +
-+    public PlayerSpawnLocationEvent(@NotNull final Player who, @NotNull Location spawnLocation, @org.jetbrains.annotations.Nullable Location initialLocation, @org.jetbrains.annotations.Nullable String initialDimensionId) {
-         super(who);
++    public PlayerSpawnLocationEvent(@NotNull final Player player, @NotNull Location spawnLocation, @org.jetbrains.annotations.Nullable Location initialLocation, @org.jetbrains.annotations.Nullable String initialDimensionId) {
+         super(player);
 +        this.initialLocation = initialLocation == null ? spawnLocation.clone() : initialLocation;
 +        this.initialDimensionId = initialDimensionId == null ? null : org.bukkit.NamespacedKey.fromString(initialDimensionId);
 +        // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent

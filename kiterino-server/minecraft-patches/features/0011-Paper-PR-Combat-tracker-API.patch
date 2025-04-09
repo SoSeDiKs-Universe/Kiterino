@@ -6,13 +6,15 @@ Subject: [PATCH] Paper PR - Combat tracker API
 https://github.com/PaperMC/Paper/pull/11853
 
 diff --git a/net/minecraft/world/damagesource/CombatTracker.java b/net/minecraft/world/damagesource/CombatTracker.java
-index 37f1eabe3362443db86da715f006e93723092779..c4082ee6d22e78689ac4aad6aaf67cdbc71de2ec 100644
+index 0924fd5203d63a008830d944e3651acd17021c22..ea97e517a6fcfd0374a35e7279e8d55719dc17d0 100644
 --- a/net/minecraft/world/damagesource/CombatTracker.java
 +++ b/net/minecraft/world/damagesource/CombatTracker.java
-@@ -37,6 +37,13 @@ public class CombatTracker {
+@@ -37,7 +37,14 @@ public class CombatTracker {
+     public void recordDamage(DamageSource source, float damage) {
          this.recheckStatus();
          FallLocation currentFallLocation = FallLocation.getCurrentFallLocation(this.mob);
-         CombatEntry combatEntry = new CombatEntry(source, damage, currentFallLocation, this.mob.fallDistance);
+-        CombatEntry combatEntry = new CombatEntry(source, damage, currentFallLocation, (float)this.mob.fallDistance);
++        CombatEntry combatEntry = new CombatEntry(source, damage, currentFallLocation, (float) this.mob.fallDistance);
 +        // Kiterino start - Paper PR - Combat tracker API
 +        recordDamageAndCheckCombatState(combatEntry);
 +    }
@@ -23,33 +25,24 @@ index 37f1eabe3362443db86da715f006e93723092779..c4082ee6d22e78689ac4aad6aaf67cdb
          this.entries.add(combatEntry);
          this.lastDamageTime = this.mob.tickCount;
          this.takingDamage = true;
-@@ -155,15 +162,21 @@ public class CombatTracker {
+@@ -156,6 +163,13 @@ public class CombatTracker {
      public void recheckStatus() {
          int i = this.inCombat ? 300 : 100;
          if (this.takingDamage && (!this.mob.isAlive() || this.mob.tickCount - this.lastDamageTime > i)) {
--            boolean flag = this.inCombat;
--            this.takingDamage = false;
--            this.inCombat = false;
--            this.combatEndTime = this.mob.tickCount;
--            if (flag) {
--                this.mob.onLeaveCombat();
--            }
 +            // Kiterino start - Paper PR - Combat tracker API
 +            resetCombatState();
 +        }
 +    }
- 
--            this.entries.clear();
-+    public void resetCombatState() {
-+        // Kiterino end - Paper PR - Combat tracker API
-+        boolean flag = this.inCombat;
-+        this.takingDamage = false;
-+        this.inCombat = false;
-+        this.combatEndTime = this.mob.tickCount;
-+        if (flag) {
-+            this.mob.onLeaveCombat();
-         }
 +
-+        this.entries.clear();
++    public void resetCombatState() {
++            // Kiterino end - Paper PR - Combat tracker API
+             boolean flag = this.inCombat;
+             this.takingDamage = false;
+             this.inCombat = false;
+@@ -165,6 +179,5 @@ public class CombatTracker {
+             }
+ 
+             this.entries.clear();
+-        }
      }
  }

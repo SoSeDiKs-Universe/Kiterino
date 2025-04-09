@@ -6,6 +6,6 @@
      private static final int FLAG_RESTING = 1;
 -    private static final TargetingConditions BAT_RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0);
 +    private static final TargetingConditions BAT_RESTING_TARGETING = TargetingConditions.forNonCombat().range(4.0).selector((entity, level) -> !level.kiterinoConfig.batsIgnoreInvisiblePlayers || !entity.isInvisible()); // Kiterino - Bats ignore invisible players
+     private static final byte DEFAULT_FLAGS = 0;
      public final AnimationState flyAnimationState = new AnimationState();
      public final AnimationState restAnimationState = new AnimationState();
-     @Nullable

@@ -23,8 +23,18 @@ public class KiterinoMobEffectWrapper extends MobEffect {
 	}
 
 	@Override
-	public int getBlendDurationTicks() {
-		return this.mobEffect.getBlendDurationTicks();
+	public int getBlendInDurationTicks() {
+		return this.mobEffect.getBlendInDurationTicks();
+	}
+
+	@Override
+	public int getBlendOutDurationTicks() {
+		return this.mobEffect.getBlendOutDurationTicks();
+	}
+
+	@Override
+	public int getBlendOutAdvanceTicks() {
+		return this.mobEffect.getBlendOutAdvanceTicks();
 	}
 
 	@Override

@@ -7,7 +7,7 @@ https://github.com/PaperMC/Paper/pull/7655
 
 diff --git a/src/main/java/io/papermc/paper/loot/PaperLootContextKey.java b/src/main/java/io/papermc/paper/loot/PaperLootContextKey.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..314ef91f5693ae1d9229b6fcefddde33200033bc
+index 0000000000000000000000000000000000000000..8199186bc2965c56f64537fce38deb140e57191e
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/loot/PaperLootContextKey.java
 @@ -0,0 +1,115 @@
@@ -52,7 +52,7 @@ index 0000000000000000000000000000000000000000..314ef91f5693ae1d9229b6fcefddde33
 +        CONVERTERS.add(entity(LootContextParams.DIRECT_ATTACKING_ENTITY, LootContextKey.DIRECT_ATTACKING_ENTITY));
 +        CONVERTERS.add(new LambdaConverter<>(LootContextParams.ORIGIN, LootContextKey.ORIGIN, MCUtil::toVec3, MCUtil::toPosition));
 +        CONVERTERS.add(new LambdaConverter<>(LootContextParams.BLOCK_STATE, LootContextKey.BLOCK_DATA, bd -> ((CraftBlockData) bd).getState(), BlockState::createCraftBlockData));
-+        CONVERTERS.add(new LambdaConverter<>(LootContextParams.BLOCK_ENTITY, LootContextKey.TILE_STATE, ts -> ((CraftBlockEntityState<?>) ts).getTileEntity(), CraftBlockStates::getTileState));
++        CONVERTERS.add(new LambdaConverter<>(LootContextParams.BLOCK_ENTITY, LootContextKey.TILE_STATE, ts -> ((CraftBlockEntityState<?>) ts).getBlockEntity(), CraftBlockStates::getTileState));
 +        CONVERTERS.add(new LambdaConverter<>(LootContextParams.TOOL, LootContextKey.TOOL, CraftItemStack::asNMSCopy, net.minecraft.world.item.ItemStack::asBukkitCopy));
 +        CONVERTERS.add(identity(LootContextParams.EXPLOSION_RADIUS, LootContextKey.EXPLOSION_RADIUS));
 +        CONVERTERS.add(identity(LootContextParams.ENCHANTMENT_LEVEL, LootContextKey.ENCHANTMENT_LEVEL));
@@ -127,13 +127,14 @@ index 0000000000000000000000000000000000000000..314ef91f5693ae1d9229b6fcefddde33
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
-index 4f29e9af057f5f885bbb83b130687272335a9ff6..a24a6fe709d32ae735d7b4d3d25848bf87ad7fb2 100644
+index 3cf0f434f374c201ecca08e7e889c7ff150396e5..7bf0f0dd187912420402f6cc003adaf68d6bc7d6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
-@@ -102,6 +102,22 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
+@@ -101,7 +101,22 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
+     }
  
      private LootParams convertContext(LootContext context) {
-         Preconditions.checkArgument(context != null, "LootContext cannot be null");
+-        Preconditions.checkArgument(context != null, "LootContext cannot be null");
 +        // Paper start - Improve LootContext API
 +        if (!context.isLegacy()) {
 +            final LootParams.Builder paramsBuilder = new LootParams.Builder(((CraftWorld) context.getWorld()).getHandle()).withLuck(context.getLuck());
@@ -153,7 +154,7 @@ index 4f29e9af057f5f885bbb83b130687272335a9ff6..a24a6fe709d32ae735d7b4d3d25848bf
          Location loc = context.getLocation();
          Preconditions.checkArgument(loc.getWorld() != null, "LootContext.getLocation#getWorld cannot be null");
          ServerLevel handle = ((CraftWorld) loc.getWorld()).getHandle();
-@@ -149,6 +165,20 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
+@@ -149,6 +164,20 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
      }
  
      public static LootContext convertContext(net.minecraft.world.level.storage.loot.LootContext info) {
@@ -173,13 +174,13 @@ index 4f29e9af057f5f885bbb83b130687272335a9ff6..a24a6fe709d32ae735d7b4d3d25848bf
 +        // Paper end - Improve LootContext API
          Vec3 position = info.getOptionalParameter(LootContextParams.ORIGIN);
          if (position == null) {
-             position = info.getOptionalParameter(LootContextParams.THIS_ENTITY).position(); // Every vanilla context has origin or this_entity, see LootContextParameterSets
+             position = info.getOptionalParameter(LootContextParams.THIS_ENTITY).position(); // Every vanilla context has origin or this_entity, see LootContextParamSets
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-index 56453454cbd4b9e9270fc833f8ab38d5fa7a3763..19e3096854f2e604bc761ecb6aae18cc40146322 100644
+index 2338e7c115037430cefae26a571ded71f77983c4..1b1f81504168d2f0428e814f15634fc3cf866d31 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-@@ -294,6 +294,13 @@ public final class CraftBlockStates {
-         return CraftBlockStates.getBlockState(null, blockPosition, blockData, tileEntity);
+@@ -237,6 +237,13 @@ public final class CraftBlockStates {
+         return CraftBlockStates.getBlockState(null, pos, state, blockEntity);
      }
  
 +    // Paper start - Improve LootContext API
@@ -189,6 +190,6 @@ index 56453454cbd4b9e9270fc833f8ab38d5fa7a3763..19e3096854f2e604bc761ecb6aae18cc
 +    }
 +    // Paper end - Improve LootContext API
 +
-     // See BlockStateFactory#createBlockState(World, BlockPosition, IBlockData, TileEntity)
-     public static CraftBlockState getBlockState(World world, BlockPos blockPosition, net.minecraft.world.level.block.state.BlockState blockData, BlockEntity tileEntity) {
-         Material material = CraftBlockType.minecraftToBukkit(blockData.getBlock());
+     // See BlockStateFactory#createBlockState(World, BlockPos, BlockState, BlockEntity)
+     public static CraftBlockState getBlockState(World world, BlockPos pos, net.minecraft.world.level.block.state.BlockState state, BlockEntity blockEntity) {
+         Material material = CraftBlockType.minecraftToBukkit(state.getBlock());

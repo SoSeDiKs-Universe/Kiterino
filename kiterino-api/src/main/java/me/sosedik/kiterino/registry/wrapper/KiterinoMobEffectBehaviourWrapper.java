@@ -14,11 +14,29 @@ import org.jspecify.annotations.Nullable;
 public interface KiterinoMobEffectBehaviourWrapper {
 
 	/**
-	 * Gets the effect's blend duration ticks
+	 * Gets the effect's blend in duration ticks
 	 *
-	 * @return effect's blend duration ticks
+	 * @return effect's blend in duration ticks
 	 */
-	default int getBlendDurationTicks() {
+	default int getBlendInDurationTicks() {
+		return 0;
+	}
+
+	/**
+	 * Gets the effect's blend out duration ticks
+	 *
+	 * @return effect's blend out duration ticks
+	 */
+	default int getBlendOutDurationTicks() {
+		return 0;
+	}
+
+	/**
+	 * Gets the effect's blend advance duration ticks
+	 *
+	 * @return effect's blend advance duration ticks
+	 */
+	default int getBlendOutAdvanceTicks() {
 		return 0;
 	}
 

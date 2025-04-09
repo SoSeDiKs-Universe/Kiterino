@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/trialspawner/TrialSpawner.java
 +++ b/net/minecraft/world/level/block/entity/trialspawner/TrialSpawner.java
-@@ -382,7 +_,7 @@
+@@ -380,7 +_,7 @@
      }
  
      public void overrideEntityToSpawn(EntityType<?> entityType, Level level) {

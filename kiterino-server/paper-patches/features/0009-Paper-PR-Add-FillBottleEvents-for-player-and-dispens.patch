@@ -17,13 +17,13 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index c3f2fc0edebde0479ba5aafd6406712ced156e15..0134cdf4f1fabefa55cecd973c3e237b6227c713 100644
+index ac971a76e1804b3edd382dfd6d34d099e69320da..c06d7ac50bde5e6ed12d84d135c440dab18d03dc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2292,4 +2292,18 @@ public class CraftEventFactory {
+@@ -2050,4 +2050,18 @@ public class CraftEventFactory {
+ 
          return event;
      }
-     // Paper end - add EntityFertilizeEggEvent
 +
 +    // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
 +    public static io.papermc.paper.event.player.PlayerFillBottleEvent callPlayerFillBottleEvent(net.minecraft.world.entity.player.Player player, InteractionHand hand, ItemStack glassBottle, ItemStack resultItem) {

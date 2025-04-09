@@ -5,10 +5,10 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index be1bb14dca9367b9685841985b6198376986c496..6c6ed6b205975ebbaacf5620d4af727f53c39274 100644
+index 212e0df38ae3ed0b06d147fb5e7e93ef556a0bdd..ecea9efa0ab7472b327286160160cca24696cb40 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
-@@ -592,7 +592,7 @@ public class Metrics {
+@@ -593,7 +593,7 @@ public class Metrics {
              boolean logFailedRequests = config.getBoolean("logFailedRequests", false);
              // Only start Metrics, if it's enabled in the config
              if (config.getBoolean("enabled", true)) {
@@ -17,7 +17,7 @@ index be1bb14dca9367b9685841985b6198376986c496..6c6ed6b205975ebbaacf5620d4af727f
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
-@@ -602,7 +602,7 @@ public class Metrics {
+@@ -603,7 +603,7 @@ public class Metrics {
  
                  metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> Bukkit.getOnlinePlayers().size()));
                  metrics.addCustomChart(new Metrics.SimplePie("online_mode", () -> Bukkit.getOnlineMode() ? "online" : (io.papermc.paper.configuration.GlobalConfiguration.get().proxies.isProxyOnlineMode() ? "bungee" : "offline"))); // Purpur - Purpur config files
@@ -27,7 +27,7 @@ index be1bb14dca9367b9685841985b6198376986c496..6c6ed6b205975ebbaacf5620d4af727f
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index fe66e43c27e0798770e102d1385bacbaa90bda07..9e94a2a6be9c9b1386fc60808997d0b30a9d9510 100644
+index 6ac291288f1e71f56a45e50b650dea4b4adeb763..86812c5374815a43a8a06f0d15ba4b42b348f293 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -36,7 +36,7 @@ public class PaperVersionFetcher implements VersionFetcher {
@@ -71,7 +71,7 @@ index bc7e4e5560708fea89c584b1d8b471f4966f311a..70145bafa7c9c45a6f7a7a6854e9eefa
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-index b36e30fd4057a938e4d90cb42a2dca661f16478e..c0e6db361f292355bf79fbf239d2d3034f4a4390 100644
+index b36e30fd4057a938e4d90cb42a2dca661f16478e..e2c6600307681e5d7ba19a4e1b3745f984b2ce78 100644
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 @@ -32,6 +32,7 @@ public record ServerBuildInfoImpl(
@@ -99,7 +99,7 @@ index b36e30fd4057a938e4d90cb42a2dca661f16478e..c0e6db361f292355bf79fbf239d2d303
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
 -        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand
-+        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Kiterino - Rebrand
++        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand // Kiterino - Rebrand
      }
  
      @Override
@@ -117,12 +117,12 @@ index 99eb04643fce44c37fd96c99756837ccafe7b559..1a821a548fc64d0ded6da854baaf7ab4
  
          if (stream != null) {
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index 776bc01784b53e3f1d9a35046109c3b9ee4f0882..1a04b632a8e55b5cdc5d0c39126104be0f5dd98e 100644
+index b8b5c2da54a4875d0d23ae6f3efb6052ef25463a..4536e2211a72388ebe3c4cfbcc59e1e246317958 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
-@@ -77,14 +77,14 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
+@@ -75,14 +75,14 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
+                 this.lastEarlyWarning = currentTime;
                  if (isLongTimeout) {
-                     // Paper end
                      logger.log(Level.SEVERE, "------------------------------");
 -                    logger.log(Level.SEVERE, "The server has stopped responding! This is (probably) not a Purpur bug."); // Paper // Purpur - Rebrand
 +                    logger.log(Level.SEVERE, "The server has stopped responding! This is (probably) not a Kiterino bug."); // Paper // Kiterino - Rebrand
@@ -138,7 +138,7 @@ index 776bc01784b53e3f1d9a35046109c3b9ee4f0882..1a04b632a8e55b5cdc5d0c39126104be
  
                      if (net.minecraft.world.level.Level.lastPhysicsProblem != null) {
                          logger.log(Level.SEVERE, "------------------------------");
-@@ -104,12 +104,12 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
+@@ -102,12 +102,12 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
                      }
                      // Paper end
                  } else {
@@ -153,7 +153,7 @@ index 776bc01784b53e3f1d9a35046109c3b9ee4f0882..1a04b632a8e55b5cdc5d0c39126104be
                  FeatureHooks.dumpAllChunkLoadInfo(MinecraftServer.getServer(), isLongTimeout); // Paper - log detailed tick information
                  WatchdogThread.dumpThread(ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().serverThread.getId(), Integer.MAX_VALUE), logger);
                  logger.log(Level.SEVERE, "------------------------------");
-@@ -122,7 +122,7 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
+@@ -120,7 +120,7 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
                          WatchdogThread.dumpThread(thread, logger);
                      }
                  } else {

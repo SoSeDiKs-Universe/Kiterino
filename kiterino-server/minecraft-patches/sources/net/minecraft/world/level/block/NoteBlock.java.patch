@@ -9,7 +9,7 @@
      @Override
      public MapCodec<NoteBlock> codec() {
          return CODEC;
-@@ -108,6 +_,7 @@
+@@ -102,6 +_,7 @@
  
      private void playNote(@Nullable Entity entity, BlockState state, Level level, BlockPos pos) {
          if (level.purpurConfig.noteBlockIgnoreAbove || state.getValue(INSTRUMENT).worksAboveNoteBlock() || level.getBlockState(pos.above()).isAir()) { // Purpur - Config to allow Note Block sounds when blocked
@@ -17,7 +17,7 @@
              level.blockEvent(pos, this, 0, 0);
              level.gameEvent(entity, GameEvent.NOTE_BLOCK_PLAY, pos);
          }
-@@ -150,7 +_,8 @@
+@@ -144,7 +_,8 @@
      protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
          NoteBlockInstrument noteBlockInstrument = state.getValue(INSTRUMENT);
          // Paper start - move NotePlayEvent call to fix instrument/note changes

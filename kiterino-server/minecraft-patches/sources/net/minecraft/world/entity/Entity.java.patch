@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -259,6 +_,7 @@
+@@ -266,6 +_,7 @@
      public final RandomSource random; // Paper - Share random for entities to make them more random // Add toggle for RNG manipulation
      public int tickCount;
      private int remainingFireTicks = -this.getFireImmuneTicks();
@@ -8,7 +8,7 @@
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
      protected boolean wasEyeInWater;
-@@ -903,6 +_,12 @@
+@@ -885,6 +_,12 @@
              this.clearFire();
          }
  
@@ -19,9 +19,9 @@
 +        // Kiterino end - Forced panic mode API
 +
          if (this.isInLava()) {
-             this.lavaHurt();
-             this.fallDistance *= 0.5F;
-@@ -3180,6 +_,21 @@
+             this.fallDistance *= 0.5;
+             // CraftBukkit start
+@@ -3121,6 +_,21 @@
              this.gameEvent(GameEvent.ENTITY_MOUNT, passenger);
          }
      }

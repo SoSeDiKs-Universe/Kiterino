@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/trialspawner/TrialSpawnerData.java
 +++ b/net/minecraft/world/level/block/entity/trialspawner/TrialSpawnerData.java
-@@ -101,9 +_,9 @@
+@@ -92,9 +_,9 @@
          this.ejectingLootTable = ejectingLootTable;
      }
  

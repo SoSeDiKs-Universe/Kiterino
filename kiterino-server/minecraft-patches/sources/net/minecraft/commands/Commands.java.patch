@@ -8,7 +8,7 @@
  import org.slf4j.Logger;
  
  public class Commands {
-@@ -511,7 +_,7 @@
+@@ -510,7 +_,7 @@
      private void runSync(ServerPlayer player, java.util.Collection<String> bukkit, RootCommandNode<SharedSuggestionProvider> rootCommandNode) {
          // Paper end - Perf: Async command map building
          new com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent<CommandSourceStack>(player.getBukkitEntity(), (RootCommandNode) rootCommandNode, true).callEvent(); // Paper - Brigadier API

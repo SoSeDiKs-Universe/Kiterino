@@ -1,29 +1,30 @@
 --- a/src/main/java/org/bukkit/event/block/NotePlayEvent.java
 +++ b/src/main/java/org/bukkit/event/block/NotePlayEvent.java
-@@ -17,12 +_,20 @@
-     private Instrument instrument;
+@@ -21,12 +_,21 @@
      private Note note;
-     private boolean cancelled = false;
+ 
+     private boolean cancelled;
 +    private final @org.jetbrains.annotations.Nullable org.bukkit.entity.Player player; // Kiterino - Add player to NotePlayEvent
  
+     @ApiStatus.Internal
      public NotePlayEvent(@NotNull Block block, @NotNull Instrument instrument, @NotNull Note note) {
 +        // Kiterino start - Add player to NotePlayEvent
 +        this(block, instrument, note, null);
 +    }
 +
++    @ApiStatus.Internal
 +    public NotePlayEvent(@NotNull Block block, @NotNull Instrument instrument, @NotNull Note note, @org.jetbrains.annotations.Nullable org.bukkit.entity.Player player) {
++        // Kiterino end - Add player to NotePlayEvent
          super(block);
          this.instrument = instrument;
          this.note = note;
-+        this.player = player;
++        this.player = player; // Kiterino - Add player to NotePlayEvent
      }
-+    // Kiterino end - Add player to NotePlayEvent
  
-     @Override
-     public boolean isCancelled() {
-@@ -79,6 +_,17 @@
-             this.note = note;
-         }
+     /**
+@@ -72,6 +_,17 @@
+         Preconditions.checkArgument(note != null, "note cannot be null");
+         this.note = note;
      }
 +
 +    // Kiterino start - Add player to NotePlayEvent
@@ -37,5 +38,5 @@
 +    }
 +    // Kiterino end - Add player to NotePlayEvent
  
-     @NotNull
      @Override
+     public boolean isCancelled() {

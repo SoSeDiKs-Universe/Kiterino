@@ -6,10 +6,10 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index 6e80b855ad216548738369c3027a220c26027028..7710272cc860871a23d90b096954a455ed3fc77c 100644
+index f9d4eea629b198468eb50fad838bbf635cffaedd..dfdcb4532f5f44704b79707fc5a41d4d66db2c29 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -305,10 +305,15 @@ public abstract class PlayerList {
+@@ -307,10 +307,15 @@ public abstract class PlayerList {
          mutableComponent.withStyle(ChatFormatting.YELLOW);
          Component joinMessage = mutableComponent; // Paper - Adventure
          serverGamePacketListenerImpl.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());

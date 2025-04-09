@@ -19,10 +19,10 @@ index b3e003694ce0da357e91ab3ce2b1380f9ab0a32a..977df16410eb4c10ef651f85dd21aad6
  
                      level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index 1131e984fd30e40c1b99054b5db9462ffe55b5f1..b3464c827d3fb8a158c82c23cc95bcb24794b22c 100644
+index 1dcfa8e751b2b5b3da1209aa20ed51edd376b616..e20afe86c8562f58a51ae2e1ef5da78db305ea99 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
-@@ -203,7 +203,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
+@@ -174,7 +174,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
          if (level instanceof ServerLevel serverLevel) {
              ChargedProjectiles chargedProjectiles = weapon.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
              if (chargedProjectiles != null && !chargedProjectiles.isEmpty()) {
@@ -32,7 +32,7 @@ index 1131e984fd30e40c1b99054b5db9462ffe55b5f1..b3464c827d3fb8a158c82c23cc95bcb2
                      CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, weapon);
                      serverPlayer.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
 diff --git a/net/minecraft/world/item/ProjectileWeaponItem.java b/net/minecraft/world/item/ProjectileWeaponItem.java
-index f20c38c1ff978d00dc0c9810c050506deed44ebd..b0c85c522e231fcd938ae2c7c487449130181422 100644
+index 662e286f40e042823fa7cdd9e27b44e4bfad9cb9..633c9b515ffb3b4184aa212c069383440a7cd7d7 100644
 --- a/net/minecraft/world/item/ProjectileWeaponItem.java
 +++ b/net/minecraft/world/item/ProjectileWeaponItem.java
 @@ -40,7 +40,7 @@ public abstract class ProjectileWeaponItem extends Item {
@@ -55,7 +55,7 @@ index f20c38c1ff978d00dc0c9810c050506deed44ebd..b0c85c522e231fcd938ae2c7c4874491
                  if (event.getProjectile() == projectile.getBukkitEntity()) {
 @@ -81,7 +81,7 @@ public abstract class ProjectileWeaponItem extends Item {
                          if (shooter instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
-                             serverPlayer.getBukkitEntity().updateInventory();
+                             serverPlayer.containerMenu.sendAllDataToRemote();
                          }
 -                        return;
 +                        return false; // Kiterino - Better EntityShootBowEvent cancellation

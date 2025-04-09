@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Inventory.java
 +++ b/net/minecraft/world/entity/player/Inventory.java
-@@ -182,7 +_,7 @@
+@@ -227,7 +_,7 @@
      }
  
      public static boolean isUsableForCrafting(ItemStack stack) {

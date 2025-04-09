@@ -300,7 +300,8 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     private static Packet<?> handle(CraftPlayer player, ClientboundContainerSetContentPacket packet) {
-        List<ItemStack> items = packet.getItems();
+        boolean modified = false;
+        List<ItemStack> items = packet.items();
         for (int i = 0; i < items.size(); i++) {
             ItemStack original = items.get(i);
             var context = new SlottedItemPacketContext(packet, i);
@@ -309,15 +310,16 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             if (result == null) continue;
 
             items.set(i, result);
+            modified = true;
         }
 
-        ItemStack original = packet.getCarriedItem();
+        ItemStack carriedOriginal = packet.carriedItem();
         var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
-        var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, original.asBukkitCopy());
-        ItemStack result = fromBukkit(contextBox, original);
-        if (result != null) packet.carriedItem = result;
+        var contextBox = new ItemContextBox(player, ItemModifierContextType.WINDOW_ITEMS, context, carriedOriginal.asBukkitCopy());
+        ItemStack carriedResult = fromBukkit(contextBox, carriedOriginal);
+        if (carriedResult != null) modified = true;
 
-        return packet;
+        return modified ? new ClientboundContainerSetContentPacket(packet.containerId(), packet.stateId(), items, carriedResult == null ? carriedOriginal : carriedResult) : packet;
     }
 
     private static Packet<?> handle(CraftPlayer player, ClientboundPlaceGhostRecipePacket packet) {
@@ -568,10 +570,9 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             case SlotDisplay.SmithingTrimDemoSlotDisplay smithingTrimDemoSlotDisplay -> {
                 SlotDisplay base = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.base());
                 SlotDisplay material = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.material());
-                SlotDisplay pattern = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.pattern());
-                if (base == smithingTrimDemoSlotDisplay.base() && material == smithingTrimDemoSlotDisplay.material() && pattern == smithingTrimDemoSlotDisplay.pattern())
+                if (base == smithingTrimDemoSlotDisplay.base() && material == smithingTrimDemoSlotDisplay.material())
                     yield smithingTrimDemoSlotDisplay;
-                yield new SlotDisplay.SmithingTrimDemoSlotDisplay(base, material, pattern);
+                yield new SlotDisplay.SmithingTrimDemoSlotDisplay(base, material, smithingTrimDemoSlotDisplay.pattern());
             }
             case SlotDisplay.WithRemainder withRemainder -> {
                 SlotDisplay input = replaceSlotDisplay(player, contextType, context, withRemainder.input());
@@ -747,10 +748,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 		    net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
 		    if (customData == null) {
 			    customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-			    customData.getUnsafe().put("kiterino_og_item", original.saveOptional(player.getHandle().registryAccess()));
+			    customData.getUnsafe().put("kiterino_og_item", original.save(player.getHandle().registryAccess()));
 			    itemStack.set(DataComponents.CUSTOM_DATA, customData);
 		    } else {
-			    customData.getUnsafe().put("kiterino_og_item", original.saveOptional(player.getHandle().registryAccess()));
+			    customData.getUnsafe().put("kiterino_og_item", original.save(player.getHandle().registryAccess()));
 		    }
 	    }
 	    return itemStack;

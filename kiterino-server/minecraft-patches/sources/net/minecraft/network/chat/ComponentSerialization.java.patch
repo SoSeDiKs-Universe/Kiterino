@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/chat/ComponentSerialization.java
 +++ b/net/minecraft/network/chat/ComponentSerialization.java
-@@ -54,13 +_,95 @@
+@@ -52,13 +_,92 @@
  
              @Override
              public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, Component object) {
@@ -66,14 +66,12 @@
 +            return component;
 +        }
 +
-+        HoverEvent.ItemStackInfo showItemValue = hoverEvent.getValue(HoverEvent.Action.SHOW_ITEM);
-+        if (showItemValue != null) {
-+            var original = showItemValue.getItemStack();
-+            var context = me.sosedik.kiterino.modifier.item.context.ItemModifierContext.EMPTY;
-+            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, context, original.asBukkitCopy());
++        if (hoverEvent instanceof HoverEvent.ShowItem(net.minecraft.world.item.ItemStack item)) {
++	        var context = me.sosedik.kiterino.modifier.item.context.ItemModifierContext.EMPTY;
++            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, context, item.asBukkitCopy());
 +            var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
 +            if (bukkitItem != null) {
-+                Style style = component.getStyle().withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem))));
++                Style style = component.getStyle().withHoverEvent(new HoverEvent.ShowItem(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem)));
 +                if (component instanceof MutableComponent mutableComponent) {
 +                    mutableComponent.setStyle(style);
 +                } else {
@@ -82,12 +80,11 @@
 +            }
 +        }
 +
-+        HoverEvent.EntityTooltipInfo showEntityValue = hoverEvent.getValue(HoverEvent.Action.SHOW_ENTITY);
-+        if (showEntityValue != null) {
-+            net.minecraft.world.entity.EntityType<?> entityType = showEntityValue.type;
++        if (hoverEvent instanceof HoverEvent.ShowEntity(HoverEvent.EntityTooltipInfo entityTooltipInfo)) {
++            net.minecraft.world.entity.EntityType<?> entityType = entityTooltipInfo.type;
 +            var bukkitType = org.bukkit.craftbukkit.entity.CraftEntityType.minecraftToBukkit(entityType);
 +            if (bukkitType != null && !org.bukkit.NamespacedKey.MINECRAFT.equals(bukkitType.key().namespace())) {
-+                component = component.copy().setStyle(component.getStyle().withHoverEvent(null));
++                component = component.copy().setStyle(component.getStyle().withHoverEvent(new HoverEvent.ShowText(Component.literal(bukkitType.key().asString()))));
 +            }
 +        }
 +

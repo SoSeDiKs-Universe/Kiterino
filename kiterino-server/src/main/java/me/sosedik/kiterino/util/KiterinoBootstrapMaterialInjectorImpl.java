@@ -7,7 +7,6 @@ import me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl;
 import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import net.kyori.adventure.key.Key;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -40,7 +39,6 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 	private final Field blockMaterialField = getField(CraftMagicNumbers.class, "BLOCK_MATERIAL");
 	private final Field byNameField = getField(Material.class, "BY_NAME");
 	private final Field maxStackField = getField(Material.class, "maxStack");
-	private final Field durabilityField = getField(Material.class, "durability");
 	private final Field idField = getField(Material.class, "id");
 	private final Field ctorField = getField(Material.class, "ctor");
 	private final Field dataField = getField(Material.class, "data");
@@ -56,7 +54,6 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 		Item item = BuiltInRegistries.ITEM.getValueOrThrow(ResourceKey.create(Registries.ITEM, PaperAdventure.asVanilla(materialKey)));
 
 		maxStackField.set(value, item.getDefaultMaxStackSize());
-		durabilityField.set(value, (short) (int) item.components().getOrDefault(DataComponents.MAX_DAMAGE, 0));
 
 		idField.set(value, 1);
 		legacyField.set(value, false);

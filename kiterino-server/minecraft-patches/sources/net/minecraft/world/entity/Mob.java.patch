@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/Mob.java
++++ b/net/minecraft/world/entity/Mob.java
+@@ -888,7 +_,7 @@
+     }
+ 
+     public boolean isSaddled() {
+-        return this.hasItemInSlot(EquipmentSlot.SADDLE);
++        return this.hasItemInSlot(EquipmentSlot.SADDLE) || hasRider(); // Kiterino - Allow riders to control mobs without a saddle
+     }
+ 
+     public boolean isWearingBodyArmor() {

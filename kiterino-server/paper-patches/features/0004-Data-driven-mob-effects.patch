@@ -5,18 +5,18 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index e44653c241f7bfa380053f6b27309a9280e3b25c..8ec675fc2828dd1eecbbafac375685796bc6be5c 100644
+index 6fb31f1ae8e25ce5d7cce13f71c1fe74a733fcd1..ddd15b2b7570b7e435cae5c750e40756c951baad 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -86,7 +86,7 @@ public final class PaperRegistries {
-             // built-ins
+@@ -93,7 +93,7 @@ public final class PaperRegistries {
+             // built-in
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
 -            start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
 +            start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).writable(me.sosedik.kiterino.registry.data.KiterinoMobEffectRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven mob effects
              start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(me.sosedik.kiterino.registry.data.KiterinoBlockRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven blocks
              start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
-             start(Registries.CAT_VARIANT, RegistryKey.CAT_VARIANT).craft(Cat.Type.class, CraftCat.CraftType::new).build(),
+             start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 index cadbf29c4667a74d79fdc538e0cca9cc61480d29..d10cea4307d2a398abf899b0f938a674920a0d49 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java

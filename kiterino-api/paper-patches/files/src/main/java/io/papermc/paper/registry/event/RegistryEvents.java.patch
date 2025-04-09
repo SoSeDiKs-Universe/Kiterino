@@ -1,9 +1,9 @@
 --- a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
 +++ b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
-@@ -29,6 +_,9 @@
-     public static final RegistryEventProvider<Art, PaintingVariantRegistryEntry.Builder> PAINTING_VARIANT = create(RegistryKey.PAINTING_VARIANT);
+@@ -32,6 +_,9 @@
      public static final RegistryEventProvider<PatternType, BannerPatternRegistryEntry.Builder> BANNER_PATTERN = create(RegistryKey.BANNER_PATTERN);
-     public static final RegistryEventProvider<DamageType, DamageTypeRegistryEntry.Builder> DAMAGE_TYPE = create(RegistryKey.DAMAGE_TYPE);
+     public static final RegistryEventProvider<Art, PaintingVariantRegistryEntry.Builder> PAINTING_VARIANT = create(RegistryKey.PAINTING_VARIANT);
+     // End generate - RegistryEvents
 +    public static final RegistryEventProvider<org.bukkit.inventory.ItemType, me.sosedik.kiterino.registry.data.ItemRegistryEntity.Builder> ITEM = create(RegistryKey.ITEM); // Kiterino - Data-driven items
 +    public static final RegistryEventProvider<org.bukkit.block.BlockType, me.sosedik.kiterino.registry.data.BlockRegistryEntity.Builder> BLOCK = create(RegistryKey.BLOCK); // Kiterino - Data-driven blocks
 +    public static final RegistryEventProvider<org.bukkit.potion.PotionEffectType, me.sosedik.kiterino.registry.data.MobEffectRegistryEntity.Builder> MOB_EFFECT = create(RegistryKey.MOB_EFFECT); // Kiterino - Data-driven mob effects

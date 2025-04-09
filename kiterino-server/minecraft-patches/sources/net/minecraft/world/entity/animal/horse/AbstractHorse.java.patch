@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/horse/AbstractHorse.java
 +++ b/net/minecraft/world/entity/animal/horse/AbstractHorse.java
-@@ -206,8 +_,8 @@
+@@ -126,8 +_,8 @@
  
      protected AbstractHorse(EntityType<? extends AbstractHorse> entityType, Level level) {
          super(entityType, level);
@@ -11,16 +11,7 @@
          this.createInventory();
      }
  
-@@ -374,7 +_,7 @@
- 
-     @Override
-     public boolean isSaddled() {
--        return this.getFlag(4);
-+        return this.getFlag(4) || hasRider(); // Kiterino - Allow riders to control horses without a saddle
-     }
- 
-     public int getTemper() {
-@@ -571,7 +_,7 @@
+@@ -462,7 +_,7 @@
  
      @Override
      public void openCustomInventoryScreen(Player player) {

@@ -5,20 +5,20 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index c5a5bd367478c32672fbf5ec237bef432814e553..12378d28a23761363bd51072452250559bf83ef2 100644
+index 4586d7afb4f0a27c7d61abb80af24205d46cb83f..c216f652ec861b346ad7aa2ad043e2b0ac78d418 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4484,6 +4484,23 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4506,6 +4506,23 @@ public abstract class LivingEntity extends Entity implements Attackable {
          return ItemStack.EMPTY;
      }
  
 +    // Kiterino start - Add EntityLoadsProjectileEvent
 +    public ItemStack getProjectile(ItemStack weapon, ItemStack projectile, Predicate<ItemStack> projectileValidator) {
 +        var event = new me.sosedik.kiterino.event.entity.EntityLoadsProjectileEvent(
-+            getBukkitLivingEntity(),
-+            weapon.asBukkitMirror(),
-+            projectile.asBukkitMirror(),
-+            bukkitItem -> projectileValidator.test(CraftItemStack.asNMSCopy(bukkitItem))
++                getBukkitLivingEntity(),
++                weapon.asBukkitMirror(),
++                projectile.asBukkitMirror(),
++                bukkitItem -> projectileValidator.test(CraftItemStack.asNMSCopy(bukkitItem))
 +        );
 +        event.callEvent();
 +        var item = event.getProjectile();
@@ -33,7 +33,7 @@ index c5a5bd367478c32672fbf5ec237bef432814e553..12378d28a23761363bd5107245225055
          return switch (slot) {
              case MAINHAND -> 47;
 diff --git a/net/minecraft/world/entity/monster/Monster.java b/net/minecraft/world/entity/monster/Monster.java
-index c1ebb74b0d4a8e2eb8880ccaf20f0f9bc1940094..8d076340357ccf40149f10c82c7bbbdf3fc4720c 100644
+index 04d5910d736dee2a88a2602f4a98495459277157..9251ff10f30d833f7b2ee6c8d771aab87e5c1443 100644
 --- a/net/minecraft/world/entity/monster/Monster.java
 +++ b/net/minecraft/world/entity/monster/Monster.java
 @@ -147,7 +147,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
@@ -46,10 +46,10 @@ index c1ebb74b0d4a8e2eb8880ccaf20f0f9bc1940094..8d076340357ccf40149f10c82c7bbbdf
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 3aab8856b07389a8d7a06a9f66f21771a3f2d122..e191e25784e4867be98032ed5029d280934c9652 100644
+index 87c8bc6f9128d2fcb19628bc3ef354e517b632bb..da5d663f1d7cf135d0d90b749b63525854728353 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -2306,19 +2306,19 @@ public abstract class Player extends LivingEntity {
+@@ -2194,19 +2194,19 @@ public abstract class Player extends LivingEntity {
              Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(shootable, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);
              if (!heldProjectile.isEmpty()) {
@@ -67,8 +67,8 @@ index 3aab8856b07389a8d7a06a9f66f21771a3f2d122..e191e25784e4867be98032ed5029d280
                  }
  
                  if (anyEventCancelled.booleanValue() && !this.abilities.instabuild && this instanceof final ServerPlayer player) this.resyncUsingItem(player); // Paper - resync if no item matched the Predicate
--                return this.abilities.instabuild ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
-+                return getProjectile(shootable, this.abilities.instabuild ? new ItemStack(Items.ARROW) : ItemStack.EMPTY, supportedHeldProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
+-                return this.hasInfiniteMaterials() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
++                return getProjectile(shootable, this.hasInfiniteMaterials() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY, supportedHeldProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
              }
          }
      }

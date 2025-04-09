@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
-@@ -3252,7 +_,9 @@
+@@ -3341,7 +_,9 @@
      );
      public static final Block PACKED_ICE = register(
          "packed_ice",
@@ -10,3 +10,10 @@
      );
      public static final Block SUNFLOWER = register(
          "sunflower",
+@@ -7076,5 +_,6 @@
+                 blockState.initCache();
+             }
+         }
++        me.sosedik.kiterino.world.block.KiterinoBlockStateIdMapper.lastVanillaBlockStateId = Block.BLOCK_STATE_REGISTRY.size() - 1; // Kiterino - Data-driven blocks
+     }
+ }

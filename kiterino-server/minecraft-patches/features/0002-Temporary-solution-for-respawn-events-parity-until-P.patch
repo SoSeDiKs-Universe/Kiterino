@@ -6,10 +6,10 @@ Subject: [PATCH] Temporary solution for respawn events parity until Paper PR
 
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index c0b8715c402041d5584ba831cda21b5578064778..ef574e6d2772330a25bf43011ccd6d8f7eea4c59 100644
+index 2d3c0cf56426d549fdf52ba8e38aa881eb3bf32e..810d98ba885e345a3af8566ee09964842e17d43d 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -746,6 +746,7 @@ public abstract class PlayerList {
+@@ -745,6 +745,7 @@ public abstract class PlayerList {
          }
          // Paper start - Add PlayerPostRespawnEvent
          boolean isBedSpawn = false;
@@ -17,15 +17,15 @@ index c0b8715c402041d5584ba831cda21b5578064778..ef574e6d2772330a25bf43011ccd6d8f
          boolean isRespawn = false;
          // Paper end - Add PlayerPostRespawnEvent
  
-@@ -809,6 +810,7 @@ public abstract class PlayerList {
-         if (!keepInventory && respawnPosition != null && level1 != null) {
-             BlockState blockState = level1.getBlockState(respawnPosition);
-             if (blockState.is(Blocks.RESPAWN_ANCHOR)) {
-+                isAnchorSpawn = true; // Kiterino - Parity for respawn events
-                 serverPlayer.connection
-                     .send(
-                         new ClientboundSoundPacket(
-@@ -852,7 +854,13 @@ public abstract class PlayerList {
+@@ -810,6 +811,7 @@ public abstract class PlayerList {
+                 BlockPos blockPos = respawnConfig.pos();
+                 BlockState blockState = level1.getBlockState(blockPos);
+                 if (blockState.is(Blocks.RESPAWN_ANCHOR)) {
++                    isAnchorSpawn = true; // Kiterino - Parity for respawn events
+                     serverPlayer.connection
+                         .send(
+                             new ClientboundSoundPacket(
+@@ -854,7 +856,13 @@ public abstract class PlayerList {
  
          // Paper start - Add PlayerPostRespawnEvent
          if (isRespawn) {

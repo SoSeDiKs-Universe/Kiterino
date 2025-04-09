@@ -6,14 +6,14 @@ Subject: [PATCH] Paper PR - Player standing on position API
 https://github.com/PaperMC/Paper/pull/9298
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 39f13ca7be830ec7af1a5b8b6cbe1ae33e92e1bb..929b215f3d56ad43a7f453b97945f836381388ed 100644
+index 941c6c0a1c028887254a4cd0704c5d1d157c4518..a1a068ae12b161a85a15dc5a518c44c51457ea16 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1453,6 +1453,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1400,6 +1400,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return this.entity.get(io.papermc.paper.datacomponent.PaperDataComponentType.bukkitToMinecraft(type)) != null;
      }
-     // Paper end - broadcast hurt animation
  
-+    // Paper start - Player standing on position API
++    // Kiterino start - Paper PR - Player standing on position API
 +    @Override
 +    public org.bukkit.block.Block getMovementAffectingBlock() {
 +        return CraftBlock.at(this.getHandle().level(), this.getHandle().getBlockPosBelowThatAffectsMyMovement());
@@ -25,7 +25,7 @@ index 39f13ca7be830ec7af1a5b8b6cbe1ae33e92e1bb..929b215f3d56ad43a7f453b97945f836
 +                .map((pos) -> CraftBlock.at(this.getHandle().level(), pos))
 +                .orElse(null);
 +    }
-+    // Paper end - Player standing on position API
++    // Kiterino end - Paper PR - Player standing on position API
 +
      // Purpur start - Ridables
      @Override

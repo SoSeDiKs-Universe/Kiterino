@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-@@ -544,7 +_,7 @@
+@@ -545,7 +_,7 @@
          //</editor-fold>
      }
  

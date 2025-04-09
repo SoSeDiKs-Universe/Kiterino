@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -4761,6 +_,7 @@
+@@ -2643,6 +_,7 @@
      private final NamespacedKey key;
      private final Supplier<ItemType> itemType;
      private final Supplier<BlockType> blockType;
@@ -8,7 +8,7 @@
  
      private Material(final int id) {
          this(id, 64);
-@@ -4932,6 +_,12 @@
+@@ -2789,6 +_,12 @@
       * @return Maximum stack size for this material
       */
      public int getMaxStackSize() {
@@ -21,20 +21,7 @@
          return maxStack;
      }
  
-@@ -4941,6 +_,12 @@
-      * @return Maximum durability for this material
-      */
-     public short getMaxDurability() {
-+        // Kiterino start - Support changing default item durability
-+        ItemType type = asItemType();
-+        if (type != null) {
-+            return type.getMaxDurability();
-+        }
-+        // Kiterino end - Support changing default item durability
-         return durability;
-     }
- 
-@@ -5119,6 +_,11 @@
+@@ -2977,6 +_,11 @@
          if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
@@ -46,7 +33,7 @@
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -5848,4 +_,16 @@
+@@ -3652,4 +_,16 @@
          }
      }
      // Purpur end - ItemStack convenience methods

@@ -2,7 +2,7 @@
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMob.java
 @@ -29,6 +_,17 @@
          } else if (target instanceof CraftLivingEntity) {
-             entity.setTarget(((CraftLivingEntity) target).getHandle(), null, false);
+             entity.setTarget(((CraftLivingEntity) target).getHandle(), null);
          }
 +        // Kiterino start - Update goal target when changing target
 +        entity.targetSelector.getAvailableGoals().forEach(goal -> {

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4037,4 +_,51 @@
+@@ -4013,4 +_,51 @@
          sendDeathScreen(message);
      }
      // Purpur end
