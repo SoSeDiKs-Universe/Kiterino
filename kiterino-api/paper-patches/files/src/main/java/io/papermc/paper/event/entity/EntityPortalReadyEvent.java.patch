@@ -1,0 +1,11 @@
+--- a/src/main/java/io/papermc/paper/event/entity/EntityPortalReadyEvent.java
++++ b/src/main/java/io/papermc/paper/event/entity/EntityPortalReadyEvent.java
+@@ -14,7 +_,7 @@
+ 
+ /**
+  * Called when an entity is ready to be teleported by a plugin.
+- * Currently, this is only called after the required
++ * Currently, this is only called for an End Portal and after the required
+  * ticks have passed for a Nether Portal.
+  * <p>
+  * Cancelling this event resets the entity's readiness

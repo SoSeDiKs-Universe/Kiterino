@@ -1,0 +1,28 @@
+--- a/net/minecraft/server/level/ServerPlayer.java
++++ b/net/minecraft/server/level/ServerPlayer.java
+@@ -1228,6 +_,12 @@
+ 
+     // CraftBukkit start
+     public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, @Nullable org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
++        // Kiterino start - Call EntityPortalReadyEvent for End Portal
++        return findRespawnPositionAndUseSpawnBlock(useCharge, postTeleportTransition, respawnReason, null);
++    }
++
++    public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, @Nullable org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason, @Nullable ServerLevel levelTo) {
++        // Kiterino end - Call EntityPortalReadyEvent for End Portal
+         TeleportTransition teleportTransition;
+         boolean isBedSpawn = false;
+         boolean isAnchorSpawn = false;
+@@ -1244,10 +_,10 @@
+                 teleportTransition = new TeleportTransition(level, respawnPosAngle.position(), Vec3.ZERO, respawnPosAngle.yaw(), 0.0F, postTeleportTransition);
+                 // CraftBukkit end
+             } else {
+-                teleportTransition = TeleportTransition.missingRespawnBlock(this.server.overworld(), this, postTeleportTransition); // CraftBukkit
++                teleportTransition = TeleportTransition.missingRespawnBlock(levelTo == null ? this.server.overworld() : levelTo, this, postTeleportTransition); // CraftBukkit // Kiterino - Call EntityPortalReadyEvent for End Portal
+             }
+         } else {
+-            teleportTransition = new TeleportTransition(this.server.overworld(), this, postTeleportTransition); // CraftBukkit
++            teleportTransition = new TeleportTransition(levelTo == null ? this.server.overworld() : levelTo, this, postTeleportTransition); // CraftBukkit // Kiterino - Call EntityPortalReadyEvent for End Portal
+         }
+         // CraftBukkit start
+         if (respawnReason == null) {
