@@ -6,10 +6,10 @@ Subject: [PATCH] Paper PR - Player standing on position API
 https://github.com/PaperMC/Paper/pull/9298
 
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 319e82d5a2c8615f5cd273d541b065ea9639fac1..336fa1743f2b31cf8426498f8c9a1d8f17051851 100644
+index 9114793474f051fb2839ea6cd5ea738bdb4580b6..27380bf184ad528c7b1d7118a4669aa727a3d7c9 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1216,6 +1216,33 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1217,6 +1217,33 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
      void broadcastHurtAnimation(@NotNull java.util.Collection<Player> players);
      // Paper end - broadcast hurt animation
  

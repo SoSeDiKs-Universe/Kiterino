@@ -1,5 +1,28 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -378,8 +_,20 @@
+     }
+ 
+     @Override
+-    public void setFireTicks(int ticks) {
+-        this.getHandle().setRemainingFireTicks(ticks);
++    public boolean setFireTicks(int ticks) { // Kiterino start - Call EntityCombustEvent on setFireTicks
++        if (ticks <= 0 || getFireTicks() > 0) {
++            this.getHandle().setRemainingFireTicks(ticks);
++            return true;
++        }
++
++        var event = new org.bukkit.event.entity.EntityCombustEvent(this, ticks / 20F);
++        if (!event.callEvent()) {
++            return false;
++        }
++
++        this.getHandle().setRemainingFireTicks((int) (event.getDuration() * 20));
++        return true;
++        // Kiterino end - Call EntityCombustEvent on setFireTicks
+     }
+ 
+     @Override
 @@ -1323,4 +_,37 @@
          return !getHandle().dismountsUnderwater();
      }

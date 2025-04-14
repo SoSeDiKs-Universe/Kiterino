@@ -25,9 +25,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -273,19 +275,25 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     @SuppressWarnings("unchecked")
     private static Packet<?> handle(CraftPlayer player, ClientboundBundlePacket initialPacket) {
-        if (!(initialPacket.subPackets() instanceof ArrayList list)) {
-            KiterinoConfig.log(Level.WARNING, "Bundle packets are not in ArrayList: " + initialPacket.subPackets().getClass());
-            return initialPacket;
+        List<Packet<? super ClientGamePacketListener>> packets;
+        if (initialPacket.packets instanceof ArrayList list) {
+            packets = list;
+        } else {
+            List<Packet<? super ClientGamePacketListener>> packetsCopy = new ArrayList<>();
+            initialPacket.packets.forEach(packetsCopy::add);
+            packets = packetsCopy;
         }
 
-        ListIterator<Packet<?>> iterator = list.listIterator();
+        ListIterator<Packet<? super ClientGamePacketListener>> iterator = packets.listIterator();
         while (iterator.hasNext()) {
-            Packet<?> packet = iterator.next();
-            Packet<?> newPacket = processPacket(player, packet);
+            Packet<? super ClientGamePacketListener> packet = iterator.next();
+            Packet<? super ClientGamePacketListener> newPacket = (Packet<? super ClientGamePacketListener>) processPacket(player, packet);
             if (packet != newPacket) {
                 iterator.set(newPacket);
             }
         }
+
+        initialPacket.packets = packets;
 
         return initialPacket;
     }
@@ -659,6 +667,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 oldDisplay.shouldAnnounceChat(),
                 oldDisplay.isHidden()
             );
+            displayInfo.setLocation(oldDisplay.getX(), oldDisplay.getY());
             var advancement = new Advancement(
                 oldAdvancement.parent(),
                 Optional.of(displayInfo),
@@ -748,10 +757,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 		    net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
 		    if (customData == null) {
 			    customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-			    customData.getUnsafe().put("kiterino_og_item", original.save(player.getHandle().registryAccess()));
+			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : original.save(player.getHandle().registryAccess()));
 			    itemStack.set(DataComponents.CUSTOM_DATA, customData);
 		    } else {
-			    customData.getUnsafe().put("kiterino_og_item", original.save(player.getHandle().registryAccess()));
+			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : original.save(player.getHandle().registryAccess()));
 		    }
 	    }
 	    return itemStack;

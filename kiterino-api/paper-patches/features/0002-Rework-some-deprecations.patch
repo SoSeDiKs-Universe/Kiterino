@@ -36,10 +36,10 @@ index 96a96ad2ffc6105074b6c20d4109496e9a619982..d8e81d8beaf8de118f7445414cc09804
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 851671b79977594c232609ba2bb4eeb87d5382e5..df55deb52873bde09b941ef63066ea28ff36ccfe 100644
+index f342b8541ef4e865c7eb0fc7f14fb6feb6324034..c9c4f45f5c2362da0274d462ee4129a479b39d9a 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
+@@ -33,7 +33,7 @@ import java.util.Map;
   * may be poorly named, throw exceptions, have misleading parameters, or any
   * other bad programming practice.
   */

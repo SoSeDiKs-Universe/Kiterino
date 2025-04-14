@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/LivingEntity.java
++++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -3637,7 +_,7 @@
+                 }
+ 
+                 if (flag) {
+-                    if (getRider() == null || !this.isControllable()) // Purpur - ignore mobs which are uncontrollable or without rider - API for any mob to burn daylight
++                    if (getRider() == null || !this.isControllable() || getRider().isInvisible()) // Purpur - ignore mobs which are uncontrollable or without rider - API for any mob to burn daylight // Kiterino - Allow burning ridables with invisible rider
+                         this.igniteForSeconds(8.0F);
+                 }
+             }

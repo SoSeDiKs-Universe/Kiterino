@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/level/block/FireBlock.java
++++ b/net/minecraft/world/level/block/FireBlock.java
+@@ -285,7 +_,10 @@
+             // CraftBukkit end
+             if (random.nextInt(age + 10) < 5 && !level.isRainingAt(pos)) {
+                 int min = Math.min(age + random.nextInt(5) / 4, 15);
+-                level.setBlock(pos, this.getStateWithAge(level, pos, min), 3);
++                // Kiterino start - Call BlockSpreadEvent on burning spread
++                BlockState newState = this.getStateWithAge(level, pos, min);
++                org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, pos, newState, 3);
++                // Kiterino end - Call BlockSpreadEvent on burning spread
+             } else {
+                 if (!blockState.is(Blocks.TNT)) level.removeBlock(pos, false); // Paper - TNTPrimeEvent; We might be cancelling it below, move the setAir down
+             }

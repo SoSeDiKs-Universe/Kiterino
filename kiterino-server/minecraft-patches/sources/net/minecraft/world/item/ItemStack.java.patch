@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -192,7 +_,18 @@
+@@ -192,7 +_,22 @@
                  } else {
                      Holder<Item> holder = Item.STREAM_CODEC.decode(buffer);
                      DataComponentPatch dataComponentPatch = codec.decode(buffer);
@@ -11,8 +11,12 @@
 +                        net.minecraft.world.item.component.CustomData customData = itemStack.components.get(DataComponents.CUSTOM_DATA);
 +                        if (customData != null && customData.contains("kiterino_og_item")) {
 +                            Tag itemTag = customData.getUnsafe().get("kiterino_og_item");
-+	                        assert itemTag != null;
-+	                        itemStack = parse(buffer.registryAccess(), itemTag).orElse(itemStack);
++                            assert itemTag != null;
++                            if (itemTag instanceof net.minecraft.nbt.StringTag) {
++                                itemStack = ItemStack.EMPTY;
++                            } else {
++                                itemStack = parse(buffer.registryAccess(), itemTag).orElse(itemStack);
++                            }
 +                        }
 +                    }
 +                    return itemStack;

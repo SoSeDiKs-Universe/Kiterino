@@ -1,0 +1,26 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityFactory.java
+@@ -38,6 +_,23 @@
+         return CraftEntitySnapshot.create(tag, CraftEntityType.minecraftToBukkit(type));
+     }
+ 
++    // Kiterino start - Add extra EntityFactory methods
++    @Override
++    public EntitySnapshot createEntitySnapshot(org.bukkit.entity.EntityType entityType, @org.jetbrains.annotations.Nullable String input) throws IllegalArgumentException {
++        Preconditions.checkArgument(entityType != null, "Entity type cannot be null");
++
++        CompoundTag tag;
++        try {
++            tag = TagParser.parseCompoundFully(input == null ? "{}" : input);
++        } catch (CommandSyntaxException e) {
++            throw new IllegalArgumentException("Could not parse Entity: " + input, e);
++        }
++        tag.putString(net.minecraft.world.entity.Entity.ID_TAG, entityType.getKey().toString());
++
++        return CraftEntitySnapshot.create(tag, entityType);
++    }
++    // Kiterino end - Add extra EntityFactory methods
++
+     public static CraftEntityFactory instance() {
+         return CraftEntityFactory.instance;
+     }

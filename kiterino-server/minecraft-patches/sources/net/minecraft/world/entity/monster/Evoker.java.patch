@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/entity/monster/Evoker.java
++++ b/net/minecraft/world/entity/monster/Evoker.java
+@@ -369,6 +_,7 @@
+             Sheep wololoTarget = Evoker.this.getWololoTarget();
+             if (wololoTarget != null && wololoTarget.isAlive()) {
+                 wololoTarget.setColor(DyeColor.RED);
++                new me.sosedik.kiterino.event.entity.EvokerWololoEvent((org.bukkit.entity.Evoker) getBukkitEntity(), (org.bukkit.entity.Sheep) wololoTarget.getBukkitEntity()).callEvent(); // Kiterino - Add EvokerWololoEvent
+             }
+         }
+ 
