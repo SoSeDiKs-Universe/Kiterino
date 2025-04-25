@@ -1,0 +1,53 @@
+--- a/src/main/java/org/bukkit/event/entity/PlayerDeathEvent.java
++++ b/src/main/java/org/bukkit/event/entity/PlayerDeathEvent.java
+@@ -19,6 +_,7 @@
+     private int newExp = 0;
+     private int newLevel = 0;
+     private int newTotalExp = 0;
++    private Component originalDeathMessage; // Kiterino - Preserve original death message
+     private Component deathMessage;
+     private boolean doExpDrop;
+     private boolean keepLevel = false;
+@@ -48,6 +_,7 @@
+         this.newTotalExp = newTotalExp;
+         this.newLevel = newLevel;
+         this.deathMessage = deathMessage;
++        this.originalDeathMessage = this.deathMessage; // Kiterino - Preserve original death message
+         this.doExpDrop = doExpDrop;
+     }
+ 
+@@ -77,6 +_,7 @@
+         this.newTotalExp = newTotalExp;
+         this.newLevel = newLevel;
+         this.deathMessage = LegacyComponentSerializer.legacySection().deserializeOrNull(deathMessage);
++        this.originalDeathMessage = this.deathMessage; // Kiterino - Preserve original death message
+         this.doExpDrop = doExpDrop;
+     }
+ 
+@@ -173,6 +_,26 @@
+     public @Nullable Component deathMessage() {
+         return this.deathMessage;
+     }
++
++    // Kiterino start - Preserve original death message
++    /**
++     * Sets the original death message.
++     *
++     * @param deathMessage Component message to appear to other players on the server.
++     */
++    public void originalDeathMessage(final @Nullable Component deathMessage) {
++        this.originalDeathMessage = deathMessage;
++    }
++
++    /**
++     * Gets the original death message.
++     *
++     * @return original death message
++     */
++    public @Nullable Component originalDeathMessage() {
++        return this.originalDeathMessage;
++    }
++    // Kiterino end - Preserve original death message
+ 
+     /**
+      * Set the death message that will appear to everyone on the server.

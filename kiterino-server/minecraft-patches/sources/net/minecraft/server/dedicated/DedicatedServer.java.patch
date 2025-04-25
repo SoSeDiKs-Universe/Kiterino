@@ -1,9 +1,9 @@
 --- a/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -177,6 +_,15 @@
+@@ -193,6 +_,15 @@
          }
          org.purpurmc.purpur.PurpurConfig.registerCommands();
-         // Purpur end - Configurable void damage height and damage
+         // Purpur end - Purpur config files
 +        // Kiterino start - Kiterino Config
 +        try {
 +            me.sosedik.kiterino.KiterinoConfig.init((java.io.File) options.valueOf("kiterino-settings"));
@@ -13,10 +13,10 @@
 +            return false;
 +        }
 +        // Kiterino end - Kiterino Config
-         // Paper start - initialize global and world-defaults configuration
-         this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
-         this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
-@@ -273,6 +_,13 @@
+         com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
+ 
+         this.setPvpAllowed(properties.pvp);
+@@ -264,6 +_,13 @@
              }
          }
          // Purpur end - UPnP Port Forwarding
