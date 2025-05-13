@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4013,4 +_,51 @@
+@@ -4029,4 +_,101 @@
          sendDeathScreen(message);
      }
      // Purpur end
@@ -51,4 +51,54 @@
 +     */
 +    boolean openEnderChest(org.bukkit.block.EnderChest enderChest);
 +    // Kiterino end - Open ender chest API
++
++    // Kiterino start - Block place API
++    /**
++     * Place block as if this player placed it
++     * <p>Item in hand will be consumed if placed successfully
++     *
++     * @param hand hand to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @return true, if placed successfully
++     */
++    default boolean placeBlock(EquipmentSlot hand, Location location, org.bukkit.block.BlockFace blockFace) {
++        return placeBlock(hand, location, blockFace, true);
++    }
++
++    /**
++     * Place block as if this player placed it
++     *
++     * @param hand hand to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @param consume whether item should be consumed or not upon successful placement
++     * @return true, if placed successfully
++     */
++    boolean placeBlock(EquipmentSlot hand, Location location, org.bukkit.block.BlockFace blockFace, boolean consume);
++
++    /**
++     * Place block as if this player placed it
++     * <p>Item in hand will be consumed if placed successfully
++     *
++     * @param block block item to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @return true, if placed successfully
++     */
++    default boolean placeBlock(ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
++        return placeBlock(block, location, blockFace, true);
++    }
++
++    /**
++     * Place block as if this player placed it
++     *
++     * @param block block item to use for placing
++     * @param location location to place
++     * @param blockFace facing against which block will be placed
++     * @param consume whether item should be consumed or not upon successful placement
++     * @return true, if placed successfully
++     */
++    boolean placeBlock(ItemStack block, Location location, org.bukkit.block.BlockFace blockFace, boolean consume);
++    // Kiterino end - Block place API
  }

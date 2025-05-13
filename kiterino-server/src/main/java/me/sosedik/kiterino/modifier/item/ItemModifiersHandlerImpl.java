@@ -4,8 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import io.papermc.paper.datacomponent.item.BundleContents;
+import io.papermc.paper.datacomponent.item.Repairable;
 import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.datacomponent.item.UseRemainder;
+import io.papermc.paper.registry.TypedKey;
+import io.papermc.paper.registry.set.RegistryKeySet;
 import me.sosedik.kiterino.KiterinoConfig;
 import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
@@ -85,6 +88,7 @@ import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -234,6 +238,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 				    item.setData(DataComponentTypes.USE_REMAINDER, UseRemainder.useRemainder(newItem));
 			    }
 		    }
+            // Repairable ingredient
+            if (item.hasData(DataComponentTypes.REPAIRABLE)) {
+                Repairable repairable = item.getData(DataComponentTypes.REPAIRABLE);
+                assert repairable != null;
+
+                // TODO find a better way
+                RegistryKeySet<ItemType> types = repairable.types();
+                for (TypedKey<ItemType> typedKey : types.values()) {
+                    if ("minecraft".equals(typedKey.key().namespace())) continue;
+
+                    item.resetData(DataComponentTypes.REPAIRABLE);
+                    modified = true;
+                    break;
+                }
+            }
 	    }
 
         return modified ? contextBox.getItem() : null;

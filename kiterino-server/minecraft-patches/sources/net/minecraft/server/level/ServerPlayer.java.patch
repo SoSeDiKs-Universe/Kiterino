@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -1228,6 +_,12 @@
+@@ -1231,6 +_,12 @@
  
      // CraftBukkit start
      public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, @Nullable org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
@@ -13,7 +13,7 @@
          TeleportTransition teleportTransition;
          boolean isBedSpawn = false;
          boolean isAnchorSpawn = false;
-@@ -1244,10 +_,10 @@
+@@ -1247,10 +_,10 @@
                  teleportTransition = new TeleportTransition(level, respawnPosAngle.position(), Vec3.ZERO, respawnPosAngle.yaw(), 0.0F, postTeleportTransition);
                  // CraftBukkit end
              } else {

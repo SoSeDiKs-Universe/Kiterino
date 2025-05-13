@@ -5,7 +5,7 @@ Subject: [PATCH] Add EntityStartUsingItemEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index c216f652ec861b346ad7aa2ad043e2b0ac78d418..5323e94d96a23bde5eea0b0963a88b94101b7b22 100644
+index eff4a51ac1817489b1d590327865dcbc9e846773..e997556eb0c6934e409f682dca30d977416d5a7a 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
 @@ -4055,8 +4055,16 @@ public abstract class LivingEntity extends Entity implements Attackable {

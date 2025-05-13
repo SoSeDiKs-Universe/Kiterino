@@ -1,5 +1,13 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -2603,6 +_,7 @@
+                 ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
+                 ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
+                 if (updateSelf) {
++                    if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
+                     chunkSource.broadcastAndSend(this, clientboundAnimatePacket);
+                 } else {
+                     chunkSource.broadcast(this, clientboundAnimatePacket);
 @@ -3637,7 +_,7 @@
                  }
  

@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven items
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 01dbd27a3dea07a46962ab19b66d16a03ab64f99..d4dd11cccb16e46994d441745e37303622d525d6 100644
+index b0d34b7496704c423c2f5fff4101aadba2a6d57c..8571bbc32e697344051e8495a42f303841cb59b4 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -95,7 +95,7 @@ public final class PaperRegistries {
+@@ -101,7 +101,7 @@ public final class PaperRegistries {
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
              start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
@@ -18,12 +18,12 @@ index 01dbd27a3dea07a46962ab19b66d16a03ab64f99..d4dd11cccb16e46994d441745e373036
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
              start(Registries.MAP_DECORATION_TYPE, RegistryKey.MAP_DECORATION_TYPE).craft(MapCursor.Type.class, CraftMapCursor.CraftType::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index b1710da835cee3333bfb1c238b37ec0c4d16ba09..cadbf29c4667a74d79fdc538e0cca9cc61480d29 100644
+index b6a9fd509a4f10170cffc8fc518ad12f3a7558e4..0c72f605e00bb7fd129ece49d1bc726cb196c234 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -55,4 +55,24 @@ public class Conversions {
-     public Component asAdventure(final net.minecraft.network.chat.@Nullable Component vanilla) {
-         return vanilla == null ? Component.empty() : this.serializer.deserialize(vanilla);
+@@ -70,4 +70,24 @@ public class Conversions {
+             PaperAdventure.asVanilla(clientTextureAsset.texturePath())
+         );
      }
 +
 +    // Kiterino start - Data-driven items

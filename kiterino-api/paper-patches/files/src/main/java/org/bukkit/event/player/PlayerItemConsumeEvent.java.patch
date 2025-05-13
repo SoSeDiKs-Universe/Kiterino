@@ -1,0 +1,25 @@
+--- a/src/main/java/org/bukkit/event/player/PlayerItemConsumeEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerItemConsumeEvent.java
+@@ -20,7 +_,7 @@
+  * If the event is cancelled the effect will not be applied and the item will
+  * not be removed from the player's inventory.
+  */
+-public class PlayerItemConsumeEvent extends PlayerEvent implements Cancellable {
++public class PlayerItemConsumeEvent extends PlayerEvent implements Cancellable, me.sosedik.kiterino.event.entity.ItemConsumeEvent { // Kiterino - Add EntityItemConsumeEvent
+ 
+     private static final HandlerList HANDLER_LIST = new HandlerList();
+ 
+@@ -43,6 +_,13 @@
+     public PlayerItemConsumeEvent(@NotNull final Player player, @NotNull final ItemStack item) {
+         this(player, item, EquipmentSlot.HAND);
+     }
++
++    // Kiterino start - Add EntityItemConsumeEvent
++    @Override
++    public @NotNull Player getEntity() {
++        return getPlayer();
++    }
++    // Kiterino end - Add EntityItemConsumeEvent
+ 
+     /**
+      * Gets the item that is being consumed. Modifying the returned item will

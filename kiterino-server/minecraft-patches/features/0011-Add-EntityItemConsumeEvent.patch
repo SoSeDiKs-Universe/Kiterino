@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 27 Apr 2025 12:45:30 +0300
+Subject: [PATCH] Add EntityItemConsumeEvent
+
+
+diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
+index e997556eb0c6934e409f682dca30d977416d5a7a..1bc1396f67babe91132a17f20cbfe9617226b80a 100644
+--- a/net/minecraft/world/entity/LivingEntity.java
++++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -4135,12 +4135,12 @@ public abstract class LivingEntity extends Entity implements Attackable {
+                     this.startUsingItem(this.getUsedItemHand(), true); // Paper - Prevent consuming the wrong itemstack
+                     // CraftBukkit start - fire PlayerItemConsumeEvent
+                     ItemStack itemStack;
+-                    org.bukkit.event.player.PlayerItemConsumeEvent event = null; // Paper
++                    me.sosedik.kiterino.event.entity.ItemConsumeEvent event = null; // Paper // Kiterino - Add EntityItemConsumeEvent
+                     if (this instanceof ServerPlayer serverPlayer) {
+                         org.bukkit.inventory.ItemStack craftItem = CraftItemStack.asBukkitCopy(this.useItem);
+                         org.bukkit.inventory.EquipmentSlot hand = org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(usedItemHand);
+                         event = new org.bukkit.event.player.PlayerItemConsumeEvent((org.bukkit.entity.Player) this.getBukkitEntity(), craftItem, hand); // Paper
+-                        this.level().getCraftServer().getPluginManager().callEvent(event);
++                        event.callEvent(); // Kiterino - Add EntityItemConsumeEvent
+ 
+                         if (event.isCancelled()) {
+                             // Update client
+@@ -4156,7 +4156,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
+ 
+                         itemStack = (craftItem.equals(event.getItem())) ? this.useItem.finishUsingItem(this.level(), this) : CraftItemStack.asNMSCopy(event.getItem()).finishUsingItem(this.level(), this);
+                     } else {
+-                        itemStack = this.useItem.finishUsingItem(this.level(), this);
++                        // Kiterino start - Add EntityItemConsumeEvent
++                        org.bukkit.inventory.ItemStack craftItem = CraftItemStack.asBukkitCopy(this.useItem);
++                        org.bukkit.inventory.EquipmentSlot hand = org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(usedItemHand);
++                        event = new me.sosedik.kiterino.event.entity.EntityItemConsumeEvent(this.getBukkitLivingEntity(), craftItem, hand);
++                        event.callEvent();
++                        if (event.isCancelled()) {
++                            this.stopUsingItem();
++                            return;
++                        }
++
++                        itemStack = (craftItem.equals(event.getItem())) ? this.useItem.finishUsingItem(this.level(), this) : CraftItemStack.asNMSCopy(event.getItem()).finishUsingItem(this.level(), this);
++                        // Kiterino end - Add EntityItemConsumeEvent
+                     }
+                     // Paper start - save the default replacement item and change it if necessary
+                     final ItemStack defaultReplacement = itemStack;

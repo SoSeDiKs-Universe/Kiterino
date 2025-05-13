@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -378,8 +_,20 @@
+@@ -411,8 +_,20 @@
      }
  
      @Override
@@ -23,7 +23,7 @@
      }
  
      @Override
-@@ -1335,4 +_,37 @@
+@@ -1348,4 +_,37 @@
          return !getHandle().dismountsUnderwater();
      }
      // Purpur end - Ridables

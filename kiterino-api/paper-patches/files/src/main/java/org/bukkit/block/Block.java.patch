@@ -1,9 +1,9 @@
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -817,4 +_,29 @@
-         return this.getBlockData().getDestroySpeed(itemStack, considerEnchants);
-     }
-     // Paper end - destroy speed API
+@@ -824,4 +_,38 @@
+      * @return {@code true} if the block can suffocate
+      */
+     boolean isSuffocating();
 +
 +    // Kiterino start - More Sound API
 +    /**
@@ -27,6 +27,15 @@
 +     */
 +    default void emitSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
 +        getWorld().playSound(getLocation().toCenterLocation(), sound, category, volume, pitch);
++    }
++
++    /**
++     * Plays a sound at the location of the block
++     *
++     * @param sound sound to play
++     */
++    default void emitSound(@NotNull net.kyori.adventure.sound.Sound sound) {
++        getWorld().playSound(sound, getX() + 0.5, getY() + 0.5, getZ() + 0.5);
 +    }
 +    // Kiterino end - More Sound API
  }

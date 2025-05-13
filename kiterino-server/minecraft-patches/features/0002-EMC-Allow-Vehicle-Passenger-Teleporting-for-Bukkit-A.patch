@@ -6,7 +6,7 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index 810d98ba885e345a3af8566ee09964842e17d43d..f9d4eea629b198468eb50fad838bbf635cffaedd 100644
+index 9c221f3573f44958e1d817b475c8330348905942..3bdb4f0a8048756867a72db6b611c5cc3175f328 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
 @@ -720,7 +720,7 @@ public abstract class PlayerList {

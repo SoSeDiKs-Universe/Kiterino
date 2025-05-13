@@ -21,7 +21,7 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
-@@ -3121,6 +_,21 @@
+@@ -3138,6 +_,21 @@
              this.gameEvent(GameEvent.ENTITY_MOUNT, passenger);
          }
      }

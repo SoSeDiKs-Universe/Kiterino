@@ -41,7 +41,7 @@ index 6d0b6fa3126eb1189e3a1b304aa8b9051ef883ef..b1db087ba7c077c4a99e9a946755b78a
          return recipe;
      }
 diff --git a/net/minecraft/world/item/crafting/ShapedRecipe.java b/net/minecraft/world/item/crafting/ShapedRecipe.java
-index e6f9f6e262df421fab01848ed45ac9301c6ba5d8..8754416cf22ca29c216c20a8e7f8d9e087990af3 100644
+index b7020d231f9002807cb1a7631890e53102535e91..4b715c3e90da85d25baa29611d914b0e4f88c201 100644
 --- a/net/minecraft/world/item/crafting/ShapedRecipe.java
 +++ b/net/minecraft/world/item/crafting/ShapedRecipe.java
 @@ -25,6 +25,7 @@ public class ShapedRecipe implements CraftingRecipe {

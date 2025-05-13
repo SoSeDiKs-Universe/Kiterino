@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/entity/ai/goal/RangedBowAttackGoal.java
++++ b/net/minecraft/world/entity/ai/goal/RangedBowAttackGoal.java
+@@ -126,14 +_,24 @@
+                 } else if (hasLineOfSight) {
+                     int ticksUsingItem = this.mob.getTicksUsingItem();
+                     if (ticksUsingItem >= 20) {
+-                        this.mob.stopUsingItem();
+-                        this.mob.performRangedAttack(target, BowItem.getPowerForTime(ticksUsingItem));
++                        performAttack(target, ticksUsingItem); // Kiterino - Easier ranged bow attack overrides
+                         this.attackTime = this.attackIntervalMin;
+                     }
+                 }
+             } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+-                this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, Items.BOW));
++                this.mob.startUsingItem(getBowHoldingHand()); // Kiterino - Easier ranged bow attack overrides
+             }
+         }
+     }
++
++    // Kiterino start - Easier ranged bow attack overrides
++    protected net.minecraft.world.InteractionHand getBowHoldingHand() {
++        return ProjectileUtil.getWeaponHoldingHand(this.mob, Items.BOW);
++    }
++
++    protected void performAttack(LivingEntity target, int ticksUsingItem) {
++        this.mob.stopUsingItem();
++        this.mob.performRangedAttack(target, BowItem.getPowerForTime(ticksUsingItem));
++    }
++    // Kiterino end - Easier ranged bow attack overrides
+ }

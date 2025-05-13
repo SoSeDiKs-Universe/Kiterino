@@ -6,33 +6,33 @@ Subject: [PATCH] Better EntityShootBowEvent cancellation
 Don't increase stats / play bow sound if event was cancelled
 
 diff --git a/net/minecraft/world/item/BowItem.java b/net/minecraft/world/item/BowItem.java
-index b3e003694ce0da357e91ab3ce2b1380f9ab0a32a..977df16410eb4c10ef651f85dd21aad6d6a9990d 100644
+index ce1ce18410fc1d47d999c918a8f880b43bf9797c..59e8e1441ff78d37b94b55885531ceb33a6b82aa 100644
 --- a/net/minecraft/world/item/BowItem.java
 +++ b/net/minecraft/world/item/BowItem.java
 @@ -43,7 +43,7 @@ public class BowItem extends ProjectileWeaponItem {
                  } else {
                      List<ItemStack> list = draw(stack, projectile, player);
                      if (level instanceof ServerLevel serverLevel && !list.isEmpty()) {
--                        this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null); // Purpur - Projectile offset config
-+                        if (!this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null)); // Purpur - Projectile offset config // Kiterino - Better EntityShootBowEvent cancellation
+-                        this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null, powerForTime); // Paper - Pass draw strength // Purpur - Projectile offset config
++                        if (!this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null, powerForTime)); // Paper - Pass draw strength  // Purpur - Projectile offset config // Kiterino - Better EntityShootBowEvent cancellation
                      }
  
                      level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index 1dcfa8e751b2b5b3da1209aa20ed51edd376b616..e20afe86c8562f58a51ae2e1ef5da78db305ea99 100644
+index 9275ba72415beaa4e495cae81674fd14ec671156..eb5e5d2ddae628a1bef7804e0f06a3ad3dc05d9e 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
 @@ -174,7 +174,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
          if (level instanceof ServerLevel serverLevel) {
              ChargedProjectiles chargedProjectiles = weapon.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
              if (chargedProjectiles != null && !chargedProjectiles.isEmpty()) {
--                this.shoot(serverLevel, shooter, hand, weapon, chargedProjectiles.getItems(), velocity, inaccuracy, shooter instanceof Player, target);
-+                if (!this.shoot(serverLevel, shooter, hand, weapon, chargedProjectiles.getItems(), velocity, inaccuracy, shooter instanceof Player, target)); // Kiterino - Better EntityShootBowEvent cancellation
+-                this.shoot(serverLevel, shooter, hand, weapon, chargedProjectiles.getItems(), velocity, inaccuracy, shooter instanceof Player, target, 1); // Paper - Pass draw strength
++                if (!this.shoot(serverLevel, shooter, hand, weapon, chargedProjectiles.getItems(), velocity, inaccuracy, shooter instanceof Player, target, 1)); // Paper - Pass draw strength // Kiterino - Better EntityShootBowEvent cancellation
                  if (shooter instanceof ServerPlayer serverPlayer) {
                      CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, weapon);
                      serverPlayer.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
 diff --git a/net/minecraft/world/item/ProjectileWeaponItem.java b/net/minecraft/world/item/ProjectileWeaponItem.java
-index 662e286f40e042823fa7cdd9e27b44e4bfad9cb9..633c9b515ffb3b4184aa212c069383440a7cd7d7 100644
+index fb5077450aa9f7b7a03dd20c27a68dfdaab5ef06..856454106de362576a7f722079fb8adbe4f58ebf 100644
 --- a/net/minecraft/world/item/ProjectileWeaponItem.java
 +++ b/net/minecraft/world/item/ProjectileWeaponItem.java
 @@ -40,7 +40,7 @@ public abstract class ProjectileWeaponItem extends Item {
@@ -44,8 +44,8 @@ index 662e286f40e042823fa7cdd9e27b44e4bfad9cb9..633c9b515ffb3b4184aa212c06938344
          ServerLevel level,
          LivingEntity shooter,
          InteractionHand hand,
-@@ -69,7 +69,7 @@ public abstract class ProjectileWeaponItem extends Item {
-                 org.bukkit.event.entity.EntityShootBowEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callEntityShootBowEvent(shooter, weapon, itemStack, projectile, hand, velocity, true);
+@@ -70,7 +70,7 @@ public abstract class ProjectileWeaponItem extends Item {
+                 org.bukkit.event.entity.EntityShootBowEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callEntityShootBowEvent(shooter, weapon, itemStack, projectile, hand, drawStrength, true);
                  if (event.isCancelled()) {
                      event.getProjectile().remove();
 -                    return;
@@ -53,7 +53,7 @@ index 662e286f40e042823fa7cdd9e27b44e4bfad9cb9..633c9b515ffb3b4184aa212c06938344
                  }
  
                  if (event.getProjectile() == projectile.getBukkitEntity()) {
-@@ -81,7 +81,7 @@ public abstract class ProjectileWeaponItem extends Item {
+@@ -82,7 +82,7 @@ public abstract class ProjectileWeaponItem extends Item {
                          if (shooter instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                              serverPlayer.containerMenu.sendAllDataToRemote();
                          }
@@ -62,7 +62,7 @@ index 662e286f40e042823fa7cdd9e27b44e4bfad9cb9..633c9b515ffb3b4184aa212c06938344
                      }
                  }
                  // CraftBukkit end
-@@ -91,6 +91,7 @@ public abstract class ProjectileWeaponItem extends Item {
+@@ -92,6 +92,7 @@ public abstract class ProjectileWeaponItem extends Item {
                  }
              }
          }

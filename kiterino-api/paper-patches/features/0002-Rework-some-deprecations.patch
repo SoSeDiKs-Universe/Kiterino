@@ -5,10 +5,10 @@ Subject: [PATCH] Rework some deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 38fa54e62719f85b635ad937d0bfce857aec3f44..8dac2150826fb7a660c0ed2c911def04adc6707e 100644
+index fdfacc79b233a3a5f32da2ec0290778832aac342..d0b7c7c66fe085f3951e465fcbc104399403e325 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2634,7 +2634,7 @@ public final class Bukkit {
+@@ -2644,7 +2644,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -18,7 +18,7 @@ index 38fa54e62719f85b635ad937d0bfce857aec3f44..8dac2150826fb7a660c0ed2c911def04
      public static UnsafeValues getUnsafe() {
          return server.getUnsafe();
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 96a96ad2ffc6105074b6c20d4109496e9a619982..d8e81d8beaf8de118f7445414cc09804fc8c79f7 100644
+index c1f19d5c1b819873fce1185b4fbf4c72eda26309..8f3683d21d9f5ad79fe16b5d8f1360b886422e56 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
 @@ -233,9 +233,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
@@ -85,10 +85,10 @@ index 7291b6dccd9bbdd27ce872adedbb0535e01f50a9..1b221fff42e307338f026afdd7dd452b
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index cbf7b65ec13c90061a3f595fb182ebcbec4695a4..1171cd4f9a2d95107266a0e43902052f22ff03d5 100644
+index e3485c5046fc87b16399b9f423c40cfe462d13f8..440ad703538bafd1da67ac0b8b5e1e63b3b4d932 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3300,9 +3300,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3316,9 +3316,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale

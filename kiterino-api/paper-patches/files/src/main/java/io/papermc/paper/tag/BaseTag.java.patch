@@ -1,0 +1,24 @@
+--- a/src/main/java/io/papermc/paper/tag/BaseTag.java
++++ b/src/main/java/io/papermc/paper/tag/BaseTag.java
+@@ -53,6 +_,13 @@
+         return (C) this;
+     }
+ 
++    // Kiterino start - Allow modifying set tags
++    public @NotNull C unlock() {
++        this.locked = false;
++        return (C) this;
++    }
++    // Kiterino end - Allow modifying set tags
++
+     public boolean isLocked() {
+         return this.locked;
+     }
+@@ -167,6 +_,7 @@
+ 
+     @NotNull
+     public C ensureSize(@NotNull String label, int size) {
++        if (true) return (C) this; // Kiterino - Disable tag size checks (already done by Paper for vanilla and breaks for custom additions)
+         long actual = this.tagged.stream().filter(globalPredicates.stream().reduce(Predicate::or).orElse(t -> true)).count();
+         if (size != actual) {
+             throw new IllegalStateException(key.toString() + ": " + label + " - Expected " + size + " values, got " + actual);

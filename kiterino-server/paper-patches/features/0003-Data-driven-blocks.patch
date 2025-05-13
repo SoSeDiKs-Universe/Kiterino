@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven blocks
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index d4dd11cccb16e46994d441745e37303622d525d6..6fb31f1ae8e25ce5d7cce13f71c1fe74a733fcd1 100644
+index 8571bbc32e697344051e8495a42f303841cb59b4..188de9e96e326686cf2e13cd138c1059018297e3 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -94,7 +94,7 @@ public final class PaperRegistries {
+@@ -100,7 +100,7 @@ public final class PaperRegistries {
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),

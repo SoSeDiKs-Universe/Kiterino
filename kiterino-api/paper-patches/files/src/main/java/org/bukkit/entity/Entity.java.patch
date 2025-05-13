@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -290,8 +_,9 @@
+@@ -291,8 +_,9 @@
       * being on fire).
       *
       * @param ticks Current ticks remaining
@@ -11,7 +11,7 @@
  
      /**
       * Sets if the entity has visual fire (it will always appear to be on fire).
-@@ -1279,4 +_,83 @@
+@@ -1306,4 +_,103 @@
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end - Fire Immunity API
@@ -35,7 +35,7 @@
 +    }
 +
 +    /**
-+     * Plays a sound at the location of the block
++     * Plays a sound at the location of the entity
 +     *
 +     * @param sound sound to play
 +     * @param category category of the sound
@@ -44,6 +44,15 @@
 +     */
 +    default void emitSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
 +        getWorld().playSound(this, sound, category, volume, pitch);
++    }
++
++    /**
++     * Plays a sound at the location of the entity
++     *
++     * @param sound sound to play
++     */
++    default void emitSound(@NotNull net.kyori.adventure.sound.Sound sound) {
++        getWorld().playSound(sound, this);
 +    }
 +    // Kiterino end - More Sound API
 +
@@ -94,4 +103,15 @@
 +     */
 +    void resendMetadata(int index);
 +    // Kiterino end - Allow resending entity metadata
++
++    // Kiterino start - Wet mobs API
++    /**
++     * Checks whether this entity is wet
++     *
++     * @return whether this entity is wet
++     */
++    default boolean isWet() {
++        return isInWater() || isInRain();
++    }
++    // Kiterino end - Wet mobs API
  }

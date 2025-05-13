@@ -6,7 +6,7 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index f9d4eea629b198468eb50fad838bbf635cffaedd..dfdcb4532f5f44704b79707fc5a41d4d66db2c29 100644
+index 3bdb4f0a8048756867a72db6b611c5cc3175f328..1c4bbc6eb20225b2a4cce58297a0910b709ea88d 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
 @@ -307,10 +307,15 @@ public abstract class PlayerList {
