@@ -1,13 +1,5 @@
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -2643,6 +_,7 @@
-     private final NamespacedKey key;
-     private final Supplier<ItemType> itemType;
-     private final Supplier<BlockType> blockType;
-+    private final boolean injected = false; // Kiterino - Injecting custom Materials
- 
-     private Material(final int id) {
-         this(id, 64);
 @@ -2789,6 +_,12 @@
       * @return Maximum stack size for this material
       */
@@ -46,7 +38,7 @@
 +     * @return whether this item is injected
 +     */
 +    public boolean isInjected() {
-+        return this.injected;
++        return !this.key.namespace().equals(NamespacedKey.MINECRAFT);
 +    }
 +    // Kiterino end - Injecting custom Materials
  }

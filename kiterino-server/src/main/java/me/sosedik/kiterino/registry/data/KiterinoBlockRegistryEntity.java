@@ -65,6 +65,10 @@ public class KiterinoBlockRegistryEntity implements BlockRegistryEntity {
 					}
 				});
 			}
+			for (BlockState blockState : block.getStateDefinition().getPossibleStates()) {
+				Block.BLOCK_STATE_REGISTRY.add(blockState);
+				blockState.initCache();
+			}
 			return block;
 		}
 

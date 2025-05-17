@@ -64,7 +64,7 @@
 +
 +        var interactionHand = hand == EquipmentSlot.OFF_HAND ? net.minecraft.world.InteractionHand.OFF_HAND : net.minecraft.world.InteractionHand.MAIN_HAND;
 +        var result = nmsItem.useOn(new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), interactionHand, nmsItem, mop));
-+        if (result != net.minecraft.world.InteractionResult.SUCCESS) return false;
++        if (!(result instanceof net.minecraft.world.InteractionResult.Success)) return false;
 +
 +        swingHand(hand);
 +        getWorld().playSound(location, location.getBlock().getBlockData().getSoundGroup().getPlaceSound(), 1F, 1F);

@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityItemConsumeEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index e997556eb0c6934e409f682dca30d977416d5a7a..1bc1396f67babe91132a17f20cbfe9617226b80a 100644
+index c119ea35e91bf080920161a04370c69a8b9c1a9f..d4edc9354542e3f1a038cc757008d5046f54e67e 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4135,12 +4135,12 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4143,12 +4143,12 @@ public abstract class LivingEntity extends Entity implements Attackable {
                      this.startUsingItem(this.getUsedItemHand(), true); // Paper - Prevent consuming the wrong itemstack
                      // CraftBukkit start - fire PlayerItemConsumeEvent
                      ItemStack itemStack;
@@ -23,7 +23,7 @@ index e997556eb0c6934e409f682dca30d977416d5a7a..1bc1396f67babe91132a17f20cbfe961
  
                          if (event.isCancelled()) {
                              // Update client
-@@ -4156,7 +4156,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4164,7 +4164,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
  
                          itemStack = (craftItem.equals(event.getItem())) ? this.useItem.finishUsingItem(this.level(), this) : CraftItemStack.asNMSCopy(event.getItem()).finishUsingItem(this.level(), this);
                      } else {

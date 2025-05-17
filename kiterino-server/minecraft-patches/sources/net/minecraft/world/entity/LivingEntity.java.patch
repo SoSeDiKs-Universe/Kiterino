@@ -8,12 +8,21 @@
                      chunkSource.broadcastAndSend(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.broadcast(this, clientboundAnimatePacket);
-@@ -3637,7 +_,7 @@
+@@ -3637,8 +_,15 @@
                  }
  
                  if (flag) {
 -                    if (getRider() == null || !this.isControllable()) // Purpur - ignore mobs which are uncontrollable or without rider - API for any mob to burn daylight
+-                        this.igniteForSeconds(8.0F);
 +                    if (getRider() == null || !this.isControllable() || getRider().isInvisible()) // Purpur - ignore mobs which are uncontrollable or without rider - API for any mob to burn daylight // Kiterino - Allow burning ridables with invisible rider
-                         this.igniteForSeconds(8.0F);
++                    // Kiterino start - Add EntitySunburnEvent
++                    {
++                        var event = new me.sosedik.kiterino.event.entity.EntitySunburnEvent(getBukkitLivingEntity(), 8F);
++                        if (event.callEvent()) {
++                            this.igniteForSeconds(event.getBurnDuration());
++                        }
++                    }
++                    // Kiterino end - Add EntitySunburnEvent
                  }
              }
+         }

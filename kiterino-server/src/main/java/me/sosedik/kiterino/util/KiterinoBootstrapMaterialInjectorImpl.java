@@ -46,7 +46,6 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 	private final Field keyField = getField(Material.class, "key");
 	private final Field itemTypeField = getField(Material.class, "itemType");
 	private final Field blockTypeField = getField(Material.class, "blockType");
-	private final Field injectedField = getField(Material.class, "injected");
 
 	@Override
 	public void injectEnum(Material value) throws Exception {
@@ -82,7 +81,6 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 	public Material allocateEnum(Key key) {
 		try {
 			Material material = super.allocateEnum(key);
-			injectedField.set(material, true);
 			keyField.set(material, new NamespacedKey(key.namespace(), key.value()));
 
 			String enumName = material.name();

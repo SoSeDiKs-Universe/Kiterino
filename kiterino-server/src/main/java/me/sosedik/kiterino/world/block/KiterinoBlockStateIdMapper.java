@@ -4,6 +4,7 @@ import net.minecraft.core.IdMapper;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
+import net.minecraft.world.level.block.DaylightDetectorBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
@@ -34,7 +35,7 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
             return super.getId(value);
         }
 
-        org.bukkit.block.BlockState bukkitState = kiterinoBlock.serializeBlockToClient();
+        org.bukkit.block.BlockState bukkitState = kiterinoBlock.serializeBlockToClient(value);
         return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
     }
 
@@ -61,6 +62,9 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
         }
         if (value.is(Blocks.FIRE)) {
             return value.setValue(FireBlock.AGE, 0);
+        }
+        if (value.is(Blocks.DAYLIGHT_DETECTOR)) {
+            return value.setValue(DaylightDetectorBlock.POWER, 0);
         }
         if (value.is(Blocks.TWISTING_VINES) || value.is(Blocks.WEEPING_VINES)) {
             return value.setValue(GrowingPlantHeadBlock.AGE, 0);

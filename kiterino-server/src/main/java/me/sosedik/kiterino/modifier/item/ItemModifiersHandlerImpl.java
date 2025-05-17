@@ -48,6 +48,7 @@ import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -63,6 +64,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipePropertySet;
 import net.minecraft.world.item.crafting.SelectableRecipe;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
@@ -466,6 +468,30 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     // Yes, this also sucks!
     private static Packet<?> handle(CraftPlayer player, ClientboundUpdateRecipesPacket packet) {
+        Map<ResourceKey<RecipePropertySet>, RecipePropertySet> resourceKeyRecipePropertySetMap = new HashMap<>(packet.itemSets());
+        resourceKeyRecipePropertySetMap.replaceAll((key, set) -> {
+            boolean[] modified = {false};
+            List<Holder<Item>> items = new ArrayList<>(set.items);
+            items.replaceAll(holder -> {
+                RecipeBookPacketContext.DisplayType displayType;
+                if (key == RecipePropertySet.SMITHING_BASE)
+                    displayType = RecipeBookPacketContext.DisplayType.SMITHING_BASE;
+                else if (key == RecipePropertySet.SMITHING_TEMPLATE)
+                    displayType = RecipeBookPacketContext.DisplayType.SMITHING_TEMPLATE;
+                else if (key == RecipePropertySet.SMITHING_ADDITION)
+                    displayType = RecipeBookPacketContext.DisplayType.SMITHING_ADDITION;
+                else
+                    displayType = RecipeBookPacketContext.DisplayType.INGREDIENT;
+
+                var ingredientContext = new RecipeBookPacketContext(packet, displayType);
+
+                ItemStack replacement = replaceItem(player, ItemModifierContextType.RECIPE_BOOK, ingredientContext, new ItemStack(holder.value()));
+                if (replacement != null) modified[0] = true;
+                return replacement == null ? holder : replacement.getItemHolder();
+            });
+            return modified[0] ? new RecipePropertySet(new HashSet<>(items)) : set;
+        });
+
         List<SelectableRecipe.SingleInputEntry<StonecutterRecipe>> stonecutterRecipes = new ArrayList<>();
         for (SelectableRecipe.SingleInputEntry<StonecutterRecipe> stonecutterRecipeEntry : packet.stonecutterRecipes().entries()) {
             if (stonecutterRecipeEntry.recipe().recipe().isEmpty()) {
@@ -490,7 +516,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             stonecutterRecipes.add(new SelectableRecipe.SingleInputEntry<>(ingredient, new SelectableRecipe<>(new SlotDisplay.ItemStackSlotDisplay(result), Optional.of(new RecipeHolder<>(recipe.id(), nmsRecipe)))));
         }
 
-        return new ClientboundUpdateRecipesPacket(packet.itemSets(), new SelectableRecipe.SingleInputSet<>(stonecutterRecipes));
+        return new ClientboundUpdateRecipesPacket(resourceKeyRecipePropertySetMap, new SelectableRecipe.SingleInputSet<>(stonecutterRecipes));
     }
 
     // This one is a real sucker (and I thought the entity data was bad :')
@@ -542,7 +568,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return switch (display) {
             case FurnaceRecipeDisplay furnaceRecipeDisplay -> {
                 SlotDisplay ingredient = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), furnaceRecipeDisplay.ingredient());
-                SlotDisplay fuel = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), furnaceRecipeDisplay.fuel());
+                SlotDisplay fuel = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.FUEL), furnaceRecipeDisplay.fuel());
                 SlotDisplay result = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.RESULT), furnaceRecipeDisplay.result());
                 SlotDisplay craftingStation = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.CRAFTING_STATION), furnaceRecipeDisplay.craftingStation());
                 yield new FurnaceRecipeDisplay(ingredient, fuel, result, craftingStation, furnaceRecipeDisplay.duration(), furnaceRecipeDisplay.experience());

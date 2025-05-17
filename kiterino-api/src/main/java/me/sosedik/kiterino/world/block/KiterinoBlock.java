@@ -24,9 +24,10 @@ public interface KiterinoBlock {
 	 * Note: this will be called for each serialization, so
 	 * caching the block state is preferable.
 	 *
+	 * @param currentState current NMS block state
 	 * @return serialized block
 	 */
-	@Nullable BlockState serializeBlockToClient();
+	@Nullable BlockState serializeBlockToClient(Object currentState);
 
 	/**
 	 * Gets the block data classes for this block.
