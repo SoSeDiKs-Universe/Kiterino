@@ -5,10 +5,10 @@ Subject: [PATCH] Automatically provide registry ids
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
-index a294ec37b6f593d502d2e044f63b54ec36878c33..98e0def2cce35a8d56b253503c8f6745fe776a05 100644
+index 9e53774c3cb6156effeab451068f1a6ce8838b55..c07fe769e80cc60bed865c1e1ec09ee4cdfe3f7f 100644
 --- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
 +++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
-@@ -55,6 +55,26 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
+@@ -56,6 +56,26 @@ public class WritableCraftRegistry<M, T extends Keyed, B extends PaperRegistryBu
              this.conversions = conversions;
          }
  

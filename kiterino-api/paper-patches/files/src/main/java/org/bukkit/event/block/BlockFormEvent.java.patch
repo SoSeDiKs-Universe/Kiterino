@@ -1,0 +1,17 @@
+--- a/src/main/java/org/bukkit/event/block/BlockFormEvent.java
++++ b/src/main/java/org/bukkit/event/block/BlockFormEvent.java
+@@ -18,12 +_,14 @@
+  * <li>Ice forming in a snowy Biome like Taiga or Tundra.
+  * <li> Obsidian / Cobblestone forming due to contact with water.
+  * <li> Concrete forming due to mixing of concrete powder and water.
++ * <li> Composter finishing composting.
+  * </ul>
+  * <p>
+  * If this event is cancelled, the block will not be formed.
+  *
+  * @see BlockSpreadEvent
+  */
++// Kiterino - Call BlockFormEvent for composter
+ public class BlockFormEvent extends BlockGrowEvent {
+ 
+     private static final HandlerList HANDLER_LIST = new HandlerList();

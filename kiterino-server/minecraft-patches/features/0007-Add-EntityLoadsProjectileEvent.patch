@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 83ac001ba28e412fad95dc345faf001aa0d57b03..c3a04d1e756365d67bc54aa85e53737c89f8d32f 100644
+index 3024c45dfa0d631dbe24ed3c4def66c750cf0006..6ef533ee03ef7bce343c314829b60935ae12163e 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4514,6 +4514,23 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -4519,6 +4519,23 @@ public abstract class LivingEntity extends Entity implements Attackable {
          return ItemStack.EMPTY;
      }
  
@@ -46,7 +46,7 @@ index 04d5910d736dee2a88a2602f4a98495459277157..9251ff10f30d833f7b2ee6c8d771aab8
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 87c8bc6f9128d2fcb19628bc3ef354e517b632bb..da5d663f1d7cf135d0d90b749b63525854728353 100644
+index 69677841f4a4f89c69e3fd7f8f2ee458689bc575..858eabc3e35178bb92023a9f26986fec806b7bbf 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
 @@ -2194,19 +2194,19 @@ public abstract class Player extends LivingEntity {

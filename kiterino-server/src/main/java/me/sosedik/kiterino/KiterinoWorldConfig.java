@@ -55,12 +55,39 @@ public final class KiterinoWorldConfig {
 		return this.config.getInt("world-settings." + this.worldName + "." + path, this.config.getInt("world-settings.default." + path));
 	}
 
+	// Kiterino start - Reset fire ticks when having fire resistance
+	public boolean fireResistanceResetsFireTicks = false;
+	private void fireResistanceResetsFireTicks() {
+		fireResistanceResetsFireTicks = getBoolean("gameplay-mechanics.fire-resistance-resets-fire-ticks", fireResistanceResetsFireTicks, "Having fire resistance potion effect will reset fire ticks");
+	}
+	// Kiterino end - Reset fire ticks when having fire resistance
+
+	// Kiterino start - Sleeping options
+	public boolean dayDreaming = false;
+	public boolean sleepWithNoBed = false;
+	public boolean noAutoWakeUp = false;
+	public boolean noWeatherSkip = false;
+	private void doNotWakeUpPlayersAutomatically() {
+		dayDreaming = getBoolean("gameplay-mechanics.sleep.daydreaming", dayDreaming, "Allow sleeping during day without weather");
+		sleepWithNoBed = getBoolean("gameplay-mechanics.sleep.sleep-with-no-bed", sleepWithNoBed, "Don't wake up players automatically, even if the bed does not exist");
+		noAutoWakeUp = getBoolean("gameplay-mechanics.sleep.no-auto-wake-up", noAutoWakeUp, "Disable automatic wake up after sleeping");
+		noWeatherSkip = getBoolean("gameplay-mechanics.sleep.no-weather-skip", noWeatherSkip, "Disable weather skipping after sleeping");
+	}
+	// Kiterino end - Sleeping options
+
 	// Kiterino start - Bat options
 	public boolean batsIgnoreInvisiblePlayers = false; // Kiterino - Bats ignore invisible (by API) players
 	private void batsSettings() {
-		batsIgnoreInvisiblePlayers = getBoolean("gameplay-mechanics.bat.ignore-invisible-players", batsIgnoreInvisiblePlayers, "Make resting bats ignore players that are marked invisible by API");
+		batsIgnoreInvisiblePlayers = getBoolean("entity.bat.ignore-invisible-players", batsIgnoreInvisiblePlayers, "Make resting bats ignore players that are marked invisible by API");
 	}
 	// Kiterino end - Bat options
+
+	// Kiterino start - Entity options
+	public boolean moreAnnoyingSilverfish = false;
+	private void entityOptions() {
+		moreAnnoyingSilverfish = getBoolean("entity.more-annoying-silverfish", moreAnnoyingSilverfish, "Makes silverfish produce sounds more often"); // Kiterino - Make silverfishes more annoying
+	}
+	// Kiterino end - Entity options
 
 	// Kiterino start - Ice options
 	public boolean iceAlwaysMeltInNether = false; // Kiterino - Always melt ice in Nether
@@ -70,5 +97,12 @@ public final class KiterinoWorldConfig {
 		meltPackedIceInNether = getBoolean("blocks.packed_ice.melt-in-nether", meltPackedIceInNether, "Ticks packed ice in ultrawarm dimensions (e.g. Nether) to allow melting it");
 	}
 	// Kiterino end - Ice options
+
+	// Kiterino start - Allow grass spread upon coarse dirt
+	public boolean grassSpreadOnCoarseDirt = false;
+	private void grassSpreadOnCoarseDirt() {
+		grassSpreadOnCoarseDirt = getBoolean("blocks.grass_block.spread-on-coarse-dirt", grassSpreadOnCoarseDirt, "Make grass block spread onto coarse dirt, turning it into dirt");
+	}
+	// Kiterino end - Allow grass spread upon coarse dirt
 
 }

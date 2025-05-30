@@ -56,12 +56,10 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 
 		idField.set(value, 1);
 		legacyField.set(value, false);
+		ctorField.set(value, org.bukkit.material.MaterialData.class.getConstructor(Material.class, byte.class));
 		if (item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KiterinoBlock kiterinoBlock && kiterinoBlock.getBlockDataClasses() != null) {
-			Class<?> dataClass = kiterinoBlock.getBlockDataClasses().first();
-			ctorField.set(value, dataClass.getConstructor(Material.class, byte.class));
-			dataField.set(value, dataClass);
+			dataField.set(value, kiterinoBlock.getBlockDataClasses().first());
 		} else {
-			ctorField.set(value, org.bukkit.material.MaterialData.class.getConstructor(Material.class, byte.class));
 			dataField.set(value, org.bukkit.material.MaterialData.class);
 		}
 

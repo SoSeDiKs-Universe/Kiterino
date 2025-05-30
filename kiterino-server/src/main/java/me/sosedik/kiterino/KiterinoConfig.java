@@ -162,4 +162,20 @@ public final class KiterinoConfig {
 	}
 	// Kiterino end - Less limited recipe matcher
 
+	// Kiterino start - No collision for leaves
+	public static boolean noCollisionForLeaves = true; // TODO init before bootstrap
+	private static void noCollisionForLeaves() {
+		noCollisionForLeaves = getBoolean(config, "blocks.leaves.disable-collision", false, "Disable server-side collision for leaves");
+	}
+	// Kiterino end - No collision for leaves
+
+	// Kiterino start - Stats options
+	public static boolean aviateRequireItem;
+	public static boolean vehicleIgnoreRider;
+	private static void statsOptions() {
+		aviateRequireItem = getBoolean(config, "stats.aviate-require-item", false, "Require a gliding item for aviate statistic"); // Kiterino - Require wearing an item for elytra distance statistics
+		vehicleIgnoreRider = getBoolean(config, "stats.vehicle-ignore-rider", false, "Ignore Purpur's riders for vehicle statistics"); // Kiterino - Don't count Purpur's riding towards distance statistics
+	}
+	// Kiterino end - Stats options
+
 }

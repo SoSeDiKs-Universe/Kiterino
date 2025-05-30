@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/monster/Silverfish.java
++++ b/net/minecraft/world/entity/monster/Silverfish.java
+@@ -100,7 +_,7 @@
+ 
+     @Override
+     protected Entity.MovementEmission getMovementEmission() {
+-        return Entity.MovementEmission.EVENTS;
++        return this.level().kiterinoConfig.moreAnnoyingSilverfish ? Entity.MovementEmission.ALL : Entity.MovementEmission.EVENTS; // Kiterino - Make silverfishes more annoying
+     }
+ 
+     @Override

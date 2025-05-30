@@ -26,3 +26,40 @@
          }
          // CraftBukkit start
          if (respawnReason == null) {
+@@ -1533,7 +_,7 @@
+             return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
+         } else {
+             this.setRespawnPosition(new ServerPlayer.RespawnConfig(this.level().dimension(), at, this.getYRot(), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - Add PlayerSetSpawnEvent
+-            if (this.level().isBrightOutside()) {
++            if (!this.level().kiterinoConfig.dayDreaming && this.level().isBrightOutside()) { // Kiterino - Sleeping options
+                 return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
+             } else {
+                 if (!this.isCreative()) {
+@@ -1881,8 +_,13 @@
+                     }
+                 }
+             } else if (this.isFallFlying()) {
+-                int rounded = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
+-                this.awardStat(Stats.AVIATE_ONE_CM, rounded);
++                // Kiterino start - Require wearing an item for elytra distance statistics
++                ItemStack chestItem = getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);
++                if (!me.sosedik.kiterino.KiterinoConfig.aviateRequireItem || (chestItem.has(DataComponents.GLIDER) && !chestItem.isBroken())) {
++                    int rounded = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
++                    this.awardStat(Stats.AVIATE_ONE_CM, rounded);
++                }
++                // Kiterino end - Require wearing an item for elytra distance statistics
+             } else {
+                 int rounded = Math.round((float)Math.sqrt(dx * dx + dz * dz) * 100.0F);
+                 if (rounded > 25) {
+@@ -1896,6 +_,11 @@
+         if (this.isPassenger() && !didNotMove(dx, dy, dz)) {
+             int rounded = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
+             Entity vehicle = this.getVehicle();
++            // Kiterino start - Don't count Purpur's riding towards distance statistics
++            if (me.sosedik.kiterino.KiterinoConfig.vehicleIgnoreRider && vehicle != null && vehicle.getRider() == this) {
++                return;
++            }
++            // Kiterino end - Don't count Purpur's riding towards distance statistics
+             if (vehicle instanceof AbstractMinecart) {
+                 this.awardStat(Stats.MINECART_ONE_CM, rounded);
+             } else if (vehicle instanceof AbstractBoat) {

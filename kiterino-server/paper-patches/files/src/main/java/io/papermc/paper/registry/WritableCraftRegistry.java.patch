@@ -1,0 +1,10 @@
+--- a/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
++++ b/src/main/java/io/papermc/paper/registry/WritableCraftRegistry.java
+@@ -41,6 +_,7 @@
+             FROM_PLUGIN,
+             conversions
+         );
++        this.registry.bindAllTagsToEmpty(); // Kiterino - Fixup unbound item tags for custom items
+     }
+ 
+     public WritableRegistry<T, B> createApiWritableRegistry(final Conversions conversions) {

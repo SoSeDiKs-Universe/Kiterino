@@ -29,6 +29,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
@@ -36,6 +37,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
 import net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket;
 import net.minecraft.network.protocol.game.ClientboundPlaceGhostRecipePacket;
 import net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket;
@@ -290,6 +292,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
             case ClientboundMerchantOffersPacket packet -> handle(player, packet);
             case ClientboundSystemChatPacket packet -> handle(player, packet);
+            case ClientboundDisguisedChatPacket packet -> handle(player, packet);
             default -> initialPacket;
         };
     }
@@ -778,7 +781,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     // Kiterino start - Parse hover events
     private static Packet<?> handle(CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
-        if (initialPacket.overlay()) {
+        if (initialPacket.overlay()) { // Action bar
             return initialPacket;
         }
 
@@ -788,6 +791,15 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         component = ComponentSerialization.replaceHoverEvent(player, player.locale(), component);
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
         return new ClientboundSystemChatPacket(component, false);
+    }
+
+    private static Packet<?> handle(CraftPlayer player, ClientboundDisguisedChatPacket initialPacket) {
+        boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
+        ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
+        Component component = initialPacket.message();
+        component = ComponentSerialization.replaceHoverEvent(player, player.locale(), component);
+        ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
+        return new ClientboundDisguisedChatPacket(component, initialPacket.chatType());
     }
     // Kiterino end - Parse hover events
 

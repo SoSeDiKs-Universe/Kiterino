@@ -1,14 +1,13 @@
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1858,4 +_,54 @@
+@@ -1858,4 +_,46 @@
          return this.craftDelegate.damage(amount, ignoreUnbreaking);
      }
      // Purpur end - ItemStack convenience methods
 +
 +    // Kiterino start - ItemStack convenience methods
 +    /**
-+     * Returns clone of this item with colored
-+     * {@link org.bukkit.inventory.meta.LeatherArmorMeta} or {@link org.bukkit.inventory.meta.PotionMeta}.
++     * Returns clone of this item with colored data component
 +     *
 +     * @param color color
 +     * @return colored cloned item
@@ -20,14 +19,7 @@
 +            case org.bukkit.DyeColor dyeColor -> dyeColor.getColor();
 +            default -> org.bukkit.Color.fromRGB(color.red(), color.green(), color.blue());
 +        };
-+        ItemMeta meta = clone.getItemMeta();
-+        if (meta instanceof org.bukkit.inventory.meta.LeatherArmorMeta leatherMeta) {
-+            leatherMeta.setColor(_color);
-+            clone.setItemMeta(leatherMeta);
-+        } else if (meta instanceof org.bukkit.inventory.meta.PotionMeta potionMeta) {
-+            potionMeta.setColor(_color);
-+            clone.setItemMeta(potionMeta);
-+        }
++        clone.setData(io.papermc.paper.datacomponent.DataComponentTypes.DYED_COLOR, io.papermc.paper.datacomponent.item.DyedItemColor.dyedItemColor(_color));
 +        return clone;
 +    }
 +

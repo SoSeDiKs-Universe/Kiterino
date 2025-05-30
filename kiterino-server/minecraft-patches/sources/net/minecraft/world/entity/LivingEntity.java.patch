@@ -1,5 +1,17 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -944,6 +_,11 @@
+                     } else if (mobEffectInstance.getDuration() % 600 == 0) {
+                         this.onEffectUpdated(mobEffectInstance, false, null);
+                     }
++                    // Kiterino start - Reset fire ticks when having fire resistance
++                    if (level().kiterinoConfig.fireResistanceResetsFireTicks && mobEffectInstance.getEffect() == MobEffects.FIRE_RESISTANCE && getRemainingFireTicks() > 0) {
++                        setRemainingFireTicks(0);
++                    }
++                    // Kiterino end - Reset fire ticks when having fire resistance
+                 }
+             } catch (ConcurrentModificationException var6) {
+             }
 @@ -2603,6 +_,7 @@
                  ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
@@ -8,6 +20,15 @@
                      chunkSource.broadcastAndSend(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.broadcast(this, clientboundAnimatePacket);
+@@ -3271,7 +_,7 @@
+                 this.getCombatTracker().recheckStatus();
+             }
+ 
+-            if (this.isSleeping() && !this.checkBedExists()) {
++            if ((!level().kiterinoConfig.sleepWithNoBed || !(this instanceof ServerPlayer)) && this.isSleeping() && !this.checkBedExists()) { // Kiterino - Sleeping options
+                 this.stopSleeping();
+             }
+         }
 @@ -3637,8 +_,15 @@
                  }
  
