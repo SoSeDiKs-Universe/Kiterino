@@ -24,6 +24,6 @@
 +     * @param sleepLocation actual sleeping location
 +     * @param bedLocation location of the bed
 +     */
-+    void lay(Location sleepLocation, Location bedLocation);
++    void lay(@NotNull Location sleepLocation, @NotNull Location bedLocation);
 +    // Kiterino end - Allow laying at will
  }

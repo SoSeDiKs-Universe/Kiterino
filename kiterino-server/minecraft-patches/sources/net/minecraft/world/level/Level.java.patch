@@ -11,8 +11,8 @@
 @@ -885,6 +_,7 @@
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
-         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName(), env); // Purpur - Purpur config files
-+        this.kiterinoConfig = new me.sosedik.kiterino.KiterinoWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName(), env); // Kiterino - Kiterino Config
+         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName(), environment); // Purpur - Purpur config files
++        this.kiterinoConfig = new me.sosedik.kiterino.KiterinoWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName(), environment); // Kiterino - Kiterino Config
          this.playerBreedingCooldowns = this.getNewBreedingCooldownCache(); // Purpur - Add adjustable breeding cooldown to config
-         this.generator = gen;
-         this.world = new CraftWorld((ServerLevel) this, gen, biomeProvider, env);
+         this.generator = generator;
+         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);

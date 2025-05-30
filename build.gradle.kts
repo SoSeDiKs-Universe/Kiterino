@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("io.papermc.paperweight.patcher") version "2.0.0-beta.14"
+    id("io.papermc.paperweight.patcher") version "2.0.0-beta.17"
 }
 
 paperweight {
@@ -60,6 +60,7 @@ subprojects {
         options.release = 21
         options.isFork = true
         options.compilerArgs.addAll(listOf("-Xlint:-deprecation", "-Xlint:-removal"))
+        options.forkOptions.memoryMaximumSize = "4g"
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()

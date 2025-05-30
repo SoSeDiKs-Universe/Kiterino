@@ -1,7 +1,7 @@
 version = "1.0.0-SNAPSHOT"
 
 //plugins {
-//    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
+//    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
 //}
 //
 //repositories {
@@ -10,6 +10,7 @@ version = "1.0.0-SNAPSHOT"
 
 dependencies {
     compileOnly(project(":kiterino-api"))
+//    compileOnly(project(":kiterino-server"))
 //    paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT", "me.sosedik.kiterino")
 }
 
