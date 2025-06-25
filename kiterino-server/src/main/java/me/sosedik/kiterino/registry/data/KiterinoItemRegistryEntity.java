@@ -15,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.ComposterBlock;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -25,13 +26,13 @@ import java.util.Map;
 @NullMarked
 public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
 
-    protected Map<DataComponentType, Object> components = new HashMap<>();
+    protected Map<DataComponentType, @Nullable Object> components = new HashMap<>();
     protected @Nullable Float compostChance;
     protected @Nullable Item nmsItem;
     protected @Nullable KiterinoItemModifier modifier; // Kiterino - Implement packet item faker for injected items
 
     protected final Conversions conversions;
-    public ResourceLocation itemKey;
+    public @UnknownNullability ResourceLocation itemKey;
 
     public KiterinoItemRegistryEntity(
         final Conversions conversions,
@@ -179,7 +180,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
         }
 
         private void setData(Item.Properties properties, PaperDataComponentType<Object, Object> type, @Nullable Object value) {
-            properties.component(type.getHandle(), type.getAdapter().toVanilla(value));
+            properties.component(type.getHandle(), type.getAdapter().toVanilla(value, type.getHolder()));
         }
 
     }

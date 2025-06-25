@@ -12,6 +12,8 @@ function getCommits() {
 set -e
 PS1="$"
 
+git add gradle.properties
+
 # Purpur updates
 purpurHash="$1"
 purpur=$(getCommits "PurpurMC/Purpur" "$purpurHash" "HEAD")
