@@ -5,10 +5,10 @@ Subject: [PATCH] Keep rider when teleporting
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index b2823967f46f9a7b8044765cf7e51c5790a3abeb..d4e9ad035594f60d5c604f64cf7f152beb751cc7 100644
+index 41991da69f29a8fb4cb43d2c1ef596eab37bef2d..941cd82daca1d1385d4e5e5cda46d4affa7cf4f8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -294,11 +294,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -302,11 +302,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
      // Kiterino start - EMC - Vehicle passenger teleporting
      private static CraftEntity teleportingEntity;
      private CraftEntity storedRoot;
@@ -27,7 +27,7 @@ index b2823967f46f9a7b8044765cf7e51c5790a3abeb..d4e9ad035594f60d5c604f64cf7f152b
              this.storedRoot.detachEntities();
              teleportingEntity = null;
              return;
-@@ -322,6 +329,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -330,6 +337,15 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
                  teleportingEntity = this;
                  this.storedRoot.teleportAndReattachEntities(location);
                  this.storedRoot.reattachPassengers();

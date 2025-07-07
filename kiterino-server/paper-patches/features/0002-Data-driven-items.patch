@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven items
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index b0d34b7496704c423c2f5fff4101aadba2a6d57c..8571bbc32e697344051e8495a42f303841cb59b4 100644
+index 804d6408eb4332cec082ea927a75a33dc0305f60..66a32b27942c36f27fa6a5dd36ca55d69663a895 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -101,7 +101,7 @@ public final class PaperRegistries {
+@@ -107,7 +107,7 @@ public final class PaperRegistries {
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
              start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
@@ -18,14 +18,13 @@ index b0d34b7496704c423c2f5fff4101aadba2a6d57c..8571bbc32e697344051e8495a42f3038
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
              start(Registries.MAP_DECORATION_TYPE, RegistryKey.MAP_DECORATION_TYPE).craft(MapCursor.Type.class, CraftMapCursor.CraftType::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index b6a9fd509a4f10170cffc8fc518ad12f3a7558e4..0c72f605e00bb7fd129ece49d1bc726cb196c234 100644
+index 1120f50d5ccdfee0e5465a049b6d361018507a4b..7c2903026d35cf66826e07700b09ae7188aad80c 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -70,4 +70,24 @@ public class Conversions {
-             PaperAdventure.asVanilla(clientTextureAsset.texturePath())
-         );
+@@ -115,4 +115,23 @@ public class Conversions {
+         return new PaperRegistryBuilderFactory<>(resourceRegistryKey, this, buildableMeta.builderFiller(), lookupForBuilders::getValueForCopying);
      }
-+
+ 
 +    // Kiterino start - Data-driven items
 +    public net.minecraft.world.item.Rarity asVanilla(final org.bukkit.inventory.ItemRarity rarity) {
 +        return switch (rarity) {
@@ -47,10 +46,10 @@ index b6a9fd509a4f10170cffc8fc518ad12f3a7558e4..0c72f605e00bb7fd129ece49d1bc726c
 +    // Kiterino end - Data-driven items
  }
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index 7fa18dd100f92cc866ba71270ead883373fda2d9..6377057ef2b5d832367f5d736fa5e6acd9da01ea 100644
+index 8df17d82a37feddbb665a5d7af172548427fe147..c33a9c2a0ba238dd93a9338476eca8e57ffc1d4a 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-@@ -24,6 +24,7 @@ class RegistryBuilderTest {
+@@ -23,6 +23,7 @@ class RegistryBuilderTest {
          return PaperRegistries.REGISTRY_ENTRIES.stream()
              .map(RegistryEntry::meta)
              .filter(RegistryEntryMeta.Buildable.class::isInstance)

@@ -71,7 +71,7 @@ index bc7e4e5560708fea89c584b1d8b471f4966f311a..70145bafa7c9c45a6f7a7a6854e9eefa
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-index b36e30fd4057a938e4d90cb42a2dca661f16478e..e2c6600307681e5d7ba19a4e1b3745f984b2ce78 100644
+index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..5fc4b6a765006c96f7c9645a9f3988ae59a3c4b3 100644
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 @@ -32,6 +32,7 @@ public record ServerBuildInfoImpl(
@@ -86,25 +86,25 @@ index b36e30fd4057a938e4d90cb42a2dca661f16478e..e2c6600307681e5d7ba19a4e1b3745f9
          this(
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
--                .orElse(BRAND_PURPUR_ID), // Purpur - Fix pufferfish issues // Purpur - Rebrand
+-                .orElse(BRAND_PURPUR_ID), // Purpur - Rebrand
 +                .orElse(BRAND_KITERINO_ID), // Kiterino - Rebrand
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
--                .orElse(BRAND_PURPUR_NAME), // Purpur - Fix pufferfish issues // Purpur - Rebrand
+-                .orElse(BRAND_PURPUR_NAME), // Purpur - Rebrand
 +                .orElse(BRAND_KITERINO_NAME), // Kiterino - Rebrand
-             SharedConstants.getCurrentVersion().getId(),
-             SharedConstants.getCurrentVersion().getName(),
+             SharedConstants.getCurrentVersion().id(),
+             SharedConstants.getCurrentVersion().name(),
              getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
 @@ -62,7 +63,7 @@ public record ServerBuildInfoImpl(
  
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
 -        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand
-+        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand // Kiterino - Rebrand
++        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur - Rebrand // Kiterino - Rebrand
      }
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 99eb04643fce44c37fd96c99756837ccafe7b559..1a821a548fc64d0ded6da854baaf7ab413c1bcdf 100644
+index 99eb04643fce44c37fd96c99756837ccafe7b559..3af82f606877e731e3ba9fc6ff1e634fa92a88e6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -112,12 +112,12 @@ index 99eb04643fce44c37fd96c99756837ccafe7b559..1a821a548fc64d0ded6da854baaf7ab4
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur - Rebrand
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik.kiterino/kiterino-api/pom.properties"); // Pufferfish // Purpur - Rebrand // Kiterino - Rebrand
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik.kiterino/kiterino-api/pom.properties"); // Kiterino - Rebrand
          Properties properties = new Properties();
  
          if (stream != null) {
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index db1939eeef1d9de36ead4bba003418a03f8f4231..3a02a6775de0d87a6b0e2e6fb3e02fc185c668af 100644
+index 39493810336442e74c0fc99fdeb5e073a8f4e95e..8941acf7f82593d98cbb9cbed163f78e30944f05 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -75,14 +75,14 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
@@ -148,8 +148,8 @@ index db1939eeef1d9de36ead4bba003418a03f8f4231..3a02a6775de0d87a6b0e2e6fb3e02fc1
                  }
                  // Paper end - Different message for short timeout
                  logger.log(Level.SEVERE, "------------------------------");
--                logger.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):" ); // Paper // Purpur - Rebrand
-+                logger.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):" ); // Paper // Kiterino - Rebrand
+-                logger.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):"); // Paper // Purpur - Rebrand
++                logger.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):"); // Paper // Kiterino - Rebrand
                  FeatureHooks.dumpAllChunkLoadInfo(MinecraftServer.getServer(), isLongTimeout); // Paper - log detailed tick information
                  WatchdogThread.dumpThread(ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().serverThread.threadId(), Integer.MAX_VALUE), logger);
                  logger.log(Level.SEVERE, "------------------------------");

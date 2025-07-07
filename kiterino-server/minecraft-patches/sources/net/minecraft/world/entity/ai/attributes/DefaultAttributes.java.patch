@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
 +++ b/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
-@@ -86,7 +_,7 @@
+@@ -87,7 +_,7 @@
  
  public class DefaultAttributes {
      private static final Logger LOGGER = LogUtils.getLogger();
@@ -9,7 +9,7 @@
          .put(EntityType.ALLAY, Allay.createAttributes().build())
          .put(EntityType.ARMADILLO, Armadillo.createAttributes().build())
          .put(EntityType.ARMOR_STAND, ArmorStand.createAttributes().build())
-@@ -172,7 +_,17 @@
+@@ -174,7 +_,17 @@
          .put(EntityType.ZOMBIE_HORSE, ZombieHorse.createAttributes().build())
          .put(EntityType.ZOMBIE_VILLAGER, Zombie.createAttributes().build())
          .put(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglin.createAttributes().build())

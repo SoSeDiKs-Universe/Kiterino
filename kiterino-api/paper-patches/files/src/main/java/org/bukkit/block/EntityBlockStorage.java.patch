@@ -1,0 +1,18 @@
+--- a/src/main/java/org/bukkit/block/EntityBlockStorage.java
++++ b/src/main/java/org/bukkit/block/EntityBlockStorage.java
+@@ -47,6 +_,15 @@
+     @NotNull
+     List<T> releaseEntities();
+ 
++    // Kiterino start - API to release entities from snapshot
++    /**
++     * Release all the entities currently stored in the block.
++     *
++     * @return List of all entities which were released
++     */
++    @NotNull List<T> releaseEntities(org.bukkit.@NotNull Location loc);
++    // Kiterino end - API to release entities from snapshot
++
+     // Purpur start - Stored Bee API
+     /**
+      * Releases a stored entity, and returns the entity in the world.

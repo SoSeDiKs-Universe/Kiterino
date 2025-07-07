@@ -5,10 +5,10 @@ Subject: [PATCH] Support custom shears
 
 
 diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 9f695e97d247b24b12a4a115bfb012c7e344ccf8..c86f36171a774226e8ab4fc64c4e5670b63dd8cc 100644
+index 86f10559e8b75fbd5369c4e9089b1dae6a9ee7d1..f1334729c95c01da499c35d6021052e322be212a 100644
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1740,7 +1740,7 @@ public class ServerGamePacketListenerImpl
+@@ -1787,7 +1787,7 @@ public class ServerGamePacketListenerImpl
  
      // Purpur start - Dont run with scissors!
      public boolean isScissors(ItemStack stack) {
@@ -16,12 +16,30 @@ index 9f695e97d247b24b12a4a115bfb012c7e344ccf8..c86f36171a774226e8ab4fc64c4e5670
 +        if (!(stack.getItem() instanceof net.minecraft.world.item.ShearsItem)) return false; // Kiterino - Support custom shears
  
          ResourceLocation itemModelReference = stack.get(net.minecraft.core.component.DataComponents.ITEM_MODEL);
-         if (itemModelReference != null && itemModelReference.equals(this.player.serverLevel().purpurConfig.dontRunWithScissorsItemModelReference)) return true;
+         if (itemModelReference != null && itemModelReference.equals(this.player.level().purpurConfig.dontRunWithScissorsItemModelReference)) return true;
+diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
+index b4fcfe5a800a183ff05b020dfe1724be0eeef5e0..210cf098fe0e5c57f2c245b7425369698a767223 100644
+--- a/net/minecraft/world/entity/Entity.java
++++ b/net/minecraft/world/entity/Entity.java
+@@ -3018,11 +3018,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         }
+ 
+         ItemStack itemInHand = player.getItemInHand(hand);
+-        if (itemInHand.is(Items.SHEARS) && this.shearOffAllLeashConnections(player, hand)) { // Paper - PlayerUnleashEntityEvent - pass used hand
++        if (itemInHand.getItem() instanceof net.minecraft.world.item.ShearsItem && this.shearOffAllLeashConnections(player, hand)) { // Paper - PlayerUnleashEntityEvent - pass used hand // Kiterino - Support custom shears
+             itemInHand.hurtAndBreak(1, player, hand);
+             return InteractionResult.SUCCESS;
+         } else if (this instanceof Mob mob
+-            && itemInHand.is(Items.SHEARS)
++            && itemInHand.getItem() instanceof net.minecraft.world.item.ShearsItem // Kiterino - Support custom shears
+             && mob.canShearEquipment(player)
+             && !player.isSecondaryUseActive()
+             && this.attemptToShearEquipment(player, hand, itemInHand, mob)) {
 diff --git a/net/minecraft/world/entity/animal/MushroomCow.java b/net/minecraft/world/entity/animal/MushroomCow.java
-index 07c89507b13d44dfc7903570e0d8c834e91866b7..3912022fb13a63864fdfe4bb0c4cd816bf31c6f8 100644
+index 5750f87944ea84d59674d1df7f5d48121d987a54..46d66f2e88bf5d30b6438cb69a9405d53c831b5d 100644
 --- a/net/minecraft/world/entity/animal/MushroomCow.java
 +++ b/net/minecraft/world/entity/animal/MushroomCow.java
-@@ -159,7 +159,7 @@ public class MushroomCow extends AbstractCow implements Shearable {
+@@ -160,7 +160,7 @@ public class MushroomCow extends AbstractCow implements Shearable {
  
              this.playSound(soundEvent, 1.0F, 1.0F);
              return InteractionResult.SUCCESS;
@@ -31,10 +49,10 @@ index 07c89507b13d44dfc7903570e0d8c834e91866b7..3912022fb13a63864fdfe4bb0c4cd816
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/entity/animal/SnowGolem.java b/net/minecraft/world/entity/animal/SnowGolem.java
-index ed7492af66a2ad678fe7a19f779ab7c4fb3dd8ae..0f15e1eaf70fee79d67dde3de94f8ed7267f312e 100644
+index 8984a4fc0aae9fd72bc3f7222003c7593810ab77..af6535476aa589e496e5a1ced98cb3bebffc35d8 100644
 --- a/net/minecraft/world/entity/animal/SnowGolem.java
 +++ b/net/minecraft/world/entity/animal/SnowGolem.java
-@@ -181,7 +181,7 @@ public class SnowGolem extends AbstractGolem implements Shearable, RangedAttackM
+@@ -182,7 +182,7 @@ public class SnowGolem extends AbstractGolem implements Shearable, RangedAttackM
      @Override
      protected InteractionResult mobInteract(Player player, InteractionHand hand) {
          ItemStack itemInHand = player.getItemInHand(hand);
@@ -44,10 +62,10 @@ index ed7492af66a2ad678fe7a19f779ab7c4fb3dd8ae..0f15e1eaf70fee79d67dde3de94f8ed7
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/entity/animal/sheep/Sheep.java b/net/minecraft/world/entity/animal/sheep/Sheep.java
-index c53ab665a0c87d342adbe395c87e15a3f5f49708..53fcab32a1acdfae43246d2dfe3fafbad37c5d5e 100644
+index 500c87f5f7b2eda637103125d6e541f7c9fb385f..d317cc5ab66cdfa06c6aa518e4170dfb885e657e 100644
 --- a/net/minecraft/world/entity/animal/sheep/Sheep.java
 +++ b/net/minecraft/world/entity/animal/sheep/Sheep.java
-@@ -206,7 +206,7 @@ public class Sheep extends Animal implements Shearable {
+@@ -184,7 +184,7 @@ public class Sheep extends Animal implements Shearable {
      @Override
      public InteractionResult mobInteract(Player player, InteractionHand hand) {
          ItemStack itemInHand = player.getItemInHand(hand);
@@ -56,24 +74,24 @@ index c53ab665a0c87d342adbe395c87e15a3f5f49708..53fcab32a1acdfae43246d2dfe3fafba
              if (this.level() instanceof ServerLevel serverLevel && this.readyForShearing()) {
                  // CraftBukkit start
                  // Paper start - custom shear drops
-diff --git a/net/minecraft/world/entity/animal/wolf/Wolf.java b/net/minecraft/world/entity/animal/wolf/Wolf.java
-index 936ee9e80239ad965be75ceeb38d5248243e9c4e..68cd097e86a52f8202a800fe6d628884bf4a230c 100644
---- a/net/minecraft/world/entity/animal/wolf/Wolf.java
-+++ b/net/minecraft/world/entity/animal/wolf/Wolf.java
-@@ -606,7 +606,7 @@ public class Wolf extends TamableAnimal implements NeutralMob {
-                     return InteractionResult.SUCCESS;
-                 }
- 
--                if (!itemInHand.is(Items.SHEARS)
-+                if (!(itemInHand.getItem() instanceof net.minecraft.world.item.ShearsItem) // Kiterino - Support custom shears
-                     || !this.isOwnedBy(player)
-                     || !this.isWearingBodyArmor()
-                     || EnchantmentHelper.has(this.getBodyArmorItem(), EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE) && !player.isCreative()) {
+diff --git a/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java b/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java
+index a131b98a9f9e212bd55645a0e048da8fafbbb3d9..bc385afbee82dc24b044452ee25903ce830d1ae5 100644
+--- a/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java
++++ b/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java
+@@ -72,7 +72,7 @@ public class LeashFenceKnotEntity extends BlockAttachedEntity {
+         if (this.level().isClientSide) {
+             return InteractionResult.SUCCESS;
+         } else {
+-            if (player.getItemInHand(hand).is(Items.SHEARS)) {
++            if (player.getItemInHand(hand).getItem() instanceof net.minecraft.world.item.ShearsItem) { // Kiterino - Support custom shears
+                 InteractionResult interactionResult = super.interact(player, hand);
+                 if (interactionResult instanceof InteractionResult.Success success && success.wasItemInteraction()) {
+                     return interactionResult;
 diff --git a/net/minecraft/world/entity/monster/Bogged.java b/net/minecraft/world/entity/monster/Bogged.java
-index bc8f46b656895d916e44a9e1dc9175da96c2fde8..5a5dcee040d469091c708d3ebb6801ee19e1eeee 100644
+index cace310ad4ad320a8a5745c6af3ec4b57e75b6a5..c0cd15b2120dd0cc65d765c5fe8fe333222dedbc 100644
 --- a/net/minecraft/world/entity/monster/Bogged.java
 +++ b/net/minecraft/world/entity/monster/Bogged.java
-@@ -96,7 +96,7 @@ public class Bogged extends AbstractSkeleton implements Shearable {
+@@ -97,7 +97,7 @@ public class Bogged extends AbstractSkeleton implements Shearable {
      @Override
      protected InteractionResult mobInteract(Player player, InteractionHand hand) {
          ItemStack itemInHand = player.getItemInHand(hand);

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3677,4 +_,73 @@
+@@ -3702,4 +_,73 @@
          this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
      }
      // Purpur end - Death screen API
@@ -29,7 +29,7 @@
 +    // Kiterino start - Anger nearby piglins API
 +    @Override
 +    public void angerNearbyPiglins(boolean blockOpen) {
-+        net.minecraft.world.entity.monster.piglin.PiglinAi.angerNearbyPiglins(this.getHandle().serverLevel(), this.getHandle(), blockOpen);
++        net.minecraft.world.entity.monster.piglin.PiglinAi.angerNearbyPiglins(this.getHandle().level(), this.getHandle(), blockOpen);
 +    }
 +    // Kiterino end - Anger nearby piglins API
 +

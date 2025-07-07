@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
 +++ b/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
-@@ -46,7 +_,7 @@
+@@ -63,7 +_,7 @@
                  .getMemory(MemoryModuleType.HURT_BY)
                  .map(damageSource -> damageSource.is(this.panicCausingDamageTypes.apply(owner)))
                  .orElse(false)

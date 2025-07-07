@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ambient/Bat.java
 +++ b/net/minecraft/world/entity/ambient/Bat.java
-@@ -34,7 +_,7 @@
+@@ -35,7 +_,7 @@
      public static final float TICKS_PER_FLAP = 10.0F;
      private static final EntityDataAccessor<Byte> DATA_ID_FLAGS = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.BYTE);
      private static final int FLAG_RESTING = 1;

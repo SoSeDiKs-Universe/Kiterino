@@ -1,8 +1,8 @@
 --- a/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
 +++ b/src/main/java/io/papermc/paper/registry/event/RegistryEvents.java
-@@ -50,6 +_,9 @@
-     public static final RegistryEventProvider<Cow.Variant, CowVariantRegistryEntry.Builder> COW_VARIANT = create(RegistryKey.COW_VARIANT);
+@@ -55,6 +_,9 @@
      public static final RegistryEventProvider<Pig.Variant, PigVariantRegistryEntry.Builder> PIG_VARIANT = create(RegistryKey.PIG_VARIANT);
+     public static final RegistryEventProvider<Dialog, DialogRegistryEntry.Builder> DIALOG = create(RegistryKey.DIALOG);
      // End generate - RegistryEvents
 +    public static final RegistryEventProvider<org.bukkit.inventory.ItemType, me.sosedik.kiterino.registry.data.ItemRegistryEntity.Builder> ITEM = create(RegistryKey.ITEM); // Kiterino - Data-driven items
 +    public static final RegistryEventProvider<org.bukkit.block.BlockType, me.sosedik.kiterino.registry.data.BlockRegistryEntity.Builder> BLOCK = create(RegistryKey.BLOCK); // Kiterino - Data-driven blocks

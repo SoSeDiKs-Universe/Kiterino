@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Drowned.java
 +++ b/net/minecraft/world/entity/monster/Drowned.java
-@@ -92,6 +_,17 @@
+@@ -88,6 +_,17 @@
      }
      // Purpur end - Ridables
  
@@ -15,6 +15,6 @@
 +    }
 +    // Kiterino end - Allow jumping in water as Drowned
 +
-     // Purpur start - Configurable entity base attributes
      @Override
-     public void initAttributes() {
+     protected PathNavigation createNavigation(Level level) {
+         return new AmphibiousPathNavigation(this, level);

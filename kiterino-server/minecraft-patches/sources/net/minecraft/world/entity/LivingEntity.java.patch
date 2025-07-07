@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -944,6 +_,11 @@
+@@ -969,6 +_,11 @@
                      } else if (mobEffectInstance.getDuration() % 600 == 0) {
                          this.onEffectUpdated(mobEffectInstance, false, null);
                      }
@@ -12,7 +12,7 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -2603,6 +_,7 @@
+@@ -2635,6 +_,7 @@
                  ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (updateSelf) {
@@ -20,7 +20,7 @@
                      chunkSource.broadcastAndSend(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.broadcast(this, clientboundAnimatePacket);
-@@ -3271,7 +_,7 @@
+@@ -3337,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -29,7 +29,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3637,8 +_,15 @@
+@@ -3703,8 +_,15 @@
                  }
  
                  if (flag) {

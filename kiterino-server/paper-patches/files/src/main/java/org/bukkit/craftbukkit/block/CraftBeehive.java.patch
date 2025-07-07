@@ -1,0 +1,29 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBeehive.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBeehive.java
+@@ -87,6 +_,26 @@
+         return bees;
+     }
+ 
++    // Kiterino start - API to release entities from snapshot
++    @Override
++    public List<Bee> releaseEntities(Location loc) {
++        this.ensureNoWorldGeneration();
++
++        List<Bee> bees = new ArrayList<>();
++
++        net.minecraft.world.level.Level level = ((org.bukkit.craftbukkit.CraftWorld) loc.getWorld()).getHandle();
++        for (BeehiveBlockEntity.BeeData beeData : getSnapshot().getStored()) {
++            if (!(beeData.toOccupant().createEntity(level, CraftLocation.toBlockPosition(loc)) instanceof net.minecraft.world.entity.animal.Bee bee)) continue;
++            if (!level.addFreshEntity(bee, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.BEEHIVE)) continue;
++
++            bees.add((Bee) bee.getBukkitEntity());
++        }
++
++        clearEntities();
++        return bees;
++    }
++    // Kiterino end - API to release entities from snapshot
++
+     // Purpur start - Stored Bee API
+     @Override
+     public Bee releaseEntity(org.purpurmc.purpur.entity.StoredEntity<Bee> entity) {

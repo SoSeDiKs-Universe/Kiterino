@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
-@@ -3341,7 +_,9 @@
+@@ -3324,7 +_,9 @@
      );
      public static final Block PACKED_ICE = register(
          "packed_ice",
@@ -10,7 +10,7 @@
      );
      public static final Block SUNFLOWER = register(
          "sunflower",
-@@ -7076,5 +_,6 @@
+@@ -7064,5 +_,6 @@
                  blockState.initCache();
              }
          }

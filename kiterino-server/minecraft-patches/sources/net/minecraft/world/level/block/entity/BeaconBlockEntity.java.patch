@@ -1,0 +1,51 @@
+--- a/net/minecraft/world/level/block/entity/BeaconBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/BeaconBlockEntity.java
+@@ -68,6 +_,10 @@
+     List<BeaconBeamOwner.Section> beamSections = new ArrayList<>();
+     private List<BeaconBeamOwner.Section> checkingBeamSections = new ArrayList<>();
+     public int levels;
++    // Kiterino start - Beacon level override API
++    private final String KITERINO_LEVELS_OVERRIDE_TAG = "Kiterino.TierOverride";
++    public int levelsOverride = -1;
++    // Kiterino end - Beacon level override API
+     private int lastCheckY;
+     @Nullable
+     public Holder<MobEffect> primaryPower;
+@@ -91,7 +_,7 @@
+         public void set(int index, int value) {
+             switch (index) {
+                 case 0:
+-                    BeaconBlockEntity.this.levels = value;
++                    BeaconBlockEntity.this.levels = BeaconBlockEntity.this.levelsOverride == -1 ? value : BeaconBlockEntity.this.levelsOverride; // Kiterino - Beacon level override API
+                     break;
+                 case 1:
+                     if (!BeaconBlockEntity.this.level.isClientSide && !BeaconBlockEntity.this.beamSections.isEmpty()) {
+@@ -229,7 +_,7 @@
+         int i = blockEntity.levels; final int originalLevels = i; // Paper - OBFHELPER
+         if (level.getGameTime() % 80L == 0L) {
+             if (!blockEntity.beamSections.isEmpty()) {
+-                blockEntity.levels = updateBase(level, x, y, z);
++                blockEntity.levels = blockEntity.levelsOverride == -1 ? updateBase(level, x, y, z) : blockEntity.levelsOverride; // Kiterino - Beacon level override API
+             }
+ 
+             if (blockEntity.levels > 0 && (!blockEntity.beamSections.isEmpty() || (level.purpurConfig.beaconAllowEffectsWithTintedGlass && isTintedGlass))) { // Purpur - allow beacon effects when covered by tinted glass
+@@ -426,7 +_,10 @@
+         super.loadAdditional(input);
+         this.primaryPower = loadEffect(input, "primary_effect");
+         this.secondaryPower = loadEffect(input, "secondary_effect");
+-        this.levels = input.getIntOr("Levels", 0); // CraftBukkit - SPIGOT-5053, use where available
++        // Kiterino start - Beacon level override API
++        this.levelsOverride = input.getIntOr(KITERINO_LEVELS_OVERRIDE_TAG, -1);
++        this.levels = this.levelsOverride == -1 ? input.getIntOr("Levels", 0) : this.levelsOverride; // CraftBukkit - SPIGOT-5053, use where available
++        // Kiterino end - Beacon level override API
+         this.name = parseCustomNameSafe(input, "CustomName");
+         this.lockKey = LockCode.fromTag(input);
+         this.effectRange = input.getDoubleOr(PAPER_RANGE_TAG, -1); // Paper - Custom beacon ranges
+@@ -437,6 +_,7 @@
+         super.saveAdditional(output);
+         storeEffect(output, "primary_effect", this.primaryPower);
+         storeEffect(output, "secondary_effect", this.secondaryPower);
++        output.putInt(KITERINO_LEVELS_OVERRIDE_TAG, this.levelsOverride); // Kiterino - Beacon level override API
+         output.putInt("Levels", this.levels);
+         output.storeNullable("CustomName", ComponentSerialization.CODEC, this.name);
+         this.lockKey.addToTag(output);

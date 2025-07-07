@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 188de9e96e326686cf2e13cd138c1059018297e3..b56caa2c6f6c268b9258eee426590e4fd3585015 100644
+index 606c090fc887fc2c70020a346dd22ad5df49a725..d70bd5b0f60de9ba77774d1e3688d356f13ee636 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -99,7 +99,7 @@ public final class PaperRegistries {
+@@ -105,7 +105,7 @@ public final class PaperRegistries {
              // built-in
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
@@ -18,10 +18,10 @@ index 188de9e96e326686cf2e13cd138c1059018297e3..b56caa2c6f6c268b9258eee426590e4f
              start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index 0c72f605e00bb7fd129ece49d1bc726cb196c234..7874a8792654ec18be0f7150a2dede53d58c3982 100644
+index 7c2903026d35cf66826e07700b09ae7188aad80c..3ee91f2eab2673ae6ded2514c7030e3c1a2966ba 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -90,4 +90,18 @@ public class Conversions {
+@@ -134,4 +134,18 @@ public class Conversions {
          };
      }
      // Kiterino end - Data-driven items
@@ -41,10 +41,10 @@ index 0c72f605e00bb7fd129ece49d1bc726cb196c234..7874a8792654ec18be0f7150a2dede53
 +    // Kiterino end - Data-driven mob effects
  }
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index 26b888be78dc11dc61f5cef7fb8bf75765d7335f..d018ad8c4869f689542b6ac2f5c5f52da920ae44 100644
+index fcd8c15cbd71f71e89dd0abd40c17f568b34860d..9d1bc8d6545316f8adbf8ebdfed3733c20ee1ae2 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-@@ -26,6 +26,7 @@ class RegistryBuilderTest {
+@@ -25,6 +25,7 @@ class RegistryBuilderTest {
              .filter(RegistryEntryMeta.Buildable.class::isInstance)
              .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
              .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks

@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven blocks
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 8571bbc32e697344051e8495a42f303841cb59b4..188de9e96e326686cf2e13cd138c1059018297e3 100644
+index 66a32b27942c36f27fa6a5dd36ca55d69663a895..606c090fc887fc2c70020a346dd22ad5df49a725 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -100,7 +100,7 @@ public final class PaperRegistries {
+@@ -106,7 +106,7 @@ public final class PaperRegistries {
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
@@ -18,10 +18,10 @@ index 8571bbc32e697344051e8495a42f303841cb59b4..188de9e96e326686cf2e13cd138c1059
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index 6377057ef2b5d832367f5d736fa5e6acd9da01ea..26b888be78dc11dc61f5cef7fb8bf75765d7335f 100644
+index c33a9c2a0ba238dd93a9338476eca8e57ffc1d4a..fcd8c15cbd71f71e89dd0abd40c17f568b34860d 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-@@ -25,6 +25,7 @@ class RegistryBuilderTest {
+@@ -24,6 +24,7 @@ class RegistryBuilderTest {
              .map(RegistryEntry::meta)
              .filter(RegistryEntryMeta.Buildable.class::isInstance)
              .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items

@@ -1,0 +1,26 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBeacon.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBeacon.java
+@@ -62,6 +_,23 @@
+         return this.getSnapshot().levels;
+     }
+ 
++    // Kiterino start - Beacon level override API
++    @Override
++    public int getTierOverride() {
++        return this.getSnapshot().levelsOverride;
++    }
++
++    @Override
++    public void setTierOverride(int tier) {
++        com.google.common.base.Preconditions.checkArgument(tier >= -1 && tier <= 4);
++        this.getSnapshot().levels = tier == -1 ? 0 : tier;
++        this.getSnapshot().levelsOverride = tier;
++        if (isPlaced() && !isSnapshot()) {
++            BeaconBlockEntity.tick(getWorldHandle().getMinecraftWorld(), getPosition(), getHandle(), getBlockEntity());
++        }
++    }
++    // Kiterino end - Beacon level override API
++
+     @Override
+     public PotionEffect getPrimaryEffect() {
+         return this.getSnapshot().getPrimaryEffect();

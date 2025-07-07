@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/EndPortalBlock.java
 +++ b/net/minecraft/world/level/block/EndPortalBlock.java
-@@ -84,6 +_,13 @@
+@@ -86,6 +_,13 @@
      public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
          ResourceKey<Level> resourceKey = level.getTypeKey() == net.minecraft.world.level.dimension.LevelStem.END ? Level.OVERWORLD : Level.END; // CraftBukkit - SPIGOT-6152: send back to main overworld in custom ends
          ServerLevel level1 = level.getServer().getLevel(resourceKey);
@@ -14,8 +14,8 @@
          if (level1 == null) {
              return null;
          } else {
-@@ -103,7 +_,7 @@
-                 f = 0.0F;
+@@ -105,7 +_,7 @@
+                 f = level1.getSharedSpawnAngle();
                  set = Relative.union(Relative.DELTA, Relative.ROTATION);
                  if (entity instanceof ServerPlayer serverPlayer) {
 -                    return serverPlayer.findRespawnPositionAndUseSpawnBlock(false, TeleportTransition.DO_NOTHING, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL); // CraftBukkit

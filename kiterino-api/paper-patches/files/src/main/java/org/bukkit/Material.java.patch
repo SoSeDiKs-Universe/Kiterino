@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -2789,6 +_,12 @@
+@@ -2810,6 +_,12 @@
       * @return Maximum stack size for this material
       */
      public int getMaxStackSize() {
@@ -13,7 +13,7 @@
          return maxStack;
      }
  
-@@ -2977,6 +_,11 @@
+@@ -2998,6 +_,11 @@
          if (filtered.startsWith(NamespacedKey.MINECRAFT + ":")) {
              filtered = filtered.substring((NamespacedKey.MINECRAFT + ":").length());
          }
@@ -25,7 +25,7 @@
  
          filtered = filtered.toUpperCase(Locale.ROOT);
  
-@@ -3652,4 +_,16 @@
+@@ -3669,4 +_,16 @@
          }
      }
      // Purpur end - ItemStack convenience methods

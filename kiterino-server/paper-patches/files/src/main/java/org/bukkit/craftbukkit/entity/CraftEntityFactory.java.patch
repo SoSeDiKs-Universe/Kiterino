@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityFactory.java
-@@ -38,6 +_,23 @@
+@@ -48,6 +_,23 @@
          return CraftEntitySnapshot.create(tag, CraftEntityType.minecraftToBukkit(type));
      }
  
@@ -15,7 +15,7 @@
 +        } catch (CommandSyntaxException e) {
 +            throw new IllegalArgumentException("Could not parse Entity: " + input, e);
 +        }
-+        tag.putString(net.minecraft.world.entity.Entity.ID_TAG, entityType.getKey().toString());
++        tag.putString(net.minecraft.world.entity.Entity.TAG_ID, entityType.getKey().toString());
 +
 +        return CraftEntitySnapshot.create(tag, entityType);
 +    }

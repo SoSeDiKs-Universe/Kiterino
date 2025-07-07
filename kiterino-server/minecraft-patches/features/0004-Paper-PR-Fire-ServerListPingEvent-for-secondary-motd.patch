@@ -6,17 +6,17 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index 3bdb4f0a8048756867a72db6b611c5cc3175f328..1c4bbc6eb20225b2a4cce58297a0910b709ea88d 100644
+index 9e72a4fbbdcd8fa6774f4fee6af96cc19d8db9af..d68616b13f0fdc3317f3fa6f0e0097f1103da743 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -307,10 +307,15 @@ public abstract class PlayerList {
-         mutableComponent.withStyle(ChatFormatting.YELLOW);
-         Component joinMessage = mutableComponent; // Paper - Adventure
-         serverGamePacketListenerImpl.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
--        ServerStatus status = this.server.getStatus();
--        if (status != null && !cookie.transferred()) {
--            player.sendServerStatus(status);
--        }
+@@ -308,10 +308,15 @@ public abstract class PlayerList {
+             mutableComponent.withStyle(ChatFormatting.YELLOW);
+             Component joinMessage = mutableComponent; // Paper - Adventure
+             serverGamePacketListenerImpl.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+-            ServerStatus status = this.server.getStatus();
+-            if (status != null && !cookie.transferred()) {
+-                player.sendServerStatus(status);
+-            }
 +        // Paper start - fire ServerListPingEvent
 +        if (!cookie.transferred()) {
 +            io.papermc.paper.util.MCUtil.scheduleAsyncTask(() -> {
@@ -27,5 +27,5 @@ index 3bdb4f0a8048756867a72db6b611c5cc3175f328..1c4bbc6eb20225b2a4cce58297a0910b
 +        }
 +        // Paper end - fire ServerListPingEvent
  
-         // player.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players)); // CraftBukkit - replaced with loop below
-         this.players.add(player);
+             // player.connection.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players)); // CraftBukkit - replaced with loop below
+             this.players.add(player);

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -3136,4 +_,30 @@
+@@ -3145,4 +_,30 @@
          server.clearBlockHighlights();
      }
      // Purpur end - Debug Marker API

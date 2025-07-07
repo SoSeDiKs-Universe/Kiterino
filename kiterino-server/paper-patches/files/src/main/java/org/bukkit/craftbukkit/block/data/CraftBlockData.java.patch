@@ -1,6 +1,15 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-@@ -545,7 +_,7 @@
+@@ -357,7 +_,7 @@
+         return state.max;
+     }
+ 
+-    private static final Map<Class<? extends Block>, Function<net.minecraft.world.level.block.state.BlockState, CraftBlockData>> MAP = new HashMap<>();
++    public static final Map<Class<? extends Block>, Function<net.minecraft.world.level.block.state.BlockState, CraftBlockData>> MAP = new HashMap<>(); // Kiterino - private -> public - Data-driven blocks
+ 
+     static {
+         //<editor-fold desc="CraftBlockData Registration" defaultstate="collapsed">
+@@ -546,7 +_,7 @@
          //</editor-fold>
      }
  

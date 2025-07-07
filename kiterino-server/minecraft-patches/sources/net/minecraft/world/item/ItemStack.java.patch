@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -192,7 +_,22 @@
+@@ -189,7 +_,24 @@
                  } else {
                      Holder<Item> holder = Item.STREAM_CODEC.decode(buffer);
                      DataComponentPatch dataComponentPatch = codec.decode(buffer);
@@ -10,12 +10,14 @@
 +                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride) {
 +                        net.minecraft.world.item.component.CustomData customData = itemStack.components.get(DataComponents.CUSTOM_DATA);
 +                        if (customData != null && customData.contains("kiterino_og_item")) {
-+                            Tag itemTag = customData.getUnsafe().get("kiterino_og_item");
++                            net.minecraft.nbt.Tag itemTag = customData.getUnsafe().get("kiterino_og_item");
 +                            assert itemTag != null;
 +                            if (itemTag instanceof net.minecraft.nbt.StringTag) {
 +                                itemStack = ItemStack.EMPTY;
 +                            } else {
-+                                itemStack = parse(buffer.registryAccess(), itemTag).orElse(itemStack);
++                                itemStack = net.minecraft.world.item.ItemStack.CODEC.parse(
++                                    org.bukkit.craftbukkit.CraftRegistry.getMinecraftRegistry().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), itemTag
++                                ).getOrThrow();
 +                            }
 +                        }
 +                    }
@@ -24,7 +26,7 @@
                  }
              }
  
-@@ -203,6 +_,19 @@
+@@ -200,6 +_,23 @@
                  } else {
                      buffer.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), value, value.getCount())); // Paper - potentially sanitize count
                      Item.STREAM_CODEC.encode(buffer, value.getItemHolder());
@@ -32,19 +34,23 @@
 +                    net.minecraft.world.item.component.CustomData customData = null;
 +                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && !value.isEmpty() && me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.modifiers.isEmpty()) {
 +                        customData = value.get(DataComponents.CUSTOM_DATA);
++                        net.minecraft.nbt.Tag itemData = net.minecraft.world.item.ItemStack.CODEC.encodeStart(
++                            net.minecraft.server.MinecraftServer.getServer().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
++                            value
++                        ).getOrThrow();
 +                        if (customData == null) {
 +                            customData = net.minecraft.world.item.component.CustomData.of(new net.minecraft.nbt.CompoundTag());
-+                            customData.getUnsafe().put("kiterino_og_item", value.save(buffer.registryAccess()));
++                            customData.getUnsafe().put("kiterino_og_item", itemData);
 +                            value.set(DataComponents.CUSTOM_DATA, customData);
 +                        } else {
-+                            customData.getUnsafe().put("kiterino_og_item", value.save(buffer.registryAccess()));
++                            customData.getUnsafe().put("kiterino_og_item", itemData);
 +                        }
 +                    }
 +                    // Kiterino end - Prevent creative from overriding items
                      // Paper start - adventure; conditionally render translatable components
                      boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
                      try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(value))) { // pass the itemstack as context to the obfuscation session
-@@ -210,6 +_,15 @@
+@@ -207,6 +_,15 @@
                      codec.encode(buffer, value.components.asPatch());
                      } finally {
                          net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);

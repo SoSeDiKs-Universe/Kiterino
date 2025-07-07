@@ -361,12 +361,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     private static Packet<?> handle(CraftPlayer player, ClientboundSetCursorItemPacket packet) {
-        // For some reason, the packet desyncs sometimes for custom items, hence grabbing the real cursor item // TODO remove this…
-        ItemStack original = /* packet.contents() */ player.getHandle().containerMenu.getCarried();
+        ItemStack original = packet.contents();
         var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
         var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
         ItemStack result = fromBukkit(contextBox, original);
-        if (result == null && original.is(Items.AIR)) result = ItemStack.EMPTY; // Otherwise, the client is getting kicked with the carried workaround above. Why? Good question! // TODO remove this…
         return result == null ? packet : new ClientboundSetCursorItemPacket(result);
     }
 
@@ -805,19 +803,22 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     private static @Nullable ItemStack fromBukkit(ItemContextBox contextBox, ItemStack original) {
         var bukkitItem = ItemModifier.modifyItem(contextBox);
-        if (bukkitItem == null) return null;
 
 	    // Kiterino start - Prevent creative from overriding items
-	    ItemStack itemStack = ItemStack.fromBukkitCopy(bukkitItem);
+	    ItemStack itemStack = bukkitItem == null ? original : ItemStack.fromBukkitCopy(bukkitItem);
 	    CraftPlayer player = (CraftPlayer) contextBox.getViewer();
-	    if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
+	    if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && !itemStack.isEmpty()) {
 		    net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+            net.minecraft.nbt.Tag itemData = net.minecraft.world.item.ItemStack.CODEC.encodeStart(
+                net.minecraft.server.MinecraftServer.getServer().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
+                itemStack
+            ).getOrThrow();
 		    if (customData == null) {
 			    customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : original.save(player.getHandle().registryAccess()));
+			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : itemData);
 			    itemStack.set(DataComponents.CUSTOM_DATA, customData);
 		    } else {
-			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : original.save(player.getHandle().registryAccess()));
+			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : itemData);
 		    }
 	    }
 	    return itemStack;

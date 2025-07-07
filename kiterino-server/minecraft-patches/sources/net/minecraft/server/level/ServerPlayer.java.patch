@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -1231,6 +_,12 @@
+@@ -1242,6 +_,12 @@
  
      // CraftBukkit start
      public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, @Nullable org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
@@ -13,7 +13,7 @@
          TeleportTransition teleportTransition;
          boolean isBedSpawn = false;
          boolean isAnchorSpawn = false;
-@@ -1247,10 +_,10 @@
+@@ -1258,10 +_,10 @@
                  teleportTransition = new TeleportTransition(level, respawnPosAngle.position(), Vec3.ZERO, respawnPosAngle.yaw(), 0.0F, postTeleportTransition);
                  // CraftBukkit end
              } else {
@@ -26,7 +26,7 @@
          }
          // CraftBukkit start
          if (respawnReason == null) {
-@@ -1533,7 +_,7 @@
+@@ -1561,7 +_,7 @@
              return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
          } else {
              this.setRespawnPosition(new ServerPlayer.RespawnConfig(this.level().dimension(), at, this.getYRot(), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - Add PlayerSetSpawnEvent
@@ -35,7 +35,7 @@
                  return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
              } else {
                  if (!this.isCreative()) {
-@@ -1881,8 +_,13 @@
+@@ -1914,8 +_,13 @@
                      }
                  }
              } else if (this.isFallFlying()) {
@@ -51,7 +51,7 @@
              } else {
                  int rounded = Math.round((float)Math.sqrt(dx * dx + dz * dz) * 100.0F);
                  if (rounded > 25) {
-@@ -1896,6 +_,11 @@
+@@ -1929,6 +_,11 @@
          if (this.isPassenger() && !didNotMove(dx, dy, dz)) {
              int rounded = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
              Entity vehicle = this.getVehicle();
