@@ -19,7 +19,7 @@ index ce1ce18410fc1d47d999c918a8f880b43bf9797c..59e8e1441ff78d37b94b55885531ceb3
  
                      level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index 9275ba72415beaa4e495cae81674fd14ec671156..eb5e5d2ddae628a1bef7804e0f06a3ad3dc05d9e 100644
+index 70dcdd2b635c49fefd359c974ee034a73561d998..cfb5e3e0f48315b42fffaabee107cd2c0452020f 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
 @@ -174,7 +174,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
@@ -32,7 +32,7 @@ index 9275ba72415beaa4e495cae81674fd14ec671156..eb5e5d2ddae628a1bef7804e0f06a3ad
                      CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, weapon);
                      serverPlayer.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
 diff --git a/net/minecraft/world/item/ProjectileWeaponItem.java b/net/minecraft/world/item/ProjectileWeaponItem.java
-index fb5077450aa9f7b7a03dd20c27a68dfdaab5ef06..856454106de362576a7f722079fb8adbe4f58ebf 100644
+index f12b9e4e8a78c713782af548d1cb15ef363305b4..ef8f875f71e61682618f6274b460eb90760a4ec7 100644
 --- a/net/minecraft/world/item/ProjectileWeaponItem.java
 +++ b/net/minecraft/world/item/ProjectileWeaponItem.java
 @@ -40,7 +40,7 @@ public abstract class ProjectileWeaponItem extends Item {
@@ -53,16 +53,16 @@ index fb5077450aa9f7b7a03dd20c27a68dfdaab5ef06..856454106de362576a7f722079fb8adb
                  }
  
                  if (event.getProjectile() == projectile.getBukkitEntity()) {
-@@ -82,7 +82,7 @@ public abstract class ProjectileWeaponItem extends Item {
-                         if (shooter instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
-                             serverPlayer.containerMenu.sendAllDataToRemote();
-                         }
+@@ -79,7 +79,7 @@ public abstract class ProjectileWeaponItem extends Item {
+                         level,
+                         itemStack
+                     ).isRemoved()) {
 -                        return;
-+                        return false; // Kiterino - Better EntityShootBowEvent cancellation
++	                    return false; // Kiterino - Better EntityShootBowEvent cancellation
                      }
                  }
                  // CraftBukkit end
-@@ -92,6 +92,7 @@ public abstract class ProjectileWeaponItem extends Item {
+@@ -89,6 +89,7 @@ public abstract class ProjectileWeaponItem extends Item {
                  }
              }
          }

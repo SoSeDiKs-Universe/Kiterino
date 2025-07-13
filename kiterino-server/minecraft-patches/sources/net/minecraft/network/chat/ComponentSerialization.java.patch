@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/chat/ComponentSerialization.java
 +++ b/net/minecraft/network/chat/ComponentSerialization.java
-@@ -52,13 +_,92 @@
+@@ -52,13 +_,97 @@
  
              @Override
              public void encode(RegistryFriendlyByteBuf registryFriendlyByteBuf, Component object) {
@@ -71,11 +71,16 @@
 +            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, context, item.asBukkitCopy());
 +            var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
 +            if (bukkitItem != null) {
-+                Style style = component.getStyle().withHoverEvent(new HoverEvent.ShowItem(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem)));
-+                if (component instanceof MutableComponent mutableComponent) {
-+                    mutableComponent.setStyle(style);
++                // Just guessing, but meh
++                if (component.getContents() instanceof TranslatableContents || (!children.isEmpty() && children.stream().anyMatch(c -> c.getContents() instanceof TranslatableContents))) {
++                    component = io.papermc.paper.adventure.PaperAdventure.asVanilla(bukkitItem.effectiveName().hoverEvent(bukkitItem));
 +                } else {
-+                    component = component.copy().setStyle(style);
++                    Style style = component.getStyle().withHoverEvent(new HoverEvent.ShowItem(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem)));
++                    if (component instanceof MutableComponent mutableComponent) {
++                        mutableComponent.setStyle(style);
++                    } else {
++                        component = component.copy().setStyle(style);
++                    }
 +                }
 +            }
 +        }

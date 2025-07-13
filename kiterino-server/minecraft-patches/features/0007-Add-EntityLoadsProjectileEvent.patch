@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 4c4ffdf7721c8f2c3be607aeacf2ca102954cff0..ad6bd5251ca73f01d53817c4c6100d9a1211cb9f 100644
+index 65e9bd7bd009ea9050d8d2a4e17432b21587e64d..a39e74bfe228b41fbd92490ea945ea1ace806b37 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4589,6 +4589,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4583,6 +4583,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return ItemStack.EMPTY;
      }
  
@@ -46,10 +46,10 @@ index 04d5910d736dee2a88a2602f4a98495459277157..9251ff10f30d833f7b2ee6c8d771aab8
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 18c8538f5ac8e35f62f7f2e266fd63a4f45849d6..0f4bf06b8b770e1dcacd10c4f44495a31eb3d3bf 100644
+index 1977ebc856214371e797835a888b1d00f99260a5..13beb6e274d6a3258e1dbc80b660088745a7165b 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -2213,19 +2213,19 @@ public abstract class Player extends LivingEntity {
+@@ -2212,19 +2212,19 @@ public abstract class Player extends LivingEntity {
              Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(shootable, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);
              if (!heldProjectile.isEmpty()) {
