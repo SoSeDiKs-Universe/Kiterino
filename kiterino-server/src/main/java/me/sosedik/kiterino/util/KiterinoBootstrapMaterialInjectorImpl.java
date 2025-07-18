@@ -20,6 +20,8 @@ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -33,6 +35,7 @@ import static me.sosedik.kiterino.util.KiterinoUnsafeUtil.getField;
 // Kiterino - Injecting custom Materials
 public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<Material> {
 
+	private final List<KiterinoBlock> blocks = new ArrayList<>();
 	private final Field materialItemField = getField(CraftMagicNumbers.class, "MATERIAL_ITEM");
 	private final Field itemMaterialField = getField(CraftMagicNumbers.class, "ITEM_MATERIAL");
 	private final Field materialBlockField = getField(CraftMagicNumbers.class, "MATERIAL_BLOCK");
@@ -71,6 +74,9 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 		if (item instanceof BlockItem blockItem) {
 			((Map<Material, Block>) materialBlockField.get(null)).put(value, blockItem.getBlock());
 			((Map<Block, Material>) blockMaterialField.get(null)).put(blockItem.getBlock(), value);
+
+			if (blockItem.getBlock() instanceof KiterinoBlock kiterinoBlock)
+				blocks.add(kiterinoBlock);
 		}
 	}
 
@@ -95,6 +101,8 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
 		if (allocated.isEmpty()) return;
 
 		injectAllocated();
+
+		blocks.forEach(KiterinoBlock::postInit);
 
 		// Kiterino start - Implement packet item faker for injected items
 		var modifier = KiterinoItemModifierImpl.MODIFIER_IMPL;

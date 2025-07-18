@@ -30,6 +30,11 @@ public interface KiterinoBlock {
 	@Nullable BlockState serializeBlockToClient(Object currentState);
 
 	/**
+	 * Called after the block's Material is initialized
+	 */
+	default void postInit() {}
+
+	/**
 	 * Gets the block data classes for this block.
 	 * Left is a bukkit interface, right is a craft implementation.
 	 *

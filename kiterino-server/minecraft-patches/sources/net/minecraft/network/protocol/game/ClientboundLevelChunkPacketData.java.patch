@@ -1,0 +1,14 @@
+--- a/net/minecraft/network/protocol/game/ClientboundLevelChunkPacketData.java
++++ b/net/minecraft/network/protocol/game/ClientboundLevelChunkPacketData.java
+@@ -62,6 +_,11 @@
+         int totalTileEntities = 0; // Paper - Handle oversized block entities in chunks
+ 
+         for (Entry<BlockPos, BlockEntity> entry : levelChunk.getBlockEntities().entrySet()) {
++            // Kiterino start - Hide custom block entities - Injecting custom blocks
++            if (entry.getValue().getBlockState().getBlock() instanceof me.sosedik.kiterino.world.block.KiterinoBlock) {
++                continue;
++            }
++            // Kiterino end - Hide custom block entities - Injecting custom blocks
+             // Paper start - Handle oversized block entities in chunks
+             if (++totalTileEntities > BLOCK_ENTITY_LIMIT) {
+                 net.minecraft.network.protocol.Packet<ClientGamePacketListener> packet = entry.getValue().getUpdatePacket();

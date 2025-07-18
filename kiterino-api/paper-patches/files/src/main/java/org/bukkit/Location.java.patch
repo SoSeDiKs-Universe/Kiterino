@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Location.java
 +++ b/src/main/java/org/bukkit/Location.java
-@@ -507,6 +_,257 @@
+@@ -518,6 +_,257 @@
          return subtractRotation(rotation.yaw(), rotation.pitch());
      }
  

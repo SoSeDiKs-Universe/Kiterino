@@ -1,0 +1,11 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
+@@ -140,7 +_,7 @@
+         CraftBlockStates.FACTORIES.put(blockType, factory);
+     }
+ 
+-    private static <T extends BlockEntity, B extends CraftBlockEntityState<T>> void register(
++    public static <T extends BlockEntity, B extends CraftBlockEntityState<T>> void register( // Kiterino - private -> public - Injecting custom blocks
+             net.minecraft.world.level.block.entity.BlockEntityType<? extends T> blockEntityType,
+             Class<B> blockStateType,
+             BiFunction<World, T, B> blockStateConstructor

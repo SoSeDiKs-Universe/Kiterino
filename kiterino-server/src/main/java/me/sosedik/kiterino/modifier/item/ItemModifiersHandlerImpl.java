@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import io.papermc.paper.datacomponent.item.BundleContents;
+import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import io.papermc.paper.datacomponent.item.Repairable;
 import io.papermc.paper.datacomponent.item.UseCooldown;
 import io.papermc.paper.datacomponent.item.UseRemainder;
@@ -29,7 +30,6 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
@@ -63,7 +63,6 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipePropertySet;
@@ -179,12 +178,29 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 				    org.bukkit.inventory.ItemStack bundleItem = items.get(i);
 				    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, bundleItem));
 				    if (newItem != null) {
-					    items.set(i, bundleItem);
+					    items.set(i, newItem);
 					    modified = true;
 				    }
 			    }
 			    if (modified) {
 				    item.setData(DataComponentTypes.BUNDLE_CONTENTS, BundleContents.bundleContents(items));
+			    }
+		    }
+		    // Containers
+		    if (item.hasData(DataComponentTypes.CONTAINER)) {
+			    ItemContainerContents containerContents = item.getData(DataComponentTypes.CONTAINER);
+			    assert containerContents != null;
+			    List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(containerContents.contents());
+			    for (int i = 0; i < items.size(); i++) {
+				    org.bukkit.inventory.ItemStack containerItem = items.get(i);
+				    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
+				    if (newItem != null) {
+					    items.set(i, newItem);
+					    modified = true;
+				    }
+			    }
+			    if (modified) {
+				    item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(items));
 			    }
 		    }
 		    // Block storages
