@@ -1,0 +1,18 @@
+--- a/src/main/java/org/bukkit/inventory/InventoryView.java
++++ b/src/main/java/org/bukkit/inventory/InventoryView.java
+@@ -323,6 +_,15 @@
+     @Deprecated(since = "1.21.1") // Paper
+     public void setTitle(@NotNull String title);
+ 
++    // Kiterino start - Update inventory title API
++    /**
++     * Resends the title to the player viewing inventory
++     *
++     * @param title title
++     */
++    void resendTitle(net.kyori.adventure.text.@NotNull Component title);
++    // Kiterino end - Update inventory title API
++
+     /**
+      * Gets the menu type of the inventory view if applicable.
+      * <p>

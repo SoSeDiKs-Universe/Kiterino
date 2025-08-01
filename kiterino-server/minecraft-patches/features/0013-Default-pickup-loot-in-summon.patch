@@ -22,10 +22,10 @@ index e9aa42f1cd12dc29611e85a767a1eaebbe323e14..fdd628262c285be7553fb05b36a6a978
      public final EntityDimensions getDimensions(Pose pose) {
          return pose == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getDefaultDimensions(pose).scale(this.getScale());
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index ab4c6176caee8a925cd76114aff08b0b0b2558af..e22e493dd8592f98bf6f70dc29803bc849e4098f 100644
+index 6ac408dae4997da1c674849148d60a5b50cb2118..7d55481d46d7db28485bad2d67dde380b1c5e023 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -456,7 +456,7 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -462,7 +462,7 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
      protected void readAdditionalSaveData(ValueInput input) {
          super.readAdditionalSaveData(input);
          // CraftBukkit start - If looting or persistence is false only use it if it was set after we started using it

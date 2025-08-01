@@ -1,9 +1,9 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3702,4 +_,73 @@
-         this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerCombatKillPacket(getEntityId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(message)));
+@@ -3623,4 +_,73 @@
+     public PlayerGameConnection getConnection() {
+         return this.getHandle().connection.playerGameConnection;
      }
-     // Purpur end - Death screen API
 +
 +    // Kiterino start - Red tint API
 +    @Override

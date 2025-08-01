@@ -1,5 +1,13 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
+@@ -716,6 +_,7 @@
+             .requiresCorrectToolForDrops()
+             .strength(4.0F)
+             .pushReaction(PushReaction.DESTROY)
++            .ignitedByLava() // Kiterino - Flammable cobwebs
+     );
+     public static final Block SHORT_GRASS = register(
+         "short_grass",
 @@ -3324,7 +_,9 @@
      );
      public static final Block PACKED_ICE = register(

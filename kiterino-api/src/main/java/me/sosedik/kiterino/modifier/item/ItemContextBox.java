@@ -145,6 +145,33 @@ public class ItemContextBox {
 	}
 
 	/**
+	 * Helper for adding a line to the item's lore
+	 *
+	 * @param index line index
+	 * @param line component
+	 */
+	public void addLore(int index, ComponentLike line) {
+		ItemLore lore;
+		if (this.item.hasData(DataComponentTypes.LORE)) {
+			ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+			assert currentLore != null;
+			lore = ItemLore.lore().lines(currentLore.lines()).addLine(index, line).build();
+		} else {
+			lore = ItemLore.lore().addLine(line).build();
+		}
+		this.item.setData(DataComponentTypes.LORE, lore);
+	}
+
+	/**
+	 * Helper for adding lines to the item's lore
+	 *
+	 * @param lines components
+	 */
+	public void addLore(ComponentLike... lines) {
+		addLore(List.of(lines));
+	}
+
+	/**
 	 * Helper for adding lines to the item's lore
 	 *
 	 * @param lines components
@@ -159,6 +186,16 @@ public class ItemContextBox {
 			lore = ItemLore.lore().addLines(lines).build();
 		}
 		this.item.setData(DataComponentTypes.LORE, lore);
+	}
+
+	/**
+	 * Gets the size of the lore
+	 *
+	 * @return lore size
+	 */
+	public int getLoreSize() {
+		ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+		return currentLore == null ? 0 : currentLore.lines().size();
 	}
 
 }

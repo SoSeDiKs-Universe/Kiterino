@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/block/Furnace.java
++++ b/src/main/java/org/bukkit/block/Furnace.java
+@@ -135,4 +_,13 @@
+     @NotNull
+     @Override
+     public FurnaceInventory getSnapshotInventory();
++
++    // Kiterino start - Drop stored experience API for furnaces
++    /**
++     * Drop stored experience and award used recipes
++     *
++     * @param player player
++     */
++    void awardUsedRecipesAndPopExperience(org.bukkit.entity.@org.jetbrains.annotations.Nullable Player player);
++    // Kiterino end - Drop stored experience API for furnaces
+ }

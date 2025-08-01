@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftContainer.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftContainer.java
+@@ -95,6 +_,13 @@
+                 this.title = title;
+             }
+ 
++            // Kiterino start - Update inventory title API
++            @Override
++            public void resendTitle(net.kyori.adventure.text.Component title) {
++                CraftInventoryView.sendInventoryTitleChange(this, title);
++            }
++            // Kiterino end - Update inventory title API
++
+             @Override
+             public MenuType getMenuType() {
+                 return CraftMenuType.minecraftToBukkit(getNotchInventoryType(inventory));

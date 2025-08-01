@@ -136,10 +136,10 @@ index 8eba44b400f98f59b47942e097c2667f34c94ebe..41991da69f29a8fb4cb43d2c1ef596ea
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index cd58b6aa18db16d97a6052f3509834d4119e3c50..58230c2509995aae3e89505681095952191a50ba 100644
+index 0dc5799e0b3e02f5fea6069b3aa333e06a7bee89..aa46c3d6d281f29bc3852359b625bd0280d207c8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1490,13 +1490,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
+@@ -1459,13 +1459,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
          Preconditions.checkArgument(location.getWorld() != null, "location.world");
          // Paper start - Teleport passenger API
          // Don't allow teleporting between worlds while keeping passengers
@@ -155,7 +155,7 @@ index cd58b6aa18db16d97a6052f3509834d4119e3c50..58230c2509995aae3e89505681095952
              return false;
          }
          // Paper end
-@@ -1551,6 +1551,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
+@@ -1520,6 +1520,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
              this.getHandle().closeContainer(org.bukkit.event.inventory.InventoryCloseEvent.Reason.TELEPORT); // Paper - Inventory close reason
          }
  
@@ -163,7 +163,7 @@ index cd58b6aa18db16d97a6052f3509834d4119e3c50..58230c2509995aae3e89505681095952
          // Check if the fromWorld and toWorld are the same.
          if (fromWorld == toWorld) {
              // Paper start - Teleport API
-@@ -1569,9 +1570,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
+@@ -1536,9 +1537,22 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
              // The respawn reason should never be used if the passed location is non null.
              this.server.getHandle().respawn(entity, true, Entity.RemovalReason.CHANGED_DIMENSION, null, to);
          }
@@ -184,5 +184,5 @@ index cd58b6aa18db16d97a6052f3509834d4119e3c50..58230c2509995aae3e89505681095952
 +    // Kiterino end - EMC - Vehicle passenger teleporting
 +
      @Override
-     public boolean isSneaking() {
-         return this.getHandle().isShiftKeyDown();
+     public void setSneaking(boolean sneak) {
+         this.getHandle().setShiftKeyDown(sneak);

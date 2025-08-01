@@ -27,6 +27,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
@@ -135,9 +136,31 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     @Override
     public org.bukkit.inventory.@Nullable ItemStack modifyItem(ItemContextBox contextBox) {
         boolean modified = false;
+
+		// Used for dynamic empty lines
+		int currentLoreSize = contextBox.getLoreSize();
+		int priorLoreSize = currentLoreSize;
+		NamespacedKey currentId = null;
+		NamespacedKey priorId = null;
+
         for (NamespacedKey modifierId : KiterinoConfig.itemModifiersOrder) {
             ItemModifier modifier = modifiers.get(modifierId);
-            if (modifier == null) continue;
+            if (modifier == null) {
+				if ("empty_line".equals(modifierId.namespace())) {
+					if (priorId == null) continue;
+
+					String[] keys = modifierId.value().split("-");
+					if (keys.length != 4) continue;
+					if (!keys[0].equals(priorId.namespace())) continue;
+					if (!keys[1].equals(priorId.value())) continue;
+					if (!keys[2].equals(currentId.namespace())) continue;
+					if (!keys[3].equals(currentId.value())) continue;
+
+					contextBox.addLore(priorLoreSize, net.kyori.adventure.text.Component.empty());
+					currentLoreSize++;
+				}
+				continue;
+            }
             if (modifier.skipAir() && contextBox.getItem().getType() == Material.AIR) continue;
             if (modifier.skipContext(contextBox.getContextType())) continue;
 
@@ -147,6 +170,13 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 return contextBox.getItem();
 
             modified = true;
+
+	        priorLoreSize = currentLoreSize;
+	        currentLoreSize = contextBox.getLoreSize();
+	        if (priorLoreSize != currentLoreSize) {
+		        priorId = currentId;
+		        currentId = modifierId;
+	        }
         }
 
 	    // Special nbt cases
@@ -759,7 +789,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             if (result != null) {
                 modified = true;
                 merchantOffer = merchantOffer.copy();
-                merchantOffer.baseCostA = new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components());
+                merchantOffer.baseCostA = new ItemCost(result.getItemHolder(), itemCost.count(), DataComponentExactPredicate.allOf(result.getComponents()), result);
             }
 
             itemCost = merchantOffer.getItemCostB().orElse(null);
@@ -773,7 +803,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                         modified = true;
                         merchantOffer = merchantOffer.copy();
                     }
-                    merchantOffer.costB = Optional.of(new ItemCost(result.getItemHolder(), itemCost.count(), itemCost.components()));
+                    merchantOffer.costB = Optional.of(new ItemCost(result.getItemHolder(), itemCost.count(), DataComponentExactPredicate.allOf(result.getComponents()), result));
                 }
             }
 
@@ -824,18 +854,23 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 	    ItemStack itemStack = bukkitItem == null ? original : ItemStack.fromBukkitCopy(bukkitItem);
 	    CraftPlayer player = (CraftPlayer) contextBox.getViewer();
 	    if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && !itemStack.isEmpty()) {
+			if (bukkitItem == null) {
+				itemStack = itemStack.copy();
+			}
 		    net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
-            net.minecraft.nbt.Tag itemData = net.minecraft.world.item.ItemStack.CODEC.encodeStart(
+            net.minecraft.nbt.Tag itemData = original.isEmpty() ? null : net.minecraft.world.item.ItemStack.CODEC.encodeStart(
                 net.minecraft.server.MinecraftServer.getServer().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
-                itemStack
+                original
             ).getOrThrow();
 		    if (customData == null) {
 			    customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : itemData);
+			    customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
 			    itemStack.set(DataComponents.CUSTOM_DATA, customData);
 		    } else {
-			    customData.getUnsafe().put("kiterino_og_item", original.isEmpty() ? StringTag.valueOf("") : itemData);
+			    customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
 		    }
+	    } else if (bukkitItem == null) {
+			return null;
 	    }
 	    return itemStack;
 	    // Kiterino end - Prevent creative from overriding items

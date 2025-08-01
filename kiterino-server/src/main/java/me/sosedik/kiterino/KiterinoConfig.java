@@ -126,7 +126,14 @@ public final class KiterinoConfig {
 	public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
 	private static void itemModifiers() {
 		itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
-		getList(config, "item-modifiers.modification-order", List.of(), "List of item modifier ids, determines modification order").forEach(id -> itemModifiersOrder.add(NamespacedKey.fromString((String) id)));
+		getList(config, "item-modifiers.modification-order", List.<String>of(), "List of item modifier ids, determines modification order").forEach(id -> {
+			if (id.startsWith("empty_line|")) {
+				String[] parts = id.split("\\|");
+				itemModifiersOrder.add(new NamespacedKey("empty_line", parts[1].replace(":", "-") + "-" + parts[2].replace(":", "-")));
+				return;
+			}
+			itemModifiersOrder.add(NamespacedKey.fromString(id));
+		});
 	}
 	// Kiterino end - Item Modifiers API
 

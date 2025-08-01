@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBeehive.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBeehive.java
-@@ -87,6 +_,26 @@
+@@ -87,6 +_,28 @@
          return bees;
      }
  
@@ -13,7 +13,9 @@
 +
 +        net.minecraft.world.level.Level level = ((org.bukkit.craftbukkit.CraftWorld) loc.getWorld()).getHandle();
 +        for (BeehiveBlockEntity.BeeData beeData : getSnapshot().getStored()) {
-+            if (!(beeData.toOccupant().createEntity(level, CraftLocation.toBlockPosition(loc)) instanceof net.minecraft.world.entity.animal.Bee bee)) continue;
++            if (!(beeData.toOccupant().createEntity(level, null) instanceof net.minecraft.world.entity.animal.Bee bee)) continue;
++
++            bee.snapTo(CraftLocation.toBlockPosition(loc), loc.getYaw(), loc.getPitch());
 +            if (!level.addFreshEntity(bee, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.BEEHIVE)) continue;
 +
 +            bees.add((Bee) bee.getBukkitEntity());

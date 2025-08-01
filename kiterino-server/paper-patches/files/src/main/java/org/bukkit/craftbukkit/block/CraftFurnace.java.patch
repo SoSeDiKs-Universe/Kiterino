@@ -1,0 +1,20 @@
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftFurnace.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftFurnace.java
+@@ -136,4 +_,17 @@
+         });
+     }
+     // Paper end
++
++    // Kiterino start - Drop stored experience API for furnaces
++    @Override
++    public void awardUsedRecipesAndPopExperience(org.bukkit.entity.@org.jspecify.annotations.Nullable Player player) {
++        if (player == null) {
++            if (getWorldHandle() instanceof net.minecraft.server.level.ServerLevel level) {
++                getBlockEntity().getRecipesToAwardAndPopExperience(level, net.minecraft.world.phys.Vec3.atCenterOf(getPosition()));
++            }
++        } else {
++            getBlockEntity().awardUsedRecipesAndPopExperience(((org.bukkit.craftbukkit.entity.CraftPlayer) player).getHandle(), null, 0);
++        }
++    }
++    // Kiterino end - Drop stored experience API for furnaces
+ }

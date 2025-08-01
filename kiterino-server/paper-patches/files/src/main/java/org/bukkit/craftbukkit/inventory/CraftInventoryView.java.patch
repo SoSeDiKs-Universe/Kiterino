@@ -1,0 +1,39 @@
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryView.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventoryView.java
+@@ -94,6 +_,13 @@
+         this.title = title;
+     }
+ 
++    // Kiterino start - Update inventory title API
++    @Override
++    public void resendTitle(net.kyori.adventure.text.Component title) {
++        CraftInventoryView.sendInventoryTitleChange(this, title);
++    }
++    // Kiterino end - Update inventory title API
++
+     @Override
+     public org.bukkit.inventory.MenuType getMenuType() {
+         MenuType<?> menuType = container.menuType;
+@@ -108,7 +_,13 @@
+         return this.container;
+     }
+ 
++    // Kiterino start - Update inventory title API
+     public static void sendInventoryTitleChange(InventoryView view, String title) {
++        sendInventoryTitleChange(view, net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().deserialize(title));
++    }
++
++    public static void sendInventoryTitleChange(InventoryView view, net.kyori.adventure.text.Component title) {
++    // Kiterino end - Update inventory title API
+         Preconditions.checkArgument(view != null, "InventoryView cannot be null");
+         Preconditions.checkArgument(title != null, "Title cannot be null");
+         Preconditions.checkArgument(view.getPlayer() instanceof Player, "NPCs are not currently supported for this function");
+@@ -117,7 +_,7 @@
+         final ServerPlayer player = (ServerPlayer) ((CraftHumanEntity) view.getPlayer()).getHandle();
+         final int containerId = player.containerMenu.containerId;
+         final MenuType<?> windowType = CraftContainer.getNotchInventoryType(view.getTopInventory());
+-        player.connection.send(new ClientboundOpenScreenPacket(containerId, windowType, CraftChatMessage.fromString(title)[0]));
++        player.connection.send(new ClientboundOpenScreenPacket(containerId, windowType, io.papermc.paper.adventure.PaperAdventure.asVanilla(title))); // Kiterino - Update inventory title API
+         player.containerMenu.sendAllDataToRemote();
+     }
+ }
