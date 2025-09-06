@@ -5,7 +5,7 @@
      @Override
      protected Entity.MovementEmission getMovementEmission() {
 -        return Entity.MovementEmission.EVENTS;
-+        return this.level().kiterinoConfig.moreAnnoyingSilverfish ? Entity.MovementEmission.ALL : Entity.MovementEmission.EVENTS; // Kiterino - Make silverfishes more annoying
++        return this.level().kiterinoConfig.moreAnnoyingSilverfish ? Entity.MovementEmission.ALL : Entity.MovementEmission.EVENTS; // Kiterino - Silverfishe options
      }
  
      @Override

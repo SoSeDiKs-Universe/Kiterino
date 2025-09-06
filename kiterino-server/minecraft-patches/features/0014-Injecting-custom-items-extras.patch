@@ -1,0 +1,136 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 5 Aug 2025 02:38:09 +0300
+Subject: [PATCH] Injecting custom items extras
+
+
+diff --git a/net/minecraft/core/MappedRegistry.java b/net/minecraft/core/MappedRegistry.java
+index 4715a60760c2c9079313db9016000bfb5c65e070..ae085bb711ada3e5f26c02acde522c53ceae12d8 100644
+--- a/net/minecraft/core/MappedRegistry.java
++++ b/net/minecraft/core/MappedRegistry.java
+@@ -339,6 +339,13 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
+         }
+     }
+ 
++    // Kiterino start - Injecting custom items extras
++    @Override
++    public boolean isFrozen() {
++        return this.frozen;
++    }
++    // Kiterino end - Injecting custom items extras
++
+     @Override
+     public Holder.Reference<T> createIntrusiveHolder(T value) {
+         if (this.unregisteredIntrusiveHolders == null) {
+diff --git a/net/minecraft/core/Registry.java b/net/minecraft/core/Registry.java
+index b9e275e4f807ebea535264802c7d31723c8dc20b..b3fa414d045510c050a3f69171ed897a407f7f99 100644
+--- a/net/minecraft/core/Registry.java
++++ b/net/minecraft/core/Registry.java
+@@ -131,6 +131,10 @@ public interface Registry<T> extends Keyable, HolderLookup.RegistryLookup<T>, Id
+ 
+     Registry<T> freeze();
+ 
++    // Kiterino start - Injecting custom items extras
++    boolean isFrozen();
++    // Kiterino end - Injecting custom items extras
++
+     Holder.Reference<T> createIntrusiveHolder(T value);
+ 
+     Optional<Holder.Reference<T>> get(int index);
+diff --git a/net/minecraft/world/item/AxeItem.java b/net/minecraft/world/item/AxeItem.java
+index eb8d2d6f9c65185f5fe16a13ab0cdbba78a25a40..eb3193c2e9e4ff6aa2114db00902843473a9186a 100644
+--- a/net/minecraft/world/item/AxeItem.java
++++ b/net/minecraft/world/item/AxeItem.java
+@@ -54,6 +54,12 @@ public class AxeItem extends Item {
+         super(properties.axe(material, attackDamage, attackSpeed));
+     }
+ 
++    // Kiterino start - Injecting custom items extras
++    public AxeItem(Item.Properties properties) {
++        super(properties);
++    }
++    // Kiterino end - Injecting custom items extras
++
+     @Override
+     public InteractionResult useOn(UseOnContext context) {
+         Level level = context.getLevel();
+diff --git a/net/minecraft/world/item/HoeItem.java b/net/minecraft/world/item/HoeItem.java
+index e03c4f7fa51bf5bb5fd780889c2fa7519ffcfad3..f229bef82f967b6951dab13a2a34b4001384ddce 100644
+--- a/net/minecraft/world/item/HoeItem.java
++++ b/net/minecraft/world/item/HoeItem.java
+@@ -41,6 +41,12 @@ public class HoeItem extends Item {
+         super(properties.hoe(material, attackDamage, attackSpeed));
+     }
+ 
++    // Kiterino start - Injecting custom items extras
++    public HoeItem(Item.Properties properties) {
++        super(properties);
++    }
++    // Kiterino end - Injecting custom items extras
++
+     @Override
+     public InteractionResult useOn(UseOnContext context) {
+         Level level = context.getLevel();
+diff --git a/net/minecraft/world/item/ShearsItem.java b/net/minecraft/world/item/ShearsItem.java
+index 8cf3e51e12f9cf98836657e722edb23943f9e866..119a087b00dbba4f8130328eb474eb811abb2878 100644
+--- a/net/minecraft/world/item/ShearsItem.java
++++ b/net/minecraft/world/item/ShearsItem.java
+@@ -30,7 +30,7 @@ public class ShearsItem extends Item {
+     }
+ 
+     public static Tool createToolProperties() {
+-        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
++        HolderGetter<Block> holderGetter = BuiltInRegistries.BLOCK.isFrozen() ? BuiltInRegistries.BLOCK : BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK); // Kiterino - Injecting custom items extras
+         return new Tool(
+             List.of(
+                 Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
+diff --git a/net/minecraft/world/item/ShovelItem.java b/net/minecraft/world/item/ShovelItem.java
+index a290ad578498da07093ea31080cc3fbc87aa3778..82b3f718a9629e6b754a7f477ea4546311790326 100644
+--- a/net/minecraft/world/item/ShovelItem.java
++++ b/net/minecraft/world/item/ShovelItem.java
+@@ -34,6 +34,12 @@ public class ShovelItem extends Item {
+         super(properties.shovel(material, attackDamage, attackSpeed));
+     }
+ 
++    // Kiterino start - Injecting custom items extras
++    public ShovelItem(Item.Properties properties) {
++        super(properties);
++    }
++    // Kiterino end - Injecting custom items extras
++
+     @Override
+     public InteractionResult useOn(UseOnContext context) {
+         Level level = context.getLevel();
+diff --git a/net/minecraft/world/item/ToolMaterial.java b/net/minecraft/world/item/ToolMaterial.java
+index 6ccb31bbee540d9f3c114685f4aa168d72dfdd4e..e6c0db5d81a7d36764ea31251540f951a3c25635 100644
+--- a/net/minecraft/world/item/ToolMaterial.java
++++ b/net/minecraft/world/item/ToolMaterial.java
+@@ -30,13 +30,18 @@ public record ToolMaterial(
+     );
+ 
+     private Item.Properties applyCommonProperties(Item.Properties properties) {
++        // Kiterino start - Injecting custom items extras
++        if (this.repairItems == ItemTags.ANVIL) {
++            return properties;
++        }
++        // Kiterino end - Injecting custom items extras
+         return properties.durability(this.durability).repairable(this.repairItems).enchantable(this.enchantmentValue);
+     }
+ 
+     public Item.Properties applyToolProperties(
+         Item.Properties properties, TagKey<Block> mineableBlocks, float attackDamage, float attackSpeed, float disableBlockingForSeconfs
+     ) {
+-        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
++        HolderGetter<Block> holderGetter = BuiltInRegistries.BLOCK.isFrozen() ? BuiltInRegistries.BLOCK : BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK); // Kiterino - Injecting custom items extras
+         return this.applyCommonProperties(properties)
+             .component(
+                 DataComponents.TOOL,
+@@ -70,7 +75,7 @@ public record ToolMaterial(
+     }
+ 
+     public Item.Properties applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed) {
+-        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
++        HolderGetter<Block> holderGetter = BuiltInRegistries.BLOCK.isFrozen() ? BuiltInRegistries.BLOCK : BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK); // Kiterino - Injecting custom items extras
+         return this.applyCommonProperties(properties)
+             .component(
+                 DataComponents.TOOL,

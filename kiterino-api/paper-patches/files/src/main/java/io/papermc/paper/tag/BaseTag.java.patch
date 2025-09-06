@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/tag/BaseTag.java
 +++ b/src/main/java/io/papermc/paper/tag/BaseTag.java
-@@ -53,6 +_,13 @@
+@@ -52,6 +_,13 @@
          return (C) this;
      }
  
@@ -14,7 +14,7 @@
      public boolean isLocked() {
          return this.locked;
      }
-@@ -167,6 +_,7 @@
+@@ -166,6 +_,7 @@
  
      @NotNull
      public C ensureSize(@NotNull String label, int size) {

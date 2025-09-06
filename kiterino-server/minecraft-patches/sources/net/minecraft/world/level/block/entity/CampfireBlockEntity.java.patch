@@ -1,0 +1,55 @@
+--- a/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
++++ b/net/minecraft/world/level/block/entity/CampfireBlockEntity.java
+@@ -58,6 +_,18 @@
+         CampfireBlockEntity campfire,
+         RecipeManager.CachedCheck<SingleRecipeInput, CampfireCookingRecipe> check
+     ) {
++        // Kiterino start - Campfire options
++        if (campfire.checkGravity(level, pos, state)) {
++            return;
++        }
++        if (level.kiterinoConfig.campfireBurnOutInRainChance > 0 && level.random.nextDouble() < level.kiterinoConfig.campfireBurnOutInRainChance) {
++            if (state.getValue(CampfireBlock.WATERLOGGED) || level.isRainingAt(pos.above())) {
++                level.setBlock(pos, state.setValue(CampfireBlock.LIT, false), 3);
++                level.playSound(null, pos.getX() + 0.5, pos.getY() + 1D, pos.getZ() + 0.5, net.minecraft.sounds.SoundEvents.FIRE_EXTINGUISH, net.minecraft.sounds.SoundSource.BLOCKS, 1F, level.random.nextFloat() * 0.4F + 0.8F);
++                setChanged(level, pos, state);
++            }
++        }
++        // Kiterino end - Campfire options
+         boolean flag = false;
+ 
+         for (int i = 0; i < campfire.items.size(); i++) {
+@@ -116,6 +_,9 @@
+     }
+ 
+     public static void cooldownTick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity blockEntity) {
++        if (blockEntity.checkGravity(level, pos, state)) {
++            return;
++        }
+         boolean flag = false;
+ 
+         for (int i = 0; i < blockEntity.items.size(); i++) {
+@@ -129,6 +_,23 @@
+             setChanged(level, pos, state);
+         }
+     }
++
++    // Kiterino start - Campfire options
++    private boolean checkGravity(Level level, BlockPos pos, BlockState state) {
++        if (!level.kiterinoConfig.campfireAffectedByGravity) {
++            return false;
++        }
++
++        BlockPos below = pos.below();
++        if (level.isOutsideBuildHeight(below.getY()) || net.minecraft.world.level.block.FallingBlock.isFree(level.getBlockState(below))) {
++            level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
++            level.addFreshEntity(new net.minecraft.world.entity.item.FallingBlockEntity(level, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, state));
++            return true;
++        }
++
++        return false;
++    }
++    // Kiterino end - Campfire options
+ 
+     public static void particleTick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity blockEntity) {
+         RandomSource randomSource = level.random;

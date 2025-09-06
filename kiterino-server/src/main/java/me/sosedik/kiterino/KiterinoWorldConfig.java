@@ -82,12 +82,28 @@ public final class KiterinoWorldConfig {
 	}
 	// Kiterino end - Bat options
 
-	// Kiterino start - Entity options
+	// Kiterino start - Silverfish options
 	public boolean moreAnnoyingSilverfish = false;
-	private void entityOptions() {
-		moreAnnoyingSilverfish = getBoolean("entity.more-annoying-silverfish", moreAnnoyingSilverfish, "Makes silverfish produce sounds more often"); // Kiterino - Make silverfishes more annoying
+	private void silverfishOptions() {
+		moreAnnoyingSilverfish = getBoolean("entity.silverfish.more-annoying", moreAnnoyingSilverfish, "Makes silverfish produce sounds more often"); // Kiterino - Make silverfishes more annoying
 	}
-	// Kiterino end - Entity options
+	// Kiterino end - Silverfish options
+
+	// Kiterino start - Ghast options
+	public boolean ghastsScreamOutsideNether = false;
+	private void ghastOptions() {
+		ghastsScreamOutsideNether = getBoolean("entity.ghast.scream-outside-nether", ghastsScreamOutsideNether, "Makes ghasts use scream sound when outside ultrawarm dimensions");
+	}
+	// Kiterino end - Ghast options
+
+	// Kiterino start - Projectile options
+	public float arrowWaterInertia = 0.6F;
+	public boolean applyImpalingOnWetMobs = false;
+	private void projectileOptions() {
+		arrowWaterInertia = (float) getDouble("entity.projectile.arrow-water-inertia", arrowWaterInertia, "The inertia applied to arrows in water");
+		applyImpalingOnWetMobs = getBoolean("entity.projectile.apply-impaling-on-wet-mobs", applyImpalingOnWetMobs, "Trident's Impaling enchantment works on wet mobs");
+	}
+	// Kiterino end - Projectile options
 
 	// Kiterino start - Ice options
 	public boolean iceAlwaysMeltInNether = false; // Kiterino - Always melt ice in Nether
@@ -104,5 +120,14 @@ public final class KiterinoWorldConfig {
 		grassSpreadOnCoarseDirt = getBoolean("blocks.grass_block.spread-on-coarse-dirt", grassSpreadOnCoarseDirt, "Make grass block spread onto coarse dirt, turning it into dirt");
 	}
 	// Kiterino end - Allow grass spread upon coarse dirt
+
+	// Kiterino start - Campfire options
+	public boolean campfireAffectedByGravity = false;
+	public double campfireBurnOutInRainChance = 0;
+	private void campfireOptions() {
+		campfireAffectedByGravity = getBoolean("blocks.campfire.affected-by-gravity", campfireAffectedByGravity, "Make campfires affected by gravity (like sand/gravel)");
+		campfireBurnOutInRainChance = getDouble("blocks.campfire.burn-out-in-rain-chance", campfireBurnOutInRainChance, "Chance for lit campfires to burnout during rain");
+	}
+	// Kiterino end - Campfire options
 
 }

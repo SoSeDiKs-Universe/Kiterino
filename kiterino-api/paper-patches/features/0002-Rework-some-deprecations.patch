@@ -49,10 +49,10 @@ index f342b8541ef4e865c7eb0fc7f14fb6feb6324034..c9c4f45f5c2362da0274d462ee4129a4
      // Paper start
      net.kyori.adventure.text.flattener.ComponentFlattener componentFlattener();
 diff --git a/src/main/java/org/bukkit/entity/Damageable.java b/src/main/java/org/bukkit/entity/Damageable.java
-index 7291b6dccd9bbdd27ce872adedbb0535e01f50a9..1b221fff42e307338f026afdd7dd452b9e972e76 100644
+index fc10949ac51d6f524b1814a4cb0f8abed4369416..7544e584395ac69afb685a07f267e7fbdd2fcb9b 100644
 --- a/src/main/java/org/bukkit/entity/Damageable.java
 +++ b/src/main/java/org/bukkit/entity/Damageable.java
-@@ -94,9 +94,9 @@ public interface Damageable extends Entity {
+@@ -92,9 +92,9 @@ public interface Damageable extends Entity {
       * Gets the maximum health this entity has.
       *
       * @return Maximum health
@@ -64,7 +64,7 @@ index 7291b6dccd9bbdd27ce872adedbb0535e01f50a9..1b221fff42e307338f026afdd7dd452b
      double getMaxHealth();
  
      /**
-@@ -109,15 +109,15 @@ public interface Damageable extends Entity {
+@@ -107,15 +107,15 @@ public interface Damageable extends Entity {
       * {@link Wither}, etc...} will have their bar scaled accordingly.
       *
       * @param health amount of health to set the maximum to
@@ -85,7 +85,7 @@ index 7291b6dccd9bbdd27ce872adedbb0535e01f50a9..1b221fff42e307338f026afdd7dd452b
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 533195657deb758501892b9d221c4ac7df976b9c..a4c3480386f2b799273970a3fbc92db787e95adf 100644
+index a51a6ed5e536f531bf58b540e54a187a8f2263e4..399148c5f865aac8cbfee5f4658f23e2f45ef463 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -3315,9 +3315,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM

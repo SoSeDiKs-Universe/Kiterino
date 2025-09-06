@@ -6,12 +6,12 @@ Subject: [PATCH] Better EntityShootBowEvent cancellation
 Don't increase stats / play bow sound if event was cancelled
 
 diff --git a/net/minecraft/world/item/BowItem.java b/net/minecraft/world/item/BowItem.java
-index ce1ce18410fc1d47d999c918a8f880b43bf9797c..59e8e1441ff78d37b94b55885531ceb33a6b82aa 100644
+index 7d846ac6163873abee29e860a066ffc130a4ea98..dae742612f539d5335deea4d3ddda2621dbf1fa5 100644
 --- a/net/minecraft/world/item/BowItem.java
 +++ b/net/minecraft/world/item/BowItem.java
-@@ -43,7 +43,7 @@ public class BowItem extends ProjectileWeaponItem {
+@@ -44,7 +44,7 @@ public class BowItem extends ProjectileWeaponItem {
                  } else {
-                     List<ItemStack> list = draw(stack, projectile, player);
+                     List<ItemStack> list = draw(stack, projectile, player, !projectile.has(net.minecraft.core.component.DataComponents.INTANGIBLE_PROJECTILE)); // Kiterino - Infinite projectiles
                      if (level instanceof ServerLevel serverLevel && !list.isEmpty()) {
 -                        this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null, powerForTime); // Paper - Pass draw strength // Purpur - Projectile offset config
 +                        if (!this.shoot(serverLevel, player, player.getUsedItemHand(), stack, list, powerForTime * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, powerForTime == 1.0F, null, powerForTime)); // Paper - Pass draw strength  // Purpur - Projectile offset config // Kiterino - Better EntityShootBowEvent cancellation

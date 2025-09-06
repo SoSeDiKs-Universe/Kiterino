@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/entity/monster/Ghast.java
++++ b/net/minecraft/world/entity/monster/Ghast.java
+@@ -194,6 +_,11 @@
+ 
+     @Override
+     public SoundEvent getAmbientSound() {
++        // Kiterino start - Ghast options
++        if (!this.level().dimensionType().ultraWarm() && this.random.nextInt(8) == 0) {
++            return SoundEvents.GHAST_SCREAM;
++        }
++        // Kiterino end - Ghast options
+         return SoundEvents.GHAST_AMBIENT;
+     }
+ 

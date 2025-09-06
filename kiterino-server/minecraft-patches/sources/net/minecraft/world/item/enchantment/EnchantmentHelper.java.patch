@@ -1,0 +1,17 @@
+--- a/net/minecraft/world/item/enchantment/EnchantmentHelper.java
++++ b/net/minecraft/world/item/enchantment/EnchantmentHelper.java
+@@ -181,6 +_,14 @@
+     public static float modifyDamage(ServerLevel level, ItemStack tool, Entity entity, DamageSource damageSource, float damage) {
+         MutableFloat mutableFloat = new MutableFloat(damage);
+         runIterationOnItem(tool, (enchantment, level1) -> enchantment.value().modifyDamage(level, level1, tool, entity, damageSource, mutableFloat));
++        // Kiterino start - Apply Impaling on wet mobs
++        if (level.kiterinoConfig.applyImpalingOnWetMobs && entity instanceof LivingEntity livingEntity && !livingEntity.getType().is(net.minecraft.tags.EntityTypeTags.SENSITIVE_TO_IMPALING) && livingEntity.isInWaterOrRain()) {
++            int impalingLevel = getItemEnchantmentLevel(Enchantments.IMPALING, tool);
++            if (impalingLevel > 0) {
++                mutableFloat.add(impalingLevel * 2.5F);
++            }
++        }
++        // Kiterino end - Apply Impaling on wet mobs
+         return mutableFloat.floatValue();
+     }
+ 

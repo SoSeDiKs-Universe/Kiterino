@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityItemConsumeEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index c49674e69e66db7c8214939338e25c7a2c63bc40..e9aa42f1cd12dc29611e85a767a1eaebbe323e14 100644
+index 42179a3f51263a7bec42d56b12ce9aed9df5f29d..0851425f9eec5c91d31b576bc0b88cbfee22428f 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4218,12 +4218,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4234,12 +4234,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
                      this.startUsingItem(this.getUsedItemHand(), true); // Paper - Prevent consuming the wrong itemstack
                      // CraftBukkit start - fire PlayerItemConsumeEvent
                      ItemStack itemStack;
@@ -23,7 +23,7 @@ index c49674e69e66db7c8214939338e25c7a2c63bc40..e9aa42f1cd12dc29611e85a767a1eaeb
  
                          if (event.isCancelled()) {
                              net.minecraft.world.item.component.Consumable consumable = this.useItem.get(DataComponents.CONSUMABLE);
-@@ -4238,7 +4238,18 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4254,7 +4254,18 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
  
                          itemStack = (craftItem.equals(event.getItem())) ? this.useItem.finishUsingItem(this.level(), this) : CraftItemStack.asNMSCopy(event.getItem()).finishUsingItem(this.level(), this);
                      } else {

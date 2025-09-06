@@ -5,10 +5,10 @@ Subject: [PATCH] Default pickup loot in summon
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index e9aa42f1cd12dc29611e85a767a1eaebbe323e14..fdd628262c285be7553fb05b36a6a978e5dd182f 100644
+index 0851425f9eec5c91d31b576bc0b88cbfee22428f..9f9bb8f1ebb452a7cf5e3029f89e4fcca34ee8d1 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4495,6 +4495,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4511,6 +4511,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return false;
      }
  

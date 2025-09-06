@@ -21,6 +21,34 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
+@@ -1960,6 +_,18 @@
+         return this.isInWater() || this.isInLava();
+     }
+ 
++    // Kiterino start - MC-145311, Treat entities in water cauldrons as wet
++    public boolean isInCauldronFilledWithWater() {
++        BlockState state = getInBlockState();
++        if (!state.is(Blocks.WATER_CAULDRON)) {
++            return false;
++        }
++        BlockPos pos = blockPosition();
++        double contentHeight = (6D + state.getValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL) * 3D) / 16D; // Copypaste from LayeredCauldronBlock#getContentHeight
++        return getY() < pos.getY() + contentHeight && getBoundingBox().maxY > pos.getY() + 0.25D;
++    }
++    // Kiterino end - MC-145311, Treat entities in water cauldrons as wet
++
+     public boolean isUnderWater() {
+         return this.wasEyeInWater && this.isInWater();
+     }
+@@ -2000,7 +_,7 @@
+     public void updateInWaterStateAndDoWaterCurrentPushing() {
+         if (this.getVehicle() instanceof AbstractBoat abstractBoat && !abstractBoat.isUnderWater()) {
+             this.wasTouchingWater = false;
+-        } else if (this.updateFluidHeightAndDoFluidPushing(FluidTags.WATER, 0.014)) {
++        } else if (this.updateFluidHeightAndDoFluidPushing(FluidTags.WATER, 0.014) || isInCauldronFilledWithWater()) { // Kiterino - MC-145311, Treat entities in water cauldrons as wet
+             if (!this.wasTouchingWater && !this.firstTick) {
+                 this.doWaterSplashEffect();
+             }
 @@ -3330,6 +_,21 @@
              this.gameEvent(GameEvent.ENTITY_MOUNT, passenger);
          }

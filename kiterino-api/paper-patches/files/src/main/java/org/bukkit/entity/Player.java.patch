@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4051,4 +_,101 @@
+@@ -4051,4 +_,112 @@
          sendDeathScreen(message);
      }
      // Purpur end
@@ -53,6 +53,17 @@
 +    // Kiterino end - Open ender chest API
 +
 +    // Kiterino start - Block place API
++	/**
++	 * Checks whether a block can be placed
++	 *
++	 * @param hand hand to use for placing
++	 * @param block block item to use for placing
++	 * @param location location to place
++	 * @param blockFace facing against which block will be placed
++	 * @return true, if placed successfully
++	 */
++	boolean canPlaceBlock(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace);
++
 +    /**
 +     * Place block as if this player placed it
 +     * <p>Item in hand will be consumed if placed successfully
