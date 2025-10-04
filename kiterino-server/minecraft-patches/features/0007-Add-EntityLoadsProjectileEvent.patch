@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 95276f6d9e152080b81e72e5d9b05ba61020a2d9..72907aa052d57291f0369f68ce12a98b3a421777 100644
+index ffd53233e4aac77e8107c8ea9e4e17ec078d6713..585e668f729a5ad6a5f338c058bf4fdcc5069012 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4599,6 +4599,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4600,6 +4600,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return ItemStack.EMPTY;
      }
  

@@ -5,10 +5,10 @@ Subject: [PATCH] Default pickup loot in summon
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 0851425f9eec5c91d31b576bc0b88cbfee22428f..9f9bb8f1ebb452a7cf5e3029f89e4fcca34ee8d1 100644
+index e0bcac54425bde3d186be03bab03dee1a313c3cd..552c1bd178719a9b7b6a1d78748165a42715359b 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4511,6 +4511,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4512,6 +4512,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return false;
      }
  
@@ -89,7 +89,7 @@ index 02bfa88568e635770675ea9173f2cf3ca21457fa..e09a22511f8b5d2efb78f72412cfc518
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/animal/allay/Allay.java b/net/minecraft/world/entity/animal/allay/Allay.java
-index cf6ff7b7b4a007d7ff4b3c5a25d4f5a36422c683..7c7ba11cd5ab1a12aa42e15c99fcf3b85825c5ed 100644
+index f372d8b21282e8fdd00dd19eb14ce6ee45b358b0..66f298be995e6a7dca15f61d3ed801773e8bc295 100644
 --- a/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/net/minecraft/world/entity/animal/allay/Allay.java
 @@ -334,6 +334,13 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
@@ -188,7 +188,7 @@ index 2f047e535df6884e391f56eb8d6b6e8da934a3bf..b32f0203129d4524c4ec7afe8385cc03
          this.timeInOverworld = input.getIntOr("TimeInOverworld", 0);
      }
 diff --git a/net/minecraft/world/entity/npc/Villager.java b/net/minecraft/world/entity/npc/Villager.java
-index edef9b959200008dda8c5036319e29c5e2d92dae..fa77622460bf712e77c35decc59794468eebd0b7 100644
+index cab85afb6a460297511b0d391364670124d5a3f3..0506258ac8ba1798b5d8956a7ef4018882cc0eed 100644
 --- a/net/minecraft/world/entity/npc/Villager.java
 +++ b/net/minecraft/world/entity/npc/Villager.java
 @@ -198,6 +198,13 @@ public class Villager extends AbstractVillager implements ReputationEventHandler

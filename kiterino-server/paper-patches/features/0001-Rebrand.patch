@@ -5,15 +5,15 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/Metrics.java b/src/main/java/com/destroystokyo/paper/Metrics.java
-index 212e0df38ae3ed0b06d147fb5e7e93ef556a0bdd..ecea9efa0ab7472b327286160160cca24696cb40 100644
+index dc49ba7b833b0d2edc8959ebe8cbecdad720bf06..2500b5df63e314071eddba565f2666722f38e39a 100644
 --- a/src/main/java/com/destroystokyo/paper/Metrics.java
 +++ b/src/main/java/com/destroystokyo/paper/Metrics.java
 @@ -593,7 +593,7 @@ public class Metrics {
              boolean logFailedRequests = config.getBoolean("logFailedRequests", false);
              // Only start Metrics, if it's enabled in the config
              if (config.getBoolean("enabled", true)) {
--                Metrics metrics = new Metrics("Purpur", serverUUID, logFailedRequests, Bukkit.getLogger()); // Pufferfish // Purpur - Purpur config files
-+                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Kiterino - Rebrand
+-                Metrics metrics = new Metrics("Purpur", serverUUID, logFailedRequests, Bukkit.getLogger()); // Purpur - Purpur config files
++                Metrics metrics = new Metrics("Kiterino", serverUUID, logFailedRequests, Bukkit.getLogger()); // Purpur - Purpur config files // Kiterino - Rebrand
  
                  metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> {
                      String minecraftVersion = Bukkit.getVersion();
@@ -71,7 +71,7 @@ index bc7e4e5560708fea89c584b1d8b471f4966f311a..70145bafa7c9c45a6f7a7a6854e9eefa
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..5fc4b6a765006c96f7c9645a9f3988ae59a3c4b3 100644
+index b678ca41f7fb1f4aa10c012fb2b432f5e65b2a91..5fc4b6a765006c96f7c9645a9f3988ae59a3c4b3 100644
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 @@ -32,6 +32,7 @@ public record ServerBuildInfoImpl(
@@ -98,21 +98,21 @@ index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..5fc4b6a765006c96f7c9645a9f3988ae
  
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
--        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand
+-        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur - Rebrand
 +        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur - Rebrand // Kiterino - Rebrand
      }
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 99eb04643fce44c37fd96c99756837ccafe7b559..3af82f606877e731e3ba9fc6ff1e634fa92a88e6 100644
+index e34ceaa77c7e538c8d6bc341c4c6f450488ce426..9163896d66675c7133b00ba419f0e18051cfc569 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
      public static String getBukkitVersion() {
          String result = "Unknown-Version";
  
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Pufferfish // Purpur - Rebrand
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik.kiterino/kiterino-api/pom.properties"); // Kiterino - Rebrand
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Purpur - Rebrand
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik.kiterino/kiterino-api/pom.properties"); // Purpur - Rebrand // Kiterino - Rebrand
          Properties properties = new Properties();
  
          if (stream != null) {

@@ -1,0 +1,60 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 20 Sep 2025 15:54:47 +0300
+Subject: [PATCH] Prevent clashed stew effects
+
+One of the server advancements requires collecting each of crafted, traded, and looted suspicious stews.
+They are differentiated by the effect duration. However, some of the looted tick durations clash with
+the traded/crafted ones. This patch makes it so the looted stews don't generate with ticks that can clash.
+
+diff --git a/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java b/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java
+index 3d5daa1a094c879376c116881d7e1044134e47f4..31b9cad3e12c57020b7fcc75197698d5131057b6 100644
+--- a/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java
++++ b/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java
+@@ -33,11 +33,11 @@ public record VanillaArchaeologyLoot(HolderLookup.Provider registries) implement
+                                 .apply(
+                                     SetStewEffectFunction.stewEffect()
+                                         .withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))
+-                                        .withEffect(MobEffects.JUMP_BOOST, UniformGenerator.between(7.0F, 10.0F))
+-                                        .withEffect(MobEffects.WEAKNESS, UniformGenerator.between(6.0F, 8.0F))
+-                                        .withEffect(MobEffects.BLINDNESS, UniformGenerator.between(5.0F, 7.0F))
+-                                        .withEffect(MobEffects.POISON, UniformGenerator.between(10.0F, 20.0F))
+-                                        .withEffect(MobEffects.SATURATION, UniformGenerator.between(7.0F, 10.0F))
++                                        .withEffect(MobEffects.JUMP_BOOST, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(7.0F, 10.0F), 8F)) // Kiterino - Prevent clashed stew effects
++                                        .withEffect(MobEffects.WEAKNESS, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(6.0F, 8.0F), 7F)) // Kiterino - Prevent clashed stew effects
++                                        .withEffect(MobEffects.BLINDNESS, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(5.0F, 7.0F), 6F)) // Kiterino - Prevent clashed stew effects
++                                        .withEffect(MobEffects.POISON, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(10.0F, 20.0F), 11F, 14F)) // Kiterino - Prevent clashed stew effects
++                                        .withEffect(MobEffects.SATURATION, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(7.0F, 10.0F), 7F)) // Kiterino - Prevent clashed stew effects
+                                 )
+                         )
+                 )
+diff --git a/net/minecraft/data/loot/packs/VanillaChestLoot.java b/net/minecraft/data/loot/packs/VanillaChestLoot.java
+index 037b4b7d5b1c3b27eed6df143a3e9ae8c3fada62..b02b75927d8f6c1f783f7f5cbe5f004fb0fc7335 100644
+--- a/net/minecraft/data/loot/packs/VanillaChestLoot.java
++++ b/net/minecraft/data/loot/packs/VanillaChestLoot.java
+@@ -157,7 +157,7 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
+                                 .apply(
+                                     SetStewEffectFunction.stewEffect()
+                                         .withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))
+-                                        .withEffect(MobEffects.BLINDNESS, UniformGenerator.between(5.0F, 7.0F))
++                                        .withEffect(MobEffects.BLINDNESS, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(5.0F, 7.0F), 6F)) // Kiterino - Prevent clashed stew effects
+                                 )
+                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 6.0F)))
+                         )
+@@ -1458,11 +1458,11 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
+                             .apply(
+                                 SetStewEffectFunction.stewEffect()
+                                     .withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))
+-                                    .withEffect(MobEffects.JUMP_BOOST, UniformGenerator.between(7.0F, 10.0F))
+-                                    .withEffect(MobEffects.WEAKNESS, UniformGenerator.between(6.0F, 8.0F))
+-                                    .withEffect(MobEffects.BLINDNESS, UniformGenerator.between(5.0F, 7.0F))
+-                                    .withEffect(MobEffects.POISON, UniformGenerator.between(10.0F, 20.0F))
+-                                    .withEffect(MobEffects.SATURATION, UniformGenerator.between(7.0F, 10.0F))
++                                    .withEffect(MobEffects.JUMP_BOOST, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(7.0F, 10.0F), 8F)) // Kiterino - Prevent clashed stew effects
++                                    .withEffect(MobEffects.WEAKNESS, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(6.0F, 8.0F), 7F)) // Kiterino - Prevent clashed stew effects
++                                    .withEffect(MobEffects.BLINDNESS, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(5.0F, 7.0F), 6F)) // Kiterino - Prevent clashed stew effects
++                                    .withEffect(MobEffects.POISON, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(10.0F, 20.0F), 11F, 14F)) // Kiterino - Prevent clashed stew effects
++                                    .withEffect(MobEffects.SATURATION, new me.sosedik.kiterino.util.loot.OmittingUniformGenerator(UniformGenerator.between(7.0F, 10.0F), 7F)) // Kiterino - Prevent clashed stew effects
+                             )
+                     )
+                     .add(LootItem.lootTableItem(Items.COAL).setWeight(6).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 8.0F))))
