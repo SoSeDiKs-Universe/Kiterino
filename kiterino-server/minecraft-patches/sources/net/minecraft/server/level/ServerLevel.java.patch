@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -761,8 +_,8 @@
+@@ -785,8 +_,8 @@
                  // Paper end - call time skip event if gamerule is enabled
              }
  

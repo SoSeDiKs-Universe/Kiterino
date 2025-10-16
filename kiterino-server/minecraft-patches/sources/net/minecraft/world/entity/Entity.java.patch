@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -286,6 +_,7 @@
+@@ -288,6 +_,7 @@
      public final RandomSource random; // Paper - Share random for entities to make them more random // Add toggle for RNG manipulation
      public int tickCount;
      private int remainingFireTicks;
@@ -8,7 +8,7 @@
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
      protected boolean wasEyeInWater;
-@@ -911,6 +_,12 @@
+@@ -917,6 +_,12 @@
              this.clearFire();
          }
  
@@ -21,7 +21,7 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
-@@ -1960,6 +_,18 @@
+@@ -2013,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }
  
@@ -40,7 +40,7 @@
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -2000,7 +_,7 @@
+@@ -2057,7 +_,7 @@
      public void updateInWaterStateAndDoWaterCurrentPushing() {
          if (this.getVehicle() instanceof AbstractBoat abstractBoat && !abstractBoat.isUnderWater()) {
              this.wasTouchingWater = false;
@@ -49,15 +49,15 @@
              if (!this.wasTouchingWater && !this.firstTick) {
                  this.doWaterSplashEffect();
              }
-@@ -3330,6 +_,21 @@
-             this.gameEvent(GameEvent.ENTITY_MOUNT, passenger);
+@@ -3389,6 +_,21 @@
+             // Purpur end - Ridables
          }
      }
 +
 +    // Kiterino start - Allow setting entity's rider
 +    public boolean setRider(Player rider) {
 +        if (!new org.bukkit.event.entity.EntityMountEvent(rider.getBukkitEntity(), this.getBukkitEntity()).callEvent()) return false;
-+        if (!rider.startRiding(this, true)) return false;
++        if (!rider.startRiding(this, true, true)) return false;
 +
 +        onMount(rider);
 +        this.rider = rider;

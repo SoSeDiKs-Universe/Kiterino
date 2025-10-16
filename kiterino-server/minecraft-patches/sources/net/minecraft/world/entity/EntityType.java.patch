@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1093,6 +_,16 @@
-     private final float spawnDimensionsScale;
+@@ -1201,6 +_,16 @@
      private final FeatureFlagSet requiredFeatures;
+     private final boolean allowedInPeaceful;
  
 +    // Kiterino start - Injecting custom entities
 +    static {

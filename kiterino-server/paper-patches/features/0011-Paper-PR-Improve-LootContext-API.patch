@@ -127,7 +127,7 @@ index 0000000000000000000000000000000000000000..8199186bc2965c56f64537fce38deb14
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
-index 3cf0f434f374c201ecca08e7e889c7ff150396e5..7bf0f0dd187912420402f6cc003adaf68d6bc7d6 100644
+index 7a67d38af41b21b36b170965da59ecef18e34304..8de5460002dd86cc8aac0ffb2968ac5e457740bf 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
 @@ -101,7 +101,22 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
@@ -176,10 +176,10 @@ index 3cf0f434f374c201ecca08e7e889c7ff150396e5..7bf0f0dd187912420402f6cc003adaf6
          if (position == null) {
              position = info.getOptionalParameter(LootContextParams.THIS_ENTITY).position(); // Every vanilla context has origin or this_entity, see LootContextParamSets
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-index 2338e7c115037430cefae26a571ded71f77983c4..1b1f81504168d2f0428e814f15634fc3cf866d31 100644
+index 534ba5aa3dfce160c6662a2e5de100988ad79cee..85e9ce5029b450448140554a3bda17af44913553 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-@@ -237,6 +237,13 @@ public final class CraftBlockStates {
+@@ -238,6 +238,13 @@ public final class CraftBlockStates {
          return CraftBlockStates.getBlockState(null, pos, state, blockEntity);
      }
  

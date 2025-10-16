@@ -14,72 +14,72 @@ import org.jspecify.annotations.Nullable;
 // Kiterino - Data-driven mob effects
 public class KiterinoMobEffectRegistryEntity implements MobEffectRegistryEntity {
 
-	protected KiterinoMobEffectBehaviourWrapper wrapper;
-	protected MobEffectCategory category;
-	protected int color;
+    protected KiterinoMobEffectBehaviourWrapper wrapper;
+    protected MobEffectCategory category;
+    protected int color;
 
-	protected final Conversions conversions;
+    protected final Conversions conversions;
 
-	public KiterinoMobEffectRegistryEntity(
-		final Conversions conversions,
-		final @Nullable MobEffect internal
-	) {
-		this.conversions = conversions;
-		if (internal == null) {
-			this.wrapper = new KiterinoMobEffectBehaviourWrapper() { };
-			this.category = MobEffectCategory.NEUTRAL;
-			return;
-		}
+    public KiterinoMobEffectRegistryEntity(
+        final Conversions conversions,
+        final @Nullable MobEffect internal
+    ) {
+        this.conversions = conversions;
+        if (internal == null) {
+            this.wrapper = new KiterinoMobEffectBehaviourWrapper() { };
+            this.category = MobEffectCategory.NEUTRAL;
+            return;
+        }
 
-		this.category = internal.getCategory();
-		this.color = internal.getColor();
-	}
+        this.category = internal.getCategory();
+        this.color = internal.getColor();
+    }
 
-	@Override
-	public KiterinoMobEffectBehaviourWrapper wrapper() {
-		return this.wrapper;
-	}
+    @Override
+    public KiterinoMobEffectBehaviourWrapper wrapper() {
+        return this.wrapper;
+    }
 
-	@Override
-	public PotionEffectType.Category category() {
-		return conversions.asBukkit(this.category);
-	}
+    @Override
+    public PotionEffectType.Category category() {
+        return conversions.asBukkit(this.category);
+    }
 
-	@Override
-	public int color() {
-		return this.color;
-	}
+    @Override
+    public int color() {
+        return this.color;
+    }
 
-	public static final class KiterinoBuilder extends KiterinoMobEffectRegistryEntity implements Builder,
-			PaperRegistryBuilder<MobEffect, PotionEffectType> {
+    public static final class KiterinoBuilder extends KiterinoMobEffectRegistryEntity implements Builder,
+            PaperRegistryBuilder<MobEffect, PotionEffectType> {
 
-		public KiterinoBuilder(final Conversions conversions, final @Nullable MobEffect internal) {
-			super(conversions, internal);
-		}
+        public KiterinoBuilder(final Conversions conversions, final @Nullable MobEffect internal) {
+            super(conversions, internal);
+        }
 
-		@Override
-		public Builder wrapper(KiterinoMobEffectBehaviourWrapper wrapper) {
-			this.wrapper = wrapper;
-			return this;
-		}
+        @Override
+        public Builder wrapper(KiterinoMobEffectBehaviourWrapper wrapper) {
+            this.wrapper = wrapper;
+            return this;
+        }
 
-		@Override
-		public Builder category(PotionEffectType.Category category) {
-			this.category = conversions.asVanilla(category);
-			return this;
-		}
+        @Override
+        public Builder category(PotionEffectType.Category category) {
+            this.category = conversions.asVanilla(category);
+            return this;
+        }
 
-		@Override
-		public Builder color(int color) {
-			this.color = color;
-			return this;
-		}
+        @Override
+        public Builder color(int color) {
+            this.color = color;
+            return this;
+        }
 
-		@Override
-		public MobEffect build() {
-			return new KiterinoMobEffectWrapper(this.category, this.color, this.wrapper);
-		}
+        @Override
+        public MobEffect build() {
+            return new KiterinoMobEffectWrapper(this.category, this.color, this.wrapper);
+        }
 
-	}
+    }
 
 }

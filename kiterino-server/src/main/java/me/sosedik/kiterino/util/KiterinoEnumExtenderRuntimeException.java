@@ -8,8 +8,8 @@ import org.jspecify.annotations.Nullable;
 // Kiterino - Injecting custom entities
 public class KiterinoEnumExtenderRuntimeException extends RuntimeException {
 
-	public KiterinoEnumExtenderRuntimeException(String message, @Nullable Throwable cause) {
-		super(message, cause);
-	}
+    public KiterinoEnumExtenderRuntimeException(String message, @Nullable Throwable cause) {
+        super(message, cause);
+    }
 
 }

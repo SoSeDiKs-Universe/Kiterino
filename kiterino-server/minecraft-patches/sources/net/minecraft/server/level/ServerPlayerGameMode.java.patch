@@ -1,14 +1,14 @@
 --- a/net/minecraft/server/level/ServerPlayerGameMode.java
 +++ b/net/minecraft/server/level/ServerPlayerGameMode.java
-@@ -91,6 +_,11 @@
-     protected void setGameModeForPlayer(GameType gameModeForPlayer, @Nullable GameType previousGameModeForPlayer) {
-         this.previousGameModeForPlayer = previousGameModeForPlayer;
-         this.gameModeForPlayer = gameModeForPlayer;
+@@ -102,6 +_,11 @@
+     protected void setGameModeForPlayer(GameType gameMode, @Nullable GameType previousGameMode) {
+         this.previousGameModeForPlayer = previousGameMode;
+         this.gameModeForPlayer = gameMode;
 +        // Kiterino start - Prevent creative from overriding items
-+        if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && gameModeForPlayer == GameType.CREATIVE) {
++        if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && gameMode == GameType.CREATIVE) {
 +            this.player.containerMenu.sendAllDataToRemote();
 +        }
 +        // Kiterino end - Prevent creative from overriding items
-         gameModeForPlayer.updatePlayerAbilities(this.player.getAbilities());
+         Abilities abilities = this.player.getAbilities();
+         gameMode.updatePlayerAbilities(abilities);
      }
- 

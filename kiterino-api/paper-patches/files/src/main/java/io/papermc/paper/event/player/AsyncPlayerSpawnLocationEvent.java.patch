@@ -1,30 +1,31 @@
---- a/src/main/java/org/spigotmc/event/player/PlayerSpawnLocationEvent.java
-+++ b/src/main/java/org/spigotmc/event/player/PlayerSpawnLocationEvent.java
-@@ -24,9 +_,21 @@
-     private static final HandlerList HANDLER_LIST = new HandlerList();
- 
+--- a/src/main/java/io/papermc/paper/event/player/AsyncPlayerSpawnLocationEvent.java
++++ b/src/main/java/io/papermc/paper/event/player/AsyncPlayerSpawnLocationEvent.java
+@@ -24,10 +_,22 @@
+     private final PlayerConfigurationConnection connection;
+     private final boolean newPlayer;
      private Location spawnLocation;
 +    // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
 +    private final Location initialLocation;
-+    private final @org.jetbrains.annotations.Nullable org.bukkit.NamespacedKey initialDimensionId;
++    private final org.bukkit.@org.jspecify.annotations.Nullable NamespacedKey initialDimensionId;
 +    // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
  
-     public PlayerSpawnLocationEvent(@NotNull final Player player, @NotNull Location spawnLocation) {
+     @ApiStatus.Internal
+     public AsyncPlayerSpawnLocationEvent(final PlayerConfigurationConnection connection, final Location spawnLocation, final boolean newPlayer) {
 +        // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
-+        this(player, spawnLocation, null, null);
++        this(connection, spawnLocation, newPlayer, null, null);
 +    }
 +
-+    public PlayerSpawnLocationEvent(@NotNull final Player player, @NotNull Location spawnLocation, @org.jetbrains.annotations.Nullable Location initialLocation, @org.jetbrains.annotations.Nullable String initialDimensionId) {
-         super(player);
++    public AsyncPlayerSpawnLocationEvent(final PlayerConfigurationConnection connection, final Location spawnLocation, final boolean newPlayer, @org.jspecify.annotations.Nullable Location initialLocation, @org.jspecify.annotations.Nullable String initialDimensionId) {
+         super(true);
 +        this.initialLocation = initialLocation == null ? spawnLocation.clone() : initialLocation;
 +        this.initialDimensionId = initialDimensionId == null ? null : org.bukkit.NamespacedKey.fromString(initialDimensionId);
 +        // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
+         this.connection = connection;
          this.spawnLocation = spawnLocation;
-     }
- 
-@@ -51,6 +_,36 @@
-     public void setSpawnLocation(@NotNull Location location) {
-         this.spawnLocation = location.clone();
+         this.newPlayer = newPlayer;
+@@ -72,6 +_,36 @@
+     public boolean isNewPlayer() {
+         return this.newPlayer;
      }
 +
 +    // Kiterino start - Expose invalid world to PlayerSpawnLocationEvent
@@ -34,7 +35,7 @@
 +     *
 +     * @return initial spawn location
 +     */
-+    public @NotNull Location getInitialLocation() {
++    public Location getInitialLocation() {
 +        return this.initialLocation.clone();
 +    }
 +
@@ -52,10 +53,10 @@
 +     *
 +     * @return the initial dimension id
 +     */
-+    public @org.jetbrains.annotations.Nullable org.bukkit.NamespacedKey getInitialDimensionId() {
++    public org.bukkit.@org.jspecify.annotations.Nullable NamespacedKey getInitialDimensionId() {
 +        return this.initialDimensionId;
 +    }
 +    // Kiterino end - Expose invalid world to PlayerSpawnLocationEvent
  
-     @NotNull
      @Override
+     public HandlerList getHandlers() {

@@ -17,7 +17,7 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/net/minecraft/core/cauldron/CauldronInteraction.java b/net/minecraft/core/cauldron/CauldronInteraction.java
-index a1ce1548bb008f1854baa4c5d6cd963c3a3f7a36..08fe833c2ec63ac3d110662ffa07748049be572f 100644
+index c58b4a5426dc2e502e240e9b9270ead2ef65ecbd..59f81f24669f2db348d7489dcd9e017d1871d144 100644
 --- a/net/minecraft/core/cauldron/CauldronInteraction.java
 +++ b/net/minecraft/core/cauldron/CauldronInteraction.java
 @@ -63,7 +63,13 @@ public interface CauldronInteraction {
@@ -36,10 +36,10 @@ index a1ce1548bb008f1854baa4c5d6cd963c3a3f7a36..08fe833c2ec63ac3d110662ffa077480
                      player.awardStat(Stats.ITEM_USED.get(item));
                      // level.setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState()); // CraftBukkit
 diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index 582e012222123e5001c34153f2ee1ab1d08935fd..105457841dc79f5c9e2b2448e0f3b6fc44228a86 100644
+index 91a1ae527589ecab1322e97efd9e863a84fcb4fe..35e71068d635ef8670be678fd0004b4a57096aae 100644
 --- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -569,13 +569,25 @@ public interface DispenseItemBehavior {
+@@ -578,13 +578,25 @@ public interface DispenseItemBehavior {
                              blockStateBase -> blockStateBase.hasProperty(BeehiveBlock.HONEY_LEVEL) && blockStateBase.getBlock() instanceof BeehiveBlock
                          )
                          && blockState.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
@@ -122,10 +122,10 @@ index 105f9166297de2bfa6bdcfa9f6a0ffb00c0242ac..1315751d594a612c7fbcc6b6fe257133
                  }
  
 diff --git a/net/minecraft/world/level/block/BeehiveBlock.java b/net/minecraft/world/level/block/BeehiveBlock.java
-index 3cec4c5a40c569d848bbf503501d8c8d38ecf3ce..ce5a9c71f7d2e7037bb95105041860f36ec78b86 100644
+index 0768619454a88f555dd81a609a61f49dc2578f06..2150c2452ac09592990c968ddf18aed485265316 100644
 --- a/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/net/minecraft/world/level/block/BeehiveBlock.java
-@@ -155,12 +155,25 @@ public class BeehiveBlock extends BaseEntityBlock {
+@@ -159,12 +159,25 @@ public class BeehiveBlock extends BaseEntityBlock {
                  flag = true;
                  level.gameEvent(player, GameEvent.SHEAR, pos);
              } else if (stack.is(Items.GLASS_BOTTLE)) {

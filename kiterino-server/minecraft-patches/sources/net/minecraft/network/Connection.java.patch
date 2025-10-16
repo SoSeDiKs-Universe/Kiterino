@@ -26,7 +26,7 @@
 +            // Kiterino end - Don't send custom mob effects - Data-driven mob effects
          final ChannelFuture channelFuture;
          // Paper end - Optimize network
-         if (channelFutureListener != null) {
+         if (sendListener != null) {
 @@ -499,7 +_,8 @@
  
          // Paper start - Optimize network

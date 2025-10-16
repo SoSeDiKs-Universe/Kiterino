@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityStartUsingItemEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 585e668f729a5ad6a5f338c058bf4fdcc5069012..1f7586102458240efd59b308e3832f99174ff8d1 100644
+index dc33726bc72faf62e14e4063625ca8acb6d361ca..1fa269d6f9bb553c6ae02650616f1a082670a40f 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4155,8 +4155,16 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4181,8 +4181,16 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          ItemStack itemInHand = this.getItemInHand(hand);
          if (!itemInHand.isEmpty() && !this.isUsingItem() || forceUpdate) { // Paper - Prevent consuming the wrong itemstack
              this.useItem = itemInHand;
@@ -25,4 +25,4 @@ index 585e668f729a5ad6a5f338c058bf4fdcc5069012..1f7586102458240efd59b308e3832f99
 +            this.useItemRemaining = this.totalEatTimeTicks = useDuration; // Kiterino - Add EntityStartUsingItemEvent
              this.eatStartTime = System.nanoTime();
              // Paper end - lag compensate eating
-             if (!this.level().isClientSide) {
+             if (!this.level().isClientSide()) {

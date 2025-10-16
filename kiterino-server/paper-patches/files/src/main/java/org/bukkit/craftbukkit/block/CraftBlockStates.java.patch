@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-@@ -140,7 +_,7 @@
+@@ -141,7 +_,7 @@
          CraftBlockStates.FACTORIES.put(blockType, factory);
      }
  

@@ -5,10 +5,10 @@
      }
      // Paper end - Fix PickupStatus getting reset
 +
-+	// Kiterino start - Allow forcing arrows to fall
-+	@Override
-+	public void startFalling() {
-+		this.getHandle().startFalling();
-+	}
-+	// Kiterino end - Allow forcing arrows to fall
++    // Kiterino start - Allow forcing arrows to fall
++    @Override
++    public void startFalling() {
++        this.getHandle().startFalling();
++    }
++    // Kiterino end - Allow forcing arrows to fall
  }

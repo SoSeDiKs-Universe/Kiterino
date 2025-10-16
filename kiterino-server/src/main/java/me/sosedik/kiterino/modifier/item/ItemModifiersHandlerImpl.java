@@ -137,29 +137,29 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     public org.bukkit.inventory.@Nullable ItemStack modifyItem(ItemContextBox contextBox) {
         boolean modified = false;
 
-		// Used for dynamic empty lines
-		int currentLoreSize = contextBox.getLoreSize();
-		int priorLoreSize = currentLoreSize;
-		NamespacedKey currentId = null;
-		NamespacedKey priorId = null;
+        // Used for dynamic empty lines
+        int currentLoreSize = contextBox.getLoreSize();
+        int priorLoreSize = currentLoreSize;
+        NamespacedKey currentId = null;
+        NamespacedKey priorId = null;
 
         for (NamespacedKey modifierId : KiterinoConfig.itemModifiersOrder) {
             ItemModifier modifier = modifiers.get(modifierId);
             if (modifier == null) {
-				if ("empty_line".equals(modifierId.namespace())) {
-					if (priorId == null) continue;
+                if ("empty_line".equals(modifierId.namespace())) {
+                    if (priorId == null) continue;
 
-					String[] keys = modifierId.value().split("-");
-					if (keys.length != 4) continue;
-					if (!keys[0].equals(priorId.namespace())) continue;
-					if (!keys[1].equals(priorId.value())) continue;
-					if (!keys[2].equals(currentId.namespace())) continue;
-					if (!keys[3].equals(currentId.value())) continue;
+                    String[] keys = modifierId.value().split("-");
+                    if (keys.length != 4) continue;
+                    if (!keys[0].equals(priorId.namespace())) continue;
+                    if (!keys[1].equals(priorId.value())) continue;
+                    if (!keys[2].equals(currentId.namespace())) continue;
+                    if (!keys[3].equals(currentId.value())) continue;
 
-					contextBox.addLore(priorLoreSize, net.kyori.adventure.text.Component.empty());
-					currentLoreSize++;
-				}
-				continue;
+                    contextBox.addLore(priorLoreSize, net.kyori.adventure.text.Component.empty());
+                    currentLoreSize++;
+                }
+                continue;
             }
             if (modifier.skipAir() && contextBox.getItem().getType() == Material.AIR) continue;
             if (modifier.skipContext(contextBox.getContextType())) continue;
@@ -171,17 +171,17 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
             modified = true;
 
-	        priorLoreSize = currentLoreSize;
-	        currentLoreSize = contextBox.getLoreSize();
-	        if (priorLoreSize != currentLoreSize) {
-		        priorId = currentId;
-		        currentId = modifierId;
-	        }
+            priorLoreSize = currentLoreSize;
+            currentLoreSize = contextBox.getLoreSize();
+            if (priorLoreSize != currentLoreSize) {
+                priorId = currentId;
+                currentId = modifierId;
+            }
         }
 
-	    // Special nbt cases
-	    org.bukkit.inventory.ItemStack item = contextBox.getItem();
-	    if (!item.isEmpty()) {
+        // Special nbt cases
+        org.bukkit.inventory.ItemStack item = contextBox.getItem();
+        if (!item.isEmpty()) {
             // Kiterino start - Implement packet item faker for injected items
             Player viewer = contextBox.getViewer();
             // Cooldown for custom items
@@ -199,95 +199,95 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 }
             }
             // Kiterino end - Implement packet item faker for injected items
-		    // Bundles
-		    if (item.hasData(DataComponentTypes.BUNDLE_CONTENTS)) {
-			    BundleContents bundleContents = item.getData(DataComponentTypes.BUNDLE_CONTENTS);
-			    assert bundleContents != null;
-			    List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(bundleContents.contents());
-			    for (int i = 0; i < items.size(); i++) {
-				    org.bukkit.inventory.ItemStack bundleItem = items.get(i);
-				    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, bundleItem));
-				    if (newItem != null) {
-					    items.set(i, newItem);
-					    modified = true;
-				    }
-			    }
-			    if (modified) {
-				    item.setData(DataComponentTypes.BUNDLE_CONTENTS, BundleContents.bundleContents(items));
-			    }
-		    }
-		    // Containers
-		    if (item.hasData(DataComponentTypes.CONTAINER)) {
-			    ItemContainerContents containerContents = item.getData(DataComponentTypes.CONTAINER);
-			    assert containerContents != null;
-			    List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(containerContents.contents());
-			    for (int i = 0; i < items.size(); i++) {
-				    org.bukkit.inventory.ItemStack containerItem = items.get(i);
-				    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
-				    if (newItem != null) {
-					    items.set(i, newItem);
-					    modified = true;
-				    }
-			    }
-			    if (modified) {
-				    item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(items));
-			    }
-		    }
-		    // Block storages
-		    if (false && item.getType().isBlock() && item.hasData(DataComponentTypes.BLOCK_DATA)) { // TODO not implemented yet
-			    BlockItemDataProperties blockItemDataProperties = item.getData(DataComponentTypes.BLOCK_DATA);
-			    BlockType blockType = item.getType().asBlockType();
-			    assert blockItemDataProperties != null;
-			    assert blockType != null;
-			    BlockData blockData = blockItemDataProperties.createBlockData(blockType);
-			    BlockState blockState = blockData.createBlockState();
-			    if (blockState instanceof org.bukkit.block.Container container) {
-				    var inventory = container.getInventory();
-				    for (int i = 0; i < inventory.getSize(); i++) {
-					    org.bukkit.inventory.ItemStack containerItem = inventory.getItem(i);
-					    if (containerItem == null) continue;
+            // Bundles
+            if (item.hasData(DataComponentTypes.BUNDLE_CONTENTS)) {
+                BundleContents bundleContents = item.getData(DataComponentTypes.BUNDLE_CONTENTS);
+                assert bundleContents != null;
+                List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(bundleContents.contents());
+                for (int i = 0; i < items.size(); i++) {
+                    org.bukkit.inventory.ItemStack bundleItem = items.get(i);
+                    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, bundleItem));
+                    if (newItem != null) {
+                        items.set(i, newItem);
+                        modified = true;
+                    }
+                }
+                if (modified) {
+                    item.setData(DataComponentTypes.BUNDLE_CONTENTS, BundleContents.bundleContents(items));
+                }
+            }
+            // Containers
+            if (item.hasData(DataComponentTypes.CONTAINER)) {
+                ItemContainerContents containerContents = item.getData(DataComponentTypes.CONTAINER);
+                assert containerContents != null;
+                List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(containerContents.contents());
+                for (int i = 0; i < items.size(); i++) {
+                    org.bukkit.inventory.ItemStack containerItem = items.get(i);
+                    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
+                    if (newItem != null) {
+                        items.set(i, newItem);
+                        modified = true;
+                    }
+                }
+                if (modified) {
+                    item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(items));
+                }
+            }
+            // Block storages
+            if (false && item.getType().isBlock() && item.hasData(DataComponentTypes.BLOCK_DATA)) { // TODO not implemented yet
+                BlockItemDataProperties blockItemDataProperties = item.getData(DataComponentTypes.BLOCK_DATA);
+                BlockType blockType = item.getType().asBlockType();
+                assert blockItemDataProperties != null;
+                assert blockType != null;
+                BlockData blockData = blockItemDataProperties.createBlockData(blockType);
+                BlockState blockState = blockData.createBlockState();
+                if (blockState instanceof org.bukkit.block.Container container) {
+                    var inventory = container.getInventory();
+                    for (int i = 0; i < inventory.getSize(); i++) {
+                        org.bukkit.inventory.ItemStack containerItem = inventory.getItem(i);
+                        if (containerItem == null) continue;
 
-					    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
-					    if (newItem != null) {
-						    inventory.setItem(i, containerItem);
-						    modified = true;
-					    }
-				    }
-				    if (modified) {
-					    item.setData(DataComponentTypes.BLOCK_DATA, BlockItemDataProperties.blockItemStateProperties().build()); // TODO not implemented yet
-				    }
-			    }
-		    }
-		    if (item.getItemMeta() instanceof org.bukkit.inventory.meta.BlockStateMeta meta && meta.hasBlockState()) {
-			    org.bukkit.block.BlockState blockState = meta.getBlockState();
-			    if (blockState instanceof org.bukkit.block.Container container) {
-				    var inventory = container.getInventory();
-				    for (int i = 0; i < inventory.getSize(); i++) {
-					    org.bukkit.inventory.ItemStack containerItem = inventory.getItem(i);
-					    if (containerItem == null) continue;
+                        org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
+                        if (newItem != null) {
+                            inventory.setItem(i, containerItem);
+                            modified = true;
+                        }
+                    }
+                    if (modified) {
+                        item.setData(DataComponentTypes.BLOCK_DATA, BlockItemDataProperties.blockItemStateProperties().build()); // TODO not implemented yet
+                    }
+                }
+            }
+            if (item.getItemMeta() instanceof org.bukkit.inventory.meta.BlockStateMeta meta && meta.hasBlockState()) {
+                org.bukkit.block.BlockState blockState = meta.getBlockState();
+                if (blockState instanceof org.bukkit.block.Container container) {
+                    var inventory = container.getInventory();
+                    for (int i = 0; i < inventory.getSize(); i++) {
+                        org.bukkit.inventory.ItemStack containerItem = inventory.getItem(i);
+                        if (containerItem == null) continue;
 
-					    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
-					    if (newItem != null) {
-						    inventory.setItem(i, containerItem);
-						    modified = true;
-					    }
-				    }
-				    if (modified) {
-					    meta.setBlockState(blockState);
-					    item.setItemMeta(meta);
-				    }
-			    }
-		    }
-		    // Use remainder
-		    if (item.hasData(DataComponentTypes.USE_REMAINDER)) {
-			    UseRemainder useRemainder = item.getData(DataComponentTypes.USE_REMAINDER);
-			    assert useRemainder != null;
-			    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, useRemainder.transformInto()));
-			    if (newItem != null) {
-				    modified = true;
-				    item.setData(DataComponentTypes.USE_REMAINDER, UseRemainder.useRemainder(newItem));
-			    }
-		    }
+                        org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, containerItem));
+                        if (newItem != null) {
+                            inventory.setItem(i, containerItem);
+                            modified = true;
+                        }
+                    }
+                    if (modified) {
+                        meta.setBlockState(blockState);
+                        item.setItemMeta(meta);
+                    }
+                }
+            }
+            // Use remainder
+            if (item.hasData(DataComponentTypes.USE_REMAINDER)) {
+                UseRemainder useRemainder = item.getData(DataComponentTypes.USE_REMAINDER);
+                assert useRemainder != null;
+                org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContextType.EMPTY_NO_LORE, ItemModifierContext.EMPTY, useRemainder.transformInto()));
+                if (newItem != null) {
+                    modified = true;
+                    item.setData(DataComponentTypes.USE_REMAINDER, UseRemainder.useRemainder(newItem));
+                }
+            }
             // Repairable ingredient
             if (item.hasData(DataComponentTypes.REPAIRABLE)) {
                 Repairable repairable = item.getData(DataComponentTypes.REPAIRABLE);
@@ -303,7 +303,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                     break;
                 }
             }
-	    }
+        }
 
         return modified ? contextBox.getItem() : null;
     }
@@ -703,7 +703,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             }
 
             modified[0] = true;
-	        return Holder.direct(ItemStack.fromBukkitCopy(parsed).getItem());
+            return Holder.direct(ItemStack.fromBukkitCopy(parsed).getItem());
         }).toList();
         if (modified[0]) {
             superDirtyCopy.values = HolderSet.direct(valuesCleaned.stream().map(item -> item.value().builtInRegistryHolder()).toList());
@@ -850,30 +850,30 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     private static @Nullable ItemStack fromBukkit(ItemContextBox contextBox, ItemStack original) {
         var bukkitItem = ItemModifier.modifyItem(contextBox);
 
-	    // Kiterino start - Prevent creative from overriding items
-	    ItemStack itemStack = bukkitItem == null ? original : ItemStack.fromBukkitCopy(bukkitItem);
-	    CraftPlayer player = (CraftPlayer) contextBox.getViewer();
-	    if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && !itemStack.isEmpty()) {
-			if (bukkitItem == null) {
-				itemStack = itemStack.copy();
-			}
-		    net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+        // Kiterino start - Prevent creative from overriding items
+        ItemStack itemStack = bukkitItem == null ? original : ItemStack.fromBukkitCopy(bukkitItem);
+        CraftPlayer player = (CraftPlayer) contextBox.getViewer();
+        if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && !itemStack.isEmpty()) {
+            if (bukkitItem == null) {
+                itemStack = itemStack.copy();
+            }
+            net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
             net.minecraft.nbt.Tag itemData = original.isEmpty() ? null : net.minecraft.world.item.ItemStack.CODEC.encodeStart(
                 net.minecraft.server.MinecraftServer.getServer().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
                 original
             ).getOrThrow();
-		    if (customData == null) {
-			    customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-			    customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
-			    itemStack.set(DataComponents.CUSTOM_DATA, customData);
-		    } else {
-			    customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
-		    }
-	    } else if (bukkitItem == null) {
-			return null;
-	    }
-	    return itemStack;
-	    // Kiterino end - Prevent creative from overriding items
+            if (customData == null) {
+                customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
+                customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
+                itemStack.set(DataComponents.CUSTOM_DATA, customData);
+            } else {
+                customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
+            }
+        } else if (bukkitItem == null) {
+            return null;
+        }
+        return itemStack;
+        // Kiterino end - Prevent creative from overriding items
     }
 
 }

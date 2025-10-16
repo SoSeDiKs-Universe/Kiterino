@@ -19,7 +19,7 @@
 +                    BeaconBlockEntity.this.levels = BeaconBlockEntity.this.levelsOverride == -1 ? value : BeaconBlockEntity.this.levelsOverride; // Kiterino - Beacon level override API
                      break;
                  case 1:
-                     if (!BeaconBlockEntity.this.level.isClientSide && !BeaconBlockEntity.this.beamSections.isEmpty()) {
+                     if (!BeaconBlockEntity.this.level.isClientSide() && !BeaconBlockEntity.this.beamSections.isEmpty()) {
 @@ -229,7 +_,7 @@
          int i = blockEntity.levels; final int originalLevels = i; // Paper - OBFHELPER
          if (level.getGameTime() % 80L == 0L) {

@@ -1,7 +1,7 @@
 --- a/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundSetBorderLerpSizePacket.java
 @@ -20,6 +_,14 @@
-         this.lerpTime = worldBorder.getLerpRemainingTime();
+         this.lerpTime = worldBorder.getLerpTime();
      }
  
 +    // Kiterino start - Red tint API

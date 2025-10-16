@@ -57,7 +57,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
         );
 
         // Injecting custom mob/potion effects
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.MOB_EFFECT.freeze(), event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.MOB_EFFECT.compose(), event -> {
             event.registry().register(TypedKey.create(RegistryKey.MOB_EFFECT, Key.key("test", "effect_1")), b -> b
                 .category(PotionEffectType.Category.BENEFICIAL)
                 .color(Color.WHITE.value())
@@ -65,14 +65,14 @@ public class TestPluginBootstrap implements PluginBootstrap {
         });
 
         // Injecting blocks (also requires block items)
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.freeze(), event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.BLOCK.compose(), event -> {
             event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("test:block_1")), b -> b
                 .nmsBlock(new TestBlockImpl((BlockBehaviour.Properties) b.constructBlockProperties()))
             );
         });
 
         // Injecting items
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(), event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.compose(), event -> {
             event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("test:block_1")), b -> b
                 .nmsItem(new BlockItem(
                     (Block) b.asBlockOrThrow(),
@@ -103,7 +103,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 .modifier(box -> box.setType(Material.EMERALD))
             );
         });
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(), event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.compose(), event -> {
             event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("test:item_3")), b -> b
                 .nmsItem(new Item(
                     ((Item.Properties) b.constructItemProperties())
@@ -120,7 +120,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
         });
 
         // Has to be called after injecting all items
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.freeze(), event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.ITEM.compose(), event -> {
             context.injectMaterials(TestMaterials.class);
         });
     }

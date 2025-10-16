@@ -4,8 +4,8 @@ import me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl;
 
 public class KiterinoInitializer {
 
-	public static void initPostConfig() {
-		ItemModifiersHandlerImpl.init();
-	}
+    public static void initPostConfig() {
+        ItemModifiersHandlerImpl.init();
+    }
 
 }

@@ -39,7 +39,7 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
         return bukkitState == null ? super.getId(value) : super.getId(((CraftBlockState) bukkitState).getHandle());
     }
 
-	// Kiterino start - Fake some vanilla block states
+    // Kiterino start - Fake some vanilla block states
     public BlockState replaceVanillaState(BlockState value) {
         if (value.is(Blocks.NOTE_BLOCK)) {
             return value.setValue(NoteBlock.INSTRUMENT, NoteBlockInstrument.BANJO)
@@ -104,6 +104,6 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
         }
         return value;
     }
-	// Kiterino end - Fake some vanilla block states
+    // Kiterino end - Fake some vanilla block states
 
 }

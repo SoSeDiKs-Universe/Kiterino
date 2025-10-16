@@ -12,16 +12,16 @@ import org.jspecify.annotations.NullMarked;
 // Kiterino - Melt packed ice in Nether
 public class PackedIceBlock extends Block {
 
-	public PackedIceBlock(Properties settings) {
-		super(settings);
-	}
+    public PackedIceBlock(Properties settings) {
+        super(settings);
+    }
 
-	@Override
-	protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-		if (world.kiterinoConfig.meltPackedIceInNether && world.dimensionType().ultraWarm()) {
-			IceBlock.meltBlock(state, world, pos);
-		}
+    @Override
+    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        if (world.kiterinoConfig.meltPackedIceInNether && world.dimensionType().ultraWarm()) {
+            IceBlock.meltBlock(state, world, pos);
+        }
 
-	}
+    }
 
 }

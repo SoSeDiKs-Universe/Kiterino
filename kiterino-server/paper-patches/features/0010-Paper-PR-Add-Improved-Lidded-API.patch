@@ -7,7 +7,7 @@ https://github.com/PaperMC/Paper/pull/11814
 
 diff --git a/src/main/java/io/papermc/paper/block/PaperLidded.java b/src/main/java/io/papermc/paper/block/PaperLidded.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..b2f34bb0bbde7a28d4f9e188161ec8581b398583
+index 0000000000000000000000000000000000000000..a3aab126cf2ccd04ebf32c80b530f43c4a688736
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/block/PaperLidded.java
 @@ -0,0 +1,87 @@
@@ -18,85 +18,85 @@ index 0000000000000000000000000000000000000000..b2f34bb0bbde7a28d4f9e188161ec858
 +@NullMarked
 +public interface PaperLidded extends Lidded, org.bukkit.block.Lidded {
 +
-+	@Override
-+	default LidMode setLidMode(final LidMode targetLidMode) {
-+		final LidMode oldLidMode = getLidMode();
-+		final LidMode newLidMode = getResultantLidMode(targetLidMode);
++    @Override
++    default LidMode setLidMode(final LidMode targetLidMode) {
++        final LidMode oldLidMode = getLidMode();
++        final LidMode newLidMode = getResultantLidMode(targetLidMode);
 +
-+		if (oldLidMode == newLidMode) {
-+			// already in correct state
-+			return newLidMode;
-+		}
++        if (oldLidMode == newLidMode) {
++            // already in correct state
++            return newLidMode;
++        }
 +
-+		boolean wasForcedOpen =
-+				oldLidMode == LidMode.FORCED_OPEN || oldLidMode == LidMode.OPEN_UNTIL_VIEWED;
-+		boolean wasForcedClosed =
-+				oldLidMode == LidMode.FORCED_CLOSED || oldLidMode == LidMode.CLOSED_UNTIL_NOT_VIEWED;
-+		boolean isForcedOpen =
-+				newLidMode == LidMode.FORCED_OPEN || newLidMode == LidMode.OPEN_UNTIL_VIEWED;
-+		boolean isForcedClosed =
-+				newLidMode == LidMode.FORCED_CLOSED || newLidMode == LidMode.CLOSED_UNTIL_NOT_VIEWED;
++        boolean wasForcedOpen =
++                oldLidMode == LidMode.FORCED_OPEN || oldLidMode == LidMode.OPEN_UNTIL_VIEWED;
++        boolean wasForcedClosed =
++                oldLidMode == LidMode.FORCED_CLOSED || oldLidMode == LidMode.CLOSED_UNTIL_NOT_VIEWED;
++        boolean isForcedOpen =
++                newLidMode == LidMode.FORCED_OPEN || newLidMode == LidMode.OPEN_UNTIL_VIEWED;
++        boolean isForcedClosed =
++                newLidMode == LidMode.FORCED_CLOSED || newLidMode == LidMode.CLOSED_UNTIL_NOT_VIEWED;
 +
-+		// stop any existing force open/close, if next state doesn't need it.
-+		if (wasForcedOpen && !isForcedOpen) {
-+			stopForceLiddedLidOpen();
-+		} else if (wasForcedClosed && !isForcedClosed) {
-+			stopForceLiddedLidClose();
-+		}
++        // stop any existing force open/close, if next state doesn't need it.
++        if (wasForcedOpen && !isForcedOpen) {
++            stopForceLiddedLidOpen();
++        } else if (wasForcedClosed && !isForcedClosed) {
++            stopForceLiddedLidClose();
++        }
 +
-+		// start new force open/close, if it wasn't previously.
-+		if (isForcedOpen && !wasForcedOpen) {
-+			startForceLiddedLidOpen();
-+		} else if (isForcedClosed && !wasForcedClosed) {
-+			startForceLiddedLidClose();
-+		}
++        // start new force open/close, if it wasn't previously.
++        if (isForcedOpen && !wasForcedOpen) {
++            startForceLiddedLidOpen();
++        } else if (isForcedClosed && !wasForcedClosed) {
++            startForceLiddedLidClose();
++        }
 +
-+		// return the new lid mode, so it can be stored by the implementation.
-+		return newLidMode;
-+	}
++        // return the new lid mode, so it can be stored by the implementation.
++        return newLidMode;
++    }
 +
-+	private LidMode getResultantLidMode(LidMode targetLidMode) {
-+		final LidState trueLidState = getTrueLidState();
++    private LidMode getResultantLidMode(LidMode targetLidMode) {
++        final LidState trueLidState = getTrueLidState();
 +
-+		// check that target lid mode is valid for true lid state.
-+		LidMode newLidMode;
++        // check that target lid mode is valid for true lid state.
++        LidMode newLidMode;
 +
-+		if (targetLidMode == LidMode.CLOSED_UNTIL_NOT_VIEWED
-+				&& trueLidState == LidState.CLOSED) {
-+			// insta-revert to default, as the lid is already closed.
-+			newLidMode = LidMode.DEFAULT;
-+		} else if (targetLidMode == LidMode.OPEN_UNTIL_VIEWED
-+				&& trueLidState == LidState.OPEN) {
-+			// insta-revert to default, as the lid is already open.
-+			newLidMode = LidMode.DEFAULT;
-+		} else {
-+			newLidMode = targetLidMode;
-+		}
-+		return newLidMode;
-+	}
++        if (targetLidMode == LidMode.CLOSED_UNTIL_NOT_VIEWED
++                && trueLidState == LidState.CLOSED) {
++            // insta-revert to default, as the lid is already closed.
++            newLidMode = LidMode.DEFAULT;
++        } else if (targetLidMode == LidMode.OPEN_UNTIL_VIEWED
++                && trueLidState == LidState.OPEN) {
++            // insta-revert to default, as the lid is already open.
++            newLidMode = LidMode.DEFAULT;
++        } else {
++            newLidMode = targetLidMode;
++        }
++        return newLidMode;
++    }
 +
-+	// these should be similar to the vanilla open/close behavior.
-+	void startForceLiddedLidOpen();
-+	void stopForceLiddedLidOpen();
-+	void startForceLiddedLidClose();
-+	void stopForceLiddedLidClose();
++    // these should be similar to the vanilla open/close behavior.
++    void startForceLiddedLidOpen();
++    void stopForceLiddedLidOpen();
++    void startForceLiddedLidClose();
++    void stopForceLiddedLidClose();
 +
-+	// bukkit lidded impl using the paper lidded api.
++    // bukkit lidded impl using the paper lidded api.
 +
-+	@Override
-+	default boolean isOpen() {
-+		return getLidMode() == LidMode.FORCED_OPEN || getLidMode() == LidMode.OPEN_UNTIL_VIEWED;
-+	}
++    @Override
++    default boolean isOpen() {
++        return getLidMode() == LidMode.FORCED_OPEN || getLidMode() == LidMode.OPEN_UNTIL_VIEWED;
++    }
 +
-+	@Override
-+	default void close() {
-+		setLidMode(LidMode.DEFAULT);
-+	}
++    @Override
++    default void close() {
++        setLidMode(LidMode.DEFAULT);
++    }
 +
-+	@Override
-+	default void open() {
-+		setLidMode(LidMode.FORCED_OPEN);
-+	}
++    @Override
++    default void open() {
++        setLidMode(LidMode.FORCED_OPEN);
++    }
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBarrel.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBarrel.java
 index 921452422c417d0c2a505790fefd05f92e1a58e1..8c91065c45a43c103cc1e61715bdbc32e131da62 100644
@@ -201,10 +201,10 @@ index 921452422c417d0c2a505790fefd05f92e1a58e1..8c91065c45a43c103cc1e61715bdbc32
 +    // Paper end - add Improved Lidded API
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java b/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java
-index 852ca0834b232ec845c796f5ffa6751c625ba1fd..1e46511d8cbefdf9afc59d7db3505dbd333e24fb 100644
+index f05ef791e4c12725e85523f48270b4f257d2896e..8ce74177eea97b5db15583f5c4a2198dd70a279b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftChest.java
-@@ -14,7 +14,7 @@ import org.bukkit.craftbukkit.inventory.CraftInventory;
+@@ -13,7 +13,7 @@ import org.bukkit.craftbukkit.inventory.CraftInventory;
  import org.bukkit.craftbukkit.inventory.CraftInventoryDoubleChest;
  import org.bukkit.inventory.Inventory;
  
@@ -213,7 +213,7 @@ index 852ca0834b232ec845c796f5ffa6751c625ba1fd..1e46511d8cbefdf9afc59d7db3505dbd
  
      public CraftChest(World world, ChestBlockEntity blockEntity) {
          super(world, blockEntity);
-@@ -58,47 +58,59 @@ public class CraftChest extends CraftLootable<ChestBlockEntity> implements Chest
+@@ -56,47 +56,59 @@ public class CraftChest extends CraftLootable<ChestBlockEntity> implements Chest
      }
  
      @Override
@@ -498,10 +498,10 @@ index 0f08bc5f79ace2dcefac66fbc56d49f7098db44c..de79b1616eeb7c3fc23316a2f296a7a1
 +    // Paper end - add Improved Lidded API
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 8d84e5ef2a7387be336e11285f94fa058d9a5515..26cfc314c8f05b5ff436c9c8760ed42a1b57336e 100644
+index adb1757918502ee29113be7a9970569d7e9e33ea..f0cab380428b6245fc3ec6f0b6c8672df0c6d935 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2144,4 +2144,16 @@ public class CraftEventFactory {
+@@ -2152,4 +2152,16 @@ public class CraftEventFactory {
          return event;
      }
      // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser

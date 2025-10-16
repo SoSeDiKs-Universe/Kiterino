@@ -15,27 +15,27 @@ import java.util.Map;
 // Kiterino - Implement packet item faker for injected items
 public final class KiterinoItemModifierImpl extends ItemModifier {
 
-	public static final NamespacedKey MODIFIER_KEY = new NamespacedKey("kiterino", "item_faker");
-	public static final KiterinoItemModifierImpl MODIFIER_IMPL = new KiterinoItemModifierImpl();
+    public static final NamespacedKey MODIFIER_KEY = new NamespacedKey("kiterino", "item_faker");
+    public static final KiterinoItemModifierImpl MODIFIER_IMPL = new KiterinoItemModifierImpl();
 
-	private final Map<NamespacedKey, KiterinoItemModifier> modifiers = new HashMap<>();
+    private final Map<NamespacedKey, KiterinoItemModifier> modifiers = new HashMap<>();
 
-	private KiterinoItemModifierImpl() {
-		super(MODIFIER_KEY);
-	}
+    private KiterinoItemModifierImpl() {
+        super(MODIFIER_KEY);
+    }
 
-	public void add(NamespacedKey key, KiterinoItemModifier modifier) {
-		this.modifiers.put(key, modifier);
-	}
+    public void add(NamespacedKey key, KiterinoItemModifier modifier) {
+        this.modifiers.put(key, modifier);
+    }
 
-	@Override
-	public ModificationResult modify(ItemContextBox contextBox) {
-		KiterinoItemModifier modifier = modifiers.get(contextBox.getItem().getType().getKey());
-		if (modifier != null) {
-			modifier.modify(contextBox);
-			return ModificationResult.OK;
-		}
-		return ModificationResult.PASS;
-	}
+    @Override
+    public ModificationResult modify(ItemContextBox contextBox) {
+        KiterinoItemModifier modifier = modifiers.get(contextBox.getItem().getType().getKey());
+        if (modifier != null) {
+            modifier.modify(contextBox);
+            return ModificationResult.OK;
+        }
+        return ModificationResult.PASS;
+    }
 
 }

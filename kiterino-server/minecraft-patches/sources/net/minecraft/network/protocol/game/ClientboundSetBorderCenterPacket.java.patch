@@ -1,7 +1,7 @@
 --- a/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
-@@ -20,6 +_,13 @@
-         // CraftBukkit end
+@@ -18,6 +_,13 @@
+         this.newCenterZ = worldBorder.getCenterZ();
      }
  
 +    // Kiterino start - Red tint API

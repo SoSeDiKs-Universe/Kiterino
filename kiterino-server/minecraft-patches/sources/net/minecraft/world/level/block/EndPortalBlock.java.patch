@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/level/block/EndPortalBlock.java
 +++ b/net/minecraft/world/level/block/EndPortalBlock.java
-@@ -86,6 +_,13 @@
-     public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
-         ResourceKey<Level> resourceKey = level.getTypeKey() == net.minecraft.world.level.dimension.LevelStem.END ? Level.OVERWORLD : Level.END; // CraftBukkit - SPIGOT-6152: send back to main overworld in custom ends
-         ServerLevel level1 = level.getServer().getLevel(resourceKey);
+@@ -91,6 +_,13 @@
+         ResourceKey<Level> resourceKey1 = flag ? respawnData.dimension() : Level.END;
+         BlockPos blockPos = flag ? respawnData.pos() : ServerLevel.END_SPAWN_POINT;
+         ServerLevel level1 = level.getServer().getLevel(resourceKey1);
 +        // Kiterino start - Call EntityPortalReadyEvent for End Portal
 +        io.papermc.paper.event.entity.EntityPortalReadyEvent portalReadyEvent = new io.papermc.paper.event.entity.EntityPortalReadyEvent(entity.getBukkitEntity(), level1 == null ? null : level1.getWorld(), org.bukkit.PortalType.ENDER);
 +        if (!portalReadyEvent.callEvent()) {
@@ -14,8 +14,8 @@
          if (level1 == null) {
              return null;
          } else {
-@@ -105,7 +_,7 @@
-                 f = level1.getSharedSpawnAngle();
+@@ -111,7 +_,7 @@
+                 f1 = respawnData.pitch();
                  set = Relative.union(Relative.DELTA, Relative.ROTATION);
                  if (entity instanceof ServerPlayer serverPlayer) {
 -                    return serverPlayer.findRespawnPositionAndUseSpawnBlock(false, TeleportTransition.DO_NOTHING, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL); // CraftBukkit

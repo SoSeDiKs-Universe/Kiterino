@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -338,7 +_,7 @@
+@@ -297,7 +_,7 @@
                  this.sleepCounter = 100;
              }
  
--            if (!this.level().isClientSide && this.level().isBrightOutside()) {
-+            if (!this.level().kiterinoConfig.noAutoWakeUp && !this.level().isClientSide && this.level().isBrightOutside()) { // Kiterino - Sleeping options
+-            if (!this.level().isClientSide() && this.level().isBrightOutside()) {
++            if (!this.level().kiterinoConfig.noAutoWakeUp && !this.level().isClientSide() && this.level().isBrightOutside()) { // Kiterino - Sleeping options
                  this.stopSleepInBed(false, true);
              }
          } else if (this.sleepCounter > 0) {

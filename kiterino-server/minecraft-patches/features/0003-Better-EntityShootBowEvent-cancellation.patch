@@ -19,7 +19,7 @@ index 7d846ac6163873abee29e860a066ffc130a4ea98..dae742612f539d5335deea4d3ddda262
  
                      level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index 70dcdd2b635c49fefd359c974ee034a73561d998..cfb5e3e0f48315b42fffaabee107cd2c0452020f 100644
+index bfea72c52e18821f9f2b9164ce3610d6adb671bc..685b83678fb3aaa1d783e3de90730ed2052147dd 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
 @@ -174,7 +174,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
@@ -32,7 +32,7 @@ index 70dcdd2b635c49fefd359c974ee034a73561d998..cfb5e3e0f48315b42fffaabee107cd2c
                      CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, weapon);
                      serverPlayer.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
 diff --git a/net/minecraft/world/item/ProjectileWeaponItem.java b/net/minecraft/world/item/ProjectileWeaponItem.java
-index f12b9e4e8a78c713782af548d1cb15ef363305b4..ef8f875f71e61682618f6274b460eb90760a4ec7 100644
+index aa1cf1653d33cd35f77db28dbee0c2319e1975f3..6b6b02ceb5a152485f39bcb9da7a3b94af67bc1b 100644
 --- a/net/minecraft/world/item/ProjectileWeaponItem.java
 +++ b/net/minecraft/world/item/ProjectileWeaponItem.java
 @@ -40,7 +40,7 @@ public abstract class ProjectileWeaponItem extends Item {
@@ -58,7 +58,7 @@ index f12b9e4e8a78c713782af548d1cb15ef363305b4..ef8f875f71e61682618f6274b460eb90
                          itemStack
                      ).isRemoved()) {
 -                        return;
-+	                    return false; // Kiterino - Better EntityShootBowEvent cancellation
++                        return false; // Kiterino - Better EntityShootBowEvent cancellation
                      }
                  }
                  // CraftBukkit end

@@ -29,7 +29,7 @@ index 3d5daa1a094c879376c116881d7e1044134e47f4..31b9cad3e12c57020b7fcc75197698d5
                          )
                  )
 diff --git a/net/minecraft/data/loot/packs/VanillaChestLoot.java b/net/minecraft/data/loot/packs/VanillaChestLoot.java
-index 037b4b7d5b1c3b27eed6df143a3e9ae8c3fada62..b02b75927d8f6c1f783f7f5cbe5f004fb0fc7335 100644
+index 43c71628a5c6637980cc262cbe42d20d75ed9c95..666783a2a0784a765d4512417961b3998c39c747 100644
 --- a/net/minecraft/data/loot/packs/VanillaChestLoot.java
 +++ b/net/minecraft/data/loot/packs/VanillaChestLoot.java
 @@ -157,7 +157,7 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
@@ -41,7 +41,7 @@ index 037b4b7d5b1c3b27eed6df143a3e9ae8c3fada62..b02b75927d8f6c1f783f7f5cbe5f004f
                                  )
                                  .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 6.0F)))
                          )
-@@ -1458,11 +1458,11 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
+@@ -1460,11 +1460,11 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
                              .apply(
                                  SetStewEffectFunction.stewEffect()
                                      .withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))

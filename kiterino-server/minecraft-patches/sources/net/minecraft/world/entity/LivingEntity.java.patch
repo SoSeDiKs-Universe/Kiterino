@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -969,6 +_,11 @@
+@@ -975,6 +_,11 @@
                      } else if (mobEffectInstance.getDuration() % 600 == 0) {
                          this.onEffectUpdated(mobEffectInstance, false, null);
                      }
@@ -12,24 +12,24 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -2635,6 +_,7 @@
+@@ -2666,6 +_,7 @@
                  ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (updateSelf) {
 +                    if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
-                     chunkSource.broadcastAndSend(this, clientboundAnimatePacket);
+                     chunkSource.sendToTrackingPlayersAndSelf(this, clientboundAnimatePacket);
                  } else {
-                     chunkSource.broadcast(this, clientboundAnimatePacket);
-@@ -3337,7 +_,7 @@
+                     chunkSource.sendToTrackingPlayers(this, clientboundAnimatePacket);
+@@ -3368,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
--            if (this.isSleeping() && !this.checkBedExists()) {
-+            if ((!level().kiterinoConfig.sleepWithNoBed || !(this instanceof ServerPlayer)) && this.isSleeping() && !this.checkBedExists()) { // Kiterino - Sleeping options
+-            if (this.isSleeping() && (!this.canInteractWithLevel() || !this.checkBedExists())) {
++            if ((!level().kiterinoConfig.sleepWithNoBed || !(this instanceof ServerPlayer)) && this.isSleeping() && (!this.canInteractWithLevel() || !this.checkBedExists())) { // Kiterino - Sleeping options
                  this.stopSleeping();
              }
          }
-@@ -3702,9 +_,17 @@
+@@ -3733,9 +_,17 @@
                      flag = false;
                  }
  
@@ -41,7 +41,7 @@
 +                    // Kiterino start - Add EntitySunburnEvent
 +                    {
 +                        var event = new me.sosedik.kiterino.event.entity.EntitySunburnEvent(getBukkitLivingEntity(), 8F);
-+						event.setCancelled(!flag);
++                        event.setCancelled(!flag);
 +                        if (event.callEvent()) {
 +                            this.igniteForSeconds(event.getBurnDuration());
 +                        }

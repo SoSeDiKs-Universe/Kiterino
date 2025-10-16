@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -1246,6 +_,12 @@
+@@ -1352,13 +_,19 @@
  
      // CraftBukkit start
      public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, @Nullable org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
@@ -13,29 +13,24 @@
          TeleportTransition teleportTransition;
          boolean isBedSpawn = false;
          boolean isAnchorSpawn = false;
-@@ -1264,10 +_,10 @@
-                 teleportTransition = new TeleportTransition(level, respawnPosAngle.position(), Vec3.ZERO, respawnPosAngle.yaw(), 0.0F, postTeleportTransition);
-                 // CraftBukkit end
-             } else {
--                teleportTransition = TeleportTransition.missingRespawnBlock(this.server.overworld(), this, postTeleportTransition); // CraftBukkit
-+                teleportTransition = TeleportTransition.missingRespawnBlock(levelTo == null ? this.server.overworld() : levelTo, this, postTeleportTransition); // CraftBukkit // Kiterino - Call EntityPortalReadyEvent for End Portal
-             }
-         } else {
--            teleportTransition = new TeleportTransition(this.server.overworld(), this, postTeleportTransition); // CraftBukkit
-+            teleportTransition = new TeleportTransition(levelTo == null ? this.server.overworld() : levelTo, this, postTeleportTransition); // CraftBukkit // Kiterino - Call EntityPortalReadyEvent for End Portal
-         }
-         // CraftBukkit start
-         if (respawnReason == null) {
-@@ -1574,7 +_,7 @@
-             return Either.left(Player.BedSleepingProblem.OBSTRUCTED);
-         } else {
-             this.setRespawnPosition(new ServerPlayer.RespawnConfig(this.level().dimension(), at, this.getYRot(), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED); // Paper - Add PlayerSetSpawnEvent
+         Runnable consumeAnchorCharge = null;
+         // CraftBukkit end
+         ServerPlayer.RespawnConfig respawnConfig = this.getRespawnConfig();
+-        ServerLevel level = this.server.getLevel(ServerPlayer.RespawnConfig.getDimensionOrDefault(respawnConfig));
++        ServerLevel level = levelTo == null ? this.server.getLevel(ServerPlayer.RespawnConfig.getDimensionOrDefault(respawnConfig)) : levelTo; // Kiterino - Call EntityPortalReadyEvent for End Portal
+         if (level != null && respawnConfig != null) {
+             Optional<ServerPlayer.RespawnPosAngle> optional = findRespawnAndUseSpawnBlock(level, respawnConfig, useCharge);
+             if (optional.isPresent()) {
+@@ -1687,7 +_,7 @@
+             this.setRespawnPosition(
+                 new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(this.level().dimension(), at, this.getYRot(), this.getXRot()), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED // Paper - Add PlayerSetSpawnEvent
+             );
 -            if (this.level().isBrightOutside()) {
 +            if (!this.level().kiterinoConfig.dayDreaming && this.level().isBrightOutside()) { // Kiterino - Sleeping options
                  return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
              } else {
                  if (!this.isCreative()) {
-@@ -1927,8 +_,13 @@
+@@ -2040,8 +_,13 @@
                      }
                  }
              } else if (this.isFallFlying()) {
@@ -51,7 +46,7 @@
              } else {
                  int rounded = Math.round((float)Math.sqrt(dx * dx + dz * dz) * 100.0F);
                  if (rounded > 25) {
-@@ -1942,6 +_,11 @@
+@@ -2055,6 +_,11 @@
          if (this.isPassenger() && !didNotMove(dx, dy, dz)) {
              int rounded = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
              Entity vehicle = this.getVehicle();

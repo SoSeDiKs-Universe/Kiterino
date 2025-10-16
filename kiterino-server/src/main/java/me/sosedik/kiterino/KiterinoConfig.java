@@ -21,49 +21,49 @@ import java.util.logging.Level;
 @NullMarked
 public final class KiterinoConfig {
 
-	private KiterinoConfig() {
-		throw new IllegalStateException("Utility class");
-	}
+    private KiterinoConfig() {
+        throw new IllegalStateException("Utility class");
+    }
 
-	private static final String HEADER = """
+    private static final String HEADER = """
             This is the main configuration file for Kiterino
             
             GitHub: https://github.com/SoSeDiKs-Universe/Kiterino
             """;
 
-	private static File configFile;
-	public static YamlConfiguration config;
-	private static int version;
-	static boolean verbose;
+    private static File configFile;
+    public static YamlConfiguration config;
+    private static int version;
+    static boolean verbose;
 
-	public static void init(File configFile) {
-		KiterinoConfig.configFile = configFile;
-		config = new YamlConfiguration();
-		try {
-			config.load(configFile);
-		} catch (IOException ignored) {
-		} catch (InvalidConfigurationException ex) {
-			Bukkit.getLogger().log(Level.SEVERE, "Could not load kiterino.yml, please correct your syntax errors", ex);
-			throw Throwables.propagate(ex);
-		}
-		config.options().header(HEADER);
-		config.options().copyDefaults(true);
-		verbose = getBoolean(config, "verbose", false);
+    public static void init(File configFile) {
+        KiterinoConfig.configFile = configFile;
+        config = new YamlConfiguration();
+        try {
+            config.load(configFile);
+        } catch (IOException ignored) {
+        } catch (InvalidConfigurationException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "Could not load kiterino.yml, please correct your syntax errors", ex);
+            throw Throwables.propagate(ex);
+        }
+        config.options().header(HEADER);
+        config.options().copyDefaults(true);
+        verbose = getBoolean(config, "verbose", false);
 
-		version = getInt(config, "config-version", 1);
-		set(config, "config-version", 1);
+        version = getInt(config, "config-version", 1);
+        set(config, "config-version", 1);
 
-		readConfig(KiterinoConfig.class, null);
-	}
+        readConfig(KiterinoConfig.class, null);
+    }
 
-	static void readConfig(Class<?> clazz, @Nullable Object instance) {
-		readConfig(configFile, config, clazz, instance);
-	}
+    static void readConfig(Class<?> clazz, @Nullable Object instance) {
+        readConfig(configFile, config, clazz, instance);
+    }
 
-	public static void readConfig(File configFile, YamlConfiguration config, Class<?> clazz, @Nullable Object instance) {
-		for (Method method : clazz.getDeclaredMethods()) {
-			if (!Modifier.isPrivate(method.getModifiers())) continue;
-			if (method.getParameterTypes().length != 0) continue;
+    public static void readConfig(File configFile, YamlConfiguration config, Class<?> clazz, @Nullable Object instance) {
+        for (Method method : clazz.getDeclaredMethods()) {
+            if (!Modifier.isPrivate(method.getModifiers())) continue;
+            if (method.getParameterTypes().length != 0) continue;
 			if (method.getReturnType() != Void.TYPE) continue;
 
 			try {

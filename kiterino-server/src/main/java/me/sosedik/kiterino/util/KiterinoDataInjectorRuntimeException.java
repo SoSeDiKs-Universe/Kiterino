@@ -6,12 +6,12 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class KiterinoDataInjectorRuntimeException extends RuntimeException {
 
-	public KiterinoDataInjectorRuntimeException(String message) {
-		super(message);
-	}
+    public KiterinoDataInjectorRuntimeException(String message) {
+        super(message);
+    }
 
-	public KiterinoDataInjectorRuntimeException(String message, @Nullable Throwable cause) {
-		super(message, cause);
-	}
+    public KiterinoDataInjectorRuntimeException(String message, @Nullable Throwable cause) {
+        super(message, cause);
+    }
 
 }

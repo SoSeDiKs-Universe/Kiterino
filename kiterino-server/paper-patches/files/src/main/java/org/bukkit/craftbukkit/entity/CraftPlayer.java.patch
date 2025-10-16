@@ -1,8 +1,8 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3623,4 +_,106 @@
-     public PlayerGameConnection getConnection() {
-         return this.getHandle().connection.playerGameConnection;
+@@ -3550,4 +_,106 @@
+             entity.remove();
+         }
      }
 +
 +    // Kiterino start - Red tint API
@@ -45,31 +45,31 @@
 +
 +    // Kiterino start - Block place API
 +    @Override
-+	public boolean canPlaceBlock(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
-+		if (block == null) {
-+			return false;
-+		}
-+		if (!block.getType().isBlock()) {
-+			return false;
-+		}
-+		if (!(location.getWorld() instanceof CraftWorld craftWorld)) {
-+			return false;
-+		}
++    public boolean canPlaceBlock(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
++        if (block == null) {
++            return false;
++        }
++        if (!block.getType().isBlock()) {
++            return false;
++        }
++        if (!(location.getWorld() instanceof CraftWorld craftWorld)) {
++            return false;
++        }
 +
-+	    var nmsItem = CraftItemStack.asNMSCopy(block);
-+		if (!(nmsItem.getItem() instanceof net.minecraft.world.item.BlockItem blockItem)) {
-+			return false;
-+		}
++        var nmsItem = CraftItemStack.asNMSCopy(block);
++        if (!(nmsItem.getItem() instanceof net.minecraft.world.item.BlockItem blockItem)) {
++            return false;
++        }
 +
-+		BlockPos blockPos = CraftLocation.toBlockPosition(location);
-+	    var mop = new net.minecraft.world.phys.BlockHitResult(CraftLocation.toVec3(location), com.google.common.base.Enums.getIfPresent(net.minecraft.core.Direction.class, blockFace.toString()).or(net.minecraft.core.Direction.UP), blockPos, false);
-+	    var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
++        BlockPos blockPos = CraftLocation.toBlockPosition(location);
++        var mop = new net.minecraft.world.phys.BlockHitResult(CraftLocation.toVec3(location), com.google.common.base.Enums.getIfPresent(net.minecraft.core.Direction.class, blockFace.toString()).or(net.minecraft.core.Direction.UP), blockPos, false);
++        var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
 +
-+	    if (!craftWorld.getHandle().getBlockState(blockPos).canBeReplaced(context)) {
-+			return false;
-+	    }
-+		return blockItem.getPlacementState(context) != null;
-+	}
++        if (!craftWorld.getHandle().getBlockState(blockPos).canBeReplaced(context)) {
++            return false;
++        }
++        return blockItem.getPlacementState(context) != null;
++    }
 +
 +    @Override
 +    public boolean placeBlock(EquipmentSlot hand, Location location, org.bukkit.block.BlockFace blockFace, boolean consume) {
@@ -83,24 +83,24 @@
 +
 +    private boolean placeBlock(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace, boolean consume) {
 +        if (block == null) {
-+			return false;
++            return false;
 +        }
 +        if (!block.getType().isBlock()) {
-+			return false;
++            return false;
 +        }
 +
 +        var nmsItem = CraftItemStack.asNMSCopy(block);
 +        var mop = new net.minecraft.world.phys.BlockHitResult(CraftLocation.toVec3(location), com.google.common.base.Enums.getIfPresent(net.minecraft.core.Direction.class, blockFace.toString()).or(net.minecraft.core.Direction.UP), CraftLocation.toBlockPosition(location), false);
-+		var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
++        var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
 +        var result = nmsItem.useOn(context);
 +        if (!(result instanceof net.minecraft.world.InteractionResult.Success)) {
-+			return false;
++            return false;
 +        }
 +
 +        swingHand(hand);
 +        getWorld().playSound(location, location.getBlock().getBlockData().getSoundGroup().getPlaceSound(), 1F, 1F);
 +        if (consume && getGameMode() != GameMode.CREATIVE) {
-+			block.subtract();
++            block.subtract();
 +        }
 +
 +        return true;

@@ -10,65 +10,65 @@ import java.util.List;
 @NullMarked
 public final class KiterinoWorldConfig {
 
-	private final YamlConfiguration config;
-	private final String worldName;
-	private final World.Environment environment;
+    private final YamlConfiguration config;
+    private final String worldName;
+    private final World.Environment environment;
 
-	public KiterinoWorldConfig(String worldName, World.Environment environment) {
-		this.config = KiterinoConfig.config;
-		this.worldName = worldName;
-		this.environment = environment;
+    public KiterinoWorldConfig(String worldName, World.Environment environment) {
+        this.config = KiterinoConfig.config;
+        this.worldName = worldName;
+        this.environment = environment;
 
-		init();
-	}
+        init();
+    }
 
-	public void init() {
-		log("-------- World Settings For [" + this.worldName + "] --------");
-		KiterinoConfig.readConfig(KiterinoWorldConfig.class, this);
-	}
+    public void init() {
+        log("-------- World Settings For [" + this.worldName + "] --------");
+        KiterinoConfig.readConfig(KiterinoWorldConfig.class, this);
+    }
 
-	public void log(String s) {
-		KiterinoConfig.log(s);
-	}
+    public void log(String s) {
+        KiterinoConfig.log(s);
+    }
 
-	public @Nullable String getString(String path, String def, String... comments) {
-		this.config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
-		return this.config.getString("world-settings." + this.worldName + "." + path, this.config.getString("world-settings.default." + path));
-	}
+    public @Nullable String getString(String path, String def, String... comments) {
+        this.config.addDefault("world-settings.default." + path, def);
+        if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+        return this.config.getString("world-settings." + this.worldName + "." + path, this.config.getString("world-settings.default." + path));
+    }
 
-	public boolean getBoolean(String path, boolean def, String... comments) {
-		this.config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
-		return this.config.getBoolean("world-settings." + this.worldName + "." + path, this.config.getBoolean("world-settings.default." + path));
-	}
+    public boolean getBoolean(String path, boolean def, String... comments) {
+        this.config.addDefault("world-settings.default." + path, def);
+        if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+        return this.config.getBoolean("world-settings." + this.worldName + "." + path, this.config.getBoolean("world-settings.default." + path));
+    }
 
-	public double getDouble(String path, double def, String... comments) {
-		this.config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
-		return this.config.getDouble("world-settings." + this.worldName + "." + path, this.config.getDouble("world-settings.default." + path));
-	}
+    public double getDouble(String path, double def, String... comments) {
+        this.config.addDefault("world-settings.default." + path, def);
+        if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+        return this.config.getDouble("world-settings." + this.worldName + "." + path, this.config.getDouble("world-settings.default." + path));
+    }
 
-	public int getInt(String path, int def, String... comments) {
-		this.config.addDefault("world-settings.default." + path, def);
-		if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
-		return this.config.getInt("world-settings." + this.worldName + "." + path, this.config.getInt("world-settings.default." + path));
-	}
+    public int getInt(String path, int def, String... comments) {
+        this.config.addDefault("world-settings.default." + path, def);
+        if (comments.length > 0) this.config.setComments("world-settings.default." + path, List.of(comments));
+        return this.config.getInt("world-settings." + this.worldName + "." + path, this.config.getInt("world-settings.default." + path));
+    }
 
-	// Kiterino start - Reset fire ticks when having fire resistance
-	public boolean fireResistanceResetsFireTicks = false;
-	private void fireResistanceResetsFireTicks() {
-		fireResistanceResetsFireTicks = getBoolean("gameplay-mechanics.fire-resistance-resets-fire-ticks", fireResistanceResetsFireTicks, "Having fire resistance potion effect will reset fire ticks");
-	}
-	// Kiterino end - Reset fire ticks when having fire resistance
+    // Kiterino start - Reset fire ticks when having fire resistance
+    public boolean fireResistanceResetsFireTicks = false;
+    private void fireResistanceResetsFireTicks() {
+        fireResistanceResetsFireTicks = getBoolean("gameplay-mechanics.fire-resistance-resets-fire-ticks", fireResistanceResetsFireTicks, "Having fire resistance potion effect will reset fire ticks");
+    }
+    // Kiterino end - Reset fire ticks when having fire resistance
 
-	// Kiterino start - Sleeping options
-	public boolean dayDreaming = false;
-	public boolean sleepWithNoBed = false;
-	public boolean noAutoWakeUp = false;
-	public boolean noWeatherSkip = false;
-	private void doNotWakeUpPlayersAutomatically() {
-		dayDreaming = getBoolean("gameplay-mechanics.sleep.daydreaming", dayDreaming, "Allow sleeping during day without weather");
+    // Kiterino start - Sleeping options
+    public boolean dayDreaming = false;
+    public boolean sleepWithNoBed = false;
+    public boolean noAutoWakeUp = false;
+    public boolean noWeatherSkip = false;
+    private void doNotWakeUpPlayersAutomatically() {
+    	dayDreaming = getBoolean("gameplay-mechanics.sleep.daydreaming", dayDreaming, "Allow sleeping during day without weather");
 		sleepWithNoBed = getBoolean("gameplay-mechanics.sleep.sleep-with-no-bed", sleepWithNoBed, "Don't wake up players automatically, even if the bed does not exist");
 		noAutoWakeUp = getBoolean("gameplay-mechanics.sleep.no-auto-wake-up", noAutoWakeUp, "Disable automatic wake up after sleeping");
 		noWeatherSkip = getBoolean("gameplay-mechanics.sleep.no-weather-skip", noWeatherSkip, "Disable weather skipping after sleeping");

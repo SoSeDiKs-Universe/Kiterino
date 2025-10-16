@@ -67,7 +67,7 @@
 +        }
 +
 +        if (hoverEvent instanceof HoverEvent.ShowItem(net.minecraft.world.item.ItemStack item)) {
-+	        var context = me.sosedik.kiterino.modifier.item.context.ItemModifierContext.EMPTY;
++            var context = me.sosedik.kiterino.modifier.item.context.ItemModifierContext.EMPTY;
 +            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, context, item.asBukkitCopy());
 +            var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
 +            if (bukkitItem != null) {

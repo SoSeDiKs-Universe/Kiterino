@@ -15,8 +15,8 @@
  
      @Override
      public void openCustomInventoryScreen(Player player) {
--        if (!this.level().isClientSide && (!this.isVehicle() || this.hasPassenger(player)) && this.isTamed()) {
-+        if (!this.level().isClientSide && (!this.isVehicle() || this.hasPassenger(player)) && (this.isTamed() || getRider() == player)) { // Kiterino - Allow riders to control horses without a saddle
+-        if (!this.level().isClientSide() && (!this.isVehicle() || this.hasPassenger(player)) && this.isTamed()) {
++        if (!this.level().isClientSide() && (!this.isVehicle() || this.hasPassenger(player)) && (this.isTamed() || getRider() == player)) { // Kiterino - Allow riders to control horses without a saddle
              player.openHorseInventory(this, this.inventory);
          }
      }

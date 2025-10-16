@@ -12,10 +12,10 @@
              } else {
                  if (!blockState.is(Blocks.TNT)) level.removeBlock(pos, false); // Paper - TNTPrimeEvent; We might be cancelling it below, move the setAir down
              }
-@@ -558,5 +_,6 @@
-         fireBlock.setFlammable(Blocks.GLOW_LICHEN, 15, 100);
-         fireBlock.setFlammable(Blocks.FIREFLY_BUSH, 60, 100);
-         fireBlock.setFlammable(Blocks.BUSH, 60, 100);
+@@ -568,5 +_,6 @@
+         fireBlock.setFlammable(Blocks.OAK_SHELF, 30, 20);
+         fireBlock.setFlammable(Blocks.PALE_OAK_SHELF, 30, 20);
+         fireBlock.setFlammable(Blocks.SPRUCE_SHELF, 30, 20);
 +        fireBlock.setFlammable(Blocks.COBWEB, 60, 100); // Kiterino - Flammable cobwebs
      }
  }

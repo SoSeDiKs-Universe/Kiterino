@@ -23,7 +23,7 @@ index 4715a60760c2c9079313db9016000bfb5c65e070..ae085bb711ada3e5f26c02acde522c53
      public Holder.Reference<T> createIntrusiveHolder(T value) {
          if (this.unregisteredIntrusiveHolders == null) {
 diff --git a/net/minecraft/core/Registry.java b/net/minecraft/core/Registry.java
-index b9e275e4f807ebea535264802c7d31723c8dc20b..b3fa414d045510c050a3f69171ed897a407f7f99 100644
+index 58d72c8843a0a5fbf1bfb50819a09e3e65bfacfa..4551adfa41b98bc30126efc02ad76601d7e87ea2 100644
 --- a/net/minecraft/core/Registry.java
 +++ b/net/minecraft/core/Registry.java
 @@ -131,6 +131,10 @@ public interface Registry<T> extends Keyable, HolderLookup.RegistryLookup<T>, Id
@@ -38,10 +38,10 @@ index b9e275e4f807ebea535264802c7d31723c8dc20b..b3fa414d045510c050a3f69171ed897a
  
      Optional<Holder.Reference<T>> get(int index);
 diff --git a/net/minecraft/world/item/AxeItem.java b/net/minecraft/world/item/AxeItem.java
-index eb8d2d6f9c65185f5fe16a13ab0cdbba78a25a40..eb3193c2e9e4ff6aa2114db00902843473a9186a 100644
+index 20c4cc7bbe33ecc53ddf484e7f10e2ce16c35381..b368abfdbb77a6b4f531e3544583923ccaf920e0 100644
 --- a/net/minecraft/world/item/AxeItem.java
 +++ b/net/minecraft/world/item/AxeItem.java
-@@ -54,6 +54,12 @@ public class AxeItem extends Item {
+@@ -56,6 +56,12 @@ public class AxeItem extends Item {
          super(properties.axe(material, attackDamage, attackSpeed));
      }
  
@@ -55,10 +55,10 @@ index eb8d2d6f9c65185f5fe16a13ab0cdbba78a25a40..eb3193c2e9e4ff6aa2114db009028434
      public InteractionResult useOn(UseOnContext context) {
          Level level = context.getLevel();
 diff --git a/net/minecraft/world/item/HoeItem.java b/net/minecraft/world/item/HoeItem.java
-index e03c4f7fa51bf5bb5fd780889c2fa7519ffcfad3..f229bef82f967b6951dab13a2a34b4001384ddce 100644
+index 9b5cf74989f41f95476d583079c778eebd707dff..42081d243a85fbf60fb8add720d523a235f60503 100644
 --- a/net/minecraft/world/item/HoeItem.java
 +++ b/net/minecraft/world/item/HoeItem.java
-@@ -41,6 +41,12 @@ public class HoeItem extends Item {
+@@ -40,6 +40,12 @@ public class HoeItem extends Item {
          super(properties.hoe(material, attackDamage, attackSpeed));
      }
  
@@ -72,7 +72,7 @@ index e03c4f7fa51bf5bb5fd780889c2fa7519ffcfad3..f229bef82f967b6951dab13a2a34b400
      public InteractionResult useOn(UseOnContext context) {
          Level level = context.getLevel();
 diff --git a/net/minecraft/world/item/ShearsItem.java b/net/minecraft/world/item/ShearsItem.java
-index 8cf3e51e12f9cf98836657e722edb23943f9e866..119a087b00dbba4f8130328eb474eb811abb2878 100644
+index c7c6253ac76afaff40514ec4b6da95b15b87f841..0c1f733e4fb1d288613a5ddec5f57ea1ea117268 100644
 --- a/net/minecraft/world/item/ShearsItem.java
 +++ b/net/minecraft/world/item/ShearsItem.java
 @@ -30,7 +30,7 @@ public class ShearsItem extends Item {
@@ -85,10 +85,10 @@ index 8cf3e51e12f9cf98836657e722edb23943f9e866..119a087b00dbba4f8130328eb474eb81
              List.of(
                  Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
 diff --git a/net/minecraft/world/item/ShovelItem.java b/net/minecraft/world/item/ShovelItem.java
-index a290ad578498da07093ea31080cc3fbc87aa3778..82b3f718a9629e6b754a7f477ea4546311790326 100644
+index 013f155677ab4a7588bd7ad1d612ce582bbd7927..169dc74642613b34f42352d3688fbdc0e53cfb8a 100644
 --- a/net/minecraft/world/item/ShovelItem.java
 +++ b/net/minecraft/world/item/ShovelItem.java
-@@ -34,6 +34,12 @@ public class ShovelItem extends Item {
+@@ -33,6 +33,12 @@ public class ShovelItem extends Item {
          super(properties.shovel(material, attackDamage, attackSpeed));
      }
  
@@ -102,10 +102,10 @@ index a290ad578498da07093ea31080cc3fbc87aa3778..82b3f718a9629e6b754a7f477ea45463
      public InteractionResult useOn(UseOnContext context) {
          Level level = context.getLevel();
 diff --git a/net/minecraft/world/item/ToolMaterial.java b/net/minecraft/world/item/ToolMaterial.java
-index 6ccb31bbee540d9f3c114685f4aa168d72dfdd4e..e6c0db5d81a7d36764ea31251540f951a3c25635 100644
+index 424682a78e97557f1bcab8e14714fcd753c8ee47..af2f87a31dde4d1b0fd8ca661e3a7e8ea854c21f 100644
 --- a/net/minecraft/world/item/ToolMaterial.java
 +++ b/net/minecraft/world/item/ToolMaterial.java
-@@ -30,13 +30,18 @@ public record ToolMaterial(
+@@ -31,13 +31,18 @@ public record ToolMaterial(
      );
  
      private Item.Properties applyCommonProperties(Item.Properties properties) {
@@ -125,7 +125,7 @@ index 6ccb31bbee540d9f3c114685f4aa168d72dfdd4e..e6c0db5d81a7d36764ea31251540f951
          return this.applyCommonProperties(properties)
              .component(
                  DataComponents.TOOL,
-@@ -70,7 +75,7 @@ public record ToolMaterial(
+@@ -71,7 +76,7 @@ public record ToolMaterial(
      }
  
      public Item.Properties applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed) {

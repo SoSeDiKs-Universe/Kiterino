@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven items
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 804d6408eb4332cec082ea927a75a33dc0305f60..66a32b27942c36f27fa6a5dd36ca55d69663a895 100644
+index 844c2b8fd46d5cba7b36f8caea8ed6edd7c86eaf..032e838796d7c7bc3b63298073a10ed5943ac8e9 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -107,7 +107,7 @@ public final class PaperRegistries {
+@@ -106,7 +106,7 @@ public final class PaperRegistries {
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
              start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
@@ -18,10 +18,10 @@ index 804d6408eb4332cec082ea927a75a33dc0305f60..66a32b27942c36f27fa6a5dd36ca55d6
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
              start(Registries.MAP_DECORATION_TYPE, RegistryKey.MAP_DECORATION_TYPE).craft(MapCursor.Type.class, CraftMapCursor.CraftType::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index 1120f50d5ccdfee0e5465a049b6d361018507a4b..7c2903026d35cf66826e07700b09ae7188aad80c 100644
+index e4124cc4bc064768c17f9c5730e45a7c58bae7b3..a6c3898ce2162e2dc75b8b8fce4f6e54f24be0f1 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -115,4 +115,23 @@ public class Conversions {
+@@ -116,4 +116,23 @@ public class Conversions {
          return new PaperRegistryBuilderFactory<>(resourceRegistryKey, this, buildableMeta.builderFiller(), lookupForBuilders::getValueForCopying);
      }
  

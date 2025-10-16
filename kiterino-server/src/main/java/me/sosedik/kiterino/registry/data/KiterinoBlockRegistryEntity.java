@@ -21,64 +21,64 @@ import java.lang.reflect.InvocationTargetException;
 // Kiterino - Data-driven blocks
 public class KiterinoBlockRegistryEntity implements BlockRegistryEntity {
 
-	protected @Nullable KiterinoBlock nmsBlock;
+    protected @Nullable KiterinoBlock nmsBlock;
 
-	protected final Conversions conversions;
-	public ResourceLocation blockKey;
+    protected final Conversions conversions;
+    public ResourceLocation blockKey;
 
-	public KiterinoBlockRegistryEntity(
-			Conversions conversions,
-			@Nullable Block internal
-	) {
-		this.conversions = conversions;
-	}
+    public KiterinoBlockRegistryEntity(
+            Conversions conversions,
+            @Nullable Block internal
+    ) {
+        this.conversions = conversions;
+    }
 
-	@Override
-	public @Nullable KiterinoBlock nmsBlock() {
-		return this.nmsBlock;
-	}
+    @Override
+    public @Nullable KiterinoBlock nmsBlock() {
+        return this.nmsBlock;
+    }
 
-	@Override
-	public Object constructBlockProperties() {
-		return BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, this.blockKey));
-	}
+    @Override
+    public Object constructBlockProperties() {
+        return BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, this.blockKey));
+    }
 
-	public static final class KiterinoBuilder extends KiterinoBlockRegistryEntity implements Builder,
-			PaperRegistryBuilder<Block, BlockType> {
+    public static final class KiterinoBuilder extends KiterinoBlockRegistryEntity implements Builder,
+            PaperRegistryBuilder<Block, BlockType> {
 
-		public KiterinoBuilder(Conversions conversions, @Nullable Block internal) {
-			super(conversions, internal);
-		}
+        public KiterinoBuilder(Conversions conversions, @Nullable Block internal) {
+            super(conversions, internal);
+        }
 
-		@Override
-		public Block build() {
-			Block block = (Block) this.nmsBlock;
-			assert block != null;
-			if (this.nmsBlock.getBlockDataClasses() != null && !CraftBlockData.MAP.containsKey(block.getClass())) {
-				CraftBlockData.register(block.getClass(), state -> {
-					try {
-						return (CraftBlockData) this.nmsBlock.getBlockDataClasses().second().getDeclaredConstructor(BlockState.class).newInstance(state);
-					} catch (NoSuchMethodException e) {
-						throw new KiterinoDataInjectorRuntimeException("Invalid block data constructor", e);
-					} catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
-						throw new KiterinoDataInjectorRuntimeException("Something went wrong constructing block data", e);
-					}
-				});
-			}
-			for (BlockState blockState : block.getStateDefinition().getPossibleStates()) {
-				Block.BLOCK_STATE_REGISTRY.add(blockState);
-				blockState.initCache();
-			}
-			return block;
-		}
+        @Override
+        public Block build() {
+            Block block = (Block) this.nmsBlock;
+            assert block != null;
+            if (this.nmsBlock.getBlockDataClasses() != null && !CraftBlockData.MAP.containsKey(block.getClass())) {
+                CraftBlockData.register(block.getClass(), state -> {
+                    try {
+                        return (CraftBlockData) this.nmsBlock.getBlockDataClasses().second().getDeclaredConstructor(BlockState.class).newInstance(state);
+                    } catch (NoSuchMethodException e) {
+                        throw new KiterinoDataInjectorRuntimeException("Invalid block data constructor", e);
+                    } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                        throw new KiterinoDataInjectorRuntimeException("Something went wrong constructing block data", e);
+                    }
+                });
+            }
+            for (BlockState blockState : block.getStateDefinition().getPossibleStates()) {
+                Block.BLOCK_STATE_REGISTRY.add(blockState);
+                blockState.initCache();
+            }
+            return block;
+        }
 
-		@Override
-		public Builder nmsBlock(KiterinoBlock nmsBlock) {
-			if (!(nmsBlock instanceof Block)) throw new IllegalArgumentException("NMS block must extend Block");
-			this.nmsBlock = nmsBlock;
-			return this;
-		}
+        @Override
+        public Builder nmsBlock(KiterinoBlock nmsBlock) {
+            if (!(nmsBlock instanceof Block)) throw new IllegalArgumentException("NMS block must extend Block");
+            this.nmsBlock = nmsBlock;
+            return this;
+        }
 
-	}
+    }
 
 }

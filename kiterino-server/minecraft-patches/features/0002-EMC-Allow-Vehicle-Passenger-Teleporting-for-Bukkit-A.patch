@@ -6,15 +6,15 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index f358dfc15eb337da430bb3876d2c55161d41801d..6250df91a1a2b82b38355a6acb11342916fe6240 100644
+index 042861f45c7ee423614122387ac652d60dfc2852..bd2a525980804142339b70b5d3698ca20f60a1d7 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -681,7 +681,7 @@ public abstract class PlayerList {
+@@ -593,7 +593,7 @@ public abstract class PlayerList {
      }
  
      public ServerPlayer respawn(ServerPlayer player, boolean keepInventory, Entity.RemovalReason reason, @Nullable org.bukkit.event.player.PlayerRespawnEvent.RespawnReason eventReason, @Nullable org.bukkit.Location location) {
 -        player.stopRiding(); // CraftBukkit
 +        //player.stopRiding(); // CraftBukkit // Kiterino - EMC - Remove stop riding - Vehicle passenger teleporting
+         // TeleportTransition teleportTransition = player.findRespawnPositionAndUseSpawnBlock(!keepInventory, TeleportTransition.DO_NOTHING);
          this.players.remove(player);
          this.playersByName.remove(player.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Spigot
-         player.level().removePlayerImmediately(player, reason);

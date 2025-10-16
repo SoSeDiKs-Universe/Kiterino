@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 606c090fc887fc2c70020a346dd22ad5df49a725..d70bd5b0f60de9ba77774d1e3688d356f13ee636 100644
+index 3817c5d7eaaa36b89a2c07a82cb9196889814904..c0ebd749534957a40d9fbe4f77d2114507443cce 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -105,7 +105,7 @@ public final class PaperRegistries {
+@@ -104,7 +104,7 @@ public final class PaperRegistries {
              // built-in
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
@@ -18,10 +18,10 @@ index 606c090fc887fc2c70020a346dd22ad5df49a725..d70bd5b0f60de9ba77774d1e3688d356
              start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(me.sosedik.kiterino.registry.data.KiterinoItemRegistryEntity.KiterinoBuilder::new).delayed(), // Kiterino - Data-driven items
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
 diff --git a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-index 7c2903026d35cf66826e07700b09ae7188aad80c..3ee91f2eab2673ae6ded2514c7030e3c1a2966ba 100644
+index a6c3898ce2162e2dc75b8b8fce4f6e54f24be0f1..ebc7f603aa65e6483078fb32f0f7c8b536882fe5 100644
 --- a/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
 +++ b/src/main/java/io/papermc/paper/registry/data/util/Conversions.java
-@@ -134,4 +134,18 @@ public class Conversions {
+@@ -135,4 +135,18 @@ public class Conversions {
          };
      }
      // Kiterino end - Data-driven items
