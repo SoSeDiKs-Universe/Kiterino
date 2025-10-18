@@ -12,7 +12,7 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -2666,6 +_,7 @@
+@@ -2672,6 +_,7 @@
                  ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (updateSelf) {
@@ -20,7 +20,7 @@
                      chunkSource.sendToTrackingPlayersAndSelf(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.sendToTrackingPlayers(this, clientboundAnimatePacket);
-@@ -3368,7 +_,7 @@
+@@ -3374,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -29,7 +29,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3733,9 +_,17 @@
+@@ -3739,9 +_,17 @@
                      flag = false;
                  }
  

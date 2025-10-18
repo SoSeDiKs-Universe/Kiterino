@@ -5,19 +5,19 @@
  
      public LeavesBlock(float leafParticleChance, BlockBehaviour.Properties properties) {
 -        super(properties);
-+        super(properties(properties)); // Kiterino - No collision for leaves
++	    super(properties(properties)); // Kiterino - No collision for leaves
          this.leafParticleChance = leafParticleChance;
          this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, false).setValue(WATERLOGGED, false));
      }
 +
-+    // Kiterino start - No collision for leaves
-+    private static BlockBehaviour.Properties properties(BlockBehaviour.Properties properties) {
-+        if (me.sosedik.kiterino.KiterinoConfig.noCollisionForLeaves) {
-+            properties = properties.noCollision().forceSolidOff();
-+        }
-+        return properties;
-+    }
-+    // Kiterino end - No collision for leaves
++	// Kiterino start - No collision for leaves
++	private static BlockBehaviour.Properties properties(BlockBehaviour.Properties properties) {
++		if (me.sosedik.kiterino.KiterinoConfig.noCollisionForLeaves) {
++			properties = properties.noCollision().forceSolidOff();
++		}
++		return properties;
++	}
++	// Kiterino end - No collision for leaves
  
      @Override
-     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter reader, BlockPos pos) {
+     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {

@@ -6,7 +6,7 @@ Subject: [PATCH] Paper PR - Add Improved Lidded API
 https://github.com/PaperMC/Paper/pull/11814
 
 diff --git a/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java b/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java
-index 03c6c7b28c1903bc1ccbcebf478528db98a1a510..4cc7b105434ca6bd5ff777076b3dbda4eb3509e7 100644
+index 4f3b6a32fe4e791aab05aa9e553ec935e3cd5e6b..f129eb134f325537421d643044418654aab4d34f 100644
 --- a/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java
 +++ b/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java
 @@ -16,20 +16,57 @@ public abstract class ContainerOpenersCounter {
@@ -83,20 +83,21 @@ index 03c6c7b28c1903bc1ccbcebf478528db98a1a510..4cc7b105434ca6bd5ff777076b3dbda4
  
 -    public abstract boolean isOwnContainer(Player player);
 -
--    public void incrementOpeners(LivingEntity entity, Level level, BlockPos pos, BlockState state, double maxInteractionRange) {
-+    public void incrementOpeners(@javax.annotation.Nullable LivingEntity entity, Level level, BlockPos pos, BlockState state, double maxInteractionRange) { // Kiterino - Paper PR - Make player nullable for New Lidded API
-+        // Paper start - Call PlayerLiddedOpenEvent
-+        if (entity instanceof net.minecraft.server.level.ServerPlayer player && !org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerLiddedOpenEvent(player, level, pos)) {
-+            cancelledPlayers.add(player);
-+            return;
-+        }
-+        // Paper end - Call PlayerLiddedOpenEvent
-+        if (this.openCount == 0 && apiLidMode == io.papermc.paper.block.LidMode.CLOSED_UNTIL_NOT_VIEWED) {
-+            apiLidMode = io.papermc.paper.block.LidMode.DEFAULT;
-+            stopForceLiddedLidClose(level, pos, state);
-+        }
-+        // Paper end - add Improved Lidded API
-         int oldPower = Math.max(0, Math.min(15, this.openCount)); // CraftBukkit - Get power before new viewer is added
+-    public void incrementOpeners(LivingEntity entity, Level level, BlockPos pos, BlockState state, double interactionRange) {
+-        int oldPower = Math.max(0, Math.min(15, this.openCount)); // CraftBukkit - Get power before new viewer is added
++    public void incrementOpeners(@javax.annotation.Nullable LivingEntity entity, Level level, BlockPos pos, BlockState state, double interactionRange) { // Kiterino - Paper PR - Make entity nullable for New Lidded API
++	    // Paper start - Call PlayerLiddedOpenEvent
++	    if (entity instanceof net.minecraft.server.level.ServerPlayer player && !org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerLiddedOpenEvent(player, level, pos)) {
++		    cancelledPlayers.add(player);
++		    return;
++	    }
++	    // Paper end - Call PlayerLiddedOpenEvent
++	    if (this.openCount == 0 && apiLidMode == io.papermc.paper.block.LidMode.CLOSED_UNTIL_NOT_VIEWED) {
++		    apiLidMode = io.papermc.paper.block.LidMode.DEFAULT;
++		    stopForceLiddedLidClose(level, pos, state);
++	    }
++	    // Paper end - add Improved Lidded API
++		int oldPower = Math.max(0, Math.min(15, this.openCount)); // CraftBukkit - Get power before new viewer is added
          int i = this.openCount++;
  
 +        if (apiLidMode == io.papermc.paper.block.LidMode.FORCED_CLOSED || apiLidMode == io.papermc.paper.block.LidMode.CLOSED_UNTIL_NOT_VIEWED) return; // Kiterino - Paper PR - Add improved Lidded API
@@ -108,7 +109,7 @@ index 03c6c7b28c1903bc1ccbcebf478528db98a1a510..4cc7b105434ca6bd5ff777076b3dbda4
  
          this.openerCountChanged(level, pos, state, i, this.openCount);
 +        if (entity != null) // Kiterino - Paper PR - Make player nullable for improved Lidded API
-         this.maxInteractionRange = Math.max(maxInteractionRange, this.maxInteractionRange);
+         this.maxInteractionRange = Math.max(interactionRange, this.maxInteractionRange);
 +        // Kiterino start - Paper PR - Add Improved Lidded API
 +        if (entity != null && apiLidMode == io.papermc.paper.block.LidMode.OPEN_UNTIL_VIEWED) {
 +            // reset to default
@@ -163,7 +164,7 @@ index 03c6c7b28c1903bc1ccbcebf478528db98a1a510..4cc7b105434ca6bd5ff777076b3dbda4
              boolean flag = size != 0;
              boolean flag1 = i != 0;
 diff --git a/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java b/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-index e2a2811464ff7455e513944b7565f9f226a5ed34..dc48d0b8c4d61212b95075e0aa1996454205d8d4 100644
+index d0880daad9d43e0b3a8d6010fcc114344df9e58a..d7c8b20a3cbe002c6e8e1996ae01185a4e90e75d 100644
 --- a/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 @@ -53,7 +53,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl

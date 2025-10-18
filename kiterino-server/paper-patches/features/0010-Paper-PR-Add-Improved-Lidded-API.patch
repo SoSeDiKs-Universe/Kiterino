@@ -498,10 +498,10 @@ index 0f08bc5f79ace2dcefac66fbc56d49f7098db44c..de79b1616eeb7c3fc23316a2f296a7a1
 +    // Paper end - add Improved Lidded API
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index adb1757918502ee29113be7a9970569d7e9e33ea..f0cab380428b6245fc3ec6f0b6c8672df0c6d935 100644
+index e69fbf1a761707436e9ef1e033b906b64ada1e09..2cf1236255514ae12611107ad25003faebc87735 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2152,4 +2152,16 @@ public class CraftEventFactory {
+@@ -2151,4 +2151,16 @@ public class CraftEventFactory {
          return event;
      }
      // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser

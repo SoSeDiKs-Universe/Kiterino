@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index a0b8c3729f24d3e3385918f0da11eef9c64a2d00..dc33726bc72faf62e14e4063625ca8acb6d361ca 100644
+index f2a51c956cbd8efd5544d6dc447821278d41bf78..420937275a136e8e4a618d5363ed9b9df4ecac4a 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4626,6 +4626,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4632,6 +4632,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return ItemStack.EMPTY;
      }
  
@@ -33,7 +33,7 @@ index a0b8c3729f24d3e3385918f0da11eef9c64a2d00..dc33726bc72faf62e14e4063625ca8ac
          return switch (slot) {
              case MAINHAND -> 47;
 diff --git a/net/minecraft/world/entity/monster/Monster.java b/net/minecraft/world/entity/monster/Monster.java
-index e1c0a694048e2cb4686b6cfe8ab2fd2fcb06a735..5189f4b57b6648576acdc3358064b9e8d54e7015 100644
+index 9f44f7095135bad776fdde06e5935e930d61332d..3149e332ebbe3df1d48b21e1a148bce06c0d295f 100644
 --- a/net/minecraft/world/entity/monster/Monster.java
 +++ b/net/minecraft/world/entity/monster/Monster.java
 @@ -143,7 +143,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
@@ -46,7 +46,7 @@ index e1c0a694048e2cb4686b6cfe8ab2fd2fcb06a735..5189f4b57b6648576acdc3358064b9e8
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 8249cb6f512b4675aac23c0410316ef0798f5c22..5e280d6fe6936c279c55d7752d2ba2db6d6110b8 100644
+index d91e73835b3f97ff377da604beb440fb5614311f..bff42882bdcbcb967a9d5bea7ad586973c502b6c 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
 @@ -1992,19 +1992,19 @@ public abstract class Player extends Avatar implements ContainerUser {

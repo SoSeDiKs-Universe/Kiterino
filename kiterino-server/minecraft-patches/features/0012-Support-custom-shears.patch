@@ -5,7 +5,7 @@ Subject: [PATCH] Support custom shears
 
 
 diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 47dd7850f07960c341e4520c757b5e9a3f4ac735..e0857110b3047e1360bf9a988d969352ce2c1f11 100644
+index 682c3545c62d88261216d0885c05304d2b9ffe11..df21a2cf9c7b58880644ca356cab0b00c703490d 100644
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -1792,7 +1792,7 @@ public class ServerGamePacketListenerImpl
@@ -18,10 +18,10 @@ index 47dd7850f07960c341e4520c757b5e9a3f4ac735..e0857110b3047e1360bf9a988d969352
          ResourceLocation itemModelReference = stack.get(net.minecraft.core.component.DataComponents.ITEM_MODEL);
          if (itemModelReference != null && itemModelReference.equals(this.player.level().purpurConfig.dontRunWithScissorsItemModelReference)) return true;
 diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
-index 8656a1a16ae4ee517b7d0be0b0aca9a42bed223e..63db4850591a82ffa9c11cd9532510387391419c 100644
+index e9e3cafa546b4a8974d531d3587f8eafd03c9871..9694a313819873260f5b25ee8cbacdc465572147 100644
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -3082,11 +3082,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
+@@ -3081,11 +3081,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
          }
  
          ItemStack itemInHand = player.getItemInHand(hand);
@@ -36,7 +36,7 @@ index 8656a1a16ae4ee517b7d0be0b0aca9a42bed223e..63db4850591a82ffa9c11cd953251038
              && !player.isSecondaryUseActive()
              && this.attemptToShearEquipment(player, hand, itemInHand, mob)) {
 diff --git a/net/minecraft/world/entity/animal/MushroomCow.java b/net/minecraft/world/entity/animal/MushroomCow.java
-index d08c79943993014d2a266b66ce79e30f6d7a321f..52423bf26baf53327ce57ee50e60e6646375c1c1 100644
+index 3b18ea446cc7e19295a9fa37b74c3a02be421e55..ab0e0ba9c99b5d069613de0d8923891f7d4a3c2e 100644
 --- a/net/minecraft/world/entity/animal/MushroomCow.java
 +++ b/net/minecraft/world/entity/animal/MushroomCow.java
 @@ -161,7 +161,7 @@ public class MushroomCow extends AbstractCow implements Shearable {
@@ -49,7 +49,7 @@ index d08c79943993014d2a266b66ce79e30f6d7a321f..52423bf26baf53327ce57ee50e60e664
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/entity/animal/SnowGolem.java b/net/minecraft/world/entity/animal/SnowGolem.java
-index efba95b3d833f2393ae846af1b27d10ef75550af..4637119485b797c674fc8d2d3aba96bf872fe575 100644
+index 03071650204193f1130e8e17f280ae6ad2cfad38..ce5478470c73149870b66b91ee6bd1b743d696ca 100644
 --- a/net/minecraft/world/entity/animal/SnowGolem.java
 +++ b/net/minecraft/world/entity/animal/SnowGolem.java
 @@ -182,7 +182,7 @@ public class SnowGolem extends AbstractGolem implements Shearable, RangedAttackM
@@ -62,7 +62,7 @@ index efba95b3d833f2393ae846af1b27d10ef75550af..4637119485b797c674fc8d2d3aba96bf
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/entity/animal/coppergolem/CopperGolem.java b/net/minecraft/world/entity/animal/coppergolem/CopperGolem.java
-index f2e9febc4cb1d008575e48bc7630cb7d96fdb2e8..766cb08c32aa26002765a22e611b5bc777631ca2 100644
+index 088b2cf28f56d60167b03bcce5fbd2c47fa2de9a..2638a74286ec81d50b200dfaaf380b39153c768e 100644
 --- a/net/minecraft/world/entity/animal/coppergolem/CopperGolem.java
 +++ b/net/minecraft/world/entity/animal/coppergolem/CopperGolem.java
 @@ -279,7 +279,7 @@ public class CopperGolem extends AbstractGolem implements ContainerUser, Shearab
@@ -75,7 +75,7 @@ index f2e9febc4cb1d008575e48bc7630cb7d96fdb2e8..766cb08c32aa26002765a22e611b5bc7
                  // Paper start
                  java.util.List<ItemStack> drops = this.generateDefaultDrops(serverLevel, itemInHand);
 diff --git a/net/minecraft/world/entity/animal/sheep/Sheep.java b/net/minecraft/world/entity/animal/sheep/Sheep.java
-index 5924a195de35d5fed84ef7175f7c69610eeafd38..60be00e1ae5f07448196bdadfbb714f1f9a3796d 100644
+index 21d66dd46650afae2091e236dfec760c096c34f8..8178d5c3e8ad934c61caf55a41985ae5fb494a38 100644
 --- a/net/minecraft/world/entity/animal/sheep/Sheep.java
 +++ b/net/minecraft/world/entity/animal/sheep/Sheep.java
 @@ -184,7 +184,7 @@ public class Sheep extends Animal implements Shearable {
@@ -88,7 +88,7 @@ index 5924a195de35d5fed84ef7175f7c69610eeafd38..60be00e1ae5f07448196bdadfbb714f1
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java b/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java
-index 5718fc0fe2f1cd5cc410b63d3dfe4b2dfac8d9a8..157acacdeca866c8de717579e9e84f52ca43b2e2 100644
+index 94f965ef441ec8a36bc0f088b39a1a4d52a029ab..20e332c6d4de562e3e0442301d08c39e04769fe0 100644
 --- a/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java
 +++ b/net/minecraft/world/entity/decoration/LeashFenceKnotEntity.java
 @@ -72,7 +72,7 @@ public class LeashFenceKnotEntity extends BlockAttachedEntity {
@@ -101,7 +101,7 @@ index 5718fc0fe2f1cd5cc410b63d3dfe4b2dfac8d9a8..157acacdeca866c8de717579e9e84f52
                  if (interactionResult instanceof InteractionResult.Success success && success.wasItemInteraction()) {
                      return interactionResult;
 diff --git a/net/minecraft/world/entity/monster/Bogged.java b/net/minecraft/world/entity/monster/Bogged.java
-index 579a5fd6e4545cc51eafbeac2369e114d404c2f1..edc9c7936e3c2b85e78239486e20ab5e1042e2ce 100644
+index 2ec4e1cc570ebdbaa8a0f3fc681026a4b89f53ed..aaa7163bde8a934887222444137b87bf59faba37 100644
 --- a/net/minecraft/world/entity/monster/Bogged.java
 +++ b/net/minecraft/world/entity/monster/Bogged.java
 @@ -97,7 +97,7 @@ public class Bogged extends AbstractSkeleton implements Shearable {
@@ -114,7 +114,7 @@ index 579a5fd6e4545cc51eafbeac2369e114d404c2f1..edc9c7936e3c2b85e78239486e20ab5e
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/level/block/BeehiveBlock.java b/net/minecraft/world/level/block/BeehiveBlock.java
-index 2150c2452ac09592990c968ddf18aed485265316..ea4a8480fda0e1835234955fa0d39f01b7f4fec2 100644
+index 978ebd1c72ad897115e2953fd7b716febff9c168..16efb0c23b18dc71d685ee3d3b6bb1c7d1833038 100644
 --- a/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/net/minecraft/world/level/block/BeehiveBlock.java
 @@ -140,7 +140,7 @@ public class BeehiveBlock extends BaseEntityBlock {
@@ -140,7 +140,7 @@ index 2e2963ad6441522554fa58cf6116abde3cf5dea7..7aafad6ea5003b51149eeb36af071dff
          } else if (level instanceof ServerLevel serverLevel) {
              Direction direction = hitResult.getDirection();
 diff --git a/net/minecraft/world/level/block/TripWireBlock.java b/net/minecraft/world/level/block/TripWireBlock.java
-index 43b46d04634a96d373cf9adac15a6f61e42e821f..25f3d0ba03c8efc68468e3d1ef5e27ad47f82755 100644
+index 9fcb791740e9df2ef7828cd38344a7c0105c792b..e6e3ddd425fdb7a4d9d246d28af7116253041084 100644
 --- a/net/minecraft/world/level/block/TripWireBlock.java
 +++ b/net/minecraft/world/level/block/TripWireBlock.java
 @@ -119,7 +119,7 @@ public class TripWireBlock extends Block {

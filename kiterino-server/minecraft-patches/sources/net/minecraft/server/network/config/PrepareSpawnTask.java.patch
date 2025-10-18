@@ -20,7 +20,7 @@
                          org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
                              serverPlayer.getBukkitEntity(),
                              org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3, this.spawnLevel, this.spawnAngle.x, this.spawnAngle.y)
-+                            , /*initialLocation*/ null // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++                            , org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3, org.bukkit.Bukkit.getWorld(net.kyori.adventure.key.Key.key(this.initialDimensionId)), this.spawnAngle.x, this.spawnAngle.y) // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
 +                            , initialDimensionId // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
                          );
                          ev.callEvent();
@@ -29,7 +29,7 @@
                                  PrepareSpawnTask.this.listener.paperConnection,
                                  org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3final, this.spawnLevel, this.spawnAngle.x, this.spawnAngle.y),
                                  PrepareSpawnTask.this.newPlayer
-+                                , /*initialLocation*/ null // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++                                , org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3final, org.bukkit.Bukkit.getWorld(net.kyori.adventure.key.Key.key(this.initialDimensionId)), this.spawnAngle.x, this.spawnAngle.y) // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
 +                                , initialDimensionId // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
                              );
                              ev.callEvent();

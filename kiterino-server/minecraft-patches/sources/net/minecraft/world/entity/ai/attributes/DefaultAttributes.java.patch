@@ -16,15 +16,15 @@
 -        .build();
 +        .build()); // Kiterino - Injecting custom entities
 +
-+    // Kiterino start - Injecting custom entities
-+    static {
-+        me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.attributes();
-+    }
++	// Kiterino start - Injecting custom entities
++	static {
++		me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.attributes();
++	}
 +
-+    public static void register(EntityType<? extends LivingEntity> entityType, AttributeSupplier supplier) {
-+        SUPPLIERS.put(entityType, supplier);
-+    }
-+    // Kiterino end - Injecting custom entities
++	public static void register(EntityType<? extends LivingEntity> entityType, AttributeSupplier supplier) {
++		SUPPLIERS.put(entityType, supplier);
++	}
++	// Kiterino end - Injecting custom entities
  
-     public static AttributeSupplier getSupplier(EntityType<? extends LivingEntity> livingEntity) {
-         return SUPPLIERS.get(livingEntity);
+     public static AttributeSupplier getSupplier(EntityType<? extends LivingEntity> entityType) {
+         return SUPPLIERS.get(entityType);

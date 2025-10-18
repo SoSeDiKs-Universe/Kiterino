@@ -7,7 +7,7 @@ import sun.misc.Unsafe;
 import java.lang.reflect.Field;
 
 @NullMarked
-final class KiterinoUnsafeUtil {
+public final class KiterinoUnsafeUtil {
 
     private KiterinoUnsafeUtil() {
         throw new IllegalStateException("Utility class");
@@ -25,7 +25,7 @@ final class KiterinoUnsafeUtil {
         }
     }
 
-    static Field getField(Class<?> clazz, String fieldName) {
+    public static Field getField(Class<?> clazz, String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -35,7 +35,7 @@ final class KiterinoUnsafeUtil {
         }
     }
 
-    static void setField(Field field, @Nullable Object value) {
+    public static void setField(Field field, @Nullable Object value) {
         Object fieldBase = unsafe.staticFieldBase(field);
         long fieldOffset = unsafe.staticFieldOffset(field);
 

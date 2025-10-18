@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3550,4 +_,106 @@
+@@ -3550,4 +_,117 @@
              entity.remove();
          }
      }
@@ -46,19 +46,29 @@
 +    // Kiterino start - Block place API
 +    @Override
 +    public boolean canPlaceBlock(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
++        return getPlacedState0(hand, block, location, blockFace) != null;
++    }
++
++    @Override
++    public BlockData getPlacedState(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
++	    net.minecraft.world.level.block.state.BlockState placedState = getPlacedState0(hand, block, location, blockFace);
++		return placedState == null ? null : placedState.createCraftBlockData();
++    }
++
++    private net.minecraft.world.level.block.state.BlockState getPlacedState0(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
 +        if (block == null) {
-+            return false;
++            return null;
 +        }
 +        if (!block.getType().isBlock()) {
-+            return false;
++            return null;
 +        }
 +        if (!(location.getWorld() instanceof CraftWorld craftWorld)) {
-+            return false;
++            return null;
 +        }
 +
 +        var nmsItem = CraftItemStack.asNMSCopy(block);
 +        if (!(nmsItem.getItem() instanceof net.minecraft.world.item.BlockItem blockItem)) {
-+            return false;
++            return null;
 +        }
 +
 +        BlockPos blockPos = CraftLocation.toBlockPosition(location);
@@ -66,9 +76,10 @@
 +        var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
 +
 +        if (!craftWorld.getHandle().getBlockState(blockPos).canBeReplaced(context)) {
-+            return false;
++            return null;
 +        }
-+        return blockItem.getPlacementState(context) != null;
++
++	    return blockItem.getPlacementState(context);
 +    }
 +
 +    @Override

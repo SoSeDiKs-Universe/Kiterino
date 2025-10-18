@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4122,4 +_,112 @@
+@@ -4122,4 +_,123 @@
          sendDeathScreen(message);
      }
      // Purpur end
@@ -63,6 +63,17 @@
 +	 * @return true, if placed successfully
 +	 */
 +	boolean canPlaceBlock(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace);
++
++	/**
++	 * Gets the potential placed block state if the block can be placed
++	 *
++	 * @param hand hand to use for placing
++	 * @param block block item to use for placing
++	 * @param location location to place
++	 * @param blockFace facing against which block will be placed
++	 * @return placed block data
++	 */
++	@Nullable BlockData getPlacedState(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace);
 +
 +    /**
 +     * Place block as if this player placed it

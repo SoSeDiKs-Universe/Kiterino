@@ -49,7 +49,7 @@
              if (!this.wasTouchingWater && !this.firstTick) {
                  this.doWaterSplashEffect();
              }
-@@ -3389,6 +_,21 @@
+@@ -3388,6 +_,21 @@
              // Purpur end - Ridables
          }
      }

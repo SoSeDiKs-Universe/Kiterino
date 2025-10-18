@@ -2,12 +2,12 @@
 +++ b/net/minecraft/world/entity/animal/horse/AbstractHorse.java
 @@ -127,8 +_,8 @@
  
-     protected AbstractHorse(EntityType<? extends AbstractHorse> entityType, Level level) {
-         super(entityType, level);
+     protected AbstractHorse(EntityType<? extends AbstractHorse> type, Level level) {
+         super(type, level);
 -        this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this); // Purpur - use vanilla controller
 -        this.lookControl = new net.minecraft.world.entity.ai.control.LookControl(this); // Purpur - use vanilla controller
-+        // this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this); // Purpur - use vanilla controller // Kiterino - Allow riders to control horses without a saddle
-+        // this.lookControl = new net.minecraft.world.entity.ai.control.LookControl(this); // Purpur - use vanilla controller // Kiterino - Allow riders to control horses without a saddle
++	    // this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this); // Purpur - use vanilla controller // Kiterino - Allow riders to control horses without a saddle
++	    // this.lookControl = new net.minecraft.world.entity.ai.control.LookControl(this); // Purpur - use vanilla controller // Kiterino - Allow riders to control horses without a saddle
          this.createInventory();
      }
  

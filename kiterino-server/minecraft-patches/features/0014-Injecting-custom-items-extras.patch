@@ -5,7 +5,7 @@ Subject: [PATCH] Injecting custom items extras
 
 
 diff --git a/net/minecraft/core/MappedRegistry.java b/net/minecraft/core/MappedRegistry.java
-index 4715a60760c2c9079313db9016000bfb5c65e070..ae085bb711ada3e5f26c02acde522c53ceae12d8 100644
+index 1610198bd96e0d79debdeddc360500e98cd28504..29e1fda36bd68587f17e2a17be69a406f0a63d00 100644
 --- a/net/minecraft/core/MappedRegistry.java
 +++ b/net/minecraft/core/MappedRegistry.java
 @@ -339,6 +339,13 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
@@ -23,7 +23,7 @@ index 4715a60760c2c9079313db9016000bfb5c65e070..ae085bb711ada3e5f26c02acde522c53
      public Holder.Reference<T> createIntrusiveHolder(T value) {
          if (this.unregisteredIntrusiveHolders == null) {
 diff --git a/net/minecraft/core/Registry.java b/net/minecraft/core/Registry.java
-index 58d72c8843a0a5fbf1bfb50819a09e3e65bfacfa..4551adfa41b98bc30126efc02ad76601d7e87ea2 100644
+index a032a2ce71707e1d1e46a1acf0a63a3bdb1c3db8..3307642782aaa49a4a05a07d61d299ecc860e862 100644
 --- a/net/minecraft/core/Registry.java
 +++ b/net/minecraft/core/Registry.java
 @@ -131,6 +131,10 @@ public interface Registry<T> extends Keyable, HolderLookup.RegistryLookup<T>, Id
@@ -38,7 +38,7 @@ index 58d72c8843a0a5fbf1bfb50819a09e3e65bfacfa..4551adfa41b98bc30126efc02ad76601
  
      Optional<Holder.Reference<T>> get(int index);
 diff --git a/net/minecraft/world/item/AxeItem.java b/net/minecraft/world/item/AxeItem.java
-index 20c4cc7bbe33ecc53ddf484e7f10e2ce16c35381..b368abfdbb77a6b4f531e3544583923ccaf920e0 100644
+index b0b96dd52747e6e3e63f0ad475db55357e6d4916..3b8ff764862b4bb33fcfd32519d8cbccbd4c5b29 100644
 --- a/net/minecraft/world/item/AxeItem.java
 +++ b/net/minecraft/world/item/AxeItem.java
 @@ -56,6 +56,12 @@ public class AxeItem extends Item {
@@ -72,7 +72,7 @@ index 9b5cf74989f41f95476d583079c778eebd707dff..42081d243a85fbf60fb8add720d523a2
      public InteractionResult useOn(UseOnContext context) {
          Level level = context.getLevel();
 diff --git a/net/minecraft/world/item/ShearsItem.java b/net/minecraft/world/item/ShearsItem.java
-index c7c6253ac76afaff40514ec4b6da95b15b87f841..0c1f733e4fb1d288613a5ddec5f57ea1ea117268 100644
+index 5e25ddf78f72ada318ef28d29199de9b93fe667e..df5d528cea828841cfac3ed61f91bac85f157d26 100644
 --- a/net/minecraft/world/item/ShearsItem.java
 +++ b/net/minecraft/world/item/ShearsItem.java
 @@ -30,7 +30,7 @@ public class ShearsItem extends Item {
@@ -102,7 +102,7 @@ index 013f155677ab4a7588bd7ad1d612ce582bbd7927..169dc74642613b34f42352d3688fbdc0
      public InteractionResult useOn(UseOnContext context) {
          Level level = context.getLevel();
 diff --git a/net/minecraft/world/item/ToolMaterial.java b/net/minecraft/world/item/ToolMaterial.java
-index 424682a78e97557f1bcab8e14714fcd753c8ee47..af2f87a31dde4d1b0fd8ca661e3a7e8ea854c21f 100644
+index 5a37b3a4aca3f0e0976fa6ef2b4be0c921db1dad..118392f46c6227295ee45872fe216fbe58235483 100644
 --- a/net/minecraft/world/item/ToolMaterial.java
 +++ b/net/minecraft/world/item/ToolMaterial.java
 @@ -31,13 +31,18 @@ public record ToolMaterial(
@@ -118,7 +118,7 @@ index 424682a78e97557f1bcab8e14714fcd753c8ee47..af2f87a31dde4d1b0fd8ca661e3a7e8e
      }
  
      public Item.Properties applyToolProperties(
-         Item.Properties properties, TagKey<Block> mineableBlocks, float attackDamage, float attackSpeed, float disableBlockingForSeconfs
+         Item.Properties properties, TagKey<Block> mineableBlocks, float attackDamage, float attackSpeed, float disableBlockingForSeconds
      ) {
 -        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
 +        HolderGetter<Block> holderGetter = BuiltInRegistries.BLOCK.isFrozen() ? BuiltInRegistries.BLOCK : BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK); // Kiterino - Injecting custom items extras

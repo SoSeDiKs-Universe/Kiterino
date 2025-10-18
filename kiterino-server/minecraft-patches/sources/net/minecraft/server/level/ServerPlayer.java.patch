@@ -23,10 +23,10 @@
              if (optional.isPresent()) {
 @@ -1687,7 +_,7 @@
              this.setRespawnPosition(
-                 new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(this.level().dimension(), at, this.getYRot(), this.getXRot()), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED // Paper - Add PlayerSetSpawnEvent
+                 new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(this.level().dimension(), bedPos, this.getYRot(), this.getXRot()), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED // Paper - Add PlayerSetSpawnEvent
              );
 -            if (this.level().isBrightOutside()) {
-+            if (!this.level().kiterinoConfig.dayDreaming && this.level().isBrightOutside()) { // Kiterino - Sleeping options
++	        if (!this.level().kiterinoConfig.dayDreaming && this.level().isBrightOutside()) { // Kiterino - Sleeping options
                  return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
              } else {
                  if (!this.isCreative()) {
