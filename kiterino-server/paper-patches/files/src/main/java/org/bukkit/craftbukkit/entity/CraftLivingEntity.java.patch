@@ -1,22 +1,32 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1111,4 +_,30 @@
+@@ -1111,4 +_,40 @@
          this.getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end - API for any mob to burn daylight
 +
-+    // Kiterino start - Expose checkBedExists
++    // Kiterino start - Expose sleeping loc
 +    @Override
 +    public boolean bedExists() {
 +        return this.getHandle().checkBedExists();
 +    }
-+    // Kiterino end - Expose checkBedExists
++
++	@Override
++	public Location getSleepingLocation() {
++		return this.getHandle().getSleepingPos().map(pos -> new Location(this.getWorld(), pos.getX(), pos.getY(), pos.getZ())).orElse(null);
++	}
++
++	@Override
++	public void setSleepingLocation(Location loc) {
++		this.getHandle().setSleepingPos(loc == null ? null : org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(loc));
++	}
++    // Kiterino end - Expose sleeping loc
 +
 +    // Kiterino start - Allow laying at will
 +    @Override
 +    public void lay(Location sleepLocation, Location bedLocation) {
 +        this.getHandle().setPose(net.minecraft.world.entity.Pose.SLEEPING);
-+        this.getHandle().setSleepingPos(new net.minecraft.core.BlockPos(bedLocation.getBlockX(), bedLocation.getBlockY(), bedLocation.getBlockZ()));
++        this.getHandle().setSleepingPos(org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(bedLocation));
 +        this.getHandle().setPos(sleepLocation.getX(), sleepLocation.getY(), sleepLocation.getZ());
 +        this.getHandle().setDeltaMovement(Vec3.ZERO);
 +        this.getHandle().hasImpulse = true;

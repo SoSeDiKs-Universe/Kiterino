@@ -1,18 +1,35 @@
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
-@@ -1510,4 +_,26 @@
+@@ -1510,4 +_,43 @@
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);
      // Purpur end - API for any mob to burn daylight
 +
-+    // Kiterino start - Expose checkBedExists
++    // Kiterino start - Expose sleeping loc
 +    /**
 +     * Checks whether this entity's bed exists as a physical bed
 +     *
 +     * @return whether this entity's bed exists
 +     */
 +    boolean bedExists();
-+    // Kiterino end - Expose checkBedExists
++
++	/**
++	 * Gets the sleeping location
++	 *
++	 * @return sleeping location
++	 * @see #isSleeping()
++	 */
++	@Nullable Location getSleepingLocation();
++
++	/**
++	 * Sets the entity's sleeping pos
++	 *
++	 * @param loc sleeping location
++	 * @see #getSleepingLocation()
++	 * @see #isSleeping()
++	 */
++	void setSleepingLocation(@Nullable Location loc);
++    // Kiterino end - Expose sleeping loc
 +
 +    // Kiterino start - Allow laying at will
 +    /**
