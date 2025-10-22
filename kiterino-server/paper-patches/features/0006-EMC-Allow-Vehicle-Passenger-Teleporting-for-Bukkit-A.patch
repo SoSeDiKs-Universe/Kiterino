@@ -6,10 +6,10 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index ea27792309711d1f1e3ac577fc68ece0816aabb2..6b3a647f1f3091185b6c5cef90360facf90cb584 100644
+index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8002e14fc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -298,6 +298,86 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -298,6 +298,89 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          this.entity.setYHeadRot(yaw);
      }
  
@@ -20,7 +20,7 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..6b3a647f1f3091185b6c5cef90360fac
 +    void detachEntities() {
 +        if (teleportingEntity == null) {
 +            teleportingEntity = this;
-+            this.storedRoot = entity.getRootVehicle().getBukkitEntity();
++            this.storedRoot = this.entity.getRootVehicle().getBukkitEntity();
 +            this.storedRoot.detachEntities();
 +            teleportingEntity = null;
 +            return;
@@ -89,6 +89,9 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..6b3a647f1f3091185b6c5cef90360fac
 +            passenger.getHandle().vehicle = this.getHandle();
 +            passenger.reattachPassengers();
 +        }
++        if (passenger instanceof CraftPlayer player) {
++            player.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundSetPassengersPacket(this.getHandle()));
++        }
 +        this.storedPassengers = null;
 +    }
 +    // Kiterino end - EMC - Vehicle passenger teleporting
@@ -136,7 +139,7 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..6b3a647f1f3091185b6c5cef90360fac
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index db39cddda8015f1e16d4fe02f09570b5e8a05fb8..5b0f7352f6767a62328808a82163771f923717d9 100644
+index 5e72f6130d770817f1b96019f96aec10f095426a..668bd5fcc73c4e76bc09829c3e0a8a9fbf59e4e6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1425,13 +1425,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player, PluginMessa
