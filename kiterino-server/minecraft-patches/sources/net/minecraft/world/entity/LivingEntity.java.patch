@@ -1,6 +1,15 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -975,6 +_,11 @@
+@@ -971,10 +_,20 @@
+                         }
+                         // CraftBukkit end
+                         iterator.remove();
++	                    // Kiterino start - Expand custom mob effects API
++	                    if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
++							wrapper.getWrapper().onEffectExpired(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
++	                    }
++	                    // Kiterino end - Expand custom mob effects API
+                         this.onEffectsRemoved(List.of(mobEffectInstance));
                      } else if (mobEffectInstance.getDuration() % 600 == 0) {
                          this.onEffectUpdated(mobEffectInstance, false, null);
                      }
@@ -12,6 +21,18 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
+@@ -1339,6 +_,11 @@
+                         serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), mobEffectInstance.getEffect()));
+                     }
+                 }
++	            // Kiterino start - Expand custom mob effects API
++	            if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
++		            wrapper.getWrapper().onEffectRemoved(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
++	            }
++	            // Kiterino end - Expand custom mob effects API
+             }
+ 
+             this.refreshDirtyAttributes();
 @@ -2672,6 +_,7 @@
                  ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();

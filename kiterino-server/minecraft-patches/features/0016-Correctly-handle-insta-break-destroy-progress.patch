@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 22 Oct 2025 14:53:13 +0300
+Subject: [PATCH] Correctly handle insta break destroy progress
+
+
+diff --git a/net/minecraft/world/level/block/state/BlockBehaviour.java b/net/minecraft/world/level/block/state/BlockBehaviour.java
+index 847b1896c61bc805ade64fc8b83d9e79a78fbf37..4f438c891762458595f8a2bad68514a41970cce5 100644
+--- a/net/minecraft/world/level/block/state/BlockBehaviour.java
++++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
+@@ -352,6 +352,11 @@ public abstract class BlockBehaviour implements FeatureElement {
+ 
+     protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+         float destroySpeed = state.getDestroySpeed(level, pos);
++	    // Kiterino start - Correctly handle insta break destroy progress
++		if (destroySpeed == 0F) {
++			return 1F;
++		}
++		// Kiterino end - Correctly handle insta break destroy progress
+         if (destroySpeed == -1.0F) {
+             return 0.0F;
+         } else {

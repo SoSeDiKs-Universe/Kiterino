@@ -12,7 +12,7 @@
          private CompletableFuture<?> chunkLoadFuture;
          private @Nullable CompletableFuture<org.bukkit.Location> eventFuture; // Paper
          private final ChunkLoadCounter chunkLoadCounter = new ca.spottedleaf.moonrise.patches.chunk_system.MoonriseChunkLoadCounter(); // Paper - rewrite chunk system
-+        String initialDimensionId = null; // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++	    @Nullable String initialDimensionId = null; // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
  
          Preparing(final ServerLevel spawnLevel, final CompletableFuture<Vec3> spawnPosition, final Vec2 spawnAngle) {
              this.spawnLevel = spawnLevel;
@@ -20,7 +20,7 @@
                          org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
                              serverPlayer.getBukkitEntity(),
                              org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3, this.spawnLevel, this.spawnAngle.x, this.spawnAngle.y)
-+                            , org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3, org.bukkit.Bukkit.getWorld(net.kyori.adventure.key.Key.key(this.initialDimensionId)), this.spawnAngle.x, this.spawnAngle.y) // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++                            , org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3, this.initialDimensionId == null ? null : org.bukkit.Bukkit.getWorld(net.kyori.adventure.key.Key.key(this.initialDimensionId)), this.spawnAngle.x, this.spawnAngle.y) // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
 +                            , initialDimensionId // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
                          );
                          ev.callEvent();
@@ -29,7 +29,7 @@
                                  PrepareSpawnTask.this.listener.paperConnection,
                                  org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3final, this.spawnLevel, this.spawnAngle.x, this.spawnAngle.y),
                                  PrepareSpawnTask.this.newPlayer
-+                                , org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3final, org.bukkit.Bukkit.getWorld(net.kyori.adventure.key.Key.key(this.initialDimensionId)), this.spawnAngle.x, this.spawnAngle.y) // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++                                , org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3final, this.initialDimensionId == null ? null : org.bukkit.Bukkit.getWorld(net.kyori.adventure.key.Key.key(this.initialDimensionId)), this.spawnAngle.x, this.spawnAngle.y) // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
 +                                , initialDimensionId // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
                              );
                              ev.callEvent();

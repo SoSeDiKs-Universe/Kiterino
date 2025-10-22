@@ -11,12 +11,26 @@
  
      /**
       * Sets if the entity has visual fire (it will always appear to be on fire).
-@@ -1316,4 +_,103 @@
+@@ -1316,4 +_,134 @@
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end - Fire Immunity API
 +
 +    // Kiterino start - More Sound API
++	/**
++	 * Gets the sound category of this entity
++	 *
++	 * @return sound category
++	 */
++	default @NotNull org.bukkit.SoundCategory getSoundCategory() {
++		return switch (this) {
++			case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
++			case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
++			case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
++			default -> org.bukkit.SoundCategory.NEUTRAL;
++		};
++	}
++
 +    /**
 +     * Plays a sound at the location of the entity
 +     *
@@ -25,13 +39,7 @@
 +     * @param pitch pitch of the sound
 +     */
 +    default void emitSound(@NotNull org.bukkit.Sound sound, float volume, float pitch) {
-+        org.bukkit.SoundCategory soundGroup = switch (this) {
-+            case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
-+            case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
-+            case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
-+            default -> org.bukkit.SoundCategory.NEUTRAL;
-+        };
-+        emitSound(sound, soundGroup, volume, pitch);
++        emitSound(sound, getSoundCategory(), volume, pitch);
 +    }
 +
 +    /**
@@ -44,6 +52,29 @@
 +     */
 +    default void emitSound(@NotNull org.bukkit.Sound sound, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
 +        getWorld().playSound(this, sound, category, volume, pitch);
++    }
++
++    /**
++     * Plays a sound at the location of the entity
++     *
++     * @param soundKey sound to play
++     * @param volume volume of the sound
++     * @param pitch pitch of the sound
++     */
++    default void emitSound(@NotNull net.kyori.adventure.key.Keyed soundKey, float volume, float pitch) {
++        emitSound(soundKey, getSoundCategory(), volume, pitch);
++    }
++
++    /**
++     * Plays a sound at the location of the entity
++     *
++     * @param soundKey sound to play
++     * @param category category of the sound
++     * @param volume volume of the sound
++     * @param pitch pitch of the sound
++     */
++    default void emitSound(@NotNull net.kyori.adventure.key.Keyed soundKey, @NotNull org.bukkit.SoundCategory category, float volume, float pitch) {
++        getWorld().playSound(net.kyori.adventure.sound.Sound.sound(soundKey.key(), category.soundSource(), volume, pitch), this);
 +    }
 +
 +    /**

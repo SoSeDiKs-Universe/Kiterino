@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import io.papermc.paper.datacomponent.item.BundleContents;
+import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import io.papermc.paper.datacomponent.item.Repairable;
 import io.papermc.paper.datacomponent.item.UseCooldown;
@@ -301,6 +302,22 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                     item.resetData(DataComponentTypes.REPAIRABLE);
                     modified = true;
                     break;
+                }
+            }
+            // Consumable custom potion effects
+            if (item.hasData(DataComponentTypes.CONSUMABLE)) {
+                Consumable consumable = item.getData(DataComponentTypes.CONSUMABLE);
+                assert consumable != null;
+
+                if (!consumable.consumeEffects().isEmpty()) {
+                    // Yea... a feature! :)
+                    item.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable()
+                        .consumeSeconds(consumable.consumeSeconds())
+                        .sound(consumable.sound())
+                        .animation(consumable.animation())
+                        .hasConsumeParticles(consumable.hasConsumeParticles())
+                        .build());
+                    modified = true;
                 }
             }
         }

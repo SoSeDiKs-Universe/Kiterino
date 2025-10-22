@@ -93,6 +93,22 @@ public interface KiterinoMobEffectBehaviourWrapper {
 	default void onEffectAdded(LivingEntity entity, int amplifier) {}
 
 	/**
+	 * Called when the effect is expired
+	 *
+	 * @param entity entity
+	 * @param amplifier effect amplifier
+	 */
+	default void onEffectExpired(LivingEntity entity, int amplifier) {}
+
+	/**
+	 * Called when the effect is removed
+	 *
+	 * @param entity entity
+	 * @param amplifier effect amplifier
+	 */
+	default void onEffectRemoved(LivingEntity entity, int amplifier) {}
+
+	/**
 	 * Called when the entity having this effect dies
 	 *
 	 * @param entity entity
