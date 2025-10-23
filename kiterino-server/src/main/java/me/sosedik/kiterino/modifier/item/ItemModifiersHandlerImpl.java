@@ -842,6 +842,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     // Kiterino start - Parse hover events
     private static Packet<?> handle(CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
+		if (KiterinoConfig.parseItemHoversEverywhere) {
+			return initialPacket;
+		}
+
         if (initialPacket.overlay()) { // Action bar
             return initialPacket;
         }
@@ -855,6 +859,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     private static Packet<?> handle(CraftPlayer player, ClientboundDisguisedChatPacket initialPacket) {
+	    if (KiterinoConfig.parseItemHoversEverywhere) {
+		    return initialPacket;
+	    }
+
         boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
         Component component = initialPacket.message();

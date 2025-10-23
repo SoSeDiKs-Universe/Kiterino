@@ -9,7 +9,7 @@ diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/
 index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8002e14fc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -298,6 +298,89 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -298,6 +298,91 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          this.entity.setYHeadRot(yaw);
      }
  
@@ -89,8 +89,10 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8
 +            passenger.getHandle().vehicle = this.getHandle();
 +            passenger.reattachPassengers();
 +        }
-+        if (passenger instanceof CraftPlayer player) {
-+            player.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundSetPassengersPacket(this.getHandle()));
++        for (CraftEntity passenger : this.storedPassengers) {
++            if (passenger instanceof CraftPlayer player) {
++                player.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundSetPassengersPacket(this.getHandle()));
++            }
 +        }
 +        this.storedPassengers = null;
 +    }
