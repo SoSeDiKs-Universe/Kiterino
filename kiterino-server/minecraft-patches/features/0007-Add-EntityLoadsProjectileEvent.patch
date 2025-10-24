@@ -33,10 +33,10 @@ index 7aab636a31c16a0421075c47f7db6b2bdca84924..35ce9cb71dda0eb997659d21f98b6896
          return switch (slot) {
              case MAINHAND -> 47;
 diff --git a/net/minecraft/world/entity/monster/Monster.java b/net/minecraft/world/entity/monster/Monster.java
-index 9f44f7095135bad776fdde06e5935e930d61332d..3149e332ebbe3df1d48b21e1a148bce06c0d295f 100644
+index 7c420f567f7841f45acd91b9749cab150397f5e2..192cddd0c08a272411ce5c8c39f5a7fe5c9e665b 100644
 --- a/net/minecraft/world/entity/monster/Monster.java
 +++ b/net/minecraft/world/entity/monster/Monster.java
-@@ -143,7 +143,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
+@@ -145,7 +145,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
          if (shootable.getItem() instanceof ProjectileWeaponItem) {
              Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles();
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);

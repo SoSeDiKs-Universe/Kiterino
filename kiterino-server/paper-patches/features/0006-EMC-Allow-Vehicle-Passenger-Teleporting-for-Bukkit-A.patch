@@ -6,7 +6,7 @@ Subject: [PATCH] EMC - Allow Vehicle/Passenger Teleporting for Bukkit API
 If Bukkit teleport is called, teleport the whole set of entities together and maintain the chain.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8002e14fc 100644
+index ea27792309711d1f1e3ac577fc68ece0816aabb2..3fc01f34168d76d7c57ec3ced191412ca563453a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -298,6 +298,91 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -101,7 +101,7 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8
      @Override
      public boolean teleport(Location location) {
          return this.teleport(location, TeleportCause.PLUGIN);
-@@ -319,13 +399,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -319,13 +404,13 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          boolean dismount = !flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_VEHICLE);
          boolean retainPassengers = flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS);
          // Don't allow teleporting between worlds while keeping passengers
@@ -117,7 +117,7 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8
              return false;
          }
          // Paper end
-@@ -347,12 +427,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -347,12 +432,14 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
  
          // If this entity is riding another entity, we must dismount before teleporting.
          if (dismount) this.entity.stopRiding(); // Paper - Teleport passenger API
@@ -132,7 +132,7 @@ index ea27792309711d1f1e3ac577fc68ece0816aabb2..ae4b59579d4f643e745cc95f9dbf49d8
              return true;
          }
  
-@@ -362,6 +444,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -362,6 +449,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          // Ensure passengers of entity are teleported
          if (retainPassengers && this.entity.isVehicle()) this.entity.teleportPassengers();
  
