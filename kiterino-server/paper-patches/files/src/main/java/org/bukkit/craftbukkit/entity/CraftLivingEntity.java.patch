@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -1111,4 +_,40 @@
+@@ -1100,4 +_,40 @@
          this.getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end - API for any mob to burn daylight
@@ -34,7 +34,7 @@
 +            // Sync player from bed to actual sleep loc
 +            this.taskScheduler.schedule(entity -> {
 +                if (player.connection != null) {
-+                    player.connection.teleport(sleepLocation);
++                    player.connection.internalTeleport(sleepLocation);
 +                }
 +            }, entity -> {}, 4L);
 +        }

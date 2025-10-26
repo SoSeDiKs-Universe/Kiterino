@@ -122,7 +122,7 @@ index 105f9166297de2bfa6bdcfa9f6a0ffb00c0242ac..1315751d594a612c7fbcc6b6fe257133
                  }
  
 diff --git a/net/minecraft/world/level/block/BeehiveBlock.java b/net/minecraft/world/level/block/BeehiveBlock.java
-index 0768619454a88f555dd81a609a61f49dc2578f06..2150c2452ac09592990c968ddf18aed485265316 100644
+index d28f2d9809affe6eb2649a9c896966f249a24d41..978ebd1c72ad897115e2953fd7b716febff9c168 100644
 --- a/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/net/minecraft/world/level/block/BeehiveBlock.java
 @@ -159,12 +159,25 @@ public class BeehiveBlock extends BaseEntityBlock {

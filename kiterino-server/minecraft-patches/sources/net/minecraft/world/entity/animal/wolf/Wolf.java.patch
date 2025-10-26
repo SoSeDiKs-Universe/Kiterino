@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/animal/wolf/Wolf.java
++++ b/net/minecraft/world/entity/animal/wolf/Wolf.java
+@@ -861,7 +_,7 @@
+         public final Holder<WolfVariant> type;
+ 
+         public WolfPackData(Holder<WolfVariant> type) {
+-            super(false);
++            super(me.sosedik.kiterino.KiterinoConfig.spawnWildBabyWolves, me.sosedik.kiterino.KiterinoConfig.wildBabyWolvesSpawnChance); // Kiterino - Allow spawning wild baby wolves
+             this.type = type;
+         }
+     }

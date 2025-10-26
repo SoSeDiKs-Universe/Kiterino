@@ -19,7 +19,7 @@ index 7d846ac6163873abee29e860a066ffc130a4ea98..dae742612f539d5335deea4d3ddda262
  
                      level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index bfea72c52e18821f9f2b9164ce3610d6adb671bc..685b83678fb3aaa1d783e3de90730ed2052147dd 100644
+index c4279f25223eacbb708134b4562c0cd042161a30..419ae5c9edd1744992a419ea11c3cf1176388184 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
 @@ -174,7 +174,7 @@ public class CrossbowItem extends ProjectileWeaponItem {

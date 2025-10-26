@@ -111,6 +111,16 @@ public final class KiterinoConfig {
 		return config.getInt(path, def);
 	}
 
+	public static float getFloat(YamlConfiguration config, String path, float def, String... comments) {
+		return (float) getDouble(config, path, def, comments);
+	}
+
+	public static double getDouble(YamlConfiguration config, String path, double def, String... comments) {
+		config.addDefault(path, def);
+		if (comments.length > 0) config.setComments(path, List.of(comments));
+		return config.getDouble(path, def);
+	}
+
 	public static <T> List<T> getList(YamlConfiguration config, String path, @Nullable List<T> def, String... comments) {
 		config.addDefault(path, def);
 		if (comments.length > 0) config.setComments(path, List.of(comments));
@@ -184,5 +194,14 @@ public final class KiterinoConfig {
 		vehicleIgnoreRider = getBoolean(config, "stats.vehicle-ignore-rider", false, "Ignore Purpur's riders for vehicle statistics"); // Kiterino - Don't count Purpur's riding towards distance statistics
 	}
 	// Kiterino end - Stats options
+
+	// Kiterino start - Global wolf options
+	public static boolean spawnWildBabyWolves;
+	public static float wildBabyWolvesSpawnChance;
+	private static void wolfOptions() {
+		spawnWildBabyWolves = getBoolean(config, "entity.wolf.spawn-wild-baby-wolves", false, "Whether wild baby wolves can spawn"); // Kiterino - Allow spawning wild baby wolves
+		wildBabyWolvesSpawnChance = getFloat(config, "entity.wolf.wild-baby-wolves-spawn-chance", 0.1F, "Chance of a baby wolf if their spawning is allowed"); // Kiterino - Allow spawning wild baby wolves
+	}
+	// Kiterino end - Global wolf options
 
 }

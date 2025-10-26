@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -292,8 +_,9 @@
+@@ -337,8 +_,9 @@
       * being on fire).
       *
       * @param ticks Current ticks remaining
@@ -11,7 +11,7 @@
  
      /**
       * Sets if the entity has visual fire (it will always appear to be on fire).
-@@ -1316,4 +_,134 @@
+@@ -1361,4 +_,134 @@
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end - Fire Immunity API

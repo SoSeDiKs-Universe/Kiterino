@@ -1,6 +1,15 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -3550,4 +_,117 @@
+@@ -1381,7 +_,7 @@
+         }
+         // Minecraft does not currently support teleporting players between worlds with passengers.
+         // It causes them to be dismounted, and causes weird behavior.
+-        if (location.getWorld() != this.getWorld() && !this.getHandle().passengers.isEmpty()) {
++        if (false && location.getWorld() != this.getWorld() && !this.getHandle().passengers.isEmpty()) { // Kiterino - Do not block between-world teleports
+             if (!new org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent(entity.getBukkitEntity(), org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent()) // Purpur - Add EntityTeleportHinderedEvent
+             return false;
+         }
+@@ -3434,4 +_,117 @@
              entity.remove();
          }
      }

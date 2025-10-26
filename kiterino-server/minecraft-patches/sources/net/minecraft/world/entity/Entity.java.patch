@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -288,6 +_,7 @@
+@@ -287,6 +_,7 @@
      public final RandomSource random; // Paper - Share random for entities to make them more random // Add toggle for RNG manipulation
      public int tickCount;
      private int remainingFireTicks;
@@ -8,7 +8,7 @@
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
      protected boolean wasEyeInWater;
-@@ -917,6 +_,12 @@
+@@ -916,6 +_,12 @@
              this.clearFire();
          }
  
@@ -21,7 +21,7 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
-@@ -2013,6 +_,18 @@
+@@ -2012,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }
  
@@ -40,7 +40,7 @@
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -2057,7 +_,7 @@
+@@ -2056,7 +_,7 @@
      public void updateInWaterStateAndDoWaterCurrentPushing() {
          if (this.getVehicle() instanceof AbstractBoat abstractBoat && !abstractBoat.isUnderWater()) {
              this.wasTouchingWater = false;
@@ -49,7 +49,7 @@
              if (!this.wasTouchingWater && !this.firstTick) {
                  this.doWaterSplashEffect();
              }
-@@ -3388,6 +_,21 @@
+@@ -3380,6 +_,21 @@
              // Purpur end - Ridables
          }
      }

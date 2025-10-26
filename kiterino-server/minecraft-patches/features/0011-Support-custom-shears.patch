@@ -5,7 +5,7 @@ Subject: [PATCH] Support custom shears
 
 
 diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 682c3545c62d88261216d0885c05304d2b9ffe11..df21a2cf9c7b58880644ca356cab0b00c703490d 100644
+index e381cbc7d3af6731acdb0e371f1c439750603e69..096d945b7743f367acfeee5c913e49eb31fd24dd 100644
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -1792,7 +1792,7 @@ public class ServerGamePacketListenerImpl
@@ -18,10 +18,10 @@ index 682c3545c62d88261216d0885c05304d2b9ffe11..df21a2cf9c7b58880644ca356cab0b00
          ResourceLocation itemModelReference = stack.get(net.minecraft.core.component.DataComponents.ITEM_MODEL);
          if (itemModelReference != null && itemModelReference.equals(this.player.level().purpurConfig.dontRunWithScissorsItemModelReference)) return true;
 diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
-index e9e3cafa546b4a8974d531d3587f8eafd03c9871..9694a313819873260f5b25ee8cbacdc465572147 100644
+index abba7c7c5ab4dc498e2d85bc02df39e95e50477b..b37ba8f7835678a685ba7376af3cde59193dd829 100644
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -3081,11 +3081,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
+@@ -3073,11 +3073,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
          }
  
          ItemStack itemInHand = player.getItemInHand(hand);

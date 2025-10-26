@@ -6,7 +6,7 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
-index 30a19d10869f73d67b794e8e4c035bc5c10209e6..3943ae879f7bed617091f49d7c6accee3abee20f 100644
+index b40b79beb3115b80150d1aa4455ebb7a2a055574..f9868bcb6a8499812ffe9dea5ceb42fc9833b103 100644
 --- a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 +++ b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 @@ -64,13 +64,23 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
