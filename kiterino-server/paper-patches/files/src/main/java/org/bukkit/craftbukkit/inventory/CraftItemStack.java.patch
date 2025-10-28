@@ -1,0 +1,11 @@
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+@@ -929,7 +_,7 @@
+                 return isBroke(damageable.getDamage());
+             }
+         }
+-        int damage = damageable.getDamage() + amount;
++        int damage = Math.max(0, damageable.getDamage() + amount); // Kiterino - Prevent negative damage IAE when over-repairing
+         damageable.setDamage(damage);
+         setItemMeta((ItemMeta) damageable);
+         return isBroke(damage);

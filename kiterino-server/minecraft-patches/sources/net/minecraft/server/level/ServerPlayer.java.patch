@@ -1,5 +1,14 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
+@@ -826,7 +_,7 @@
+                 this.foodData.tick(this);
+                 this.awardStat(Stats.PLAY_TIME);
+                 this.awardStat(Stats.TOTAL_WORLD_TIME);
+-                if (this.isAlive()) {
++                if (this.isAlive() && (!me.sosedik.kiterino.KiterinoConfig.surviveIgnoreInvulnerability || !isInvulnerable())) { // Kiterino - Ignore invulnerable player for time since death
+                     this.awardStat(Stats.TIME_SINCE_DEATH);
+                 }
+ 
 @@ -1355,18 +_,30 @@
      }
  

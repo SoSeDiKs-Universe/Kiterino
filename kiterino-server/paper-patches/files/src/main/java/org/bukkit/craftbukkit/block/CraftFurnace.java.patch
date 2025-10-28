@@ -13,7 +13,7 @@
 +                getBlockEntity().getRecipesToAwardAndPopExperience(level, net.minecraft.world.phys.Vec3.atCenterOf(getPosition()));
 +            }
 +        } else {
-+            getBlockEntity().awardUsedRecipesAndPopExperience(((org.bukkit.craftbukkit.entity.CraftPlayer) player).getHandle(), null, 0);
++            getBlockEntity().awardUsedRecipesAndPopExperience(((org.bukkit.craftbukkit.entity.CraftPlayer) player).getHandle(), null, getBlockEntity().recipesUsed.size());
 +        }
 +    }
 +    // Kiterino end - Drop stored experience API for furnaces
