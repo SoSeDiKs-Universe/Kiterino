@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/Animal.java
 +++ b/net/minecraft/world/entity/animal/Animal.java
-@@ -75,7 +_,11 @@
+@@ -76,7 +_,11 @@
                  double d = this.random.nextGaussian() * 0.02;
                  double d1 = this.random.nextGaussian() * 0.02;
                  double d2 = this.random.nextGaussian() * 0.02;

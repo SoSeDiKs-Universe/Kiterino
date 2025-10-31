@@ -10,7 +10,7 @@
      private static final float RAIN_FILL_CHANCE = 0.05F;
      private static final float POWDER_SNOW_FILL_CHANCE = 0.1F;
 @@ -84,4 +_,30 @@
-             level.levelEvent(1046, pos, 0);
+             level.levelEvent(LevelEvent.SOUND_DRIP_LAVA_INTO_CAULDRON, pos, 0);
          }
      }
 +

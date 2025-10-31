@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/wolf/Wolf.java
 +++ b/net/minecraft/world/entity/animal/wolf/Wolf.java
-@@ -861,7 +_,7 @@
+@@ -862,7 +_,7 @@
          public final Holder<WolfVariant> type;
  
          public WolfPackData(Holder<WolfVariant> type) {

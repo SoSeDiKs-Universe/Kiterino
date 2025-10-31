@@ -4,14 +4,14 @@
      @Override
      protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
          if (state.getValue(LEVEL) == 7) {
--            level.setBlock(pos, state.cycle(LEVEL), 3);
+-            level.setBlock(pos, state.cycle(LEVEL), Block.UPDATE_ALL);
 +            // Kiterino start - Call BlockFormEvent for composter
 +            BlockState newState = state.cycle(LEVEL);
 +            var event = new org.bukkit.event.block.BlockFormEvent(org.bukkit.craftbukkit.block.CraftBlock.at(level, pos), org.bukkit.craftbukkit.block.CraftBlockStates.getBlockState(level, pos, newState, null));
 +            if (!event.callEvent()) {
 +                return;
 +            }
-+            level.setBlock(pos, newState, 3);
++            level.setBlock(pos, newState, Block.UPDATE_ALL);
 +            // Kiterino end - Call BlockFormEvent for composter
              level.playSound(null, pos, SoundEvents.COMPOSTER_READY, SoundSource.BLOCKS, 1.0F, 1.0F);
          }

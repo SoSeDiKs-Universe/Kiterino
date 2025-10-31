@@ -38,10 +38,10 @@ index a032a2ce71707e1d1e46a1acf0a63a3bdb1c3db8..3307642782aaa49a4a05a07d61d299ec
  
      Optional<Holder.Reference<T>> get(int index);
 diff --git a/net/minecraft/world/item/AxeItem.java b/net/minecraft/world/item/AxeItem.java
-index b0b96dd52747e6e3e63f0ad475db55357e6d4916..3b8ff764862b4bb33fcfd32519d8cbccbd4c5b29 100644
+index 57ad7c438353aa4d0589894a7cab0554d9758c56..c86073425899452b2f0c1ab2da6ee96a98a7517a 100644
 --- a/net/minecraft/world/item/AxeItem.java
 +++ b/net/minecraft/world/item/AxeItem.java
-@@ -56,6 +56,12 @@ public class AxeItem extends Item {
+@@ -57,6 +57,12 @@ public class AxeItem extends Item {
          super(properties.axe(material, attackDamage, attackSpeed));
      }
  
@@ -55,7 +55,7 @@ index b0b96dd52747e6e3e63f0ad475db55357e6d4916..3b8ff764862b4bb33fcfd32519d8cbcc
      public InteractionResult useOn(UseOnContext context) {
          Level level = context.getLevel();
 diff --git a/net/minecraft/world/item/HoeItem.java b/net/minecraft/world/item/HoeItem.java
-index 9b5cf74989f41f95476d583079c778eebd707dff..42081d243a85fbf60fb8add720d523a235f60503 100644
+index db539e794dc2df0ca859a429ece5a6c75344d5bf..a7ff6cb0f1fca34f6efee38d204e46c64572688b 100644
 --- a/net/minecraft/world/item/HoeItem.java
 +++ b/net/minecraft/world/item/HoeItem.java
 @@ -40,6 +40,12 @@ public class HoeItem extends Item {
@@ -85,10 +85,10 @@ index 5e25ddf78f72ada318ef28d29199de9b93fe667e..df5d528cea828841cfac3ed61f91bac8
              List.of(
                  Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
 diff --git a/net/minecraft/world/item/ShovelItem.java b/net/minecraft/world/item/ShovelItem.java
-index 013f155677ab4a7588bd7ad1d612ce582bbd7927..169dc74642613b34f42352d3688fbdc0e53cfb8a 100644
+index 7910c96cc47985acc8b64ba376933c84c51022d4..0075865e62395078c64e54868597f356af6bce1f 100644
 --- a/net/minecraft/world/item/ShovelItem.java
 +++ b/net/minecraft/world/item/ShovelItem.java
-@@ -33,6 +33,12 @@ public class ShovelItem extends Item {
+@@ -34,6 +34,12 @@ public class ShovelItem extends Item {
          super(properties.shovel(material, attackDamage, attackSpeed));
      }
  

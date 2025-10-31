@@ -5,10 +5,10 @@ Subject: [PATCH] Default pickup loot in summon
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index b97c0d6944cc96433466275f1a38c452f1379c03..4ce7ccf0a822bda40aa2dd1e50987feec6900738 100644
+index 4780b829a54ce18288df57267c5cf5d64fb81b3c..1687197bf89b58009a5b8efd9bea96ef1a00f5ad 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4554,6 +4554,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4557,6 +4557,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return false;
      }
  
@@ -22,7 +22,7 @@ index b97c0d6944cc96433466275f1a38c452f1379c03..4ce7ccf0a822bda40aa2dd1e50987fee
      public final EntityDimensions getDimensions(Pose pose) {
          return pose == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getDefaultDimensions(pose).scale(this.getScale());
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index 57b2b25a5fe47741325b28fef25a55d8d113b7f0..86351463835c2bcdc4a66cdd468eaf0122d1b9b3 100644
+index 6fdc56f7a949d2b1bd0f561adbfe1e501a4cb60e..23468734bebf184389c1662d88fff952d649f719 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
 @@ -472,7 +472,7 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
@@ -35,10 +35,10 @@ index 57b2b25a5fe47741325b28fef25a55d8d113b7f0..86351463835c2bcdc4a66cdd468eaf01
              this.setCanPickUpLoot(canPickUpLoot);
          }
 diff --git a/net/minecraft/world/entity/animal/Dolphin.java b/net/minecraft/world/entity/animal/Dolphin.java
-index c790233d6f254a77a42ec5628441345a506c37b0..6410c52b868d4570f51334e13cf498a87f0c04d4 100644
+index 9bf53221bf6652fa8e0a2ef47ac1524065ffe784..e321c0f15b0d9bab8c6b137e07e5f3f97c22b31d 100644
 --- a/net/minecraft/world/entity/animal/Dolphin.java
 +++ b/net/minecraft/world/entity/animal/Dolphin.java
-@@ -115,6 +115,13 @@ public class Dolphin extends AgeableWaterCreature {
+@@ -116,6 +116,13 @@ public class Dolphin extends AgeableWaterCreature {
          this.setCanPickUpLoot(true);
      }
  
@@ -53,10 +53,10 @@ index c790233d6f254a77a42ec5628441345a506c37b0..6410c52b868d4570f51334e13cf498a8
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/animal/Fox.java b/net/minecraft/world/entity/animal/Fox.java
-index b571ae4fd284806478df5c311a19b2c87cbe903a..41737ad05b80c54fff8b16a279f901715f56e675 100644
+index c4fae5fb7dd0da2a5d850b1513c9dfab1d05d727..43f4e1a49e0ab0672f0870a7bd123dbb296d6e95 100644
 --- a/net/minecraft/world/entity/animal/Fox.java
 +++ b/net/minecraft/world/entity/animal/Fox.java
-@@ -142,6 +142,13 @@ public class Fox extends Animal {
+@@ -144,6 +144,13 @@ public class Fox extends Animal {
          this.getNavigation().setRequiredPathLength(32.0F);
      }
  
@@ -71,7 +71,7 @@ index b571ae4fd284806478df5c311a19b2c87cbe903a..41737ad05b80c54fff8b16a279f90171
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/animal/Panda.java b/net/minecraft/world/entity/animal/Panda.java
-index c97ec93732d10197ee978477dc07c097d45bbe15..792a1061d2ea450baf7520be4bac1738f0c761bf 100644
+index 9fae0d54fce37ef1b3511339ba05673e80ef6d01..e0c991f6b799f186be8c1882144a5f96a2c01db9 100644
 --- a/net/minecraft/world/entity/animal/Panda.java
 +++ b/net/minecraft/world/entity/animal/Panda.java
 @@ -107,6 +107,13 @@ public class Panda extends Animal {
@@ -89,10 +89,10 @@ index c97ec93732d10197ee978477dc07c097d45bbe15..792a1061d2ea450baf7520be4bac1738
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/animal/allay/Allay.java b/net/minecraft/world/entity/animal/allay/Allay.java
-index d842d0158f1c685a9350c61158a6eaa36ea9e897..8d0e4590d329171b67fc8186a2a7c1589f060055 100644
+index bbe59d6ab90f1b1274289ef20811f914afa55fd3..9333d3911363ab9d5a134f84a9013e11732ccb4c 100644
 --- a/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -333,6 +333,13 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+@@ -334,6 +334,13 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
          return !this.isOnPickupCooldown() && this.hasItemInHand();
      }
  
@@ -143,10 +143,10 @@ index 8bc07bbf713ebd3afc8c0e62c92b5e11fb424307..22e44ecd18bdbf7014b0728c750b676b
      public float getWalkTargetValue(BlockPos pos, LevelReader level) {
          return 0.0F;
 diff --git a/net/minecraft/world/entity/monster/Zombie.java b/net/minecraft/world/entity/monster/Zombie.java
-index 7e13f2958f3935077fe25570567d2576f435028c..a6773d16f76796ee8f065b0badf125bdc2246619 100644
+index 2dd08e5ef413c37a682046071b83f595c8499cf2..e931ec977cbf9370e638c8b20d038a8637c41ebc 100644
 --- a/net/minecraft/world/entity/monster/Zombie.java
 +++ b/net/minecraft/world/entity/monster/Zombie.java
-@@ -103,6 +103,13 @@ public class Zombie extends Monster {
+@@ -104,6 +104,13 @@ public class Zombie extends Monster {
          this(EntityType.ZOMBIE, level);
      }
  
@@ -188,10 +188,10 @@ index 9b76d5156309981127adb2ccd98fb666480618bb..db0171607f5497903187dd0e9275369e
          this.timeInOverworld = input.getIntOr("TimeInOverworld", 0);
      }
 diff --git a/net/minecraft/world/entity/npc/Villager.java b/net/minecraft/world/entity/npc/Villager.java
-index 0ab9ac120703285baa563391653323c17d05b20b..34727b69a811f16798002a77ef000f202a9707ae 100644
+index bfff91e5e252141f887d8965ecf1dd9ff1cebfe3..61ac4cc1af553add9c1f45bb38f182ff49839249 100644
 --- a/net/minecraft/world/entity/npc/Villager.java
 +++ b/net/minecraft/world/entity/npc/Villager.java
-@@ -198,6 +198,13 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
+@@ -199,6 +199,13 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          this.setVillagerData(this.getVillagerData().withType(villagerType).withProfession(level.registryAccess(), VillagerProfession.NONE));
      }
  

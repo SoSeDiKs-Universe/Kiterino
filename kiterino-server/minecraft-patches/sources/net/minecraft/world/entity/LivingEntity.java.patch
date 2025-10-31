@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -971,10 +_,20 @@
+@@ -972,10 +_,20 @@
                          }
                          // CraftBukkit end
                          iterator.remove();
@@ -21,7 +21,7 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -1339,6 +_,11 @@
+@@ -1340,6 +_,11 @@
                          serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), mobEffectInstance.getEffect()));
                      }
                  }
@@ -33,15 +33,15 @@
              }
  
              this.refreshDirtyAttributes();
-@@ -2672,6 +_,7 @@
-                 ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
+@@ -2675,6 +_,7 @@
+                 );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (updateSelf) {
-+                    if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
++	                if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
                      chunkSource.sendToTrackingPlayersAndSelf(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.sendToTrackingPlayers(this, clientboundAnimatePacket);
-@@ -3374,7 +_,7 @@
+@@ -3377,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -50,7 +50,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3739,9 +_,17 @@
+@@ -3742,9 +_,17 @@
                      flag = false;
                  }
  
