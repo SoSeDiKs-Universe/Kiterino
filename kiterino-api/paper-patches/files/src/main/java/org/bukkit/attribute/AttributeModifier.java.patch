@@ -1,0 +1,20 @@
+--- a/src/main/java/org/bukkit/attribute/AttributeModifier.java
++++ b/src/main/java/org/bukkit/attribute/AttributeModifier.java
+@@ -218,14 +_,17 @@
+ 
+         /**
+          * Adds (or subtracts) the specified amount to the base value.
++         * <p>Corresponds to Minecraft's {@code add_value}.
+          */
+         ADD_NUMBER,
+         /**
+          * Adds this scalar of amount to the base value.
++         * <p>Corresponds to Minecraft's {@code add_multiplied_base}.
+          */
+         ADD_SCALAR,
+         /**
+          * Multiply amount by this value, after adding 1 to it.
++         * <p>Corresponds to Minecraft's {@code add_multiplied_total}.
+          */
+         MULTIPLY_SCALAR_1;
+     }

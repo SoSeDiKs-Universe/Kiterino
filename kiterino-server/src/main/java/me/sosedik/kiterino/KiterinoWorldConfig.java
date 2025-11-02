@@ -55,19 +55,21 @@ public final class KiterinoWorldConfig {
         return this.config.getInt("world-settings." + this.worldName + "." + path, this.config.getInt("world-settings.default." + path));
     }
 
-    // Kiterino start - Reset fire ticks when having fire resistance
-    public boolean fireResistanceResetsFireTicks = false;
-    private void fireResistanceResetsFireTicks() {
+	// Kiterino start - Gameplay mechanics
+    public boolean fireResistanceResetsFireTicks = false; // Kiterino - Reset fire ticks when having fire resistance
+    public boolean doorOpenAIAffectsGates = false; // Kiterino - Allow AI opening fence gates
+    private void gameplayMechanics() {
         fireResistanceResetsFireTicks = getBoolean("gameplay-mechanics.fire-resistance-resets-fire-ticks", fireResistanceResetsFireTicks, "Having fire resistance potion effect will reset fire ticks");
+	    doorOpenAIAffectsGates = getBoolean("gameplay-mechanics.door-open-ai-affects-gates", doorOpenAIAffectsGates, "AI for opening doors allows opening gates as well");
     }
-    // Kiterino end - Reset fire ticks when having fire resistance
+	// Kiterino end - Gameplay mechanics
 
     // Kiterino start - Sleeping options
     public boolean dayDreaming = false;
     public boolean sleepWithNoBed = false;
     public boolean noAutoWakeUp = false;
     public boolean noWeatherSkip = false;
-    private void doNotWakeUpPlayersAutomatically() {
+    private void sleepingOptions() {
     	dayDreaming = getBoolean("gameplay-mechanics.sleep.daydreaming", dayDreaming, "Allow sleeping during day without weather");
 		sleepWithNoBed = getBoolean("gameplay-mechanics.sleep.sleep-with-no-bed", sleepWithNoBed, "Don't wake up players automatically, even if the bed does not exist");
 		noAutoWakeUp = getBoolean("gameplay-mechanics.sleep.no-auto-wake-up", noAutoWakeUp, "Disable automatic wake up after sleeping");

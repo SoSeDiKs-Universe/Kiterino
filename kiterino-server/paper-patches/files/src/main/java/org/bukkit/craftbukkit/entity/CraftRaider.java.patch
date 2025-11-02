@@ -1,0 +1,14 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftRaider.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftRaider.java
+@@ -102,4 +_,11 @@
+     public Sound getCelebrationSound() {
+         return CraftSound.minecraftToBukkit(this.getHandle().getCelebrateSound());
+     }
++
++	// Kiterino start = More Raider API
++	@Override
++	public boolean isPatrolling() {
++		return this.getHandle().isPatrolling();
++	}
++	// Kiterino end = More Raider API
+ }

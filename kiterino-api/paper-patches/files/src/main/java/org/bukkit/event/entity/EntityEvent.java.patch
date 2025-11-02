@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/event/entity/EntityEvent.java
++++ b/src/main/java/org/bukkit/event/entity/EntityEvent.java
+@@ -16,6 +_,13 @@
+         this.entity = entity;
+     }
+ 
++	// Kiterino start - Add async constructor
++	protected EntityEvent(@NotNull final Entity entity, boolean async) {
++		super(async);
++		this.entity = entity;
++	}
++	// Kiterino end - Add async constructor
++
+     /**
+      * Returns the Entity involved in this event
+      *

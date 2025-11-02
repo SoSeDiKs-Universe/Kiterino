@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/entity/AgeableMob.java
++++ b/net/minecraft/world/entity/AgeableMob.java
+@@ -103,6 +_,7 @@
+         if (age1 < 0 && age >= 0 || age1 >= 0 && age < 0) {
+             this.entityData.set(DATA_BABY_ID, age < 0);
+             this.ageBoundaryReached();
++			new me.sosedik.kiterino.event.entity.MaybeAsyncEntityChangeAgeEvent((org.bukkit.entity.Ageable) getBukkitEntity()).callEvent(); // Kiterino - Add EntityChangeAgeEvent
+         }
+     }
+ 
