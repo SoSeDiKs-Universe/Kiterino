@@ -64,146 +64,146 @@ public final class KiterinoConfig {
         for (Method method : clazz.getDeclaredMethods()) {
             if (!Modifier.isPrivate(method.getModifiers())) continue;
             if (method.getParameterTypes().length != 0) continue;
-			if (method.getReturnType() != Void.TYPE) continue;
+            if (method.getReturnType() != Void.TYPE) continue;
 
-			try {
-				method.setAccessible(true);
-				method.invoke(instance);
-			} catch (InvocationTargetException ex) {
-				throw Throwables.propagate(ex.getCause());
-			} catch (Exception ex) {
-				Bukkit.getLogger().log(Level.SEVERE, "Error invoking " + method, ex);
-			}
-		}
+            try {
+                method.setAccessible(true);
+                method.invoke(instance);
+            } catch (InvocationTargetException ex) {
+                throw Throwables.propagate(ex.getCause());
+            } catch (Exception ex) {
+                Bukkit.getLogger().log(Level.SEVERE, "Error invoking " + method, ex);
+            }
+        }
 
-		try {
-			config.save(configFile);
-		} catch (IOException ex) {
-			Bukkit.getLogger().log(Level.SEVERE, "Could not save " + configFile, ex);
-		}
-	}
+        try {
+            config.save(configFile);
+        } catch (IOException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "Could not save " + configFile, ex);
+        }
+    }
 
-	public static void log(String s) {
-		if (verbose) {
-			log(Level.INFO, s);
-		}
-	}
+    public static void log(String s) {
+        if (verbose) {
+            log(Level.INFO, s);
+        }
+    }
 
-	public static void log(Level level, String s) {
-		Bukkit.getLogger().log(level, s);
-	}
+    public static void log(Level level, String s) {
+        Bukkit.getLogger().log(level, s);
+    }
 
-	public static void set(YamlConfiguration config, String path, @Nullable Object val, String... comments) {
-		config.addDefault(path, val);
-		config.set(path, val);
-		if (comments.length > 0) config.setComments(path, List.of(comments));
-	}
+    public static void set(YamlConfiguration config, String path, @Nullable Object val, String... comments) {
+        config.addDefault(path, val);
+        config.set(path, val);
+        if (comments.length > 0) config.setComments(path, List.of(comments));
+    }
 
-	public static boolean getBoolean(YamlConfiguration config, String path, boolean def, String... comments) {
-		config.addDefault(path, def);
-		if (comments.length > 0) config.setComments(path, List.of(comments));
-		return config.getBoolean(path, def);
-	}
+    public static boolean getBoolean(YamlConfiguration config, String path, boolean def, String... comments) {
+        config.addDefault(path, def);
+        if (comments.length > 0) config.setComments(path, List.of(comments));
+        return config.getBoolean(path, def);
+    }
 
-	public static int getInt(YamlConfiguration config, String path, int def, String... comments) {
-		config.addDefault(path, def);
-		if (comments.length > 0) config.setComments(path, List.of(comments));
-		return config.getInt(path, def);
-	}
+    public static int getInt(YamlConfiguration config, String path, int def, String... comments) {
+        config.addDefault(path, def);
+        if (comments.length > 0) config.setComments(path, List.of(comments));
+        return config.getInt(path, def);
+    }
 
-	public static float getFloat(YamlConfiguration config, String path, float def, String... comments) {
-		return (float) getDouble(config, path, def, comments);
-	}
+    public static float getFloat(YamlConfiguration config, String path, float def, String... comments) {
+        return (float) getDouble(config, path, def, comments);
+    }
 
-	public static double getDouble(YamlConfiguration config, String path, double def, String... comments) {
-		config.addDefault(path, def);
-		if (comments.length > 0) config.setComments(path, List.of(comments));
-		return config.getDouble(path, def);
-	}
+    public static double getDouble(YamlConfiguration config, String path, double def, String... comments) {
+        config.addDefault(path, def);
+        if (comments.length > 0) config.setComments(path, List.of(comments));
+        return config.getDouble(path, def);
+    }
 
-	public static <T> List<T> getList(YamlConfiguration config, String path, @Nullable List<T> def, String... comments) {
-		config.addDefault(path, def);
-		if (comments.length > 0) config.setComments(path, List.of(comments));
-		return (List<T>) config.getList(path, def);
-	}
+    public static <T> List<T> getList(YamlConfiguration config, String path, @Nullable List<T> def, String... comments) {
+        config.addDefault(path, def);
+        if (comments.length > 0) config.setComments(path, List.of(comments));
+        return (List<T>) config.getList(path, def);
+    }
 
-	public static int getVersion() {
-		return version;
-	}
+    public static int getVersion() {
+        return version;
+    }
 
-	// Kiterino start - Item Modifiers API
-	public static boolean itemModifiersLogMissingIds;
-	public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
-	private static void itemModifiers() {
-		itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
-		getList(config, "item-modifiers.modification-order", List.<String>of(), "List of item modifier ids, determines modification order").forEach(id -> {
-			if (id.startsWith("empty_line|")) {
-				String[] parts = id.split("\\|");
-				itemModifiersOrder.add(new NamespacedKey("empty_line", parts[1].replace(":", "-") + "-" + parts[2].replace(":", "-")));
-				return;
-			}
-			itemModifiersOrder.add(NamespacedKey.fromString(id));
-		});
-	}
-	// Kiterino end - Item Modifiers API
+    // Kiterino start - Item Modifiers API
+    public static boolean itemModifiersLogMissingIds;
+    public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
+    private static void itemModifiers() {
+        itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
+        getList(config, "item-modifiers.modification-order", List.<String>of(), "List of item modifier ids, determines modification order").forEach(id -> {
+            if (id.startsWith("empty_line|")) {
+                String[] parts = id.split("\\|");
+                itemModifiersOrder.add(new NamespacedKey("empty_line", parts[1].replace(":", "-") + "-" + parts[2].replace(":", "-")));
+                return;
+            }
+            itemModifiersOrder.add(NamespacedKey.fromString(id));
+        });
+    }
+    // Kiterino end - Item Modifiers API
 
-	// Kiterino start - Parse hover events
-	public static boolean parseItemHoversEverywhere;
-	private static void parseItemHoversEverywhere() {
-		parseItemHoversEverywhere = getBoolean(config, "item-modifiers.apply-modifiers-on-all-hover", false, "Apply item modifiers on all show_item hover events in text components.", "By default, they are applied only to system chat messages.", "Only enable if your client is getting kicked due to injected items.");
-	}
-	// Kiterino end - Parse hover events
+    // Kiterino start - Parse hover events
+    public static boolean parseItemHoversEverywhere;
+    private static void parseItemHoversEverywhere() {
+        parseItemHoversEverywhere = getBoolean(config, "item-modifiers.apply-modifiers-on-all-hover", false, "Apply item modifiers on all show_item hover events in text components.", "By default, they are applied only to system chat messages.", "Only enable if your client is getting kicked due to injected items.");
+    }
+    // Kiterino end - Parse hover events
 
-	// Kiterino start - Prevent creative from overriding items
-	public static boolean preventCreativeItemOverride;
-	private static void preventCreativeItemsOverride() {
-		preventCreativeItemOverride = getBoolean(config, "items.prevent-creative-override", true, "Prevent creative from overriding items");
-	}
-	// Kiterino end - Prevent creative from overriding items
+    // Kiterino start - Prevent creative from overriding items
+    public static boolean preventCreativeItemOverride;
+    private static void preventCreativeItemsOverride() {
+        preventCreativeItemOverride = getBoolean(config, "items.prevent-creative-override", true, "Prevent creative from overriding items");
+    }
+    // Kiterino end - Prevent creative from overriding items
 
-	// Kiterino start - Allow server-side translatables on items
-	public static boolean denyServerTranslatablesOnItems;
-	private static void allowServerTranslatablesOnItems() {
-		denyServerTranslatablesOnItems = !getBoolean(config, "items.allow-server-translatables", true, "Apply server-side translatables to items before sending to the client");
-	}
-	// Kiterino end - Allow server-side translatables on items
+    // Kiterino start - Allow server-side translatables on items
+    public static boolean denyServerTranslatablesOnItems;
+    private static void allowServerTranslatablesOnItems() {
+        denyServerTranslatablesOnItems = !getBoolean(config, "items.allow-server-translatables", true, "Apply server-side translatables to items before sending to the client");
+    }
+    // Kiterino end - Allow server-side translatables on items
 
-	// Kiterino start - Less limited recipe matcher
-	public static boolean allowDamagedItemsInRecipeBook;
-	public static boolean allowEnchantedItemsInRecipeBook;
-	public static boolean allowRenamedItemsInRecipeBook;
-	private static void lessLimitedCraftingBook() {
-		allowDamagedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-damaged-items", false, "Allow using damaged items when searching for items");
-		allowEnchantedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-enchanted-items", false, "Allow using items with enchantments when searching for items");
-		allowRenamedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-renamed-items", false, "Allow using items with custom names (i.e., renamed in anvil) when searching for items");
-	}
-	// Kiterino end - Less limited recipe matcher
+    // Kiterino start - Less limited recipe matcher
+    public static boolean allowDamagedItemsInRecipeBook;
+    public static boolean allowEnchantedItemsInRecipeBook;
+    public static boolean allowRenamedItemsInRecipeBook;
+    private static void lessLimitedCraftingBook() {
+        allowDamagedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-damaged-items", false, "Allow using damaged items when searching for items");
+        allowEnchantedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-enchanted-items", false, "Allow using items with enchantments when searching for items");
+        allowRenamedItemsInRecipeBook = getBoolean(config, "recipe-matcher.allow-renamed-items", false, "Allow using items with custom names (i.e., renamed in anvil) when searching for items");
+    }
+    // Kiterino end - Less limited recipe matcher
 
-	// Kiterino start - No collision for leaves
-	public static boolean noCollisionForLeaves = true; // TODO init before bootstrap
-	private static void noCollisionForLeaves() {
-		noCollisionForLeaves = getBoolean(config, "blocks.leaves.disable-collision", false, "Disable server-side collision for leaves");
-	}
-	// Kiterino end - No collision for leaves
+    // Kiterino start - No collision for leaves
+    public static boolean noCollisionForLeaves = true; // TODO init before bootstrap
+    private static void noCollisionForLeaves() {
+        noCollisionForLeaves = getBoolean(config, "blocks.leaves.disable-collision", false, "Disable server-side collision for leaves");
+    }
+    // Kiterino end - No collision for leaves
 
-	// Kiterino start - Stats options
-	public static boolean aviateRequireItem;
-	public static boolean vehicleIgnoreRider;
-	public static boolean surviveIgnoreInvulnerability;
-	private static void statsOptions() {
-		aviateRequireItem = getBoolean(config, "stats.aviate-require-item", false, "Require a gliding item for aviate statistic"); // Kiterino - Require wearing an item for elytra distance statistics
-		vehicleIgnoreRider = getBoolean(config, "stats.vehicle-ignore-rider", false, "Ignore Purpur's riders for vehicle statistics"); // Kiterino - Don't count Purpur's riding towards distance statistics
-		surviveIgnoreInvulnerability = getBoolean(config, "stats.survive-ignore-vulnerability", false, "Ignore invulnerable players for time since death statistics"); // Kiterino - Ignore invulnerable player for time since death
-	}
-	// Kiterino end - Stats options
+    // Kiterino start - Stats options
+    public static boolean aviateRequireItem;
+    public static boolean vehicleIgnoreRider;
+    public static boolean surviveIgnoreInvulnerability;
+    private static void statsOptions() {
+        aviateRequireItem = getBoolean(config, "stats.aviate-require-item", false, "Require a gliding item for aviate statistic"); // Kiterino - Require wearing an item for elytra distance statistics
+        vehicleIgnoreRider = getBoolean(config, "stats.vehicle-ignore-rider", false, "Ignore Purpur's riders for vehicle statistics"); // Kiterino - Don't count Purpur's riding towards distance statistics
+        surviveIgnoreInvulnerability = getBoolean(config, "stats.survive-ignore-vulnerability", false, "Ignore invulnerable players for time since death statistics"); // Kiterino - Ignore invulnerable player for time since death
+    }
+    // Kiterino end - Stats options
 
-	// Kiterino start - Global wolf options
-	public static boolean spawnWildBabyWolves;
-	public static float wildBabyWolvesSpawnChance;
-	private static void wolfOptions() {
-		spawnWildBabyWolves = getBoolean(config, "entity.wolf.spawn-wild-baby-wolves", false, "Whether wild baby wolves can spawn"); // Kiterino - Allow spawning wild baby wolves
-		wildBabyWolvesSpawnChance = getFloat(config, "entity.wolf.wild-baby-wolves-spawn-chance", 0.1F, "Chance of a baby wolf if their spawning is allowed"); // Kiterino - Allow spawning wild baby wolves
-	}
-	// Kiterino end - Global wolf options
+    // Kiterino start - Global wolf options
+    public static boolean spawnWildBabyWolves;
+    public static float wildBabyWolvesSpawnChance;
+    private static void wolfOptions() {
+        spawnWildBabyWolves = getBoolean(config, "entity.wolf.spawn-wild-baby-wolves", false, "Whether wild baby wolves can spawn"); // Kiterino - Allow spawning wild baby wolves
+        wildBabyWolvesSpawnChance = getFloat(config, "entity.wolf.wild-baby-wolves-spawn-chance", 0.1F, "Chance of a baby wolf if their spawning is allowed"); // Kiterino - Allow spawning wild baby wolves
+    }
+    // Kiterino end - Global wolf options
 
 }

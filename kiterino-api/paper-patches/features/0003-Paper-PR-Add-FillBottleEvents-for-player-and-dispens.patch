@@ -18,7 +18,7 @@ Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/src/main/java/io/papermc/paper/event/block/BlockFillBottleEvent.java b/src/main/java/io/papermc/paper/event/block/BlockFillBottleEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..77e34fb5115aa039f10176f815ba3a0f2094e909
+index 0000000000000000000000000000000000000000..6767709e5ec823c565f48677a195bdde88ab6817
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/event/block/BlockFillBottleEvent.java
 @@ -0,0 +1,80 @@
@@ -37,74 +37,74 @@ index 0000000000000000000000000000000000000000..77e34fb5115aa039f10176f815ba3a0f
 +@NullMarked
 +public class BlockFillBottleEvent extends BlockEvent implements Cancellable {
 +
-+	private static final HandlerList HANDLER_LIST = new HandlerList();
++    private static final HandlerList HANDLER_LIST = new HandlerList();
 +
-+	private final ItemStack bottle;
-+	private ItemStack resultItem;
-+	private boolean cancelled;
++    private final ItemStack bottle;
++    private ItemStack resultItem;
++    private boolean cancelled;
 +
 +
-+	public BlockFillBottleEvent(Block block, ItemStack bottle, ItemStack resultItem) {
-+		super(block);
-+		this.bottle = bottle;
-+		this.resultItem = resultItem;
-+	}
++    public BlockFillBottleEvent(Block block, ItemStack bottle, ItemStack resultItem) {
++        super(block);
++        this.bottle = bottle;
++        this.resultItem = resultItem;
++    }
 +
-+	/**
-+	 * Gets the bottle item that's being filled.
-+	 *
-+	 * @return the bottle item
-+	 */
-+	public ItemStack getBottle() {
-+		return this.bottle;
-+	}
++    /**
++     * Gets the bottle item that's being filled.
++     *
++     * @return the bottle item
++     */
++    public ItemStack getBottle() {
++        return this.bottle;
++    }
 +
-+	/**
-+	 * Gets the result of the glass bottle that's being filled.
-+	 *
-+	 * @return the result of the filling
-+	 */
-+	public ItemStack getResultItem() {
-+		return this.resultItem;
-+	}
++    /**
++     * Gets the result of the glass bottle that's being filled.
++     *
++     * @return the result of the filling
++     */
++    public ItemStack getResultItem() {
++        return this.resultItem;
++    }
 +
-+	/**
-+	 * Sets the result of the glass bottle being filled.
-+	 *
-+	 * @param resultItem the result of the filling
-+	 */
-+	public void setResultItem(ItemStack resultItem) {
-+		this.resultItem = resultItem;
-+	}
++    /**
++     * Sets the result of the glass bottle being filled.
++     *
++     * @param resultItem the result of the filling
++     */
++    public void setResultItem(ItemStack resultItem) {
++        this.resultItem = resultItem;
++    }
 +
-+	@Override
-+	public boolean isCancelled() {
-+		return this.cancelled;
-+	}
++    @Override
++    public boolean isCancelled() {
++        return this.cancelled;
++    }
 +
-+	/**
-+	 * {@inheritDoc}
-+	 * <p>
-+	 * Cancelling this event will prevent {@link #getBottle()} from being
-+	 * replaced/consumed.
-+	 */
-+	@Override
-+	public void setCancelled(boolean cancel) {
-+		this.cancelled = cancel;
-+	}
++    /**
++     * {@inheritDoc}
++     * <p>
++     * Cancelling this event will prevent {@link #getBottle()} from being
++     * replaced/consumed.
++     */
++    @Override
++    public void setCancelled(boolean cancel) {
++        this.cancelled = cancel;
++    }
 +
-+	@Override
-+	public HandlerList getHandlers() {
-+		return HANDLER_LIST;
-+	}
++    @Override
++    public HandlerList getHandlers() {
++        return HANDLER_LIST;
++    }
 +
-+	public static HandlerList getHandlerList() {
-+		return HANDLER_LIST;
-+	}
++    public static HandlerList getHandlerList() {
++        return HANDLER_LIST;
++    }
 +}
 diff --git a/src/main/java/io/papermc/paper/event/player/PlayerFillBottleEvent.java b/src/main/java/io/papermc/paper/event/player/PlayerFillBottleEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c7e6e1b2e699f6c49921ef25ebd31e39fc6646b1
+index 0000000000000000000000000000000000000000..401b22c7086db836bb0be53a51b320d56f92f5bf
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/event/player/PlayerFillBottleEvent.java
 @@ -0,0 +1,88 @@
@@ -121,78 +121,78 @@ index 0000000000000000000000000000000000000000..c7e6e1b2e699f6c49921ef25ebd31e39
 +@NullMarked
 +public class PlayerFillBottleEvent extends PlayerEvent implements Cancellable {
 +
-+	private static final HandlerList HANDLER_LIST = new HandlerList();
++    private static final HandlerList HANDLER_LIST = new HandlerList();
 +
-+	private final EquipmentSlot hand;
-+	private final ItemStack bottle;
-+	private ItemStack resultItem;
-+	private boolean cancelled;
++    private final EquipmentSlot hand;
++    private final ItemStack bottle;
++    private ItemStack resultItem;
++    private boolean cancelled;
 +
-+	public PlayerFillBottleEvent(Player player, EquipmentSlot hand, ItemStack bottle, ItemStack resultItem) {
-+		super(player);
-+		this.hand = hand;
-+		this.bottle = bottle;
-+		this.resultItem = resultItem;
-+	}
++    public PlayerFillBottleEvent(Player player, EquipmentSlot hand, ItemStack bottle, ItemStack resultItem) {
++        super(player);
++        this.hand = hand;
++        this.bottle = bottle;
++        this.resultItem = resultItem;
++    }
 +
-+	/**
-+	 * The hand used to fill the bottle.
-+	 *
-+	 * @return the hand
-+	 */
-+	public EquipmentSlot getHand() {
-+		return this.hand;
-+	}
++    /**
++     * The hand used to fill the bottle.
++     *
++     * @return the hand
++     */
++    public EquipmentSlot getHand() {
++        return this.hand;
++    }
 +
-+	/**
-+	 * Gets the bottle item that's being filled.
-+	 *
-+	 * @return the bottle item
-+	 */
-+	public ItemStack getBottle() {
-+		return this.bottle;
-+	}
++    /**
++     * Gets the bottle item that's being filled.
++     *
++     * @return the bottle item
++     */
++    public ItemStack getBottle() {
++        return this.bottle;
++    }
 +
-+	/**
-+	 * Gets the result of the bottle that's being filled.
-+	 *
-+	 * @return the result of the filling
-+	 */
-+	public ItemStack getResultItem() {
-+		return this.resultItem;
-+	}
++    /**
++     * Gets the result of the bottle that's being filled.
++     *
++     * @return the result of the filling
++     */
++    public ItemStack getResultItem() {
++        return this.resultItem;
++    }
 +
-+	/**
-+	 * Sets the result of the bottle being filled.
-+	 *
-+	 * @param resultItem the result of the filling
-+	 */
-+	public void setResultItem(ItemStack resultItem) {
-+		this.resultItem = resultItem;
-+	}
++    /**
++     * Sets the result of the bottle being filled.
++     *
++     * @param resultItem the result of the filling
++     */
++    public void setResultItem(ItemStack resultItem) {
++        this.resultItem = resultItem;
++    }
 +
-+	@Override
-+	public boolean isCancelled() {
-+		return this.cancelled;
-+	}
++    @Override
++    public boolean isCancelled() {
++        return this.cancelled;
++    }
 +
-+	/**
-+	 * {@inheritDoc}
-+	 * <p>
-+	 * Cancelling this event will prevent {@link #getBottle()} from being
-+	 * replaced/consumed.
-+	 */
-+	@Override
-+	public void setCancelled(boolean cancel) {
-+		this.cancelled = cancel;
-+	}
++    /**
++     * {@inheritDoc}
++     * <p>
++     * Cancelling this event will prevent {@link #getBottle()} from being
++     * replaced/consumed.
++     */
++    @Override
++    public void setCancelled(boolean cancel) {
++        this.cancelled = cancel;
++    }
 +
-+	@Override
-+	public HandlerList getHandlers() {
-+		return HANDLER_LIST;
-+	}
++    @Override
++    public HandlerList getHandlers() {
++        return HANDLER_LIST;
++    }
 +
-+	public static HandlerList getHandlerList() {
-+		return HANDLER_LIST;
-+	}
++    public static HandlerList getHandlerList() {
++        return HANDLER_LIST;
++    }
 +}

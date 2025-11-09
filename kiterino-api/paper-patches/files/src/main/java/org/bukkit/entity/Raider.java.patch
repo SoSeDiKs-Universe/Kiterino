@@ -5,12 +5,12 @@
      @NotNull
      Sound getCelebrationSound();
 +
-+	// Kiterino start = More Raider API
-+	/**
-+	 * Checks whether the raider is patrolling
-+	 *
-+	 * @return whether the raider is patrolling
-+	 */
-+	boolean isPatrolling();
-+	// Kiterino end = More Raider API
++    // Kiterino start = More Raider API
++    /**
++     * Checks whether the raider is patrolling
++     *
++     * @return whether the raider is patrolling
++     */
++    boolean isPatrolling();
++    // Kiterino end = More Raider API
  }

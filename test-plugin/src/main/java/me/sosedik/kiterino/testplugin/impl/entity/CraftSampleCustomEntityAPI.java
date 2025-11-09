@@ -8,8 +8,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class CraftSampleCustomEntityAPI extends CraftSheep implements SampleCustomEntityAPI {
 
-	public CraftSampleCustomEntityAPI(CraftServer server, Sheep entity) {
-		super(server, entity);
-	}
+    public CraftSampleCustomEntityAPI(CraftServer server, Sheep entity) {
+        super(server, entity);
+    }
 
 }

@@ -64,7 +64,7 @@ index b2eec24be3635f2c19da9b147211fe6cb454c780..9b06fe2943b3e4498eeb5350f91ef40e
 +                        } else if (areOtherMobsComingThroughDoor(entity, blockPos, nearestLivingEntities)) {
 +                            iterator.remove();
 +                        } else {
-+	                        ((net.minecraft.world.level.block.FenceGateBlock) blockState.getBlock()).setOpen(entity, level, blockState, blockPos, false);
++                            ((net.minecraft.world.level.block.FenceGateBlock) blockState.getBlock()).setOpen(entity, level, blockState, blockPos, false);
 +                            iterator.remove();
 +                        }
 +                        continue;
@@ -142,22 +142,22 @@ index 6845b2ec65f50bc29c53632a3105ced6761e5f8f..0ad5a8068453d0d11c26cd4d6201ef9e
          return state.getValue(FACING).getAxis() == direction.getClockWise().getAxis();
      }
 +
-+	// Kiterino start - Allow AI opening fence gates
-+	// Copy-paste from DoorBlock
-+	public void setOpen(@Nullable net.minecraft.world.entity.Entity entity, Level level, BlockState state, BlockPos pos, boolean _open) {
-+		if (state.is(this) && state.getValue(OPEN) != _open) {
-+			level.setBlock(pos, state.setValue(OPEN, _open), Block.UPDATE_CLIENTS | Block.UPDATE_IMMEDIATE);
-+			this.playSound(entity, level, pos, _open);
-+			level.gameEvent(entity, _open ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
-+		}
-+	}
++    // Kiterino start - Allow AI opening fence gates
++    // Copy-paste from DoorBlock
++    public void setOpen(@Nullable net.minecraft.world.entity.Entity entity, Level level, BlockState state, BlockPos pos, boolean _open) {
++        if (state.is(this) && state.getValue(OPEN) != _open) {
++            level.setBlock(pos, state.setValue(OPEN, _open), Block.UPDATE_CLIENTS | Block.UPDATE_IMMEDIATE);
++            this.playSound(entity, level, pos, _open);
++            level.gameEvent(entity, _open ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
++        }
++    }
 +
-+	private void playSound(@Nullable Entity source, Level level, BlockPos pos, boolean isOpening) {
-+		level.playSound(
-+			source, pos, isOpening ? this.type.fenceGateOpen() : this.type.fenceGateClose(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F
-+		);
-+	}
-+	// Kiterino end - Allow AI opening fence gates
++    private void playSound(@Nullable Entity source, Level level, BlockPos pos, boolean isOpening) {
++        level.playSound(
++            source, pos, isOpening ? this.type.fenceGateOpen() : this.type.fenceGateClose(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F
++        );
++    }
++    // Kiterino end - Allow AI opening fence gates
  }
 diff --git a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 index db6baaa698fe93aba3fbd595158b568badd6cb8a..904d18194246815fd5dd5f9039e31f3b49cd9c1c 100644

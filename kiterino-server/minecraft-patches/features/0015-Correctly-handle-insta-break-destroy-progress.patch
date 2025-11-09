@@ -12,11 +12,11 @@ index 847b1896c61bc805ade64fc8b83d9e79a78fbf37..4f438c891762458595f8a2bad68514a4
  
      protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
          float destroySpeed = state.getDestroySpeed(level, pos);
-+	    // Kiterino start - Correctly handle insta break destroy progress
-+		if (destroySpeed == 0F) {
-+			return 1F;
-+		}
-+		// Kiterino end - Correctly handle insta break destroy progress
++        // Kiterino start - Correctly handle insta break destroy progress
++        if (destroySpeed == 0F) {
++            return 1F;
++        }
++        // Kiterino end - Correctly handle insta break destroy progress
          if (destroySpeed == -1.0F) {
              return 0.0F;
          } else {

@@ -4,11 +4,11 @@
                          }
                          // CraftBukkit end
                          iterator.remove();
-+	                    // Kiterino start - Expand custom mob effects API
-+	                    if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
-+							wrapper.getWrapper().onEffectExpired(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
-+	                    }
-+	                    // Kiterino end - Expand custom mob effects API
++                        // Kiterino start - Expand custom mob effects API
++                        if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
++                            wrapper.getWrapper().onEffectExpired(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
++                        }
++                        // Kiterino end - Expand custom mob effects API
                          this.onEffectsRemoved(List.of(mobEffectInstance));
                      } else if (mobEffectInstance.getDuration() % 600 == 0) {
                          this.onEffectUpdated(mobEffectInstance, false, null);
@@ -25,11 +25,11 @@
                          serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), mobEffectInstance.getEffect()));
                      }
                  }
-+	            // Kiterino start - Expand custom mob effects API
-+	            if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
-+		            wrapper.getWrapper().onEffectRemoved(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
-+	            }
-+	            // Kiterino end - Expand custom mob effects API
++                // Kiterino start - Expand custom mob effects API
++                if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
++                    wrapper.getWrapper().onEffectRemoved(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
++                }
++                // Kiterino end - Expand custom mob effects API
              }
  
              this.refreshDirtyAttributes();
@@ -37,7 +37,7 @@
                  );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (updateSelf) {
-+	                if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
++                    if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
                      chunkSource.sendToTrackingPlayersAndSelf(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.sendToTrackingPlayers(this, clientboundAnimatePacket);

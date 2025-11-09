@@ -30,6 +30,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
@@ -40,6 +41,7 @@ import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket;
 import net.minecraft.network.protocol.game.ClientboundPlaceGhostRecipePacket;
 import net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket;
@@ -354,6 +356,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             case ClientboundRecipeBookAddPacket packet -> handle(player, packet);
             case ClientboundUpdateAdvancementsPacket packet -> handle(player, packet);
             case ClientboundMerchantOffersPacket packet -> handle(player, packet);
+            case ClientboundLevelParticlesPacket packet -> handle(player, packet);
             case ClientboundSystemChatPacket packet -> handle(player, packet);
             case ClientboundDisguisedChatPacket packet -> handle(player, packet);
             default -> initialPacket;
@@ -840,11 +843,23 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return packet;
     }
 
+    private static Packet<?> handle(CraftPlayer player, ClientboundLevelParticlesPacket initialPacket) {
+        if (!(initialPacket.getParticle() instanceof ItemParticleOption particleOption)) return initialPacket;
+
+        ItemStack original = particleOption.itemStack;
+        var contextBox = new ItemContextBox(player, ItemModifierContextType.MERCHANT_OFFER, ItemModifierContext.EMPTY, original.asBukkitCopy());
+        ItemStack result = fromBukkit(contextBox, original);
+        if (result != null) {
+            particleOption.itemStack = result;
+        }
+        return initialPacket;
+    }
+
     // Kiterino start - Parse hover events
     private static Packet<?> handle(CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
-		if (KiterinoConfig.parseItemHoversEverywhere) {
-			return initialPacket;
-		}
+        if (KiterinoConfig.parseItemHoversEverywhere) {
+            return initialPacket;
+        }
 
         if (initialPacket.overlay()) { // Action bar
             return initialPacket;
@@ -859,9 +874,9 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     private static Packet<?> handle(CraftPlayer player, ClientboundDisguisedChatPacket initialPacket) {
-	    if (KiterinoConfig.parseItemHoversEverywhere) {
-		    return initialPacket;
-	    }
+        if (KiterinoConfig.parseItemHoversEverywhere) {
+            return initialPacket;
+        }
 
         boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);

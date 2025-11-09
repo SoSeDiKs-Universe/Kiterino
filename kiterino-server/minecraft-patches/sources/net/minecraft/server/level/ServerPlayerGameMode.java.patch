@@ -4,11 +4,11 @@
      protected void setGameModeForPlayer(GameType gameModeForPlayer, @Nullable GameType previousGameModeForPlayer) {
          this.previousGameModeForPlayer = previousGameModeForPlayer;
          this.gameModeForPlayer = gameModeForPlayer;
-+	    // Kiterino start - Prevent creative from overriding items
-+	    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && gameModeForPlayer == GameType.CREATIVE) {
-+		    this.player.containerMenu.sendAllDataToRemote();
-+	    }
-+	    // Kiterino end - Prevent creative from overriding items
++        // Kiterino start - Prevent creative from overriding items
++        if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && gameModeForPlayer == GameType.CREATIVE) {
++            this.player.containerMenu.sendAllDataToRemote();
++        }
++        // Kiterino end - Prevent creative from overriding items
          Abilities abilities = this.player.getAbilities();
          gameModeForPlayer.updatePlayerAbilities(abilities);
      }

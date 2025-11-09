@@ -9,6 +9,6 @@ import java.util.function.Function;
 @NullMarked
 public interface IKiterinoBootstrapEntityTypeInjector extends IKiterinoBootstrapEnumInjector {
 
-	void addEntityTypes(Class<?> entityTypesClass, Class<?> nmsEntityTypesClass, Function<Key, Object> entityTypeDataProvider, Consumer<Key> attributeProvider);
+    void addEntityTypes(Class<?> entityTypesClass, Class<?> nmsEntityTypesClass, Function<Key, Object> entityTypeDataProvider, Consumer<Key> attributeProvider);
 
 }

@@ -12,10 +12,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class TestEntityTypes {
 
-	public static final EntityType ENTITY_1 = inject("entity_1");
+    public static final EntityType ENTITY_1 = inject("entity_1");
 
-	private static EntityType inject(@Subst("sample_key") String key) {
-		return KiterinoBootstrapEntityTypeInjector.injectEntityType(Key.key("test", key));
-	}
+    private static EntityType inject(@Subst("sample_key") String key) {
+        return KiterinoBootstrapEntityTypeInjector.injectEntityType(Key.key("test", key));
+    }
 
 }

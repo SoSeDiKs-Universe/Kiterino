@@ -12,15 +12,15 @@ import java.util.function.Supplier;
 @NullMarked
 public class UnknownEntityDataContext extends EntityPacketContext {
 
-	/**
-	 * Constructs wrapper around a packet that contains an unknown entity
-	 *
-	 * @param packet   nms packet
-	 * @param world    world instance
-	 * @param entityId internal entity id
-	 */
-	public UnknownEntityDataContext(Object packet, World world, int entityId) {
-		super(packet, world, entityId, (Supplier<Entity>) null);
-	}
+    /**
+     * Constructs wrapper around a packet that contains an unknown entity
+     *
+     * @param packet   nms packet
+     * @param world    world instance
+     * @param entityId internal entity id
+     */
+    public UnknownEntityDataContext(Object packet, World world, int entityId) {
+        super(packet, world, entityId, (Supplier<Entity>) null);
+    }
 
 }

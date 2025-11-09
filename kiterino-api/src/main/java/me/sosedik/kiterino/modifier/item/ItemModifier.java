@@ -16,98 +16,98 @@ import java.util.Locale;
 @NullMarked
 public abstract class ItemModifier {
 
-	private final NamespacedKey modifierId;
+    private final NamespacedKey modifierId;
 
-	protected ItemModifier(NamespacedKey modifierId) {
-		this.modifierId = modifierId;
-	}
+    protected ItemModifier(NamespacedKey modifierId) {
+        this.modifierId = modifierId;
+    }
 
-	/**
-	 * Unique ID of this modifier
-	 *
-	 * @return modifier id
-	 */
-	public NamespacedKey getModifierId() {
-		return modifierId;
-	}
+    /**
+     * Unique ID of this modifier
+     *
+     * @return modifier id
+     */
+    public NamespacedKey getModifierId() {
+        return modifierId;
+    }
 
-	/**
-	 * Registers this modifier
-	 */
-	public void register() {
-		ItemModifiersHandler.itemModifiersHandler().registerModifier(this);
-	}
+    /**
+     * Registers this modifier
+     */
+    public void register() {
+        ItemModifiersHandler.itemModifiersHandler().registerModifier(this);
+    }
 
-	/**
-	 * Unregisters this modifier
-	 */
-	public void unregister() {
-		ItemModifiersHandler.itemModifiersHandler().unregisterModifier(this);
-	}
+    /**
+     * Unregisters this modifier
+     */
+    public void unregister() {
+        ItemModifiersHandler.itemModifiersHandler().unregisterModifier(this);
+    }
 
-	/**
-	 * Whether this modifier should automatically
-	 * skip air items
-	 *
-	 * @return whether to skip air items
-	 */
-	public boolean skipAir() {
-		return true;
-	}
+    /**
+     * Whether this modifier should automatically
+     * skip air items
+     *
+     * @return whether to skip air items
+     */
+    public boolean skipAir() {
+        return true;
+    }
 
-	/**
-	 * Whether this modifier should automatically
-	 * skip the provided context
-	 *
-	 * @param contextType context type
-	 * @return whether to skip context
-	 */
-	public boolean skipContext(ItemModifierContextType contextType) {
-		return false;
-	}
+    /**
+     * Whether this modifier should automatically
+     * skip the provided context
+     *
+     * @param contextType context type
+     * @return whether to skip context
+     */
+    public boolean skipContext(ItemModifierContextType contextType) {
+        return false;
+    }
 
-	/**
-	 * Modifies an item given the context
-	 *
-	 * @param contextBox item data
-	 * @return modification result
-	 */
-	public abstract ModificationResult modify(ItemContextBox contextBox);
+    /**
+     * Modifies an item given the context
+     *
+     * @param contextBox item data
+     * @return modification result
+     */
+    public abstract ModificationResult modify(ItemContextBox contextBox);
 
-	/**
-	 * Modify item with viewer's locale, empty context, lore and slot 0.
-	 * Will return {@code null} if no modifications were made.
-	 *
-	 * @param viewer player viewing the item
-	 * @param item item
-	 * @return modified item or {@code null}
-	 */
-	public static @Nullable ItemStack modifyItem(Player viewer, ItemStack item) {
-		return modifyItem(viewer, viewer.locale(), item);
-	}
+    /**
+     * Modify item with viewer's locale, empty context, lore and slot 0.
+     * Will return {@code null} if no modifications were made.
+     *
+     * @param viewer player viewing the item
+     * @param item item
+     * @return modified item or {@code null}
+     */
+    public static @Nullable ItemStack modifyItem(Player viewer, ItemStack item) {
+        return modifyItem(viewer, viewer.locale(), item);
+    }
 
-	/**
-	 * Modify item with empty context, lore and slot 0
-	 *
-	 * @param viewer player viewing the item
-	 * @param locale locale
-	 * @param item item
-	 * @return modified item or {@code null}
-	 */
-	public static @Nullable ItemStack modifyItem(@Nullable Player viewer, Locale locale, ItemStack item) {
-		var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item.clone());
-		return modifyItem(contextBox);
-	}
+    /**
+     * Modify item with empty context, lore and slot 0
+     *
+     * @param viewer player viewing the item
+     * @param locale locale
+     * @param item item
+     * @return modified item or {@code null}
+     */
+    public static @Nullable ItemStack modifyItem(@Nullable Player viewer, Locale locale, ItemStack item) {
+        var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item.clone());
+        return modifyItem(contextBox);
+    }
 
-	/**
-	 * Modify item given the context.
-	 * Will return {@code null} if no modifications were made.
-	 *
-	 * @param contextBox item context box
-	 * @return modified item or {@code null}
-	 */
-	public static @Nullable ItemStack modifyItem(ItemContextBox contextBox) {
-		return ItemModifiersHandler.itemModifiersHandler().modifyItem(contextBox);
-	}
+    /**
+     * Modify item given the context.
+     * Will return {@code null} if no modifications were made.
+     *
+     * @param contextBox item context box
+     * @return modified item or {@code null}
+     */
+    public static @Nullable ItemStack modifyItem(ItemContextBox contextBox) {
+        return ItemModifiersHandler.itemModifiersHandler().modifyItem(contextBox);
+    }
 
 }

@@ -9,10 +9,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class TestMobEffects {
 
-	public static final PotionEffectType EFFECT_1 = inject("effect_1");
+    public static final PotionEffectType EFFECT_1 = inject("effect_1");
 
-	private static PotionEffectType inject(@Subst("sample_key") String key) {
-		return Registry.EFFECT.getOrThrow(Key.key("test", key));
-	}
+    private static PotionEffectType inject(@Subst("sample_key") String key) {
+        return Registry.EFFECT.getOrThrow(Key.key("test", key));
+    }
 
 }

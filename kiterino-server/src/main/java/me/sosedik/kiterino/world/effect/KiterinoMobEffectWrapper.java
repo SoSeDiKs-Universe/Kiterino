@@ -22,9 +22,9 @@ public class KiterinoMobEffectWrapper extends MobEffect {
         this.mobEffect = mobEffect;
     }
 
-	public KiterinoMobEffectBehaviourWrapper getWrapper() {
-		return this.mobEffect;
-	}
+    public KiterinoMobEffectBehaviourWrapper getWrapper() {
+        return this.mobEffect;
+    }
 
     @Override
     public int getBlendInDurationTicks() {

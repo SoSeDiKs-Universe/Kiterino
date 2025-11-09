@@ -7,12 +7,12 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class TestItemImpl extends Item {
 
-	public TestItemImpl(Object properties) {
-		super(
-			((Properties) properties)
-				.food(new FoodProperties.Builder().alwaysEdible().nutrition(3).build())
-				.stacksTo(10)
-		);
-	}
+    public TestItemImpl(Object properties) {
+        super(
+            ((Properties) properties)
+                .food(new FoodProperties.Builder().alwaysEdible().nutrition(3).build())
+                .stacksTo(10)
+        );
+    }
 
 }

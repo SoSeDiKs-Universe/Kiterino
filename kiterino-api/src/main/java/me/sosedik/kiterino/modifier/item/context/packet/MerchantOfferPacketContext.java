@@ -16,24 +16,24 @@ public record MerchantOfferPacketContext(Object packet,
                                          MerchantRecipe merchantRecipe,
                                          Slot slot) implements PacketItemModifierContext {
 
-	/**
-	 * Represents trade screen's item slot position
-	 */
-	public enum Slot {
+    /**
+     * Represents trade screen's item slot position
+     */
+    public enum Slot {
 
-		/**
-		 * First item cost
-		 */
-		FIRST,
-		/**
-		 * Second item cost
-		 */
-		SECOND,
-		/**
-		 * Trade result
-		 */
-		RESULT
+        /**
+         * First item cost
+         */
+        FIRST,
+        /**
+         * Second item cost
+         */
+        SECOND,
+        /**
+         * Trade result
+         */
+        RESULT
 
-	}
+    }
 
 }

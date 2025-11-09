@@ -13,36 +13,36 @@ import org.jspecify.annotations.NullMarked;
 // Kiterino - Add EvokerWololoEvent
 public class EvokerWololoEvent extends EntityEvent {
 
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	private final Sheep wololoTarget;
+    private final Sheep wololoTarget;
 
-	public EvokerWololoEvent(Evoker entity, Sheep wololoTarget) {
-		super(entity);
-		this.wololoTarget = wololoTarget;
-	}
+    public EvokerWololoEvent(Evoker entity, Sheep wololoTarget) {
+        super(entity);
+        this.wololoTarget = wololoTarget;
+    }
 
-	@Override
-	public Evoker getEntity() {
-		return (Evoker) super.getEntity();
-	}
+    @Override
+    public Evoker getEntity() {
+        return (Evoker) super.getEntity();
+    }
 
-	/**
-	 * Gets the wololo spell target
-	 *
-	 * @return wololo target
-	 */
-	public Sheep getWololoTarget() {
-		return this.wololoTarget;
-	}
+    /**
+     * Gets the wololo spell target
+     *
+     * @return wololo target
+     */
+    public Sheep getWololoTarget() {
+        return this.wololoTarget;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
 }

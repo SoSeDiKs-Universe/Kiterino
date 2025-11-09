@@ -14,45 +14,45 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class MaybeAsyncEntityChangeAgeEvent extends EntityEvent {
 
-	private static final HandlerList HANDLER_LIST = new HandlerList();
+    private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	private final boolean toAdult;
+    private final boolean toAdult;
 
-	public MaybeAsyncEntityChangeAgeEvent(Ageable entity) {
-		super(entity, !Bukkit.isPrimaryThread());
-		this.toAdult = entity.isAdult();
-	}
+    public MaybeAsyncEntityChangeAgeEvent(Ageable entity) {
+        super(entity, !Bukkit.isPrimaryThread());
+        this.toAdult = entity.isAdult();
+    }
 
-	@Override
-	public Ageable getEntity() {
-		return (Ageable) super.getEntity();
-	}
+    @Override
+    public Ageable getEntity() {
+        return (Ageable) super.getEntity();
+    }
 
-	/**
-	 * Checks whether this entity has turned into a baby
-	 *
-	 * @return whether this entity has turned into a baby
-	 */
-	public boolean isBaby() {
-		return !isAdult();
-	}
+    /**
+     * Checks whether this entity has turned into a baby
+     *
+     * @return whether this entity has turned into a baby
+     */
+    public boolean isBaby() {
+        return !isAdult();
+    }
 
-	/**
-	 * Checks whether this entity has turned into an adult
-	 *
-	 * @return whether this entity has turned into an adult
-	 */
-	public boolean isAdult() {
-		return this.toAdult;
-	}
+    /**
+     * Checks whether this entity has turned into an adult
+     *
+     * @return whether this entity has turned into an adult
+     */
+    public boolean isAdult() {
+        return this.toAdult;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLER_LIST;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLER_LIST;
+    }
 
-	public static HandlerList getHandlerList() {
-		return HANDLER_LIST;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
 
 }

@@ -60,8 +60,8 @@
 +
 +    @Override
 +    public BlockData getPlacedState(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
-+	    net.minecraft.world.level.block.state.BlockState placedState = getPlacedState0(hand, block, location, blockFace);
-+		return placedState == null ? null : placedState.createCraftBlockData();
++        net.minecraft.world.level.block.state.BlockState placedState = getPlacedState0(hand, block, location, blockFace);
++        return placedState == null ? null : placedState.createCraftBlockData();
 +    }
 +
 +    private net.minecraft.world.level.block.state.BlockState getPlacedState0(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
@@ -88,7 +88,7 @@
 +            return null;
 +        }
 +
-+	    return blockItem.getPlacementState(context);
++        return blockItem.getPlacementState(context);
 +    }
 +
 +    @Override

@@ -1,0 +1,64 @@
+--- a/net/minecraft/world/item/BundleItem.java
++++ b/net/minecraft/world/item/BundleItem.java
+@@ -55,6 +_,11 @@
+             ItemStack item = slot.getItem();
+             BundleContents.Mutable mutable = new BundleContents.Mutable(bundleContents);
+             if (action == ClickAction.PRIMARY && !item.isEmpty()) {
++                // Kiterino start - Add Bundle API
++                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerPutItemInBundleEvent(serverPlayer.getBukkitEntity(), stack.asBukkitCopy(), item.asBukkitCopy(), slot.getContainerSlot(), false).callEvent()) {
++                    return false;
++                }
++                // Kiterino end - Add Bundle API
+                 if (mutable.tryTransfer(slot, player) > 0) {
+                     playInsertSound(player);
+                 } else {
+@@ -65,6 +_,11 @@
+                 this.broadcastChangesOnContainerMenu(player);
+                 return true;
+             } else if (action == ClickAction.SECONDARY && item.isEmpty()) {
++                // Kiterino start - Add Bundle API
++                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerRemoveItemFromBundleEvent(serverPlayer.getBukkitEntity(), stack.asBukkitCopy(), item.asBukkitCopy(), slot.getContainerSlot(), false).callEvent()) {
++                    return false;
++                }
++                // Kiterino end - Add Bundle API
+                 ItemStack itemStack = mutable.removeOne();
+                 if (itemStack != null) {
+                     ItemStack itemStack1 = slot.safeInsert(itemStack);
+@@ -96,6 +_,11 @@
+             } else {
+                 BundleContents.Mutable mutable = new BundleContents.Mutable(bundleContents);
+                 if (action == ClickAction.PRIMARY && !other.isEmpty()) {
++                    // Kiterino start - Add Bundle API
++                    if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerPutItemInBundleEvent(serverPlayer.getBukkitEntity(), stack.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), true).callEvent()) {
++                        return false;
++                    }
++                    // Kiterino end - Add Bundle API
+                     if (slot.allowModification(player) && mutable.tryInsert(other) > 0) {
+                         playInsertSound(player);
+                     } else {
+@@ -106,6 +_,11 @@
+                     this.broadcastChangesOnContainerMenu(player);
+                     return true;
+                 } else if (action == ClickAction.SECONDARY && other.isEmpty()) {
++                    // Kiterino start - Add Bundle API
++                    if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerRemoveItemFromBundleEvent(serverPlayer.getBukkitEntity(), stack.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), true).callEvent()) {
++                        return false;
++                    }
++                    // Kiterino end - Add Bundle API
+                     if (slot.allowModification(player)) {
+                         ItemStack itemStack = mutable.removeOne();
+                         if (itemStack != null) {
+@@ -188,6 +_,13 @@
+     }
+ 
+     private boolean dropContent(ItemStack stack, Player player) {
++        // Kiterino start - Add Bundle API
++        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerEmptyBundleEvent(serverPlayer.getBukkitEntity(), stack.asBukkitCopy(), player.getUsedItemHand() == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) {
++            serverPlayer.getBukkitEntity().clearActiveItem();
++            serverPlayer.getBukkitEntity().updateInventory();
++            return false;
++        }
++        // Kiterino end - Add Bundle API
+         BundleContents bundleContents = stack.get(DataComponents.BUNDLE_CONTENTS);
+         if (bundleContents != null && !bundleContents.isEmpty()) {
+             Optional<ItemStack> optional = removeOneItemFromBundle(stack, player, bundleContents);

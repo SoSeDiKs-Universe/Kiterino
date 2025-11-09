@@ -28,6 +28,7 @@ public net.minecraft.world.level.block.EnderChestBlock CONTAINER_TITLE
 public net.minecraft.world.level.block.EnderChestBlock getEnderChestSixRows(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/inventory/PlayerEnderChestContainer;)Lnet/minecraft/world/inventory/ChestMenu;
 public net.minecraft.world.level.block.entity.BlockEntityType register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;
 public net.minecraft.world.level.block.entity.BlockEntityType$BlockEntitySupplier
+public-f net.minecraft.core.particles.ItemParticleOption itemStack
 public-f net.minecraft.network.protocol.BundlePacket packets
 public-f net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket carriedItem
 public-f net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket itemStack
@@ -38,5 +39,6 @@ public-f net.minecraft.world.damagesource.CombatTracker entries
 public-f net.minecraft.world.damagesource.CombatTracker inCombat
 public-f net.minecraft.world.damagesource.CombatTracker mob
 public-f net.minecraft.world.damagesource.CombatTracker takingDamage
+public-f net.minecraft.world.entity.Display hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z
 public-f net.minecraft.world.item.crafting.Ingredient values
 public-f net.minecraft.world.item.trading.MerchantOffer result

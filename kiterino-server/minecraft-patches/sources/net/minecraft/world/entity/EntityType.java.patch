@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1201,6 +_,16 @@
+@@ -1202,6 +_,16 @@
      private final FeatureFlagSet requiredFeatures;
      private final boolean allowedInPeaceful;
  

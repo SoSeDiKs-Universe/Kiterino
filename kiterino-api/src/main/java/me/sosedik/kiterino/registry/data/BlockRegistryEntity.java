@@ -16,36 +16,36 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public interface BlockRegistryEntity {
 
-	/**
-	 * Provides the block's nms implementation
-	 *
-	 * @return the block's nms implementation
-	 */
-	@Nullable KiterinoBlock nmsBlock();
+    /**
+     * Provides the block's nms implementation
+     *
+     * @return the block's nms implementation
+     */
+    @Nullable KiterinoBlock nmsBlock();
 
-	/**
-	 * Constructs block properties with block id already set
-	 *
-	 * @return block properties
-	 */
-	Object constructBlockProperties();
+    /**
+     * Constructs block properties with block id already set
+     *
+     * @return block properties
+     */
+    Object constructBlockProperties();
 
-	/**
-	 * A mutable builder for the {@link BlockRegistryEntity} plugins may change in applicable registry events.
-	 */
-	@ApiStatus.Experimental
-	@ApiStatus.NonExtendable
-	interface Builder extends BlockRegistryEntity, RegistryBuilder<BlockType> {
+    /**
+     * A mutable builder for the {@link BlockRegistryEntity} plugins may change in applicable registry events.
+     */
+    @ApiStatus.Experimental
+    @ApiStatus.NonExtendable
+    interface Builder extends BlockRegistryEntity, RegistryBuilder<BlockType> {
 
-		/**
-		 * Configures the block's nms implementation
-		 *
-		 * @param nmsBlock the block's nms implementation
-		 * @return this builder
-		 */
-		@Contract(value = "_ -> this", mutates = "this")
-		Builder nmsBlock(KiterinoBlock nmsBlock);
+        /**
+         * Configures the block's nms implementation
+         *
+         * @param nmsBlock the block's nms implementation
+         * @return this builder
+         */
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder nmsBlock(KiterinoBlock nmsBlock);
 
-	}
+    }
 
 }

@@ -9,12 +9,12 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface SlottedItemModifierContext extends ItemModifierContext {
 
-	/**
-	 * Gets the raw container slot the item's in
-	 *
-	 * @return slot
-	 * @see InventorySlotHelper
-	 */
-	int slot();
+    /**
+     * Gets the raw container slot the item's in
+     *
+     * @return slot
+     * @see InventorySlotHelper
+     */
+    int slot();
 
 }

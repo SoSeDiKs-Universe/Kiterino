@@ -13,22 +13,22 @@
 +     */
 +    boolean bedExists();
 +
-+	/**
-+	 * Gets the sleeping location
-+	 *
-+	 * @return sleeping location
-+	 * @see #isSleeping()
-+	 */
-+	@Nullable Location getSleepingLocation();
++    /**
++     * Gets the sleeping location
++     *
++     * @return sleeping location
++     * @see #isSleeping()
++     */
++    @Nullable Location getSleepingLocation();
 +
-+	/**
-+	 * Sets the entity's sleeping pos
-+	 *
-+	 * @param loc sleeping location
-+	 * @see #getSleepingLocation()
-+	 * @see #isSleeping()
-+	 */
-+	void setSleepingLocation(@Nullable Location loc);
++    /**
++     * Sets the entity's sleeping pos
++     *
++     * @param loc sleeping location
++     * @see #getSleepingLocation()
++     * @see #isSleeping()
++     */
++    void setSleepingLocation(@Nullable Location loc);
 +    // Kiterino end - Expose sleeping loc
 +
 +    // Kiterino start - Allow laying at will

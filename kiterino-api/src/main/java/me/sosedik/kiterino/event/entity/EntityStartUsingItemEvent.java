@@ -14,77 +14,77 @@ import org.jspecify.annotations.NullMarked;
 // Kiterino - Add EntityStartUsingItemEvent
 public class EntityStartUsingItemEvent extends EntityEvent implements Cancellable {
 
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	private final ItemStack item;
-	private int useDuration;
-	private boolean cancelled;
+    private final ItemStack item;
+    private int useDuration;
+    private boolean cancelled;
 
-	public EntityStartUsingItemEvent(LivingEntity entity, ItemStack item, int useDuration) {
-		super(entity);
-		this.item = item;
-		this.useDuration = useDuration;
-	}
+    public EntityStartUsingItemEvent(LivingEntity entity, ItemStack item, int useDuration) {
+        super(entity);
+        this.item = item;
+        this.useDuration = useDuration;
+    }
 
-	@Override
-	public LivingEntity getEntity() {
-		return (LivingEntity) this.entity;
-	}
+    @Override
+    public LivingEntity getEntity() {
+        return (LivingEntity) this.entity;
+    }
 
-	/**
-	 * Gets the item that's being used
-	 *
-	 * @return the item that's being used
-	 */
-	public ItemStack getItem() {
-		return this.item;
-	}
+    /**
+     * Gets the item that's being used
+     *
+     * @return the item that's being used
+     */
+    public ItemStack getItem() {
+        return this.item;
+    }
 
-	/**
-	 * Gets for how long in ticks the item should be used until it's ready
-	 *
-	 * @return item use duration
-	 */
-	public int getUseDuration() {
-		return this.useDuration;
-	}
+    /**
+     * Gets for how long in ticks the item should be used until it's ready
+     *
+     * @return item use duration
+     */
+    public int getUseDuration() {
+        return this.useDuration;
+    }
 
-	/**
-	 * Sets for how long in ticks the item should be used until it's ready
-	 *
-	 * @param useDuration item use duration in ticks
-	 */
-	public void setUseDuration(int useDuration) {
-		this.useDuration = useDuration;
-	}
+    /**
+     * Sets for how long in ticks the item should be used until it's ready
+     *
+     * @param useDuration item use duration in ticks
+     */
+    public void setUseDuration(int useDuration) {
+        this.useDuration = useDuration;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return if cancelled, the item will stop being in use
-	 */
-	@Override
-	public boolean isCancelled() {
-		return this.cancelled;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @return if cancelled, the item will stop being in use
+     */
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
 
-	/**
-	 * Set whether to cancel item use. If canceled,
-	 * the item will stop being in use.
-	 *
-	 * @param cancel whether you wish to cancel this event
-	 */
-	public void setCancelled(boolean cancel) {
-		this.cancelled = cancel;
-	}
+    /**
+     * Set whether to cancel item use. If canceled,
+     * the item will stop being in use.
+     *
+     * @param cancel whether you wish to cancel this event
+     */
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
 }

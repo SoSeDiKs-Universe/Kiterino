@@ -9,12 +9,12 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface KiterinoItemModifier {
 
-	/**
-	 * Modifies an item before sending it to the client.
-	 * <p><b>Implementations must override the item type to match one of the vanilla ones.
-	 *
-	 * @param contextBox item data
-	 */
-	void modify(ItemContextBox contextBox);
+    /**
+     * Modifies an item before sending it to the client.
+     * <p><b>Implementations must override the item type to match one of the vanilla ones.
+     *
+     * @param contextBox item data
+     */
+    void modify(ItemContextBox contextBox);
 
 }

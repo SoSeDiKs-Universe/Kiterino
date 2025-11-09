@@ -14,34 +14,34 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public interface KiterinoBlock {
 
-	/**
-	 * Serializes custom block to the client.
-	 * <br>
-	 * If the resulting block state is null, you MUST
-	 * replace the block in some other way, e.g., via
-	 * packet listener plugins.
-	 * <br>
-	 * Note: this will be called for each serialization, so
-	 * caching the block state is preferable.
-	 *
-	 * @param currentState current NMS block state
-	 * @return serialized block
-	 */
-	@Nullable BlockState serializeBlockToClient(Object currentState);
+    /**
+     * Serializes custom block to the client.
+     * <br>
+     * If the resulting block state is null, you MUST
+     * replace the block in some other way, e.g., via
+     * packet listener plugins.
+     * <br>
+     * Note: this will be called for each serialization, so
+     * caching the block state is preferable.
+     *
+     * @param currentState current NMS block state
+     * @return serialized block
+     */
+    @Nullable BlockState serializeBlockToClient(Object currentState);
 
-	/**
-	 * Called after the block's Material is initialized
-	 */
-	default void postInit() {}
+    /**
+     * Called after the block's Material is initialized
+     */
+    default void postInit() {}
 
-	/**
-	 * Gets the block data classes for this block.
-	 * Left is a bukkit interface, right is a craft implementation.
-	 *
-	 * @return block data classes
-	 */
-	default @Nullable Pair<Class<?>, Class<?>> getBlockDataClasses() {
-		return null;
-	}
+    /**
+     * Gets the block data classes for this block.
+     * Left is a bukkit interface, right is a craft implementation.
+     *
+     * @return block data classes
+     */
+    default @Nullable Pair<Class<?>, Class<?>> getBlockDataClasses() {
+        return null;
+    }
 
 }

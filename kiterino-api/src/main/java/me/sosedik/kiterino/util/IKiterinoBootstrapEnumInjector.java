@@ -8,8 +8,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 interface IKiterinoBootstrapEnumInjector {
 
-	void injectEnums(Class<?> enumsClass);
+    void injectEnums(Class<?> enumsClass);
 
-	Object allocateEnum(Key key);
+    Object allocateEnum(Key key);
 
 }

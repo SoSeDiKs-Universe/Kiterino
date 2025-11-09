@@ -14,23 +14,23 @@
  
      public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
 -        RespawnResult result = this.findRespawnPositionAndUseSpawnBlock0(useCharge, postTeleportTransition, respawnReason);
-+	    // Kiterino start - Call EntityPortalReadyEvent for End Portal
-+	    return findRespawnPositionAndUseSpawnBlock(useCharge, postTeleportTransition, respawnReason, null);
++        // Kiterino start - Call EntityPortalReadyEvent for End Portal
++        return findRespawnPositionAndUseSpawnBlock(useCharge, postTeleportTransition, respawnReason, null);
 +    }
 +
 +    public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason, @Nullable ServerLevel levelTo) {
-+	    // Kiterino end - Call EntityPortalReadyEvent for End Portal
++        // Kiterino end - Call EntityPortalReadyEvent for End Portal
 +        RespawnResult result = this.findRespawnPositionAndUseSpawnBlock0(useCharge, postTeleportTransition, respawnReason, levelTo); // Kiterino - Call EntityPortalReadyEvent for End Portal
          return result == null ? null : result.transition();
      }
  
      public @Nullable RespawnResult findRespawnPositionAndUseSpawnBlock0(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
-+	    // Kiterino start - Call EntityPortalReadyEvent for End Portal
-+	    return findRespawnPositionAndUseSpawnBlock0(useCharge, postTeleportTransition, respawnReason, null);
++        // Kiterino start - Call EntityPortalReadyEvent for End Portal
++        return findRespawnPositionAndUseSpawnBlock0(useCharge, postTeleportTransition, respawnReason, null);
 +    }
 +
 +    public @Nullable RespawnResult findRespawnPositionAndUseSpawnBlock0(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason, @Nullable ServerLevel levelTo) {
-+	    // Kiterino end - Call EntityPortalReadyEvent for End Portal
++        // Kiterino end - Call EntityPortalReadyEvent for End Portal
          TeleportTransition teleportTransition;
          boolean isBedSpawn = false;
          boolean isAnchorSpawn = false;
@@ -38,7 +38,7 @@
          // Paper end
          ServerPlayer.RespawnConfig respawnConfig = this.getRespawnConfig();
 -        ServerLevel level = this.server.getLevel(ServerPlayer.RespawnConfig.getDimensionOrDefault(respawnConfig));
-+	    ServerLevel level = levelTo == null ? this.server.getLevel(ServerPlayer.RespawnConfig.getDimensionOrDefault(respawnConfig)) : levelTo; // Kiterino - Call EntityPortalReadyEvent for End Portal
++        ServerLevel level = levelTo == null ? this.server.getLevel(ServerPlayer.RespawnConfig.getDimensionOrDefault(respawnConfig)) : levelTo; // Kiterino - Call EntityPortalReadyEvent for End Portal
          if (level != null && respawnConfig != null) {
              Optional<ServerPlayer.RespawnPosAngle> optional = findRespawnAndUseSpawnBlock(level, respawnConfig, useCharge);
              if (optional.isPresent()) {

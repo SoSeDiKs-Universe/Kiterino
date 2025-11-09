@@ -8,9 +8,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface ItemModifierContext {
 
-	/**
-	 * Empty item modifier context
-	 */
-	ItemModifierContext EMPTY = new ItemModifierContext() {};
+    /**
+     * Empty item modifier context
+     */
+    ItemModifierContext EMPTY = new ItemModifierContext() {};
 
 }

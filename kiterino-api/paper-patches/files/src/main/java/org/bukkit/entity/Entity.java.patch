@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -337,8 +_,9 @@
+@@ -353,8 +_,9 @@
       * being on fire).
       *
       * @param ticks Current ticks remaining
@@ -11,25 +11,25 @@
  
      /**
       * Sets if the entity has visual fire (it will always appear to be on fire).
-@@ -1361,4 +_,134 @@
+@@ -1377,4 +_,134 @@
       */
      void setImmuneToFire(@Nullable Boolean fireImmune);
      // Purpur end - Fire Immunity API
 +
 +    // Kiterino start - More Sound API
-+	/**
-+	 * Gets the sound category of this entity
-+	 *
-+	 * @return sound category
-+	 */
-+	default @NotNull org.bukkit.SoundCategory getSoundCategory() {
-+		return switch (this) {
-+			case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
-+			case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
-+			case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
-+			default -> org.bukkit.SoundCategory.NEUTRAL;
-+		};
-+	}
++    /**
++     * Gets the sound category of this entity
++     *
++     * @return sound category
++     */
++    default @NotNull org.bukkit.SoundCategory getSoundCategory() {
++        return switch (this) {
++            case HumanEntity humanEntity -> org.bukkit.SoundCategory.PLAYERS;
++            case Ambient ambient -> org.bukkit.SoundCategory.AMBIENT;
++            case Monster monster -> org.bukkit.SoundCategory.HOSTILE;
++            default -> org.bukkit.SoundCategory.NEUTRAL;
++        };
++    }
 +
 +    /**
 +     * Plays a sound at the location of the entity

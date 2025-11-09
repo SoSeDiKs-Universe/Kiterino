@@ -1,14 +1,14 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2112,4 +_,11 @@
+@@ -2113,4 +_,11 @@
          return POINTERS_SUPPLIER.view(this);
      }
      // Paper end
 +
-+	// Kiterino start - Allow checking for Halloween season
-+	@Override
-+	public boolean isHalloweenSeason() {
-+		return net.minecraft.world.entity.ambient.Bat.isHalloweenSeason(getHandle());
-+	}
-+	// Kiterino end - Allow checking for Halloween season
++    // Kiterino start - Allow checking for Halloween season
++    @Override
++    public boolean isHalloweenSeason() {
++        return net.minecraft.world.entity.ambient.Bat.isHalloweenSeason(getHandle());
++    }
++    // Kiterino end - Allow checking for Halloween season
  }

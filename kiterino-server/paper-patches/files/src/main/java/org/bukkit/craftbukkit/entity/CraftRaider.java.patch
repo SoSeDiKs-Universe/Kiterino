@@ -5,10 +5,10 @@
          return CraftSound.minecraftToBukkit(this.getHandle().getCelebrateSound());
      }
 +
-+	// Kiterino start = More Raider API
-+	@Override
-+	public boolean isPatrolling() {
-+		return this.getHandle().isPatrolling();
-+	}
-+	// Kiterino end = More Raider API
++    // Kiterino start = More Raider API
++    @Override
++    public boolean isPatrolling() {
++        return this.getHandle().isPatrolling();
++    }
++    // Kiterino end = More Raider API
  }

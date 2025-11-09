@@ -20,182 +20,182 @@ import java.util.Locale;
 @NullMarked
 public class ItemContextBox {
 
-	private final @Nullable Player viewer;
-	private final Locale locale;
-	private final ItemModifierContextType contextType;
-	private final ItemModifierContext context;
-	private final Material type;
-	private ItemStack item;
+    private final @Nullable Player viewer;
+    private final Locale locale;
+    private final ItemModifierContextType contextType;
+    private final ItemModifierContext context;
+    private final Material type;
+    private ItemStack item;
 
-	/**
-	 * Creates a new context box with viewer's locale
-	 *
-	 * @param viewer player viewing the item
-	 * @param contextType context type
-	 * @param context modification context
-	 * @param item item
-	 */
-	public ItemContextBox(Player viewer, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
-		this(viewer, viewer.locale(), contextType, context, item);
-	}
+    /**
+     * Creates a new context box with viewer's locale
+     *
+     * @param viewer player viewing the item
+     * @param contextType context type
+     * @param context modification context
+     * @param item item
+     */
+    public ItemContextBox(Player viewer, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
+        this(viewer, viewer.locale(), contextType, context, item);
+    }
 
-	/**
-	 * Creates a new context box
-	 *
-	 * @param viewer player viewing the item
-	 * @param locale locale for modifications
-	 * @param contextType context type
-	 * @param context modification context
-	 * @param item item
-	 */
-	public ItemContextBox(@Nullable Player viewer, Locale locale, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
-		this.viewer = viewer;
-		this.locale = locale;
-		this.contextType = contextType;
-		this.type = item.getType();
-		this.item = item;
-		this.context = context;
-	}
+    /**
+     * Creates a new context box
+     *
+     * @param viewer player viewing the item
+     * @param locale locale for modifications
+     * @param contextType context type
+     * @param context modification context
+     * @param item item
+     */
+    public ItemContextBox(@Nullable Player viewer, Locale locale, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
+        this.viewer = viewer;
+        this.locale = locale;
+        this.contextType = contextType;
+        this.type = item.getType();
+        this.item = item;
+        this.context = context;
+    }
 
-	/**
-	 * Gets the player receiving this item
-	 *
-	 * @return player viewer
-	 */
-	public @Nullable Player getViewer() {
-		return this.viewer;
-	}
+    /**
+     * Gets the player receiving this item
+     *
+     * @return player viewer
+     */
+    public @Nullable Player getViewer() {
+        return this.viewer;
+    }
 
-	/**
-	 * Locale that should be used for modification
-	 *
-	 * @return locale
-	 */
-	public Locale getLocale() {
-		return this.locale;
-	}
+    /**
+     * Locale that should be used for modification
+     *
+     * @return locale
+     */
+    public Locale getLocale() {
+        return this.locale;
+    }
 
-	/**
-	 * Gets the context type
-	 *
-	 * @return context type
-	 */
-	public ItemModifierContextType getContextType() {
-		return this.contextType;
-	}
+    /**
+     * Gets the context type
+     *
+     * @return context type
+     */
+    public ItemModifierContextType getContextType() {
+        return this.contextType;
+    }
 
-	/**
-	 * Gets the modification context
-	 *
-	 * @return modification context
-	 */
-	public ItemModifierContext getContext() {
-		return this.context;
-	}
+    /**
+     * Gets the modification context
+     *
+     * @return modification context
+     */
+    public ItemModifierContext getContext() {
+        return this.context;
+    }
 
-	/**
-	 * Gets the original item's type
-	 *
-	 * @return item
-	 */
-	public Material getInitialType() {
-		return this.type;
-	}
+    /**
+     * Gets the original item's type
+     *
+     * @return item
+     */
+    public Material getInitialType() {
+        return this.type;
+    }
 
-	/**
-	 * Sets the item's new type
-	 */
-	public void setType(Material type) {
-		this.item = this.item.withType(type);
-	}
+    /**
+     * Sets the item's new type
+     */
+    public void setType(Material type) {
+        this.item = this.item.withType(type);
+    }
 
-	/**
-	 * Gets the modifying item
-	 *
-	 * @return item
-	 */
-	public ItemStack getItem() {
-		return this.item;
-	}
+    /**
+     * Gets the modifying item
+     *
+     * @return item
+     */
+    public ItemStack getItem() {
+        return this.item;
+    }
 
-	/**
-	 * Completely replaces the item
-	 *
-	 * @param item item
-	 */
-	public void setItem(ItemStack item) {
-		this.item = item;
-	}
+    /**
+     * Completely replaces the item
+     *
+     * @param item item
+     */
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
 
-	/**
-	 * Helper for adding a line to the item's lore
-	 *
-	 * @param line component
-	 */
-	public void addLore(ComponentLike line) {
-		ItemLore lore;
-		if (this.item.hasData(DataComponentTypes.LORE)) {
-			ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-			assert currentLore != null;
-			lore = ItemLore.lore().lines(currentLore.lines()).addLine(line).build();
-		} else {
-			lore = ItemLore.lore().addLine(line).build();
-		}
-		this.item.setData(DataComponentTypes.LORE, lore);
-	}
+    /**
+     * Helper for adding a line to the item's lore
+     *
+     * @param line component
+     */
+    public void addLore(ComponentLike line) {
+        ItemLore lore;
+        if (this.item.hasData(DataComponentTypes.LORE)) {
+            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+            assert currentLore != null;
+            lore = ItemLore.lore().lines(currentLore.lines()).addLine(line).build();
+        } else {
+            lore = ItemLore.lore().addLine(line).build();
+        }
+        this.item.setData(DataComponentTypes.LORE, lore);
+    }
 
-	/**
-	 * Helper for adding a line to the item's lore
-	 *
-	 * @param index line index
-	 * @param line component
-	 */
-	public void addLore(int index, ComponentLike line) {
-		ItemLore lore;
-		if (this.item.hasData(DataComponentTypes.LORE)) {
-			ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-			assert currentLore != null;
-			lore = ItemLore.lore().lines(currentLore.lines()).addLine(index, line).build();
-		} else {
-			lore = ItemLore.lore().addLine(line).build();
-		}
-		this.item.setData(DataComponentTypes.LORE, lore);
-	}
+    /**
+     * Helper for adding a line to the item's lore
+     *
+     * @param index line index
+     * @param line component
+     */
+    public void addLore(int index, ComponentLike line) {
+        ItemLore lore;
+        if (this.item.hasData(DataComponentTypes.LORE)) {
+            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+            assert currentLore != null;
+            lore = ItemLore.lore().lines(currentLore.lines()).addLine(index, line).build();
+        } else {
+            lore = ItemLore.lore().addLine(line).build();
+        }
+        this.item.setData(DataComponentTypes.LORE, lore);
+    }
 
-	/**
-	 * Helper for adding lines to the item's lore
-	 *
-	 * @param lines components
-	 */
-	public void addLore(ComponentLike... lines) {
-		addLore(List.of(lines));
-	}
+    /**
+     * Helper for adding lines to the item's lore
+     *
+     * @param lines components
+     */
+    public void addLore(ComponentLike... lines) {
+        addLore(List.of(lines));
+    }
 
-	/**
-	 * Helper for adding lines to the item's lore
-	 *
-	 * @param lines components
-	 */
-	public void addLore(List<? extends ComponentLike> lines) {
-		ItemLore lore;
-		if (this.item.hasData(DataComponentTypes.LORE)) {
-			ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-			assert currentLore != null;
-			lore = ItemLore.lore().lines(currentLore.lines()).addLines(lines).build();
-		} else {
-			lore = ItemLore.lore().addLines(lines).build();
-		}
-		this.item.setData(DataComponentTypes.LORE, lore);
-	}
+    /**
+     * Helper for adding lines to the item's lore
+     *
+     * @param lines components
+     */
+    public void addLore(List<? extends ComponentLike> lines) {
+        ItemLore lore;
+        if (this.item.hasData(DataComponentTypes.LORE)) {
+            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+            assert currentLore != null;
+            lore = ItemLore.lore().lines(currentLore.lines()).addLines(lines).build();
+        } else {
+            lore = ItemLore.lore().addLines(lines).build();
+        }
+        this.item.setData(DataComponentTypes.LORE, lore);
+    }
 
-	/**
-	 * Gets the size of the lore
-	 *
-	 * @return lore size
-	 */
-	public int getLoreSize() {
-		ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-		return currentLore == null ? 0 : currentLore.lines().size();
-	}
+    /**
+     * Gets the size of the lore
+     *
+     * @return lore size
+     */
+    public int getLoreSize() {
+        ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+        return currentLore == null ? 0 : currentLore.lines().size();
+    }
 
 }

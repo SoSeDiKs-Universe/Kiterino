@@ -14,10 +14,10 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class TestEntities {
 
-	public static final EntityType<Sheep> ENTITY_1 = register("entity_1", EntityType.Builder.of(Sheep::new, MobCategory.CREATURE).sized(0.1F, 0.1F).passengerAttachments(0.86875F).clientTrackingRange(10));
+    public static final EntityType<Sheep> ENTITY_1 = register("entity_1", EntityType.Builder.of(Sheep::new, MobCategory.CREATURE).sized(0.1F, 0.1F).passengerAttachments(0.86875F).clientTrackingRange(10));
 
-	private static <T extends Entity> EntityType<T> register(@Subst("sample_key") String key, EntityType.Builder<T> builder) {
-		return EntityType.register(Key.key("test", key), builder);
-	}
+    private static <T extends Entity> EntityType<T> register(@Subst("sample_key") String key, EntityType.Builder<T> builder) {
+        return EntityType.register(Key.key("test", key), builder);
+    }
 
 }

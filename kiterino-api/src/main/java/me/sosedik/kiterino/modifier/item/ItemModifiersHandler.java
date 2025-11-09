@@ -9,39 +9,39 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 abstract class ItemModifiersHandler {
 
-	static @Nullable ItemModifiersHandler itemModifiersHandler;
+    static @Nullable ItemModifiersHandler itemModifiersHandler;
 
-	/**
-	 * Registers item modifier
-	 *
-	 * @param itemModifier item modifier
-	 */
-	public abstract void registerModifier(ItemModifier itemModifier);
+    /**
+     * Registers item modifier
+     *
+     * @param itemModifier item modifier
+     */
+    public abstract void registerModifier(ItemModifier itemModifier);
 
-	/**
-	 * Unregisters item modifier
-	 *
-	 * @param itemModifier item modifier
-	 */
-	public abstract void unregisterModifier(ItemModifier itemModifier);
+    /**
+     * Unregisters item modifier
+     *
+     * @param itemModifier item modifier
+     */
+    public abstract void unregisterModifier(ItemModifier itemModifier);
 
-	/**
-	 * Applies modifiers to the item.
-	 * Will return {@code null} if no changes were made.
-	 *
-	 * @param contextBox context box
-	 * @return modified item or {@code null} if no changes
-	 */
-	public abstract @Nullable ItemStack modifyItem(ItemContextBox contextBox);
+    /**
+     * Applies modifiers to the item.
+     * Will return {@code null} if no changes were made.
+     *
+     * @param contextBox context box
+     * @return modified item or {@code null} if no changes
+     */
+    public abstract @Nullable ItemStack modifyItem(ItemContextBox contextBox);
 
-	/**
-	 * Gets the item modifiers applier
-	 *
-	 * @return item modifiers handler
-	 */
-	public static ItemModifiersHandler itemModifiersHandler() {
-		assert itemModifiersHandler != null;
-		return itemModifiersHandler;
-	}
+    /**
+     * Gets the item modifiers applier
+     *
+     * @return item modifiers handler
+     */
+    public static ItemModifiersHandler itemModifiersHandler() {
+        assert itemModifiersHandler != null;
+        return itemModifiersHandler;
+    }
 
 }

@@ -12,7 +12,7 @@
          private CompletableFuture<?> chunkLoadFuture;
          private @Nullable CompletableFuture<org.bukkit.Location> eventFuture; // Paper
          private final ChunkLoadCounter chunkLoadCounter = new ca.spottedleaf.moonrise.patches.chunk_system.MoonriseChunkLoadCounter(); // Paper - rewrite chunk system
-+	    @Nullable String initialDimensionId = null; // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++        @Nullable String initialDimensionId = null; // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
  
          Preparing(final ServerLevel spawnLevel, final CompletableFuture<Vec3> spawnPosition, final Vec2 spawnAngle) {
              this.spawnLevel = spawnLevel;

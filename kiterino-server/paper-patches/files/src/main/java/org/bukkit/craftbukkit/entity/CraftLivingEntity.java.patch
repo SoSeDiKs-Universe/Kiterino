@@ -11,15 +11,15 @@
 +        return this.getHandle().checkBedExists();
 +    }
 +
-+	@Override
-+	public Location getSleepingLocation() {
-+		return this.getHandle().getSleepingPos().map(pos -> new Location(this.getWorld(), pos.getX(), pos.getY(), pos.getZ())).orElse(null);
-+	}
++    @Override
++    public Location getSleepingLocation() {
++        return this.getHandle().getSleepingPos().map(pos -> new Location(this.getWorld(), pos.getX(), pos.getY(), pos.getZ())).orElse(null);
++    }
 +
-+	@Override
-+	public void setSleepingLocation(Location loc) {
-+		this.getHandle().setSleepingPos(loc == null ? null : org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(loc));
-+	}
++    @Override
++    public void setSleepingLocation(Location loc) {
++        this.getHandle().setSleepingPos(loc == null ? null : org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(loc));
++    }
 +    // Kiterino end - Expose sleeping loc
 +
 +    // Kiterino start - Allow laying at will

@@ -8,11 +8,11 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface PacketItemModifierContext extends ItemModifierContext {
 
-	/**
-	 * The item packet that was in the base of this context
-	 *
-	 * @return the item packet, if present
-	 */
-	Object packet();
+    /**
+     * The item packet that was in the base of this context
+     *
+     * @return the item packet, if present
+     */
+    Object packet();
 
 }

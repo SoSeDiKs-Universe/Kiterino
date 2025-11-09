@@ -1,16 +1,16 @@
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4722,4 +_,13 @@
+@@ -4725,4 +_,13 @@
              }
          }
      }
 +
-+	// Kiterino start - Allow checking for Halloween season
-+	/**
-+	 * Checks whether it's currently Halloween season
-+	 *
-+	 * @return whether it's currently Halloween season
-+	 */
-+	boolean isHalloweenSeason();
-+	// Kiterino end - Allow checking for Halloween season
++    // Kiterino start - Allow checking for Halloween season
++    /**
++     * Checks whether it's currently Halloween season
++     *
++     * @return whether it's currently Halloween season
++     */
++    boolean isHalloweenSeason();
++    // Kiterino end - Allow checking for Halloween season
  }
