@@ -98,6 +98,13 @@ public final class KiterinoWorldConfig {
     }
     // Kiterino end - Ghast options
 
+    // Kiterino start - Creeper options
+    public boolean creepersStalkPlayers = false; // Kiterino - Creepers stalk players
+    private void creeperOptions() {
+	    creepersStalkPlayers = getBoolean("entity.creeper.stalk-players", creepersStalkPlayers, "Creepers require the target to see them in order to explode");
+    }
+    // Kiterino end - Creeper options
+
     // Kiterino start - Projectile options
     public float arrowWaterInertia = 0.6F;
     public boolean applyImpalingOnWetMobs = false;

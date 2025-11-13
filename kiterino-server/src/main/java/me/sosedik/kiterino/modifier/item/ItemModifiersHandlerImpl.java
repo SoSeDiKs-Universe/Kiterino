@@ -400,6 +400,8 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     private static Packet<?> handle(CraftPlayer player, ClientboundContainerSetContentPacket packet) {
         boolean modified = false;
         List<ItemStack> items = packet.items();
+        if (!(items instanceof ArrayList<ItemStack>))
+            items = new ArrayList<>(items);
         for (int i = 0; i < items.size(); i++) {
             ItemStack original = items.get(i);
             var context = new SlottedItemPacketContext(packet, i);

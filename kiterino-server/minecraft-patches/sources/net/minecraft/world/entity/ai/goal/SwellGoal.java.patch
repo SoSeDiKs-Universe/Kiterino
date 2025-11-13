@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/entity/ai/goal/SwellGoal.java
++++ b/net/minecraft/world/entity/ai/goal/SwellGoal.java
+@@ -18,7 +_,7 @@
+     @Override
+     public boolean canUse() {
+         LivingEntity target = this.creeper.getTarget();
+-        return this.creeper.getSwellDir() > 0 || target != null && this.creeper.distanceToSqr(target) < 9.0;
++        return this.creeper.getSwellDir() > 0 || target != null && this.creeper.distanceToSqr(target) < 9.0 && (!this.creeper.level().kiterinoConfig.creepersStalkPlayers || this.creeper.isLookingAtMe(target, 0.9, false, true, this.creeper.getEyeY())); // Kiterino - Creepers stalk players
+     }
+ 
+     // Paper start - Fix MC-179072
