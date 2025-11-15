@@ -1,0 +1,109 @@
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaAxolotlBucket.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaAxolotlBucket.java
+@@ -18,10 +_,12 @@
+ public class CraftMetaAxolotlBucket extends CraftMetaItem implements AxolotlBucketMeta {
+ 
+     static final ItemMetaKey VARIANT = new ItemMetaKey("Variant", "axolotl-variant");
++    static final ItemMetaKey AGE = new ItemMetaKey("Age", "axolotl-age"); // Kiterino - Expose age to AxolotlBucketMeta
+     static final ItemMetaKeyType<TypedEntityData<EntityType<?>>> ENTITY_TAG = new ItemMetaKeyType<>(DataComponents.ENTITY_DATA, "entity-tag");
+     static final ItemMetaKeyType<CustomData> BUCKET_ENTITY_TAG = new ItemMetaKeyType<>(DataComponents.BUCKET_ENTITY_DATA, "bucket-entity-tag");
+ 
+     private Integer variant;
++    private Integer age; // Kiterino - Expose age to AxolotlBucketMeta
+     private CompoundTag entityTag;
+     private CompoundTag bucketEntityTag;
+ 
+@@ -35,6 +_,7 @@
+         this.variant = bucketMeta.variant;
+         this.entityTag = bucketMeta.entityTag;
+         this.bucketEntityTag = bucketMeta.bucketEntityTag;
++        this.age = bucketMeta.age; // Kiterino - Expose age to AxolotlBucketMeta
+     }
+ 
+     CraftMetaAxolotlBucket(DataComponentPatch tag, final java.util.Set<net.minecraft.core.component.DataComponentType<?>> extraHandledDcts) {
+@@ -43,10 +_,12 @@
+         getOrEmpty(tag, CraftMetaAxolotlBucket.ENTITY_TAG).ifPresent((nbt) -> {
+             this.entityTag = nbt.copyTagWithEntityId();
+             this.entityTag.getInt(CraftMetaAxolotlBucket.VARIANT.NBT).ifPresent(variant -> this.variant = variant);
++            this.entityTag.getInt(CraftMetaAxolotlBucket.AGE.NBT).ifPresent(age -> this.age = age); // Kiterino - Expose age to AxolotlBucketMeta
+         });
+         getOrEmpty(tag, CraftMetaAxolotlBucket.BUCKET_ENTITY_TAG).ifPresent((nbt) -> {
+             this.bucketEntityTag = nbt.copyTag();
+             this.bucketEntityTag.getInt(CraftMetaAxolotlBucket.VARIANT.NBT).ifPresent(variant -> this.variant = variant);
++            this.bucketEntityTag.getInt(CraftMetaAxolotlBucket.AGE.NBT).ifPresent(age -> this.age = age); // Kiterino - Expose age to AxolotlBucketMeta
+         });
+     }
+ 
+@@ -57,6 +_,12 @@
+         if (variant != null) {
+             this.variant = variant;
+         }
++        // Kiterino start - Expose age to AxolotlBucketMeta
++        Integer age = SerializableMeta.getObject(Integer.class, map, CraftMetaAxolotlBucket.AGE.BUKKIT, true);
++        if (age != null) {
++            this.age = age;
++        }
++        // Kiterino end - Expose age to AxolotlBucketMeta
+     }
+ 
+     @Override
+@@ -92,6 +_,14 @@
+             }
+             bucketEntityTag.putInt(CraftMetaAxolotlBucket.VARIANT.NBT, this.variant);
+         }
++        // Kiterino start - Expose age to AxolotlBucketMeta
++        if (this.age != null) {
++            if (bucketEntityTag == null) {
++                bucketEntityTag = new CompoundTag();
++            }
++            bucketEntityTag.putInt(CraftMetaAxolotlBucket.AGE.NBT, this.age);
++        }
++        // Kiterino end - Expose age to AxolotlBucketMeta
+ 
+         if (bucketEntityTag != null) {
+             tag.put(CraftMetaAxolotlBucket.BUCKET_ENTITY_TAG, CustomData.of(bucketEntityTag));
+@@ -131,6 +_,7 @@
+         }
+         if (meta instanceof final CraftMetaAxolotlBucket other) {
+             return Objects.equals(this.variant, other.variant)
++                    && Objects.equals(this.age, other.age) // Kiterino - Expose age to AxolotlBucketMeta
+                     && Objects.equals(this.entityTag, other.entityTag)
+                     && Objects.equals(this.bucketEntityTag, other.bucketEntityTag);
+         }
+@@ -150,6 +_,11 @@
+         if (this.hasVariant()) {
+             hash = 61 * hash + this.variant;
+         }
++        // Kiterino start - Expose age to AxolotlBucketMeta
++        if (this.age != null) {
++            hash = 61 * hash + this.age;
++        }
++        // Kiterino end - Expose age to AxolotlBucketMeta
+         if (this.entityTag != null) {
+             hash = 61 * hash + this.entityTag.hashCode();
+         }
+@@ -181,7 +_,24 @@
+         if (this.hasVariant()) {
+             builder.put(CraftMetaAxolotlBucket.VARIANT.BUKKIT, this.variant);
+         }
++        // Kiterino start - Expose age to AxolotlBucketMeta
++        if (this.age != null) {
++            builder.put(CraftMetaAxolotlBucket.VARIANT.BUKKIT, this.age);
++        }
++        // Kiterino end - Expose age to AxolotlBucketMeta
+ 
+         return builder;
+     }
++
++    // Kiterino start - Expose age to AxolotlBucketMeta
++    @Override
++    public int getAge() {
++        return age == null ? 0 : age;
++    }
++
++    @Override
++    public void setAge(int age) {
++        this.age = age;
++    }
++    // Kiterino end - Expose age to AxolotlBucketMeta
+ }

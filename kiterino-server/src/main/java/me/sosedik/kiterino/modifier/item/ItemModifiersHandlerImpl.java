@@ -58,6 +58,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.OminousItemSpawner;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.EyeOfEnder;
@@ -522,6 +523,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemDisplay);
                 original = itemDisplay.getItemStack();
             }
+	        case OminousItemSpawner ominousItemSpawner -> {
+		        context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), ominousItemSpawner);
+		        original = ominousItemSpawner.getItem();
+	        }
             default -> {
                 return packet;
             }
