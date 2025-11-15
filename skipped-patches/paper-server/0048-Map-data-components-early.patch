@@ -1,0 +1,149 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 5 Dec 2024 00:24:31 +0200
+Subject: [PATCH] Map data components early
+
+Skipped: Can't work with data components API during bootstrap
+
+
+diff --git a/src/main/java/io/papermc/paper/datacomponent/DataComponentAdapters.java b/src/main/java/io/papermc/paper/datacomponent/DataComponentAdapters.java
+index 7675588202b20af182cc44253f4c036d37000a8c..77b92d82c1fafd2cf37d03509519776cef59ce7e 100644
+--- a/src/main/java/io/papermc/paper/datacomponent/DataComponentAdapters.java
++++ b/src/main/java/io/papermc/paper/datacomponent/DataComponentAdapters.java
+@@ -136,10 +136,23 @@ public final class DataComponentAdapters {
+         // register(DataComponents.LOCK, PaperLockCode::new);
+         register(DataComponents.CONTAINER_LOOT, PaperSeededContainerLoot::new);
+ 
++        // Kiterino start - Map data components early
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.DEBUG_STICK_STATE);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.ENTITY_DATA);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.BUCKET_ENTITY_DATA);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.BLOCK_ENTITY_DATA);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.BEES);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.CUSTOM_DATA);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.CREATIVE_SLOT_LOCK);
++        registerUntyped((DataComponentType<Unit>) (DataComponentType<?>) DataComponents.LOCK);
++        // Kiterino end - Map data components early
+         // TODO: REMOVE THIS... we want to build the PR... so lets just make things UNTYPED!
+         for (final Map.Entry<ResourceKey<DataComponentType<?>>, DataComponentType<?>> componentType : BuiltInRegistries.DATA_COMPONENT_TYPE.entrySet()) {
+             if (!ADAPTERS.containsKey(componentType.getKey())) {
+-                registerUntyped((DataComponentType<Unit>) componentType.getValue());
++                // Kiterino start - Map data components early
++                //registerUntyped((DataComponentType<Unit>) componentType.getValue());
++                throw new IllegalStateException("Unregistered data component: " + componentType.getKey());
++                // Kiterino end - Map data components early
+             }
+         }
+     }
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/KiterinoDataComponentMapper.java b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoDataComponentMapper.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..156289033ce9c9767c6e2931962b3a9696ff3445
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/registry/data/KiterinoDataComponentMapper.java
+@@ -0,0 +1,94 @@
++package me.sosedik.kiterino.registry.data;
++
++import io.papermc.paper.datacomponent.DataComponentType;
++import io.papermc.paper.datacomponent.PaperDataComponentType;
++import net.minecraft.core.component.DataComponents;
++import org.bukkit.NamespacedKey;
++import org.jspecify.annotations.NullMarked;
++
++@NullMarked
++public class KiterinoDataComponentMapper extends DataComponentMapper {
++
++    @Override
++    public DataComponentType.NonValued unvalued(String name) {
++        return switch (name) {
++            case "hide_additional_tooltip" -> unvalued(name, DataComponents.HIDE_ADDITIONAL_TOOLTIP);
++            case "hide_tooltip" -> unvalued(name, DataComponents.HIDE_TOOLTIP);
++            case "intangible_projectile" -> unvalued(name, DataComponents.INTANGIBLE_PROJECTILE);
++            case "glider" -> unvalued(name, DataComponents.GLIDER);
++            default -> throw new IllegalArgumentException("Unmapped data component: " + name);
++        };
++    }
++
++    @Override
++    public <T> DataComponentType.Valued<T> valued(String name) {
++        return switch (name) {
++            case "max_stack_size" -> valued(name, DataComponents.MAX_STACK_SIZE);
++            case "max_damage" -> valued(name, DataComponents.MAX_DAMAGE);
++            case "damage" -> valued(name, DataComponents.DAMAGE);
++            case "unbreakable" -> valued(name, DataComponents.UNBREAKABLE);
++            case "custom_name" -> valued(name, DataComponents.CUSTOM_NAME);
++            case "item_name" -> valued(name, DataComponents.ITEM_NAME);
++            case "item_model" -> valued(name, DataComponents.ITEM_MODEL);
++            case "lore" -> valued(name, DataComponents.LORE);
++            case "rarity" -> valued(name, DataComponents.RARITY);
++            case "enchantments" -> valued(name, DataComponents.ENCHANTMENTS);
++            case "can_place_on" -> valued(name, DataComponents.CAN_PLACE_ON);
++            case "can_break" -> valued(name, DataComponents.CAN_BREAK);
++            case "attribute_modifiers" -> valued(name, DataComponents.ATTRIBUTE_MODIFIERS);
++            case "custom_model_data" -> valued(name, DataComponents.CUSTOM_MODEL_DATA);
++            case "repair_cost" -> valued(name, DataComponents.REPAIR_COST);
++            case "enchantment_glint_override" -> valued(name, DataComponents.ENCHANTMENT_GLINT_OVERRIDE);
++            case "food" -> valued(name, DataComponents.FOOD);
++            case "consumable" -> valued(name, DataComponents.CONSUMABLE);
++            case "use_remainder" -> valued(name, DataComponents.USE_REMAINDER);
++            case "use_cooldown" -> valued(name, DataComponents.USE_COOLDOWN);
++            case "damage_resistant" -> valued(name, DataComponents.DAMAGE_RESISTANT);
++            case "tool" -> valued(name, DataComponents.TOOL);
++            case "enchantable" -> valued(name, DataComponents.ENCHANTABLE);
++            case "equippable" -> valued(name, DataComponents.EQUIPPABLE);
++            case "repairable" -> valued(name, DataComponents.REPAIRABLE);
++            case "tooltip_style" -> valued(name, DataComponents.TOOLTIP_STYLE);
++            case "death_protection" -> valued(name, DataComponents.DEATH_PROTECTION);
++            case "stored_enchantments" -> valued(name, DataComponents.STORED_ENCHANTMENTS);
++            case "dyed_color" -> valued(name, DataComponents.DYED_COLOR);
++            case "map_color" -> valued(name, DataComponents.MAP_COLOR);
++            case "map_id" -> valued(name, DataComponents.MAP_ID);
++            case "map_decorations" -> valued(name, DataComponents.MAP_DECORATIONS);
++            case "map_post_processing" -> valued(name, DataComponents.MAP_POST_PROCESSING);
++            case "charged_projectiles" -> valued(name, DataComponents.CHARGED_PROJECTILES);
++            case "bundle_contents" -> valued(name, DataComponents.BUNDLE_CONTENTS);
++            case "potion_contents" -> valued(name, DataComponents.POTION_CONTENTS);
++            case "suspicious_stew_effects" -> valued(name, DataComponents.SUSPICIOUS_STEW_EFFECTS);
++            case "writable_book_content" -> valued(name, DataComponents.WRITABLE_BOOK_CONTENT);
++            case "written_book_content" -> valued(name, DataComponents.WRITTEN_BOOK_CONTENT);
++            case "trim" -> valued(name, DataComponents.TRIM);
++            case "instrument" -> valued(name, DataComponents.INSTRUMENT);
++            case "ominous_bottle_amplifier" -> valued(name, DataComponents.OMINOUS_BOTTLE_AMPLIFIER);
++            case "jukebox_playable" -> valued(name, DataComponents.JUKEBOX_PLAYABLE);
++            case "recipes" -> valued(name, DataComponents.RECIPES);
++            case "lodestone_tracker" -> valued(name, DataComponents.LODESTONE_TRACKER);
++            case "firework_explosion" -> valued(name, DataComponents.FIREWORK_EXPLOSION);
++            case "fireworks" -> valued(name, DataComponents.FIREWORKS);
++            case "profile" -> valued(name, DataComponents.PROFILE);
++            case "note_block_sound" -> valued(name, DataComponents.NOTE_BLOCK_SOUND);
++            case "banner_patterns" -> valued(name, DataComponents.BANNER_PATTERNS);
++            case "base_color" -> valued(name, DataComponents.BASE_COLOR);
++            case "pot_decorations" -> valued(name, DataComponents.POT_DECORATIONS);
++            case "container" -> valued(name, DataComponents.CONTAINER);
++            case "block_state" -> valued(name, DataComponents.BLOCK_STATE);
++            case "container_loot" -> valued(name, DataComponents.CONTAINER_LOOT);
++            default -> throw new IllegalArgumentException("Unmapped data component: " + name);
++        };
++    }
++
++    @SuppressWarnings("unchecked")
++    private <T, NMS> DataComponentType.Valued<T> valued(String name, net.minecraft.core.component.DataComponentType<NMS> type) {
++        return (DataComponentType.Valued<T>) PaperDataComponentType.of(NamespacedKey.minecraft(name), type);
++    }
++
++    private <NMS> DataComponentType.NonValued unvalued(String name, net.minecraft.core.component.DataComponentType<NMS> type) {
++        return (DataComponentType.NonValued) PaperDataComponentType.of(NamespacedKey.minecraft(name), type);
++    }
++
++}
+diff --git a/src/main/java/net/minecraft/server/Bootstrap.java b/src/main/java/net/minecraft/server/Bootstrap.java
+index 56169e077b0275773953e14bd5016c3d472f8690..83e09a6053bb84c66ee2770f10aca535fb7ba790 100644
+--- a/src/main/java/net/minecraft/server/Bootstrap.java
++++ b/src/main/java/net/minecraft/server/Bootstrap.java
+@@ -63,6 +63,7 @@ public class Bootstrap {
+             Bootstrap.isBootstrapped = true;
+             Instant instant = Instant.now();
+ 
++            me.sosedik.kiterino.registry.data.DataComponentMapper.instance = new me.sosedik.kiterino.registry.data.KiterinoDataComponentMapper(); // Kiterino - Map data components early
+             // Kiterino start - Init/destruct injectors
+             if (!Boolean.getBoolean("Kiterino.testingBase")) {
+                 me.sosedik.kiterino.util.KiterinoBootstrapMaterialInjectorImpl.init(); // Kiterino - Injecting custom Materials

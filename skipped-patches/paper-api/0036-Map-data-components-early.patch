@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 5 Dec 2024 00:24:31 +0200
+Subject: [PATCH] Map data components early
+
+Skipped: Can't work with data components API during bootstrap
+
+diff --git a/src/main/java/io/papermc/paper/datacomponent/DataComponentTypes.java b/src/main/java/io/papermc/paper/datacomponent/DataComponentTypes.java
+index 68284abd5c4358617ee7766101e942f81a001e2c..c3d64bdcccca720c39c766fa16b89a1aad2100b0 100644
+--- a/src/main/java/io/papermc/paper/datacomponent/DataComponentTypes.java
++++ b/src/main/java/io/papermc/paper/datacomponent/DataComponentTypes.java
+@@ -331,12 +331,18 @@ public final class DataComponentTypes {
+     public static final DataComponentType.Valued<SeededContainerLoot> CONTAINER_LOOT = valued("container_loot");
+ 
+     private static DataComponentType.NonValued unvalued(final String name) {
+-        return (DataComponentType.NonValued) requireNonNull(Registry.DATA_COMPONENT_TYPE.get(NamespacedKey.minecraft(name)), name + " unvalued data component type couldn't be found, this is a bug.");
++        // Kiterino start - Map data components early
++        //return (DataComponentType.NonValued) requireNonNull(Registry.DATA_COMPONENT_TYPE.get(NamespacedKey.minecraft(name)), name + " unvalued data component type couldn't be found, this is a bug.");
++        return me.sosedik.kiterino.registry.data.DataComponentMapper.instance.unvalued(name);
++        // Kiterino end - Map data components early
+     }
+ 
+     @SuppressWarnings("unchecked")
+     private static <T> DataComponentType.Valued<T> valued(final String name) {
+-        return (DataComponentType.Valued<T>) requireNonNull(Registry.DATA_COMPONENT_TYPE.get(NamespacedKey.minecraft(name)), name + " valued data component type couldn't be found, this is a bug.");
++        // Kiterino start - Map data components early
++        //return (DataComponentType.Valued<T>) requireNonNull(Registry.DATA_COMPONENT_TYPE.get(NamespacedKey.minecraft(name)), name + " valued data component type couldn't be found, this is a bug.");
++        return me.sosedik.kiterino.registry.data.DataComponentMapper.instance.valued(name);
++        // Kiterino end - Map data components early
+     }
+ 
+     private DataComponentTypes() {
+diff --git a/src/main/java/me/sosedik/kiterino/registry/data/DataComponentMapper.java b/src/main/java/me/sosedik/kiterino/registry/data/DataComponentMapper.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..ef36c95fd94335db282cc7fe0ab16c05f97411b7
+--- /dev/null
++++ b/src/main/java/me/sosedik/kiterino/registry/data/DataComponentMapper.java
+@@ -0,0 +1,15 @@
++package me.sosedik.kiterino.registry.data;
++
++import io.papermc.paper.datacomponent.DataComponentType;
++import org.jspecify.annotations.NullMarked;
++
++@NullMarked
++public abstract class DataComponentMapper {
++
++    public static DataComponentMapper instance;
++
++    public abstract DataComponentType.NonValued unvalued(String name);
++
++    public abstract <T> DataComponentType.Valued<T> valued(String name);
++
++}

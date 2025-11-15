@@ -3,6 +3,7 @@ package me.sosedik.kiterino.modifier.item.context.packet;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.UnknownNullability;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import java.util.function.Function;
 @NullMarked
 public class EntityDataPacketContext extends EntityPacketContext {
 
-    static Function<Object, @Nullable Entity> entityFetcher;
+    static @UnknownNullability Function<Object, @Nullable Entity> entityFetcher;
 
     private final EntityType entityType;
 
@@ -26,7 +27,7 @@ public class EntityDataPacketContext extends EntityPacketContext {
      * @param entityId entity id
      * @param entity entity instance
      */
-    public EntityDataPacketContext(Object packet, World world, int entityId, EntityType entityType, Object entity) {
+    public EntityDataPacketContext(Object packet, @Nullable World world, int entityId, EntityType entityType, Object entity) {
         super(packet, world, entityId, () -> entityFetcher.apply(entity));
         this.entityType = entityType;
     }

@@ -101,7 +101,7 @@ public final class KiterinoWorldConfig {
     // Kiterino start - Creeper options
     public boolean creepersStalkPlayers = false; // Kiterino - Creepers stalk players
     private void creeperOptions() {
-	    creepersStalkPlayers = getBoolean("entity.creeper.stalk-players", creepersStalkPlayers, "Creepers require the target to see them in order to explode");
+        creepersStalkPlayers = getBoolean("entity.creeper.stalk-players", creepersStalkPlayers, "Creepers require the target to see them in order to explode");
     }
     // Kiterino end - Creeper options
 

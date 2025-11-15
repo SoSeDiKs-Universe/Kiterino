@@ -35,7 +35,7 @@ public class ItemContextBox {
      * @param context modification context
      * @param item item
      */
-    public ItemContextBox(Player viewer, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
+    public ItemContextBox(@Nullable Player viewer, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
         this(viewer, viewer.locale(), contextType, context, item);
     }
 

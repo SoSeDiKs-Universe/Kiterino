@@ -23,7 +23,7 @@ public class EntityEquipmentPacketContext extends EntityPacketContext {
      * @param entity entity
      * @param slot equipment slot
      */
-    public EntityEquipmentPacketContext(Object packet, World world, int entityId, @Nullable Entity entity, EquipmentSlot slot) {
+    public EntityEquipmentPacketContext(Object packet, @Nullable World world, int entityId, @Nullable Entity entity, EquipmentSlot slot) {
         super(packet, world, entityId, entity);
         this.slot = slot;
     }

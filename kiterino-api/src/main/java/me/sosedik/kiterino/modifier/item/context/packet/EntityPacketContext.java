@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public abstract class EntityPacketContext implements PacketItemModifierContext {
 
     private final Object packet;
-    private final World world;
+    private final @Nullable World world;
     private final int entityId;
     protected @Nullable Entity entity;
     private @Nullable Supplier<@Nullable Entity> entityFetcher;
@@ -29,7 +29,7 @@ public abstract class EntityPacketContext implements PacketItemModifierContext {
      * @param entityId internal entity id
      * @param entity entity
      */
-    protected EntityPacketContext(Object packet, World world, int entityId, @Nullable Entity entity) {
+    protected EntityPacketContext(Object packet, @Nullable World world, int entityId, @Nullable Entity entity) {
         this.packet = packet;
         this.world = world;
         this.entityId = entityId;
@@ -45,7 +45,7 @@ public abstract class EntityPacketContext implements PacketItemModifierContext {
      * @param entityId internal entity id
      * @param entityFetcher entity supplier
      */
-    protected EntityPacketContext(Object packet, World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
+    protected EntityPacketContext(Object packet, @Nullable World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
         this.packet = packet;
         this.world = world;
         this.entityId = entityId;
@@ -72,7 +72,7 @@ public abstract class EntityPacketContext implements PacketItemModifierContext {
      *
      * @return world
      */
-    public World getWorld() {
+    public @Nullable World getWorld() {
         return this.world;
     }
 

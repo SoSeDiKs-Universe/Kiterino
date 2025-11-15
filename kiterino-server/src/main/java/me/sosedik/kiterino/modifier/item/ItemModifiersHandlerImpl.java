@@ -83,6 +83,7 @@ import net.minecraft.world.item.crafting.display.StonecutterRecipeDisplay;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -104,6 +105,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -339,7 +341,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         ItemPacketContextInitializer.init();
     }
 
-    public static Packet<?> processPacket(CraftPlayer player, Packet<?> initialPacket) {
+    public static Packet<?> processPacket(@Nullable CraftPlayer player, Packet<?> initialPacket) {
         if (modifiers.isEmpty()) return initialPacket;
         if (KiterinoConfig.itemModifiersOrder.isEmpty()) return initialPacket;
 
@@ -364,7 +366,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private static Packet<?> handle(CraftPlayer player, ClientboundBundlePacket initialPacket) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundBundlePacket initialPacket) {
         List<Packet<? super ClientGamePacketListener>> packets;
         if (initialPacket.packets instanceof ArrayList list) {
             packets = list;
@@ -388,7 +390,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return initialPacket;
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundContainerSetSlotPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundContainerSetSlotPacket packet) {
         ItemStack original = packet.getItem();
         var context = new SlottedItemPacketContext(packet, packet.getSlot());
         var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
@@ -397,7 +399,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return packet;
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundContainerSetContentPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundContainerSetContentPacket packet) {
         boolean modified = false;
         List<ItemStack> items = packet.items();
         if (!(items instanceof ArrayList<ItemStack>))
@@ -422,13 +424,13 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return modified ? new ClientboundContainerSetContentPacket(packet.containerId(), packet.stateId(), items, carriedResult == null ? carriedOriginal : carriedResult) : packet;
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundPlaceGhostRecipePacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundPlaceGhostRecipePacket packet) {
         RecipeDisplay display = packet.recipeDisplay();
         RecipeDisplay newDisplay = replaceRecipeDisplay(packet, ItemModifierContextType.RECIPE_GHOST, player, display); // TODO recipe id :F
         return display == newDisplay ? packet : new ClientboundPlaceGhostRecipePacket(packet.containerId(), newDisplay);
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundSetCursorItemPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundSetCursorItemPacket packet) {
         ItemStack original = packet.contents();
         var context = new SlottedItemPacketContext(packet, InventorySlotHelper.CURSOR);
         var contextBox = new ItemContextBox(player, ItemModifierContextType.SET_SLOT, context, original.asBukkitCopy());
@@ -436,11 +438,11 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return result == null ? packet : new ClientboundSetCursorItemPacket(result);
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundSetEquipmentPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundSetEquipmentPacket packet) {
         List<Pair<EquipmentSlot, ItemStack>> slots = packet.getSlots();
         int entityId = packet.getEntity();
         org.bukkit.entity.Entity entity = null;
-        World world = player.getWorld();
+        World world = player == null ? null : player.getWorld();
         for (int i = 0; i < slots.size(); i++) {
             Pair<EquipmentSlot, ItemStack> slot = slots.get(i);
             ItemStack original = slot.getSecond();
@@ -454,9 +456,19 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     // As much as I dislike this, not sure if there's a better way
-    private static Packet<?> handle(CraftPlayer player, ClientboundSetEntityDataPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundSetEntityDataPacket packet) {
         int entityId = packet.id();
-        Entity entity = ((CraftWorld) player.getWorld()).getHandle().moonrise$getEntityLookup().get(entityId);
+        Entity entity = null;
+        if (player == null) {
+            for (World world : Bukkit.getWorlds()) {
+                entity = ((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(entityId);
+                if (entity != null) {
+                    break;
+                }
+            }
+        } else {
+            entity = ((CraftWorld) player.getWorld()).getHandle().moonrise$getEntityLookup().get(entityId);
+        }
         if (entity == null) {
             List<SynchedEntityData.DataValue<?>> dataValues = packet.packedItems();
             for (int i = 0; i < dataValues.size(); i++) {
@@ -465,7 +477,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
                 ItemStack original = (ItemStack) dataValue.value();
                 var contextType = ItemModifierContextType.UNKNOWN_ENTITY_DATA;
-                var context = new UnknownEntityDataContext(packet, player.getWorld(), entityId);
+                var context = new UnknownEntityDataContext(packet, player == null ? null : player.getWorld(), entityId);
                 var contextBox = new ItemContextBox(player, contextType, context, original.asBukkitCopy());
                 ItemStack result = fromBukkit(contextBox, original);
                 if (result != null) dataValues.set(i, new SynchedEntityData.DataValue<>(dataValue.id(), EntityDataSerializers.ITEM_STACK, result));
@@ -479,35 +491,35 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         ItemStack original;
         switch (entity) {
             case ItemEntity droppedItem -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), droppedItem);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), droppedItem);
                 original = droppedItem.getItem();
             }
             case ItemFrame itemFrame -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemFrame);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemFrame);
                 original = itemFrame.getItem();
             }
             case ThrowableItemProjectile throwableProjectile -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), throwableProjectile);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), throwableProjectile);
                 original = throwableProjectile.getItem();
             }
             case EyeOfEnder eyeOfEnder -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), eyeOfEnder);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), eyeOfEnder);
                 original = eyeOfEnder.getItem();
             }
             case FireworkRocketEntity firework -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), firework);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), firework);
                 original = firework.getItem();
             }
             case Fireball fireball -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), fireball);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), fireball);
                 original = fireball.getItem();
             }
             case AbstractWindCharge windCharge -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), windCharge);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), windCharge);
                 original = windCharge.getItem();
             }
             case Display.ItemDisplay itemDisplay -> {
-                context = new EntityDataPacketContext(packet, player.getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemDisplay);
+                context = new EntityDataPacketContext(packet, entity.level().getWorld(), entityId, CraftEntityType.minecraftToBukkit(entity.getType()), itemDisplay);
                 original = itemDisplay.getItemStack();
             }
             default -> {
@@ -526,7 +538,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return packet;
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundSetPlayerInventoryPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundSetPlayerInventoryPacket packet) {
         ItemStack original = packet.contents();
         int slot = packet.slot();
         var context = new SlottedItemPacketContext(packet, slot);
@@ -536,7 +548,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     // Yes, this also sucks!
-    private static Packet<?> handle(CraftPlayer player, ClientboundUpdateRecipesPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundUpdateRecipesPacket packet) {
         Map<ResourceKey<RecipePropertySet>, RecipePropertySet> resourceKeyRecipePropertySetMap = new HashMap<>(packet.itemSets());
         resourceKeyRecipePropertySetMap.replaceAll((key, set) -> {
             boolean[] modified = {false};
@@ -591,7 +603,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     // This one is a real sucker (and I thought the entity data was bad :')
     // Changing items inside the recipes is a no-go and there's lack of context upon
     // writing to the buffer, so we have to recreate the recipes in there...
-    private static Packet<?> handle(CraftPlayer player, ClientboundRecipeBookAddPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundRecipeBookAddPacket packet) {
         List<ClientboundRecipeBookAddPacket.Entry> entries = new ArrayList<>(packet.entries());
         for (int r = 0; r < entries.size(); r++) {
             ClientboundRecipeBookAddPacket.Entry entry = entries.get(r);
@@ -633,7 +645,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return new ClientboundRecipeBookAddPacket(entries, packet.replace());
     }
 
-    private static RecipeDisplay replaceRecipeDisplay(Packet<?> packet, ItemModifierContextType contextType, CraftPlayer player, RecipeDisplay display) {
+    private static RecipeDisplay replaceRecipeDisplay(Packet<?> packet, ItemModifierContextType contextType, @Nullable CraftPlayer player, RecipeDisplay display) {
         return switch (display) {
             case FurnaceRecipeDisplay furnaceRecipeDisplay -> {
                 SlotDisplay ingredient = replaceSlotDisplay(player, contextType, new RecipeBookPacketContext(packet, RecipeBookPacketContext.DisplayType.INGREDIENT), furnaceRecipeDisplay.ingredient());
@@ -674,7 +686,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         };
     }
 
-    private static SlotDisplay replaceSlotDisplay(CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, SlotDisplay slotDisplay) {
+    private static SlotDisplay replaceSlotDisplay(@Nullable CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, SlotDisplay slotDisplay) {
         return switch (slotDisplay) {
             case SlotDisplay.Composite composite -> {
                 List<SlotDisplay> displays = new ArrayList<>(composite.contents());
@@ -707,7 +719,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         };
     }
 
-    private static Ingredient replaceIngredient(CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, Ingredient ingredient) {
+    private static Ingredient replaceIngredient(@Nullable CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, Ingredient ingredient) {
         final boolean[] modified = {false};
 
         Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
@@ -719,7 +731,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             }
 
             Item item = holder.value();
-            org.bukkit.inventory.ItemStack parsed = ItemModifier.modifyItem(player, new ItemStack(item).asBukkitMirror());
+            org.bukkit.inventory.ItemStack parsed = ItemModifier.modifyItem(player, player == null ? Locale.US : player.locale(), new ItemStack(item).asBukkitMirror());
             if (parsed == null) {
                 return holder;
             }
@@ -750,13 +762,13 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return superDirtyCopy;
     }
 
-    private static @Nullable ItemStack replaceItem(CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, ItemStack original) {
+    private static @Nullable ItemStack replaceItem(@Nullable CraftPlayer player, ItemModifierContextType contextType, RecipeBookPacketContext context, ItemStack original) {
         var contextBox = new ItemContextBox(player, contextType, context, original.asBukkitCopy());
         return fromBukkit(contextBox, original);
     }
 
     // I may have sinned, twice
-    private static Packet<?> handle(CraftPlayer player, ClientboundUpdateAdvancementsPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundUpdateAdvancementsPacket packet) {
         List<AdvancementHolder> advancements = new ArrayList<>(packet.getAdded());
         for (int i = 0; i < advancements.size(); i++) {
             AdvancementHolder oldHolder = advancements.get(i);
@@ -798,7 +810,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     // ..thrice?!
-    private static Packet<?> handle(CraftPlayer player, ClientboundMerchantOffersPacket packet) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundMerchantOffersPacket packet) {
         MerchantOffers newOffers = new MerchantOffers();
         MerchantOffers oldOffers = packet.getOffers();
         for (MerchantOffer merchantOffer : oldOffers) {
@@ -845,7 +857,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         return packet;
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundLevelParticlesPacket initialPacket) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundLevelParticlesPacket initialPacket) {
         if (!(initialPacket.getParticle() instanceof ItemParticleOption particleOption)) return initialPacket;
 
         ItemStack original = particleOption.itemStack;
@@ -858,7 +870,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     }
 
     // Kiterino start - Parse hover events
-    private static Packet<?> handle(CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundSystemChatPacket initialPacket) {
         if (KiterinoConfig.parseItemHoversEverywhere) {
             return initialPacket;
         }
@@ -870,12 +882,12 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
         Component component = initialPacket.content();
-        component = ComponentSerialization.replaceHoverEvent(player, player.locale(), component);
+        component = ComponentSerialization.replaceHoverEvent(player,player == null ? Locale.US : player.locale(), component);
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
         return new ClientboundSystemChatPacket(component, false);
     }
 
-    private static Packet<?> handle(CraftPlayer player, ClientboundDisguisedChatPacket initialPacket) {
+    private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundDisguisedChatPacket initialPacket) {
         if (KiterinoConfig.parseItemHoversEverywhere) {
             return initialPacket;
         }
@@ -883,7 +895,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
         Component component = initialPacket.message();
-        component = ComponentSerialization.replaceHoverEvent(player, player.locale(), component);
+        component = ComponentSerialization.replaceHoverEvent(player, player == null ? Locale.US : player.locale(), component);
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
         return new ClientboundDisguisedChatPacket(component, initialPacket.chatType());
     }

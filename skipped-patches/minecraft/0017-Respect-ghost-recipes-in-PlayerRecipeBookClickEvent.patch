@@ -3,6 +3,8 @@ From: SoSeDiK <mrsosedik@gmail.com>
 Date: Sat, 15 Nov 2025 01:50:25 +0200
 Subject: [PATCH] Respect ghost recipes in PlayerRecipeBookClickEvent
 
+Skipped: Was made for a feature that didn't quite work out, and as is, clicking for the second time does not fire the PlayerRecipeBookClickEvent for whatever reason
+
 
 diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 index e30807eb7bb9a78e7b0616166d61c9aed4fa4bfa..e6e9c4d4e3b232ce2c30c6e21f6cc4f6e5ac7789 100644
@@ -13,31 +15,18 @@ index e30807eb7bb9a78e7b0616166d61c9aed4fa4bfa..e6e9c4d4e3b232ce2c30c6e21f6cc4f6
                              // CraftBukkit end
                              if (postPlaceAction == RecipeBookMenu.PostPlaceAction.PLACE_GHOST_RECIPE) {
 -                                this.send(new ClientboundPlaceGhostRecipePacket(this.player.containerMenu.containerId, recipeFromDisplay.display().display()));
-+								// Kiterino start - Respect ghost recipes in PlayerRecipeBookClickEvent
-+								if (!this.player.getRecipeBook().contains(recipeHolder.id())) {
-+									return;
-+								}
-+	                            List<net.minecraft.world.item.crafting.display.RecipeDisplay> list = new java.util.ArrayList<>();
-+	                            this.player.getRecipeBook().displayResolver.displaysForRecipe(recipeHolder.id(), entry -> list.add(entry.display()));
-+								if (list.isEmpty()) {
-+									return;
-+								}
-+	                            net.minecraft.world.item.crafting.display.RecipeDisplay recipeDisplay = list.getFirst();
++                                // Kiterino start - Respect ghost recipes in PlayerRecipeBookClickEvent
++                                if (!this.player.getRecipeBook().contains(recipeHolder.id())) {
++                                    return;
++                                }
++                                List<net.minecraft.world.item.crafting.display.RecipeDisplay> list = new java.util.ArrayList<>();
++                                this.player.getRecipeBook().displayResolver.displaysForRecipe(recipeHolder.id(), entry -> list.add(entry.display()));
++                                if (list.isEmpty()) {
++                                    return;
++                                }
++                                net.minecraft.world.item.crafting.display.RecipeDisplay recipeDisplay = list.getFirst();
 +                                this.send(new ClientboundPlaceGhostRecipePacket(this.player.containerMenu.containerId, recipeDisplay));
-+	                            // Kiterino end - Respect ghost recipes in PlayerRecipeBookClickEvent
++                                // Kiterino end - Respect ghost recipes in PlayerRecipeBookClickEvent
                              }
                          }
                      }
-diff --git a/net/minecraft/stats/ServerRecipeBook.java b/net/minecraft/stats/ServerRecipeBook.java
-index 2f4f90bf428deb682fe9ec8c1218ae31ebaeea7c..dcca55ab77ae79b95e865658cbb66c03c2eb0089 100644
---- a/net/minecraft/stats/ServerRecipeBook.java
-+++ b/net/minecraft/stats/ServerRecipeBook.java
-@@ -27,7 +27,7 @@ import org.slf4j.Logger;
- public class ServerRecipeBook extends RecipeBook {
-     public static final String RECIPE_BOOK_TAG = "recipeBook";
-     private static final Logger LOGGER = LogUtils.getLogger();
--    private final ServerRecipeBook.DisplayResolver displayResolver;
-+    public final ServerRecipeBook.DisplayResolver displayResolver;
-     @VisibleForTesting
-     public final Set<ResourceKey<Recipe<?>>> known = Sets.newIdentityHashSet();
-     @VisibleForTesting

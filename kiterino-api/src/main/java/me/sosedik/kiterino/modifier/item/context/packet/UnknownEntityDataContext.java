@@ -3,6 +3,7 @@ package me.sosedik.kiterino.modifier.item.context.packet;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -19,7 +20,7 @@ public class UnknownEntityDataContext extends EntityPacketContext {
      * @param world    world instance
      * @param entityId internal entity id
      */
-    public UnknownEntityDataContext(Object packet, World world, int entityId) {
+    public UnknownEntityDataContext(Object packet, @Nullable World world, int entityId) {
         super(packet, world, entityId, (Supplier<Entity>) null);
     }
 
