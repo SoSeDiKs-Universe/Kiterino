@@ -13,8 +13,8 @@
          /**
           * Sends the component to the player
           *
-@@ -2879,4 +_,26 @@
-      */
+@@ -2893,4 +_,26 @@
+     @Deprecated
      void clearBlockHighlights();
      // Purpur end - Debug Marker API
 +
