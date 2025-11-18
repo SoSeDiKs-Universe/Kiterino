@@ -1,5 +1,7 @@
 package me.sosedik.kiterino.modifier.item.context.packet;
 
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EquipmentSlot;
@@ -17,14 +19,16 @@ public class EntityEquipmentPacketContext extends EntityPacketContext {
     /**
      * Constructs entity equipment packet wrapper
      *
+     * @param contextType context type
+     * @param parentContext parent context
      * @param packet nms packet
      * @param world entity's world
      * @param entityId internal entity id
      * @param entity entity
      * @param slot equipment slot
      */
-    public EntityEquipmentPacketContext(Object packet, @Nullable World world, int entityId, @Nullable Entity entity, EquipmentSlot slot) {
-        super(packet, world, entityId, entity);
+    public EntityEquipmentPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Entity entity, EquipmentSlot slot) {
+        super(contextType, parentContext, packet, world, entityId, entity);
         this.slot = slot;
     }
 

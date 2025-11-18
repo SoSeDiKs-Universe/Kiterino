@@ -2,6 +2,7 @@ package me.sosedik.kiterino.modifier.item;
 
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
+import me.sosedik.kiterino.modifier.item.context.packet.BaseItemContext;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,10 +60,10 @@ public abstract class ItemModifier {
      * Whether this modifier should automatically
      * skip the provided context
      *
-     * @param contextType context type
+     * @param context context
      * @return whether to skip context
      */
-    public boolean skipContext(ItemModifierContextType contextType) {
+    public boolean skipContext(ItemModifierContext context) {
         return false;
     }
 
@@ -83,7 +84,20 @@ public abstract class ItemModifier {
      * @return modified item or {@code null}
      */
     public static @Nullable ItemStack modifyItem(Player viewer, ItemStack item) {
-        return modifyItem(viewer, viewer.locale(), item);
+        return modifyItem(null, viewer, viewer.locale(), item);
+    }
+
+    /**
+     * Modify item with viewer's locale, empty context, lore and slot 0.
+     * Will return {@code null} if no modifications were made.
+     *
+     * @param parentContext parent context
+     * @param viewer player viewing the item
+     * @param item item
+     * @return modified item or {@code null}
+     */
+    public static @Nullable ItemStack modifyItem(@Nullable ItemModifierContext parentContext, Player viewer, ItemStack item) {
+        return modifyItem(parentContext, viewer, viewer.locale(), item);
     }
 
     /**
@@ -95,7 +109,20 @@ public abstract class ItemModifier {
      * @return modified item or {@code null}
      */
     public static @Nullable ItemStack modifyItem(@Nullable Player viewer, Locale locale, ItemStack item) {
-        var contextBox = new ItemContextBox(viewer, locale, ItemModifierContextType.EMPTY_LORE, ItemModifierContext.EMPTY, item.clone());
+        return modifyItem(null, viewer, locale, item);
+    }
+
+    /**
+     * Modify item with empty context, lore and slot 0
+     *
+     * @param parentContext parent context
+     * @param viewer player viewing the item
+     * @param locale locale
+     * @param item item
+     * @return modified item or {@code null}
+     */
+    public static @Nullable ItemStack modifyItem(@Nullable ItemModifierContext parentContext, @Nullable Player viewer, Locale locale, ItemStack item) {
+        var contextBox = new ItemContextBox(viewer, locale, parentContext == null ? ItemModifierContext.EMPTY_LORE : new BaseItemContext(ItemModifierContextType.EMPTY_LORE, parentContext), item.clone());
         return modifyItem(contextBox);
     }
 

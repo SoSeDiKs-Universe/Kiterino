@@ -1,5 +1,34 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -507,6 +_,28 @@
+         return true;
+     }
+ 
++    // Kiterino start - Allow individual chunk refresh
++    @Override
++    public boolean refreshChunk(int x, int z, Collection<Player> players) {
++        ChunkHolder playerChunk = this.world.getChunkSource().chunkMap.getVisibleChunkIfPresent(ChunkPos.asLong(x, z));
++        if (playerChunk == null) return false;
++
++        // Paper start - chunk system
++        net.minecraft.world.level.chunk.LevelChunk chunk = playerChunk.getChunkToSend();
++        if (chunk == null) {
++            return false;
++        }
++        // Paper end - chunk system
++                List<ServerPlayer> playersInRange = players.stream().map(player -> ((CraftPlayer) player).getHandle()).toList();
++                if (playersInRange.isEmpty()) return true; // Paper - chunk system
++
++                FeatureHooks.sendChunkRefreshPackets(playersInRange, chunk);
++        // Paper - chunk system
++
++        return true;
++    }
++    // Kiterino end - Allow individual chunk refresh
++
+     @Override
+     public Collection<Player> getPlayersSeeingChunk(Chunk chunk) {
+         Preconditions.checkArgument(chunk != null, "chunk cannot be null");
 @@ -2113,4 +_,11 @@
          return POINTERS_SUPPLIER.view(this);
      }

@@ -1,0 +1,107 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 15 Nov 2025 19:37:17 +0200
+Subject: [PATCH] Expose bucket in bucket events
+
+
+diff --git a/src/main/java/org/bukkit/event/player/PlayerBucketEmptyEvent.java b/src/main/java/org/bukkit/event/player/PlayerBucketEmptyEvent.java
+index a20f55d37e2741112f868030d8a349258127599d..a34a6b9d212a020ba2af8146ee4a550938023c1d 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerBucketEmptyEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerBucketEmptyEvent.java
+@@ -34,6 +34,13 @@ public class PlayerBucketEmptyEvent extends PlayerBucketEvent {
+         super(player, block, blockClicked, blockFace, bucket, itemInHand, hand);
+     }
+ 
++    // Kiterino start - Expose bucket in bucket events
++    @ApiStatus.Internal
++    public PlayerBucketEmptyEvent(@NotNull final Player player, @NotNull final Block block, @NotNull final Block blockClicked, @NotNull final BlockFace blockFace, @NotNull final ItemStack bucket, @NotNull final ItemStack itemInHand, @NotNull final EquipmentSlot hand) {
++        super(player, block, blockClicked, blockFace, bucket, itemInHand, hand);
++    }
++    // Kiterino end - Expose bucket in bucket events
++
+     @NotNull
+     @Override
+     public HandlerList getHandlers() {
+diff --git a/src/main/java/org/bukkit/event/player/PlayerBucketEvent.java b/src/main/java/org/bukkit/event/player/PlayerBucketEvent.java
+index 777d25beb10f84c175aa14abccc3ebeaad38b6e1..ac46649401077aa4b824e0dd13c9056cab33adf2 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerBucketEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerBucketEvent.java
+@@ -21,7 +21,7 @@ public abstract class PlayerBucketEvent extends PlayerEvent implements Cancellab
+     private final Block block;
+     private final Block blockClicked;
+     private final BlockFace blockFace;
+-    private final Material bucket;
++    private final ItemStack bucket; // Kiterino - Expose bucket in bucket events
+     private final EquipmentSlot hand;
+     private ItemStack itemStack;
+ 
+@@ -41,16 +41,25 @@ public abstract class PlayerBucketEvent extends PlayerEvent implements Cancellab
+ 
+     @ApiStatus.Internal
+     public PlayerBucketEvent(@NotNull final Player player, @NotNull final Block block, @NotNull final Block blockClicked, @NotNull final BlockFace blockFace, @NotNull final Material bucket, @NotNull final ItemStack itemInHand, @NotNull final EquipmentSlot hand) {
++        // Kiterino start - Expose bucket in bucket events
++        this(player, block, blockClicked, blockFace, ItemStack.of(bucket), itemInHand, hand);
++    }
++
++    public PlayerBucketEvent(@NotNull final Player player, @NotNull final Block block, @NotNull final Block blockClicked, @NotNull final BlockFace blockFace, @NotNull final ItemStack bucket, @NotNull final ItemStack itemInHand, @NotNull final EquipmentSlot hand) {
++        // Kiterino end - Expose bucket in bucket events
+         super(player);
+         this.block = block;
+         this.blockClicked = blockClicked;
+         this.blockFace = blockFace;
+         this.itemStack = itemInHand;
+-        if (bucket != null && bucket.isLegacy()) {
+-            this.bucket = Bukkit.getUnsafe().fromLegacy(new MaterialData(bucket), true);
+-        } else {
+-            this.bucket = bucket;
+-        }
++        // Kiterino start - Expose bucket in bucket events
++        this.bucket = bucket;
++//        if (bucket != null && bucket.isLegacy()) {
++//            this.bucket = Bukkit.getUnsafe().fromLegacy(new MaterialData(bucket), true);
++//        } else {
++//            this.bucket = bucket;
++//        }
++        // Kiterino end - Expose bucket in bucket events
+         this.hand = hand;
+     }
+ 
+@@ -91,8 +100,20 @@ public abstract class PlayerBucketEvent extends PlayerEvent implements Cancellab
+      */
+     @NotNull
+     public Material getBucket() {
++        return this.bucket.getType(); // Kiterino - Expose bucket in bucket events
++    }
++
++    // Kiterino start - Expose bucket in bucket events
++    /**
++     * Returns the bucket used in this event
++     *
++     * @return the used bucket
++     */
++    @NotNull
++    public ItemStack getBucketItem() {
+         return this.bucket;
+     }
++    // Kiterino end - Expose bucket in bucket events
+ 
+     /**
+      * Get the hand that was used in this event.
+diff --git a/src/main/java/org/bukkit/event/player/PlayerBucketFillEvent.java b/src/main/java/org/bukkit/event/player/PlayerBucketFillEvent.java
+index f439df0d0f9691c1d6b571fd9ae8ffad53b6c2b8..c1edf872473b5ab889c59b2dc086aa2908d75d23 100644
+--- a/src/main/java/org/bukkit/event/player/PlayerBucketFillEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerBucketFillEvent.java
+@@ -34,6 +34,13 @@ public class PlayerBucketFillEvent extends PlayerBucketEvent {
+         super(player, block, blockClicked, blockFace, bucket, itemInHand, hand);
+     }
+ 
++    // Kiterino start - Expose bucket in bucket events
++    @ApiStatus.Internal
++    public PlayerBucketFillEvent(@NotNull final Player player, @NotNull final Block block, @NotNull final Block blockClicked, @NotNull final BlockFace blockFace, @NotNull final ItemStack bucket, @NotNull final ItemStack itemInHand, @NotNull final EquipmentSlot hand) {
++        super(player, block, blockClicked, blockFace, bucket, itemInHand, hand);
++    }
++    // Kiterino end - Expose bucket in bucket events
++
+     @NotNull
+     @Override
+     public HandlerList getHandlers() {

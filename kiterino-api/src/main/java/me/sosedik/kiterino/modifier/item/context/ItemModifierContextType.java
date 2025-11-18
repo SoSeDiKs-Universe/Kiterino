@@ -1,6 +1,7 @@
 package me.sosedik.kiterino.modifier.item.context;
 
 import me.sosedik.kiterino.modifier.item.context.packet.AdvancementPacketContext;
+import me.sosedik.kiterino.modifier.item.context.packet.BaseItemContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityDataPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.MerchantOfferPacketContext;
@@ -62,24 +63,24 @@ public class ItemModifierContextType {
     /**
      * Item particle packet
      */
-    public static final ItemModifierContextType PARTICLE = context(ItemModifierContext.EMPTY.getClass()).build();
+    public static final ItemModifierContextType PARTICLE = context(BaseItemContext.class).build();
 
     /**
      * Empty modification context with visible name and lore
      */
-    public static final ItemModifierContextType EMPTY_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().withLore().build();
+    public static final ItemModifierContextType EMPTY_LORE = context(BaseItemContext.class).withName().withLore().build();
 
     /**
      * Empty modification context with visible name and without visible lore
      */
-    public static final ItemModifierContextType EMPTY_NO_LORE = context(ItemModifierContext.EMPTY.getClass()).withName().build();
+    public static final ItemModifierContextType EMPTY_NO_LORE = context(BaseItemContext.class).withName().build();
 
     // Allows parsing items inside hover event. Required to not kick the client when an injected item is shown.
     // By default, only parses hovers in system chat messages, but can be enabled globally via "item-modifiers.apply-modifiers-on-all-hover" option.
     /**
      * Show item hover event in text components
      */
-    public static final ItemModifierContextType CHAT_ITEM = context(ItemModifierContext.EMPTY.getClass()).withName().withLore().build();
+    public static final ItemModifierContextType CHAT_ITEM = context(BaseItemContext.class).withName().withLore().build();
 
     private final Class<? extends ItemModifierContext> contextClass;
     private final boolean visibleName;

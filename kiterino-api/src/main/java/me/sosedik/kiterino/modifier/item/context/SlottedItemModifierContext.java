@@ -15,6 +15,6 @@ public interface SlottedItemModifierContext extends ItemModifierContext {
      * @return slot
      * @see InventorySlotHelper
      */
-    int slot();
+    int getSlot();
 
 }

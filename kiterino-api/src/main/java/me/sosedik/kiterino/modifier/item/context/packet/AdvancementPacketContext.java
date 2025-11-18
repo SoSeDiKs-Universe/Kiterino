@@ -1,5 +1,7 @@
 package me.sosedik.kiterino.modifier.item.context.packet;
 
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.PacketItemModifierContext;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
@@ -12,9 +14,8 @@ import java.util.function.Supplier;
  * Wraps around an advancement packet
  */
 @NullMarked
-public class AdvancementPacketContext implements PacketItemModifierContext {
+public class AdvancementPacketContext extends BasePacketContext implements PacketItemModifierContext {
 
-    private final Object packet;
     private final NamespacedKey advancementKey;
     private final Supplier<Advancement> advancementSupplier;
     private @Nullable Advancement advancement;
@@ -22,19 +23,16 @@ public class AdvancementPacketContext implements PacketItemModifierContext {
     /**
      * Constructs advancement packet context
      *
+     * @param contextType context type
+     * @param parentContext parent context
      * @param packet packet
      * @param advancementKey advancement key
      * @param advancementSupplier advancement supplier
      */
-    public AdvancementPacketContext(Object packet, NamespacedKey advancementKey, Supplier<Advancement> advancementSupplier) {
-        this.packet = packet;
+    public AdvancementPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, NamespacedKey advancementKey, Supplier<Advancement> advancementSupplier) {
+		super(contextType, parentContext, packet);
         this.advancementKey = advancementKey;
         this.advancementSupplier = advancementSupplier;
-    }
-
-    @Override
-    public Object packet() {
-        return this.packet;
     }
 
     /**

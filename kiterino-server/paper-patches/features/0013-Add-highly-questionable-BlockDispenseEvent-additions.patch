@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Nov 2025 14:24:56 +0200
+Subject: [PATCH] Add highly questionable BlockDispenseEvent additions
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+index 6f75aae59fb33c5dc0829b41d625f4b40fb171ce..7fd87d3951c45334de2228e4924debf84b0f996a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
+@@ -2126,14 +2126,19 @@ public class CraftEventFactory {
+         return event.callEvent();
+     }
+ 
+-    @Nullable
+-    public static ItemStack handleBlockDispenseEvent(net.minecraft.core.dispenser.BlockSource pointer, BlockPos to, ItemStack itemStack, net.minecraft.core.dispenser.DispenseItemBehavior instance) {
++//    @Nullable // Kiterino - More BlockDispenseEvent API
++    public static DispenseResult handleBlockDispenseEvent(net.minecraft.core.dispenser.BlockSource pointer, BlockPos to, ItemStack itemStack, net.minecraft.core.dispenser.DispenseItemBehavior instance, java.util.function.Consumer<org.bukkit.event.block.BlockDispenseEvent> extra) { // Kiterino - More BlockDispenseEvent API
+         org.bukkit.block.Block bukkitBlock = CraftBlock.at(pointer.level(), pointer.pos());
+         CraftItemStack craftItem = CraftItemStack.asCraftMirror(itemStack.isDamageableItem() ? itemStack : itemStack.copyWithCount(1));
+ 
+         org.bukkit.event.block.BlockDispenseEvent event = new org.bukkit.event.block.BlockDispenseEvent(bukkitBlock, craftItem.clone(), CraftVector.toBukkit(to));
++        // Kiterino start - More BlockDispenseEvent API
++        if (extra != null) {
++            extra.accept(event);
++        }
++        // Kiterino end - More BlockDispenseEvent API
+         if (!event.callEvent()) {
+-            return itemStack;
++            return new DispenseResult(itemStack, event); // Kiterino - More BlockDispenseEvent API
+         }
+ 
+         if (!event.getItem().equals(craftItem)) {
+@@ -2142,11 +2147,13 @@ public class CraftEventFactory {
+             net.minecraft.core.dispenser.DispenseItemBehavior itemBehavior = net.minecraft.world.level.block.DispenserBlock.getDispenseBehavior(pointer, eventStack);
+             if (itemBehavior != net.minecraft.core.dispenser.DispenseItemBehavior.NOOP && itemBehavior != instance) {
+                 itemBehavior.dispense(pointer, eventStack);
+-                return itemStack;
++                itemStack.shrink(1); // Kiterino - More BlockDispenseEvent API
++                return new DispenseResult(itemStack, event); // Kiterino - More BlockDispenseEvent API
+             }
+         }
+-        return null;
++        return new DispenseResult(null, event); // Kiterino - More BlockDispenseEvent API
+     }
++    public record DispenseResult(@Nullable ItemStack dispensedItem, org.bukkit.event.block.BlockDispenseEvent event) {}
+ 
+     /**
+      * Calls the {@link io.papermc.paper.event.entity.EntityFertilizeEggEvent}.

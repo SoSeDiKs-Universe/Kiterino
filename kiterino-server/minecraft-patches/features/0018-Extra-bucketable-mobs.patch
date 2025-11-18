@@ -1,0 +1,212 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Nov 2025 23:45:31 +0200
+Subject: [PATCH] Extra bucketable mobs
+
+
+diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
+index 6cf6dd99ec454c9617551c3249e20a745a4cd3a4..4da200795ff9868fc1bb4deb100b8903e9369b36 100644
+--- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
++++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
+@@ -275,8 +275,9 @@ public interface DispenseItemBehavior {
+                 boolean willEmptyContentsSolidBucketItem = dispensibleContainerItem instanceof net.minecraft.world.item.SolidBucketItem && level.isInWorldBounds(blockPos) && state.isAir();
+                 /* Taken from BucketItem#emptyContents */
+                 boolean willEmptyBucketItem = dispensibleContainerItem instanceof final net.minecraft.world.item.BucketItem bucketItem && bucketItem.content instanceof net.minecraft.world.level.material.FlowingFluid && (state.isAir() || state.canBeReplaced(bucketItem.content) || (state.getBlock() instanceof net.minecraft.world.level.block.LiquidBlockContainer liquidBlockContainer && liquidBlockContainer.canPlaceLiquid(null, level, blockPos, state, bucketItem.content)));
++                boolean willPlaceCustomMob = dispensibleContainerItem instanceof net.minecraft.world.item.MobBucketItem bucketItem && bucketItem.content == net.minecraft.world.level.material.Fluids.EMPTY; // Kiterino - Extra bucketable mobs
+                 ItemStack leftover = new ItemStack(Items.BUCKET);
+-                if (willEmptyContentsSolidBucketItem || willEmptyBucketItem) {
++                if (willEmptyContentsSolidBucketItem || willEmptyBucketItem || willPlaceCustomMob) { // Kiterino - Extra bucketable mobs
+                 // Paper end - correctly check if the bucket place will succeed
+                     org.bukkit.block.Block block = org.bukkit.craftbukkit.block.CraftBlock.at(level, blockSource.pos());
+                     org.bukkit.craftbukkit.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(item.copyWithCount(1)); // Paper - single item in event
+@@ -319,6 +320,7 @@ public interface DispenseItemBehavior {
+                 }
+             }
+         };
++        net.minecraft.world.item.MobBucketItem.BUCKET_DISPENSE_BEHAVIOR = dispenseItemBehavior; // Kiterino - Extra bucketable mobs
+         DispenserBlock.registerBehavior(Items.LAVA_BUCKET, dispenseItemBehavior);
+         DispenserBlock.registerBehavior(Items.WATER_BUCKET, dispenseItemBehavior);
+         DispenserBlock.registerBehavior(Items.POWDER_SNOW_BUCKET, dispenseItemBehavior);
+diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
+index 23468734bebf184389c1662d88fff952d649f719..7790c1cfb2222897728be2a319fe722a7a6dd203 100644
+--- a/net/minecraft/world/entity/Mob.java
++++ b/net/minecraft/world/entity/Mob.java
+@@ -1322,6 +1322,12 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+     }
+ 
+     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
++        // Kiterino start - Extra bucketable mobs // TODO Client sends block interact after, which auto releases the mob; currently worked around in a plugin
++        // Optional<InteractionResult> result = net.minecraft.world.entity.animal.Bucketable.bucketMobPickup(player, hand, this);
++        // if (result.isPresent()) {
++        //     return result.get();
++        // }
++        // Kiterino end - Extra bucketable mobs
+         return tryRide(player, hand); // Purpur - Ridables
+     }
+ 
+diff --git a/net/minecraft/world/entity/animal/Bucketable.java b/net/minecraft/world/entity/animal/Bucketable.java
+index 7f64148a30b842e850374f05a992dc7d627b9ebf..cc46336c6409394480fea2cea97bb29fa24bb76d 100644
+--- a/net/minecraft/world/entity/animal/Bucketable.java
++++ b/net/minecraft/world/entity/animal/Bucketable.java
+@@ -30,6 +30,24 @@ public interface Bucketable {
+ 
+     SoundEvent getPickupSound();
+ 
++    // Kiterino start - Extra bucketable mobs
++    default net.minecraft.world.item.Item getPickBucket() {
++        return Items.WATER_BUCKET;
++    }
++
++    default boolean canPickup(LivingEntity entity) {
++        return true;
++    }
++
++    default void saveToBucketTag(LivingEntity entity, ItemStack stack) {
++        saveToBucketTag(stack);
++    }
++
++    default void loadFromBucketTag(LivingEntity entity, CompoundTag tag) {
++        loadFromBucketTag(tag);
++    }
++    // Kiterino end - Extra bucketable mobs
++
+     @Deprecated
+     static void saveDefaultDataToBucketTag(Mob mob, ItemStack bucket) {
+         bucket.copyFrom(DataComponents.CUSTOM_NAME, mob);
+@@ -68,13 +86,25 @@ public interface Bucketable {
+         tag.getFloat("Health").ifPresent(mob::setHealth);
+     }
+ 
+-    static <T extends LivingEntity & Bucketable> Optional<InteractionResult> bucketMobPickup(Player player, InteractionHand hand, T entity) {
++    static <T extends LivingEntity> Optional<InteractionResult> bucketMobPickup(Player player, InteractionHand hand, T entity) { // Kiterino - Extra bucketable mobs
+         ItemStack itemInHand = player.getItemInHand(hand);
+-        if (itemInHand.getItem() == Items.WATER_BUCKET && entity.isAlive()) {
++        // Kiterino start - Extra bucketable mobs
++        Bucketable bucketable = net.minecraft.world.item.MobBucketItem.EXTRA_BUCKETABLE_RULES.get(entity.getType());
++        if (bucketable == null) {
++            if (!(entity instanceof Bucketable b)) {
++                return Optional.empty();
++            }
++            bucketable = b;
++        }
++        if (!bucketable.canPickup(entity)) {
++            return Optional.empty();
++        }
++        // Kiterino end - Extra bucketable mobs
++        if (itemInHand.getItem() == bucketable.getPickBucket() && entity.isAlive()) { // Kiterino - Extra bucketable mobs
+             // CraftBukkit start
+             // entity.playSound(entity.getPickupSound(), 1.0F, 1.0F); // CraftBukkit - moved down
+-            ItemStack bucketItemStack = entity.getBucketItemStack();
+-            entity.saveToBucketTag(bucketItemStack);
++            ItemStack bucketItemStack = bucketable.getBucketItemStack(); // Kiterino - Extra bucketable mobs
++            bucketable.saveToBucketTag(entity, bucketItemStack); // Kiterino - Extra bucketable mobs
+             org.bukkit.event.player.PlayerBucketEntityEvent playerBucketFishEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFishBucketEvent(entity, player, itemInHand, bucketItemStack, hand);
+             bucketItemStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(playerBucketFishEvent.getEntityBucket());
+             if (playerBucketFishEvent.isCancelled()) {
+@@ -82,7 +112,7 @@ public interface Bucketable {
+                 entity.resendPossiblyDesyncedEntityData((ServerPlayer) player); // Paper
+                 return Optional.of(InteractionResult.FAIL);
+             }
+-            entity.playSound(entity.getPickupSound(), 1.0F, 1.0F);
++            entity.playSound(bucketable.getPickupSound(), 1.0F, 1.0F); // Kiterino - Extra bucketable mobs
+             // CraftBukkit end
+             ItemStack itemStack = ItemUtils.createFilledResult(itemInHand, player, bucketItemStack, false);
+             player.setItemInHand(hand, itemStack);
+diff --git a/net/minecraft/world/item/BucketItem.java b/net/minecraft/world/item/BucketItem.java
+index 1534b142bf8188df0ef6652e39768e0a0c88bcf2..16c67df7f23a012f3b41d4def44a9723d1dee1a5 100644
+--- a/net/minecraft/world/item/BucketItem.java
++++ b/net/minecraft/world/item/BucketItem.java
+@@ -54,7 +54,7 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+             BlockPos blockPos1 = blockPos.relative(direction);
+             if (!level.mayInteract(player, blockPos) || !player.mayUseItemAt(blockPos1, direction, itemInHand)) {
+                 return InteractionResult.FAIL;
+-            } else if (this.content == Fluids.EMPTY) {
++            } else if (this.content == Fluids.EMPTY && !(this instanceof MobBucketItem)) { // Kiterino - Extra bucketable mobs
+                 BlockState blockState = level.getBlockState(blockPos);
+                 if (blockState.getBlock() instanceof BucketPickup bucketPickup) {
+                     // CraftBukkit start
+@@ -87,10 +87,11 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+                 BlockPos blockPos2 = blockState.getBlock() instanceof LiquidBlockContainer && this.content == Fluids.WATER ? blockPos : blockPos1;
+                 if (this.emptyContents(player, level, blockPos2, playerPovHitResult, playerPovHitResult.getDirection(), blockPos, itemInHand, hand)) { // CraftBukkit
+                     this.checkExtraContent(player, level, itemInHand, blockPos2);
+-                    if (player instanceof ServerPlayer) {
++                    if (player instanceof ServerPlayer && this.content != Fluids.EMPTY) { // Kiterino - Extra bucketable mobs
+                         CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)player, blockPos2, itemInHand);
+                     }
+ 
++                    player.swing(hand, true); // Kiterino - Extra bucketable mobs
+                     player.awardStat(Stats.ITEM_USED.get(this));
+                     ItemStack itemStack = ItemUtils.createFilledResult(itemInHand, player, getEmptySuccessItem(itemInHand, player));
+                     return InteractionResult.SUCCESS.heldItemTransformedTo(itemStack);
+@@ -124,7 +125,7 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+ 
+     public boolean emptyContents(@Nullable LivingEntity entity, Level level, BlockPos pos, @Nullable BlockHitResult hitResult, Direction direction, BlockPos clicked, ItemStack itemstack, InteractionHand hand) {
+         // CraftBukkit end
+-        if (!(this.content instanceof FlowingFluid flowingFluid)) {
++        if (!(this.content instanceof FlowingFluid flowingFluid) && !(this instanceof MobBucketItem && this.content == Fluids.EMPTY)) { // Kiterino - Extra bucketable mobs
+             return false;
+         } else {
+             BlockState blockState = level.getBlockState(pos);
+@@ -160,16 +161,16 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+                 }
+ 
+                 return true;
+-            } else if (block instanceof LiquidBlockContainer liquidBlockContainer1 && this.content == Fluids.WATER) {
++            } else if (block instanceof LiquidBlockContainer liquidBlockContainer1 && this.content == Fluids.WATER && this.content instanceof FlowingFluid flowingFluid) { // Kiterino - Extra bucketable mobs
+                 liquidBlockContainer1.placeLiquid(level, pos, blockState, flowingFluid.getSource(false));
+                 this.playEmptySound(entity, level, pos);
+                 return true;
+             } else {
+-                if (!level.isClientSide() && canBeReplaced && !blockState.liquid()) {
++                if (!(this instanceof MobBucketItem && this.content == Fluids.EMPTY) && !level.isClientSide() && canBeReplaced && !blockState.liquid()) { // Kiterino - Extra bucketable mobs
+                     level.destroyBlock(pos, true);
+                 }
+ 
+-                if (!level.setBlock(pos, this.content.defaultFluidState().createLegacyBlock(), Block.UPDATE_ALL_IMMEDIATE)
++                if (!(this instanceof MobBucketItem && this.content == Fluids.EMPTY) && !level.setBlock(pos, this.content.defaultFluidState().createLegacyBlock(), Block.UPDATE_ALL_IMMEDIATE) // Kiterino - Extra bucketable mobs
+                     && !blockState.getFluidState().isSource()) {
+                     return false;
+                 } else {
+diff --git a/net/minecraft/world/item/MobBucketItem.java b/net/minecraft/world/item/MobBucketItem.java
+index cbde1be92d2febd1538e34546f4f2d0138e38cdb..99dc907360416afe8afc4b1b0373c42f9a0c4d7d 100644
+--- a/net/minecraft/world/item/MobBucketItem.java
++++ b/net/minecraft/world/item/MobBucketItem.java
+@@ -18,6 +18,14 @@ import net.minecraft.world.level.gameevent.GameEvent;
+ import net.minecraft.world.level.material.Fluid;
+ 
+ public class MobBucketItem extends BucketItem {
++    // Kiterino start - Extra bucketable mobs
++    public static net.minecraft.core.dispenser.DispenseItemBehavior BUCKET_DISPENSE_BEHAVIOR;
++    public static final java.util.Map<EntityType<? extends Mob>, Bucketable> EXTRA_BUCKETABLE_RULES = new java.util.HashMap<>();
++    public MobBucketItem bucketable(Bucketable bucketable) {
++        EXTRA_BUCKETABLE_RULES.put(this.type, bucketable);
++        return this;
++    }
++    // Kiterino end - Extra bucketable mobs
+     private final EntityType<? extends Mob> type;
+     private final SoundEvent emptySound;
+ 
+@@ -42,9 +50,21 @@ public class MobBucketItem extends BucketItem {
+ 
+     private void spawn(ServerLevel level, ItemStack bucketedMobStack, BlockPos pos) {
+         Mob mob = this.type.create(level, EntityType.createDefaultStackConfig(level, bucketedMobStack, null), pos, EntitySpawnReason.BUCKET, true, false);
+-        if (mob instanceof Bucketable bucketable) {
++        // Kiterino start - Extra bucketable mobs
++        Bucketable bucketable = EXTRA_BUCKETABLE_RULES.get(this.type);
++        if (bucketable == null && mob instanceof Bucketable b) {
++            bucketable = b;
++        }
++        if (bucketable != null) {
++        // Kiterino end - Extra bucketable mobs
+             CustomData customData = bucketedMobStack.getOrDefault(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY);
+-            bucketable.loadFromBucketTag(customData.copyTag());
++            // Kiterino start - Extra bucketable mobs
++            if (mob == null) {
++                bucketable.loadFromBucketTag(customData.copyTag());
++            } else {
++                bucketable.loadFromBucketTag(mob, customData.copyTag());
++            }
++            // Kiterino end - Extra bucketable mobs
+             bucketable.setFromBucket(true);
+         }
+ 

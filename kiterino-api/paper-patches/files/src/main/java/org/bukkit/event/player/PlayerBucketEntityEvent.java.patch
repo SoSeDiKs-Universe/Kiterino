@@ -1,0 +1,27 @@
+--- a/src/main/java/org/bukkit/event/player/PlayerBucketEntityEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerBucketEntityEvent.java
+@@ -19,7 +_,7 @@
+ 
+     protected final Entity entity;
+     private final ItemStack originalBucket;
+-    private final ItemStack entityBucket;
++    private ItemStack entityBucket; // Kiterino - Remove final - Allow changing PlayerBucketEntityEvent result
+     private final EquipmentSlot hand;
+ 
+     private boolean cancelled;
+@@ -67,6 +_,15 @@
+     public ItemStack getEntityBucket() {
+         return this.entityBucket;
+     }
++
++    // Kiterino start - Allow changing PlayerBucketEntityEvent result
++    /**
++     * Sets the bucket resulting from the event
++     */
++    public void setEntityBucket(@org.jetbrains.annotations.Nullable ItemStack item) {
++        this.entityBucket = item == null ? ItemStack.empty() : item;
++    }
++    // Kiterino end - Allow changing PlayerBucketEntityEvent result
+ 
+     /**
+      * Get the hand that was used to bucket the entity.

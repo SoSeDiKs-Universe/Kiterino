@@ -1,10 +1,17 @@
 --- a/src/main/java/io/papermc/paper/datacomponent/item/ItemLore.java
 +++ b/src/main/java/io/papermc/paper/datacomponent/item/ItemLore.java
-@@ -71,6 +_,19 @@
+@@ -71,6 +_,26 @@
          @Contract(value = "_ -> this", mutates = "this")
          Builder addLine(ComponentLike line);
  
 +        // Kiterino start - Data components API improvements
++        /**
++         * Gets the lore lines
++         *
++         * @return lore
++         */
++        List<Component> getLines();
++
 +        /**
 +         * Adds a component to the lore.
 +         *

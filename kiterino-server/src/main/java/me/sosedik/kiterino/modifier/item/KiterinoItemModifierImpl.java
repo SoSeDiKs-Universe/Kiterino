@@ -30,7 +30,7 @@ public final class KiterinoItemModifierImpl extends ItemModifier {
 
     @Override
     public ModificationResult modify(ItemContextBox contextBox) {
-        KiterinoItemModifier modifier = modifiers.get(contextBox.getItem().getType().getKey());
+        KiterinoItemModifier modifier = this.modifiers.get(contextBox.getItem().getType().getKey());
         if (modifier != null) {
             modifier.modify(contextBox);
             return ModificationResult.OK;

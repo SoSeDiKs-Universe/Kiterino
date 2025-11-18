@@ -1,9 +1,10 @@
 package me.sosedik.kiterino.modifier.item;
 
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
-import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +23,6 @@ public class ItemContextBox {
 
     private final @Nullable Player viewer;
     private final Locale locale;
-    private final ItemModifierContextType contextType;
     private final ItemModifierContext context;
     private final Material type;
     private ItemStack item;
@@ -31,12 +31,11 @@ public class ItemContextBox {
      * Creates a new context box with viewer's locale
      *
      * @param viewer player viewing the item
-     * @param contextType context type
      * @param context modification context
      * @param item item
      */
-    public ItemContextBox(@Nullable Player viewer, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
-        this(viewer, viewer.locale(), contextType, context, item);
+    public ItemContextBox(@Nullable Player viewer, ItemModifierContext context, ItemStack item) {
+        this(viewer, viewer == null ? Locale.US : viewer.locale(), context, item);
     }
 
     /**
@@ -44,14 +43,12 @@ public class ItemContextBox {
      *
      * @param viewer player viewing the item
      * @param locale locale for modifications
-     * @param contextType context type
      * @param context modification context
      * @param item item
      */
-    public ItemContextBox(@Nullable Player viewer, Locale locale, ItemModifierContextType contextType, ItemModifierContext context, ItemStack item) {
+    public ItemContextBox(@Nullable Player viewer, Locale locale, ItemModifierContext context, ItemStack item) {
         this.viewer = viewer;
         this.locale = locale;
-        this.contextType = contextType;
         this.type = item.getType();
         this.item = item;
         this.context = context;
@@ -73,15 +70,6 @@ public class ItemContextBox {
      */
     public Locale getLocale() {
         return this.locale;
-    }
-
-    /**
-     * Gets the context type
-     *
-     * @return context type
-     */
-    public ItemModifierContextType getContextType() {
-        return this.contextType;
     }
 
     /**
@@ -196,6 +184,20 @@ public class ItemContextBox {
     public int getLoreSize() {
         ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
         return currentLore == null ? 0 : currentLore.lines().size();
+    }
+
+    /**
+     * Adds hidden components from tooltip display
+     *
+     * @param components component types
+     */
+    public void addHiddenComponents(DataComponentType... components) {
+        TooltipDisplay tooltipDisplay = this.item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
+        if (tooltipDisplay == null) {
+            this.item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(components).build());
+        } else if (!tooltipDisplay.hideTooltip() && !tooltipDisplay.hiddenComponents().contains(DataComponentTypes.DYED_COLOR)) {
+            this.item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(components).build());
+        }
     }
 
 }

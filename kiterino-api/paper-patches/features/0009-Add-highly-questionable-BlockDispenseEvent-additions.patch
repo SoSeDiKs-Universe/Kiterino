@@ -1,0 +1,83 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Nov 2025 14:24:32 +0200
+Subject: [PATCH] Add highly questionable BlockDispenseEvent additions
+
+
+diff --git a/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java b/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java
+index 5aea3be601216cb8076dd571bce34d3c40a8f33d..0113eabae52369ce4470e51393e389b532e4aa6d 100644
+--- a/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java
++++ b/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java
+@@ -20,6 +20,10 @@ public class BlockDispenseEvent extends BlockEvent implements Cancellable {
+ 
+     private ItemStack item;
+     private Vector velocity;
++    // Kiterino start - More BlockDispenseEvent API
++    private ItemStack dispensedItem = null;
++    private ItemStack leftoverItem = null;
++    // Kiterino end - More BlockDispenseEvent API
+ 
+     private boolean cancelled;
+ 
+@@ -44,11 +48,16 @@ public class BlockDispenseEvent extends BlockEvent implements Cancellable {
+ 
+     /**
+      * Sets the item being dispensed.
++     * <p>This will reset the leftover item and override the dispense logic.
+      *
+      * @param item the item being dispensed
+      */
+     public void setItem(@NotNull ItemStack item) {
+         this.item = item;
++        // Kiterino start - More BlockDispenseEvent API
++        this.dispensedItem = null;
++        this.leftoverItem = null;
++        // Kiterino end - More BlockDispenseEvent API
+     }
+ 
+     /**
+@@ -73,6 +82,44 @@ public class BlockDispenseEvent extends BlockEvent implements Cancellable {
+         this.velocity = velocity.clone();
+     }
+ 
++    // Kiterino start - More BlockDispenseEvent API
++	/**
++	 * Gets the dispensed item
++	 *
++	 * @return dispensed item
++	 */
++	public @NotNull ItemStack getDispensedItem() {
++		return this.dispensedItem == null ? getItem() : this.dispensedItem;
++	}
++
++    /**
++     * Sets the item being dispensed
++     *
++     * @param item the item being dispensed
++     */
++    public void setDispensedItem(@org.jetbrains.annotations.Nullable ItemStack item) {
++        this.dispensedItem = item;
++    }
++
++    /**
++     * Gets the leftover item¸ placed into the dispenser instead of dropping
++     *
++     * @return the leftover item
++     */
++    public @org.jetbrains.annotations.Nullable ItemStack getLeftoverItem() {
++        return this.leftoverItem;
++    }
++
++    /**
++     * Sets the leftover item¸ placed into the dispenser instead of dropping
++     *
++     * @param leftoverItem item
++     */
++    public void setLeftoverItem(@org.jetbrains.annotations.Nullable ItemStack leftoverItem) {
++        this.leftoverItem = leftoverItem;
++    }
++    // Kiterino end - More BlockDispenseEvent API
++
+     @Override
+     public boolean isCancelled() {
+         return this.cancelled;

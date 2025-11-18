@@ -1,0 +1,347 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sun, 16 Nov 2025 14:25:15 +0200
+Subject: [PATCH] Add highly questionable BlockDispenseEvent additions
+
+
+diff --git a/net/minecraft/core/dispenser/DefaultDispenseItemBehavior.java b/net/minecraft/core/dispenser/DefaultDispenseItemBehavior.java
+index b9f8bf2158f3ec4331c0de39a24857b2ed84f01b..f1d24d4c01e2656688133d9783dc0df7679456f8 100644
+--- a/net/minecraft/core/dispenser/DefaultDispenseItemBehavior.java
++++ b/net/minecraft/core/dispenser/DefaultDispenseItemBehavior.java
+@@ -26,7 +26,12 @@ public class DefaultDispenseItemBehavior implements DispenseItemBehavior {
+         Position dispensePosition = DispenserBlock.getDispensePosition(blockSource);
+         ItemStack itemStack = item.split(1);
+         // CraftBukkit start
+-        if (!DefaultDispenseItemBehavior.spawnItem(blockSource.level(), itemStack, 6, this.direction, dispensePosition, blockSource)) {
++        // Kiterino start - More BlockDispenseEvent API
++        ItemStack result = DefaultDispenseItemBehavior.spawnItem(blockSource.level(), item, itemStack, 6, this.direction, dispensePosition, blockSource);
++        if (result != null) {
++            return result;
++        } else {
++        // Kiterino end - More BlockDispenseEvent API
+             item.grow(1);
+         }
+         // CraftBukkit end
+@@ -61,8 +66,8 @@ public class DefaultDispenseItemBehavior implements DispenseItemBehavior {
+     }
+ 
+     // CraftBukkit start - void -> boolean return
+-    public static boolean spawnItem(Level level, ItemStack stack, int speed, Direction facing, Position position, BlockSource blockSource) {
+-        if (stack.isEmpty()) return true;
++    public static @org.jspecify.annotations.Nullable ItemStack spawnItem(Level level, ItemStack original, ItemStack stack, int speed, Direction facing, Position position, BlockSource blockSource) { // Kiterino - Change return type, expose original - More BlockDispenseEvent API
++        if (stack.isEmpty()) return stack;
+         ItemEntity itemEntity = DefaultDispenseItemBehavior.prepareItem(level, stack, speed, facing, position);
+ 
+         org.bukkit.block.Block block = org.bukkit.craftbukkit.block.CraftBlock.at(level, blockSource.pos());
+@@ -72,27 +77,37 @@ public class DefaultDispenseItemBehavior implements DispenseItemBehavior {
+         level.getCraftServer().getPluginManager().callEvent(event);
+ 
+         if (event.isCancelled()) {
+-            return false;
++            return null; // Kiterino - More BlockDispenseEvent API
++        }
++
++        // Kiterino start - More BlockDispenseEvent API
++        if (blockSource.state().is(net.minecraft.world.level.block.Blocks.DISPENSER) && event.getLeftoverItem() != null) {
++            if (original.isEmpty()) {
++                return ItemStack.fromBukkitCopy(event.getLeftoverItem());
++            }
++            addToInventoryOrDispenseS(blockSource, ItemStack.fromBukkitCopy(event.getLeftoverItem()));
++            return stack;
+         }
++        // Kiterino end - More BlockDispenseEvent API
+ 
+-        itemEntity.setItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem()));
++        itemEntity.setItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem())); // Kiterino - More BlockDispenseEvent API
+         itemEntity.setDeltaMovement(org.bukkit.craftbukkit.util.CraftVector.toVec3(event.getVelocity()));
+ 
+         if (blockSource.state().is(net.minecraft.world.level.block.Blocks.DISPENSER) && !event.getItem().getType().equals(craftItem.getType())) {
+             // Chain to handler for new item
+-            ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++            ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+             DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+             if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior.getClass() != DefaultDispenseItemBehavior.class) {
+                 dispenseBehavior.dispense(blockSource, eventStack);
+             } else {
+                 level.addFreshEntity(itemEntity);
+             }
+-            return false;
++            return null; // Kiterino - More BlockDispenseEvent API
+         }
+ 
+         level.addFreshEntity(itemEntity);
+ 
+-        return true;
++        return original; // Kiterino - More BlockDispenseEvent API
+         // CraftBukkit end
+     }
+ 
+@@ -122,7 +137,12 @@ public class DefaultDispenseItemBehavior implements DispenseItemBehavior {
+         }
+     }
+ 
++    // Kiterino start - More BlockDispenseEvent API
+     private void addToInventoryOrDispense(BlockSource blockSource, ItemStack remainder) {
++        addToInventoryOrDispenseS(blockSource, remainder);
++    }
++    private static void addToInventoryOrDispenseS(BlockSource blockSource, ItemStack remainder) {
++    // Kiterino end - More BlockDispenseEvent API
+         ItemStack itemStack = blockSource.blockEntity().insertItem(remainder);
+         if (!itemStack.isEmpty()) {
+             Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
+diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
+index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a745a4cd3a4 100644
+--- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
++++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
+@@ -104,7 +104,7 @@ public interface DispenseItemBehavior {
+                     if (!event.getItem().equals(craftItem)) {
+                         shrink = false;
+                         // Chain to handler for new item
+-                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+                         DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                         if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                             dispenseBehavior.dispense(blockSource, eventStack);
+@@ -166,7 +166,7 @@ public interface DispenseItemBehavior {
+                     if (!event.getItem().equals(craftItem)) {
+                         shrink = false;
+                         // Chain to handler for new item
+-                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+                         DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                         if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                             dispenseBehavior.dispense(blockSource, eventStack);
+@@ -219,7 +219,7 @@ public interface DispenseItemBehavior {
+                             if (!event.getItem().equals(craftItem)) {
+                                 shrink = false;
+                                 // Chain to handler for new item
+-                                ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++                                ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+                                 DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                                 if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                                     dispenseBehavior.dispense(blockSource, eventStack);
+@@ -275,21 +275,28 @@ public interface DispenseItemBehavior {
+                 boolean willEmptyContentsSolidBucketItem = dispensibleContainerItem instanceof net.minecraft.world.item.SolidBucketItem && level.isInWorldBounds(blockPos) && state.isAir();
+                 /* Taken from BucketItem#emptyContents */
+                 boolean willEmptyBucketItem = dispensibleContainerItem instanceof final net.minecraft.world.item.BucketItem bucketItem && bucketItem.content instanceof net.minecraft.world.level.material.FlowingFluid && (state.isAir() || state.canBeReplaced(bucketItem.content) || (state.getBlock() instanceof net.minecraft.world.level.block.LiquidBlockContainer liquidBlockContainer && liquidBlockContainer.canPlaceLiquid(null, level, blockPos, state, bucketItem.content)));
++                ItemStack leftover = new ItemStack(Items.BUCKET);
+                 if (willEmptyContentsSolidBucketItem || willEmptyBucketItem) {
+                 // Paper end - correctly check if the bucket place will succeed
+                     org.bukkit.block.Block block = org.bukkit.craftbukkit.block.CraftBlock.at(level, blockSource.pos());
+                     org.bukkit.craftbukkit.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(item.copyWithCount(1)); // Paper - single item in event
+ 
+                     org.bukkit.event.block.BlockDispenseEvent event = new org.bukkit.event.block.BlockDispenseEvent(block, craftItem.clone(), org.bukkit.craftbukkit.util.CraftVector.toBukkit(blockPos));
++                    event.setLeftoverItem(leftover.asBukkitCopy()); // Kiterino - More BlockDispenseEvent API
+                     level.getCraftServer().getPluginManager().callEvent(event);
+ 
+                     if (event.isCancelled()) {
+                         return item;
+                     }
++                    // Kiterino start - More BlockDispenseEvent API
++                    if (event.getLeftoverItem() != null) {
++                        leftover = ItemStack.fromBukkitCopy(event.getLeftoverItem());
++                    }
++                    // Kiterino end - More BlockDispenseEvent API
+ 
+                     if (!event.getItem().equals(craftItem)) {
+                         // Chain to handler for new item
+-                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+                         DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                         if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                             dispenseBehavior.dispense(blockSource, eventStack);
+@@ -306,7 +313,7 @@ public interface DispenseItemBehavior {
+ 
+                 if (dispensibleContainerItem.emptyContents(null, level, blockPos, null)) {
+                     dispensibleContainerItem.checkExtraContent(null, level, dispensedItem, blockPos); // Paper - track changed item from dispense event
+-                    return this.consumeWithRemainder(blockSource, item, new ItemStack(Items.BUCKET));
++                    return this.consumeWithRemainder(blockSource, item, leftover); // Kiterino - More BlockDispenseEvent API
+                 } else {
+                     return this.defaultDispenseItemBehavior.dispense(blockSource, item);
+                 }
+@@ -335,13 +342,17 @@ public interface DispenseItemBehavior {
+                         levelAccessor.gameEvent(null, GameEvent.FLUID_PICKUP, blockPos);
+                         Item item1 = itemStack.getItem();
+                         // Paper start - Call BlockDispenseEvent
+-                        ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                        if (result != null) {
+-                            return result;
++                        // Kiterino start - More BlockDispenseEvent API
++                        var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, event -> {
++                            event.setLeftoverItem(itemStack.asBukkitCopy());
++                        });
++                        if (result.dispensedItem() != null) {
++                            return result.dispensedItem();
+                         }
+                         // Paper end - Call BlockDispenseEvent
+-                        itemStack = bucketPickup.pickupBlock(null, levelAccessor, blockPos, blockState); // CraftBukkit - from above
+-                        return this.consumeWithRemainder(blockSource, item, new ItemStack(item1));
++                        bucketPickup.pickupBlock(null, levelAccessor, blockPos, blockState); // CraftBukkit - from above
++                        return result.event().getLeftoverItem() != null ? this.consumeWithRemainder(blockSource, item, ItemStack.fromBukkitCopy(result.event().getLeftoverItem())) : itemStack;
++                        // Kiterino end - More BlockDispenseEvent API
+                     }
+                 } else {
+                     return super.execute(blockSource, item);
+@@ -356,11 +367,13 @@ public interface DispenseItemBehavior {
+                 Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
+                 BlockPos blockPos = blockSource.pos().relative(direction);
+                 // Paper start - Call BlockDispenseEvent
+-                ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                if (result != null) {
++                // Kiterino - More BlockDispenseEvent API
++                var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                if (result.dispensedItem() != null) {
+                     this.setSuccess(false);
+-                    return result;
++                    return result.dispensedItem();
+                 }
++                // Kiterino - More BlockDispenseEvent API
+                 // Paper end - Call BlockDispenseEvent
+                 BlockState blockState = serverLevel.getBlockState(blockPos);
+                 if (BaseFireBlock.canBePlacedAt(serverLevel, blockPos, direction)) {
+@@ -397,11 +410,13 @@ public interface DispenseItemBehavior {
+                 Level level = blockSource.level();
+                 BlockPos blockPos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
+                 // Paper start - Call BlockDispenseEvent
+-                ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                if (result != null) {
++                // Kiterino start - More BlockDispenseEvent API
++                var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                if (result.dispensedItem() != null) {
+                     this.setSuccess(false);
+-                    return result;
++                    return result.dispensedItem();
+                 }
++                // Kiterino end - More BlockDispenseEvent API
+                 // Paper end - Call BlockDispenseEvent
+                 level.captureTreeGeneration = true; // CraftBukkit
+                 if (!BoneMealItem.growCrop(item, level, blockPos) && !BoneMealItem.growWaterPlant(item, level, blockPos, null)) {
+@@ -465,7 +480,7 @@ public interface DispenseItemBehavior {
+                     if (!event.getItem().equals(craftItem)) {
+                         shrink = false;
+                         // Chain to handler for new item
+-                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+                         DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                         if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                             dispenseBehavior.dispense(blockSource, eventStack);
+@@ -493,11 +508,13 @@ public interface DispenseItemBehavior {
+                     Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
+                     BlockPos blockPos = blockSource.pos().relative(direction);
+                     // Paper start - Call BlockDispenseEvent
+-                    ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                    if (result != null) {
++                    // Kiterino start - More BlockDispenseEvent API
++                    var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                    if (result.dispensedItem() != null) {
+                         this.setSuccess(false);
+-                        return result;
++                        return result.dispensedItem();
+                     }
++                    // Kiterino end - More BlockDispenseEvent API
+                     // Paper end - Call BlockDispenseEvent
+                     if (level.isEmptyBlock(blockPos) && WitherSkullBlock.canSpawnMob(level, blockPos, item)) {
+                         level.setBlock(
+@@ -528,11 +545,13 @@ public interface DispenseItemBehavior {
+                 BlockPos blockPos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
+                 CarvedPumpkinBlock carvedPumpkinBlock = (CarvedPumpkinBlock)Blocks.CARVED_PUMPKIN;
+                 // Paper start - Call BlockDispenseEvent
+-                ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                if (result != null) {
++                // Kiterino start - More BlockDispenseEvent API
++                var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                if (result.dispensedItem() != null) {
+                     this.setSuccess(false);
+-                    return result;
++                    return result.dispensedItem();
+                 }
++                // Kiterino end - More BlockDispenseEvent API
+                 // Paper end - Call BlockDispenseEvent
+                 if (level.isEmptyBlock(blockPos) && carvedPumpkinBlock.canSpawnGolem(level, blockPos)) {
+                     if (!level.isClientSide()) {
+@@ -570,10 +589,12 @@ public interface DispenseItemBehavior {
+                     BlockPos blockPos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
+                     BlockState blockState = serverLevel.getBlockState(blockPos);
+                     // Paper start - Call BlockDispenseEvent
+-                    ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                    if (result != null) {
+-                        return result;
++                    // Kiterino start - More BlockDispenseEvent API
++                    var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                    if (result.dispensedItem() != null) {
++                        return result.dispensedItem();
+                     }
++                    // Kiterino end - More BlockDispenseEvent API
+                     // Paper end - Call BlockDispenseEvent
+                     if (blockState.is(
+                             BlockTags.BEEHIVES,
+@@ -616,11 +637,13 @@ public interface DispenseItemBehavior {
+                 if (blockState.is(Blocks.RESPAWN_ANCHOR)) {
+                     if (blockState.getValue(RespawnAnchorBlock.CHARGE) != 4) {
+                         // Paper start - Call BlockDispenseEvent
+-                        ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                        if (result != null) {
++                        // Kiterino start - More BlockDispenseEvent API
++                        var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                        if (result.dispensedItem() != null) {
+                             this.setSuccess(false);
+-                            return result;
++                            return result.dispensedItem();
+                         }
++                        // Kiterino end - More BlockDispenseEvent API
+                         // Paper end - Call BlockDispenseEvent
+                         RespawnAnchorBlock.charge(null, level, blockPos, blockState);
+                         item.shrink(1);
+@@ -659,7 +682,7 @@ public interface DispenseItemBehavior {
+ 
+                     if (!event.getItem().equals(craftItem)) {
+                         // Chain to handler for new item
+-                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
++                        ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
+                         DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                         if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                             dispenseBehavior.dispense(blockSource, eventStack);
+@@ -688,11 +711,13 @@ public interface DispenseItemBehavior {
+                 Optional<BlockState> waxed = HoneycombItem.getWaxed(blockState);
+                 if (waxed.isPresent()) {
+                     // Paper start - Call BlockDispenseEvent
+-                    ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this);
+-                    if (result != null) {
++                    // Kiterino start - More BlockDispenseEvent API
++                    var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos, item, this, null);
++                    if (result.dispensedItem() != null) {
+                         this.setSuccess(false);
+-                        return result;
++                        return result.dispensedItem();
+                     }
++                    // Kiterino end - More BlockDispenseEvent API
+                     // Paper end - Call BlockDispenseEvent
+                     level.setBlockAndUpdate(blockPos, waxed.get());
+                     level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_WAX_ON, blockPos, 0);
+@@ -722,10 +747,14 @@ public interface DispenseItemBehavior {
+                             return this.defaultDispenseItemBehavior.dispense(blockSource, item);
+                         } else {
+                             // Paper start - Call BlockDispenseEvent
+-                            ItemStack result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos1, item, this);
+-                            if (result != null) {
+-                                return result;
++                            // Kiterino start - More BlockDispenseEvent API
++                            var result = org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockDispenseEvent(blockSource, blockPos1, item, this, event -> {
++                                event.setLeftoverItem(new ItemStack(Items.GLASS_BOTTLE).asBukkitMirror());
++                            });
++                            if (result.dispensedItem() != null) {
++                                return result.dispensedItem();
+                             }
++                            // Kiterino end - More BlockDispenseEvent API
+                             // Paper end - Call BlockDispenseEvent
+                             if (!serverLevel.isClientSide()) {
+                                 for (int i = 0; i < 5; i++) {
+@@ -746,7 +775,7 @@ public interface DispenseItemBehavior {
+                             serverLevel.playSound(null, blockPos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                             serverLevel.gameEvent(null, GameEvent.FLUID_PLACE, blockPos);
+                             serverLevel.setBlockAndUpdate(blockPos1, Blocks.MUD.defaultBlockState());
+-                            return this.consumeWithRemainder(blockSource, item, new ItemStack(Items.GLASS_BOTTLE));
++                            return result.event().getLeftoverItem() != null ? this.consumeWithRemainder(blockSource, item, ItemStack.fromBukkitCopy(result.event().getLeftoverItem())) : new ItemStack(Items.GLASS_BOTTLE); // Kiterino - More BlockDispenseEvent API
+                         }
+                     }
+                 }

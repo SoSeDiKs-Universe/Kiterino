@@ -13,6 +13,6 @@ public interface PacketItemModifierContext extends ItemModifierContext {
      *
      * @return the item packet, if present
      */
-    Object packet();
+    Object getPacket();
 
 }

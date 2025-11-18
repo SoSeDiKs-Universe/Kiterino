@@ -1,5 +1,7 @@
 package me.sosedik.kiterino.modifier.item.context.packet;
 
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
+import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.PacketItemModifierContext;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -12,9 +14,8 @@ import java.util.function.Supplier;
  * Wrapper around packet containing an entity
  */
 @NullMarked
-public abstract class EntityPacketContext implements PacketItemModifierContext {
+public abstract class EntityPacketContext extends BasePacketContext {
 
-    private final Object packet;
     private final @Nullable World world;
     private final int entityId;
     protected @Nullable Entity entity;
@@ -24,13 +25,15 @@ public abstract class EntityPacketContext implements PacketItemModifierContext {
     /**
      * Constructs wrapper around a packet that contains an entity
      *
+     * @param contextType context type
+     * @param parentContext parent context
      * @param packet nms packet
      * @param world world instance
      * @param entityId internal entity id
      * @param entity entity
      */
-    protected EntityPacketContext(Object packet, @Nullable World world, int entityId, @Nullable Entity entity) {
-        this.packet = packet;
+    protected EntityPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Entity entity) {
+		super(contextType, parentContext, packet);
         this.world = world;
         this.entityId = entityId;
         this.entity = entity;
@@ -40,22 +43,19 @@ public abstract class EntityPacketContext implements PacketItemModifierContext {
     /**
      * Constructs wrapper around a packet that contains an entity
      *
+     * @param contextType context type
+     * @param parentContext parent context
      * @param packet nms packet
      * @param world world instance
      * @param entityId internal entity id
      * @param entityFetcher entity supplier
      */
-    protected EntityPacketContext(Object packet, @Nullable World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
-        this.packet = packet;
+    protected EntityPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
+	    super(contextType, parentContext, packet);
         this.world = world;
         this.entityId = entityId;
         this.entityFetcher = entityFetcher;
         this.fetchedEntity = entityFetcher == null;
-    }
-
-    @Override
-    public Object packet() {
-        return this.packet;
     }
 
     /**

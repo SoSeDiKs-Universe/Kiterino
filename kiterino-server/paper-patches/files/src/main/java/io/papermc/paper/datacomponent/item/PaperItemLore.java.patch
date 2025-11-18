@@ -1,10 +1,15 @@
 --- a/src/main/java/io/papermc/paper/datacomponent/item/PaperItemLore.java
 +++ b/src/main/java/io/papermc/paper/datacomponent/item/PaperItemLore.java
-@@ -58,6 +_,15 @@
+@@ -58,6 +_,20 @@
              return this;
          }
  
 +        // Kiterino start - Data components API improvements
++        @Override
++        public List<Component> getLines() {
++            return this.lines;
++        }
++
 +        @Override
 +        public ItemLore.Builder addLine(int index, final ComponentLike line) {
 +            validateLineCount(this.lines.size(), 1);
