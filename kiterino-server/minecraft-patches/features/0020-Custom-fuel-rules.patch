@@ -1,0 +1,61 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 18 Nov 2025 17:03:33 +0200
+Subject: [PATCH] Custom fuel rules
+
+
+diff --git a/net/minecraft/world/level/block/entity/FuelValues.java b/net/minecraft/world/level/block/entity/FuelValues.java
+index 3a431745c769b8131c2201ff17f1246cbc1820a6..f9b469c8d0b6ffc14f0d5fc2de55c262c245df11 100644
+--- a/net/minecraft/world/level/block/entity/FuelValues.java
++++ b/net/minecraft/world/level/block/entity/FuelValues.java
+@@ -18,13 +18,28 @@ import net.minecraft.world.level.block.Blocks;
+ 
+ public class FuelValues {
+     public final Object2IntSortedMap<Item> values;
++    public final java.util.List<java.util.function.Function<org.bukkit.inventory.ItemStack, Integer>> extraRules = new java.util.ArrayList<>(); // Kiterino - Custom fuel rules
+ 
+     FuelValues(Object2IntSortedMap<Item> values) {
+         this.values = values;
+     }
+ 
+     public boolean isFuel(ItemStack stack) {
+-        return this.values.containsKey(stack.getItem());
++        // Kiterino - Custom fuel rules
++        if (this.values.containsKey(stack.getItem())) {
++            return true;
++        }
++        if (stack.isEmpty()) {
++            return false;
++        }
++        var bukkitItem = stack.asBukkitMirror();
++        for (var extraCheck : extraRules) {
++            if (extraCheck.apply(bukkitItem) != null) {
++                return true;
++            }
++        }
++        return false;
++        // Kiterino - Custom fuel rules
+     }
+ 
+     public SequencedSet<Item> fuelItems() {
+@@ -32,7 +47,19 @@ public class FuelValues {
+     }
+ 
+     public int burnDuration(ItemStack stack) {
+-        return stack.isEmpty() ? 0 : this.values.getInt(stack.getItem());
++        // Kiterino start - Custom fuel rules
++        if (stack.isEmpty()) {
++            return 0;
++        }
++        var bukkitItem = stack.asBukkitMirror();
++        for (var extraCheck : extraRules) {
++            Integer duration = extraCheck.apply(bukkitItem);
++            if (duration != null) {
++                return duration;
++            }
++        }
++        return this.values.getInt(stack.getItem());
++        // Kiterino end - Custom fuel rules
+     }
+ 
+     public static FuelValues vanillaBurnTimes(HolderLookup.Provider registries, FeatureFlagSet enabledFeatures) {

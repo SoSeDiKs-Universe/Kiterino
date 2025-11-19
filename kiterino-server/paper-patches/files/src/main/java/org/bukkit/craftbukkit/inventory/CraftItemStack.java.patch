@@ -1,11 +1,26 @@
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
-@@ -929,7 +_,7 @@
-                 return isBroke(damageable.getDamage());
+@@ -926,17 +_,18 @@
+             }
+             amount -= reduce;
+             if (amount <= 0) {
+-                return isBroke(damageable.getDamage());
++                return damageable.hasMaxDamage() && isBroke(damageable.getDamage(), damageable.getMaxDamage()); // Kiterino - Fix ItemStacl#damage
              }
          }
 -        int damage = damageable.getDamage() + amount;
-+        int damage = Math.max(0, damageable.getDamage() + amount); // Kiterino - Prevent negative damage IAE when over-repairing
++		int maxDamage = damageable.hasMaxDamage() ? damageable.getMaxDamage() : Integer.MAX_VALUE; // Kiterino - Fix ItemStacl#damage
++        int damage = Math.clamp(damageable.getDamage() + amount, 0, maxDamage); // Kiterino - Prevent IAE when over-repairing or over-damaging
          damageable.setDamage(damage);
          setItemMeta((ItemMeta) damageable);
-         return isBroke(damage);
+-        return isBroke(damage);
++        return isBroke(damage, maxDamage); // Kiterino - Fix ItemStacl#damage
+     }
+ 
+-    private boolean isBroke(int damage) {
+-        if (damage > getType().getMaxDurability()) {
++    private boolean isBroke(int damage, int maxDamage) { // Kiterino - Fix ItemStacl#damage
++        if (damage > maxDamage) { // Kiterino - Fix ItemStacl#damage
+             if (getAmount() > 0) {
+                 // ensure it "breaks"
+                 setAmount(0);

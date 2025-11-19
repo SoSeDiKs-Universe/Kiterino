@@ -61,6 +61,11 @@ public class ItemModifierContextType {
     public static final ItemModifierContextType UNKNOWN_ENTITY_DATA = context(UnknownEntityDataContext.class).build();
 
     /**
+     * Campfire block entity
+     */
+    public static final ItemModifierContextType CAMPFIRE = context(BaseItemContext.class).build();
+
+    /**
      * Item particle packet
      */
     public static final ItemModifierContextType PARTICLE = context(BaseItemContext.class).build();

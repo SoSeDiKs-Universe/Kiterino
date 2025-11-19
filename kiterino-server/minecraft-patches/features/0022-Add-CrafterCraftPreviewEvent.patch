@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 19 Nov 2025 03:27:23 +0200
+Subject: [PATCH] Add CrafterCraftPreviewEvent
+
+
+diff --git a/net/minecraft/world/inventory/CrafterMenu.java b/net/minecraft/world/inventory/CrafterMenu.java
+index d2586f1917cd912ac9dbbc51d24b1235d835e072..f77044f5502f6dd8c4c01887732400d3b1729f43 100644
+--- a/net/minecraft/world/inventory/CrafterMenu.java
++++ b/net/minecraft/world/inventory/CrafterMenu.java
+@@ -122,9 +122,17 @@ public class CrafterMenu extends AbstractContainerMenu implements ContainerListe
+         if (this.player instanceof ServerPlayer serverPlayer) {
+             ServerLevel serverLevel = serverPlayer.level();
+             CraftingInput craftInput = this.container.asCraftInput();
+-            ItemStack itemStack = CrafterBlock.getPotentialResults(serverLevel, craftInput)
++            // Kiterino start - Add CrafterCraftPreviewEvent
++            var potentialResults = CrafterBlock.getPotentialResults(serverLevel, craftInput);
++            ItemStack itemStack = potentialResults
+                 .map(recipeHolder -> recipeHolder.value().assemble(craftInput, serverLevel.registryAccess()))
+                 .orElse(ItemStack.EMPTY);
++            if (!itemStack.isEmpty() && potentialResults.isPresent()) {
++                var event = new me.sosedik.kiterino.event.inventory.CrafterCraftPreviewEvent(serverPlayer.getBukkitEntity(), getBukkitView(), potentialResults.get().toBukkitRecipe(), itemStack.asBukkitMirror());
++                event.callEvent();
++                itemStack = ItemStack.fromBukkitCopy(event.getResult());
++            }
++            // Kiterino end - Add CrafterCraftPreviewEvent
+             this.resultContainer.setItem(0, itemStack);
+         }
+     }

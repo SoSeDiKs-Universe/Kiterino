@@ -29,11 +29,10 @@
          boolean flag = false;
  
          for (int i = 0; i < blockEntity.items.size(); i++) {
-@@ -130,6 +_,23 @@
-             setChanged(level, pos, state);
+@@ -131,6 +_,23 @@
          }
      }
-+
+ 
 +    // Kiterino start - Campfire options
 +    private boolean checkGravity(Level level, BlockPos pos, BlockState state) {
 +        if (!level.kiterinoConfig.campfireAffectedByGravity) {
@@ -50,6 +49,30 @@
 +        return false;
 +    }
 +    // Kiterino end - Campfire options
- 
++
      public static void particleTick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity blockEntity) {
          RandomSource randomSource = level.random;
+         if (randomSource.nextFloat() < 0.11F) {
+@@ -211,7 +_,21 @@
+         CompoundTag var4;
+         try (ProblemReporter.ScopedCollector scopedCollector = new ProblemReporter.ScopedCollector(this.problemPath(), LOGGER)) {
+             TagValueOutput tagValueOutput = TagValueOutput.createWithContext(scopedCollector, registries);
+-            ContainerHelper.saveAllItems(tagValueOutput, this.items, true);
++            // Kiterino start - Spoof sent items on block entities
++            NonNullList<ItemStack> items = NonNullList.withSize(this.items.size(), ItemStack.EMPTY);
++            for (int i = 0; i < this.items.size(); i++) {
++                ItemStack original = this.items.get(i);
++                var context = new me.sosedik.kiterino.modifier.item.context.packet.BaseItemContext(me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CAMPFIRE, null);
++                var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(null, context, original.asBukkitCopy());
++                var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
++                if (bukkitItem == null) {
++                    items.set(i, original);
++                } else {
++                    items.set(i, ItemStack.fromBukkitCopy(bukkitItem));
++                }
++            }
++            ContainerHelper.saveAllItems(tagValueOutput, items, true);
++            // Kiterino end - Spoof sent items on block entities
+             var4 = tagValueOutput.buildResult();
+         }
+ 

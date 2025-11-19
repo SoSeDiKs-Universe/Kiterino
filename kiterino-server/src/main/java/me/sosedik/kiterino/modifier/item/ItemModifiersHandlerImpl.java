@@ -939,8 +939,9 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         } else if (bukkitItem == null) {
             return null;
         }
+	    // Kiterino end - Prevent creative from overriding items
+
         return itemStack;
-        // Kiterino end - Prevent creative from overriding items
     }
 
 }

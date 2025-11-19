@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Tue, 18 Nov 2025 17:03:43 +0200
+Subject: [PATCH] Custom fuel rules
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index a6d62a0c92b6788ce5575368eb33c11622661861..0a3f4187acb7a23add50c6bee79e2487eea3a7e6 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -3047,6 +3047,17 @@ public final class Bukkit {
+     }
+     // Purpur end - Added the ability to add combustible items
+ 
++    // Kiterino start - Custom fuel rules
++    /**
++     * Add an extra fuel rule
++     *
++     * @param rule burning rule
++     */
++    public static void addFuel(@NotNull java.util.function.Function<ItemStack, Integer> rule) {
++        server.addFuel(rule);
++    }
++    // Kiterino end - Custom fuel rules
++
+     // Purpur start - Debug Marker API
+     /**
+      * Creates debug block highlight on specified block location and show it to all players on the server.
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 130014793ae2e2306cab537b45d4dc8c50749e1e..c1966c1996c5d8e9c28f12f678c3f7a27ba50106 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2814,6 +2814,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+     public void removeFuel(@NotNull Material material);
+     // Purpur end - Added the ability to add combustible items
+ 
++    // Kiterino start - Custom fuel rules
++    /**
++     * Add an extra fuel rule
++     *
++     * @param rule burning rule
++     */
++    void addFuel(@NotNull java.util.function.Function<ItemStack, Integer> rule);
++    // Kiterino end - Custom fuel rules
++
+     // Purpur start - Debug Marker API
+     /**
+      * Creates debug block highlight on specified block location and show it to all players on the server.
