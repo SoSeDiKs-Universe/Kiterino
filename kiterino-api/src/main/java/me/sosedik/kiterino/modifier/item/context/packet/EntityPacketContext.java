@@ -33,7 +33,7 @@ public abstract class EntityPacketContext extends BasePacketContext {
      * @param entity entity
      */
     protected EntityPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Entity entity) {
-		super(contextType, parentContext, packet);
+        super(contextType, parentContext, packet);
         this.world = world;
         this.entityId = entityId;
         this.entity = entity;
@@ -51,7 +51,7 @@ public abstract class EntityPacketContext extends BasePacketContext {
      * @param entityFetcher entity supplier
      */
     protected EntityPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher) {
-	    super(contextType, parentContext, packet);
+        super(contextType, parentContext, packet);
         this.world = world;
         this.entityId = entityId;
         this.entityFetcher = entityFetcher;

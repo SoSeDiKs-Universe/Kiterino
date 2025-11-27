@@ -9,7 +9,7 @@
              }
          }
 -        int damage = damageable.getDamage() + amount;
-+		int maxDamage = damageable.hasMaxDamage() ? damageable.getMaxDamage() : Integer.MAX_VALUE; // Kiterino - Fix ItemStacl#damage
++        int maxDamage = damageable.hasMaxDamage() ? damageable.getMaxDamage() : Integer.MAX_VALUE; // Kiterino - Fix ItemStacl#damage
 +        int damage = Math.clamp(damageable.getDamage() + amount, 0, maxDamage); // Kiterino - Prevent IAE when over-repairing or over-damaging
          damageable.setDamage(damage);
          setItemMeta((ItemMeta) damageable);

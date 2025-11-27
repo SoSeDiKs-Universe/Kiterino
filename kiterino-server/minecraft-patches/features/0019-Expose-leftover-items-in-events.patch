@@ -5,7 +5,7 @@ Subject: [PATCH] Expose leftover items in events
 
 
 diff --git a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index 3dfd539f4453d9c47c99af36e7ba64400fc89a5c..dc2b5564785c73a5b8d472e14b90ef46f57cd1bd 100644
+index 3dfd539f4453d9c47c99af36e7ba64400fc89a5c..00d0cd4a82efadc358d1bbbe57eec873cec691d8 100755
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 @@ -224,6 +224,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
@@ -28,23 +28,23 @@ index 3dfd539f4453d9c47c99af36e7ba64400fc89a5c..dc2b5564785c73a5b8d472e14b90ef46
 -                        Item item = itemStack.getItem();
 +                        // Kiterino start - Expose leftover items in events
 +                        org.bukkit.inventory.ItemStack remainingItem = furnaceBurnEvent.getRemainingItem();
-+	                    craftingRemainder = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
++                        craftingRemainder = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
 +                        // Kiterino end - Expose leftover items in events
                          itemStack.shrink(1);
                          if (itemStack.isEmpty()) {
 -                            furnace.items.set(1, item.getCraftingRemainder());
 +                            furnace.items.set(1, craftingRemainder);// Kiterino - Expose leftover items in events
 +                        }
-+	                    // Kiterino start - Expose leftover items in events
-+	                    else if (!craftingRemainder.isEmpty()) {
-+	                        net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), craftingRemainder);
++                        // Kiterino start - Expose leftover items in events
++                        else if (!craftingRemainder.isEmpty()) {
++                            net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), craftingRemainder);
                          }
-+	                    // Kiterino end - Expose leftover items in events
++                        // Kiterino end - Expose leftover items in events
                      }
                  }
              }
 diff --git a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-index 5b28e257982c911f4d8ffe286dc125b3f9b64ee4..ffa75dc83ceda1f4175b66e9a2fc2ede7f99f491 100644
+index 5b28e257982c911f4d8ffe286dc125b3f9b64ee4..ffa75dc83ceda1f4175b66e9a2fc2ede7f99f491 100755
 --- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 @@ -242,6 +242,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements

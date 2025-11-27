@@ -13,31 +13,31 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class MerchantOfferPacketContext extends BasePacketContext implements PacketItemModifierContext {
 
-	private final MerchantRecipe merchantRecipe;
-	private final Slot slot;
+    private final MerchantRecipe merchantRecipe;
+    private final Slot slot;
 
-	/**
-	 * Wraps around a merchant offer packet
-	 *
-	 * @param contextType context type
-	 * @param parentContext parent context
-	 * @param packet nms packet
-	 * @param merchantRecipe nms merchant offer
-	 * @param slot item slot
-	 */
-	public MerchantOfferPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, MerchantRecipe merchantRecipe, Slot slot) {
-		super(contextType, parentContext, packet);
-		this.merchantRecipe = merchantRecipe;
-		this.slot = slot;
-	}
+    /**
+     * Wraps around a merchant offer packet
+     *
+     * @param contextType context type
+     * @param parentContext parent context
+     * @param packet nms packet
+     * @param merchantRecipe nms merchant offer
+     * @param slot item slot
+     */
+    public MerchantOfferPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, MerchantRecipe merchantRecipe, Slot slot) {
+        super(contextType, parentContext, packet);
+        this.merchantRecipe = merchantRecipe;
+        this.slot = slot;
+    }
 
-	public MerchantRecipe getMerchantRecipe() {
-		return this.merchantRecipe;
-	}
+    public MerchantRecipe getMerchantRecipe() {
+        return this.merchantRecipe;
+    }
 
-	public Slot getSlot() {
-		return this.slot;
-	}
+    public Slot getSlot() {
+        return this.slot;
+    }
 
     /**
      * Represents trade screen's item slot position

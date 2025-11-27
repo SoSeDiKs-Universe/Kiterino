@@ -5,7 +5,7 @@ Subject: [PATCH] Add highly questionable BlockDispenseEvent additions
 
 
 diff --git a/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java b/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java
-index 5aea3be601216cb8076dd571bce34d3c40a8f33d..0113eabae52369ce4470e51393e389b532e4aa6d 100644
+index 5aea3be601216cb8076dd571bce34d3c40a8f33d..a7b5c4e4ba014a531fafc33e3a1fa89aed537fa5 100644
 --- a/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java
 +++ b/src/main/java/org/bukkit/event/block/BlockDispenseEvent.java
 @@ -20,6 +20,10 @@ public class BlockDispenseEvent extends BlockEvent implements Cancellable {
@@ -41,14 +41,14 @@ index 5aea3be601216cb8076dd571bce34d3c40a8f33d..0113eabae52369ce4470e51393e389b5
      }
  
 +    // Kiterino start - More BlockDispenseEvent API
-+	/**
-+	 * Gets the dispensed item
-+	 *
-+	 * @return dispensed item
-+	 */
-+	public @NotNull ItemStack getDispensedItem() {
-+		return this.dispensedItem == null ? getItem() : this.dispensedItem;
-+	}
++    /**
++     * Gets the dispensed item
++     *
++     * @return dispensed item
++     */
++    public @NotNull ItemStack getDispensedItem() {
++        return this.dispensedItem == null ? getItem() : this.dispensedItem;
++    }
 +
 +    /**
 +     * Sets the item being dispensed

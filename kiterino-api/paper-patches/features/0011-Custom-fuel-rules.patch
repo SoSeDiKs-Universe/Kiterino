@@ -27,10 +27,10 @@ index a6d62a0c92b6788ce5575368eb33c11622661861..0a3f4187acb7a23add50c6bee79e2487
      /**
       * Creates debug block highlight on specified block location and show it to all players on the server.
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 130014793ae2e2306cab537b45d4dc8c50749e1e..c1966c1996c5d8e9c28f12f678c3f7a27ba50106 100644
+index 7fa2901691de6f499458122101141e354cb1f04c..6a4b41ca3a557e4ce760de53b48595806163740e 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2814,6 +2814,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2815,6 +2815,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      public void removeFuel(@NotNull Material material);
      // Purpur end - Added the ability to add combustible items
  

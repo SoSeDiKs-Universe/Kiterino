@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2436,6 +_,12 @@
+@@ -2437,6 +_,12 @@
          }
          // Purpur end
  
@@ -13,7 +13,7 @@
          /**
           * Sends the component to the player
           *
-@@ -2893,4 +_,26 @@
+@@ -2894,4 +_,26 @@
      @Deprecated
      void clearBlockHighlights();
      // Purpur end - Debug Marker API

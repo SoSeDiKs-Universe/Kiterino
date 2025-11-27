@@ -152,7 +152,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         NamespacedKey currentId = null;
         NamespacedKey priorId = null;
 
-		modifier:
+        modifier:
         for (NamespacedKey modifierId : KiterinoConfig.itemModifiersOrder) {
             ItemModifier modifier = modifiers.get(modifierId);
             if (modifier == null) {
@@ -173,10 +173,10 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             }
             if (modifier.skipAir() && contextBox.getItem().getType() == Material.AIR) continue;
 
-	        ItemModifierContext context = contextBox.getContext();
-	        do {
-		        if (modifier.skipContext(context)) continue modifier;
-	        } while ((context = context.getParentContext()) != null);
+            ItemModifierContext context = contextBox.getContext();
+            do {
+                if (modifier.skipContext(context)) continue modifier;
+            } while ((context = context.getParentContext()) != null);
 
             ModificationResult result = modifier.modify(contextBox);
             if (result == ModificationResult.PASS) continue;
@@ -939,7 +939,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         } else if (bukkitItem == null) {
             return null;
         }
-	    // Kiterino end - Prevent creative from overriding items
+        // Kiterino end - Prevent creative from overriding items
 
         return itemStack;
     }

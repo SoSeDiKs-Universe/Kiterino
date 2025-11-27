@@ -30,7 +30,7 @@ public class AdvancementPacketContext extends BasePacketContext implements Packe
      * @param advancementSupplier advancement supplier
      */
     public AdvancementPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, NamespacedKey advancementKey, Supplier<Advancement> advancementSupplier) {
-		super(contextType, parentContext, packet);
+        super(contextType, parentContext, packet);
         this.advancementKey = advancementKey;
         this.advancementSupplier = advancementSupplier;
     }

@@ -12,24 +12,24 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class RecipeBookPacketContext extends BasePacketContext implements PacketItemModifierContext {
 
-	private final DisplayType displayType;
+    private final DisplayType displayType;
 
-	/**
-	 * Recipe book context
-	 *
-	 * @param contextType context type
-	 * @param parentContext parent context
-	 * @param packet nms packet
-	 * @param displayType item's display position
-	 */
-	public RecipeBookPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, DisplayType displayType) {
-		super(contextType, parentContext, packet);
-		this.displayType = displayType;
-	}
+    /**
+     * Recipe book context
+     *
+     * @param contextType context type
+     * @param parentContext parent context
+     * @param packet nms packet
+     * @param displayType item's display position
+     */
+    public RecipeBookPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, DisplayType displayType) {
+        super(contextType, parentContext, packet);
+        this.displayType = displayType;
+    }
 
-	public DisplayType getDisplayType() {
-		return this.displayType;
-	}
+    public DisplayType getDisplayType() {
+        return this.displayType;
+    }
 
     /**
      * Represents item's display position

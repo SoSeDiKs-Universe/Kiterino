@@ -5,7 +5,7 @@ Subject: [PATCH] Add SideItemRemainEvent
 
 
 diff --git a/net/minecraft/world/item/crafting/CraftingRecipe.java b/net/minecraft/world/item/crafting/CraftingRecipe.java
-index daf01e36594d7fcc7cd13fafe6a2cb84793d029d..fb5d561f0a56bc36f7dc29ccef9f9569780eeeaf 100644
+index daf01e36594d7fcc7cd13fafe6a2cb84793d029d..8d1dd6c817fec04fe54e0c3e6f90eae5c511ac83 100755
 --- a/net/minecraft/world/item/crafting/CraftingRecipe.java
 +++ b/net/minecraft/world/item/crafting/CraftingRecipe.java
 @@ -24,7 +24,11 @@ public interface CraftingRecipe extends Recipe<CraftingInput> {
@@ -14,7 +14,7 @@ index daf01e36594d7fcc7cd13fafe6a2cb84793d029d..fb5d561f0a56bc36f7dc29ccef9f9569
              Item item = input.getItem(i).getItem();
 -            list.set(i, item.getCraftingRemainder());
 +            // Kiterino start - Add SideItemRemainEvent
-+            var event = new me.sosedik.kiterino.event.item.SideItemRemainEvent(input.getItem(i).asBukkitCopy(), item.getCraftingRemainder().asBukkitCopy());
++            var event = new me.sosedik.kiterino.event.item.SideItemRemainEvent(me.sosedik.kiterino.event.item.SideItemRemainEvent.Reason.CRAFTING_REMAINDER, input.getItem(i).asBukkitCopy(), item.getCraftingRemainder().asBukkitCopy());
 +            event.callEvent();
 +            list.set(i, ItemStack.fromBukkitCopy(event.getRemainder()));
 +            // Kiterino end - Add SideItemRemainEvent
@@ -22,39 +22,16 @@ index daf01e36594d7fcc7cd13fafe6a2cb84793d029d..fb5d561f0a56bc36f7dc29ccef9f9569
  
          return list;
 diff --git a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index dc2b5564785c73a5b8d472e14b90ef46f57cd1bd..bc6666034e6adfc53cc19fd6f729ce639abb7615 100644
+index 00d0cd4a82efadc358d1bbbe57eec873cec691d8..58fd6b886a683c2505bc423b0f8c1eb38b13ba31 100755
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -240,17 +240,17 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
-                     if (flag2 && furnaceBurnEvent.willConsumeFuel()) { // Paper - add consumeFuel to FurnaceBurnEvent
-                         // Kiterino start - Expose leftover items in events
-                         org.bukkit.inventory.ItemStack remainingItem = furnaceBurnEvent.getRemainingItem();
--	                    craftingRemainder = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
-+                        craftingRemainder = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
-                         // Kiterino end - Expose leftover items in events
-                         itemStack.shrink(1);
-                         if (itemStack.isEmpty()) {
-                             furnace.items.set(1, craftingRemainder);// Kiterino - Expose leftover items in events
-                         }
--	                    // Kiterino start - Expose leftover items in events
--	                    else if (!craftingRemainder.isEmpty()) {
--	                        net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), craftingRemainder);
-+                        // Kiterino start - Expose leftover items in events
-+                        else if (!craftingRemainder.isEmpty()) {
-+                            net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), craftingRemainder);
-                         }
--	                    // Kiterino end - Expose leftover items in events
-+                        // Kiterino end - Expose leftover items in events
-                     }
-                 }
-             }
 @@ -376,7 +376,14 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
              // CraftBukkit end
  
              if (itemStack.is(Blocks.WET_SPONGE.asItem()) && !items.get(1).isEmpty() && items.get(1).is(Items.BUCKET)) {
 -                items.set(1, new ItemStack(Items.WATER_BUCKET));
 +                // Kiterino start - Add SideItemRemainEvent
-+                var event = new me.sosedik.kiterino.event.item.SideItemRemainEvent(items.get(1).asBukkitCopy(), new ItemStack(Items.WATER_BUCKET).asBukkitMirror());
++                var event = new me.sosedik.kiterino.event.item.SideItemRemainEvent(me.sosedik.kiterino.event.item.SideItemRemainEvent.Reason.WET_SPONGE, items.get(1).asBukkitCopy(), new ItemStack(Items.WATER_BUCKET).asBukkitMirror());
 +                event.callEvent();
 +                var bukkitItem = event.getRemainder();
 +                if (!bukkitItem.isEmpty()) {
