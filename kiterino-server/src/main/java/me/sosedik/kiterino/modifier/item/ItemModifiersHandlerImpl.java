@@ -5,6 +5,7 @@ import io.papermc.paper.command.subcommands.DumpItemCommand;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import io.papermc.paper.datacomponent.item.BundleContents;
+import io.papermc.paper.datacomponent.item.ChargedProjectiles;
 import io.papermc.paper.datacomponent.item.Consumable;
 import io.papermc.paper.datacomponent.item.ItemContainerContents;
 import io.papermc.paper.datacomponent.item.Repairable;
@@ -220,7 +221,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(bundleContents.contents());
                 for (int i = 0; i < items.size(); i++) {
                     org.bukkit.inventory.ItemStack bundleItem = items.get(i);
-                    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, bundleItem));
+                    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, bundleItem.clone()));
                     if (newItem != null) {
                         items.set(i, newItem);
                         modified = true;
@@ -237,7 +238,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(containerContents.contents());
                 for (int i = 0; i < items.size(); i++) {
                     org.bukkit.inventory.ItemStack containerItem = items.get(i);
-                    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem));
+                    org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem.clone()));
                     if (newItem != null) {
                         items.set(i, newItem);
                         modified = true;
@@ -261,7 +262,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                         org.bukkit.inventory.ItemStack containerItem = inventory.getItem(i);
                         if (containerItem == null) continue;
 
-                        org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem));
+                        org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem.clone()));
                         if (newItem != null) {
                             inventory.setItem(i, containerItem);
                             modified = true;
@@ -280,7 +281,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                         org.bukkit.inventory.ItemStack containerItem = inventory.getItem(i);
                         if (containerItem == null) continue;
 
-                        org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem));
+                        org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem.clone()));
                         if (newItem != null) {
                             inventory.setItem(i, containerItem);
                             modified = true;
@@ -302,6 +303,22 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                     item.setData(DataComponentTypes.USE_REMAINDER, UseRemainder.useRemainder(newItem));
                 }
             }
+			// Crossbow projectile
+	        if (item.hasData(DataComponentTypes.CHARGED_PROJECTILES)) {
+		        ChargedProjectiles data = item.getData(DataComponentTypes.CHARGED_PROJECTILES);
+				assert data != null;
+				List<org.bukkit.inventory.ItemStack> newProjectiles = new ArrayList<>(data.projectiles());
+		        for (int i = 0; i < newProjectiles.size(); i++) {
+			        org.bukkit.inventory.ItemStack newProjectile = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, newProjectiles.get(i).clone()));
+					if (newProjectile == null) continue;
+
+					modified = true;
+					newProjectiles.set(i, newProjectile);
+		        }
+				if (modified) {
+					item.setData(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectiles.chargedProjectiles(newProjectiles));
+				}
+	        }
             // Repairable ingredient
             if (item.hasData(DataComponentTypes.REPAIRABLE)) {
                 Repairable repairable = item.getData(DataComponentTypes.REPAIRABLE);

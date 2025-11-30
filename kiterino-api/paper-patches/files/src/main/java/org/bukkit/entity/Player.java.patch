@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -4123,4 +_,123 @@
+@@ -4123,4 +_,121 @@
          sendDeathScreen(message);
      }
      // Purpur end
@@ -28,9 +28,7 @@
 +     *
 +     * @param item item
 +     */
-+    default void sendCursorItem(@Nullable ItemStack item) {
-+        sendItem(me.sosedik.kiterino.inventory.InventorySlotHelper.CURSOR, item);
-+    }
++    void sendCursorItem(@Nullable ItemStack item);
 +    // Kiterino end - Send ItemStack API
 +
 +    // Kiterino start - Anger nearby piglins API

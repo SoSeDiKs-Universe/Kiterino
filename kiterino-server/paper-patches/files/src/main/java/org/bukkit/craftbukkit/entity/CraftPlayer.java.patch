@@ -9,7 +9,7 @@
              if (!new org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent(entity.getBukkitEntity(), org.purpurmc.purpur.event.entity.EntityTeleportHinderedEvent.Reason.IS_VEHICLE, cause).callEvent()) // Purpur - Add EntityTeleportHinderedEvent
              return false;
          }
-@@ -3453,4 +_,117 @@
+@@ -3453,4 +_,122 @@
              entity.remove();
          }
      }
@@ -30,8 +30,13 @@
 +    // Kiterino start - Send ItemStack API
 +    @Override
 +    public void sendItem(int slot, ItemStack item) {
-+        int stateId = this.getHandle().containerMenu.getStateId();
-+        this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket(0, stateId, slot, CraftItemStack.asNMSCopy(item)));
++        int stateId = this.getHandle().containerMenu.incrementStateId();
++        this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket(this.getHandle().containerMenu.containerId, stateId, slot, CraftItemStack.asNMSCopy(item)));
++    }
++
++    @Override
++    public void sendCursorItem(ItemStack item) {
++        this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundSetCursorItemPacket(CraftItemStack.asNMSCopy(item)));
 +    }
 +    // Kiterino end - Send ItemStack API
 +
