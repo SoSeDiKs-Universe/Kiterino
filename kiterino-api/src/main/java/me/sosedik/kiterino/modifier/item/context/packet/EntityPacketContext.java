@@ -2,7 +2,6 @@ package me.sosedik.kiterino.modifier.item.context.packet;
 
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
-import me.sosedik.kiterino.modifier.item.context.PacketItemModifierContext;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jspecify.annotations.NullMarked;
@@ -19,26 +18,8 @@ public abstract class EntityPacketContext extends BasePacketContext {
     private final @Nullable World world;
     private final int entityId;
     protected @Nullable Entity entity;
-    private @Nullable Supplier<@Nullable Entity> entityFetcher;
+    private final @Nullable Supplier<@Nullable Entity> entityFetcher;
     protected boolean fetchedEntity;
-
-    /**
-     * Constructs wrapper around a packet that contains an entity
-     *
-     * @param contextType context type
-     * @param parentContext parent context
-     * @param packet nms packet
-     * @param world world instance
-     * @param entityId internal entity id
-     * @param entity entity
-     */
-    protected EntityPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Entity entity) {
-        super(contextType, parentContext, packet);
-        this.world = world;
-        this.entityId = entityId;
-        this.entity = entity;
-        this.fetchedEntity = true;
-    }
 
     /**
      * Constructs wrapper around a packet that contains an entity
@@ -84,7 +65,7 @@ public abstract class EntityPacketContext extends BasePacketContext {
     public @Nullable Entity getEntity() {
         if (this.fetchedEntity) return this.entity;
         this.fetchedEntity = true;
-        if (entityFetcher != null) this.entity = entityFetcher.get();
+        if (this.entityFetcher != null) this.entity = this.entityFetcher.get();
         return this.entity;
     }
 

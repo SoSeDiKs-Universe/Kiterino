@@ -8,6 +8,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 /**
  * Wrapper around an entity equipment packet
  */
@@ -24,11 +26,11 @@ public class EntityEquipmentPacketContext extends EntityPacketContext {
      * @param packet nms packet
      * @param world entity's world
      * @param entityId internal entity id
-     * @param entity entity
+     * @param entityFetcher entity fetcher
      * @param slot equipment slot
      */
-    public EntityEquipmentPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Entity entity, EquipmentSlot slot) {
-        super(contextType, parentContext, packet, world, entityId, entity);
+    public EntityEquipmentPacketContext(ItemModifierContextType contextType, @Nullable ItemModifierContext parentContext, Object packet, @Nullable World world, int entityId, @Nullable Supplier<@Nullable Entity> entityFetcher, EquipmentSlot slot) {
+        super(contextType, parentContext, packet, world, entityId, entityFetcher);
         this.slot = slot;
     }
 
