@@ -49,11 +49,10 @@
              if (!this.wasTouchingWater && !this.firstTick) {
                  this.doWaterSplashEffect();
              }
-@@ -3380,6 +_,21 @@
-             // Purpur end - Ridables
+@@ -3381,6 +_,21 @@
          }
      }
-+
+ 
 +    // Kiterino start - Allow setting entity's rider
 +    public boolean setRider(Player rider) {
 +        if (!new org.bukkit.event.entity.EntityMountEvent(rider.getBukkitEntity(), this.getBukkitEntity()).callEvent()) return false;
@@ -68,6 +67,15 @@
 +        return getRider() != null;
 +    }
 +    // Kiterino end - Allow setting entity's rider
- 
++
      // Paper start - Force entity dismount during teleportation
      protected boolean removePassenger(Entity passenger) {
+         return removePassenger(passenger, false);
+@@ -4027,6 +_,7 @@
+ 
+         this.portalCooldown = entity.portalCooldown;
+         this.portalProcess = entity.portalProcess;
++        this.rider = entity.rider; // Kiterino - Preserve rider state on entity change
+     }
+ 
+     @Nullable
