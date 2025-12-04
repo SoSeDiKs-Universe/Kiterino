@@ -195,7 +195,7 @@ public class ItemContextBox {
         TooltipDisplay tooltipDisplay = this.item.getData(DataComponentTypes.TOOLTIP_DISPLAY);
         if (tooltipDisplay == null) {
             this.item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().addHiddenComponents(components).build());
-        } else if (!tooltipDisplay.hideTooltip() && !tooltipDisplay.hiddenComponents().contains(DataComponentTypes.DYED_COLOR)) {
+        } else if (!tooltipDisplay.hideTooltip()) {
             this.item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(tooltipDisplay.hiddenComponents()).addHiddenComponents(components).build());
         }
     }

@@ -1,5 +1,26 @@
 --- a/src/main/java/org/bukkit/entity/LivingEntity.java
 +++ b/src/main/java/org/bukkit/entity/LivingEntity.java
+@@ -674,7 +_,19 @@
+      *
+      * @param type the potion type to remove
+      */
+-    public void removePotionEffect(@NotNull PotionEffectType type);
++    // Kiterino start - Add removePotionEffect overload
++    default boolean removePotionEffect(@NotNull PotionEffectType type) {
++        return removePotionEffect(type, org.bukkit.event.entity.EntityPotionEffectEvent.Cause.PLUGIN);
++    }
++
++    /**
++     * Removes any effects present of the given {@link PotionEffectType}.
++     *
++     * @param type the potion type to remove
++     * @param cause removal cause
++     */
++    boolean removePotionEffect(@NotNull PotionEffectType type, @NotNull org.bukkit.event.entity.EntityPotionEffectEvent.Cause cause);
++	// Kiterino end - Add removePotionEffect overload
+ 
+     /**
+      * Returns all currently active {@link PotionEffect}s on the living
 @@ -1510,4 +_,43 @@
       */
      void setShouldBurnInDay(boolean shouldBurnInDay);

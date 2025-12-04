@@ -1,5 +1,16 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -517,8 +_,8 @@
+     }
+ 
+     @Override
+-    public void removePotionEffect(PotionEffectType type) {
+-        this.getHandle().removeEffect(CraftPotionEffectType.bukkitToMinecraftHolder(type), EntityPotionEffectEvent.Cause.PLUGIN);
++    public boolean removePotionEffect(PotionEffectType type, EntityPotionEffectEvent.Cause cause) { // Kiterino - Add removePotionEffect overload
++        return this.getHandle().removeEffect(CraftPotionEffectType.bukkitToMinecraftHolder(type), cause); // Kiterino - Add removePotionEffect overload
+     }
+ 
+     @Override
 @@ -1100,4 +_,40 @@
          this.getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
