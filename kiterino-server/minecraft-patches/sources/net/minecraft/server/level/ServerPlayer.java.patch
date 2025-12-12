@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -827,7 +_,7 @@
+@@ -824,7 +_,7 @@
                  this.foodData.tick(this);
                  this.awardStat(Stats.PLAY_TIME);
                  this.awardStat(Stats.TOTAL_WORLD_TIME);
@@ -9,7 +9,7 @@
                      this.awardStat(Stats.TIME_SINCE_DEATH);
                  }
  
-@@ -1356,18 +_,30 @@
+@@ -1353,18 +_,30 @@
      }
  
      public @Nullable TeleportTransition findRespawnPositionAndUseSpawnBlock(boolean useCharge, TeleportTransition.PostTeleportTransition postTeleportTransition, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason) {
@@ -42,16 +42,7 @@
          if (level != null && respawnConfig != null) {
              Optional<ServerPlayer.RespawnPosAngle> optional = findRespawnAndUseSpawnBlock(level, respawnConfig, useCharge);
              if (optional.isPresent()) {
-@@ -1666,7 +_,7 @@
-             this.setRespawnPosition(
-                 new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(this.level().dimension(), bedPos, this.getYRot(), this.getXRot()), false), true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.BED // Paper - Add PlayerSetSpawnEvent
-             );
--            if (this.level().isBrightOutside()) {
-+            if (!this.level().kiterinoConfig.dayDreaming && this.level().isBrightOutside()) { // Kiterino - Sleeping options
-                 return Either.left(Player.BedSleepingProblem.NOT_POSSIBLE_NOW);
-             } else {
-                 if (!this.isCreative()) {
-@@ -2019,8 +_,13 @@
+@@ -2050,8 +_,13 @@
                      }
                  }
              } else if (this.isFallFlying()) {
@@ -67,7 +58,7 @@
              } else {
                  int rounded = Math.round((float)Math.sqrt(dx * dx + dz * dz) * 100.0F);
                  if (rounded > 25) {
-@@ -2034,6 +_,11 @@
+@@ -2065,6 +_,11 @@
          if (this.isPassenger() && !didNotMove(dx, dy, dz)) {
              int rounded = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
              Entity vehicle = this.getVehicle();

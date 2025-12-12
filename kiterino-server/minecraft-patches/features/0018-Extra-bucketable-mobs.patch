@@ -5,10 +5,10 @@ Subject: [PATCH] Extra bucketable mobs
 
 
 diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index 6cf6dd99ec454c9617551c3249e20a745a4cd3a4..4da200795ff9868fc1bb4deb100b8903e9369b36 100755
+index 0a6f81950c3edd9bcb6ccfacbec99e53d36fca2b..43273db3097accf2c1f1c7b98b0537165a8b0a0a 100644
 --- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -275,8 +275,9 @@ public interface DispenseItemBehavior {
+@@ -279,8 +279,9 @@ public interface DispenseItemBehavior {
                  boolean willEmptyContentsSolidBucketItem = dispensibleContainerItem instanceof net.minecraft.world.item.SolidBucketItem && level.isInWorldBounds(blockPos) && state.isAir();
                  /* Taken from BucketItem#emptyContents */
                  boolean willEmptyBucketItem = dispensibleContainerItem instanceof final net.minecraft.world.item.BucketItem bucketItem && bucketItem.content instanceof net.minecraft.world.level.material.FlowingFluid && (state.isAir() || state.canBeReplaced(bucketItem.content) || (state.getBlock() instanceof net.minecraft.world.level.block.LiquidBlockContainer liquidBlockContainer && liquidBlockContainer.canPlaceLiquid(null, level, blockPos, state, bucketItem.content)));
@@ -19,7 +19,7 @@ index 6cf6dd99ec454c9617551c3249e20a745a4cd3a4..4da200795ff9868fc1bb4deb100b8903
                  // Paper end - correctly check if the bucket place will succeed
                      org.bukkit.block.Block block = org.bukkit.craftbukkit.block.CraftBlock.at(level, blockSource.pos());
                      org.bukkit.craftbukkit.inventory.CraftItemStack craftItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(item.copyWithCount(1)); // Paper - single item in event
-@@ -319,6 +320,7 @@ public interface DispenseItemBehavior {
+@@ -323,6 +324,7 @@ public interface DispenseItemBehavior {
                  }
              }
          };
@@ -28,10 +28,10 @@ index 6cf6dd99ec454c9617551c3249e20a745a4cd3a4..4da200795ff9868fc1bb4deb100b8903
          DispenserBlock.registerBehavior(Items.WATER_BUCKET, dispenseItemBehavior);
          DispenserBlock.registerBehavior(Items.POWDER_SNOW_BUCKET, dispenseItemBehavior);
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index 23468734bebf184389c1662d88fff952d649f719..e661d09f9da89a31c4f56ec2b00cff9027146fe4 100755
+index 9feda8160f8727d8182dba265390d8be65048389..15d36ec44c8a986fcd04ee14cd65d51c15d8f22c 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -1322,6 +1322,12 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -1347,6 +1347,12 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
      }
  
      protected InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -45,7 +45,7 @@ index 23468734bebf184389c1662d88fff952d649f719..e661d09f9da89a31c4f56ec2b00cff90
      }
  
 diff --git a/net/minecraft/world/entity/animal/Bucketable.java b/net/minecraft/world/entity/animal/Bucketable.java
-index 7f64148a30b842e850374f05a992dc7d627b9ebf..d37aa209bb9ffc135ba59186eb7a4f68fc156973 100755
+index 7f64148a30b842e850374f05a992dc7d627b9ebf..d37aa209bb9ffc135ba59186eb7a4f68fc156973 100644
 --- a/net/minecraft/world/entity/animal/Bucketable.java
 +++ b/net/minecraft/world/entity/animal/Bucketable.java
 @@ -30,6 +30,24 @@ public interface Bucketable {
@@ -120,10 +120,10 @@ index 7f64148a30b842e850374f05a992dc7d627b9ebf..d37aa209bb9ffc135ba59186eb7a4f68
              ItemStack itemStack = ItemUtils.createFilledResult(itemInHand, player, bucketItemStack, false);
              player.setItemInHand(hand, itemStack);
 diff --git a/net/minecraft/world/item/BucketItem.java b/net/minecraft/world/item/BucketItem.java
-index 1534b142bf8188df0ef6652e39768e0a0c88bcf2..16c67df7f23a012f3b41d4def44a9723d1dee1a5 100755
+index 0ffdbcd75fa57feb2ada835c0189246821d279d1..44e653e060d46d6ce469bda460026125c0c3833a 100644
 --- a/net/minecraft/world/item/BucketItem.java
 +++ b/net/minecraft/world/item/BucketItem.java
-@@ -54,7 +54,7 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+@@ -55,7 +55,7 @@ public class BucketItem extends Item implements DispensibleContainerItem {
              BlockPos blockPos1 = blockPos.relative(direction);
              if (!level.mayInteract(player, blockPos) || !player.mayUseItemAt(blockPos1, direction, itemInHand)) {
                  return InteractionResult.FAIL;
@@ -132,7 +132,7 @@ index 1534b142bf8188df0ef6652e39768e0a0c88bcf2..16c67df7f23a012f3b41d4def44a9723
                  BlockState blockState = level.getBlockState(blockPos);
                  if (blockState.getBlock() instanceof BucketPickup bucketPickup) {
                      // CraftBukkit start
-@@ -87,10 +87,11 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+@@ -88,10 +88,11 @@ public class BucketItem extends Item implements DispensibleContainerItem {
                  BlockPos blockPos2 = blockState.getBlock() instanceof LiquidBlockContainer && this.content == Fluids.WATER ? blockPos : blockPos1;
                  if (this.emptyContents(player, level, blockPos2, playerPovHitResult, playerPovHitResult.getDirection(), blockPos, itemInHand, hand)) { // CraftBukkit
                      this.checkExtraContent(player, level, itemInHand, blockPos2);
@@ -145,7 +145,7 @@ index 1534b142bf8188df0ef6652e39768e0a0c88bcf2..16c67df7f23a012f3b41d4def44a9723
                      player.awardStat(Stats.ITEM_USED.get(this));
                      ItemStack itemStack = ItemUtils.createFilledResult(itemInHand, player, getEmptySuccessItem(itemInHand, player));
                      return InteractionResult.SUCCESS.heldItemTransformedTo(itemStack);
-@@ -124,7 +125,7 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+@@ -125,7 +126,7 @@ public class BucketItem extends Item implements DispensibleContainerItem {
  
      public boolean emptyContents(@Nullable LivingEntity entity, Level level, BlockPos pos, @Nullable BlockHitResult hitResult, Direction direction, BlockPos clicked, ItemStack itemstack, InteractionHand hand) {
          // CraftBukkit end
@@ -154,7 +154,7 @@ index 1534b142bf8188df0ef6652e39768e0a0c88bcf2..16c67df7f23a012f3b41d4def44a9723
              return false;
          } else {
              BlockState blockState = level.getBlockState(pos);
-@@ -160,16 +161,16 @@ public class BucketItem extends Item implements DispensibleContainerItem {
+@@ -163,16 +164,16 @@ public class BucketItem extends Item implements DispensibleContainerItem {
                  }
  
                  return true;
@@ -175,11 +175,11 @@ index 1534b142bf8188df0ef6652e39768e0a0c88bcf2..16c67df7f23a012f3b41d4def44a9723
                      return false;
                  } else {
 diff --git a/net/minecraft/world/item/MobBucketItem.java b/net/minecraft/world/item/MobBucketItem.java
-index cbde1be92d2febd1538e34546f4f2d0138e38cdb..d5e308d086617cb9b3d242527e14654000f60d1a 100755
+index 39f4dc20fe793ac2045fec5650de4aab18868bd5..328c8b45e7456365bb86dc5362565437deeaf01f 100644
 --- a/net/minecraft/world/item/MobBucketItem.java
 +++ b/net/minecraft/world/item/MobBucketItem.java
-@@ -18,6 +18,14 @@ import net.minecraft.world.level.gameevent.GameEvent;
- import net.minecraft.world.level.material.Fluid;
+@@ -18,6 +18,14 @@ import net.minecraft.world.level.material.Fluid;
+ import org.jspecify.annotations.Nullable;
  
  public class MobBucketItem extends BucketItem {
 +    // Kiterino start - Extra bucketable mobs

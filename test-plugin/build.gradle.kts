@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     compileOnly(project(":kiterino-api"))
-    paperweight.paperDevBundle("1.21.10-R0.1-SNAPSHOT", "me.sosedik.kiterino")
+    paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT", "me.sosedik.kiterino")
 }
 
 tasks.processResources {

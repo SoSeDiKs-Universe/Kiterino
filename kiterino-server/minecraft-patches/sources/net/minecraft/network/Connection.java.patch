@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/Connection.java
 +++ b/net/minecraft/network/Connection.java
-@@ -724,6 +_,27 @@
+@@ -690,6 +_,27 @@
          pipeline.addLast("hackfix", new ChannelOutboundHandlerAdapter() {
              @Override
              public void write(ChannelHandlerContext channelHandlerContext, Object object, ChannelPromise channelPromise) throws Exception {
@@ -11,13 +11,13 @@
 +                    // Kiterino start - Don't send custom mob effects - Data-driven mob effects
 +                    if (packet instanceof net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket mobEffectPacket) {
 +                        java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.getEffect().unwrapKey();
-+                        if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().location().getNamespace())) {
++                        if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().identifier().getNamespace())) {
 +                            packet.onPacketDispatchFinish(player, null);
 +                            return;
 +                        }
 +                    } else if (packet instanceof net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket mobEffectPacket) {
 +                        java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.effect().unwrapKey();
-+                        if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().location().getNamespace())) {
++                        if (key.isPresent() && !org.bukkit.NamespacedKey.MINECRAFT.equals(key.get().identifier().getNamespace())) {
 +                            packet.onPacketDispatchFinish(player, null);
 +                            return;
 +                        }

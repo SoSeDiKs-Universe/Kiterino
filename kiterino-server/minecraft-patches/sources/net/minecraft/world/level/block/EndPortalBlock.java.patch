@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/EndPortalBlock.java
 +++ b/net/minecraft/world/level/block/EndPortalBlock.java
-@@ -91,6 +_,13 @@
+@@ -83,6 +_,13 @@
          ResourceKey<Level> resourceKey1 = flag ? respawnData.dimension() : Level.END;
          BlockPos blockPos = flag ? respawnData.pos() : ServerLevel.END_SPAWN_POINT;
          ServerLevel level1 = level.getServer().getLevel(resourceKey1);
@@ -14,7 +14,7 @@
          if (level1 == null) {
              return null;
          } else {
-@@ -111,7 +_,7 @@
+@@ -103,7 +_,7 @@
                  f1 = respawnData.pitch();
                  set = Relative.union(Relative.DELTA, Relative.ROTATION);
                  if (entity instanceof ServerPlayer serverPlayer) {

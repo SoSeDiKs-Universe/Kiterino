@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 3817c5d7eaaa36b89a2c07a82cb9196889814904..c0ebd749534957a40d9fbe4f77d2114507443cce 100644
+index 330dabcf7636328c04622a2e085665007b60fbc6..64d0ff2cd8ff9b8b1f3d0bfd9b173ca12b89332c 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -104,7 +104,7 @@ public final class PaperRegistries {
+@@ -109,7 +109,7 @@ public final class PaperRegistries {
              // built-in
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
@@ -41,14 +41,14 @@ index a6c3898ce2162e2dc75b8b8fce4f6e54f24be0f1..ebc7f603aa65e6483078fb32f0f7c8b5
 +    // Kiterino end - Data-driven mob effects
  }
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index fcd8c15cbd71f71e89dd0abd40c17f568b34860d..9d1bc8d6545316f8adbf8ebdfed3733c20ee1ae2 100644
+index 58bd6995b2e52d381c89df23fc78839728246dcb..c57948e45c61ed34a20190d472949f7ee6df7e75 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -25,6 +25,7 @@ class RegistryBuilderTest {
              .filter(RegistryEntryMeta.Buildable.class::isInstance)
-             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
-             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks
-+            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.MOB_EFFECT.location())) // Kiterino - Data-driven mob effects
+             .filter(entry -> !entry.mcKey().identifier().equals(net.minecraft.core.registries.Registries.ITEM.identifier())) // Kiterino - Data-driven items
+             .filter(entry -> !entry.mcKey().identifier().equals(net.minecraft.core.registries.Registries.BLOCK.identifier())) // Kiterino - Data-driven blocks
++            .filter(entry -> !entry.mcKey().identifier().equals(net.minecraft.core.registries.Registries.MOB_EFFECT.identifier())) // Kiterino - Data-driven mob effects
              .map(Arguments::arguments);
      }
  

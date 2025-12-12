@@ -5,20 +5,20 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 41a032ada42082d298a93a0bd5327dd1f854454a..4958d7309b60de753e5fe2996c7d17b8818e7d75 100644
+index ef72833a30fa176a2073f507c1da87c454b9f7d7..5aad58bf8ed53d1432c4d1c9e60179e2daf116f8 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4645,6 +4645,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4780,6 +4780,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return ItemStack.EMPTY;
      }
  
 +    // Kiterino start - Add EntityLoadsProjectileEvent
 +    public ItemStack getProjectile(ItemStack weapon, ItemStack projectile, Predicate<ItemStack> projectileValidator) {
 +        var event = new me.sosedik.kiterino.event.entity.EntityLoadsProjectileEvent(
-+                getBukkitLivingEntity(),
-+                weapon.asBukkitMirror(),
-+                projectile.asBukkitMirror(),
-+                bukkitItem -> projectileValidator.test(CraftItemStack.asNMSCopy(bukkitItem))
++            getBukkitLivingEntity(),
++            weapon.asBukkitMirror(),
++            projectile.asBukkitMirror(),
++            bukkitItem -> projectileValidator.test(CraftItemStack.asNMSCopy(bukkitItem))
 +        );
 +        event.callEvent();
 +        var item = event.getProjectile();
@@ -31,12 +31,12 @@ index 41a032ada42082d298a93a0bd5327dd1f854454a..4958d7309b60de753e5fe2996c7d17b8
 +
      public static byte entityEventForEquipmentBreak(EquipmentSlot slot) {
          return switch (slot) {
-             case MAINHAND -> 47;
+             case MAINHAND -> EntityEvent.MAINHAND_BREAK;
 diff --git a/net/minecraft/world/entity/monster/Monster.java b/net/minecraft/world/entity/monster/Monster.java
-index 7c420f567f7841f45acd91b9749cab150397f5e2..192cddd0c08a272411ce5c8c39f5a7fe5c9e665b 100644
+index 54033572e325f8486a438e31dde34f8407f9180a..6f844935432f8c512d16a71f6fa6151df1cfee5c 100644
 --- a/net/minecraft/world/entity/monster/Monster.java
 +++ b/net/minecraft/world/entity/monster/Monster.java
-@@ -145,7 +145,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
+@@ -151,7 +151,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
          if (shootable.getItem() instanceof ProjectileWeaponItem) {
              Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles();
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);
@@ -46,10 +46,10 @@ index 7c420f567f7841f45acd91b9749cab150397f5e2..192cddd0c08a272411ce5c8c39f5a7fe
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 6a213e47e29119fbf0112dcb4e9e33fd7f28ff2f..30411714e4b4178df28f1690afe00f984643f2e6 100644
+index 83e579008ab890a6c82146c488bebe705e0b9fdf..b93759afe2c8858fdeb5c2b6b34c831d4dc7ccf0 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -1993,19 +1993,19 @@ public abstract class Player extends Avatar implements ContainerUser {
+@@ -2096,19 +2096,19 @@ public abstract class Player extends Avatar implements ContainerUser {
              Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(shootable, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);
              if (!heldProjectile.isEmpty()) {

@@ -13,7 +13,7 @@
 +
 +        net.minecraft.world.level.Level level = ((org.bukkit.craftbukkit.CraftWorld) loc.getWorld()).getHandle();
 +        for (BeehiveBlockEntity.BeeData beeData : getSnapshot().getStored()) {
-+            if (!(beeData.toOccupant().createEntity(level, null) instanceof net.minecraft.world.entity.animal.Bee bee)) continue;
++            if (!(beeData.toOccupant().createEntity(level, null) instanceof net.minecraft.world.entity.animal.bee.Bee bee)) continue;
 +
 +            bee.snapTo(CraftLocation.toBlockPosition(loc), loc.getYaw(), loc.getPitch());
 +            if (!level.addFreshEntity(bee, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.BEEHIVE)) continue;

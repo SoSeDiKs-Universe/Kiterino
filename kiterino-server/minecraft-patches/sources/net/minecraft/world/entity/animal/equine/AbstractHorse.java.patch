@@ -1,5 +1,5 @@
---- a/net/minecraft/world/entity/animal/horse/AbstractHorse.java
-+++ b/net/minecraft/world/entity/animal/horse/AbstractHorse.java
+--- a/net/minecraft/world/entity/animal/equine/AbstractHorse.java
++++ b/net/minecraft/world/entity/animal/equine/AbstractHorse.java
 @@ -128,8 +_,8 @@
  
      protected AbstractHorse(EntityType<? extends AbstractHorse> type, Level level) {
@@ -11,7 +11,7 @@
          this.createInventory();
      }
  
-@@ -465,7 +_,7 @@
+@@ -458,7 +_,7 @@
  
      @Override
      public void openCustomInventoryScreen(Player player) {

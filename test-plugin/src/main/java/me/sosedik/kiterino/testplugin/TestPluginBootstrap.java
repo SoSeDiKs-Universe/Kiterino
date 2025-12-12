@@ -21,7 +21,7 @@ import io.papermc.paper.registry.event.RegistryEvents;
 import me.sosedik.kiterino.testplugin.impl.block.TestBlockImpl;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -49,7 +49,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 switch (key.value()) {
                     case "entity_1" -> {
                         KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TestEntities.ENTITY_1, EntityType.SHEEP);
-                        DefaultAttributes.register(TestEntities.ENTITY_1, net.minecraft.world.entity.animal.Pig.createAttributes().build());
+                        DefaultAttributes.register(TestEntities.ENTITY_1, net.minecraft.world.entity.animal.pig.Pig.createAttributes().build());
                     }
                     default -> throw new IllegalArgumentException();
                 }
@@ -95,7 +95,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                         .stacksTo(32)
                         .rarity(Rarity.EPIC)
                         .food(new FoodProperties(2, 5F, true))
-                        .craftRemainder(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse("test:item_1")))
+                        .craftRemainder(BuiltInRegistries.ITEM.getValue(Identifier.parse("test:item_1")))
                 ))
 //                .setData(DataComponentTypes.MAX_STACK_SIZE, 32)
 //                .setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(5).canAlwaysEat(true).build())
@@ -110,7 +110,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                         .durability(10)
                         .repairable(ItemTags.COALS)
                         .food(new FoodProperties(0, 5F, true))
-                        .craftRemainder(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse("test:item_1")))
+                        .craftRemainder(BuiltInRegistries.ITEM.getValue(Identifier.parse("test:item_1")))
                 ))
 //                .setData(DataComponentTypes.MAX_STACK_SIZE, 32)
 //                .setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(5).canAlwaysEat(true).build())

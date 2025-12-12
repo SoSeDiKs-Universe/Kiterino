@@ -1,8 +1,8 @@
 --- a/src/main/java/com/destroystokyo/paper/MaterialTags.java
 +++ b/src/main/java/com/destroystokyo/paper/MaterialTags.java
-@@ -783,4 +_,26 @@
-         .add(Material.NETHERITE_AXE, Material.NETHERITE_HOE, Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_SWORD)
-         .ensureSize("NETHERITE_TOOLS", 5).lock();
+@@ -784,4 +_,26 @@
+         .add(Material.NETHERITE_AXE, Material.NETHERITE_HOE, Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_SWORD, Material.NETHERITE_SPEAR)
+         .lock();
  
 +    // Kiterino start - Add extra MaterialTags
 +    private static NamespacedKey kiterinoKeyFor(String key) {

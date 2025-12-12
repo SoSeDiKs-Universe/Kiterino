@@ -1,0 +1,23 @@
+--- a/net/minecraft/util/SpecialDates.java
++++ b/net/minecraft/util/SpecialDates.java
+@@ -6,6 +_,7 @@
+ import java.util.List;
+ 
+ public class SpecialDates {
++    public static final com.google.common.collect.Range<MonthDay> HALLOWEEN_RANGE = com.google.common.collect.Range.closed(MonthDay.of(Month.OCTOBER, 20), MonthDay.of(Month.NOVEMBER, 3)); // Kiterino - Allow checking for Halloween season
+     public static final MonthDay HALLOWEEN = MonthDay.of(Month.OCTOBER, 31);
+     public static final List<MonthDay> CHRISTMAS_RANGE = List.of(
+         MonthDay.of(Month.DECEMBER, 24), MonthDay.of(Month.DECEMBER, 25), MonthDay.of(Month.DECEMBER, 26)
+@@ -20,6 +_,12 @@
+     public static boolean isHalloween() {
+         return HALLOWEEN.equals(dayNow());
+     }
++
++    // Kiterino start - Allow checking for Halloween season
++    public static boolean isExtendedHalloween() {
++        return HALLOWEEN_RANGE.contains(dayNow());
++    }
++    // Kiterino end - Allow checking for Halloween season
+ 
+     public static boolean isExtendedChristmas() {
+         return CHRISTMAS_RANGE.contains(dayNow());

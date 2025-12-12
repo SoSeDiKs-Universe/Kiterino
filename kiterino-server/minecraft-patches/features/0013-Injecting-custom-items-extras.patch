@@ -5,10 +5,10 @@ Subject: [PATCH] Injecting custom items extras
 
 
 diff --git a/net/minecraft/core/MappedRegistry.java b/net/minecraft/core/MappedRegistry.java
-index 1610198bd96e0d79debdeddc360500e98cd28504..29e1fda36bd68587f17e2a17be69a406f0a63d00 100644
+index ad1558693564ebd18f5e16b85ae552d2af95efef..169b1227cdf26c9eaf0d672492f8d2644b5f9ae9 100644
 --- a/net/minecraft/core/MappedRegistry.java
 +++ b/net/minecraft/core/MappedRegistry.java
-@@ -339,6 +339,13 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
+@@ -333,6 +333,13 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
          }
      }
  
@@ -23,10 +23,10 @@ index 1610198bd96e0d79debdeddc360500e98cd28504..29e1fda36bd68587f17e2a17be69a406
      public Holder.Reference<T> createIntrusiveHolder(T value) {
          if (this.unregisteredIntrusiveHolders == null) {
 diff --git a/net/minecraft/core/Registry.java b/net/minecraft/core/Registry.java
-index a032a2ce71707e1d1e46a1acf0a63a3bdb1c3db8..3307642782aaa49a4a05a07d61d299ecc860e862 100644
+index af9de8a3c46231159973632fcfc798a4988b9ef5..ef125597f95f0bf108720a4369f62b8630cb477e 100644
 --- a/net/minecraft/core/Registry.java
 +++ b/net/minecraft/core/Registry.java
-@@ -131,6 +131,10 @@ public interface Registry<T> extends Keyable, HolderLookup.RegistryLookup<T>, Id
+@@ -128,6 +128,10 @@ public interface Registry<T> extends Keyable, HolderLookup.RegistryLookup<T>, Id
  
      Registry<T> freeze();
  
@@ -38,7 +38,7 @@ index a032a2ce71707e1d1e46a1acf0a63a3bdb1c3db8..3307642782aaa49a4a05a07d61d299ec
  
      Optional<Holder.Reference<T>> get(int index);
 diff --git a/net/minecraft/world/item/AxeItem.java b/net/minecraft/world/item/AxeItem.java
-index 57ad7c438353aa4d0589894a7cab0554d9758c56..c86073425899452b2f0c1ab2da6ee96a98a7517a 100644
+index 443410efadc9b8e919a23e475ff9457b93e8f156..35b2bb4643c9f33ca23a3fe7e8b8ba4bc3ace56c 100644
 --- a/net/minecraft/world/item/AxeItem.java
 +++ b/net/minecraft/world/item/AxeItem.java
 @@ -57,6 +57,12 @@ public class AxeItem extends Item {

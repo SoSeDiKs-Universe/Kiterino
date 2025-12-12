@@ -103,19 +103,6 @@ index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..5fc4b6a765006c96f7c9645a9f3988ae
      }
  
      @Override
-diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index e34ceaa77c7e538c8d6bc341c4c6f450488ce426..9163896d66675c7133b00ba419f0e18051cfc569 100644
---- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-+++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-@@ -11,7 +11,7 @@ public final class Versioning {
-     public static String getBukkitVersion() {
-         String result = "Unknown-Version";
- 
--        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.purpurmc.purpur/purpur-api/pom.properties"); // Purpur - Rebrand
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.sosedik.kiterino/kiterino-api/pom.properties"); // Purpur - Rebrand // Kiterino - Rebrand
-         Properties properties = new Properties();
- 
-         if (stream != null) {
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
 index bf0cda94d87e46149a21505fc67ddb9ad9af0838..49acaea3219372f1048ac49e3d94a737bbcb630d 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java

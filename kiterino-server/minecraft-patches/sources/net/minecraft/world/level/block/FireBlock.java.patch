@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/FireBlock.java
 +++ b/net/minecraft/world/level/block/FireBlock.java
-@@ -285,7 +_,10 @@
+@@ -281,7 +_,10 @@
              // CraftBukkit end
              if (random.nextInt(age + 10) < 5 && !level.isRainingAt(pos)) {
                  int min = Math.min(age + random.nextInt(5) / 4, 15);
@@ -12,7 +12,7 @@
              } else {
                  if (!blockState.is(Blocks.TNT)) level.removeBlock(pos, false); // Paper - TNTPrimeEvent; We might be cancelling it below, move the setAir down
              }
-@@ -568,5 +_,6 @@
+@@ -564,5 +_,6 @@
          fireBlock.setFlammable(Blocks.OAK_SHELF, 30, 20);
          fireBlock.setFlammable(Blocks.PALE_OAK_SHELF, 30, 20);
          fireBlock.setFlammable(Blocks.SPRUCE_SHELF, 30, 20);

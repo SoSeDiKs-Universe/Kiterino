@@ -1,6 +1,6 @@
---- a/net/minecraft/world/entity/projectile/ThrownSplashPotion.java
-+++ b/net/minecraft/world/entity/projectile/ThrownSplashPotion.java
-@@ -40,7 +_,7 @@
+--- a/net/minecraft/world/entity/projectile/throwableitemprojectile/ThrownSplashPotion.java
++++ b/net/minecraft/world/entity/projectile/throwableitemprojectile/ThrownSplashPotion.java
+@@ -41,7 +_,7 @@
          PotionContents potionContents = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
          float orDefault = stack.getOrDefault(DataComponents.POTION_DURATION_SCALE, 1.0F);
          Iterable<MobEffectInstance> allEffects = potionContents.getAllEffects();

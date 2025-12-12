@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven blocks
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 032e838796d7c7bc3b63298073a10ed5943ac8e9..3817c5d7eaaa36b89a2c07a82cb9196889814904 100644
+index 508cfb120b1c02a2c0bca435a8698590e281c600..330dabcf7636328c04622a2e085665007b60fbc6 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -105,7 +105,7 @@ public final class PaperRegistries {
+@@ -110,7 +110,7 @@ public final class PaperRegistries {
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
@@ -18,14 +18,14 @@ index 032e838796d7c7bc3b63298073a10ed5943ac8e9..3817c5d7eaaa36b89a2c07a82cb91968
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index c33a9c2a0ba238dd93a9338476eca8e57ffc1d4a..fcd8c15cbd71f71e89dd0abd40c17f568b34860d 100644
+index f897557c9f21d485f72839521e5d23b5c0882e12..58bd6995b2e52d381c89df23fc78839728246dcb 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -24,6 +24,7 @@ class RegistryBuilderTest {
              .map(RegistryEntry::meta)
              .filter(RegistryEntryMeta.Buildable.class::isInstance)
-             .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.ITEM.location())) // Kiterino - Data-driven items
-+            .filter(entry -> !entry.mcKey().location().equals(net.minecraft.core.registries.Registries.BLOCK.location())) // Kiterino - Data-driven blocks
+             .filter(entry -> !entry.mcKey().identifier().equals(net.minecraft.core.registries.Registries.ITEM.identifier())) // Kiterino - Data-driven items
++            .filter(entry -> !entry.mcKey().identifier().equals(net.minecraft.core.registries.Registries.BLOCK.identifier())) // Kiterino - Data-driven blocks
              .map(Arguments::arguments);
      }
  

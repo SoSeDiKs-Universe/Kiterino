@@ -2,7 +2,7 @@
 +++ b/net/minecraft/world/entity/ai/goal/EatBlockGoal.java
 @@ -66,18 +_,20 @@
              if (IS_EDIBLE.test(blockState)) { // Paper - fix wrong block state
-                 if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockPos, blockState.getFluidState().createLegacyBlock(), !getServerLevel(this.level).getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING, getServerLevel(this.level).purpurConfig.sheepMobGriefingOverride))) { // CraftBukkit // Paper - fix wrong block state // Purpur - Add mobGriefing override to everything affected
+                 if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockPos, blockState.getFluidState().createLegacyBlock(), !getServerLevel(this.level).getGameRules().get(GameRules.MOB_GRIEFING, getServerLevel(this.level).purpurConfig.sheepMobGriefingOverride))) { // CraftBukkit // Paper - fix wrong block state // Purpur - Add mobGriefing override to everything affected
                      this.level.destroyBlock(blockPos, false);
 +                    this.mob.ate(); // Kiterino - EMC - Moved from below - Sheep should not regrow wool if grass eating is cancelled
                  }
@@ -12,7 +12,7 @@
              } else {
                  BlockPos blockPos1 = blockPos.below();
                  if (this.level.getBlockState(blockPos1).is(Blocks.GRASS_BLOCK)) {
-                     if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockPos1, Blocks.DIRT.defaultBlockState(), !getServerLevel(this.level).getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING, getServerLevel(this.level).purpurConfig.sheepMobGriefingOverride))) { // CraftBukkit // Paper - Fix wrong block state // Purpur - Add mobGriefing override to everything affected
+                     if (org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(this.mob, blockPos1, Blocks.DIRT.defaultBlockState(), !getServerLevel(this.level).getGameRules().get(GameRules.MOB_GRIEFING, getServerLevel(this.level).purpurConfig.sheepMobGriefingOverride))) { // CraftBukkit // Paper - Fix wrong block state // Purpur - Add mobGriefing override to everything affected
                          this.level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos1, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()));
                          this.level.setBlock(blockPos1, Blocks.DIRT.defaultBlockState(), Block.UPDATE_CLIENTS);
 +                        this.mob.ate(); // Kiterino - EMC - Moved from below - Sheep should not regrow wool if grass eating is cancelled

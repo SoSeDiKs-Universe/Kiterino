@@ -163,10 +163,10 @@ index 4f3b6a32fe4e791aab05aa9e553ec935e3cd5e6b..a5f00d7fa03654024b059b2ab69ae478
              boolean flag = size != 0;
              boolean flag1 = i != 0;
 diff --git a/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java b/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-index 4d268864656ad67e6971b74534e25ac47d922cbd..5e93bfdff7e7521449dc037dcff5e47d5e9f1cc9 100644
+index 61b99c895c0e248f0e7c4c634644dcff54a964d9..7dec3a38c6ac9837946d5997cd2a276d2c61ae89 100644
 --- a/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-@@ -53,7 +53,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
+@@ -52,7 +52,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
      // CraftBukkit start - add fields and methods
      public List<org.bukkit.entity.HumanEntity> transaction = new java.util.ArrayList<>();
      private int maxStack = MAX_STACK;
@@ -175,7 +175,7 @@ index 4d268864656ad67e6971b74534e25ac47d922cbd..5e93bfdff7e7521449dc037dcff5e47d
  
      @Override
      public List<ItemStack> getContents() {
-@@ -176,7 +176,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
+@@ -175,7 +175,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
      @Override
      public boolean triggerEvent(int id, int type) {
          if (id == 1) {
@@ -184,7 +184,7 @@ index 4d268864656ad67e6971b74534e25ac47d922cbd..5e93bfdff7e7521449dc037dcff5e47d
              if (type == 0) {
                  this.animationStatus = ShulkerBoxBlockEntity.AnimationStatus.CLOSING;
              }
-@@ -200,6 +200,64 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
+@@ -199,6 +199,64 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
      public void preRemoveSideEffects(BlockPos pos, BlockState state) {
      }
  
@@ -249,7 +249,7 @@ index 4d268864656ad67e6971b74534e25ac47d922cbd..5e93bfdff7e7521449dc037dcff5e47d
      @Override
      public void startOpen(ContainerUser user) {
          if (!this.remove && !user.getLivingEntity().isSpectator()) {
-@@ -207,22 +265,58 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
+@@ -206,22 +264,58 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
                  this.openCount = 0;
              }
  

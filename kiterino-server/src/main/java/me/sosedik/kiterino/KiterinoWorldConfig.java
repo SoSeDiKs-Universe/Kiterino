@@ -79,8 +79,10 @@ public final class KiterinoWorldConfig {
 
     // Kiterino start - Bat options
     public boolean batsIgnoreInvisiblePlayers = false; // Kiterino - Bats ignore invisible (by API) players
+    public boolean extraBatsOnHalloween = false; // Kiterino - Extra bats on Halloween
     private void batsSettings() {
         batsIgnoreInvisiblePlayers = getBoolean("entity.bat.ignore-invisible-players", batsIgnoreInvisiblePlayers, "Make resting bats ignore players that are marked invisible by API");
+        extraBatsOnHalloween = getBoolean("entity.bat.legacy-halloween-spawn-rules", extraBatsOnHalloween, "Restore legacy bat spawn rules during Halloween");
     }
     // Kiterino end - Bat options
 

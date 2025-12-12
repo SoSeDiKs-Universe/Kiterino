@@ -40,7 +40,7 @@
 +        this.getHandle().setSleepingPos(org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(bedLocation));
 +        this.getHandle().setPos(sleepLocation.getX(), sleepLocation.getY(), sleepLocation.getZ());
 +        this.getHandle().setDeltaMovement(Vec3.ZERO);
-+        this.getHandle().hasImpulse = true;
++        this.getHandle().needsSync = true;
 +        if (this.getHandle() instanceof net.minecraft.server.level.ServerPlayer player && player.connection != null) {
 +            // Sync player from bed to actual sleep loc
 +            this.taskScheduler.schedule(entity -> {

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1202,6 +_,16 @@
+@@ -1228,6 +_,16 @@
      private final FeatureFlagSet requiredFeatures;
      private final boolean allowedInPeaceful;
  
@@ -10,7 +10,7 @@
 +    }
 +
 +    public static <T extends Entity> EntityType<T> register(net.kyori.adventure.key.Key key, EntityType.Builder<T> builder) {
-+        return register(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(key.namespace(), key.value())), builder);
++        return register(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(key.namespace(), key.value())), builder);
 +    }
 +    // Kiterino end - Injecting custom entities
 +

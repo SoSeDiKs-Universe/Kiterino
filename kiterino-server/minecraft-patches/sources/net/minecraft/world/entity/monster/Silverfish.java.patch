@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Silverfish.java
 +++ b/net/minecraft/world/entity/monster/Silverfish.java
-@@ -100,7 +_,7 @@
+@@ -99,7 +_,7 @@
  
      @Override
      protected Entity.MovementEmission getMovementEmission() {

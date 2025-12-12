@@ -8,7 +8,7 @@
      );
      public static final Block SHORT_GRASS = register(
          "short_grass",
-@@ -3383,7 +_,9 @@
+@@ -3443,7 +_,9 @@
      );
      public static final Block PACKED_ICE = register(
          "packed_ice",
@@ -18,7 +18,7 @@
      );
      public static final Block SUNFLOWER = register(
          "sunflower",
-@@ -7237,5 +_,6 @@
+@@ -7299,5 +_,6 @@
                  blockState.initCache();
              }
          }

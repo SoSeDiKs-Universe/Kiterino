@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/goal/SwellGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/SwellGoal.java
-@@ -18,7 +_,7 @@
+@@ -17,7 +_,7 @@
      @Override
      public boolean canUse() {
          LivingEntity target = this.creeper.getTarget();

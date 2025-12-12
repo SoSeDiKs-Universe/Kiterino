@@ -5,7 +5,7 @@
      @Override
      public SoundEvent getAmbientSound() {
 +        // Kiterino start - Ghast options
-+        if (!this.level().dimensionType().ultraWarm() && this.random.nextInt(8) == 0) {
++        if (!this.level().environmentAttributes().getDimensionValue(net.minecraft.world.attribute.EnvironmentAttributes.WATER_EVAPORATES) && this.random.nextInt(8) == 0) {
 +            return SoundEvents.GHAST_SCREAM;
 +        }
 +        // Kiterino end - Ghast options

@@ -5,10 +5,10 @@ Subject: [PATCH] Default pickup loot in summon
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 4780b829a54ce18288df57267c5cf5d64fb81b3c..1687197bf89b58009a5b8efd9bea96ef1a00f5ad 100644
+index e83112cf264c3fae4a5a23bcf5691bb1dac4cd5b..1c3b2de5e5dc4f5859c77004f427354fa9b67b49 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4557,6 +4557,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4693,6 +4693,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return false;
      }
  
@@ -22,10 +22,10 @@ index 4780b829a54ce18288df57267c5cf5d64fb81b3c..1687197bf89b58009a5b8efd9bea96ef
      public final EntityDimensions getDimensions(Pose pose) {
          return pose == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getDefaultDimensions(pose).scale(this.getScale());
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index 6fdc56f7a949d2b1bd0f561adbfe1e501a4cb60e..23468734bebf184389c1662d88fff952d649f719 100644
+index 21be947627f43b6044523edf7a0e314a32325069..9feda8160f8727d8182dba265390d8be65048389 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -472,7 +472,7 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -468,7 +468,7 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
      protected void readAdditionalSaveData(ValueInput input) {
          super.readAdditionalSaveData(input);
          // CraftBukkit start - If looting or persistence is false only use it if it was set after we started using it
@@ -34,10 +34,28 @@ index 6fdc56f7a949d2b1bd0f561adbfe1e501a4cb60e..23468734bebf184389c1662d88fff952
          if (isLevelAtLeast(input, 1) || canPickUpLoot) {
              this.setCanPickUpLoot(canPickUpLoot);
          }
-diff --git a/net/minecraft/world/entity/animal/Dolphin.java b/net/minecraft/world/entity/animal/Dolphin.java
-index 9bf53221bf6652fa8e0a2ef47ac1524065ffe784..e321c0f15b0d9bab8c6b137e07e5f3f97c22b31d 100644
---- a/net/minecraft/world/entity/animal/Dolphin.java
-+++ b/net/minecraft/world/entity/animal/Dolphin.java
+diff --git a/net/minecraft/world/entity/animal/allay/Allay.java b/net/minecraft/world/entity/animal/allay/Allay.java
+index ea7666cc10aee49e13dbdd6e3367fabaa0dcbc17..b83d71be8531bb3cac14c0c7d8c0be7931e5ed2a 100644
+--- a/net/minecraft/world/entity/animal/allay/Allay.java
++++ b/net/minecraft/world/entity/animal/allay/Allay.java
+@@ -333,6 +333,13 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
+         return !this.isOnPickupCooldown() && this.hasItemInHand();
+     }
+ 
++    // Kiterino start - Default pickup loot in summon
++    @Override
++    public boolean getCanPickUpLootDefault() {
++        return this.canPickUpLoot();
++    }
++    // Kiterino end - Default pickup loot in summon
++
+     public boolean hasItemInHand() {
+         return !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
+     }
+diff --git a/net/minecraft/world/entity/animal/dolphin/Dolphin.java b/net/minecraft/world/entity/animal/dolphin/Dolphin.java
+index bea132780ef9b8aac23dbd38cebed080082c2a87..2fafa8b03f889b15cfd9bcc8c57a83fcd1fcc497 100644
+--- a/net/minecraft/world/entity/animal/dolphin/Dolphin.java
++++ b/net/minecraft/world/entity/animal/dolphin/Dolphin.java
 @@ -116,6 +116,13 @@ public class Dolphin extends AgeableWaterCreature {
          this.setCanPickUpLoot(true);
      }
@@ -52,11 +70,11 @@ index 9bf53221bf6652fa8e0a2ef47ac1524065ffe784..e321c0f15b0d9bab8c6b137e07e5f3f9
      // Purpur start - Ridables
      @Override
      public boolean isRidable() {
-diff --git a/net/minecraft/world/entity/animal/Fox.java b/net/minecraft/world/entity/animal/Fox.java
-index c4fae5fb7dd0da2a5d850b1513c9dfab1d05d727..43f4e1a49e0ab0672f0870a7bd123dbb296d6e95 100644
---- a/net/minecraft/world/entity/animal/Fox.java
-+++ b/net/minecraft/world/entity/animal/Fox.java
-@@ -144,6 +144,13 @@ public class Fox extends Animal {
+diff --git a/net/minecraft/world/entity/animal/fox/Fox.java b/net/minecraft/world/entity/animal/fox/Fox.java
+index 6ffae11213ba56529f663f156ab1e0bf1986d438..2254f531cebd9e39644c06e8dbd714f579f1a1c3 100644
+--- a/net/minecraft/world/entity/animal/fox/Fox.java
++++ b/net/minecraft/world/entity/animal/fox/Fox.java
+@@ -151,6 +151,13 @@ public class Fox extends Animal {
          this.getNavigation().setRequiredPathLength(32.0F);
      }
  
@@ -70,11 +88,11 @@ index c4fae5fb7dd0da2a5d850b1513c9dfab1d05d727..43f4e1a49e0ab0672f0870a7bd123dbb
      // Purpur start - Ridables
      @Override
      public boolean isRidable() {
-diff --git a/net/minecraft/world/entity/animal/Panda.java b/net/minecraft/world/entity/animal/Panda.java
-index 9fae0d54fce37ef1b3511339ba05673e80ef6d01..e0c991f6b799f186be8c1882144a5f96a2c01db9 100644
---- a/net/minecraft/world/entity/animal/Panda.java
-+++ b/net/minecraft/world/entity/animal/Panda.java
-@@ -107,6 +107,13 @@ public class Panda extends Animal {
+diff --git a/net/minecraft/world/entity/animal/panda/Panda.java b/net/minecraft/world/entity/animal/panda/Panda.java
+index 5116e9e16070e23d13b526d21facb7b5ad0988ba..df782b6bafc369b3e1c34b4612f22118bc67e674 100644
+--- a/net/minecraft/world/entity/animal/panda/Panda.java
++++ b/net/minecraft/world/entity/animal/panda/Panda.java
+@@ -108,6 +108,13 @@ public class Panda extends Animal {
          }
      }
  
@@ -88,47 +106,11 @@ index 9fae0d54fce37ef1b3511339ba05673e80ef6d01..e0c991f6b799f186be8c1882144a5f96
      // Purpur start - Ridables
      @Override
      public boolean isRidable() {
-diff --git a/net/minecraft/world/entity/animal/allay/Allay.java b/net/minecraft/world/entity/animal/allay/Allay.java
-index bbe59d6ab90f1b1274289ef20811f914afa55fd3..9333d3911363ab9d5a134f84a9013e11732ccb4c 100644
---- a/net/minecraft/world/entity/animal/allay/Allay.java
-+++ b/net/minecraft/world/entity/animal/allay/Allay.java
-@@ -334,6 +334,13 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
-         return !this.isOnPickupCooldown() && this.hasItemInHand();
-     }
- 
-+    // Kiterino start - Default pickup loot in summon
-+    @Override
-+    public boolean getCanPickUpLootDefault() {
-+        return this.canPickUpLoot();
-+    }
-+    // Kiterino end - Default pickup loot in summon
-+
-     public boolean hasItemInHand() {
-         return !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
-     }
-diff --git a/net/minecraft/world/entity/monster/AbstractSkeleton.java b/net/minecraft/world/entity/monster/AbstractSkeleton.java
-index 14730f53561dec218b0fa6648c8de2b2157165fc..fe9f69a1d3d4801139bdacf32e7996821bf54f79 100644
---- a/net/minecraft/world/entity/monster/AbstractSkeleton.java
-+++ b/net/minecraft/world/entity/monster/AbstractSkeleton.java
-@@ -72,6 +72,13 @@ public abstract class AbstractSkeleton extends Monster implements RangedAttackMo
-         this.setShouldBurnInDay(true); // Purpur - API for any mob to burn daylight
-     }
- 
-+    // Kiterino start - Default pickup loot in summon
-+    @Override
-+    public boolean getCanPickUpLootDefault() {
-+        return this.level() != null && this.level().paperConfig().entities.behavior.mobsCanAlwaysPickUpLoot.skeletons;
-+    }
-+    // Kiterino end - Default pickup loot in summon
-+
-     @Override
-     protected void registerGoals() {
-         this.goalSelector.addGoal(0, new org.purpurmc.purpur.entity.ai.HasRider(this)); // Purpur - Ridables
-diff --git a/net/minecraft/world/entity/monster/Pillager.java b/net/minecraft/world/entity/monster/Pillager.java
-index 8bc07bbf713ebd3afc8c0e62c92b5e11fb424307..22e44ecd18bdbf7014b0728c750b676b1c1056cc 100644
---- a/net/minecraft/world/entity/monster/Pillager.java
-+++ b/net/minecraft/world/entity/monster/Pillager.java
-@@ -183,6 +183,13 @@ public class Pillager extends AbstractIllager implements CrossbowAttackMob, Inve
+diff --git a/net/minecraft/world/entity/monster/illager/Pillager.java b/net/minecraft/world/entity/monster/illager/Pillager.java
+index 68fe150d0da04084690670f29a0a4ea035e8c921..c2dcd6b9ee485d861272a4a2428a1ab94f7cb1ad 100644
+--- a/net/minecraft/world/entity/monster/illager/Pillager.java
++++ b/net/minecraft/world/entity/monster/illager/Pillager.java
+@@ -184,6 +184,13 @@ public class Pillager extends AbstractIllager implements CrossbowAttackMob, Inve
          this.setCanPickUpLoot(true);
      }
  
@@ -142,10 +124,55 @@ index 8bc07bbf713ebd3afc8c0e62c92b5e11fb424307..22e44ecd18bdbf7014b0728c750b676b
      @Override
      public float getWalkTargetValue(BlockPos pos, LevelReader level) {
          return 0.0F;
-diff --git a/net/minecraft/world/entity/monster/Zombie.java b/net/minecraft/world/entity/monster/Zombie.java
-index 2dd08e5ef413c37a682046071b83f595c8499cf2..e931ec977cbf9370e638c8b20d038a8637c41ebc 100644
---- a/net/minecraft/world/entity/monster/Zombie.java
-+++ b/net/minecraft/world/entity/monster/Zombie.java
+diff --git a/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java b/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java
+index 16afad411aa86c0439be169958926519a287cc24..97c95b2404b6e41840710b75d39e1f1fb7deac5c 100644
+--- a/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java
++++ b/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java
+@@ -38,6 +38,13 @@ public abstract class AbstractPiglin extends Monster {
+         this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
+     }
+ 
++    // Kiterino start - Default pickup loot in summon
++    @Override
++    public boolean getCanPickUpLootDefault() {
++        return true;
++    }
++    // Kiterino end - Default pickup loot in summon
++
+     private void applyOpenDoorsAbility() {
+         if (GoalUtils.hasGroundPathNavigation(this)) {
+             this.getNavigation().setCanOpenDoors(true);
+@@ -70,7 +77,7 @@ public abstract class AbstractPiglin extends Monster {
+     @Override
+     protected void readAdditionalSaveData(ValueInput input) {
+         super.readAdditionalSaveData(input);
+-        this.setCanPickUpLoot(input.getBooleanOr("CanPickUpLoot", true));
++        this.setCanPickUpLoot(input.getBooleanOr("CanPickUpLoot", getCanPickUpLootDefault())); // Kiterino - Default pickup loot in summon
+         this.setImmuneToZombification(input.getBooleanOr("IsImmuneToZombification", false));
+         this.timeInOverworld = input.getIntOr("TimeInOverworld", 0);
+     }
+diff --git a/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java b/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java
+index 60afd81d3bf671889fbff5d4a3fabb38a8e2d461..d380663708c63584b5ae01758b985a75e9531d78 100644
+--- a/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java
++++ b/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java
+@@ -148,6 +148,13 @@ public abstract class AbstractSkeleton extends Monster implements RangedAttackMo
+         return spawnGroupData;
+     }
+ 
++    // Kiterino start - Default pickup loot in summon
++    @Override
++    public boolean getCanPickUpLootDefault() {
++        return this.level() != null && this.level().paperConfig().entities.behavior.mobsCanAlwaysPickUpLoot.skeletons;
++    }
++    // Kiterino end - Default pickup loot in summon
++
+     public void reassessWeaponGoal() {
+         if (this.level() != null && !this.level().isClientSide()) {
+             this.goalSelector.removeGoal(this.meleeGoal);
+diff --git a/net/minecraft/world/entity/monster/zombie/Zombie.java b/net/minecraft/world/entity/monster/zombie/Zombie.java
+index f14fc03577a94dc6bd6e536e819a32c2d6144f02..3fdbe9573fa0e307afb25ac536482173e336558c 100644
+--- a/net/minecraft/world/entity/monster/zombie/Zombie.java
++++ b/net/minecraft/world/entity/monster/zombie/Zombie.java
 @@ -104,6 +104,13 @@ public class Zombie extends Monster {
          this(EntityType.ZOMBIE, level);
      }
@@ -160,37 +187,10 @@ index 2dd08e5ef413c37a682046071b83f595c8499cf2..e931ec977cbf9370e638c8b20d038a86
      // Purpur start - Ridables
      @Override
      public boolean isRidable() {
-diff --git a/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java b/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java
-index 9b76d5156309981127adb2ccd98fb666480618bb..db0171607f5497903187dd0e9275369ec7dcae48 100644
---- a/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java
-+++ b/net/minecraft/world/entity/monster/piglin/AbstractPiglin.java
-@@ -37,6 +37,13 @@ public abstract class AbstractPiglin extends Monster {
-         this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
-     }
- 
-+    // Kiterino start - Default pickup loot in summon
-+    @Override
-+    public boolean getCanPickUpLootDefault() {
-+        return true;
-+    }
-+    // Kiterino end - Default pickup loot in summon
-+
-     private void applyOpenDoorsAbility() {
-         if (GoalUtils.hasGroundPathNavigation(this)) {
-             this.getNavigation().setCanOpenDoors(true);
-@@ -69,7 +76,7 @@ public abstract class AbstractPiglin extends Monster {
-     @Override
-     protected void readAdditionalSaveData(ValueInput input) {
-         super.readAdditionalSaveData(input);
--        this.setCanPickUpLoot(input.getBooleanOr("CanPickUpLoot", true));
-+        this.setCanPickUpLoot(input.getBooleanOr("CanPickUpLoot", getCanPickUpLootDefault())); // Kiterino - Default pickup loot in summon
-         this.setImmuneToZombification(input.getBooleanOr("IsImmuneToZombification", false));
-         this.timeInOverworld = input.getIntOr("TimeInOverworld", 0);
-     }
-diff --git a/net/minecraft/world/entity/npc/Villager.java b/net/minecraft/world/entity/npc/Villager.java
-index bfff91e5e252141f887d8965ecf1dd9ff1cebfe3..61ac4cc1af553add9c1f45bb38f182ff49839249 100644
---- a/net/minecraft/world/entity/npc/Villager.java
-+++ b/net/minecraft/world/entity/npc/Villager.java
+diff --git a/net/minecraft/world/entity/npc/villager/Villager.java b/net/minecraft/world/entity/npc/villager/Villager.java
+index 996468c21a79d698a8d842189ffd4f2dc86a4302..d0cff99808945b6a86460b71124985a611da9fb8 100644
+--- a/net/minecraft/world/entity/npc/villager/Villager.java
++++ b/net/minecraft/world/entity/npc/villager/Villager.java
 @@ -199,6 +199,13 @@ public class Villager extends AbstractVillager implements ReputationEventHandler
          this.setVillagerData(this.getVillagerData().withType(villagerType).withProfession(level.registryAccess(), VillagerProfession.NONE));
      }

@@ -5,13 +5,13 @@
      private List<BeaconBeamOwner.Section> checkingBeamSections = new ArrayList<>();
      public int levels;
 +    // Kiterino start - Beacon level override API
-+    private final String KITERINO_LEVELS_OVERRIDE_TAG = "Kiterino.TierOverride";
++    private static final String KITERINO_LEVELS_OVERRIDE_TAG = "Kiterino.TierOverride";
 +    public int levelsOverride = -1;
 +    // Kiterino end - Beacon level override API
      private int lastCheckY;
-     @Nullable
-     public Holder<MobEffect> primaryPower;
-@@ -91,7 +_,7 @@
+     @Nullable public Holder<MobEffect> primaryPower;
+     @Nullable public Holder<MobEffect> secondaryPower;
+@@ -88,7 +_,7 @@
          public void set(int index, int value) {
              switch (index) {
                  case 0:
@@ -20,7 +20,7 @@
                      break;
                  case 1:
                      if (!BeaconBlockEntity.this.level.isClientSide() && !BeaconBlockEntity.this.beamSections.isEmpty()) {
-@@ -229,7 +_,7 @@
+@@ -223,7 +_,7 @@
          int i = blockEntity.levels; final int originalLevels = i; // Paper - OBFHELPER
          if (level.getGameTime() % 80L == 0L) {
              if (!blockEntity.beamSections.isEmpty()) {
@@ -29,7 +29,7 @@
              }
  
              if (blockEntity.levels > 0 && (!blockEntity.beamSections.isEmpty() || (level.purpurConfig.beaconAllowEffectsWithTintedGlass && isTintedGlass))) { // Purpur - allow beacon effects when covered by tinted glass
-@@ -426,7 +_,10 @@
+@@ -419,7 +_,10 @@
          super.loadAdditional(input);
          this.primaryPower = loadEffect(input, "primary_effect");
          this.secondaryPower = loadEffect(input, "secondary_effect");
@@ -41,7 +41,7 @@
          this.name = parseCustomNameSafe(input, "CustomName");
          this.lockKey = LockCode.fromTag(input);
          this.effectRange = input.getDoubleOr(PAPER_RANGE_TAG, -1); // Paper - Custom beacon ranges
-@@ -437,6 +_,7 @@
+@@ -430,6 +_,7 @@
          super.saveAdditional(output);
          storeEffect(output, "primary_effect", this.primaryPower);
          storeEffect(output, "secondary_effect", this.secondaryPower);

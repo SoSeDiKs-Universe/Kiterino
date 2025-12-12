@@ -66,10 +66,10 @@ import net.minecraft.world.entity.OminousItemSpawner;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.EyeOfEnder;
-import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.entity.projectile.windcharge.AbstractWindCharge;
+import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.AbstractWindCharge;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -763,7 +763,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
         List<Holder<Item>> values = superDirtyCopy.values.stream().toList();
         List<Holder<Item>> valuesCleaned = values.stream().map(holder -> {
-            if (holder.unwrapKey().map(itemResourceKey -> "minecraft".equals(itemResourceKey.location().getNamespace())).orElse(true)) {
+            if (holder.unwrapKey().map(itemResourceKey -> "minecraft".equals(itemResourceKey.identifier().getNamespace())).orElse(true)) {
                 return holder;
             }
 

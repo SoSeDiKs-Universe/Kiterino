@@ -5,10 +5,10 @@ Subject: [PATCH] Expose bucket in bucket events
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 22725f22a51773f96262416e852f6bbefe2fd289..6f75aae59fb33c5dc0829b41d625f4b40fb171ce 100644
+index f2fed5a1ff20e1037806d7359b7ac0b7e0f7f3e0..9d9e4bfbf9c6eee89c85dbbbc75f5cd7ac893393 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -437,17 +437,22 @@ public class CraftEventFactory {
+@@ -569,17 +569,22 @@ public class CraftEventFactory {
      }
  
      public static PlayerBucketEmptyEvent callPlayerBucketEmptyEvent(Level world, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, InteractionHand hand) {
@@ -35,7 +35,7 @@ index 22725f22a51773f96262416e852f6bbefe2fd289..6f75aae59fb33c5dc0829b41d625f4b4
  
          Block block = CraftBlock.at(world, changed);
          Block clickedBlock = CraftBlock.at(world, clicked);
-@@ -456,10 +461,10 @@ public class CraftEventFactory {
+@@ -588,10 +593,10 @@ public class CraftEventFactory {
  
          PlayerEvent event;
          if (isFilling) {

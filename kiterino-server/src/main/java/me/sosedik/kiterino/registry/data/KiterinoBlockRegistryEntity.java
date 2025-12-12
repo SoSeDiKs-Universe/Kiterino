@@ -5,8 +5,8 @@ import io.papermc.paper.registry.data.util.Conversions;
 import me.sosedik.kiterino.util.KiterinoDataInjectorRuntimeException;
 import me.sosedik.kiterino.world.block.KiterinoBlock;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +24,7 @@ public class KiterinoBlockRegistryEntity implements BlockRegistryEntity {
     protected @Nullable KiterinoBlock nmsBlock;
 
     protected final Conversions conversions;
-    public ResourceLocation blockKey;
+    public Identifier blockKey;
 
     public KiterinoBlockRegistryEntity(
             Conversions conversions,

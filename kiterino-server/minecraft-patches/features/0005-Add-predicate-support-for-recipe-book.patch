@@ -123,10 +123,10 @@ index f47c12e9dd6cfa857ca07a764edc22de372e25b6..487d3b3f25aa4c73d7e5d957b06a90c7
          }
          return false;
 diff --git a/net/minecraft/world/entity/player/StackedItemContents.java b/net/minecraft/world/entity/player/StackedItemContents.java
-index 83ccde54c625d40dc595e000c533f60aa929bd5a..ac5d668f9e05124a7338df51054db41c1b2bebe0 100644
+index 00dbc0d125b2c8c208ffa46f9084c6317efaba90..6c72fdbfea5e25c6d0d38bb98e9f0bb2796472e3 100644
 --- a/net/minecraft/world/entity/player/StackedItemContents.java
 +++ b/net/minecraft/world/entity/player/StackedItemContents.java
-@@ -29,7 +29,7 @@ public class StackedItemContents {
+@@ -42,7 +42,7 @@ public class StackedItemContents {
      public void accountStack(ItemStack stack, int maxStackSize) {
          if (!stack.isEmpty()) {
              int min = Math.min(maxStackSize, stack.getCount());

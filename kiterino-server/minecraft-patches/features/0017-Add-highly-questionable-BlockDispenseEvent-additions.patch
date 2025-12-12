@@ -90,10 +90,10 @@ index b9f8bf2158f3ec4331c0de39a24857b2ed84f01b..f1d24d4c01e2656688133d9783dc0df7
          if (!itemStack.isEmpty()) {
              Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
 diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a745a4cd3a4 100644
+index ca4081681f3a142fa586d1bdf06181ee0746aaf8..0a6f81950c3edd9bcb6ccfacbec99e53d36fca2b 100644
 --- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -104,7 +104,7 @@ public interface DispenseItemBehavior {
+@@ -105,7 +105,7 @@ public interface DispenseItemBehavior {
                      if (!event.getItem().equals(craftItem)) {
                          shrink = false;
                          // Chain to handler for new item
@@ -102,7 +102,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                          DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
                          if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
                              dispenseBehavior.dispense(blockSource, eventStack);
-@@ -166,7 +166,7 @@ public interface DispenseItemBehavior {
+@@ -167,7 +167,7 @@ public interface DispenseItemBehavior {
                      if (!event.getItem().equals(craftItem)) {
                          shrink = false;
                          // Chain to handler for new item
@@ -111,16 +111,16 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                          DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
                          if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
                              dispenseBehavior.dispense(blockSource, eventStack);
-@@ -219,7 +219,7 @@ public interface DispenseItemBehavior {
-                             if (!event.getItem().equals(craftItem)) {
-                                 shrink = false;
-                                 // Chain to handler for new item
--                                ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
+@@ -222,7 +222,7 @@ public interface DispenseItemBehavior {
+                                 if (!event.getItem().equals(craftItem)) {
+                                     shrink = false;
+                                     // Chain to handler for new item
+-                                    ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getItem());
 +                                ItemStack eventStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getDispensedItem()); // Kiterino - More BlockDispenseEvent API
-                                 DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
-                                 if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
-                                     dispenseBehavior.dispense(blockSource, eventStack);
-@@ -275,21 +275,28 @@ public interface DispenseItemBehavior {
+                                     DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
+                                     if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
+                                         dispenseBehavior.dispense(blockSource, eventStack);
+@@ -279,21 +279,28 @@ public interface DispenseItemBehavior {
                  boolean willEmptyContentsSolidBucketItem = dispensibleContainerItem instanceof net.minecraft.world.item.SolidBucketItem && level.isInWorldBounds(blockPos) && state.isAir();
                  /* Taken from BucketItem#emptyContents */
                  boolean willEmptyBucketItem = dispensibleContainerItem instanceof final net.minecraft.world.item.BucketItem bucketItem && bucketItem.content instanceof net.minecraft.world.level.material.FlowingFluid && (state.isAir() || state.canBeReplaced(bucketItem.content) || (state.getBlock() instanceof net.minecraft.world.level.block.LiquidBlockContainer liquidBlockContainer && liquidBlockContainer.canPlaceLiquid(null, level, blockPos, state, bucketItem.content)));
@@ -150,7 +150,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                          DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
                          if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
                              dispenseBehavior.dispense(blockSource, eventStack);
-@@ -306,7 +313,7 @@ public interface DispenseItemBehavior {
+@@ -310,7 +317,7 @@ public interface DispenseItemBehavior {
  
                  if (dispensibleContainerItem.emptyContents(null, level, blockPos, null)) {
                      dispensibleContainerItem.checkExtraContent(null, level, dispensedItem, blockPos); // Paper - track changed item from dispense event
@@ -159,7 +159,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                  } else {
                      return this.defaultDispenseItemBehavior.dispense(blockSource, item);
                  }
-@@ -335,13 +342,17 @@ public interface DispenseItemBehavior {
+@@ -339,13 +346,17 @@ public interface DispenseItemBehavior {
                          levelAccessor.gameEvent(null, GameEvent.FLUID_PICKUP, blockPos);
                          Item item1 = itemStack.getItem();
                          // Paper start - Call BlockDispenseEvent
@@ -182,7 +182,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                      }
                  } else {
                      return super.execute(blockSource, item);
-@@ -356,11 +367,13 @@ public interface DispenseItemBehavior {
+@@ -360,11 +371,13 @@ public interface DispenseItemBehavior {
                  Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
                  BlockPos blockPos = blockSource.pos().relative(direction);
                  // Paper start - Call BlockDispenseEvent
@@ -199,7 +199,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                  // Paper end - Call BlockDispenseEvent
                  BlockState blockState = serverLevel.getBlockState(blockPos);
                  if (BaseFireBlock.canBePlacedAt(serverLevel, blockPos, direction)) {
-@@ -397,11 +410,13 @@ public interface DispenseItemBehavior {
+@@ -401,11 +414,13 @@ public interface DispenseItemBehavior {
                  Level level = blockSource.level();
                  BlockPos blockPos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
                  // Paper start - Call BlockDispenseEvent
@@ -216,7 +216,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                  // Paper end - Call BlockDispenseEvent
                  level.captureTreeGeneration = true; // CraftBukkit
                  if (!BoneMealItem.growCrop(item, level, blockPos) && !BoneMealItem.growWaterPlant(item, level, blockPos, null)) {
-@@ -465,7 +480,7 @@ public interface DispenseItemBehavior {
+@@ -469,7 +484,7 @@ public interface DispenseItemBehavior {
                      if (!event.getItem().equals(craftItem)) {
                          shrink = false;
                          // Chain to handler for new item
@@ -225,7 +225,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                          DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
                          if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
                              dispenseBehavior.dispense(blockSource, eventStack);
-@@ -493,11 +508,13 @@ public interface DispenseItemBehavior {
+@@ -497,11 +512,13 @@ public interface DispenseItemBehavior {
                      Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
                      BlockPos blockPos = blockSource.pos().relative(direction);
                      // Paper start - Call BlockDispenseEvent
@@ -242,7 +242,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                      // Paper end - Call BlockDispenseEvent
                      if (level.isEmptyBlock(blockPos) && WitherSkullBlock.canSpawnMob(level, blockPos, item)) {
                          level.setBlock(
-@@ -528,11 +545,13 @@ public interface DispenseItemBehavior {
+@@ -532,11 +549,13 @@ public interface DispenseItemBehavior {
                  BlockPos blockPos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
                  CarvedPumpkinBlock carvedPumpkinBlock = (CarvedPumpkinBlock)Blocks.CARVED_PUMPKIN;
                  // Paper start - Call BlockDispenseEvent
@@ -259,7 +259,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                  // Paper end - Call BlockDispenseEvent
                  if (level.isEmptyBlock(blockPos) && carvedPumpkinBlock.canSpawnGolem(level, blockPos)) {
                      if (!level.isClientSide()) {
-@@ -570,10 +589,12 @@ public interface DispenseItemBehavior {
+@@ -574,10 +593,12 @@ public interface DispenseItemBehavior {
                      BlockPos blockPos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
                      BlockState blockState = serverLevel.getBlockState(blockPos);
                      // Paper start - Call BlockDispenseEvent
@@ -275,7 +275,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                      // Paper end - Call BlockDispenseEvent
                      if (blockState.is(
                              BlockTags.BEEHIVES,
-@@ -616,11 +637,13 @@ public interface DispenseItemBehavior {
+@@ -620,11 +641,13 @@ public interface DispenseItemBehavior {
                  if (blockState.is(Blocks.RESPAWN_ANCHOR)) {
                      if (blockState.getValue(RespawnAnchorBlock.CHARGE) != 4) {
                          // Paper start - Call BlockDispenseEvent
@@ -292,7 +292,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                          // Paper end - Call BlockDispenseEvent
                          RespawnAnchorBlock.charge(null, level, blockPos, blockState);
                          item.shrink(1);
-@@ -659,7 +682,7 @@ public interface DispenseItemBehavior {
+@@ -663,7 +686,7 @@ public interface DispenseItemBehavior {
  
                      if (!event.getItem().equals(craftItem)) {
                          // Chain to handler for new item
@@ -301,7 +301,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                          DispenseItemBehavior dispenseBehavior = DispenserBlock.getDispenseBehavior(blockSource, eventStack);
                          if (dispenseBehavior != DispenseItemBehavior.NOOP && dispenseBehavior != this) {
                              dispenseBehavior.dispense(blockSource, eventStack);
-@@ -688,11 +711,13 @@ public interface DispenseItemBehavior {
+@@ -692,11 +715,13 @@ public interface DispenseItemBehavior {
                  Optional<BlockState> waxed = HoneycombItem.getWaxed(blockState);
                  if (waxed.isPresent()) {
                      // Paper start - Call BlockDispenseEvent
@@ -318,7 +318,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                      // Paper end - Call BlockDispenseEvent
                      level.setBlockAndUpdate(blockPos, waxed.get());
                      level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_WAX_ON, blockPos, 0);
-@@ -722,10 +747,14 @@ public interface DispenseItemBehavior {
+@@ -726,10 +751,14 @@ public interface DispenseItemBehavior {
                              return this.defaultDispenseItemBehavior.dispense(blockSource, item);
                          } else {
                              // Paper start - Call BlockDispenseEvent
@@ -336,7 +336,7 @@ index e817baf5a74185ff7a062529f43daa27fc582726..6cf6dd99ec454c9617551c3249e20a74
                              // Paper end - Call BlockDispenseEvent
                              if (!serverLevel.isClientSide()) {
                                  for (int i = 0; i < 5; i++) {
-@@ -746,7 +775,7 @@ public interface DispenseItemBehavior {
+@@ -750,7 +779,7 @@ public interface DispenseItemBehavior {
                              serverLevel.playSound(null, blockPos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                              serverLevel.gameEvent(null, GameEvent.FLUID_PLACE, blockPos);
                              serverLevel.setBlockAndUpdate(blockPos1, Blocks.MUD.defaultBlockState());

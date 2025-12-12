@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -507,6 +_,28 @@
+@@ -505,6 +_,28 @@
          return true;
      }
  
@@ -29,7 +29,7 @@
      @Override
      public Collection<Player> getPlayersSeeingChunk(Chunk chunk) {
          Preconditions.checkArgument(chunk != null, "chunk cannot be null");
-@@ -2113,4 +_,11 @@
+@@ -2089,4 +_,11 @@
          return POINTERS_SUPPLIER.view(this);
      }
      // Paper end
@@ -37,7 +37,7 @@
 +    // Kiterino start - Allow checking for Halloween season
 +    @Override
 +    public boolean isHalloweenSeason() {
-+        return net.minecraft.world.entity.ambient.Bat.isHalloweenSeason(getHandle());
++        return getHandle().purpurConfig.forceHalloweenSeason || net.minecraft.util.SpecialDates.isExtendedHalloween();
 +    }
 +    // Kiterino end - Allow checking for Halloween season
  }

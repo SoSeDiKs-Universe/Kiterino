@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ambient/Bat.java
 +++ b/net/minecraft/world/entity/ambient/Bat.java
-@@ -36,7 +_,7 @@
+@@ -34,7 +_,7 @@
      public static final float TICKS_PER_FLAP = 10.0F;
      private static final EntityDataAccessor<Byte> DATA_ID_FLAGS = SynchedEntityData.defineId(Bat.class, EntityDataSerializers.BYTE);
      private static final int FLAG_RESTING = 1;
@@ -9,3 +9,27 @@
      private static final byte DEFAULT_FLAGS = 0;
      public final AnimationState flyAnimationState = new AnimationState();
      public final AnimationState restAnimationState = new AnimationState();
+@@ -309,6 +_,23 @@
+     public static boolean checkBatSpawnRules(
+         EntityType<Bat> entityType, LevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource randomSource
+     ) {
++        // Kiterino start - Extra bats on Halloween
++        if (level instanceof ServerLevel serverLevel && serverLevel.kiterinoConfig.extraBatsOnHalloween) {
++            if (pos.getY() >= level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos).getY()) {
++                return false;
++            }
++
++            int i = level.getMaxLocalRawBrightness(pos);
++            int j = 4;
++            if (serverLevel.purpurConfig.forceHalloweenSeason || net.minecraft.util.SpecialDates.isExtendedHalloween()) {
++                j = 7;
++            } else if (randomSource.nextBoolean()) {
++                return false;
++            }
++
++            return i > randomSource.nextInt(j) && level.getBlockState(pos.below()).is(BlockTags.BATS_SPAWNABLE_ON) && checkMobSpawnRules(entityType, level, spawnReason, pos, randomSource);
++        }
++        // Kiterino end - Extra bats on Halloween
+         return pos.getY() < level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos).getY()
+             && !randomSource.nextBoolean()
+             && level.getMaxLocalRawBrightness(pos) <= randomSource.nextInt(4)

@@ -9,8 +9,8 @@ import me.sosedik.kiterino.modifier.item.KiterinoItemModifierImpl;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.ComposterBlock;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +32,7 @@ public class KiterinoItemRegistryEntity implements ItemRegistryEntity {
     protected @Nullable KiterinoItemModifier modifier; // Kiterino - Implement packet item faker for injected items
 
     protected final Conversions conversions;
-    public @UnknownNullability ResourceLocation itemKey;
+    public @UnknownNullability Identifier itemKey;
 
     public KiterinoItemRegistryEntity(
         final Conversions conversions,

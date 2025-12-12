@@ -1,22 +1,22 @@
 --- a/net/minecraft/server/network/config/PrepareSpawnTask.java
 +++ b/net/minecraft/server/network/config/PrepareSpawnTask.java
-@@ -113,6 +_,7 @@
+@@ -112,6 +_,7 @@
                  .orElseGet(() -> PlayerSpawnFinder.findSpawn(serverLevel, respawnData.pos()));
              Vec2 vec2 = savedPosition.rotation().orElse(new Vec2(respawnData.yaw(), respawnData.pitch()));
              this.state = new PrepareSpawnTask.Preparing(serverLevel, completableFuture, vec2);
-+            ((PrepareSpawnTask.Preparing) this.state).initialDimensionId = savedPosition.dimension().map(k -> k.location().toString()).orElse(null); // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
++            ((PrepareSpawnTask.Preparing) this.state).initialDimensionId = savedPosition.dimension().map(k -> k.identifier().toString()).orElse(null); // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
          }
      }
  
-@@ -169,6 +_,7 @@
-         private CompletableFuture<?> chunkLoadFuture;
+@@ -167,6 +_,7 @@
+         private @Nullable CompletableFuture<?> chunkLoadFuture;
          private @Nullable CompletableFuture<org.bukkit.Location> eventFuture; // Paper
          private final ChunkLoadCounter chunkLoadCounter = new ca.spottedleaf.moonrise.patches.chunk_system.MoonriseChunkLoadCounter(); // Paper - rewrite chunk system
 +        @Nullable String initialDimensionId = null; // Kiterino - Expose invalid world to PlayerSpawnLocationEvent
  
          Preparing(final ServerLevel spawnLevel, final CompletableFuture<Vec3> spawnPosition, final Vec2 spawnAngle) {
              this.spawnLevel = spawnLevel;
-@@ -200,6 +_,8 @@
+@@ -197,6 +_,8 @@
                          org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
                              serverPlayer.getBukkitEntity(),
                              org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3, this.spawnLevel, this.spawnAngle.x, this.spawnAngle.y)
@@ -25,7 +25,7 @@
                          );
                          ev.callEvent();
                          vec3 = io.papermc.paper.util.MCUtil.toVec3(ev.getSpawnLocation());
-@@ -215,6 +_,8 @@
+@@ -212,6 +_,8 @@
                                  PrepareSpawnTask.this.listener.paperConnection,
                                  org.bukkit.craftbukkit.util.CraftLocation.toBukkit(vec3final, this.spawnLevel, this.spawnAngle.x, this.spawnAngle.y),
                                  PrepareSpawnTask.this.newPlayer

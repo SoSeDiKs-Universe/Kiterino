@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -513,6 +_,19 @@
+@@ -514,6 +_,19 @@
       */
      public boolean refreshChunk(int x, int z);
  
@@ -20,7 +20,7 @@
      /**
       * Get a list of all players who are can view the specified chunk from their
       * client
-@@ -4739,4 +_,13 @@
+@@ -4745,4 +_,13 @@
              }
          }
      }

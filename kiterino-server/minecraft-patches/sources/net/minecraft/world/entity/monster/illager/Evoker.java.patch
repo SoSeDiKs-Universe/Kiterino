@@ -1,5 +1,5 @@
---- a/net/minecraft/world/entity/monster/Evoker.java
-+++ b/net/minecraft/world/entity/monster/Evoker.java
+--- a/net/minecraft/world/entity/monster/illager/Evoker.java
++++ b/net/minecraft/world/entity/monster/illager/Evoker.java
 @@ -352,6 +_,7 @@
              Sheep wololoTarget = Evoker.this.getWololoTarget();
              if (wololoTarget != null && wololoTarget.isAlive()) {

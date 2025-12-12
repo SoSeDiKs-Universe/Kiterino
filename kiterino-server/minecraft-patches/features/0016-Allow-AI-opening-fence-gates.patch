@@ -5,7 +5,7 @@ Subject: [PATCH] Allow AI opening fence gates
 
 
 diff --git a/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java b/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
-index b2eec24be3635f2c19da9b147211fe6cb454c780..9b06fe2943b3e4498eeb5350f91ef40ed2c3bebd 100644
+index 5c845d78e8baee41809e0678e3d99523368a2882..7be269643c0de740c5aa16a07906c2d28fd6045d 100644
 --- a/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 +++ b/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 @@ -69,6 +69,22 @@ public class InteractWithDoor {
@@ -126,25 +126,17 @@ index 73bba480f3f017a8aed14562bd82ba33db04391c..a3ebafde7046526445e54d3b3e498cc8
              } else {
                  return false;
 diff --git a/net/minecraft/world/level/block/FenceGateBlock.java b/net/minecraft/world/level/block/FenceGateBlock.java
-index 6845b2ec65f50bc29c53632a3105ced6761e5f8f..0ad5a8068453d0d11c26cd4d6201ef9e829c4f69 100644
+index 48aa8820761806f40761ab18496720af538bbd4d..933dda81e3a8f0a0bc82e5daa6f52440e425c70e 100644
 --- a/net/minecraft/world/level/block/FenceGateBlock.java
 +++ b/net/minecraft/world/level/block/FenceGateBlock.java
-@@ -14,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
- import net.minecraft.tags.BlockTags;
- import net.minecraft.util.RandomSource;
- import net.minecraft.world.InteractionResult;
-+import net.minecraft.world.entity.Entity;
- import net.minecraft.world.entity.player.Player;
- import net.minecraft.world.item.ItemStack;
- import net.minecraft.world.item.context.BlockPlaceContext;
-@@ -235,4 +236,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
+@@ -235,4 +235,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
      public static boolean connectsToDirection(BlockState state, Direction direction) {
          return state.getValue(FACING).getAxis() == direction.getClockWise().getAxis();
      }
 +
 +    // Kiterino start - Allow AI opening fence gates
 +    // Copy-paste from DoorBlock
-+    public void setOpen(@Nullable net.minecraft.world.entity.Entity entity, Level level, BlockState state, BlockPos pos, boolean _open) {
++    public void setOpen(net.minecraft.world.entity.@Nullable Entity entity, Level level, BlockState state, BlockPos pos, boolean _open) {
 +        if (state.is(this) && state.getValue(OPEN) != _open) {
 +            level.setBlock(pos, state.setValue(OPEN, _open), Block.UPDATE_CLIENTS | Block.UPDATE_IMMEDIATE);
 +            this.playSound(entity, level, pos, _open);
@@ -152,7 +144,7 @@ index 6845b2ec65f50bc29c53632a3105ced6761e5f8f..0ad5a8068453d0d11c26cd4d6201ef9e
 +        }
 +    }
 +
-+    private void playSound(@Nullable Entity source, Level level, BlockPos pos, boolean isOpening) {
++    private void playSound(net.minecraft.world.entity.@Nullable Entity source, Level level, BlockPos pos, boolean isOpening) {
 +        level.playSound(
 +            source, pos, isOpening ? this.type.fenceGateOpen() : this.type.fenceGateClose(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F
 +        );
@@ -160,10 +152,10 @@ index 6845b2ec65f50bc29c53632a3105ced6761e5f8f..0ad5a8068453d0d11c26cd4d6201ef9e
 +    // Kiterino end - Allow AI opening fence gates
  }
 diff --git a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index db6baaa698fe93aba3fbd595158b568badd6cb8a..904d18194246815fd5dd5f9039e31f3b49cd9c1c 100644
+index 876aef8dab7187a69bcb380692d0f6a583fb38bd..7b4cd9c6b1e5fb3520e4f5e9b9edcf23f14b413c 100644
 --- a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -511,6 +511,10 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -508,6 +508,10 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                  } else {
                      return doorBlock.type().canOpenByHand() ? PathType.DOOR_WOOD_CLOSED : PathType.DOOR_IRON_CLOSED;
                  }

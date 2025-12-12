@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LeavesBlock.java
 +++ b/net/minecraft/world/level/block/LeavesBlock.java
-@@ -38,10 +_,19 @@
+@@ -39,10 +_,19 @@
      public abstract MapCodec<? extends LeavesBlock> codec();
  
      public LeavesBlock(float leafParticleChance, BlockBehaviour.Properties properties) {
@@ -20,4 +20,4 @@
 +    // Kiterino end - No collision for leaves
  
      @Override
-     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+     protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
