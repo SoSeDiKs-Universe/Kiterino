@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 13 Dec 2025 02:54:52 +0200
+Subject: [PATCH] Change enabled experiments
+
+
+diff --git a/net/minecraft/server/Main.java b/net/minecraft/server/Main.java
+index 3560914ad6318403b525df0243c49809f8459f11..83c2e1d8f53cf424741a6f50af9a4ecbd2ebb406 100644
+--- a/net/minecraft/server/Main.java
++++ b/net/minecraft/server/Main.java
+@@ -433,6 +433,7 @@ public class Main {
+             flag = true;
+             worldDataConfiguration = new WorldDataConfiguration(dedicatedServerProperties.initialDataPackConfiguration, FeatureFlags.DEFAULT_FLAGS);
+         }
++        worldDataConfiguration = worldDataConfiguration.expandFeatures(FeatureFlags.KITERINO_FLAGS); // Kiterino - Change enabled experiments
+ 
+         WorldLoader.PackConfig packConfig = new WorldLoader.PackConfig(packRepository, worldDataConfiguration, safeMode, flag);
+         return new WorldLoader.InitConfig(packConfig, Commands.CommandSelection.DEDICATED, dedicatedServerProperties.functionPermissions);
+diff --git a/net/minecraft/world/flag/FeatureFlags.java b/net/minecraft/world/flag/FeatureFlags.java
+index 2aef6126395b9a49e3cc02d09fdeb2de46a91642..6829f91655fa1066f5e696868178390306695a45 100644
+--- a/net/minecraft/world/flag/FeatureFlags.java
++++ b/net/minecraft/world/flag/FeatureFlags.java
+@@ -14,6 +14,7 @@ public class FeatureFlags {
+     public static final Codec<FeatureFlagSet> CODEC;
+     public static final FeatureFlagSet VANILLA_SET;
+     public static final FeatureFlagSet DEFAULT_FLAGS;
++    public static final FeatureFlagSet KITERINO_FLAGS; // Kiterino - Change enabled experiments
+ 
+     public static String printMissingFlags(FeatureFlagSet enabledFeatures, FeatureFlagSet requestedFeatures) {
+         return printMissingFlags(REGISTRY, enabledFeatures, requestedFeatures);
+@@ -39,5 +40,6 @@ public class FeatureFlags {
+         CODEC = REGISTRY.codec();
+         VANILLA_SET = FeatureFlagSet.of(VANILLA);
+         DEFAULT_FLAGS = VANILLA_SET;
++        KITERINO_FLAGS = FeatureFlagSet.of(VANILLA, TRADE_REBALANCE, REDSTONE_EXPERIMENTS, MINECART_IMPROVEMENTS); // Kiterino - Change enabled experiments
+     }
+ }

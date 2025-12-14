@@ -17,7 +17,7 @@
 +     * @param cause removal cause
 +     */
 +    boolean removePotionEffect(@NotNull PotionEffectType type, @NotNull org.bukkit.event.entity.EntityPotionEffectEvent.Cause cause);
-+	// Kiterino end - Add removePotionEffect overload
++    // Kiterino end - Add removePotionEffect overload
  
      /**
       * Returns all currently active {@link PotionEffect}s on the living
