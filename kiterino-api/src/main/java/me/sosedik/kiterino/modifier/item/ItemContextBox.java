@@ -121,15 +121,17 @@ public class ItemContextBox {
      * @param line component
      */
     public void addLore(ComponentLike line) {
-        ItemLore lore;
-        if (this.item.hasData(DataComponentTypes.LORE)) {
-            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-            assert currentLore != null;
-            lore = ItemLore.lore().lines(currentLore.lines()).addLine(line).build();
-        } else {
-            lore = ItemLore.lore().addLine(line).build();
-        }
-        this.item.setData(DataComponentTypes.LORE, lore);
+        try {
+            ItemLore lore;
+            if (this.item.hasData(DataComponentTypes.LORE)) {
+                ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+                assert currentLore != null;
+                lore = ItemLore.lore().lines(currentLore.lines()).addLine(line).build();
+            } else {
+                lore = ItemLore.lore().addLine(line).build();
+            }
+            this.item.setData(DataComponentTypes.LORE, lore);
+        } catch (IllegalArgumentException ignored) { }
     }
 
     /**
@@ -139,15 +141,17 @@ public class ItemContextBox {
      * @param line component
      */
     public void addLore(int index, ComponentLike line) {
-        ItemLore lore;
-        if (this.item.hasData(DataComponentTypes.LORE)) {
-            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-            assert currentLore != null;
-            lore = ItemLore.lore().lines(currentLore.lines()).addLine(index, line).build();
-        } else {
-            lore = ItemLore.lore().addLine(line).build();
-        }
-        this.item.setData(DataComponentTypes.LORE, lore);
+        try {
+            ItemLore lore;
+            if (this.item.hasData(DataComponentTypes.LORE)) {
+                ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+                assert currentLore != null;
+                lore = ItemLore.lore().lines(currentLore.lines()).addLine(index, line).build();
+            } else {
+                lore = ItemLore.lore().addLine(line).build();
+            }
+            this.item.setData(DataComponentTypes.LORE, lore);
+        } catch (IllegalArgumentException ignored) { }
     }
 
     /**
@@ -165,15 +169,17 @@ public class ItemContextBox {
      * @param lines components
      */
     public void addLore(List<? extends ComponentLike> lines) {
+        try {
         ItemLore lore;
-        if (this.item.hasData(DataComponentTypes.LORE)) {
-            ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
-            assert currentLore != null;
-            lore = ItemLore.lore().lines(currentLore.lines()).addLines(lines).build();
-        } else {
-            lore = ItemLore.lore().addLines(lines).build();
-        }
-        this.item.setData(DataComponentTypes.LORE, lore);
+            if (this.item.hasData(DataComponentTypes.LORE)) {
+                ItemLore currentLore = this.item.getData(DataComponentTypes.LORE);
+                assert currentLore != null;
+                lore = ItemLore.lore().lines(currentLore.lines()).addLines(lines).build();
+            } else {
+                lore = ItemLore.lore().addLines(lines).build();
+            }
+            this.item.setData(DataComponentTypes.LORE, lore);
+        } catch (IllegalArgumentException ignored) { }
     }
 
     /**

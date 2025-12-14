@@ -303,22 +303,22 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                     item.setData(DataComponentTypes.USE_REMAINDER, UseRemainder.useRemainder(newItem));
                 }
             }
-			// Crossbow projectile
-	        if (item.hasData(DataComponentTypes.CHARGED_PROJECTILES)) {
-		        ChargedProjectiles data = item.getData(DataComponentTypes.CHARGED_PROJECTILES);
-				assert data != null;
-				List<org.bukkit.inventory.ItemStack> newProjectiles = new ArrayList<>(data.projectiles());
-		        for (int i = 0; i < newProjectiles.size(); i++) {
-			        org.bukkit.inventory.ItemStack newProjectile = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, newProjectiles.get(i).clone()));
-					if (newProjectile == null) continue;
+            // Crossbow projectile
+            if (item.hasData(DataComponentTypes.CHARGED_PROJECTILES)) {
+                ChargedProjectiles data = item.getData(DataComponentTypes.CHARGED_PROJECTILES);
+                assert data != null;
+                List<org.bukkit.inventory.ItemStack> newProjectiles = new ArrayList<>(data.projectiles());
+                for (int i = 0; i < newProjectiles.size(); i++) {
+                    org.bukkit.inventory.ItemStack newProjectile = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, newProjectiles.get(i).clone()));
+                    if (newProjectile == null) continue;
 
-					modified = true;
-					newProjectiles.set(i, newProjectile);
-		        }
-				if (modified) {
-					item.setData(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectiles.chargedProjectiles(newProjectiles));
-				}
-	        }
+                    modified = true;
+                    newProjectiles.set(i, newProjectile);
+                }
+                if (modified) {
+                    item.setData(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectiles.chargedProjectiles(newProjectiles));
+                }
+            }
             // Repairable ingredient
             if (item.hasData(DataComponentTypes.REPAIRABLE)) {
                 Repairable repairable = item.getData(DataComponentTypes.REPAIRABLE);
@@ -472,13 +472,13 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         for (int i = 0; i < slots.size(); i++) {
             Pair<EquipmentSlot, ItemStack> slot = slots.get(i);
             ItemStack original = slot.getSecond();
-	        org.bukkit.entity.Entity finalEntity = entity;
-	        var context = new EntityEquipmentPacketContext(ItemModifierContextType.ENTITY_EQUIPMENT, null, packet, world, entityId, () -> {
-	            if (finalEntity == null && world != null) {
-		            Entity lookup = ((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(entityId);
-					return lookup == null ? null : lookup.getBukkitEntity();
-	            }
-	            return finalEntity;
+            org.bukkit.entity.Entity finalEntity = entity;
+            var context = new EntityEquipmentPacketContext(ItemModifierContextType.ENTITY_EQUIPMENT, null, packet, world, entityId, () -> {
+                if (finalEntity == null && world != null) {
+                    Entity lookup = ((CraftWorld) world).getHandle().moonrise$getEntityLookup().get(entityId);
+                    return lookup == null ? null : lookup.getBukkitEntity();
+                }
+                return finalEntity;
             }, CraftEquipmentSlot.getSlot(slot.getFirst()));
             var contextBox = new ItemContextBox(player, context, original.asBukkitCopy());
             ItemStack result = fromBukkit(contextBox, original);
