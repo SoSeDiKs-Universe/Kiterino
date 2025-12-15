@@ -1,0 +1,31 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -707,6 +_,28 @@
+         return this.getHandle().awardRecipes(this.bukkitKeysToMinecraftRecipes(recipes));
+     }
+ 
++    // Kiterino start - Allow sending recipes
++    @Override
++    public void justSendRecipes(Collection<NamespacedKey> recipeKeys, boolean notification, boolean highlight, boolean replace) {
++        if (!(getHandle() instanceof ServerPlayer serverPlayer)) return;
++        if (serverPlayer.connection == null) return;
++
++        net.minecraft.stats.ServerRecipeBook.DisplayResolver displayResolver = serverPlayer.getRecipeBook().displayResolver;
++        java.util.List<net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket.Entry> list = new ArrayList<>();
++        Collection<RecipeHolder<?>> recipes = bukkitKeysToMinecraftRecipes(recipeKeys);
++        for (RecipeHolder<?> recipeHolder : recipes) {
++            net.minecraft.resources.ResourceKey<net.minecraft.world.item.crafting.Recipe<?>> resourceKey = recipeHolder.id();
++            if (!recipeHolder.value().isSpecial()) {
++                displayResolver.displaysForRecipe(resourceKey, entry -> list.add(new net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket.Entry(entry, notification, highlight)));
++            }
++        }
++
++        if (!list.isEmpty()) {
++            serverPlayer.connection.send(new net.minecraft.network.protocol.game.ClientboundRecipeBookAddPacket(list, replace));
++        }
++    }
++    // Kiterino end - Allow sending recipes
++
+     @Override
+     public int undiscoverRecipes(Collection<NamespacedKey> recipes) {
+         return this.getHandle().resetRecipes(this.bukkitKeysToMinecraftRecipes(recipes));

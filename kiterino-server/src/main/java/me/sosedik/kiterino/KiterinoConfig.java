@@ -133,9 +133,11 @@ public final class KiterinoConfig {
 
     // Kiterino start - Item Modifiers API
     public static boolean itemModifiersLogMissingIds;
+    public static boolean disableCraftableRecipes;
     public static final List<NamespacedKey> itemModifiersOrder = new ArrayList<>();
     private static void itemModifiers() {
         itemModifiersLogMissingIds = getBoolean(config, "item-modifiers.log-missing-ids", true, "Whether to log the id if the item modifier's id is missing in modification order");
+        disableCraftableRecipes = getBoolean(config, "item-modifiers.disable-craftable-recipes", false, "Disables the recipe book from showing craftable recipes");
         getList(config, "item-modifiers.modification-order", List.<String>of(), "List of item modifier ids, determines modification order").forEach(id -> {
             if (id.startsWith("empty_line|")) {
                 String[] parts = id.split("\\|");

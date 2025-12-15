@@ -1,7 +1,6 @@
 package me.sosedik.kiterino.modifier.item;
 
 import com.mojang.datafixers.util.Pair;
-import io.papermc.paper.command.subcommands.DumpItemCommand;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.BlockItemDataProperties;
 import io.papermc.paper.datacomponent.item.BundleContents;
@@ -18,7 +17,6 @@ import me.sosedik.kiterino.inventory.InventorySlotHelper;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContext;
 import me.sosedik.kiterino.modifier.item.context.ItemModifierContextType;
 import me.sosedik.kiterino.modifier.item.context.packet.AdvancementPacketContext;
-import me.sosedik.kiterino.modifier.item.context.packet.BaseItemContext;
 import me.sosedik.kiterino.modifier.item.context.packet.BasePacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityDataPacketContext;
 import me.sosedik.kiterino.modifier.item.context.packet.EntityEquipmentPacketContext;
@@ -648,31 +646,31 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             RecipeDisplay display = contents.display();
             RecipeDisplay newDisplay = replaceRecipeDisplay(packet, ItemModifierContextType.RECIPE_BOOK, player, display);
 
-            boolean modifiedRemainders = false;
-            Optional<List<Ingredient>> craftingRemainders = contents.craftingRequirements();
-            if (craftingRemainders.isPresent()) {
-                List<Ingredient> ingredients = new ArrayList<>(craftingRemainders.get());
+            boolean modifiedRequirements = false;
+            Optional<List<Ingredient>> craftingRequirements = contents.craftingRequirements();
+            if (craftingRequirements.isPresent()) {
+                List<Ingredient> ingredients = new ArrayList<>(craftingRequirements.get());
                 var ingredientContext = new RecipeBookPacketContext(ItemModifierContextType.RECIPE_BOOK, null, packet, RecipeBookPacketContext.DisplayType.INGREDIENT);
                 for (int i = 0; i < ingredients.size(); i++) {
                     Ingredient ingredient = ingredients.get(i);
                     Ingredient newIngredient = replaceIngredient(player, ingredientContext, ingredient);
                     if (ingredient != newIngredient) {
                         ingredients.set(i, newIngredient);
-                        modifiedRemainders = true;
+                        modifiedRequirements = true;
                     }
                 }
-                if (modifiedRemainders)
-                    craftingRemainders = Optional.of(ingredients);
+                if (modifiedRequirements)
+                    craftingRequirements = Optional.of(ingredients);
             }
 
-            if (display != newDisplay || modifiedRemainders) {
+            if (display != newDisplay || modifiedRequirements) {
                 entries.set(r, new ClientboundRecipeBookAddPacket.Entry(
                     new RecipeDisplayEntry(
                         contents.id(),
                         newDisplay,
                         contents.group(),
                         contents.category(),
-                        craftingRemainders
+                        craftingRequirements
                     ),
                     entry.flags()
                 ));
@@ -762,20 +760,27 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
 
         List<Holder<Item>> values = superDirtyCopy.values.stream().toList();
-        List<Holder<Item>> valuesCleaned = values.stream().map(holder -> {
-            if (holder.unwrapKey().map(itemResourceKey -> "minecraft".equals(itemResourceKey.identifier().getNamespace())).orElse(true)) {
-                return holder;
-            }
+        List<Holder<Item>> valuesCleaned = values.stream()
+            .map(holder -> {
+                if (KiterinoConfig.disableCraftableRecipes) {
+                    modified[0] = true;
+                    return net.minecraft.world.item.Items.DEBUG_STICK.builtInRegistryHolder();
+                }
+                if (holder.unwrapKey().map(itemResourceKey -> "minecraft".equals(itemResourceKey.identifier().getNamespace())).orElse(true)) {
+                    return holder;
+                }
 
-            Item item = holder.value();
-            org.bukkit.inventory.ItemStack parsed = ItemModifier.modifyItem(player, player == null ? Locale.US : player.locale(), new ItemStack(item).asBukkitMirror());
-            if (parsed == null) {
-                return holder;
-            }
+                Item item = holder.value();
+                org.bukkit.inventory.ItemStack parsed = ItemModifier.modifyItem(player, player == null ? Locale.US : player.locale(), new ItemStack(item).asBukkitMirror());
+                if (parsed == null) {
+                    return holder;
+                }
 
-            modified[0] = true;
-            return Holder.direct(ItemStack.fromBukkitCopy(parsed).getItem());
-        }).toList();
+                modified[0] = true;
+                return Holder.direct(ItemStack.fromBukkitCopy(parsed).getItem());
+            })
+            .toList();
+
         if (modified[0]) {
             superDirtyCopy.values = HolderSet.direct(valuesCleaned.stream().map(item -> item.value().builtInRegistryHolder()).toList());
         }
@@ -785,14 +790,15 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             return modified[0] ? superDirtyCopy : ingredient;
         }
 
+        boolean modifiedItems = false;
         Set<ItemStack> updatedItems = new HashSet<>();
         for (ItemStack item : items) {
             ItemStack result = replaceItem(player, context, item);
             updatedItems.add(result == null ? item : result);
-            if (result != null) modified[0] = true;
+            if (result != null) modifiedItems = true;
         }
-        if (!modified[0]) {
-            return ingredient;
+        if (!modifiedItems) {
+            return modified[0] ? superDirtyCopy : ingredient;
         }
 
         superDirtyCopy.itemStacks = updatedItems;

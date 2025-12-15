@@ -46,3 +46,4 @@ public-f net.minecraft.world.damagesource.CombatTracker takingDamage
 public-f net.minecraft.world.entity.Display hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z
 public-f net.minecraft.world.item.crafting.Ingredient values
 public-f net.minecraft.world.item.trading.MerchantOffer result
+public net.minecraft.stats.ServerRecipeBook displayResolver

@@ -1,0 +1,21 @@
+--- a/src/main/java/org/bukkit/entity/HumanEntity.java
++++ b/src/main/java/org/bukkit/entity/HumanEntity.java
+@@ -638,6 +_,18 @@
+      */
+     public int discoverRecipes(Collection<NamespacedKey> recipes);
+ 
++    // Kiterino start - Allow sending recipes
++    /**
++     * Sends recipe discover packet
++     *
++     * @param recipeKeys recipe keys
++     * @param notification whether to show notification
++     * @param highlight whether to highlight item in the recipe book
++     * @param replace whether to replace or add the recipes
++     */
++    void justSendRecipes(Collection<NamespacedKey> recipeKeys, boolean notification, boolean highlight, boolean replace);
++    // Kiterino end - Allow sending recipes
++
+     /**
+      * Undiscover a recipe for this player such that it has already been
+      * discovered. This method will remove the key's associated recipe from the
