@@ -4,6 +4,7 @@ public net.minecraft.core.component.PatchedDataComponentMap ensureMapOwnership()
 public net.minecraft.core.component.PatchedDataComponentMap patch
 public net.minecraft.core.component.PatchedDataComponentMap prototype
 public net.minecraft.server.network.ServerGamePacketListenerImpl awaitingTeleport
+public net.minecraft.stats.ServerRecipeBook displayResolver
 public net.minecraft.world.damagesource.CombatTracker getMostSignificantFall()Lnet/minecraft/world/damagesource/CombatEntry;
 public net.minecraft.world.entity.Entity rider
 public net.minecraft.world.entity.Entity vehicle
@@ -46,4 +47,3 @@ public-f net.minecraft.world.damagesource.CombatTracker takingDamage
 public-f net.minecraft.world.entity.Display hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z
 public-f net.minecraft.world.item.crafting.Ingredient values
 public-f net.minecraft.world.item.trading.MerchantOffer result
-public net.minecraft.stats.ServerRecipeBook displayResolver
