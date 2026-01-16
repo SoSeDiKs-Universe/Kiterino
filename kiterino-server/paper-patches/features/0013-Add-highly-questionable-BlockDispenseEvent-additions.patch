@@ -5,10 +5,10 @@ Subject: [PATCH] Add highly questionable BlockDispenseEvent additions
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 9d9e4bfbf9c6eee89c85dbbbc75f5cd7ac893393..188a32becb5946c73630cf6771f83b61df3321da 100644
+index a6670f04bb93f71d95f5e63e7737dcb166af9ca3..960fd0c6d028db4ddb97dcfdd8fc51f535992ce3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2259,14 +2259,19 @@ public class CraftEventFactory {
+@@ -2263,14 +2263,19 @@ public class CraftEventFactory {
          return event.callEvent();
      }
  
@@ -31,7 +31,7 @@ index 9d9e4bfbf9c6eee89c85dbbbc75f5cd7ac893393..188a32becb5946c73630cf6771f83b61
          }
  
          if (!event.getItem().equals(craftItem)) {
-@@ -2275,11 +2280,13 @@ public class CraftEventFactory {
+@@ -2279,11 +2284,13 @@ public class CraftEventFactory {
              net.minecraft.core.dispenser.DispenseItemBehavior itemBehavior = net.minecraft.world.level.block.DispenserBlock.getDispenseBehavior(pointer, eventStack);
              if (itemBehavior != net.minecraft.core.dispenser.DispenseItemBehavior.NOOP && itemBehavior != instance) {
                  itemBehavior.dispense(pointer, eventStack);

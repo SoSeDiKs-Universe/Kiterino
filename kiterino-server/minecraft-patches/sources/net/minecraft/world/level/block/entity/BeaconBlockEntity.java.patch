@@ -20,16 +20,16 @@
                      break;
                  case 1:
                      if (!BeaconBlockEntity.this.level.isClientSide() && !BeaconBlockEntity.this.beamSections.isEmpty()) {
-@@ -223,7 +_,7 @@
+@@ -226,7 +_,7 @@
          int i = blockEntity.levels; final int originalLevels = i; // Paper - OBFHELPER
          if (level.getGameTime() % 80L == 0L) {
-             if (!blockEntity.beamSections.isEmpty()) {
+             if (!blockEntity.beamSections.isEmpty() || (level.purpurConfig.beaconAllowEffectsWithTintedGlass && isTintedGlass)) { // Purpur - fix beacon effects persisting with broken base while tinted glass is used
 -                blockEntity.levels = updateBase(level, x, y, z);
 +                blockEntity.levels = blockEntity.levelsOverride == -1 ? updateBase(level, x, y, z) : blockEntity.levelsOverride; // Kiterino - Beacon level override API
              }
  
              if (blockEntity.levels > 0 && (!blockEntity.beamSections.isEmpty() || (level.purpurConfig.beaconAllowEffectsWithTintedGlass && isTintedGlass))) { // Purpur - allow beacon effects when covered by tinted glass
-@@ -419,7 +_,10 @@
+@@ -422,7 +_,10 @@
          super.loadAdditional(input);
          this.primaryPower = loadEffect(input, "primary_effect");
          this.secondaryPower = loadEffect(input, "secondary_effect");
@@ -41,7 +41,7 @@
          this.name = parseCustomNameSafe(input, "CustomName");
          this.lockKey = LockCode.fromTag(input);
          this.effectRange = input.getDoubleOr(PAPER_RANGE_TAG, -1); // Paper - Custom beacon ranges
-@@ -430,6 +_,7 @@
+@@ -433,6 +_,7 @@
          super.saveAdditional(output);
          storeEffect(output, "primary_effect", this.primaryPower);
          storeEffect(output, "secondary_effect", this.secondaryPower);

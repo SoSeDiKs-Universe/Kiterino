@@ -5,7 +5,7 @@ Subject: [PATCH] Rework some deprecations
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 64eedbf05ad43cb4419c8a3a69de27b515fe54cf..0a242d5182a5d7868cdb13c2305116f91dfc8fe6 100644
+index d456925de7825a06fe8211add39e9b320cb66a85..a6d62a0c92b6788ce5575368eb33c11622661861 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -2640,7 +2640,7 @@ public final class Bukkit {
@@ -36,10 +36,10 @@ index 28ebe77719afcc6b975def6b9d89f469173396f0..b4ba2928b55c57878603d72cf2bf6c29
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index f342b8541ef4e865c7eb0fc7f14fb6feb6324034..c9c4f45f5c2362da0274d462ee4129a479b39d9a 100644
+index 82d8febbc565d41e37717f1d75ce7561116254d5..96a36d573ecf7fe05c8b8e8dc5e79e27dba6c804 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -33,7 +33,7 @@ import java.util.Map;
+@@ -34,7 +34,7 @@ import java.util.Map;
   * may be poorly named, throw exceptions, have misleading parameters, or any
   * other bad programming practice.
   */
@@ -85,7 +85,7 @@ index a2ceb14de6feb9c62db01413c597bb497f688053..158bcc3daa218a30dd03c7c16d68e018
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 2126799d1b59f51a52c638274af9821919e5ab64..23653339c4e7f22a3425db8963198ddf7f2da6d2 100644
+index fba2411f7e10d963c1b3a63d42d6a5ead7aeff1d..f4fa6ddeb79bc8314fac9f745cdb0dc498a134bc 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -3384,9 +3384,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM

@@ -20,7 +20,7 @@
      /**
       * Get a list of all players who are can view the specified chunk from their
       * client
-@@ -4745,4 +_,13 @@
+@@ -4713,4 +_,13 @@
              }
          }
      }

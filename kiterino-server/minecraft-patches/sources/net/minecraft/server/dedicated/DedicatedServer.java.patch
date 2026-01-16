@@ -3,7 +3,7 @@
 @@ -292,6 +_,15 @@
          }
          org.purpurmc.purpur.PurpurConfig.registerCommands();
-         // Purpur end - Purpur config files
+         */// Purpur end - Purpur config files // Purpur end - Migrate Setting to reintroduce end void rings
 +        // Kiterino start - Kiterino Config
 +        try {
 +            me.sosedik.kiterino.KiterinoConfig.init((java.io.File) options.valueOf("kiterino-settings"));

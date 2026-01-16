@@ -5,7 +5,7 @@ Subject: [PATCH] Support custom shears
 
 
 diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 9084d8f50cd3747592fd40797587d0a6f509658d..3187b63228f7b960aa0d5ea6c588fb357562c544 100644
+index bb83ee58e5320e43bdeea24bd39b37f074bb6ef3..b58542c158928830b34ec0e9ae4b2e5adc9053ee 100644
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -1811,7 +1811,7 @@ public class ServerGamePacketListenerImpl
@@ -18,10 +18,10 @@ index 9084d8f50cd3747592fd40797587d0a6f509658d..3187b63228f7b960aa0d5ea6c588fb35
          Identifier itemModelReference = stack.get(net.minecraft.core.component.DataComponents.ITEM_MODEL);
          if (itemModelReference != null && itemModelReference.equals(this.player.level().purpurConfig.dontRunWithScissorsItemModelReference)) return true;
 diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
-index 1da9a79c0ad3b0e3f9cd11aaf7fb1d3dfbd36279..17f4f7f7d2ec2fae822ec9829c9c385c46880c9a 100644
+index 790d9c8de922ee46811d3a925ccf8b421ab7a948..ea062ea6d7ab3347d062a39e66df103ae2599941 100644
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -3088,11 +3088,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
+@@ -3090,11 +3090,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
          }
  
          ItemStack itemInHand = player.getItemInHand(hand);
@@ -49,7 +49,7 @@ index 3327b93f095b6b6b6d5620bffd03232d4fb47d20..07afff605b9468a4a37b6e1011f0fd5e
                  // CraftBukkit start
                  // Paper start - custom shear drops
 diff --git a/net/minecraft/world/entity/animal/golem/CopperGolem.java b/net/minecraft/world/entity/animal/golem/CopperGolem.java
-index 4f92ac01a6d362a7ef748b74b75773575970859f..c547cc513eac64faa114221a26f83e971fa945d9 100644
+index 493d1678592bce78a15adeb4c9435fdc8e9dab8a..21237f49d211c9515945174437965ba4cd0cb2ba 100644
 --- a/net/minecraft/world/entity/animal/golem/CopperGolem.java
 +++ b/net/minecraft/world/entity/animal/golem/CopperGolem.java
 @@ -278,7 +278,7 @@ public class CopperGolem extends AbstractGolem implements ContainerUser, Shearab
@@ -62,7 +62,7 @@ index 4f92ac01a6d362a7ef748b74b75773575970859f..c547cc513eac64faa114221a26f83e97
                  // Paper start
                  java.util.List<ItemStack> drops = this.generateDefaultDrops(serverLevel, itemInHand);
 diff --git a/net/minecraft/world/entity/animal/golem/SnowGolem.java b/net/minecraft/world/entity/animal/golem/SnowGolem.java
-index 846b1a064398b455dbb2f05521870b4519edd5b8..4d4272575374f1a92300578bb0a0b64b247c19ef 100644
+index c37c999671955eeaff0b145a890a512c78d642a8..e2af8aa18696d3ce313e08df1cdeab81fceab1a3 100644
 --- a/net/minecraft/world/entity/animal/golem/SnowGolem.java
 +++ b/net/minecraft/world/entity/animal/golem/SnowGolem.java
 @@ -181,7 +181,7 @@ public class SnowGolem extends AbstractGolem implements Shearable, RangedAttackM
@@ -101,10 +101,10 @@ index 9d2e036dfe874a48713f1397721912854e88f560..0609016db3027572fb20c85adb564977
                  if (interactionResult instanceof InteractionResult.Success success && success.wasItemInteraction()) {
                      return interactionResult;
 diff --git a/net/minecraft/world/entity/monster/skeleton/Bogged.java b/net/minecraft/world/entity/monster/skeleton/Bogged.java
-index f1e9cec85ce911a50bb83eff9228d6b98aa00d44..2d859c72c80cc602a597fd5a24e481f9c0488f5e 100644
+index 59c986a28a5546a9070ec9bcf3f1994317b47fff..123b897230854bc5e47f12245fe512cb6abbeae0 100644
 --- a/net/minecraft/world/entity/monster/skeleton/Bogged.java
 +++ b/net/minecraft/world/entity/monster/skeleton/Bogged.java
-@@ -95,7 +95,7 @@ public class Bogged extends AbstractSkeleton implements Shearable {
+@@ -102,7 +102,7 @@ public class Bogged extends AbstractSkeleton implements Shearable {
      @Override
      protected InteractionResult mobInteract(Player player, InteractionHand hand) {
          ItemStack itemInHand = player.getItemInHand(hand);

@@ -1,12 +1,12 @@
 --- a/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
 +++ b/net/minecraft/world/level/block/SpreadingSnowyDirtBlock.java
 @@ -86,6 +_,11 @@
-                         org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(blockPos.above()))), 3); // CraftBukkit
+                         org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, blockState.setValue(SNOWY, isSnowySetting(access.getBlockState(blockPos.above()))), Block.UPDATE_ALL); // CraftBukkit
                          // Paper end - Perf: optimize dirt and snow spreading
                      }
 +                    // Kiterino start - Allow grass spread upon coarse dirt
 +                    else if (level.kiterinoConfig.grassSpreadOnCoarseDirt && access.getBlockState(blockPos).is(Blocks.COARSE_DIRT) && SpreadingSnowyDirtBlock.canPropagate(access, blockState, level, blockPos)) {
-+                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, Blocks.DIRT.defaultBlockState(), 3);
++                        org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, blockPos, Blocks.DIRT.defaultBlockState(), Block.UPDATE_ALL);
 +                    }
 +                    // Kiterino end - Allow grass spread upon coarse dirt
                  }

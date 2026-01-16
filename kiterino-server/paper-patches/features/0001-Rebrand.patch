@@ -26,37 +26,6 @@ index 6194d6d8952864c71cc4017a639b818e4ecccea9..54017deac6404ad450e8e41e90f7db6b
  
                  metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
                      Map<String, Map<String, Integer>> map = new HashMap<>();
-diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index a5a7334f7a1f147945079f20aa04b4f317d9e94c..7f00b1fb3a86284f99631140033673d7b0907db0 100644
---- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-+++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-@@ -36,7 +36,7 @@ public class PaperVersionFetcher implements VersionFetcher {
-     private static final int DISTANCE_ERROR = -1;
-     private static final int DISTANCE_UNKNOWN = -2;
-     // Purpur start - Rebrand
--    private static final String DOWNLOAD_PAGE = "https://purpurmc.org/downloads";
-+    private static final String DOWNLOAD_PAGE = "https://github.com/SoSeDiKs-Universe/Kiterino"; // Kiterino - Rebrand
-     private static int distance = DISTANCE_UNKNOWN; public int distance() { return distance; }
-     // Purpur end - Rebrand
- 
-@@ -52,7 +52,7 @@ public class PaperVersionFetcher implements VersionFetcher {
-         if (build.buildNumber().isEmpty() && build.gitCommit().isEmpty()) {
-             updateMessage = text("You are running a development version without access to version information", color(0xFF5300));
-         } else {
--            updateMessage = getUpdateStatusMessage("PurpurMC/Purpur", build); // Purpur - Rebrand
-+            updateMessage = getUpdateStatusMessage("SoSeDiKs-Universe/Kiterino", build); // Kiterino - Rebrand
-         }
-         final @Nullable Component history = this.getHistory();
- 
-@@ -63,7 +63,7 @@ public class PaperVersionFetcher implements VersionFetcher {
-         //int distance = DISTANCE_ERROR; // Purpur - use field - Rebrand
- 
-         final OptionalInt buildNumber = build.buildNumber();
--        if (buildNumber.isPresent()) {
-+        if (false && buildNumber.isPresent()) { // Kiterino - No public builds - Rebrand
-             distance = fetchDistanceFromSiteApi(build, buildNumber.getAsInt());
-         } else {
-             final Optional<String> gitBranch = build.gitBranch();
 diff --git a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java b/src/main/java/com/destroystokyo/paper/console/PaperConsole.java
 index bc7e4e5560708fea89c584b1d8b471f4966f311a..70145bafa7c9c45a6f7a7a6854e9eefaccd97e9a 100644
 --- a/src/main/java/com/destroystokyo/paper/console/PaperConsole.java

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -517,8 +_,8 @@
+@@ -525,8 +_,8 @@
      }
  
      @Override
@@ -11,7 +11,7 @@
      }
  
      @Override
-@@ -1100,4 +_,40 @@
+@@ -1144,4 +_,40 @@
          this.getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end - API for any mob to burn daylight

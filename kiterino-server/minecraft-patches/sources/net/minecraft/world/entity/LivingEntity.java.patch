@@ -21,7 +21,7 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -1340,6 +_,11 @@
+@@ -1352,6 +_,11 @@
                          serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), mobEffectInstance.getEffect()));
                      }
                  }
@@ -33,7 +33,7 @@
              }
  
              this.refreshDirtyAttributes();
-@@ -2693,6 +_,7 @@
+@@ -2705,6 +_,7 @@
                  );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (updateSelf) {
@@ -41,7 +41,7 @@
                      chunkSource.sendToTrackingPlayersAndSelf(this, clientboundAnimatePacket);
                  } else {
                      chunkSource.sendToTrackingPlayers(this, clientboundAnimatePacket);
-@@ -3452,7 +_,7 @@
+@@ -3464,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -50,7 +50,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3873,9 +_,17 @@
+@@ -3885,9 +_,17 @@
                      flag = false;
                  }
  

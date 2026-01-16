@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1392,7 +_,7 @@
+@@ -1388,7 +_,7 @@
          }
          // Minecraft does not currently support teleporting players between worlds with passengers.
          // It causes them to be dismounted, and causes weird behavior.
@@ -9,7 +9,7 @@
              return false;
          }
  
-@@ -3466,4 +_,122 @@
+@@ -3461,4 +_,122 @@
              entity.remove();
          }
      }

@@ -8,7 +8,7 @@
      public boolean wasTouchingWater;
      protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
      protected boolean wasEyeInWater;
-@@ -922,6 +_,12 @@
+@@ -923,6 +_,12 @@
              this.clearFire();
          }
  
@@ -21,7 +21,7 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
-@@ -2031,6 +_,18 @@
+@@ -2032,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }
  
@@ -40,7 +40,7 @@
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -2074,7 +_,7 @@
+@@ -2075,7 +_,7 @@
      public void updateInWaterStateAndDoWaterCurrentPushing() {
          if (this.getVehicle() instanceof AbstractBoat abstractBoat && !abstractBoat.isUnderWater()) {
              this.wasTouchingWater = false;
@@ -49,7 +49,7 @@
              if (!this.wasTouchingWater && !this.firstTick) {
                  this.doWaterSplashEffect();
              }
-@@ -3399,6 +_,21 @@
+@@ -3401,6 +_,21 @@
          }
      }
  
@@ -71,7 +71,7 @@
      // Paper start - Force entity dismount during teleportation
      protected boolean removePassenger(Entity passenger) {
          return removePassenger(passenger, false);
-@@ -4049,6 +_,7 @@
+@@ -4050,6 +_,7 @@
  
          this.portalCooldown = entity.portalCooldown;
          this.portalProcess = entity.portalProcess;

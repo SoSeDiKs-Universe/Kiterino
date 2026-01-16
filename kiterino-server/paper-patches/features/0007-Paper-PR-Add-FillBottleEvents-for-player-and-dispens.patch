@@ -17,10 +17,10 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 9800f0457c39b79bf94683579f339f969a1da789..68229b029ccd99fcf82a93a49829bbdd42385810 100644
+index 36d6d6d6896eb4aeb8116d3320c5c1db90c1d934..853a61a96503a925c55a172772f975cd3f5e6f1d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2394,4 +2394,18 @@ public class CraftEventFactory {
+@@ -2398,4 +2398,18 @@ public class CraftEventFactory {
          }
          return false;
      }

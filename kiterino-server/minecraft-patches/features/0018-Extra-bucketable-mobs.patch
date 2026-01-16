@@ -28,10 +28,10 @@ index 0a6f81950c3edd9bcb6ccfacbec99e53d36fca2b..43273db3097accf2c1f1c7b98b053716
          DispenserBlock.registerBehavior(Items.WATER_BUCKET, dispenseItemBehavior);
          DispenserBlock.registerBehavior(Items.POWDER_SNOW_BUCKET, dispenseItemBehavior);
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index 9feda8160f8727d8182dba265390d8be65048389..15d36ec44c8a986fcd04ee14cd65d51c15d8f22c 100644
+index 69257ee8a3347e5e7a824ee7816ce351288e506c..9b4eb4cd9be6e9d20531ea9c305957dcdabf3f80 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -1347,6 +1347,12 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
+@@ -1353,6 +1353,12 @@ public abstract class Mob extends LivingEntity implements EquipmentUser, Leashab
      }
  
      protected InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -45,7 +45,7 @@ index 9feda8160f8727d8182dba265390d8be65048389..15d36ec44c8a986fcd04ee14cd65d51c
      }
  
 diff --git a/net/minecraft/world/entity/animal/Bucketable.java b/net/minecraft/world/entity/animal/Bucketable.java
-index 7f64148a30b842e850374f05a992dc7d627b9ebf..d37aa209bb9ffc135ba59186eb7a4f68fc156973 100644
+index acb0e770ae00c315cbf812e36b4ff4f8100a676b..9dab2592ea3190cf280970679c334e223d534392 100644
 --- a/net/minecraft/world/entity/animal/Bucketable.java
 +++ b/net/minecraft/world/entity/animal/Bucketable.java
 @@ -30,6 +30,24 @@ public interface Bucketable {
@@ -110,7 +110,7 @@ index 7f64148a30b842e850374f05a992dc7d627b9ebf..d37aa209bb9ffc135ba59186eb7a4f68
              org.bukkit.event.player.PlayerBucketEntityEvent playerBucketFishEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFishBucketEvent(entity, player, itemInHand, bucketItemStack, hand);
              bucketItemStack = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(playerBucketFishEvent.getEntityBucket());
              if (playerBucketFishEvent.isCancelled()) {
-@@ -82,7 +119,7 @@ public interface Bucketable {
+@@ -88,7 +125,7 @@ public interface Bucketable {
                  entity.resendPossiblyDesyncedEntityData((ServerPlayer) player); // Paper
                  return Optional.of(InteractionResult.FAIL);
              }
