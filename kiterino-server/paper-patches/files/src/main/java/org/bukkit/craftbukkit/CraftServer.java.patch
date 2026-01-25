@@ -7,7 +7,7 @@
 +        me.sosedik.kiterino.KiterinoConfig.init((File) console.options.valueOf("kiterino-settings")); // Kiterino - Kiterino Config
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
-             world.setSpawnSettings(world.serverLevelData.getDifficulty() != Difficulty.PEACEFUL && world.getGameRules().get(GameRules.SPAWN_MONSTERS)); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
+             world.setSpawnSettings(world.isSpawningMonsters()); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
 @@ -2812,6 +_,13 @@
          }
          // Purpur end - Purpur config files

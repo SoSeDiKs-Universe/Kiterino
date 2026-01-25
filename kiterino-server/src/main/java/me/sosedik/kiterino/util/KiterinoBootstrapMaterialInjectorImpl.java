@@ -41,7 +41,6 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
     private final Field materialBlockField = getField(CraftMagicNumbers.class, "MATERIAL_BLOCK");
     private final Field blockMaterialField = getField(CraftMagicNumbers.class, "BLOCK_MATERIAL");
     private final Field byNameField = getField(Material.class, "BY_NAME");
-    private final Field maxStackField = getField(Material.class, "maxStack");
     private final Field idField = getField(Material.class, "id");
     private final Field ctorField = getField(Material.class, "ctor");
     private final Field dataField = getField(Material.class, "data");
@@ -54,8 +53,6 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
     public void injectEnum(Material value) throws Exception {
         NamespacedKey materialKey = value.getKey();
         Item item = BuiltInRegistries.ITEM.getValueOrThrow(ResourceKey.create(Registries.ITEM, PaperAdventure.asVanilla(materialKey)));
-
-        maxStackField.set(value, item.getDefaultMaxStackSize());
 
         idField.set(value, 1);
         legacyField.set(value, false);
