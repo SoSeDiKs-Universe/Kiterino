@@ -9,6 +9,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Called for:
  * <ul>
+ * <li>Recipe leftovers</li>
  * <li>Wet sponge producing water bucket</li>
  * </ul>
  */

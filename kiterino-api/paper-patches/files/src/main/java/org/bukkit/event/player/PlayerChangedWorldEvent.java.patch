@@ -1,0 +1,39 @@
+--- a/src/main/java/org/bukkit/event/player/PlayerChangedWorldEvent.java
++++ b/src/main/java/org/bukkit/event/player/PlayerChangedWorldEvent.java
+@@ -14,11 +_,18 @@
+     private static final HandlerList HANDLER_LIST = new HandlerList();
+ 
+     private final World from;
++    private final org.bukkit.Location fromLoc; // Kiterino - Pass old location to PlayerChangedWorldEvent
+ 
+     @ApiStatus.Internal
+     public PlayerChangedWorldEvent(@NotNull final Player player, @NotNull final World from) {
++    // Kiterino start - Pass old location to PlayerChangedWorldEvent
++        this(player, from, null);
++    }
++    public PlayerChangedWorldEvent(@NotNull final Player player, @NotNull final World from, @org.jetbrains.annotations.Nullable org.bukkit.Location fromLoc) {
++    // Kiterino end - Pass old location to PlayerChangedWorldEvent
+         super(player);
+         this.from = from;
++        this.fromLoc = fromLoc; // Kiterino - Pass old location to PlayerChangedWorldEvent
+     }
+ 
+     /**
+@@ -30,6 +_,17 @@
+     public World getFrom() {
+         return this.from;
+     }
++
++    // Kiterino start - Pass old location to PlayerChangedWorldEvent
++    /**
++     * Gets the world the player is switching from.
++     *
++     * @return player's previous world
++     */
++    public @org.jetbrains.annotations.Nullable org.bukkit.Location getFromLoc() {
++        return this.fromLoc;
++    }
++    // Kiterino end - Pass old location to PlayerChangedWorldEvent
+ 
+     @NotNull
+     @Override
