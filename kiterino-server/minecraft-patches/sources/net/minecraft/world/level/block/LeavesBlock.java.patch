@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/LeavesBlock.java
 +++ b/net/minecraft/world/level/block/LeavesBlock.java
-@@ -39,10 +_,19 @@
+@@ -39,11 +_,20 @@
      public abstract MapCodec<? extends LeavesBlock> codec();
  
      public LeavesBlock(float leafParticleChance, BlockBehaviour.Properties properties) {
@@ -9,7 +9,7 @@
          this.leafParticleChance = leafParticleChance;
          this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, false).setValue(WATERLOGGED, false));
      }
-+
+ 
 +    // Kiterino start - No collision for leaves
 +    private static BlockBehaviour.Properties properties(BlockBehaviour.Properties properties) {
 +        if (me.sosedik.kiterino.KiterinoConfig.noCollisionForLeaves) {
@@ -18,6 +18,16 @@
 +        return properties;
 +    }
 +    // Kiterino end - No collision for leaves
- 
++
      @Override
      protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
+         return !cutoutLeaves && adjacentState.getBlock() instanceof LeavesBlock || super.skipRendering(state, adjacentState, direction);
+@@ -55,7 +_,7 @@
+ 
+     @Override
+     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+-        return Shapes.empty();
++        return me.sosedik.kiterino.KiterinoConfig.noCollisionForLeaves ? Shapes.block() : Shapes.empty();
+     }
+ 
+     @Override

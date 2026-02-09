@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftRecipe.java
-@@ -70,7 +_,11 @@
+@@ -77,7 +_,11 @@
                  choices.add(CraftItemStack.asBukkitCopy(i));
              }
  
@@ -11,5 +11,5 @@
 +            return recipeChoice;
 +            // Kiterino end - Add predicate support for the recipe book
          } else {
-             List<org.bukkit.Material> choices = list.items().map((i) -> CraftItemType.minecraftToBukkit(i.value())).toList();
- 
+             final RegistryKeySet<ItemType> itemTypes = PaperRegistrySets.convertToApi(RegistryKey.ITEM, list.values);
+             return RecipeChoice.itemType(itemTypes);

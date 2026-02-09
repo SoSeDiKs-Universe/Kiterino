@@ -5,10 +5,10 @@ Subject: [PATCH] Support custom shears
 
 
 diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index bb83ee58e5320e43bdeea24bd39b37f074bb6ef3..b58542c158928830b34ec0e9ae4b2e5adc9053ee 100644
+index f28d6a2dae813b578c8fdecfb419a74c98426d51..6c54b32c228ad99a4f481e26c10ec0c2f0fa55a5 100644
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1811,7 +1811,7 @@ public class ServerGamePacketListenerImpl
+@@ -1812,7 +1812,7 @@ public class ServerGamePacketListenerImpl
  
      // Purpur start - Dont run with scissors!
      public boolean isScissors(ItemStack stack) {

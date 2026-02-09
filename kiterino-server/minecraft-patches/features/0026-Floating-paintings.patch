@@ -1,0 +1,66 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Sat, 7 Feb 2026 14:48:26 +0200
+Subject: [PATCH] Floating paintings
+
+
+diff --git a/net/minecraft/world/entity/decoration/painting/Painting.java b/net/minecraft/world/entity/decoration/painting/Painting.java
+index 9a0df81220ace93c37d0c2f9d28b32d6b6b707b1..f8b795bcfb5337db40963cc40772a8d9f4efeaf8 100644
+--- a/net/minecraft/world/entity/decoration/painting/Painting.java
++++ b/net/minecraft/world/entity/decoration/painting/Painting.java
+@@ -46,6 +46,30 @@ public class Painting extends HangingEntity {
+         super(type, level);
+     }
+ 
++    // Kiterino start - Floating paintings
++    @Override
++    public boolean survives() {
++        if (level().kiterinoConfig.floatingPaintings) {
++            return canCoexist(true);
++        }
++        return super.survives();
++    }
++
++    public boolean canBePlaced(boolean requireSupport) {
++        if (!level().kiterinoConfig.floatingPaintings) {
++            return survives();
++        }
++        if (hasLevelCollision(getPopBox())) {
++            return false;
++        }
++        boolean flag = !requireSupport ? true : BlockPos.betweenClosedStream(this.calculateSupportBox()).allMatch(blockPos -> {
++            net.minecraft.world.level.block.state.BlockState blockState = this.level().getBlockState(blockPos);
++            return !blockState.isAir();
++        });
++        return flag && canCoexist(true);
++    }
++    // Kiterino end - Floating paintings
++
+     @Override
+     protected void defineSynchedData(SynchedEntityData.Builder builder) {
+         super.defineSynchedData(builder);
+@@ -99,7 +123,7 @@ public class Painting extends HangingEntity {
+             painting.setDirection(direction);
+             list.removeIf(holder -> {
+                 painting.setVariant((Holder<PaintingVariant>)holder);
+-                return !painting.survives();
++                return !painting.canBePlaced(true); // Kiterino - Floating paintings
+             });
+             if (list.isEmpty()) {
+                 return Optional.empty();
+diff --git a/net/minecraft/world/item/HangingEntityItem.java b/net/minecraft/world/item/HangingEntityItem.java
+index ecc890ae91475420215b61311ff959d9c522202d..d50ae209c62049ef89890f97c9ad567d48fcdc70 100644
+--- a/net/minecraft/world/item/HangingEntityItem.java
++++ b/net/minecraft/world/item/HangingEntityItem.java
+@@ -82,6 +82,11 @@ public class HangingEntityItem extends Item {
+                 }
+ 
+                 itemInHand.shrink(1);
++                // Kiterino start - Floating paintings
++                if (player != null && context.getLevel().kiterinoConfig.floatingPaintings) {
++                    player.swing(context.getHand(), true);
++                }
++                // Kiterino end - Floating paintings
+                 return InteractionResult.SUCCESS;
+             } else {
+                 return InteractionResult.CONSUME;

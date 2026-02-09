@@ -18,10 +18,10 @@ index d456925de7825a06fe8211add39e9b320cb66a85..a6d62a0c92b6788ce5575368eb33c116
      public static UnsafeValues getUnsafe() {
          return server.getUnsafe();
 diff --git a/src/main/java/org/bukkit/OfflinePlayer.java b/src/main/java/org/bukkit/OfflinePlayer.java
-index 28ebe77719afcc6b975def6b9d89f469173396f0..b4ba2928b55c57878603d72cf2bf6c2992f10aac 100644
+index 31ce15fa8cc6b4c79f6be4cbb4be5d9e6a9d7536..c191282250734ec71fa8ca5f752696cbe0193ed7 100644
 --- a/src/main/java/org/bukkit/OfflinePlayer.java
 +++ b/src/main/java/org/bukkit/OfflinePlayer.java
-@@ -235,9 +235,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
+@@ -234,9 +234,11 @@ public interface OfflinePlayer extends ServerOperator, AnimalTamer, Configuratio
       * UTC.
       *
       * @return Date of last log-in for this player, or 0
@@ -85,10 +85,10 @@ index a2ceb14de6feb9c62db01413c597bb497f688053..158bcc3daa218a30dd03c7c16d68e018
      void resetMaxHealth();
  }
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index fba2411f7e10d963c1b3a63d42d6a5ead7aeff1d..f4fa6ddeb79bc8314fac9f745cdb0dc498a134bc 100644
+index ec29aef11d581223fdb2fb20fe70beadbb0fbf77..dd1d7e0a4209de17e47bce78935d568eb520a254 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3384,9 +3384,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3386,9 +3386,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
       * they wish.
       *
       * @return the player's locale

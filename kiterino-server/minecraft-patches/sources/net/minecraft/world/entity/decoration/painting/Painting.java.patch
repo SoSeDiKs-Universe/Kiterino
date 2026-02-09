@@ -1,0 +1,16 @@
+--- a/net/minecraft/world/entity/decoration/painting/Painting.java
++++ b/net/minecraft/world/entity/decoration/painting/Painting.java
+@@ -219,6 +_,13 @@
+ 
+     @Override
+     public ItemStack getPickResult() {
++        // Kiterino start - Accurate paintings pickup
++        if (level().kiterinoConfig.accuratePaintingsPickup) {
++            ItemStack item = new ItemStack(Items.PAINTING);
++            item.set(DataComponents.PAINTING_VARIANT, getVariant());
++            return item;
++        }
++        // Kiterino end - Accurate paintings pickup
+         return new ItemStack(Items.PAINTING);
+     }
+ }

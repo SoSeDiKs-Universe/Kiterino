@@ -58,9 +58,11 @@ public final class KiterinoWorldConfig {
     // Kiterino start - Gameplay mechanics
     public boolean fireResistanceResetsFireTicks = false; // Kiterino - Reset fire ticks when having fire resistance
     public boolean doorOpenAIAffectsGates = false; // Kiterino - Allow AI opening fence gates
+    public boolean explosionsInFluids = false; // Kiterino - Allow explosions in fluids
     private void gameplayMechanics() {
         fireResistanceResetsFireTicks = getBoolean("gameplay-mechanics.fire-resistance-resets-fire-ticks", fireResistanceResetsFireTicks, "Having fire resistance potion effect will reset fire ticks");
         doorOpenAIAffectsGates = getBoolean("gameplay-mechanics.door-open-ai-affects-gates", doorOpenAIAffectsGates, "AI for opening doors allows opening gates as well");
+        explosionsInFluids = getBoolean("gameplay-mechanics.explosions-in-fluids", explosionsInFluids, "Allow explosions in fluids (e.g., underwater)");
     }
     // Kiterino end - Gameplay mechanics
 
@@ -116,29 +118,28 @@ public final class KiterinoWorldConfig {
     }
     // Kiterino end - Projectile options
 
-    // Kiterino start - Ice options
+    // Kiterino start - Hanging options
+    public boolean floatingPaintings = false;
+    public boolean accuratePaintingsPickup = false;
+    private void hangingOptions() {
+        floatingPaintings = getBoolean("entity.hanging.floating-paintings", floatingPaintings, "Paintings can survive without a support block");
+        accuratePaintingsPickup = getBoolean("entity.hanging.acurate-paintings-pickup", accuratePaintingsPickup, "Paintings will preserve the art when picked up in creative");
+    }
+    // Kiterino end - Hanging options
+
     public boolean iceAlwaysMeltInNether = false; // Kiterino - Always melt ice in Nether
-    public boolean meltPackedIceInNether = false; // Kiterino - Melt packed ice in Nether
-    private void iceBlockSettings() {
+    public boolean meltPackedIceInNether = false; // Kiterino - Always melt ice in Nether
+    public boolean grassSpreadOnCoarseDirt = false; // Kiterino - Allow grass spread upon coarse dirt
+    public boolean campfireAffectedByGravity = false; // Kiterino - Campfire options
+    public double campfireBurnOutInRainChance = 0; // Kiterino - Campfire options
+    public boolean betterRailPlacement = false; // Kiterino - Allow placing rails on more surfaces
+    private void blockOptions() {
         iceAlwaysMeltInNether = getBoolean("blocks.ice.always-melt-in-nether", iceAlwaysMeltInNether, "Make ice melt in ultrawarm dimensions (e.g. Nether) regardless of melting requirements");
         meltPackedIceInNether = getBoolean("blocks.packed_ice.melt-in-nether", meltPackedIceInNether, "Ticks packed ice in ultrawarm dimensions (e.g. Nether) to allow melting it");
-    }
-    // Kiterino end - Ice options
-
-    // Kiterino start - Allow grass spread upon coarse dirt
-    public boolean grassSpreadOnCoarseDirt = false;
-    private void grassSpreadOnCoarseDirt() {
         grassSpreadOnCoarseDirt = getBoolean("blocks.grass_block.spread-on-coarse-dirt", grassSpreadOnCoarseDirt, "Make grass block spread onto coarse dirt, turning it into dirt");
-    }
-    // Kiterino end - Allow grass spread upon coarse dirt
-
-    // Kiterino start - Campfire options
-    public boolean campfireAffectedByGravity = false;
-    public double campfireBurnOutInRainChance = 0;
-    private void campfireOptions() {
         campfireAffectedByGravity = getBoolean("blocks.campfire.affected-by-gravity", campfireAffectedByGravity, "Make campfires affected by gravity (like sand/gravel)");
         campfireBurnOutInRainChance = getDouble("blocks.campfire.burn-out-in-rain-chance", campfireBurnOutInRainChance, "Chance for lit campfires to burnout during rain");
+        betterRailPlacement = getBoolean("blocks.rails.better-placement", betterRailPlacement, "Allow placing rails on more surfaces");
     }
-    // Kiterino end - Campfire options
 
 }

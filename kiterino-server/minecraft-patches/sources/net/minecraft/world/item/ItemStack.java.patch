@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -196,7 +_,24 @@
+@@ -196,7 +_,25 @@
                  } else {
                      Holder<Item> holder = Item.STREAM_CODEC.decode(buffer);
                      DataComponentPatch dataComponentPatch = codec.decode(buffer);
@@ -16,7 +16,8 @@
 +                                itemStack = ItemStack.EMPTY;
 +                            } else {
 +                                itemStack = net.minecraft.world.item.ItemStack.CODEC.parse(
-+                                    org.bukkit.craftbukkit.CraftRegistry.getMinecraftRegistry().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), itemTag
++                                    me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.SERIALIZATION_CONTEXT,
++                                    itemTag
 +                                ).getOrThrow();
 +                            }
 +                        }
@@ -35,7 +36,7 @@
 +                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && !value.isEmpty() && me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.modifiers.isEmpty()) {
 +                        customData = value.get(DataComponents.CUSTOM_DATA);
 +                        net.minecraft.nbt.Tag itemData = net.minecraft.world.item.ItemStack.CODEC.encodeStart(
-+                            net.minecraft.server.MinecraftServer.getServer().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
++                            me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.SERIALIZATION_CONTEXT,
 +                            value
 +                        ).getOrThrow();
 +                        if (customData == null) {

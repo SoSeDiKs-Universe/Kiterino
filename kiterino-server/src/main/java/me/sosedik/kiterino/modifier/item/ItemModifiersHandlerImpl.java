@@ -34,7 +34,9 @@ import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
@@ -56,7 +58,9 @@ import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -70,6 +74,7 @@ import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.Abstra
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipePropertySet;
@@ -118,6 +123,7 @@ import java.util.logging.Level;
 public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
     public static final Map<NamespacedKey, ItemModifier> modifiers = new HashMap<>();
+    public static final RegistryOps<Tag> SERIALIZATION_CONTEXT = MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE);
 
     @Override
     public void registerModifier(ItemModifier itemModifier) {
@@ -610,7 +616,8 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
         List<SelectableRecipe.SingleInputEntry<StonecutterRecipe>> stonecutterRecipes = new ArrayList<>();
         for (SelectableRecipe.SingleInputEntry<StonecutterRecipe> stonecutterRecipeEntry : packet.stonecutterRecipes().entries()) {
-            if (stonecutterRecipeEntry.recipe().recipe().isEmpty()) {
+            Optional<RecipeHolder<StonecutterRecipe>> recipeHolder = stonecutterRecipeEntry.recipe().recipe();
+            if (recipeHolder.isEmpty()) {
                 stonecutterRecipes.add(stonecutterRecipeEntry);
                 continue;
             }
@@ -618,9 +625,9 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             var ingredientContext = new RecipeBookPacketContext(ItemModifierContextType.RECIPE_BOOK, null, packet, RecipeBookPacketContext.DisplayType.INGREDIENT);
             var resultContext = new RecipeBookPacketContext(ItemModifierContextType.RECIPE_BOOK, null, packet, RecipeBookPacketContext.DisplayType.RESULT);
 
-            RecipeHolder<StonecutterRecipe> recipe = stonecutterRecipeEntry.recipe().recipe().get();
+            RecipeHolder<StonecutterRecipe> recipe = recipeHolder.get();
             StonecutterRecipe nmsRecipe = recipe.value();
-            Ingredient ingredient = replaceIngredient(player, ingredientContext, nmsRecipe.input());
+            Ingredient ingredient = replaceIngredient(player, ingredientContext, stonecutterRecipeEntry.input(), false);
 
             ItemStack original = nmsRecipe.result;
             ItemStack result = replaceItem(player, resultContext, original);
@@ -653,7 +660,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                 var ingredientContext = new RecipeBookPacketContext(ItemModifierContextType.RECIPE_BOOK, null, packet, RecipeBookPacketContext.DisplayType.INGREDIENT);
                 for (int i = 0; i < ingredients.size(); i++) {
                     Ingredient ingredient = ingredients.get(i);
-                    Ingredient newIngredient = replaceIngredient(player, ingredientContext, ingredient);
+                    Ingredient newIngredient = replaceIngredient(player, ingredientContext, ingredient, true);
                     if (ingredient != newIngredient) {
                         ingredients.set(i, newIngredient);
                         modifiedRequirements = true;
@@ -754,7 +761,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         };
     }
 
-    private static Ingredient replaceIngredient(@Nullable CraftPlayer player, RecipeBookPacketContext context, Ingredient ingredient) {
+    private static Ingredient replaceIngredient(@Nullable CraftPlayer player, RecipeBookPacketContext context, Ingredient ingredient, boolean fakeRecipeBook) {
         final boolean[] modified = {false};
 
         Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
@@ -762,7 +769,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         List<Holder<Item>> values = superDirtyCopy.values.stream().toList();
         List<Holder<Item>> valuesCleaned = values.stream()
             .map(holder -> {
-                if (KiterinoConfig.disableCraftableRecipes) {
+                if (fakeRecipeBook && KiterinoConfig.disableCraftableRecipes) {
                     modified[0] = true;
                     return net.minecraft.world.item.Items.DEBUG_STICK.builtInRegistryHolder();
                 }
@@ -948,30 +955,19 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         var bukkitItem = ItemModifier.modifyItem(contextBox);
 
         // Kiterino start - Prevent creative from overriding items
-        ItemStack itemStack = bukkitItem == null ? original : ItemStack.fromBukkitCopy(bukkitItem);
         CraftPlayer player = (CraftPlayer) contextBox.getViewer();
-        if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && !itemStack.isEmpty()) {
-            if (bukkitItem == null) {
-                itemStack = itemStack.copy();
-            }
-            net.minecraft.world.item.component.CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
+        if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && (!org.bukkit.inventory.ItemStack.isEmpty(bukkitItem) || !original.isEmpty())) {
+            ItemStack itemStack = bukkitItem == null ? original.copy() : ItemStack.fromBukkitCopy(bukkitItem);
             net.minecraft.nbt.Tag itemData = original.isEmpty() ? null : net.minecraft.world.item.ItemStack.CODEC.encodeStart(
-                net.minecraft.server.MinecraftServer.getServer().registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
+                SERIALIZATION_CONTEXT,
                 original
             ).getOrThrow();
-            if (customData == null) {
-                customData = net.minecraft.world.item.component.CustomData.of(new CompoundTag());
-                customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
-                itemStack.set(DataComponents.CUSTOM_DATA, customData);
-            } else {
-                customData.getUnsafe().put("kiterino_og_item", itemData == null ? StringTag.valueOf("") : itemData);
-            }
-        } else if (bukkitItem == null) {
-            return null;
+            net.minecraft.world.item.component.CustomData.update(DataComponents.CUSTOM_DATA, itemStack, tag -> tag.put("kiterino_og_item", itemData == null ? StringTag.valueOf("minecraft:air") : itemData));
+            return itemStack;
         }
         // Kiterino end - Prevent creative from overriding items
 
-        return itemStack;
+        return bukkitItem == null ? null : ItemStack.fromBukkitCopy(bukkitItem);
     }
 
 }

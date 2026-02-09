@@ -46,10 +46,10 @@ index 54033572e325f8486a438e31dde34f8407f9180a..6f844935432f8c512d16a71f6fa6151d
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index 0c5f64e03920178e30adc70b8631ef8d3c5ff282..3f0ac358a0ef89ebc183dcb7b922d96d3dc26cb2 100644
+index 6f2819f76fe9ffed838b6b6fdc426a834ea9129d..74110abb9687f1d7df3fe9ac95173d87ca553e9a 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -2096,19 +2096,19 @@ public abstract class Player extends Avatar implements ContainerUser {
+@@ -2117,19 +2117,19 @@ public abstract class Player extends Avatar implements ContainerUser {
              Predicate<ItemStack> supportedHeldProjectiles = ((ProjectileWeaponItem)shootable.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(shootable, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
              ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedHeldProjectiles);
              if (!heldProjectile.isEmpty()) {
