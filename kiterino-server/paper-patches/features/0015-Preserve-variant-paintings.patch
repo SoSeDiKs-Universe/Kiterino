@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 11 Feb 2026 14:12:00 +0200
+Subject: [PATCH] Preserve variant paintings
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPainting.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPainting.java
+index 4582a36fe4610a3140e1ca58d820aef39a9373ec..ef452e98d585d388328fbadd0ff148da0a8d8194 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPainting.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPainting.java
+@@ -54,4 +54,16 @@ public class CraftPainting extends CraftHanging implements Painting {
+ 
+         return false;
+     }
++
++    // Kiterino start - Preserve variant paintings
++    @Override
++    public boolean isPlacedWithoutVariant() {
++        return this.getHandle().placedWithoutVariant;
++    }
++
++    @Override
++    public void setPlacedWithoutVariant(boolean placedWithoutVariant) {
++        this.getHandle().placedWithoutVariant = placedWithoutVariant;
++    }
++    // Kiterino end - Preserve variant paintings
+ }

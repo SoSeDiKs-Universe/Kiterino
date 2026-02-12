@@ -48,6 +48,7 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
     private final Field keyField = getField(Material.class, "key");
     private final Field itemTypeField = getField(Material.class, "itemType");
     private final Field blockTypeField = getField(Material.class, "blockType");
+    private final Field materialRegistryMap = getField(Registry.SimpleRegistry.class, "map");
 
     @Override
     public void injectEnum(Material value) throws Exception {
@@ -75,6 +76,8 @@ public class KiterinoBootstrapMaterialInjectorImpl extends KiterinoEnumExtender<
             if (blockItem.getBlock() instanceof KiterinoBlock kiterinoBlock)
                 blocks.add(kiterinoBlock);
         }
+
+        ((Map<NamespacedKey, Material>) materialRegistryMap.get(Registry.MATERIAL)).put(materialKey, value);
     }
 
     @SuppressWarnings({"unchecked", "java:S3011"})

@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Thu, 12 Feb 2026 15:12:25 +0200
+Subject: [PATCH] Injecting custom items extras
+
+
+diff --git a/src/main/java/org/bukkit/Registry.java b/src/main/java/org/bukkit/Registry.java
+index 0859653089acab606eade01bc380dcc076e6a89c..f02a1f62ad8e0eaf82c002bb9bb29b94613d00cd 100644
+--- a/src/main/java/org/bukkit/Registry.java
++++ b/src/main/java/org/bukkit/Registry.java
+@@ -601,7 +601,7 @@ public interface Registry<T extends Keyed> extends Iterable<T> {
+                 }
+             }
+ 
+-            this.map = builder.build();
++            this.map = new java.util.HashMap<>(builder.build()); // Kiterino - Use modifiable HashMap - Injecting custom items
+             this.type = type;
+         }
+ 

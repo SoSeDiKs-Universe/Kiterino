@@ -118,14 +118,14 @@ public final class KiterinoWorldConfig {
     }
     // Kiterino end - Projectile options
 
-    // Kiterino start - Hanging options
-    public boolean floatingPaintings = false;
-    public boolean accuratePaintingsPickup = false;
+    public boolean floatingPaintings = false; // Kiterino - Floating paintings
+    public boolean accuratePaintingsPickup = false; // Kiterino - Accurate paintings pickup
+    public boolean preservePaintingVariants = false; // Kiterino - Preserve variant paintings
     private void hangingOptions() {
         floatingPaintings = getBoolean("entity.hanging.floating-paintings", floatingPaintings, "Paintings can survive without a support block");
         accuratePaintingsPickup = getBoolean("entity.hanging.acurate-paintings-pickup", accuratePaintingsPickup, "Paintings will preserve the art when picked up in creative");
+        preservePaintingVariants = getBoolean("entity.hanging.preserve-painting-variants", preservePaintingVariants, "If a painting with a variant was placed, preserve the variant when dropped");
     }
-    // Kiterino end - Hanging options
 
     public boolean iceAlwaysMeltInNether = false; // Kiterino - Always melt ice in Nether
     public boolean meltPackedIceInNether = false; // Kiterino - Always melt ice in Nether

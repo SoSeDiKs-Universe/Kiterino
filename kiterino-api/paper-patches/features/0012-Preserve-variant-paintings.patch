@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 11 Feb 2026 14:11:37 +0200
+Subject: [PATCH] Preserve variant paintings
+
+
+diff --git a/src/main/java/org/bukkit/entity/Painting.java b/src/main/java/org/bukkit/entity/Painting.java
+index 19e9582017fb2ac6281fb6992e24f1eaa79906f4..032639c728b3bbd0a565d400fcd776a15fdbae69 100644
+--- a/src/main/java/org/bukkit/entity/Painting.java
++++ b/src/main/java/org/bukkit/entity/Painting.java
+@@ -38,4 +38,20 @@ public interface Painting extends Hanging {
+      *     painting's current location
+      */
+     public boolean setArt(@NotNull Art art, boolean force);
++
++    // Kiterino start - Preserve variant paintings
++    /**
++     * Gets whether the painting was placed without a variant (i.e., random)
++     *
++     * @return whether the painting was placed without a variant
++     */
++    boolean isPlacedWithoutVariant();
++
++    /**
++     * Sets whether the painting was placed without a variant (i.e., random)
++     *
++     * @param placedWithoutVariant whether the painting is placed without a variant
++     */
++    void setPlacedWithoutVariant(boolean placedWithoutVariant);
++    // Kiterino end - Preserve variant paintings
+ }

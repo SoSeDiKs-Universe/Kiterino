@@ -22,7 +22,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     @Override
     public void onLoad() {
         getLogger().info("MobEffect Test1: " + TestMobEffects.EFFECT_1);
-        getLogger().info("Item Test1: " + TestMaterials.TEST_ITEM_1);
+        getLogger().info("Item Test1: " + TestMaterials.TEST_ITEM_1 + " | " + TestMaterials.TEST_ITEM_1.asItemType() + " | " + TestMaterials.TEST_ITEM_1.asItemType().asMaterial());
         getLogger().info("Entity Test1: " + TestEntityTypes.ENTITY_1);
     }
 

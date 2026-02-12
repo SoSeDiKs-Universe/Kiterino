@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: SoSeDiK <mrsosedik@gmail.com>
+Date: Wed, 11 Feb 2026 14:11:16 +0200
+Subject: [PATCH] Preserve variant paintings
+
+
+diff --git a/net/minecraft/world/entity/decoration/painting/Painting.java b/net/minecraft/world/entity/decoration/painting/Painting.java
+index f8b795bcfb5337db40963cc40772a8d9f4efeaf8..ae47ab1857669db49584313ae3299bacd790ff7a 100644
+--- a/net/minecraft/world/entity/decoration/painting/Painting.java
++++ b/net/minecraft/world/entity/decoration/painting/Painting.java
+@@ -42,6 +42,8 @@ public class Painting extends HangingEntity {
+     );
+     public static final float DEPTH = 0.0625F;
+ 
++    public boolean placedWithoutVariant = true; // Kiterino - Preserve variant paintings
++
+     public Painting(EntityType<? extends Painting> type, Level level) {
+         super(type, level);
+     }
+@@ -107,6 +109,7 @@ public class Painting extends HangingEntity {
+     protected <T> boolean applyImplicitComponent(DataComponentType<T> component, T value) {
+         if (component == DataComponents.PAINTING_VARIANT) {
+             this.setVariant(castComponentValue(DataComponents.PAINTING_VARIANT, value));
++            this.placedWithoutVariant = false; // Kiterino - Preserve variant paintings
+             return true;
+         } else {
+             return super.applyImplicitComponent(component, value);
+@@ -161,6 +164,7 @@ public class Painting extends HangingEntity {
+         output.store("facing", Direction.LEGACY_ID_CODEC_2D, this.getDirection());
+         super.addAdditionalSaveData(output);
+         VariantUtils.writeVariant(output, this.getVariant());
++        output.putBoolean("Kiterino.placed_without_variant", this.placedWithoutVariant); // Kiterino - Preserve variant paintings
+     }
+ 
+     @Override
+@@ -169,6 +173,7 @@ public class Painting extends HangingEntity {
+         super.readAdditionalSaveData(input);
+         this.setDirection(direction);
+         VariantUtils.readVariant(input, Registries.PAINTING_VARIANT).ifPresent(this::setVariant);
++        this.placedWithoutVariant = input.getBooleanOr("Kiterino.placed_without_variant", true); // Kiterino - Preserve variant paintings
+     }
+ 
+     @Override
+@@ -209,6 +214,11 @@ public class Painting extends HangingEntity {
+                 // Purpur start - Apply display names from item forms of entities to entities and vice versa
+                 final ItemStack painting = new ItemStack(Items.PAINTING);
+                 if (!this.level().purpurConfig.persistentDroppableEntityDisplayNames) painting.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, null);
++                // Kiterino start - Preserve variant paintings
++                if (level.kiterinoConfig.preservePaintingVariants && !this.placedWithoutVariant) {
++                    painting.set(DataComponents.PAINTING_VARIANT, getVariant());
++                }
++                // Kiterino end - Preserve variant paintings
+                 this.spawnAtLocation(level, painting);
+                 // Purpur end - Apply display names from item forms of entities to entities and vice versa
+             }
