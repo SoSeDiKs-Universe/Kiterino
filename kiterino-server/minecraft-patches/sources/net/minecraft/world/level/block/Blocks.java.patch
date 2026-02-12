@@ -18,6 +18,21 @@
      );
      public static final Block SUNFLOWER = register(
          "sunflower",
+@@ -6832,12 +_,12 @@
+     public static final Block PINK_PETALS = register(
+         "pink_petals",
+         FlowerBedBlock::new,
+-        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY)
++        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY) // Kiterino - Replaceable petals
+     );
+     public static final Block WILDFLOWERS = register(
+         "wildflowers",
+         FlowerBedBlock::new,
+-        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY)
++        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY) // Kiterino - Replaceable petals
+     );
+     public static final Block LEAF_LITTER = register(
+         "leaf_litter",
 @@ -7299,5 +_,6 @@
                  blockState.initCache();
              }
