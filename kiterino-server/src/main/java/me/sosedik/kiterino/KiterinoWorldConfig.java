@@ -59,10 +59,12 @@ public final class KiterinoWorldConfig {
     public boolean fireResistanceResetsFireTicks = false; // Kiterino - Reset fire ticks when having fire resistance
     public boolean doorOpenAIAffectsGates = false; // Kiterino - Allow AI opening fence gates
     public boolean explosionsInFluids = false; // Kiterino - Allow explosions in fluids
+    public boolean observersDetectMovingEntities = false; // Kiterino - Observers detect moving entities
     private void gameplayMechanics() {
         fireResistanceResetsFireTicks = getBoolean("gameplay-mechanics.fire-resistance-resets-fire-ticks", fireResistanceResetsFireTicks, "Having fire resistance potion effect will reset fire ticks");
         doorOpenAIAffectsGates = getBoolean("gameplay-mechanics.door-open-ai-affects-gates", doorOpenAIAffectsGates, "AI for opening doors allows opening gates as well");
         explosionsInFluids = getBoolean("gameplay-mechanics.explosions-in-fluids", explosionsInFluids, "Allow explosions in fluids (e.g., underwater)");
+        observersDetectMovingEntities = getBoolean("gameplay-mechanics.observers-detect-moving-entities", observersDetectMovingEntities, "Observers detect moving entities");
     }
     // Kiterino end - Gameplay mechanics
 
@@ -133,6 +135,8 @@ public final class KiterinoWorldConfig {
     public boolean campfireAffectedByGravity = false; // Kiterino - Campfire options
     public double campfireBurnOutInRainChance = 0; // Kiterino - Campfire options
     public boolean betterRailPlacement = false; // Kiterino - Allow placing rails on more surfaces
+    public boolean noteBlockAirOnAnySide = false; // Kiterino - Note blocks require air on any side
+    public boolean reverseNoteBlockPlaying = false; // Kiterino - Reverse note block playing
     private void blockOptions() {
         iceAlwaysMeltInNether = getBoolean("blocks.ice.always-melt-in-nether", iceAlwaysMeltInNether, "Make ice melt in ultrawarm dimensions (e.g. Nether) regardless of melting requirements");
         meltPackedIceInNether = getBoolean("blocks.packed_ice.melt-in-nether", meltPackedIceInNether, "Ticks packed ice in ultrawarm dimensions (e.g. Nether) to allow melting it");
@@ -140,6 +144,8 @@ public final class KiterinoWorldConfig {
         campfireAffectedByGravity = getBoolean("blocks.campfire.affected-by-gravity", campfireAffectedByGravity, "Make campfires affected by gravity (like sand/gravel)");
         campfireBurnOutInRainChance = getDouble("blocks.campfire.burn-out-in-rain-chance", campfireBurnOutInRainChance, "Chance for lit campfires to burnout during rain");
         betterRailPlacement = getBoolean("blocks.rails.better-placement", betterRailPlacement, "Allow placing rails on more surfaces");
+        noteBlockAirOnAnySide = getBoolean("blocks.note_block.allow-air-on-any-side", noteBlockAirOnAnySide, "Allow having air on any side to play the note block");
+        reverseNoteBlockPlaying = getBoolean("blocks.note_block.reverse-playing", reverseNoteBlockPlaying, "Reverse note block playing when sneaking");
     }
 
 }

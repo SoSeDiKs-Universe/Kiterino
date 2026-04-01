@@ -36,10 +36,10 @@ index 31ce15fa8cc6b4c79f6be4cbb4be5d9e6a9d7536..c191282250734ec71fa8ca5f752696cb
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index 82d8febbc565d41e37717f1d75ce7561116254d5..96a36d573ecf7fe05c8b8e8dc5e79e27dba6c804 100644
+index 020ee30c0a7d96944c22ffa447994747c7e13ea2..5f7420c7e6ad33c5145691d0701bdaffcfa37ed3 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -34,7 +34,7 @@ import java.util.Map;
+@@ -33,7 +33,7 @@ import java.util.Map;
   * may be poorly named, throw exceptions, have misleading parameters, or any
   * other bad programming practice.
   */

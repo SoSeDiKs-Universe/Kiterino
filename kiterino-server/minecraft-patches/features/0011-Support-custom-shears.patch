@@ -18,10 +18,10 @@ index f28d6a2dae813b578c8fdecfb419a74c98426d51..6c54b32c228ad99a4f481e26c10ec0c2
          Identifier itemModelReference = stack.get(net.minecraft.core.component.DataComponents.ITEM_MODEL);
          if (itemModelReference != null && itemModelReference.equals(this.player.level().purpurConfig.dontRunWithScissorsItemModelReference)) return true;
 diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
-index 790d9c8de922ee46811d3a925ccf8b421ab7a948..ea062ea6d7ab3347d062a39e66df103ae2599941 100644
+index 6834311b38737dde138888eaf8beea425730efce..feba7fb9da90a53a666960d01e516fd104770be2 100644
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -3090,11 +3090,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
+@@ -3114,11 +3114,11 @@ public abstract class Entity implements SyncedDataHolder, DebugValueSource, Name
          }
  
          ItemStack itemInHand = player.getItemInHand(hand);

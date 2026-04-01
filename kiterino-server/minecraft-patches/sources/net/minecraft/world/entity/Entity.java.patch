@@ -21,6 +21,37 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
+@@ -1283,6 +_,30 @@
+                 this.setDeltaMovement(this.getDeltaMovement().multiply(blockSpeedFactor, 1.0, blockSpeedFactor));
+                 profilerFiller.pop();
+             }
++            // Kiterino start - Observers detect moving entities
++            if (this.level.kiterinoConfig.observersDetectMovingEntities && this instanceof net.minecraft.world.entity.LivingEntity && movement.lengthSqr() > 0.00615D) {
++                profilerFiller.push("move");
++                profilerFiller.push("kiterino:observerCheck");
++                double height = Math.min(getBoundingBox().getYsize(), 3D);
++                BlockPos base = blockPosition();
++                do {
++                    for (Direction direction : Direction.Plane.HORIZONTAL) {
++                        BlockPos relative = base.relative(direction);
++                        BlockState relativeBlockState = this.level.getBlockState(relative);
++                        if (relativeBlockState.getBlock() == Blocks.OBSERVER && !this.level.getBlockState(base).isSolid()
++                            && !relativeBlockState.getValue(net.minecraft.world.level.block.ObserverBlock.POWERED)
++                            && relativeBlockState.getValue(net.minecraft.world.level.block.ObserverBlock.FACING) == direction.getOpposite()
++                            && this.level instanceof ServerLevel serverLevel) {
++                            relativeBlockState.tick(serverLevel, relative.immutable(), this.level.random);
++                        }
++                    }
++                    height--;
++                    base = base.above();
++                } while (height > 0);
++                profilerFiller.pop();
++                profilerFiller.pop();
++            }
++            // Kiterino end - Observers detect moving entities
+         }
+         // Paper start - detailed watchdog information
+         } finally {
 @@ -2032,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }

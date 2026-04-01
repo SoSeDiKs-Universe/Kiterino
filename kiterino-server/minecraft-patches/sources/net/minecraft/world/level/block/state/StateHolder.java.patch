@@ -1,0 +1,25 @@
+--- a/net/minecraft/world/level/block/state/StateHolder.java
++++ b/net/minecraft/world/level/block/state/StateHolder.java
+@@ -62,6 +_,22 @@
+         return this.setValue(property, findNextInCollection(property.getPossibleValues(), this.getValue(property)));
+     }
+ 
++    // Kiterino start - Reverse note block playing
++    public <T extends Comparable<T>> S cycleBackwards(Property<T> property) {
++        return this.setValue(property, findPreviousInCollection(property.getPossibleValues(), this.getValue(property)));
++    }
++
++    protected static <T> T findPreviousInCollection(Collection<T> values, T value) {
++        T previous = null;
++        for (T next : values) {
++            if (next.equals(value) && previous != null)
++                return previous;
++            previous = next;
++        }
++        return previous == null ? value : previous;
++    }
++    // Kiterino end - Reverse note block playing
++
+     protected static <T> T findNextInCollection(List<T> possibleValues, T currentValue) {
+         int i = possibleValues.indexOf(currentValue) + 1;
+         return i == possibleValues.size() ? possibleValues.getFirst() : possibleValues.get(i);
