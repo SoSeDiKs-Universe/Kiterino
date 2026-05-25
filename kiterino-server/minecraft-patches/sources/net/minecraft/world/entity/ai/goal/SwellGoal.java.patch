@@ -4,8 +4,8 @@
      @Override
      public boolean canUse() {
          LivingEntity target = this.creeper.getTarget();
--        return this.creeper.getSwellDir() > 0 || target != null && this.creeper.distanceToSqr(target) < 9.0;
-+        return this.creeper.getSwellDir() > 0 || target != null && this.creeper.distanceToSqr(target) < 9.0 && (!this.creeper.level().kiterinoConfig.creepersStalkPlayers || this.creeper.isLookingAtMe(target, 0.9, false, true, this.creeper.getEyeY())); // Kiterino - Creepers stalk players
+-        return this.creeper.getSwellDir() > 0 || target != null && !target.isDeadOrDying() && this.creeper.distanceToSqr(target) < 9.0;
++        return this.creeper.getSwellDir() > 0 || target != null && !target.isDeadOrDying() && this.creeper.distanceToSqr(target) < 9.0 && (!this.creeper.level().kiterinoConfig.creepersStalkPlayers || this.creeper.isLookingAtMe(target, 0.9, false, true, this.creeper.getEyeY())); // Kiterino - Creepers stalk players
      }
  
  

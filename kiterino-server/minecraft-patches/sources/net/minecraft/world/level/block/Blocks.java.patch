@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
-@@ -716,6 +_,7 @@
+@@ -704,6 +_,7 @@
              .requiresCorrectToolForDrops()
              .strength(4.0F)
              .pushReaction(PushReaction.DESTROY)
@@ -8,7 +8,7 @@
      );
      public static final Block SHORT_GRASS = register(
          "short_grass",
-@@ -3443,7 +_,9 @@
+@@ -3399,7 +_,9 @@
      );
      public static final Block PACKED_ICE = register(
          "packed_ice",
@@ -18,7 +18,7 @@
      );
      public static final Block SUNFLOWER = register(
          "sunflower",
-@@ -6832,12 +_,12 @@
+@@ -6753,12 +_,12 @@
      public static final Block PINK_PETALS = register(
          "pink_petals",
          FlowerBedBlock::new,
@@ -33,8 +33,8 @@
      );
      public static final Block LEAF_LITTER = register(
          "leaf_litter",
-@@ -7299,5 +_,6 @@
-                 blockState.initCache();
+@@ -7230,5 +_,6 @@
+                 state.initCache();
              }
          }
 +        me.sosedik.kiterino.world.block.KiterinoBlockStateIdMapper.lastVanillaBlockStateId = Block.BLOCK_STATE_REGISTRY.size() - 1; // Kiterino - Data-driven blocks

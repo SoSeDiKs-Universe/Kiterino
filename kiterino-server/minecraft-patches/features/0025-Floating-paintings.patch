@@ -5,7 +5,7 @@ Subject: [PATCH] Floating paintings
 
 
 diff --git a/net/minecraft/world/entity/decoration/painting/Painting.java b/net/minecraft/world/entity/decoration/painting/Painting.java
-index 9a0df81220ace93c37d0c2f9d28b32d6b6b707b1..f8b795bcfb5337db40963cc40772a8d9f4efeaf8 100644
+index 6a3170060fdc4df3039cffbb2887918e214c28d9..67e853146b4171c4b36a1fd2997e97a2f5a39f62 100644
 --- a/net/minecraft/world/entity/decoration/painting/Painting.java
 +++ b/net/minecraft/world/entity/decoration/painting/Painting.java
 @@ -46,6 +46,30 @@ public class Painting extends HangingEntity {
@@ -28,28 +28,28 @@ index 9a0df81220ace93c37d0c2f9d28b32d6b6b707b1..f8b795bcfb5337db40963cc40772a8d9
 +        if (hasLevelCollision(getPopBox())) {
 +            return false;
 +        }
-+        boolean flag = !requireSupport ? true : BlockPos.betweenClosedStream(this.calculateSupportBox()).allMatch(blockPos -> {
-+            net.minecraft.world.level.block.state.BlockState blockState = this.level().getBlockState(blockPos);
-+            return !blockState.isAir();
++        boolean flag = !requireSupport || BlockPos.betweenClosedStream(this.calculateSupportBox()).allMatch(blockPos -> {
++	        net.minecraft.world.level.block.state.BlockState blockState = this.level().getBlockState(blockPos);
++	        return !blockState.isAir();
 +        });
 +        return flag && canCoexist(true);
 +    }
 +    // Kiterino end - Floating paintings
 +
      @Override
-     protected void defineSynchedData(SynchedEntityData.Builder builder) {
-         super.defineSynchedData(builder);
+     protected void defineSynchedData(final SynchedEntityData.Builder entityData) {
+         super.defineSynchedData(entityData);
 @@ -99,7 +123,7 @@ public class Painting extends HangingEntity {
-             painting.setDirection(direction);
-             list.removeIf(holder -> {
-                 painting.setVariant((Holder<PaintingVariant>)holder);
--                return !painting.survives();
-+                return !painting.canBePlaced(true); // Kiterino - Floating paintings
+             candidate.setDirection(direction);
+             potentialVariants.removeIf(variant -> {
+                 candidate.setVariant((Holder<PaintingVariant>)variant);
+-                return !candidate.survives();
++                return !candidate.canBePlaced(true); // Kiterino - Floating paintings
              });
-             if (list.isEmpty()) {
+             if (potentialVariants.isEmpty()) {
                  return Optional.empty();
 diff --git a/net/minecraft/world/item/HangingEntityItem.java b/net/minecraft/world/item/HangingEntityItem.java
-index ecc890ae91475420215b61311ff959d9c522202d..d50ae209c62049ef89890f97c9ad567d48fcdc70 100644
+index c07b334eb05fd277925b684256591d505e5fd46a..f4a67a8f087c387105720c091444864c060b841e 100644
 --- a/net/minecraft/world/item/HangingEntityItem.java
 +++ b/net/minecraft/world/item/HangingEntityItem.java
 @@ -82,6 +82,11 @@ public class HangingEntityItem extends Item {

@@ -3,16 +3,16 @@
 @@ -57,7 +_,7 @@
  
      @Override
-     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+     protected boolean canSurvive(final BlockState state, final LevelReader level, final BlockPos pos) {
 -        return canSupportRigidBlock(level, pos.below());
 +        return level instanceof ServerLevel serverLevel && serverLevel.kiterinoConfig.betterRailPlacement ? canSupportCenter(level, pos.below(), Direction.UP) : canSupportRigidBlock(level, pos.below()); // Kiterino - Allow placing rails on more surfaces
      }
  
      @Override
-@@ -91,6 +_,11 @@
+@@ -93,6 +_,11 @@
      }
  
-     private static boolean shouldBeRemoved(BlockPos pos, Level level, RailShape shape) {
+     private static boolean shouldBeRemoved(final BlockPos pos, final Level level, final RailShape shape) {
 +        // Kiterino start - Allow placing rails on more surfaces
 +        if (level instanceof ServerLevel serverLevel && serverLevel.kiterinoConfig.betterRailPlacement && canSupportCenter(level, pos.below(), Direction.UP)) {
 +            return false;

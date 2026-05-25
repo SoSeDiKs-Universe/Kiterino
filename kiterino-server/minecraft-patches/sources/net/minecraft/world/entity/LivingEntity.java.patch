@@ -1,47 +1,47 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -973,10 +_,20 @@
+@@ -970,10 +_,20 @@
                          }
                          // CraftBukkit end
                          iterator.remove();
 +                        // Kiterino start - Expand custom mob effects API
-+                        if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
-+                            wrapper.getWrapper().onEffectExpired(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
++                        if (effect.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
++                            wrapper.getWrapper().onEffectExpired(getBukkitLivingEntity(), effect.getAmplifier());
 +                        }
 +                        // Kiterino end - Expand custom mob effects API
-                         this.onEffectsRemoved(List.of(mobEffectInstance));
-                     } else if (mobEffectInstance.getDuration() % 600 == 0) {
-                         this.onEffectUpdated(mobEffectInstance, false, null);
+                         this.onEffectsRemoved(List.of(effect));
+                     } else if (effect.getDuration() % 600 == 0) {
+                         this.onEffectUpdated(effect, false, null);
                      }
 +                    // Kiterino start - Reset fire ticks when having fire resistance
-+                    if (level().kiterinoConfig.fireResistanceResetsFireTicks && mobEffectInstance.getEffect() == MobEffects.FIRE_RESISTANCE && getRemainingFireTicks() > 0) {
++                    if (level().kiterinoConfig.fireResistanceResetsFireTicks && effect.getEffect() == MobEffects.FIRE_RESISTANCE && getRemainingFireTicks() > 0) {
 +                        setRemainingFireTicks(0);
 +                    }
 +                    // Kiterino end - Reset fire ticks when having fire resistance
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -1352,6 +_,11 @@
-                         serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), mobEffectInstance.getEffect()));
+@@ -1348,6 +_,11 @@
+                         serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), effect.getEffect()));
                      }
                  }
 +                // Kiterino start - Expand custom mob effects API
-+                if (mobEffectInstance.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
-+                    wrapper.getWrapper().onEffectRemoved(getBukkitLivingEntity(), mobEffectInstance.getAmplifier());
++                if (effect.getEffect().value() instanceof me.sosedik.kiterino.world.effect.KiterinoMobEffectWrapper wrapper) {
++                    wrapper.getWrapper().onEffectRemoved(getBukkitLivingEntity(), effect.getAmplifier());
 +                }
 +                // Kiterino end - Expand custom mob effects API
              }
  
              this.refreshDirtyAttributes();
-@@ -2705,6 +_,7 @@
+@@ -2728,6 +_,7 @@
                  );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
-                 if (updateSelf) {
+                 if (sendToSwingingEntity) {
 +                    if (this instanceof ServerPlayer serverPlayer && new me.sosedik.kiterino.event.player.PlayerArmSwingFromServerEvent(serverPlayer.getBukkitEntity(), hand == InteractionHand.MAIN_HAND ? org.bukkit.inventory.EquipmentSlot.HAND : org.bukkit.inventory.EquipmentSlot.OFF_HAND).callEvent()) // Kiterino - Add PlayerArmSwingFromServerEvent
-                     chunkSource.sendToTrackingPlayersAndSelf(this, clientboundAnimatePacket);
+                     chunkSource.sendToTrackingPlayersAndSelf(this, packet);
                  } else {
-                     chunkSource.sendToTrackingPlayers(this, clientboundAnimatePacket);
-@@ -3464,7 +_,7 @@
+                     chunkSource.sendToTrackingPlayers(this, packet);
+@@ -3494,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -50,7 +50,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3885,9 +_,17 @@
+@@ -3930,9 +_,17 @@
                      flag = false;
                  }
  

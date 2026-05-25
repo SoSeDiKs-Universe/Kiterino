@@ -26,5 +26,5 @@
 +    }
 +    // Kiterino end - Injecting custom entities
  
-     public static AttributeSupplier getSupplier(EntityType<? extends LivingEntity> entityType) {
-         return SUPPLIERS.get(entityType);
+     public static AttributeSupplier getSupplier(final EntityType<? extends LivingEntity> type) {
+         return SUPPLIERS.get(type);

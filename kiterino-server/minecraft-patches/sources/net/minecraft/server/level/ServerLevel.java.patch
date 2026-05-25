@@ -1,12 +1,12 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -800,8 +_,8 @@
-                 // Paper end - call time skip event if gamerule is enabled
+@@ -834,8 +_,8 @@
+                 // Paper end - per-world time
              }
  
--            if (!event.isCancelled()) this.wakeUpAllPlayers(); // Paper - only wake up players if time skip event is not cancelled
+-            if (event == null || !event.isCancelled()) this.wakeUpAllPlayers(); // Paper - per-world time - only wake up players if time skip event is not cancelled
 -            if (this.getGameRules().get(GameRules.ADVANCE_WEATHER) && this.isRaining()) {
-+            if (!event.isCancelled() && !this.kiterinoConfig.noAutoWakeUp) this.wakeUpAllPlayers(); // Paper - only wake up players if time skip event is not cancelled // Kiterino - Sleeping options
++            if ((event == null || !event.isCancelled()) && !this.kiterinoConfig.noAutoWakeUp) this.wakeUpAllPlayers(); // Paper - per-world time - only wake up players if time skip event is not cancelled
 +            if (!this.kiterinoConfig.noWeatherSkip && this.getGameRules().get(GameRules.ADVANCE_WEATHER) && this.isRaining()) { // Kiterino - Sleeping options
                  this.resetWeatherCycle();
              }

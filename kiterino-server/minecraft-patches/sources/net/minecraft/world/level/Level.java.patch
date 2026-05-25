@@ -1,18 +1,18 @@
 --- a/net/minecraft/world/level/Level.java
 +++ b/net/minecraft/world/level/Level.java
-@@ -166,6 +_,7 @@
+@@ -172,6 +_,7 @@
      // Paper end - add paper world config
  
      public final org.purpurmc.purpur.PurpurWorldConfig purpurConfig; // Purpur - Purpur config files
 +    public final me.sosedik.kiterino.KiterinoWorldConfig kiterinoConfig; // Kiterino - Kiterino Config
      public static @Nullable BlockPos lastPhysicsProblem; // Spigot
-     private int tileTickPosition;
      public final Map<ServerExplosion.CacheKey, Float> explosionDensityCache = new java.util.HashMap<>(); // Paper - Optimize explosions
-@@ -890,6 +_,7 @@
-         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
+     public java.util.ArrayDeque<net.minecraft.world.level.block.RedstoneTorchBlock.Toggle> redstoneUpdateInfos; // Paper - Faster redstone torch rapid clock removal; Move from Map in BlockRedstoneTorch to here
+@@ -897,6 +_,7 @@
+         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(bukkitName, worldKey); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
-         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName(), environment); // Purpur - Purpur config files
-+        this.kiterinoConfig = new me.sosedik.kiterino.KiterinoWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName(), environment); // Kiterino - Kiterino Config
+         this.purpurConfig = new org.purpurmc.purpur.PurpurWorldConfig(bukkitName, environment, worldKey); // Purpur - Purpur config files
++        this.kiterinoConfig = new me.sosedik.kiterino.KiterinoWorldConfig(environment, worldKey); // Kiterino - Kiterino Config
          this.playerBreedingCooldowns = this.getNewBreedingCooldownCache(); // Purpur - Add adjustable breeding cooldown to config
          this.generator = generator;
-         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
+         this.world = new CraftWorld((ServerLevel) this, worldKey, biomeProvider, environment);

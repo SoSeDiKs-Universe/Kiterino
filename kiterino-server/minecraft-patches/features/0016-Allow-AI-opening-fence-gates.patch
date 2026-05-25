@@ -5,76 +5,76 @@ Subject: [PATCH] Allow AI opening fence gates
 
 
 diff --git a/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java b/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
-index 5c845d78e8baee41809e0678e3d99523368a2882..7be269643c0de740c5aa16a07906c2d28fd6045d 100644
+index a8bdf295c83dd0cabc4f85dfbee6d7271dadbe1b..2c89b3b605498e11e3c7c2e99c813aee493ffcb7 100644
 --- a/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 +++ b/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
-@@ -69,6 +69,22 @@ public class InteractWithDoor {
+@@ -67,6 +67,22 @@ public class InteractWithDoor {
  
-                                 optional = rememberDoorToClose(doorsToClose, optional, level, blockPos);
+                                 doors = rememberDoorToClose(doorsMemory, doors, level, fromPos);
                              }
 +                            // Kiterino start - Allow AI opening fence gates
-+                            else if (level.kiterinoConfig.doorOpenAIAffectsGates && blockState.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
-+                                net.minecraft.world.level.block.FenceGateBlock doorBlock = (net.minecraft.world.level.block.FenceGateBlock) blockState.getBlock();
-+                                if (!blockState.getValue(net.minecraft.world.level.block.FenceGateBlock.OPEN)) {
++                            else if (level.kiterinoConfig.doorOpenAIAffectsGates && fromState.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
++                                net.minecraft.world.level.block.FenceGateBlock doorBlock = (net.minecraft.world.level.block.FenceGateBlock) fromState.getBlock();
++                                if (!fromState.getValue(net.minecraft.world.level.block.FenceGateBlock.OPEN)) {
 +                                    // CraftBukkit start - entities opening doors
-+                                    org.bukkit.event.entity.EntityInteractEvent event = new org.bukkit.event.entity.EntityInteractEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(entity.level(), blockPos));
++                                    org.bukkit.event.entity.EntityInteractEvent event = new org.bukkit.event.entity.EntityInteractEvent(body.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(body.level(), fromPos));
 +                                    if (!event.callEvent()) {
 +                                        return false;
 +                                    }
 +                                    // CraftBukkit end - entities opening doors
-+                                    doorBlock.setOpen(entity, level, blockState, blockPos, true);
++                                    doorBlock.setOpen(body, level, fromState, fromPos, true);
 +                                }
 +
-+                                optional = rememberDoorToClose(doorsToClose, optional, level, blockPos);
++                                doors = rememberDoorToClose(doorsMemory, doors, level, fromPos);
 +                            }
 +                            // Kiterino end - Allow AI opening fence gates
  
-                             BlockPos blockPos1 = nextNode.asBlockPos();
-                             BlockState blockState1 = level.getBlockState(blockPos1);
-@@ -85,6 +101,21 @@ public class InteractWithDoor {
-                                     optional = rememberDoorToClose(doorsToClose, optional, level, blockPos1);
+                             BlockPos toPos = toNode.asBlockPos();
+                             BlockState toState = level.getBlockState(toPos);
+@@ -83,6 +99,21 @@ public class InteractWithDoor {
+                                     doors = rememberDoorToClose(doorsMemory, doors, level, toPos);
                                  }
                              }
 +                            // Kiterino start - Allow AI opening fence gates
-+                            else if (level.kiterinoConfig.doorOpenAIAffectsGates && blockState1.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
-+                                net.minecraft.world.level.block.FenceGateBlock doorBlock = (net.minecraft.world.level.block.FenceGateBlock) blockState1.getBlock();
-+                                if (!blockState1.getValue(net.minecraft.world.level.block.FenceGateBlock.OPEN)) {
++                            else if (level.kiterinoConfig.doorOpenAIAffectsGates && toState.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
++                                net.minecraft.world.level.block.FenceGateBlock doorBlock = (net.minecraft.world.level.block.FenceGateBlock) toState.getBlock();
++                                if (!toState.getValue(net.minecraft.world.level.block.FenceGateBlock.OPEN)) {
 +                                    // CraftBukkit start - entities opening doors
-+                                    org.bukkit.event.entity.EntityInteractEvent event = new org.bukkit.event.entity.EntityInteractEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(entity.level(), blockPos1));
++                                    org.bukkit.event.entity.EntityInteractEvent event = new org.bukkit.event.entity.EntityInteractEvent(body.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(body.level(), toPos));
 +                                    if (!event.callEvent()) {
 +                                        return false;
 +                                    }
 +                                    // CraftBukkit end - entities opening doors
-+                                    doorBlock.setOpen(entity, level, blockState1, blockPos1, true);
-+                                    optional = rememberDoorToClose(doorsToClose, optional, level, blockPos1);
++                                    doorBlock.setOpen(body, level, toState, toPos, true);
++                                    doors = rememberDoorToClose(doorsMemory, doors, level, toPos);
 +                                }
 +                            }
 +                            // Kiterino end - Allow AI opening fence gates
  
-                             optional.ifPresent(
-                                 doorPositions -> closeDoorsThatIHaveOpenedOrPassedThrough(
-@@ -118,6 +149,19 @@ public class InteractWithDoor {
+                             doors.ifPresent(
+                                 doorSet -> closeDoorsThatIHaveOpenedOrPassedThrough(
+@@ -117,6 +148,19 @@ public class InteractWithDoor {
                      iterator.remove();
                  } else {
-                     BlockState blockState = level.getBlockState(blockPos);
+                     BlockState state = level.getBlockState(doorPos);
 +                    // Kiterino start - Allow AI opening fence gates
-+                    if (level.kiterinoConfig.doorOpenAIAffectsGates && blockState.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
-+                        if (!blockState.getValue(net.minecraft.world.level.block.FenceGateBlock.OPEN)) {
++                    if (level.kiterinoConfig.doorOpenAIAffectsGates && state.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
++                        if (!state.getValue(net.minecraft.world.level.block.FenceGateBlock.OPEN)) {
 +                            iterator.remove();
-+                        } else if (areOtherMobsComingThroughDoor(entity, blockPos, nearestLivingEntities)) {
++                        } else if (areOtherMobsComingThroughDoor(body, doorPos, nearestEntities)) {
 +                            iterator.remove();
 +                        } else {
-+                            ((net.minecraft.world.level.block.FenceGateBlock) blockState.getBlock()).setOpen(entity, level, blockState, blockPos, false);
++                            ((net.minecraft.world.level.block.FenceGateBlock) state.getBlock()).setOpen(body, level, state, doorPos, false);
 +                            iterator.remove();
 +                        }
 +                        continue;
 +                    }
 +                    // Kiterino end - Allow AI opening fence gates
-                     if (!blockState.is(BlockTags.MOB_INTERACTABLE_DOORS, state -> state.getBlock() instanceof DoorBlock) || DoorBlock.requiresRedstone(entity.level(), blockState, blockPos)) { // Purpur - Option to make doors require redstone
+                     if (!state.is(BlockTags.MOB_INTERACTABLE_DOORS, s -> s.getBlock() instanceof DoorBlock) || DoorBlock.requiresRedstone(body.level(), state, doorPos)) { // Purpur - Option to make doors require redstone
                          iterator.remove();
                      } else {
 diff --git a/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java b/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java
-index 73bba480f3f017a8aed14562bd82ba33db04391c..a3ebafde7046526445e54d3b3e498cc86def773b 100644
+index b45807e66f927344cdaccf0727c5e2e2a96eb460..83eb714b577354de52eda42392d882ed39423251 100644
 --- a/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java
 @@ -29,6 +29,11 @@ public abstract class DoorInteractGoal extends Goal {
@@ -91,11 +91,11 @@ index 73bba480f3f017a8aed14562bd82ba33db04391c..a3ebafde7046526445e54d3b3e498cc8
              } else {
 @@ -43,6 +48,11 @@ public abstract class DoorInteractGoal extends Goal {
              if (blockState.getBlock() instanceof DoorBlock) {
-                 ((DoorBlock)blockState.getBlock()).setOpen(this.mob, this.mob.level(), blockState, this.doorPos, _open);
+                 ((DoorBlock)blockState.getBlock()).setOpen(this.mob, this.mob.level(), blockState, this.doorPos, open);
              }
 +            // Kiterino start - Allow AI opening fence gates
 +            else if (this.mob.level().kiterinoConfig.doorOpenAIAffectsGates && blockState.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock) {
-+                ((net.minecraft.world.level.block.FenceGateBlock) blockState.getBlock()).setOpen(this.mob, this.mob.level(), blockState, this.doorPos, _open);
++                ((net.minecraft.world.level.block.FenceGateBlock) blockState.getBlock()).setOpen(this.mob, this.mob.level(), blockState, this.doorPos, open);
 +            }
 +            // Kiterino end - Allow AI opening fence gates
          }
@@ -126,11 +126,11 @@ index 73bba480f3f017a8aed14562bd82ba33db04391c..a3ebafde7046526445e54d3b3e498cc8
              } else {
                  return false;
 diff --git a/net/minecraft/world/level/block/FenceGateBlock.java b/net/minecraft/world/level/block/FenceGateBlock.java
-index 48aa8820761806f40761ab18496720af538bbd4d..933dda81e3a8f0a0bc82e5daa6f52440e425c70e 100644
+index 54a9ad47f5990a38648e5b6466d8c817e8b3cf8d..5f79d070d60d40d3d8881bbd99f501610a1481a5 100644
 --- a/net/minecraft/world/level/block/FenceGateBlock.java
 +++ b/net/minecraft/world/level/block/FenceGateBlock.java
-@@ -235,4 +235,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
-     public static boolean connectsToDirection(BlockState state, Direction direction) {
+@@ -218,4 +218,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
+     public static boolean connectsToDirection(final BlockState state, final Direction direction) {
          return state.getValue(FACING).getAxis() == direction.getClockWise().getAxis();
      }
 +
@@ -152,12 +152,12 @@ index 48aa8820761806f40761ab18496720af538bbd4d..933dda81e3a8f0a0bc82e5daa6f52440
 +    // Kiterino end - Allow AI opening fence gates
  }
 diff --git a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 876aef8dab7187a69bcb380692d0f6a583fb38bd..7b4cd9c6b1e5fb3520e4f5e9b9edcf23f14b413c 100644
+index 47a457ede2b7913812e72c3ddd54c68f28b01e03..666dd63ef99c635bcca0e3fda6ddd8a02d38e40a 100644
 --- a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -508,6 +508,10 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -535,6 +535,10 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                  } else {
-                     return doorBlock.type().canOpenByHand() ? PathType.DOOR_WOOD_CLOSED : PathType.DOOR_IRON_CLOSED;
+                     return door.type().canOpenByHand() ? PathType.DOOR_WOOD_CLOSED : PathType.DOOR_IRON_CLOSED;
                  }
 +            // Kiterino start - Allow AI opening fence gates
 +            } else if (level instanceof net.minecraft.server.level.ServerLevel serverLevel && serverLevel.kiterinoConfig.doorOpenAIAffectsGates && block instanceof FenceGateBlock && !blockState.getValue(FenceGateBlock.OPEN)) {

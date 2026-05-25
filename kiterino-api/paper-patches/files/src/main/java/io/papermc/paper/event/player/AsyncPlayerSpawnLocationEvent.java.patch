@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/event/player/AsyncPlayerSpawnLocationEvent.java
 +++ b/src/main/java/io/papermc/paper/event/player/AsyncPlayerSpawnLocationEvent.java
-@@ -24,10 +_,22 @@
+@@ -25,10 +_,22 @@
      private final PlayerConfigurationConnection connection;
      private final boolean newPlayer;
      private Location spawnLocation;
@@ -23,7 +23,7 @@
          this.connection = connection;
          this.spawnLocation = spawnLocation;
          this.newPlayer = newPlayer;
-@@ -72,6 +_,36 @@
+@@ -75,6 +_,36 @@
      public boolean isNewPlayer() {
          return this.newPlayer;
      }

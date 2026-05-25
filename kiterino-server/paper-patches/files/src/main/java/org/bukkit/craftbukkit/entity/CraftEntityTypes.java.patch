@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityTypes.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntityTypes.java
-@@ -495,7 +_,7 @@
+@@ -492,7 +_,7 @@
          register(new EntityTypeData<>(EntityType.PLAYER, Player.class, CraftPlayer::new, null)); // Cannot spawn a player
      }
  
@@ -9,7 +9,7 @@
          EntityTypeData<?, ?> other = CraftEntityTypes.CLASS_TYPE_DATA.put(typeData.entityClass(), typeData);
          if (other != null) {
              Bukkit.getLogger().warning(String.format("Found multiple entity type data for class %s, replacing '%s' with new value '%s'", typeData.entityClass().getName(), other, typeData));
-@@ -511,15 +_,15 @@
+@@ -508,15 +_,15 @@
          return spawnData -> entityTypes.create(spawnData.minecraftWorld(), EntitySpawnReason.COMMAND);
      }
  
@@ -28,7 +28,7 @@
          return spawnData -> {
              if (spawnData.normalWorld()) {
                  return AbstractMinecart.createMinecart(spawnData.minecraftWorld(), spawnData.x(), spawnData.y(), spawnData.z(), entityTypes, EntitySpawnReason.TRIGGERED, ItemStack.EMPTY, null);
-@@ -529,22 +_,22 @@
+@@ -526,22 +_,22 @@
          };
      }
  

@@ -9,15 +9,15 @@
      @Override
      public MapCodec<NoteBlock> codec() {
          return CODEC;
-@@ -101,12 +_,26 @@
+@@ -108,12 +_,26 @@
      }
  
-     private void playNote(@Nullable Entity entity, BlockState state, Level level, BlockPos pos) {
+     private void playNote(final @Nullable Entity source, final BlockState state, final Level level, final BlockPos pos) {
 -        if (level.purpurConfig.noteBlockIgnoreAbove || state.getValue(INSTRUMENT).worksAboveNoteBlock() || level.getBlockState(pos.above()).isAir()) { // Purpur - Config to allow Note Block sounds when blocked
 +        if (level.purpurConfig.noteBlockIgnoreAbove || state.getValue(INSTRUMENT).worksAboveNoteBlock() || (level.kiterinoConfig.noteBlockAirOnAnySide && hasAir(level, pos)) || level.getBlockState(pos.above()).isAir()) { // Purpur - Config to allow Note Block sounds when blocked // Kiterino - Note blocks require air on any side
-+            if (entity instanceof Player player) this.lastPlayedBy = player; // Kiterino - Add player to NotePlayEvent
++            if (source instanceof Player player) this.lastPlayedBy = player; // Kiterino - Add player to NotePlayEvent
              level.blockEvent(pos, this, 0, 0);
-             level.gameEvent(entity, GameEvent.NOTE_BLOCK_PLAY, pos);
+             level.gameEvent(source, GameEvent.NOTE_BLOCK_PLAY, pos);
          }
      }
  
@@ -36,10 +36,10 @@
 +
      @Override
      protected InteractionResult useItemOn(
-         ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult
-@@ -119,7 +_,15 @@
+         final ItemStack itemStack,
+@@ -132,7 +_,15 @@
      @Override
-     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+     protected InteractionResult useWithoutItem(BlockState state, final Level level, final BlockPos pos, final Player player, final BlockHitResult hitResult) {
          if (!level.isClientSide()) {
 -            if (!io.papermc.paper.configuration.GlobalConfiguration.get().blockUpdates.disableNoteblockUpdates) state = state.cycle(NoteBlock.NOTE); // Paper - prevent noteblock note from updating
 +            // Kiterino start - Reverse note block playing
@@ -54,13 +54,13 @@
              level.setBlock(pos, state, Block.UPDATE_ALL);
              this.playNote(player, state, level, pos);
              player.awardStat(Stats.TUNE_NOTEBLOCK);
-@@ -144,7 +_,8 @@
-     protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
-         NoteBlockInstrument noteBlockInstrument = state.getValue(INSTRUMENT);
+@@ -157,7 +_,8 @@
+     protected boolean triggerEvent(final BlockState state, final Level level, final BlockPos pos, final int b0, final int b1) {
+         NoteBlockInstrument instrument = state.getValue(INSTRUMENT);
          // Paper start - move NotePlayEvent call to fix instrument/note changes
--        org.bukkit.event.block.NotePlayEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callNotePlayEvent(level, pos, noteBlockInstrument, state.getValue(NOTE));
-+        org.bukkit.event.block.NotePlayEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callNotePlayEvent(level, pos, noteBlockInstrument, state.getValue(NOTE), this.lastPlayedBy); // Kiterino - Add player to NotePlayEvent
+-        org.bukkit.event.block.NotePlayEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callNotePlayEvent(level, pos, instrument, state.getValue(NOTE));
++        org.bukkit.event.block.NotePlayEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callNotePlayEvent(level, pos, instrument, state.getValue(NOTE), this.lastPlayedBy); // Kiterino - Add player to NotePlayEvent
 +        this.lastPlayedBy = null; // Kiterino - Add player to NotePlayEvent
          if (event.isCancelled()) return false;
          // Paper end - move NotePlayEvent call to fix instrument/note changes
-         float pitchFromNote;
+         float pitch;

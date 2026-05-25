@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
 +++ b/net/minecraft/world/entity/ai/behavior/AnimalPanic.java
-@@ -63,7 +_,7 @@
-                 .getMemory(MemoryModuleType.HURT_BY)
-                 .map(damageSource -> damageSource.is(this.panicCausingDamageTypes.apply(owner)))
-                 .orElse(false)
--            || owner.getBrain().hasMemoryValue(MemoryModuleType.IS_PANICKING);
-+            || owner.getBrain().hasMemoryValue(MemoryModuleType.IS_PANICKING) || owner.isForcePanicking(); // Kiterino - Forced panic mode API
+@@ -62,7 +_,7 @@
+     @Override
+     protected boolean checkExtraStartConditions(final ServerLevel level, final E body) {
+         return body.getBrain().getMemory(MemoryModuleType.HURT_BY).map(d -> d.is(this.panicCausingDamageTypes.apply(body))).orElse(false)
+-            || body.getBrain().hasMemoryValue(MemoryModuleType.IS_PANICKING);
++            || body.getBrain().hasMemoryValue(MemoryModuleType.IS_PANICKING) || body.isForcePanicking(); // Kiterino - Forced panic mode API
      }
  
      @Override

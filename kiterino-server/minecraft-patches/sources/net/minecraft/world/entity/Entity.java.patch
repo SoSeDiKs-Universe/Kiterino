@@ -1,14 +1,14 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -288,6 +_,7 @@
+@@ -303,6 +_,7 @@
      public final RandomSource random; // Paper - Share random for entities to make them more random // Add toggle for RNG manipulation
      public int tickCount;
      private int remainingFireTicks;
 +    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino - Forced panic mode API
+     private final EntityFluidInteraction fluidInteraction = new EntityFluidInteraction(Set.of(FluidTags.WATER, FluidTags.LAVA));
      public boolean wasTouchingWater;
-     protected Object2DoubleMap<TagKey<Fluid>> fluidHeight = new Object2DoubleArrayMap<>(2);
      protected boolean wasEyeInWater;
-@@ -923,6 +_,12 @@
+@@ -939,6 +_,12 @@
              this.clearFire();
          }
  
@@ -21,14 +21,14 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
-@@ -1283,6 +_,30 @@
+@@ -1299,6 +_,30 @@
                  this.setDeltaMovement(this.getDeltaMovement().multiply(blockSpeedFactor, 1.0, blockSpeedFactor));
-                 profilerFiller.pop();
+                 profiler.pop();
              }
 +            // Kiterino start - Observers detect moving entities
 +            if (this.level.kiterinoConfig.observersDetectMovingEntities && this instanceof net.minecraft.world.entity.LivingEntity && movement.lengthSqr() > 0.00615D) {
-+                profilerFiller.push("move");
-+                profilerFiller.push("kiterino:observerCheck");
++                profiler.push("move");
++                profiler.push("kiterino:observerCheck");
 +                double height = Math.min(getBoundingBox().getYsize(), 3D);
 +                BlockPos base = blockPosition();
 +                do {
@@ -39,20 +39,20 @@
 +                            && !relativeBlockState.getValue(net.minecraft.world.level.block.ObserverBlock.POWERED)
 +                            && relativeBlockState.getValue(net.minecraft.world.level.block.ObserverBlock.FACING) == direction.getOpposite()
 +                            && this.level instanceof ServerLevel serverLevel) {
-+                            relativeBlockState.tick(serverLevel, relative.immutable(), this.level.random);
++                            relativeBlockState.tick(serverLevel, relative.immutable(), this.level.getRandom());
 +                        }
 +                    }
 +                    height--;
 +                    base = base.above();
 +                } while (height > 0);
-+                profilerFiller.pop();
-+                profilerFiller.pop();
++                profiler.pop();
++                profiler.pop();
 +            }
 +            // Kiterino end - Observers detect moving entities
          }
          // Paper start - detailed watchdog information
          } finally {
-@@ -2032,6 +_,18 @@
+@@ -2073,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }
  
@@ -71,16 +71,16 @@
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -2075,7 +_,7 @@
-     public void updateInWaterStateAndDoWaterCurrentPushing() {
-         if (this.getVehicle() instanceof AbstractBoat abstractBoat && !abstractBoat.isUnderWater()) {
-             this.wasTouchingWater = false;
--        } else if (this.updateFluidHeightAndDoFluidPushing(FluidTags.WATER, 0.014)) {
-+        } else if (this.updateFluidHeightAndDoFluidPushing(FluidTags.WATER, 0.014) || isInCauldronFilledWithWater()) { // Kiterino - MC-145311, Treat entities in water cauldrons as wet
-             if (!this.wasTouchingWater && !this.firstTick) {
-                 this.doWaterSplashEffect();
-             }
-@@ -3401,6 +_,21 @@
+@@ -2107,7 +_,7 @@
+ 
+     protected boolean updateFluidInteraction() {
+         this.fluidInteraction.update(this, !this.isPushedByFluid());
+-        boolean inWater = this.fluidInteraction.isInFluid(FluidTags.WATER);
++        boolean inWater = this.fluidInteraction.isInFluid(FluidTags.WATER) || isInCauldronFilledWithWater(); // Kiterino - MC-145311, Treat entities in water cauldrons as wet
+         boolean inLava = this.fluidInteraction.isInFluid(FluidTags.LAVA);
+         if (inWater) {
+             this.resetFallDistance();
+@@ -3367,6 +_,21 @@
          }
      }
  
@@ -99,14 +99,14 @@
 +    }
 +    // Kiterino end - Allow setting entity's rider
 +
-     // Paper start - Force entity dismount during teleportation
-     protected boolean removePassenger(Entity passenger) {
-         return removePassenger(passenger, false);
-@@ -4050,6 +_,7 @@
+     public void removeVehicle() {
+         // Paper start - Force entity dismount during teleportation
+         this.removeVehicle(false);
+@@ -4066,6 +_,7 @@
  
-         this.portalCooldown = entity.portalCooldown;
-         this.portalProcess = entity.portalProcess;
-+        this.rider = entity.rider; // Kiterino - Preserve rider state on entity change
+         this.portalCooldown = oldEntity.portalCooldown;
+         this.portalProcess = oldEntity.portalProcess;
++        this.rider = oldEntity.rider; // Kiterino - Preserve rider state on entity change
      }
  
-     public @Nullable Entity teleport(TeleportTransition teleportTransition) {
+     public @Nullable Entity teleport(TeleportTransition transition) { // Paper - remove param final

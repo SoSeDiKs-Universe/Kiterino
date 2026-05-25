@@ -5,11 +5,11 @@ Subject: [PATCH] Extra recipes API
 
 
 diff --git a/net/minecraft/world/item/crafting/BlastingRecipe.java b/net/minecraft/world/item/crafting/BlastingRecipe.java
-index 89e2e9c18e0ca121bf856eb671df0a60e64010de..df8633ea05e003601f93e5a6c6c955cd3dcca1b1 100644
+index c09b5fe3fa709129919c93f41b82879bcc464d10..64e40d27185a0351282cb94cd56940c84a5bbc5d 100644
 --- a/net/minecraft/world/item/crafting/BlastingRecipe.java
 +++ b/net/minecraft/world/item/crafting/BlastingRecipe.java
-@@ -40,6 +40,7 @@ public class BlastingRecipe extends AbstractCookingRecipe {
-         org.bukkit.craftbukkit.inventory.CraftBlastingRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftBlastingRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toBukkit(this.input()), this.experience(), this.cookingTime());
+@@ -54,6 +54,7 @@ public class BlastingRecipe extends AbstractCookingRecipe {
+         org.bukkit.craftbukkit.inventory.CraftBlastingRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftBlastingRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toChoice(this.input()), this.experience(), this.cookingTime());
          recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial());// Kiterino - Extra recipes API
@@ -17,11 +17,11 @@ index 89e2e9c18e0ca121bf856eb671df0a60e64010de..df8633ea05e003601f93e5a6c6c955cd
          return recipe;
      }
 diff --git a/net/minecraft/world/item/crafting/CampfireCookingRecipe.java b/net/minecraft/world/item/crafting/CampfireCookingRecipe.java
-index 1fff25c3442cd3375be4d546281730ba5d8e6306..e993791565b0502efc8a483c028769e56789f65c 100644
+index a7d8a869cdd47b9c4780eff400e7615396b21f93..9c15f66bbe8fa49ec81835f14eb4059d94420028 100644
 --- a/net/minecraft/world/item/crafting/CampfireCookingRecipe.java
 +++ b/net/minecraft/world/item/crafting/CampfireCookingRecipe.java
-@@ -37,6 +37,7 @@ public class CampfireCookingRecipe extends AbstractCookingRecipe {
-         org.bukkit.craftbukkit.inventory.CraftCampfireRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftCampfireRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toBukkit(this.input()), this.experience(), this.cookingTime());
+@@ -51,6 +51,7 @@ public class CampfireCookingRecipe extends AbstractCookingRecipe {
+         org.bukkit.craftbukkit.inventory.CraftCampfireRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftCampfireRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toChoice(this.input()), this.experience(), this.cookingTime());
          recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial());// Kiterino - Extra recipes API
@@ -29,11 +29,11 @@ index 1fff25c3442cd3375be4d546281730ba5d8e6306..e993791565b0502efc8a483c028769e5
          return recipe;
      }
 diff --git a/net/minecraft/world/item/crafting/CustomRecipe.java b/net/minecraft/world/item/crafting/CustomRecipe.java
-index 6d0b6fa3126eb1189e3a1b304aa8b9051ef883ef..b1db087ba7c077c4a99e9a946755b78ab455e411 100644
+index af19d0ba60f094fc2a6a23ffbef2f9125ae58bc7..f14c5093f499365126d78c4af3e8cc154c469f73 100644
 --- a/net/minecraft/world/item/crafting/CustomRecipe.java
 +++ b/net/minecraft/world/item/crafting/CustomRecipe.java
-@@ -38,6 +38,7 @@ public abstract class CustomRecipe implements CraftingRecipe {
-         org.bukkit.craftbukkit.inventory.CraftComplexRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftComplexRecipe(id, result, this);
+@@ -35,6 +35,7 @@ public abstract class CustomRecipe implements CraftingRecipe {
+         org.bukkit.craftbukkit.inventory.CraftComplexRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftComplexRecipe(id, org.bukkit.inventory.ItemStack.empty(), this);
          recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial());// Kiterino - Extra recipes API
@@ -41,18 +41,18 @@ index 6d0b6fa3126eb1189e3a1b304aa8b9051ef883ef..b1db087ba7c077c4a99e9a946755b78a
          return recipe;
      }
 diff --git a/net/minecraft/world/item/crafting/ShapedRecipe.java b/net/minecraft/world/item/crafting/ShapedRecipe.java
-index 50fc4a6ce7040412b98d1602efcd67a4760d3aee..be2ed4ad471b9ef3d5c4108a90dbb362be57d628 100644
+index 7ebac76135580738e7d115f925ca9a1556b9ba13..85beef8aaea7fb1d4cf192fba05704825a85d27e 100644
 --- a/net/minecraft/world/item/crafting/ShapedRecipe.java
 +++ b/net/minecraft/world/item/crafting/ShapedRecipe.java
-@@ -24,6 +24,7 @@ public class ShapedRecipe implements CraftingRecipe {
-     final CraftingBookCategory category;
-     final boolean showNotification;
-     private @Nullable PlacementInfo placementInfo;
+@@ -39,6 +39,7 @@ public class ShapedRecipe extends NormalCraftingRecipe {
+     public static final RecipeSerializer<ShapedRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+     public final ShapedRecipePattern pattern;
+     public final ItemStackTemplate result;
 +    public boolean special = false; // Kiterino - Extra recipes API
  
-     public ShapedRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification) {
-         this.group = group;
-@@ -102,6 +103,13 @@ public class ShapedRecipe implements CraftingRecipe {
+     public ShapedRecipe(
+         final Recipe.CommonInfo commonInfo, final CraftingRecipe.CraftingBookInfo bookInfo, final ShapedRecipePattern pattern, final ItemStackTemplate result
+@@ -94,6 +95,13 @@ public class ShapedRecipe extends NormalCraftingRecipe {
          );
      }
  
@@ -66,27 +66,27 @@ index 50fc4a6ce7040412b98d1602efcd67a4760d3aee..be2ed4ad471b9ef3d5c4108a90dbb362
      // CraftBukkit start
      @Override
      public org.bukkit.inventory.ShapedRecipe toBukkitRecipe(org.bukkit.NamespacedKey id) {
-@@ -109,6 +117,7 @@ public class ShapedRecipe implements CraftingRecipe {
+@@ -101,6 +109,7 @@ public class ShapedRecipe extends NormalCraftingRecipe {
          org.bukkit.craftbukkit.inventory.CraftShapedRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftShapedRecipe(id, result, this);
-         recipe.setGroup(this.group);
+         recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial()); // Kiterino - Extra recipes API
  
          switch (this.pattern.height()) {
-         case 1:
+             case 1:
 diff --git a/net/minecraft/world/item/crafting/ShapelessRecipe.java b/net/minecraft/world/item/crafting/ShapelessRecipe.java
-index af2ef4546e80f1095fe24fa5b40c4bab458db157..656e0f99d57b67c90e67afe685a229d87b483c10 100644
+index fb7eaa2a9c4b49b494e33ec7066b7850aa581842..fbe4a4b861c14c325b14d05b22b7e89fd68c6a91 100644
 --- a/net/minecraft/world/item/crafting/ShapelessRecipe.java
 +++ b/net/minecraft/world/item/crafting/ShapelessRecipe.java
-@@ -22,6 +22,7 @@ public class ShapelessRecipe implements CraftingRecipe {
-     public final ItemStack result;
+@@ -38,6 +38,7 @@ public class ShapelessRecipe extends NormalCraftingRecipe {
+     public static final RecipeSerializer<ShapelessRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+     public final ItemStackTemplate result;
      public final List<Ingredient> ingredients;
-     private @Nullable PlacementInfo placementInfo;
 +    public boolean special = false; // Kiterino - Extra recipes API
  
-     public ShapelessRecipe(String group, CraftingBookCategory category, ItemStack result, List<Ingredient> ingredients) {
-         this.group = group;
-@@ -30,6 +31,13 @@ public class ShapelessRecipe implements CraftingRecipe {
+     public ShapelessRecipe(
+         final Recipe.CommonInfo commonInfo, final CraftingRecipe.CraftingBookInfo bookInfo, final ItemStackTemplate result, final List<Ingredient> ingredients
+@@ -47,6 +48,13 @@ public class ShapelessRecipe extends NormalCraftingRecipe {
          this.ingredients = ingredients;
      }
  
@@ -100,21 +100,21 @@ index af2ef4546e80f1095fe24fa5b40c4bab458db157..656e0f99d57b67c90e67afe685a229d8
      // CraftBukkit start
      @Override
      public org.bukkit.inventory.ShapelessRecipe toBukkitRecipe(org.bukkit.NamespacedKey id) {
-@@ -37,6 +45,7 @@ public class ShapelessRecipe implements CraftingRecipe {
+@@ -54,6 +62,7 @@ public class ShapelessRecipe extends NormalCraftingRecipe {
          org.bukkit.craftbukkit.inventory.CraftShapelessRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftShapelessRecipe(id, result, this);
-         recipe.setGroup(this.group);
+         recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial()); // Kiterino - Extra recipes API
  
-         for (Ingredient list : this.ingredients) {
-             recipe.addIngredient(org.bukkit.craftbukkit.inventory.CraftRecipe.toBukkit(list));
+         for (Ingredient ingredient : this.ingredients) {
+             recipe.addIngredient(org.bukkit.craftbukkit.inventory.CraftRecipe.toChoice(ingredient));
 diff --git a/net/minecraft/world/item/crafting/SingleItemRecipe.java b/net/minecraft/world/item/crafting/SingleItemRecipe.java
-index 6d88ed75778c17ee5921aa0948fde0ad6a414195..682945566b5a0ac59fef9d5713cb994ae0afc4d4 100644
+index 443ab1e86cb8f551d224f36cd766dd59a8133201..77b8141561d0eb8b810dd06462dc283ab63be76d 100644
 --- a/net/minecraft/world/item/crafting/SingleItemRecipe.java
 +++ b/net/minecraft/world/item/crafting/SingleItemRecipe.java
-@@ -16,6 +16,14 @@ public abstract class SingleItemRecipe implements Recipe<SingleRecipeInput> {
-     public final ItemStack result;
-     private final String group;
+@@ -14,6 +14,14 @@ public abstract class SingleItemRecipe implements Recipe<SingleRecipeInput> {
+     private final Ingredient input;
+     public final ItemStackTemplate result;
      private @Nullable PlacementInfo placementInfo;
 +    // Kiterino start - Extra recipes API
 +    public boolean special;
@@ -125,14 +125,14 @@ index 6d88ed75778c17ee5921aa0948fde0ad6a414195..682945566b5a0ac59fef9d5713cb994a
 +    }
 +    // Kiterino end - Extra recipes API
  
-     public SingleItemRecipe(String group, Ingredient input, ItemStack result) {
-         this.group = group;
+     public SingleItemRecipe(final Recipe.CommonInfo commonInfo, final Ingredient input, final ItemStackTemplate result) {
+         this.commonInfo = commonInfo;
 diff --git a/net/minecraft/world/item/crafting/SmeltingRecipe.java b/net/minecraft/world/item/crafting/SmeltingRecipe.java
-index e2f5d20adfe5632e7e1fb47ca8a1d0f4943a244f..65c20ae21933f117f3d3a206398c4255c6eaeca0 100644
+index 6608fe9655e3dbe75bb6cedfda37ff7a86699795..732ded89f16b6fd27b0fefb019b82026bbde23ef 100644
 --- a/net/minecraft/world/item/crafting/SmeltingRecipe.java
 +++ b/net/minecraft/world/item/crafting/SmeltingRecipe.java
-@@ -41,6 +41,7 @@ public class SmeltingRecipe extends AbstractCookingRecipe {
-         org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toBukkit(this.input()), this.experience(), this.cookingTime());
+@@ -55,6 +55,7 @@ public class SmeltingRecipe extends AbstractCookingRecipe {
+         org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toChoice(this.input()), this.experience(), this.cookingTime());
          recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial());// Kiterino - Extra recipes API
@@ -140,11 +140,11 @@ index e2f5d20adfe5632e7e1fb47ca8a1d0f4943a244f..65c20ae21933f117f3d3a206398c4255
          return recipe;
      }
 diff --git a/net/minecraft/world/item/crafting/SmokingRecipe.java b/net/minecraft/world/item/crafting/SmokingRecipe.java
-index fad1338a1832763e5ecc512ed8c8220ab3b7eb35..0d6e7487ccf27672e0557603e77d6618e497e762 100644
+index 40d72718798a577edcfec21dfce43dabdd81bd17..271c8694fd4eb4bf6550913bd3feeb03a186c2fe 100644
 --- a/net/minecraft/world/item/crafting/SmokingRecipe.java
 +++ b/net/minecraft/world/item/crafting/SmokingRecipe.java
-@@ -37,6 +37,7 @@ public class SmokingRecipe extends AbstractCookingRecipe {
-         org.bukkit.craftbukkit.inventory.CraftSmokingRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftSmokingRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toBukkit(this.input()), this.experience(), this.cookingTime());
+@@ -51,6 +51,7 @@ public class SmokingRecipe extends AbstractCookingRecipe {
+         org.bukkit.craftbukkit.inventory.CraftSmokingRecipe recipe = new org.bukkit.craftbukkit.inventory.CraftSmokingRecipe(id, result, org.bukkit.craftbukkit.inventory.CraftRecipe.toChoice(this.input()), this.experience(), this.cookingTime());
          recipe.setGroup(this.group());
          recipe.setCategory(org.bukkit.craftbukkit.inventory.CraftRecipe.getCategory(this.category()));
 +        recipe.setSpecial(isSpecial());// Kiterino - Extra recipes API

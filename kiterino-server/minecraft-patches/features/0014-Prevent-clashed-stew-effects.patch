@@ -8,7 +8,7 @@ They are differentiated by the effect duration. However, some of the looted tick
 the traded/crafted ones. This patch makes it so the looted stews don't generate with ticks that can clash.
 
 diff --git a/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java b/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java
-index 3d5daa1a094c879376c116881d7e1044134e47f4..31b9cad3e12c57020b7fcc75197698d5131057b6 100644
+index dabd4af7147c2b30d84e3f03022fc76085c63420..4cfb53b17edd8a30654bb367f1d17ee173b1b07a 100644
 --- a/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java
 +++ b/net/minecraft/data/loot/packs/VanillaArchaeologyLoot.java
 @@ -33,11 +33,11 @@ public record VanillaArchaeologyLoot(HolderLookup.Provider registries) implement
@@ -29,10 +29,10 @@ index 3d5daa1a094c879376c116881d7e1044134e47f4..31b9cad3e12c57020b7fcc75197698d5
                          )
                  )
 diff --git a/net/minecraft/data/loot/packs/VanillaChestLoot.java b/net/minecraft/data/loot/packs/VanillaChestLoot.java
-index df0019e6f853d9951164f368e163e9c84e26cd30..3aa3b1f2062a764c696569760d7286bafddd4ad8 100644
+index b6561bc9354fb78dd96a35add8171734bb8db15a..a0bbb51dec27ac600c363dc3e807da9e8ab93808 100644
 --- a/net/minecraft/data/loot/packs/VanillaChestLoot.java
 +++ b/net/minecraft/data/loot/packs/VanillaChestLoot.java
-@@ -171,7 +171,7 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
+@@ -172,7 +172,7 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
                                  .apply(
                                      SetStewEffectFunction.stewEffect()
                                          .withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))
@@ -41,7 +41,7 @@ index df0019e6f853d9951164f368e163e9c84e26cd30..3aa3b1f2062a764c696569760d7286ba
                                  )
                                  .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 6.0F)))
                          )
-@@ -1504,11 +1504,11 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
+@@ -1505,11 +1505,11 @@ public record VanillaChestLoot(HolderLookup.Provider registries) implements Loot
                              .apply(
                                  SetStewEffectFunction.stewEffect()
                                      .withEffect(MobEffects.NIGHT_VISION, UniformGenerator.between(7.0F, 10.0F))

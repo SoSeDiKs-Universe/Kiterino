@@ -2,11 +2,11 @@
 +++ b/net/minecraft/world/entity/ai/goal/RangedBowAttackGoal.java
 @@ -126,14 +_,24 @@
                  } else if (hasLineOfSight) {
-                     int ticksUsingItem = this.mob.getTicksUsingItem();
-                     if (ticksUsingItem >= 20) {
+                     int pullTime = this.mob.getTicksUsingItem();
+                     if (pullTime >= 20) {
 -                        this.mob.stopUsingItem();
--                        this.mob.performRangedAttack(target, BowItem.getPowerForTime(ticksUsingItem));
-+                        performAttack(target, ticksUsingItem); // Kiterino - Easier ranged bow attack overrides
+-                        this.mob.performRangedAttack(target, BowItem.getPowerForTime(pullTime));
++                        performAttack(target, pullTime); // Kiterino - Easier ranged bow attack overrides
                          this.attackTime = this.attackIntervalMin;
                      }
                  }

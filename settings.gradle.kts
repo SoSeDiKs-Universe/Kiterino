@@ -52,3 +52,15 @@ fun optionalInclude(name: String, op: (ProjectDescriptor.() -> Unit)? = null) {
         )
     }
 }
+
+gradle.lifecycle.beforeProject {
+    val mcVersion = providers.gradleProperty("mcVersion").get().trim()
+    val kiterinoChannel = providers.gradleProperty("channel").get().trim()
+    val kiterinoBuildNumber = providers.environmentVariable("BUILD_NUMBER").orNull?.trim()?.toInt()
+    val versionString = if (kiterinoBuildNumber == null) {
+        "$mcVersion.local-SNAPSHOT"
+    } else {
+        "$mcVersion.build.$kiterinoBuildNumber-${kiterinoChannel.lowercase()}"
+    }
+    version = versionString
+}

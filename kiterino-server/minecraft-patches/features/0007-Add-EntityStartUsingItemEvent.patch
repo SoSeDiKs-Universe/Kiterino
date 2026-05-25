@@ -5,15 +5,15 @@ Subject: [PATCH] Add EntityStartUsingItemEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 8e0600962fb20a38c349982fb72604a53e8a093e..05f4eb13910a3cc4590a47d291518f12db6eb84b 100644
+index 5913beef80612067b4fdb4afb8f124fa89a18082..676763af882416e0a3844e1b4b810404ff663652 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4341,8 +4341,16 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
-         ItemStack itemInHand = this.getItemInHand(hand);
-         if (!itemInHand.isEmpty() && !this.isUsingItem() || forceUpdate) { // Paper - Prevent consuming the wrong itemstack
-             this.useItem = itemInHand;
+@@ -4384,8 +4384,16 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+         ItemStack itemStack = this.getItemInHand(hand);
+         if ((!itemStack.isEmpty() && !this.isUsingItem()) || forceUpdate) { // Paper - Prevent consuming the wrong itemstack
+             this.useItem = itemStack;
 +            // Kiterino start - Add EntityStartUsingItemEvent
-+            var event = new me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent(getBukkitLivingEntity(), itemInHand.asBukkitMirror(), itemInHand.getUseDuration(this));
++            var event = new me.sosedik.kiterino.event.entity.EntityStartUsingItemEvent(getBukkitLivingEntity(), itemStack.asBukkitMirror(), itemStack.getUseDuration(this));
 +            if (!event.callEvent()) {
 +                stopUsingItem();
 +                return;
@@ -21,7 +21,7 @@ index 8e0600962fb20a38c349982fb72604a53e8a093e..05f4eb13910a3cc4590a47d291518f12
 +            int useDuration = event.getUseDuration();
 +            // Kiterino end - Add EntityStartUsingItemEvent
              // Paper start - lag compensate eating
--            this.useItemRemaining = this.totalEatTimeTicks = itemInHand.getUseDuration(this);
+-            this.useItemRemaining = this.totalEatTimeTicks = itemStack.getUseDuration(this);
 +            this.useItemRemaining = this.totalEatTimeTicks = useDuration; // Kiterino - Add EntityStartUsingItemEvent
              this.eatStartTime = System.nanoTime();
              // Paper end - lag compensate eating

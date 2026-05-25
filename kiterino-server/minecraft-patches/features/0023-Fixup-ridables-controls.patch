@@ -5,10 +5,10 @@ Subject: [PATCH] Fixup ridables controls
 
 
 diff --git a/net/minecraft/world/entity/animal/polarbear/PolarBear.java b/net/minecraft/world/entity/animal/polarbear/PolarBear.java
-index 592711e205ee959cc66de80933ad5a2dcec3092f..97c999b0b5c72d86e332938ec68bc923d5bdd8e1 100644
+index 5e218adce80f2d8d64cca54894abffaf6eb0baa0..69cf8734238b880f85a90defb87f40f9ef55473b 100644
 --- a/net/minecraft/world/entity/animal/polarbear/PolarBear.java
 +++ b/net/minecraft/world/entity/animal/polarbear/PolarBear.java
-@@ -109,7 +109,7 @@ public class PolarBear extends Animal implements NeutralMob {
+@@ -110,7 +110,7 @@ public class PolarBear extends Animal implements NeutralMob {
      @Override
      public boolean onSpacebar() {
          if (!isStanding()) {
@@ -18,10 +18,10 @@ index 592711e205ee959cc66de80933ad5a2dcec3092f..97c999b0b5c72d86e332938ec68bc923
                  playSound(SoundEvents.POLAR_BEAR_WARNING, 1.0F, 1.0F);
              }
 diff --git a/net/minecraft/world/entity/animal/squid/Squid.java b/net/minecraft/world/entity/animal/squid/Squid.java
-index 6b5be8e58aa7e3acd14ff3cb1ba25d15f8d37410..96c7d43dfbf1bbc5dd8f621819852a753fd50fe6 100644
+index 3f197daef44cafb00390d0e429eceae8505d9c1d..f999a83e1171b3791da2bce045e5b0384d0abc79 100644
 --- a/net/minecraft/world/entity/animal/squid/Squid.java
 +++ b/net/minecraft/world/entity/animal/squid/Squid.java
-@@ -372,12 +372,13 @@ public class Squid extends AgeableWaterCreature {
+@@ -385,12 +385,13 @@ public class Squid extends AgeableWaterCreature {
          public void tick() {
              // Purpur start - Ridables
              net.minecraft.world.entity.player.Player rider = squid.getRider();
@@ -40,7 +40,7 @@ index 6b5be8e58aa7e3acd14ff3cb1ba25d15f8d37410..96c7d43dfbf1bbc5dd8f621819852a75
                  if (forward < 0.0F) {
                      speed *= -0.5;
 diff --git a/net/minecraft/world/entity/monster/Creeper.java b/net/minecraft/world/entity/monster/Creeper.java
-index 608d787b73dce1726ccece9e0372acf995f261d4..956721ceeab199ff48ab699b393aa32cb4c7ec53 100644
+index 46a769f2960fd4a35305231b84c56ff36d622d8f..567a6cd03e724c531d9669b474113ed8b6fde013 100644
 --- a/net/minecraft/world/entity/monster/Creeper.java
 +++ b/net/minecraft/world/entity/monster/Creeper.java
 @@ -88,8 +88,8 @@ public class Creeper extends Monster {
@@ -64,7 +64,7 @@ index 608d787b73dce1726ccece9e0372acf995f261d4..956721ceeab199ff48ab699b393aa32c
                  setIgnited(true);
                  setSwellDir(1);
 diff --git a/net/minecraft/world/entity/monster/Slime.java b/net/minecraft/world/entity/monster/Slime.java
-index 29d6d0c9687b835d24fe51c3824deeb67af1ba4f..42dab50b1e843f7a79faf5793e5133a7ac18d597 100644
+index 0636fdf31330da5523b9ad11869776a21a6f68b1..e7eb429b765d139f09362e4ded65a9cfedd2d22f 100644
 --- a/net/minecraft/world/entity/monster/Slime.java
 +++ b/net/minecraft/world/entity/monster/Slime.java
 @@ -92,9 +92,10 @@ public class Slime extends Mob implements Enemy {
@@ -80,7 +80,7 @@ index 29d6d0c9687b835d24fe51c3824deeb67af1ba4f..42dab50b1e843f7a79faf5793e5133a7
                  jumpFromGround(); // jump() here if not moving
              }
          }
-@@ -651,7 +652,7 @@ public class Slime extends Mob implements Enemy {
+@@ -648,7 +649,7 @@ public class Slime extends Mob implements Enemy {
              } else {
                  this.operation = MoveControl.Operation.WAIT;
                  if (this.mob.onGround()) {
@@ -89,7 +89,7 @@ index 29d6d0c9687b835d24fe51c3824deeb67af1ba4f..42dab50b1e843f7a79faf5793e5133a7
                      if (this.jumpDelay-- <= 0) {
                          this.jumpDelay = this.slime.getJumpDelay();
                          if (this.isAggressive) {
-@@ -668,7 +669,7 @@ public class Slime extends Mob implements Enemy {
+@@ -665,7 +666,7 @@ public class Slime extends Mob implements Enemy {
                          this.mob.setSpeed(0.0F);
                      }
                  } else {

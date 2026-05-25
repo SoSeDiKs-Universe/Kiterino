@@ -16,133 +16,133 @@ AreaEffectCloud.
 
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
-diff --git a/net/minecraft/core/cauldron/CauldronInteraction.java b/net/minecraft/core/cauldron/CauldronInteraction.java
-index c58b4a5426dc2e502e240e9b9270ead2ef65ecbd..59f81f24669f2db348d7489dcd9e017d1871d144 100644
---- a/net/minecraft/core/cauldron/CauldronInteraction.java
-+++ b/net/minecraft/core/cauldron/CauldronInteraction.java
-@@ -63,7 +63,13 @@ public interface CauldronInteraction {
+diff --git a/net/minecraft/core/cauldron/CauldronInteractions.java b/net/minecraft/core/cauldron/CauldronInteractions.java
+index 63e93e299a13cf04d26a588485481fef5310da5f..8986ed0803bf042f075479fd1961b96dea631b49 100644
+--- a/net/minecraft/core/cauldron/CauldronInteractions.java
++++ b/net/minecraft/core/cauldron/CauldronInteractions.java
+@@ -56,7 +56,13 @@ public class CauldronInteractions {
                      }
                      // CraftBukkit end
-                     Item item = stack.getItem();
--                    player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
+                     Item usedItem = itemInHand.getItem();
+-                    player.setItemInHand(hand, ItemUtils.createFilledResult(itemInHand, player, new ItemStack(Items.GLASS_BOTTLE)));
 +                    // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
-+                    final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, stack, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
++                    final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemInHand, ItemUtils.createFilledResult(itemInHand, player, new ItemStack(Items.GLASS_BOTTLE)));
 +                    if (event.isCancelled()) {
 +                        // doesn't seem to require updating the client
 +                        return InteractionResult.PASS; // PASS to not increment statistics
 +                    }
 +                    // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
                      player.awardStat(Stats.USE_CAULDRON);
-                     player.awardStat(Stats.ITEM_USED.get(item));
+                     player.awardStat(Stats.ITEM_USED.get(usedItem));
                      // level.setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState()); // CraftBukkit
 diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index ff32a89a720676c5a9f34ea7c859f03d47545b72..ca4081681f3a142fa586d1bdf06181ee0746aaf8 100644
+index 2018428758d4cad3d627be5667d246b64ac90567..c039d59c9082346c45359cae66ced10b267f0d7b 100644
 --- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -584,13 +584,25 @@ public interface DispenseItemBehavior {
-                             blockStateBase -> blockStateBase.hasProperty(BeehiveBlock.HONEY_LEVEL) && blockStateBase.getBlock() instanceof BeehiveBlock
-                         )
-                         && blockState.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
+@@ -523,13 +523,25 @@ public interface DispenseItemBehavior {
+                     // Paper end - Call BlockDispenseEvent
+                     if (state.is(BlockTags.BEEHIVES, s -> s.hasProperty(BeehiveBlock.HONEY_LEVEL) && s.getBlock() instanceof BeehiveBlock)
+                         && state.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
 +                        // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
-+                        final io.papermc.paper.event.block.BlockFillBottleEvent bottleEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFillBottleEvent(serverLevel, blockSource.pos(), item, new ItemStack(Items.HONEY_BOTTLE));
++                        final io.papermc.paper.event.block.BlockFillBottleEvent bottleEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFillBottleEvent(level, source.pos(), dispensed, new ItemStack(Items.HONEY_BOTTLE));
 +                        if (bottleEvent.isCancelled()) {
-+                            return item;
++                            return dispensed;
 +                        }
 +                        // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
-                         ((BeehiveBlock)blockState.getBlock())
-                             .releaseBeesAndResetHoneyLevel(serverLevel, blockState, blockPos, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
+                         ((BeehiveBlock)state.getBlock())
+                             .releaseBeesAndResetHoneyLevel(level, state, target, null, BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED);
                          this.setSuccess(true);
--                        return this.takeLiquid(blockSource, item, new ItemStack(Items.HONEY_BOTTLE));
-+                        return this.takeLiquid(blockSource, item, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(bottleEvent.getResultItem())); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
-                     } else if (serverLevel.getFluidState(blockPos).is(FluidTags.WATER)) {
+-                        return this.takeLiquid(source, dispensed, new ItemStack(Items.HONEY_BOTTLE));
++                        return this.takeLiquid(source, dispensed, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(bottleEvent.getResultItem())); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
+                     } else if (level.getFluidState(target).is(FluidTags.WATER)) {
 +                        // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
-+                        final io.papermc.paper.event.block.BlockFillBottleEvent bottleEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFillBottleEvent(serverLevel, blockSource.pos(), item, PotionContents.createItemStack(Items.POTION, Potions.WATER));
++                        final io.papermc.paper.event.block.BlockFillBottleEvent bottleEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callBlockFillBottleEvent(level, source.pos(), dispensed, PotionContents.createItemStack(Items.POTION, Potions.WATER));
 +                        if (bottleEvent.isCancelled()) {
-+                            return item;
++                            return dispensed;
 +                        }
 +                        // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
                          this.setSuccess(true);
--                        return this.takeLiquid(blockSource, item, PotionContents.createItemStack(Items.POTION, Potions.WATER));
-+                        return this.takeLiquid(blockSource, item, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(bottleEvent.getResultItem())); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
+-                        return this.takeLiquid(source, dispensed, PotionContents.createItemStack(Items.POTION, Potions.WATER));
++                        return this.takeLiquid(source, dispensed, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(bottleEvent.getResultItem())); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
                      } else {
-                         return super.execute(blockSource, item);
+                         return super.execute(source, dispensed);
                      }
 diff --git a/net/minecraft/world/item/BottleItem.java b/net/minecraft/world/item/BottleItem.java
-index 287332788643be2eb9058555456e9058c6ee475b..2f4ff5e35b955ca1ef89ab5f82a9cf39eb1b86e2 100644
+index 7ecb79724e7ff7bdc0dbeb89e83bdfa683978868..c3ec242d0056e924e6177d4edbdcd1afa9dc907a 100644
 --- a/net/minecraft/world/item/BottleItem.java
 +++ b/net/minecraft/world/item/BottleItem.java
-@@ -35,6 +35,17 @@ public class BottleItem extends Item {
+@@ -33,6 +33,17 @@ public class BottleItem extends Item {
          );
-         ItemStack itemInHand = player.getItemInHand(hand);
-         if (!entitiesOfClass.isEmpty()) {
+         ItemStack itemStack = player.getItemInHand(hand);
+         if (!clouds.isEmpty()) {
 +            // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
-+            final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemInHand, new ItemStack(Items.DRAGON_BREATH));
++            final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemStack, new ItemStack(Items.DRAGON_BREATH));
 +            if (event.isCancelled()) {
 +                player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
 +                return InteractionResult.PASS;
 +            }
 +            final ItemStack resultItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem());
-+            if (resultItem.is(itemInHand.getItem())) {
++            if (resultItem.is(itemStack.getItem())) {
 +                player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
 +            }
 +            // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
-             AreaEffectCloud areaEffectCloud = entitiesOfClass.get(0);
-             areaEffectCloud.setRadius(areaEffectCloud.getRadius() - 0.5F);
+             AreaEffectCloud cloud = clouds.get(0);
+             cloud.setRadius(cloud.getRadius() - 0.5F);
              level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.NEUTRAL, 1.0F, 1.0F);
-@@ -43,7 +54,7 @@ public class BottleItem extends Item {
-                 CriteriaTriggers.PLAYER_INTERACTED_WITH_ENTITY.trigger(serverPlayer, itemInHand, areaEffectCloud);
+@@ -41,7 +52,7 @@ public class BottleItem extends Item {
+                 CriteriaTriggers.PLAYER_INTERACTED_WITH_ENTITY.trigger(serverPlayer, itemStack, cloud);
              }
  
--            return InteractionResult.SUCCESS.heldItemTransformedTo(this.turnBottleIntoItem(itemInHand, player, new ItemStack(Items.DRAGON_BREATH)));
-+            return InteractionResult.SUCCESS.heldItemTransformedTo(this.turnBottleIntoItem(itemInHand, player, resultItem)); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
+-            return InteractionResult.SUCCESS.heldItemTransformedTo(this.turnBottleIntoItem(itemStack, player, new ItemStack(Items.DRAGON_BREATH)));
++            return InteractionResult.SUCCESS.heldItemTransformedTo(this.turnBottleIntoItem(itemStack, player, resultItem)); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
          } else {
-             BlockHitResult playerPovHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-             if (playerPovHitResult.getType() == HitResult.Type.MISS) {
-@@ -56,10 +67,21 @@ public class BottleItem extends Item {
+             BlockHitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+             if (hitResult.getType() == HitResult.Type.MISS) {
+@@ -54,10 +65,21 @@ public class BottleItem extends Item {
                      }
  
-                     if (level.getFluidState(blockPos).is(FluidTags.WATER)) {
+                     if (level.getFluidState(pos).is(FluidTags.WATER)) {
 +                        // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
-+                        final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemInHand, PotionContents.createItemStack(Items.POTION, Potions.WATER));
++                        final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemStack, PotionContents.createItemStack(Items.POTION, Potions.WATER));
 +                        if (event.isCancelled()) {
 +                            player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
 +                            return InteractionResult.PASS;
 +                        }
 +                        final ItemStack resultItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem());
-+                        if (resultItem.is(itemInHand.getItem())) {
++                        if (resultItem.is(itemStack.getItem())) {
 +                            player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
 +                        }
 +                        // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
                          level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                         level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
+                         level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
                          return InteractionResult.SUCCESS
--                            .heldItemTransformedTo(this.turnBottleIntoItem(itemInHand, player, PotionContents.createItemStack(Items.POTION, Potions.WATER)));
-+                            .heldItemTransformedTo(this.turnBottleIntoItem(itemInHand, player, resultItem)); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
+-                            .heldItemTransformedTo(this.turnBottleIntoItem(itemStack, player, PotionContents.createItemStack(Items.POTION, Potions.WATER)));
++                            .heldItemTransformedTo(this.turnBottleIntoItem(itemStack, player, resultItem)); // Kiterino - Paper PR - Add FillBottleEvents for player and dispenser
                      }
                  }
  
 diff --git a/net/minecraft/world/level/block/BeehiveBlock.java b/net/minecraft/world/level/block/BeehiveBlock.java
-index 7b24213eb30f60d49c37fc7d1242b52db578e634..cacbf158da45cdf8766451ff1b9774472b3bc8e2 100644
+index 0d3e97012b0d590dc2b93e4886a7009f6f78e0d7..4cc8721b2c81a14286c427bbb33760ff7460a3c5 100644
 --- a/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/net/minecraft/world/level/block/BeehiveBlock.java
-@@ -159,12 +159,25 @@ public class BeehiveBlock extends BaseEntityBlock {
-                 flag = true;
+@@ -180,12 +180,25 @@ public class BeehiveBlock extends BaseEntityBlock {
+                 hiveEmptied = true;
                  level.gameEvent(player, GameEvent.SHEAR, pos);
-             } else if (stack.is(Items.GLASS_BOTTLE)) {
+             } else if (itemStack.is(Items.GLASS_BOTTLE)) {
 +                // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser
-+                final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, stack, new ItemStack(Items.HONEY_BOTTLE));
++                final io.papermc.paper.event.player.PlayerFillBottleEvent event = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerFillBottleEvent(player, hand, itemStack, new ItemStack(Items.HONEY_BOTTLE));
 +                if (event.isCancelled()) {
 +                    player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
 +                    return InteractionResult.PASS;
 +                }
 +                final ItemStack resultItem = org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(event.getResultItem());
-+                if (resultItem.is(stack.getItem())) {
++                if (resultItem.is(itemStack.getItem())) {
 +                    player.containerMenu.sendAllDataToRemote(); // client expects the itemstack to be used
 +                }
 +                // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
-                 stack.shrink(1);
+                 itemStack.shrink(1);
                  level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                 if (stack.isEmpty()) {
+                 if (itemStack.isEmpty()) {
 -                    player.setItemInHand(hand, new ItemStack(Items.HONEY_BOTTLE));
 -                } else if (!player.getInventory().add(new ItemStack(Items.HONEY_BOTTLE))) {
 -                    player.drop(new ItemStack(Items.HONEY_BOTTLE), false);
@@ -153,4 +153,4 @@ index 7b24213eb30f60d49c37fc7d1242b52db578e634..cacbf158da45cdf8766451ff1b977447
 +                    // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser
                  }
  
-                 flag = true;
+                 hiveEmptied = true;

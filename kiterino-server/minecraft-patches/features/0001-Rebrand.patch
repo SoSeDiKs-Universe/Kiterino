@@ -5,7 +5,7 @@ Subject: [PATCH] Rebrand
 
 
 diff --git a/net/minecraft/CrashReport.java b/net/minecraft/CrashReport.java
-index 2c60f1d955b17cbc79b5372c536e5463f6c0a186..86641d5d9e36f74208897c74924b705c73e61a5f 100644
+index c239edddec50792b14b2c8163f18cb3dc0c05e63..4a169ef8ed6bff426d2bc56c45b7dba37abe870f 100644
 --- a/net/minecraft/CrashReport.java
 +++ b/net/minecraft/CrashReport.java
 @@ -30,7 +30,7 @@ public class CrashReport {
@@ -15,5 +15,5 @@ index 2c60f1d955b17cbc79b5372c536e5463f6c0a186..86641d5d9e36f74208897c74924b705c
 -    private List<String> extraInfo = List.of("", "DO NOT REPORT THIS TO PAPER! REPORT TO PURPUR INSTEAD!", ""); // Purpur - Rebrand
 +    private List<String> extraInfo = List.of("", "DO NOT REPORT THIS TO PAPER/PURPUR! REPORT TO KITERINO INSTEAD!", ""); // Kiterino - Rebrand
  
-     public CrashReport(String title, Throwable exception) {
+     public CrashReport(final String title, final Throwable t) {
          this.title = title;

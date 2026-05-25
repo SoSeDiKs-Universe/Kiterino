@@ -20,15 +20,15 @@
 +        this.age = bucketMeta.age; // Kiterino - Expose age to AxolotlBucketMeta
      }
  
-     CraftMetaAxolotlBucket(DataComponentPatch tag, final java.util.Set<net.minecraft.core.component.DataComponentType<?>> extraHandledDcts) {
+     CraftMetaAxolotlBucket(DataComponentPatch patch, final java.util.Set<net.minecraft.core.component.DataComponentType<?>> extraHandledComponents) {
 @@ -43,10 +_,12 @@
-         getOrEmpty(tag, CraftMetaAxolotlBucket.ENTITY_TAG).ifPresent((nbt) -> {
-             this.entityTag = nbt.copyTagWithEntityId();
+         getOrEmpty(patch, CraftMetaAxolotlBucket.ENTITY_TAG).ifPresent((entityData) -> {
+             this.entityTag = entityData.copyTagWithEntityId();
              this.entityTag.getInt(CraftMetaAxolotlBucket.VARIANT.NBT).ifPresent(variant -> this.variant = variant);
 +            this.entityTag.getInt(CraftMetaAxolotlBucket.AGE.NBT).ifPresent(age -> this.age = age); // Kiterino - Expose age to AxolotlBucketMeta
          });
-         getOrEmpty(tag, CraftMetaAxolotlBucket.BUCKET_ENTITY_TAG).ifPresent((nbt) -> {
-             this.bucketEntityTag = nbt.copyTag();
+         getOrEmpty(patch, CraftMetaAxolotlBucket.BUCKET_ENTITY_TAG).ifPresent((customData) -> {
+             this.bucketEntityTag = customData.copyTag();
              this.bucketEntityTag.getInt(CraftMetaAxolotlBucket.VARIANT.NBT).ifPresent(variant -> this.variant = variant);
 +            this.bucketEntityTag.getInt(CraftMetaAxolotlBucket.AGE.NBT).ifPresent(age -> this.age = age); // Kiterino - Expose age to AxolotlBucketMeta
          });

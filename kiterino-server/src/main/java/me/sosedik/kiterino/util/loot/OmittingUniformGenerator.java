@@ -1,7 +1,7 @@
 package me.sosedik.kiterino.util.loot;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jspecify.annotations.NullMarked;
@@ -39,8 +39,8 @@ public record OmittingUniformGenerator(UniformGenerator source, Set<Float> omitt
     }
 
     @Override
-    public LootNumberProviderType getType() {
-        return this.source.getType();
+    public MapCodec<? extends NumberProvider> codec() {
+        return this.source().codec();
     }
 
 }

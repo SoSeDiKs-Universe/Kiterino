@@ -61,21 +61,21 @@
 +        }
 +
 +        // Finally replace hover if needed
-+        HoverEvent hoverEvent = component.getStyle().hoverEvent;
++        HoverEvent hoverEvent = component.getStyle().getHoverEvent();
 +        if (hoverEvent == null) {
 +            return component;
 +        }
 +
-+        if (hoverEvent instanceof HoverEvent.ShowItem(net.minecraft.world.item.ItemStack item)) {
++        if (hoverEvent instanceof HoverEvent.ShowItem(net.minecraft.world.item.ItemStackTemplate item)) {
 +            var context = new me.sosedik.kiterino.modifier.item.context.packet.BaseItemContext(me.sosedik.kiterino.modifier.item.context.ItemModifierContextType.CHAT_ITEM, null);
-+            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, context, item.asBukkitCopy());
++            var contextBox = new me.sosedik.kiterino.modifier.item.ItemContextBox(player, locale, context, item.create().asBukkitCopy());
 +            var bukkitItem = me.sosedik.kiterino.modifier.item.ItemModifier.modifyItem(contextBox);
 +            if (bukkitItem != null) {
 +                // Just guessing, but meh
 +                if (component.getContents() instanceof TranslatableContents || (!children.isEmpty() && children.stream().anyMatch(c -> c.getContents() instanceof TranslatableContents))) {
 +                    component = io.papermc.paper.adventure.PaperAdventure.asVanilla(bukkitItem.effectiveName().hoverEvent(bukkitItem));
 +                } else {
-+                    Style style = component.getStyle().withHoverEvent(new HoverEvent.ShowItem(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem)));
++                    Style style = component.getStyle().withHoverEvent(new HoverEvent.ShowItem(net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(net.minecraft.world.item.ItemStack.fromBukkitCopy(bukkitItem))));
 +                    if (component instanceof MutableComponent mutableComponent) {
 +                        mutableComponent.setStyle(style);
 +                    } else {

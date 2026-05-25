@@ -3,19 +3,19 @@
 @@ -281,7 +_,10 @@
              // CraftBukkit end
              if (random.nextInt(age + 10) < 5 && !level.isRainingAt(pos)) {
-                 int min = Math.min(age + random.nextInt(5) / 4, 15);
--                level.setBlock(pos, this.getStateWithAge(level, pos, min), Block.UPDATE_ALL);
+                 int newAge = Math.min(age + random.nextInt(5) / 4, 15);
+-                level.setBlock(pos, this.getStateWithAge(level, pos, newAge), Block.UPDATE_ALL);
 +                // Kiterino start - Call BlockSpreadEvent on burning spread
-+                BlockState newState = this.getStateWithAge(level, pos, min);
++                BlockState newState = this.getStateWithAge(level, pos, newAge);
 +                org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, pos, newState, Block.UPDATE_ALL);
 +                // Kiterino end - Call BlockSpreadEvent on burning spread
              } else {
-                 if (!blockState.is(Blocks.TNT)) level.removeBlock(pos, false); // Paper - TNTPrimeEvent; We might be cancelling it below, move the setAir down
+                 if (!oldState.is(Blocks.TNT)) level.removeBlock(pos, false); // Paper - TNTPrimeEvent; We might be cancelling it below, move the setAir down
              }
-@@ -564,5 +_,6 @@
-         fireBlock.setFlammable(Blocks.OAK_SHELF, 30, 20);
-         fireBlock.setFlammable(Blocks.PALE_OAK_SHELF, 30, 20);
-         fireBlock.setFlammable(Blocks.SPRUCE_SHELF, 30, 20);
-+        fireBlock.setFlammable(Blocks.COBWEB, 60, 100); // Kiterino - Flammable cobwebs
+@@ -566,5 +_,6 @@
+         fire.setFlammable(Blocks.OAK_SHELF, 30, 20);
+         fire.setFlammable(Blocks.PALE_OAK_SHELF, 30, 20);
+         fire.setFlammable(Blocks.SPRUCE_SHELF, 30, 20);
++        fire.setFlammable(Blocks.COBWEB, 60, 100); // Kiterino - Flammable cobwebs
      }
  }

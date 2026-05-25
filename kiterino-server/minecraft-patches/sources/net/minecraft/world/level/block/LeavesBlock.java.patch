@@ -3,7 +3,7 @@
 @@ -39,11 +_,20 @@
      public abstract MapCodec<? extends LeavesBlock> codec();
  
-     public LeavesBlock(float leafParticleChance, BlockBehaviour.Properties properties) {
+     public LeavesBlock(final float leafParticleChance, final BlockBehaviour.Properties properties) {
 -        super(properties);
 +        super(properties(properties)); // Kiterino - No collision for leaves
          this.leafParticleChance = leafParticleChance;
@@ -20,12 +20,12 @@
 +    // Kiterino end - No collision for leaves
 +
      @Override
-     protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
-         return !cutoutLeaves && adjacentState.getBlock() instanceof LeavesBlock || super.skipRendering(state, adjacentState, direction);
+     protected boolean skipRendering(final BlockState state, final BlockState neighborState, final Direction direction) {
+         return !cutoutLeaves && neighborState.getBlock() instanceof LeavesBlock || super.skipRendering(state, neighborState, direction);
 @@ -55,7 +_,7 @@
  
      @Override
-     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+     protected VoxelShape getBlockSupportShape(final BlockState state, final BlockGetter level, final BlockPos pos) {
 -        return Shapes.empty();
 +        return me.sosedik.kiterino.KiterinoConfig.noCollisionForLeaves ? Shapes.block() : Shapes.empty();
      }

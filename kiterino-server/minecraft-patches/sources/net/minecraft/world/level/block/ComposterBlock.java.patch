@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/level/block/ComposterBlock.java
 +++ b/net/minecraft/world/level/block/ComposterBlock.java
-@@ -405,7 +_,14 @@
+@@ -420,7 +_,14 @@
      @Override
-     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+     protected void tick(final BlockState state, final ServerLevel level, final BlockPos pos, final RandomSource random) {
          if (state.getValue(LEVEL) == 7) {
 -            level.setBlock(pos, state.cycle(LEVEL), Block.UPDATE_ALL);
 +            // Kiterino start - Call BlockFormEvent for composter

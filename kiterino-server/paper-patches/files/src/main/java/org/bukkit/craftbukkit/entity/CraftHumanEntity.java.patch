@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -707,6 +_,28 @@
+@@ -709,6 +_,28 @@
          return this.getHandle().awardRecipes(this.bukkitKeysToMinecraftRecipes(recipes));
      }
  

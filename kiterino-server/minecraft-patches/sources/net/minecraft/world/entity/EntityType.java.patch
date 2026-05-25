@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/EntityType.java
 +++ b/net/minecraft/world/entity/EntityType.java
-@@ -1228,6 +_,16 @@
+@@ -1226,6 +_,16 @@
      private final FeatureFlagSet requiredFeatures;
      private final boolean allowedInPeaceful;
  
@@ -14,6 +14,6 @@
 +    }
 +    // Kiterino end - Injecting custom entities
 +
-     private static <T extends Entity> EntityType<T> register(ResourceKey<EntityType<?>> key, EntityType.Builder<T> builder) {
-         return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, builder.build(key));
+     private static <T extends Entity> EntityType<T> register(final ResourceKey<EntityType<?>> id, final EntityType.Builder<T> builder) {
+         return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
      }

@@ -1,13 +1,15 @@
 --- a/net/minecraft/network/Connection.java
 +++ b/net/minecraft/network/Connection.java
-@@ -690,6 +_,27 @@
-         pipeline.addLast("hackfix", new ChannelOutboundHandlerAdapter() {
+@@ -695,7 +_,28 @@
+             }
+ 
              @Override
-             public void write(ChannelHandlerContext channelHandlerContext, Object object, ChannelPromise channelPromise) throws Exception {
+-            public void write(final ChannelHandlerContext ctx, final Object msg, final ChannelPromise promise) throws Exception {
++            public void write(final ChannelHandlerContext ctx, Object msg, final ChannelPromise promise) throws Exception {
 +                // Kiterino start - Item Modifiers API
-+                if (object instanceof Packet<?> packet) {
++                if (msg instanceof Packet<?> packet) {
 +                    net.minecraft.server.level.ServerPlayer player = getPlayer();
-+                    object = me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.processPacket(player == null ? null : player.getBukkitEntity(), packet);
++                    msg = me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.processPacket(player == null ? null : player.getBukkitEntity(), packet);
 +                    // Kiterino start - Don't send custom mob effects - Data-driven mob effects
 +                    if (packet instanceof net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket mobEffectPacket) {
 +                        java.util.Optional<net.minecraft.resources.ResourceKey<net.minecraft.world.effect.MobEffect>> key = mobEffectPacket.getEffect().unwrapKey();
@@ -25,6 +27,6 @@
 +                    // Kiterino end - Don't send custom mob effects - Data-driven mob effects
 +                }
 +                // Kiterino end - Item Modifiers API
-                 super.write(channelHandlerContext, object, channelPromise);
+                 super.write(ctx, msg, promise);
              }
-         }).addLast("packet_handler", this);
+         }).addLast(HandlerNames.PACKET_HANDLER, this);

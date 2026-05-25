@@ -54,7 +54,7 @@ public class KiterinoBlockRegistryEntity implements BlockRegistryEntity {
         public Block build() {
             Block block = (Block) this.nmsBlock;
             assert block != null;
-            if (this.nmsBlock.getBlockDataClasses() != null && !CraftBlockData.MAP.containsKey(block.getClass())) {
+            if (this.nmsBlock.getBlockDataClasses() != null && !CraftBlockData.INSTANCE_CREATOR.containsKey(block.getClass())) {
                 CraftBlockData.register(block.getClass(), state -> {
                     try {
                         return (CraftBlockData) this.nmsBlock.getBlockDataClasses().second().getDeclaredConstructor(BlockState.class).newInstance(state);

@@ -1,20 +1,20 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-@@ -357,7 +_,7 @@
-         return state.max;
-     }
+@@ -241,7 +_,7 @@
+         BlockFace.EAST, BlockFace.EAST_SOUTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_SOUTH_EAST
+     };
  
--    private static final Map<Class<? extends Block>, Function<net.minecraft.world.level.block.state.BlockState, CraftBlockData>> MAP = new HashMap<>();
-+    public static final Map<Class<? extends Block>, Function<net.minecraft.world.level.block.state.BlockState, CraftBlockData>> MAP = new HashMap<>(); // Kiterino - private -> public - Data-driven blocks
+-    private static final Map<Class<? extends Block>, Function<BlockState, CraftBlockData>> INSTANCE_CREATOR = new HashMap<>();
++    public static final Map<Class<? extends Block>, Function<BlockState, CraftBlockData>> INSTANCE_CREATOR = new HashMap<>(); // Kiterino - private -> public - Data-driven blocks
  
      static {
          //<editor-fold desc="CraftBlockData Registration" defaultstate="collapsed">
-@@ -554,7 +_,7 @@
+@@ -438,7 +_,7 @@
          //</editor-fold>
      }
  
--    private static void register(Class<? extends Block> nms, Function<net.minecraft.world.level.block.state.BlockState, CraftBlockData> bukkit) {
-+    public static void register(Class<? extends Block> nms, Function<net.minecraft.world.level.block.state.BlockState, CraftBlockData> bukkit) { // Kiterino - private -> public - Data-driven blocks
-         Preconditions.checkState(CraftBlockData.MAP.put(nms, bukkit) == null, "Duplicate mapping %s->%s", nms, bukkit);
+-    private static void register(Class<? extends Block> blockClass, Function<BlockState, CraftBlockData> newInstance) {
++    public static void register(Class<? extends Block> blockClass, Function<BlockState, CraftBlockData> newInstance) { // Kiterino - private -> public - Data-driven blocks
+         Preconditions.checkState(INSTANCE_CREATOR.put(blockClass, newInstance) == null, "Duplicate mapping %s->%s", blockClass, newInstance);
      }
  

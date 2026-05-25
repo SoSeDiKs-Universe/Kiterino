@@ -1,11 +1,11 @@
 --- a/net/minecraft/world/level/block/entity/BlockEntityType.java
 +++ b/net/minecraft/world/level/block/entity/BlockEntityType.java
-@@ -294,7 +_,7 @@
+@@ -289,7 +_,7 @@
  
-     private BlockEntityType(BlockEntityType.BlockEntitySupplier<? extends T> factory, Set<Block> validBlocks) {
+     private BlockEntityType(final BlockEntityType.BlockEntitySupplier<? extends T> factory, final Set<Block> validBlocks) {
          this.factory = factory;
 -        this.validBlocks = validBlocks;
 +        this.validBlocks = new java.util.HashSet<>(validBlocks); // Kiterino - Allow modifying valid blocks - Injecting custom blocks
      }
  
-     public T create(BlockPos pos, BlockState state) {
+     public T create(final BlockPos worldPosition, final BlockState blockState) {

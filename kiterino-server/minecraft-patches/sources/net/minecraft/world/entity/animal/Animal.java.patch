@@ -1,13 +1,13 @@
 --- a/net/minecraft/world/entity/animal/Animal.java
 +++ b/net/minecraft/world/entity/animal/Animal.java
 @@ -80,7 +_,11 @@
-                 double d = this.random.nextGaussian() * 0.02;
-                 double d1 = this.random.nextGaussian() * 0.02;
-                 double d2 = this.random.nextGaussian() * 0.02;
--                this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), d, d1, d2);
+                 double xa = this.random.nextGaussian() * 0.02;
+                 double ya = this.random.nextGaussian() * 0.02;
+                 double za = this.random.nextGaussian() * 0.02;
+-                this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), xa, ya, za);
 +                // Kiterino start - Fix MC-93826
 +                if (this.level() instanceof ServerLevel serverLevel) {
-+                    serverLevel.sendParticles(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), 1, d, d1, d2, 0);
++                    serverLevel.sendParticles(ParticleTypes.HEART, this.getRandomX(1.0), this.getRandomY() + 0.5, this.getRandomZ(1.0), 1, xa, ya, za, 0);
 +                }
 +                // Kiterino end - Fix MC-93826
              }

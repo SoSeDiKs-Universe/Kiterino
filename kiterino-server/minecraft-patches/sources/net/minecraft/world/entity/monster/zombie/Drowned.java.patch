@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/zombie/Drowned.java
 +++ b/net/minecraft/world/entity/monster/zombie/Drowned.java
-@@ -91,6 +_,17 @@
+@@ -98,6 +_,17 @@
      }
      // Purpur end - Ridables
  
@@ -16,5 +16,5 @@
 +    // Kiterino end - Allow jumping in water as Drowned
 +
      @Override
-     protected PathNavigation createNavigation(Level level) {
+     protected PathNavigation createNavigation(final Level level) {
          return new AmphibiousPathNavigation(this, level);

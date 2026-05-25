@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/attribute/BedRule.java
 +++ b/net/minecraft/world/attribute/BedRule.java
 @@ -51,7 +_,7 @@
-         public boolean test(Level level) {
+         public boolean test(final Level level) {
              return switch (this) {
                  case ALWAYS -> true;
 -                case WHEN_DARK -> level.isDarkOutside();

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/arrow/AbstractArrow.java
 +++ b/net/minecraft/world/entity/projectile/arrow/AbstractArrow.java
-@@ -775,7 +_,7 @@
+@@ -787,7 +_,7 @@
      }
  
      protected float getWaterInertia() {
@@ -8,4 +8,4 @@
 +        return this.level().kiterinoConfig.arrowWaterInertia; // Kiterino - Projectile options
      }
  
-     public void setNoPhysics(boolean noPhysics) {
+     public void setNoPhysics(final boolean noPhysics) {

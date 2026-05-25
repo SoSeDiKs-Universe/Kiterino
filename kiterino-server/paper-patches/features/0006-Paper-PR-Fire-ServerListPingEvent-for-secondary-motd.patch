@@ -6,30 +6,30 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
-index b40b79beb3115b80150d1aa4455ebb7a2a055574..f9868bcb6a8499812ffe9dea5ceb42fc9833b103 100644
+index 5e89bad7231d0ec389f6be085943cc027485bd7a..46bf215b99068e26e53a61ccdbd6f95b3ab6975d 100644
 --- a/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 +++ b/src/main/java/com/destroystokyo/paper/network/StandardPaperServerListPingEventImpl.java
 @@ -64,13 +64,23 @@ public final class StandardPaperServerListPingEventImpl extends PaperServerListP
      }
  
-     public static void processRequest(MinecraftServer server, Connection networkManager) {
-+        ServerStatus ping = getEventResponse(server, networkManager);
-+        if (ping == null) {
-+            networkManager.disconnect((Component) null);
-+            return;
-+        }
+     public static void processRequest(MinecraftServer server, Connection connection) {
++	    ServerStatus ping = getEventResponse(server, connection);
++	    if (ping == null) {
++		    connection.disconnect((Component) null);
++		    return;
++	    }
 +
-+        // Send response
-+        networkManager.send(new ClientboundStatusResponsePacket(ping));
++	    // Send response
++	    connection.send(new ClientboundStatusResponsePacket(ping));
 +    }
 +
-+    public static ServerStatus getEventResponse(MinecraftServer server, Connection networkManager) {
-         StandardPaperServerListPingEventImpl event = new StandardPaperServerListPingEventImpl(server, networkManager, server.getStatus());
++	public static ServerStatus getEventResponse(MinecraftServer server, Connection connection) {
+         StandardPaperServerListPingEventImpl event = new StandardPaperServerListPingEventImpl(server, connection, server.getStatus());
          server.server.getPluginManager().callEvent(event);
  
          // Close connection immediately if event is cancelled
          if (event.isCancelled()) {
--            networkManager.disconnect((Component) null);
+-            connection.disconnect((Component) null);
 -            return;
 +            return null;
          }
@@ -40,8 +40,8 @@ index b40b79beb3115b80150d1aa4455ebb7a2a055574..f9868bcb6a8499812ffe9dea5ceb42fc
          final ServerStatus ping = new ServerStatus(description, players, Optional.of(version), favicon, server.enforceSecureProfile());
  
 -        // Send response
--        networkManager.send(new ClientboundStatusResponsePacket(ping));
-+        return ping;
+-        connection.send(new ClientboundStatusResponsePacket(ping));
++	    return ping;
      }
  
  }

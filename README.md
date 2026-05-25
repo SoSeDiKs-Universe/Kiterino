@@ -14,7 +14,7 @@
 </div>
 
 > [!WARNING]  
-> Experimental branch, likely not ready for production.
+> Experimental, expect breakages time to time.
 
 ## Building and setting up
 

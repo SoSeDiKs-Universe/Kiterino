@@ -2,8 +2,8 @@
 +++ b/net/minecraft/server/dedicated/DedicatedServerSettings.java
 @@ -24,6 +_,7 @@
  
-     public DedicatedServerSettings update(UnaryOperator<DedicatedServerProperties> propertiesOperator) {
-         (this.properties = propertiesOperator.apply(this.properties)).store(this.source);
+     public DedicatedServerSettings update(final UnaryOperator<DedicatedServerProperties> mutator) {
+         (this.properties = mutator.apply(this.properties)).store(this.source);
 +        if (org.bukkit.Bukkit.getServer() != null) new me.sosedik.kiterino.event.server.ServerPropertiesUpdatedEvent().callEvent(); // Kiterino - Add ServerPropertiesUpdatedEvent
          return this;
      }

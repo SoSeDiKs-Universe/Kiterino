@@ -5,46 +5,46 @@ Subject: [PATCH] Expose bucket in bucket events
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index f2fed5a1ff20e1037806d7359b7ac0b7e0f7f3e0..9d9e4bfbf9c6eee89c85dbbbc75f5cd7ac893393 100644
+index 8832caad5c38b181adfff6922a0502a2484e2684..c9d50e6c9fb9e783fc5125fd4e64da454f1bc316 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -569,17 +569,22 @@ public class CraftEventFactory {
+@@ -568,17 +568,22 @@ public class CraftEventFactory {
      }
  
-     public static PlayerBucketEmptyEvent callPlayerBucketEmptyEvent(Level world, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, InteractionHand hand) {
--        return (PlayerBucketEmptyEvent) CraftEventFactory.getPlayerBucketEvent(false, world, player, changed, clicked, clickedFace, itemInHand, Items.BUCKET, hand);
-+        return (PlayerBucketEmptyEvent) CraftEventFactory.getPlayerBucketEvent(false, world, player, changed, clicked, clickedFace, itemInHand, new ItemStack(Items.BUCKET), hand); // Kiterino - Expose bucket in bucket events
+     public static PlayerBucketEmptyEvent callPlayerBucketEmptyEvent(Level level, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, InteractionHand hand) {
+-        return (PlayerBucketEmptyEvent) CraftEventFactory.getPlayerBucketEvent(false, level, player, changed, clicked, clickedFace, itemInHand, Items.BUCKET, hand);
++        return (PlayerBucketEmptyEvent) CraftEventFactory.getPlayerBucketEvent(false, level, player, changed, clicked, clickedFace, itemInHand, new ItemStack(Items.BUCKET), hand); // Kiterino - Expose bucket in bucket events
      }
  
-     public static PlayerBucketFillEvent callPlayerBucketFillEvent(Level world, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, net.minecraft.world.item.Item bucket, InteractionHand hand) {
+     public static PlayerBucketFillEvent callPlayerBucketFillEvent(Level level, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, net.minecraft.world.item.Item bucket, InteractionHand hand) {
 +        // Kiterino start - Expose bucket in bucket events
-+        return callPlayerBucketFillEvent(world, player, changed, clicked, clickedFace, itemInHand, new ItemStack(bucket), hand);
++        return callPlayerBucketFillEvent(level, player, changed, clicked, clickedFace, itemInHand, new ItemStack(bucket), hand);
 +    }
-+    public static PlayerBucketFillEvent callPlayerBucketFillEvent(Level world, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, ItemStack bucket, InteractionHand hand) {
++    public static PlayerBucketFillEvent callPlayerBucketFillEvent(Level level, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack itemInHand, ItemStack bucket, InteractionHand hand) {
 +        // Kiterino end - Expose bucket in bucket events
-         return (PlayerBucketFillEvent) CraftEventFactory.getPlayerBucketEvent(true, world, player, clicked, changed, clickedFace, itemInHand, bucket, hand);
+         return (PlayerBucketFillEvent) CraftEventFactory.getPlayerBucketEvent(true, level, player, clicked, changed, clickedFace, itemInHand, bucket, hand);
      }
  
--    private static PlayerEvent getPlayerBucketEvent(boolean isFilling, Level world, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack bucket, net.minecraft.world.item.Item item, InteractionHand hand) {
-+    private static PlayerEvent getPlayerBucketEvent(boolean isFilling, Level world, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack usedItem, ItemStack resultingItem, InteractionHand hand) { // Kiterino - Expose bucket in bucket events
+-    private static PlayerEvent getPlayerBucketEvent(boolean isFilling, Level level, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack bucket, net.minecraft.world.item.Item item, InteractionHand hand) {
++    private static PlayerEvent getPlayerBucketEvent(boolean isFilling, Level level, net.minecraft.world.entity.player.Player player, BlockPos changed, BlockPos clicked, Direction clickedFace, ItemStack bucket, ItemStack resultingItem, InteractionHand hand) { // Kiterino - Expose bucket in bucket events
          Player cplayer = (Player) player.getBukkitEntity();
 -        CraftItemStack itemInHand = CraftItemStack.asNewCraftStack(item);
 -        Material bucketItem = CraftItemType.minecraftToBukkit(bucket.getItem());
-+//        CraftItemStack itemInHand = CraftItemStack.asNewCraftStack(item); // Kiterino - Expose bucket in bucket events
-+//        Material bucketItem = CraftItemType.minecraftToBukkit(bucket.getItem()); // Kiterino - Expose bucket in bucket events
++        // CraftItemStack itemInHand = CraftItemStack.asNewCraftStack(item); // Kiterino - Expose bucket in bucket events
++        // Material bucketItem = CraftItemType.minecraftToBukkit(bucket.getItem()); // Kiterino - Expose bucket in bucket events
  
-         Block block = CraftBlock.at(world, changed);
-         Block clickedBlock = CraftBlock.at(world, clicked);
-@@ -588,10 +593,10 @@ public class CraftEventFactory {
+         Block block = CraftBlock.at(level, changed);
+         Block clickedBlock = CraftBlock.at(level, clicked);
+@@ -587,10 +592,10 @@ public class CraftEventFactory {
  
          PlayerEvent event;
          if (isFilling) {
 -            event = new PlayerBucketFillEvent(cplayer, block, clickedBlock, blockFace, bucketItem, itemInHand, handSlot);
-+            event = new PlayerBucketFillEvent(cplayer, block, clickedBlock, blockFace, CraftItemStack.asBukkitCopy(usedItem), CraftItemStack.asBukkitCopy(resultingItem), handSlot); // Kiterino - Expose bucket in bucket events
-             ((PlayerBucketFillEvent) event).setCancelled(!CraftEventFactory.canBuild(world, cplayer, changed.getX(), changed.getZ()));
++            event = new PlayerBucketFillEvent(cplayer, block, clickedBlock, blockFace, CraftItemStack.asBukkitCopy(bucket), CraftItemStack.asBukkitCopy(resultingItem), handSlot); // Kiterino - Expose bucket in bucket events
+             ((PlayerBucketFillEvent) event).setCancelled(!CraftEventFactory.canBuild(level, cplayer, changed.getX(), changed.getZ()));
          } else {
 -            event = new PlayerBucketEmptyEvent(cplayer, block, clickedBlock, blockFace, bucketItem, itemInHand, handSlot);
-+            event = new PlayerBucketEmptyEvent(cplayer, block, clickedBlock, blockFace, CraftItemStack.asBukkitCopy(usedItem), CraftItemStack.asBukkitCopy(resultingItem), handSlot); // Kiterino - Expose bucket in bucket events
-             ((PlayerBucketEmptyEvent) event).setCancelled(!CraftEventFactory.canBuild(world, cplayer, changed.getX(), changed.getZ()));
++            event = new PlayerBucketEmptyEvent(cplayer, block, clickedBlock, blockFace, CraftItemStack.asBukkitCopy(bucket), CraftItemStack.asBukkitCopy(resultingItem), handSlot); // Kiterino - Expose bucket in bucket events
+             ((PlayerBucketEmptyEvent) event).setCancelled(!CraftEventFactory.canBuild(level, cplayer, changed.getX(), changed.getZ()));
          }
  

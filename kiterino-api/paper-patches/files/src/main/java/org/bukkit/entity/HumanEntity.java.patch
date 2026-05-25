@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -638,6 +_,18 @@
+@@ -639,6 +_,18 @@
       */
      public int discoverRecipes(Collection<NamespacedKey> recipes);
  

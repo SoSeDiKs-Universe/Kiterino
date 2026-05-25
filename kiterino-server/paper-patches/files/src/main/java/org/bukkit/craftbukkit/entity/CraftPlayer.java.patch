@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1388,7 +_,7 @@
+@@ -1390,7 +_,7 @@
          }
          // Minecraft does not currently support teleporting players between worlds with passengers.
          // It causes them to be dismounted, and causes weird behavior.
@@ -9,9 +9,9 @@
              return false;
          }
  
-@@ -3461,4 +_,122 @@
-             entity.remove();
-         }
+@@ -3468,4 +_,122 @@
+         super.knockback(strength, directionX, directionZ);
+         this.entity.hurtMarked = true;
      }
 +
 +    // Kiterino start - Red tint API
@@ -66,7 +66,7 @@
 +    @Override
 +    public BlockData getPlacedState(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
 +        net.minecraft.world.level.block.state.BlockState placedState = getPlacedState0(hand, block, location, blockFace);
-+        return placedState == null ? null : placedState.createCraftBlockData();
++        return placedState == null ? null : placedState.asBlockData();
 +    }
 +
 +    private net.minecraft.world.level.block.state.BlockState getPlacedState0(EquipmentSlot hand, ItemStack block, Location location, org.bukkit.block.BlockFace blockFace) {
@@ -85,7 +85,7 @@
 +            return null;
 +        }
 +
-+        BlockPos blockPos = CraftLocation.toBlockPosition(location);
++        BlockPos blockPos = CraftLocation.toBlockPos(location);
 +        var mop = new net.minecraft.world.phys.BlockHitResult(CraftLocation.toVec3(location), com.google.common.base.Enums.getIfPresent(net.minecraft.core.Direction.class, blockFace.toString()).or(net.minecraft.core.Direction.UP), blockPos, false);
 +        var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
 +
@@ -115,7 +115,7 @@
 +        }
 +
 +        var nmsItem = CraftItemStack.asNMSCopy(block);
-+        var mop = new net.minecraft.world.phys.BlockHitResult(CraftLocation.toVec3(location), com.google.common.base.Enums.getIfPresent(net.minecraft.core.Direction.class, blockFace.toString()).or(net.minecraft.core.Direction.UP), CraftLocation.toBlockPosition(location), false);
++        var mop = new net.minecraft.world.phys.BlockHitResult(CraftLocation.toVec3(location), com.google.common.base.Enums.getIfPresent(net.minecraft.core.Direction.class, blockFace.toString()).or(net.minecraft.core.Direction.UP), CraftLocation.toBlockPos(location), false);
 +        var context = new net.minecraft.world.item.context.BlockPlaceContext(getHandle(), CraftEquipmentSlot.getHand(hand), nmsItem, mop);
 +        var result = nmsItem.useOn(context);
 +        if (!(result instanceof net.minecraft.world.InteractionResult.Success)) {

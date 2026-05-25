@@ -7,10 +7,10 @@ https://github.com/PaperMC/Paper/pull/7655
 
 diff --git a/src/main/java/io/papermc/paper/loot/PaperLootContextKey.java b/src/main/java/io/papermc/paper/loot/PaperLootContextKey.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8199186bc2965c56f64537fce38deb140e57191e
+index 0000000000000000000000000000000000000000..5af7ca5c44e4d422d897b51ad7f9766566030f2f
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/loot/PaperLootContextKey.java
-@@ -0,0 +1,115 @@
+@@ -0,0 +1,123 @@
 +package io.papermc.paper.loot;
 +
 +import com.google.common.collect.BiMap;
@@ -51,9 +51,17 @@ index 0000000000000000000000000000000000000000..8199186bc2965c56f64537fce38deb14
 +        CONVERTERS.add(entity(LootContextParams.ATTACKING_ENTITY, LootContextKey.ATTACKING_ENTITY));
 +        CONVERTERS.add(entity(LootContextParams.DIRECT_ATTACKING_ENTITY, LootContextKey.DIRECT_ATTACKING_ENTITY));
 +        CONVERTERS.add(new LambdaConverter<>(LootContextParams.ORIGIN, LootContextKey.ORIGIN, MCUtil::toVec3, MCUtil::toPosition));
-+        CONVERTERS.add(new LambdaConverter<>(LootContextParams.BLOCK_STATE, LootContextKey.BLOCK_DATA, bd -> ((CraftBlockData) bd).getState(), BlockState::createCraftBlockData));
++        CONVERTERS.add(new LambdaConverter<>(LootContextParams.BLOCK_STATE, LootContextKey.BLOCK_DATA, bd -> ((CraftBlockData) bd).getState(), BlockState::asBlockData));
 +        CONVERTERS.add(new LambdaConverter<>(LootContextParams.BLOCK_ENTITY, LootContextKey.TILE_STATE, ts -> ((CraftBlockEntityState<?>) ts).getBlockEntity(), CraftBlockStates::getTileState));
-+        CONVERTERS.add(new LambdaConverter<>(LootContextParams.TOOL, LootContextKey.TOOL, CraftItemStack::asNMSCopy, net.minecraft.world.item.ItemStack::asBukkitCopy));
++        CONVERTERS.add(new LambdaConverter<>(LootContextParams.TOOL, LootContextKey.TOOL, CraftItemStack::asTemplate, itemInstance -> {
++            if (itemInstance instanceof net.minecraft.world.item.ItemStack itemStack) {
++                return CraftItemStack.asBukkitCopy(itemStack);
++            }
++            if (itemInstance instanceof net.minecraft.world.item.ItemStackTemplate template) {
++                return CraftItemStack.asBukkitCopy(template);
++            }
++            return org.bukkit.inventory.ItemStack.empty();
++        }));
 +        CONVERTERS.add(identity(LootContextParams.EXPLOSION_RADIUS, LootContextKey.EXPLOSION_RADIUS));
 +        CONVERTERS.add(identity(LootContextParams.ENCHANTMENT_LEVEL, LootContextKey.ENCHANTMENT_LEVEL));
 +        CONVERTERS.add(identity(LootContextParams.ENCHANTMENT_ACTIVE, LootContextKey.ENCHANTMENT_ACTIVE));
@@ -127,7 +135,7 @@ index 0000000000000000000000000000000000000000..8199186bc2965c56f64537fce38deb14
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
-index 7a67d38af41b21b36b170965da59ecef18e34304..8de5460002dd86cc8aac0ffb2968ac5e457740bf 100644
+index f1a616432ea732d5a316113ae19a6e0e1ef3dd17..4355df36f9619b8c77bd145c65598beb8232ea96 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftLootTable.java
 @@ -101,7 +101,22 @@ public class CraftLootTable implements org.bukkit.loot.LootTable {
@@ -176,7 +184,7 @@ index 7a67d38af41b21b36b170965da59ecef18e34304..8de5460002dd86cc8aac0ffb2968ac5e
          if (position == null) {
              position = info.getOptionalParameter(LootContextParams.THIS_ENTITY).position(); // Every vanilla context has origin or this_entity, see LootContextParamSets
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-index 534ba5aa3dfce160c6662a2e5de100988ad79cee..85e9ce5029b450448140554a3bda17af44913553 100644
+index aad7b919eb8f21dc75fa9424258bd6de39cae691..d8e0f731df2f03ad1cba9b777d029a78908f8a96 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
 @@ -238,6 +238,13 @@ public final class CraftBlockStates {

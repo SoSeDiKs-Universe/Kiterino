@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/entity/animal/equine/AbstractHorse.java
 +++ b/net/minecraft/world/entity/animal/equine/AbstractHorse.java
-@@ -128,8 +_,8 @@
+@@ -129,8 +_,8 @@
  
-     protected AbstractHorse(EntityType<? extends AbstractHorse> type, Level level) {
+     protected AbstractHorse(final EntityType<? extends AbstractHorse> type, final Level level) {
          super(type, level);
 -        this.moveControl = new net.minecraft.world.entity.ai.control.MoveControl(this); // Purpur - use vanilla controller
 -        this.lookControl = new net.minecraft.world.entity.ai.control.LookControl(this); // Purpur - use vanilla controller
@@ -11,10 +11,10 @@
          this.createInventory();
      }
  
-@@ -458,7 +_,7 @@
+@@ -459,7 +_,7 @@
  
      @Override
-     public void openCustomInventoryScreen(Player player) {
+     public void openCustomInventoryScreen(final Player player) {
 -        if (!this.level().isClientSide() && (!this.isVehicle() || this.hasPassenger(player)) && this.isTamed()) {
 +        if (!this.level().isClientSide() && (!this.isVehicle() || this.hasPassenger(player)) && (this.isTamed() || getRider() == player)) { // Kiterino - Allow riders to control horses without a saddle
              player.openHorseInventory(this, this.inventory);

@@ -1,14 +1,14 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-@@ -511,11 +_,25 @@
+@@ -486,10 +_,24 @@
          net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
          boolean result = false;
  
 +        // Kiterino start - Call BlockDestroyEvent for breakNaturally
 +        boolean dropResources = true;
-+        int expDrop = dropExperience ? block.getExpDrop(state, this.world.getMinecraftWorld(), this.position, nmsItem, true) : 0;
++        int expDrop = dropExperience ? block.getExpDrop(state, this.level.getMinecraftWorld(), this.position, nmsItem, true) : 0;
 +        if (block != Blocks.AIR) {
-+            var blockDestroyEvent = new com.destroystokyo.paper.event.block.BlockDestroyEvent(this, state.getFluidState().createLegacyBlock().createCraftBlockData(), state.createCraftBlockData(), expDrop, true);
++            var blockDestroyEvent = new com.destroystokyo.paper.event.block.BlockDestroyEvent(this, state.getFluidState().createLegacyBlock().asBlockData(), state.asBlockData(), expDrop, true);
 +            blockDestroyEvent.setPlayEffect(triggerEffect);
 +            if (!blockDestroyEvent.callEvent()) return false;
 +
@@ -19,12 +19,11 @@
 +        // Kiterino end - Call BlockDestroyEvent for breakNaturally
 +
          // Modelled off Player#hasCorrectToolForDrops
-         if (block != Blocks.AIR && (item == null || !state.requiresCorrectToolForDrops() || nmsItem.isCorrectToolForDrops(state))) {
--            net.minecraft.world.level.block.Block.dropResources(state, this.world.getMinecraftWorld(), this.position, this.world.getBlockEntity(this.position), null, nmsItem, false); // Paper - Properly handle xp dropping
-+            if (dropResources) net.minecraft.world.level.block.Block.dropResources(state, this.world.getMinecraftWorld(), this.position, this.world.getBlockEntity(this.position), null, nmsItem, false); // Paper - Properly handle xp dropping // Kiterino - Call BlockDestroyEvent for breakNaturally
-             // Paper start - improve Block#breakNaturally
--            if (dropExperience) block.popExperience(this.world.getMinecraftWorld(), this.position, block.getExpDrop(state, this.world.getMinecraftWorld(), this.position, nmsItem, true));
-+            if (expDrop > 0) block.popExperience(this.world.getMinecraftWorld(), this.position, expDrop); // Kiterino - Call BlockDestroyEvent for breakNaturally
-             // Paper end
+         if (!state.isAir() && (item == null || !state.requiresCorrectToolForDrops() || nmsItem.isCorrectToolForDrops(state))) {
+-            net.minecraft.world.level.block.Block.dropResources(state, this.level.getMinecraftWorld(), this.position, this.level.getBlockEntity(this.position), null, nmsItem, false);
+-            if (dropExperience) block.popExperience(this.level.getMinecraftWorld(), this.position, block.getExpDrop(state, this.level.getMinecraftWorld(), this.position, nmsItem, true));
++            if (dropResources) net.minecraft.world.level.block.Block.dropResources(state, this.level.getMinecraftWorld(), this.position, this.level.getBlockEntity(this.position), null, nmsItem, false); // Kiterino - Call BlockDestroyEvent for breakNaturally
++            if (expDrop > 0) block.popExperience(this.level.getMinecraftWorld(), this.position, expDrop); // Kiterino - Call BlockDestroyEvent for breakNaturally
              result = true;
          }
+ 

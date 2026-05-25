@@ -1,6 +1,6 @@
 --- a/src/main/java/org/spigotmc/event/player/PlayerSpawnLocationEvent.java
 +++ b/src/main/java/org/spigotmc/event/player/PlayerSpawnLocationEvent.java
-@@ -24,9 +_,21 @@
+@@ -25,9 +_,21 @@
      private static final HandlerList HANDLER_LIST = new HandlerList();
  
      private Location spawnLocation;
@@ -22,8 +22,8 @@
          this.spawnLocation = spawnLocation;
      }
  
-@@ -51,6 +_,36 @@
-     public void setSpawnLocation(@NotNull Location location) {
+@@ -54,6 +_,36 @@
+         Preconditions.checkArgument(location.getWorld() != null, "World cannot be null");
          this.spawnLocation = location.clone();
      }
 +

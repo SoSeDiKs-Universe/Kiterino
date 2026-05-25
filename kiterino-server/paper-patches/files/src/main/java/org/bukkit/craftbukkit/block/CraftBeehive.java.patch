@@ -15,7 +15,7 @@
 +        for (BeehiveBlockEntity.BeeData beeData : getSnapshot().getStored()) {
 +            if (!(beeData.toOccupant().createEntity(level, null) instanceof net.minecraft.world.entity.animal.bee.Bee bee)) continue;
 +
-+            bee.snapTo(CraftLocation.toBlockPosition(loc), loc.getYaw(), loc.getPitch());
++            bee.snapTo(CraftLocation.toBlockPos(loc), loc.getYaw(), loc.getPitch());
 +            if (!level.addFreshEntity(bee, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.BEEHIVE)) continue;
 +
 +            bees.add((Bee) bee.getBukkitEntity());

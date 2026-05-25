@@ -5,10 +5,10 @@ Subject: [PATCH] Data-driven mob effects
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/PaperRegistries.java b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-index 330dabcf7636328c04622a2e085665007b60fbc6..64d0ff2cd8ff9b8b1f3d0bfd9b173ca12b89332c 100644
+index 5952cdc59724b02fcf4f3755cd5564b4f820f94f..1fd7d96f1d12a2fcdfb8169e88fd533b5ee52d9c 100644
 --- a/src/main/java/io/papermc/paper/registry/PaperRegistries.java
 +++ b/src/main/java/io/papermc/paper/registry/PaperRegistries.java
-@@ -109,7 +109,7 @@ public final class PaperRegistries {
+@@ -111,7 +111,7 @@ public final class PaperRegistries {
              // built-in
              start(Registries.GAME_EVENT, RegistryKey.GAME_EVENT).craft(GameEvent.class, CraftGameEvent::new).writable(PaperGameEventRegistryEntry.PaperBuilder::new),
              start(Registries.STRUCTURE_TYPE, RegistryKey.STRUCTURE_TYPE).craft(StructureType.class, CraftStructureType::new).build(),
@@ -41,7 +41,7 @@ index a6c3898ce2162e2dc75b8b8fce4f6e54f24be0f1..ebc7f603aa65e6483078fb32f0f7c8b5
 +    // Kiterino end - Data-driven mob effects
  }
 diff --git a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
-index 58bd6995b2e52d381c89df23fc78839728246dcb..c57948e45c61ed34a20190d472949f7ee6df7e75 100644
+index 3e1bbb5f92610ff2f15c839c340759c7783f36b6..e4728a3d07d31919ce6077621fd5f2e2bdcd57f8 100644
 --- a/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 +++ b/src/test/java/io/papermc/paper/registry/RegistryBuilderTest.java
 @@ -25,6 +25,7 @@ class RegistryBuilderTest {

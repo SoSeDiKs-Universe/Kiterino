@@ -1,19 +1,19 @@
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -602,6 +_,7 @@
+@@ -604,6 +_,7 @@
          }
-         TeleportTransition teleportTransition = result.transition();
-         Level fromLevel = player.level();
-+        Vec3 fromPos = player.position(); // Kiterino - Pass old location to PlayerChangedWorldEvent
+         TeleportTransition respawnInfo = result.transition();
+         Level fromLevel = serverPlayer.level();
++        Vec3 fromPos = serverPlayer.position(); // Kiterino - Pass old location to PlayerChangedWorldEvent
          // Paper end - respawn event
-         this.players.remove(player);
-         this.playersByName.remove(player.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Paper
-@@ -691,7 +_,7 @@
+         this.players.remove(serverPlayer);
+         this.playersByName.remove(serverPlayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Paper
+@@ -692,7 +_,7 @@
  
          // It's possible for respawn to be in a diff dimension
          if (fromLevel != level) {
--            new org.bukkit.event.player.PlayerChangedWorldEvent(serverPlayer.getBukkitEntity(), fromLevel.getWorld()).callEvent();
-+            new org.bukkit.event.player.PlayerChangedWorldEvent(serverPlayer.getBukkitEntity(), fromLevel.getWorld(), org.bukkit.craftbukkit.util.CraftLocation.toBukkit(fromPos, fromLevel)).callEvent(); // Kiterino - Pass old location to PlayerChangedWorldEvent
-             serverPlayer.triggerDimensionChangeTriggers(level);
+-            new org.bukkit.event.player.PlayerChangedWorldEvent(player.getBukkitEntity(), fromLevel.getWorld()).callEvent();
++            new org.bukkit.event.player.PlayerChangedWorldEvent(player.getBukkitEntity(), fromLevel.getWorld(), org.bukkit.craftbukkit.util.CraftLocation.toBukkit(fromPos, fromLevel)).callEvent(); // Kiterino - Pass old location to PlayerChangedWorldEvent
+             player.triggerDimensionChangeTriggers(level);
          }
  

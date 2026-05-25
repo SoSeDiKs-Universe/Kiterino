@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBeacon.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBeacon.java
-@@ -62,6 +_,23 @@
+@@ -60,6 +_,23 @@
          return this.getSnapshot().levels;
      }
  

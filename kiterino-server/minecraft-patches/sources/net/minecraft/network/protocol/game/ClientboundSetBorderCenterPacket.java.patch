@@ -1,7 +1,7 @@
 --- a/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundSetBorderCenterPacket.java
-@@ -18,6 +_,13 @@
-         this.newCenterZ = worldBorder.getCenterZ();
+@@ -23,6 +_,13 @@
+         this.newCenterZ = input.readDouble();
      }
  
 +    // Kiterino start - Red tint API
@@ -11,6 +11,6 @@
 +    }
 +    // Kiterino ens - Red tint API
 +
-     private ClientboundSetBorderCenterPacket(FriendlyByteBuf buffer) {
-         this.newCenterX = buffer.readDouble();
-         this.newCenterZ = buffer.readDouble();
+     private void write(final FriendlyByteBuf output) {
+         output.writeDouble(this.newCenterX);
+         output.writeDouble(this.newCenterZ);

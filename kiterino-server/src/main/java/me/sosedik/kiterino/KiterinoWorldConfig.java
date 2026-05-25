@@ -1,5 +1,6 @@
 package me.sosedik.kiterino;
 
+import net.kyori.adventure.key.Key;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jspecify.annotations.NullMarked;
@@ -14,9 +15,9 @@ public final class KiterinoWorldConfig {
     private final String worldName;
     private final World.Environment environment;
 
-    public KiterinoWorldConfig(String worldName, World.Environment environment) {
+    public KiterinoWorldConfig(World.Environment environment, Key worldKey) {
         this.config = KiterinoConfig.config;
-        this.worldName = worldName;
+        this.worldName = worldKey.asString();
         this.environment = environment;
 
         init();

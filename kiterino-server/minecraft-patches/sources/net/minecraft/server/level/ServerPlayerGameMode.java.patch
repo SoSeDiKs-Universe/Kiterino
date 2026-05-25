@@ -1,7 +1,7 @@
 --- a/net/minecraft/server/level/ServerPlayerGameMode.java
 +++ b/net/minecraft/server/level/ServerPlayerGameMode.java
 @@ -100,6 +_,11 @@
-     protected void setGameModeForPlayer(GameType gameModeForPlayer, @Nullable GameType previousGameModeForPlayer) {
+     protected void setGameModeForPlayer(final GameType gameModeForPlayer, final @Nullable GameType previousGameModeForPlayer) {
          this.previousGameModeForPlayer = previousGameModeForPlayer;
          this.gameModeForPlayer = gameModeForPlayer;
 +        // Kiterino start - Prevent creative from overriding items

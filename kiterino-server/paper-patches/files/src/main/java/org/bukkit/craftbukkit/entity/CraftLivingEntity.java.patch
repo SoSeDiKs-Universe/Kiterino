@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -525,8 +_,8 @@
+@@ -534,8 +_,8 @@
      }
  
      @Override
@@ -11,7 +11,7 @@
      }
  
      @Override
-@@ -1144,4 +_,40 @@
+@@ -1153,4 +_,40 @@
          this.getHandle().setShouldBurnInDay(shouldBurnInDay);
      }
      // Purpur end - API for any mob to burn daylight
@@ -29,7 +29,7 @@
 +
 +    @Override
 +    public void setSleepingLocation(Location loc) {
-+        this.getHandle().setSleepingPos(loc == null ? null : org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(loc));
++        this.getHandle().setSleepingPos(loc == null ? null : org.bukkit.craftbukkit.util.CraftLocation.toBlockPos(loc));
 +    }
 +    // Kiterino end - Expose sleeping loc
 +
@@ -37,7 +37,7 @@
 +    @Override
 +    public void lay(Location sleepLocation, Location bedLocation) {
 +        this.getHandle().setPose(net.minecraft.world.entity.Pose.SLEEPING);
-+        this.getHandle().setSleepingPos(org.bukkit.craftbukkit.util.CraftLocation.toBlockPosition(bedLocation));
++        this.getHandle().setSleepingPos(org.bukkit.craftbukkit.util.CraftLocation.toBlockPos(bedLocation));
 +        this.getHandle().setPos(sleepLocation.getX(), sleepLocation.getY(), sleepLocation.getZ());
 +        this.getHandle().setDeltaMovement(Vec3.ZERO);
 +        this.getHandle().needsSync = true;

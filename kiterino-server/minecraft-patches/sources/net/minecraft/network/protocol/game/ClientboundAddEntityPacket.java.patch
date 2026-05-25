@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/protocol/game/ClientboundAddEntityPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundAddEntityPacket.java
-@@ -80,7 +_,7 @@
+@@ -90,7 +_,7 @@
          this.xRot = Mth.packDegrees(xRot);
          this.yRot = Mth.packDegrees(yRot);
          this.yHeadRot = Mth.packDegrees((float)yHeadRot);

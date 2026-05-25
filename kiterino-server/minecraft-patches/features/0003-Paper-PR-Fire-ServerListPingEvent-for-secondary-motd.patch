@@ -6,13 +6,13 @@ Subject: [PATCH] Paper PR - Fire ServerListPingEvent for secondary motd send
 https://github.com/PaperMC/Paper/pull/8074
 
 diff --git a/net/minecraft/server/players/PlayerList.java b/net/minecraft/server/players/PlayerList.java
-index 3ad9b41704349838cc9d672b4ae6ac1b3a7cfa7f..620851ae25ef3245e9dfa763345fbfaa2a5d9ca2 100644
+index a4b1eea2a55a126d8170e56a0b9a1250e3317f26..49d5d4fe04b8557a7059768b0249f9eebd87edb8 100644
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -214,10 +214,15 @@ public abstract class PlayerList {
-         mutableComponent.withStyle(ChatFormatting.YELLOW);
-         Component joinMessage = mutableComponent; // Paper - Adventure
-         serverGamePacketListenerImpl.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+@@ -216,10 +216,15 @@ public abstract class PlayerList {
+         component.withStyle(ChatFormatting.YELLOW);
+         Component joinMessage = component; // Paper - Adventure
+         playerConnection.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
 -        ServerStatus status = this.server.getStatus();
 -        if (status != null && !cookie.transferred()) {
 -            player.sendServerStatus(status);

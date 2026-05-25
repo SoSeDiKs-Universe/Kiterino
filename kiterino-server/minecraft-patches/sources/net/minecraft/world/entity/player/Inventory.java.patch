@@ -3,9 +3,9 @@
 @@ -249,7 +_,7 @@
      }
  
-     public static boolean isUsableForCrafting(ItemStack stack) {
--        return !stack.isDamaged() && !stack.isEnchanted() && !stack.has(DataComponents.CUSTOM_NAME);
-+        return (me.sosedik.kiterino.KiterinoConfig.allowDamagedItemsInRecipeBook || !stack.isDamaged()) && (me.sosedik.kiterino.KiterinoConfig.allowEnchantedItemsInRecipeBook || !stack.isEnchanted()) && (me.sosedik.kiterino.KiterinoConfig.allowRenamedItemsInRecipeBook || !stack.has(DataComponents.CUSTOM_NAME)); // Kiterino - Less limited recipe matcher
+     public static boolean isUsableForCrafting(final ItemStack item) {
+-        return !item.isDamaged() && !item.isEnchanted() && !item.has(DataComponents.CUSTOM_NAME);
++        return (me.sosedik.kiterino.KiterinoConfig.allowDamagedItemsInRecipeBook || !item.isDamaged()) && (me.sosedik.kiterino.KiterinoConfig.allowEnchantedItemsInRecipeBook || !item.isEnchanted()) && (me.sosedik.kiterino.KiterinoConfig.allowRenamedItemsInRecipeBook || !item.has(DataComponents.CUSTOM_NAME)); // Kiterino - Less limited recipe matcher
      }
  
-     public int findSlotMatchingCraftingIngredient(io.papermc.paper.inventory.recipe.ItemOrExact item, ItemStack stack) { // Paper - Improve exact choice recipe ingredients
+     public int findSlotMatchingCraftingIngredient(final io.papermc.paper.inventory.recipe.ItemOrExact item, final ItemStack existingItem) { // Paper - Improve exact choice recipe ingredients

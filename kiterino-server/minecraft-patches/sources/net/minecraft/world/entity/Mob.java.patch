@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -958,7 +_,7 @@
+@@ -963,7 +_,7 @@
      }
  
      public boolean isSaddled() {

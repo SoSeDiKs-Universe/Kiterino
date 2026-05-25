@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
 +++ b/src/main/java/org/bukkit/craftbukkit/legacy/MaterialRerouting.java
-@@ -731,4 +_,19 @@
+@@ -730,4 +_,19 @@
          return itemStack.getBlockData(MaterialRerouting.transformToBlockType(material));
      }
      // Purpur end - Adopt MaterialRerouting

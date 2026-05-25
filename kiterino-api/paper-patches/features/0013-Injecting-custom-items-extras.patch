@@ -5,10 +5,10 @@ Subject: [PATCH] Injecting custom items extras
 
 
 diff --git a/src/main/java/org/bukkit/Registry.java b/src/main/java/org/bukkit/Registry.java
-index 0859653089acab606eade01bc380dcc076e6a89c..f02a1f62ad8e0eaf82c002bb9bb29b94613d00cd 100644
+index bdf1957e5b72b3d680c7756aadc9dde063b4b167..edad99142cb568b87c8675f6817138d8330f2e5f 100644
 --- a/src/main/java/org/bukkit/Registry.java
 +++ b/src/main/java/org/bukkit/Registry.java
-@@ -601,7 +601,7 @@ public interface Registry<T extends Keyed> extends Iterable<T> {
+@@ -608,7 +608,7 @@ public interface Registry<T extends Keyed> extends Iterable<T> {
                  }
              }
  

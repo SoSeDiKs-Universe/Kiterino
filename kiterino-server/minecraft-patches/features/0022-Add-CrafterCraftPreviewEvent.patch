@@ -5,25 +5,23 @@ Subject: [PATCH] Add CrafterCraftPreviewEvent
 
 
 diff --git a/net/minecraft/world/inventory/CrafterMenu.java b/net/minecraft/world/inventory/CrafterMenu.java
-index d2586f1917cd912ac9dbbc51d24b1235d835e072..f77044f5502f6dd8c4c01887732400d3b1729f43 100644
+index eab7ab8a272b97b8073825875c6e1e8030db0bb7..f04df8a643f86ca0e26cfca2e270fa377e1b45f8 100644
 --- a/net/minecraft/world/inventory/CrafterMenu.java
 +++ b/net/minecraft/world/inventory/CrafterMenu.java
-@@ -122,9 +122,17 @@ public class CrafterMenu extends AbstractContainerMenu implements ContainerListe
+@@ -122,7 +122,15 @@ public class CrafterMenu extends AbstractContainerMenu implements ContainerListe
          if (this.player instanceof ServerPlayer serverPlayer) {
-             ServerLevel serverLevel = serverPlayer.level();
+             ServerLevel level = serverPlayer.level();
              CraftingInput craftInput = this.container.asCraftInput();
--            ItemStack itemStack = CrafterBlock.getPotentialResults(serverLevel, craftInput)
+-            ItemStack result = CrafterBlock.getPotentialResults(level, craftInput).map(recipe -> recipe.value().assemble(craftInput)).orElse(ItemStack.EMPTY);
 +            // Kiterino start - Add CrafterCraftPreviewEvent
-+            var potentialResults = CrafterBlock.getPotentialResults(serverLevel, craftInput);
-+            ItemStack itemStack = potentialResults
-                 .map(recipeHolder -> recipeHolder.value().assemble(craftInput, serverLevel.registryAccess()))
-                 .orElse(ItemStack.EMPTY);
-+            if (!itemStack.isEmpty() && potentialResults.isPresent()) {
-+                var event = new me.sosedik.kiterino.event.inventory.CrafterCraftPreviewEvent(serverPlayer.getBukkitEntity(), getBukkitView(), potentialResults.get().toBukkitRecipe(), itemStack.asBukkitMirror());
++            var potentialResults = CrafterBlock.getPotentialResults(level, craftInput);
++            ItemStack result = potentialResults.map(recipe -> recipe.value().assemble(craftInput)).orElse(ItemStack.EMPTY);
++            if (!result.isEmpty() && potentialResults.isPresent()) {
++                var event = new me.sosedik.kiterino.event.inventory.CrafterCraftPreviewEvent(serverPlayer.getBukkitEntity(), getBukkitView(), potentialResults.get().toBukkitRecipe(), result.asBukkitMirror());
 +                event.callEvent();
-+                itemStack = ItemStack.fromBukkitCopy(event.getResult());
++                result = ItemStack.fromBukkitCopy(event.getResult());
 +            }
 +            // Kiterino end - Add CrafterCraftPreviewEvent
-             this.resultContainer.setItem(0, itemStack);
+             this.resultContainer.setItem(0, result);
          }
      }

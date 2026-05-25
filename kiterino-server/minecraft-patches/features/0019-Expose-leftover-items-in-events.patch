@@ -5,63 +5,60 @@ Subject: [PATCH] Expose leftover items in events
 
 
 diff --git a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index 3dfd539f4453d9c47c99af36e7ba64400fc89a5c..00d0cd4a82efadc358d1bbbe57eec873cec691d8 100755
+index 26d6fa5b9ab8d75eb5a300b399a81daf59a409d4..08dac7994cdf9399bbc9592606e35035ba9e664a 100644
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -224,6 +224,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
-                     fuel,
-                     furnace.getBurnDuration(level.fuelValues(), itemStack)
-                 );
-+                // Kiterino start - Expose leftover items in events
-+                ItemStack craftingRemainder = itemStack.getItem().getCraftingRemainder();
-+                if (!craftingRemainder.isEmpty()) {
-+                    furnaceBurnEvent.setRemainingItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(craftingRemainder));
-+                }
-+                // Kiterino end - Expose leftover items in events
-                 if (!furnaceBurnEvent.callEvent()) return;
-                 // CraftBukkit end
- 
-@@ -232,11 +238,19 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
-                 if (furnace.isLit() && furnaceBurnEvent.isBurning()) { // CraftBukkit - respect event output
-                     flag = true;
-                     if (flag2 && furnaceBurnEvent.willConsumeFuel()) { // Paper - add consumeFuel to FurnaceBurnEvent
--                        Item item = itemStack.getItem();
+@@ -227,6 +227,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+                             org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(fuel),
+                             entity.getBurnDuration(level.fuelValues(), fuel)
+                         );
 +                        // Kiterino start - Expose leftover items in events
-+                        org.bukkit.inventory.ItemStack remainingItem = furnaceBurnEvent.getRemainingItem();
-+                        craftingRemainder = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
-+                        // Kiterino end - Expose leftover items in events
-                         itemStack.shrink(1);
-                         if (itemStack.isEmpty()) {
--                            furnace.items.set(1, item.getCraftingRemainder());
-+                            furnace.items.set(1, craftingRemainder);// Kiterino - Expose leftover items in events
++                        ItemStackTemplate craftingRemainder = fuel.getItem().getCraftingRemainder();
++                        if (craftingRemainder != null) {
++                            furnaceBurnEvent.setRemainingItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(craftingRemainder.create()));
 +                        }
-+                        // Kiterino start - Expose leftover items in events
-+                        else if (!craftingRemainder.isEmpty()) {
-+                            net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), craftingRemainder);
-                         }
 +                        // Kiterino end - Expose leftover items in events
-                     }
-                 }
-             }
+                         if (!furnaceBurnEvent.callEvent()) return;
+                         // CraftBukkit end
+                         if (!isLit) {
+@@ -235,7 +241,17 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+                             entity.litTotalTime = newLitTime;
+                             if (newLitTime > 0 && furnaceBurnEvent.isBurning()) { // CraftBukkit - respect event output // TODO - snapshot - double check surrounding diff post squash
+                                 if (furnaceBurnEvent.willConsumeFuel()) { // Paper - add consumeFuel to FurnaceBurnEvent
+-                                consumeFuel(entity.items, fuel);
++                                    // Kiterino start - Expose leftover items in events
++                                    org.bukkit.inventory.ItemStack remainingItem = furnaceBurnEvent.getRemainingItem();
++                                    ItemStack craftingRemainderItem = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
++                                    fuel.shrink(1);
++                                    if (fuel.isEmpty()) {
++                                        entity.items.set(1, craftingRemainderItem); // Kiterino - Expose leftover items in events
++                                    }
++                                    else if (!craftingRemainderItem.isEmpty()) {
++                                        net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), craftingRemainderItem);
++                                    }
++                                    // Kiterino end - Expose leftover items in events
+                                 } // Paper - add consumeFuel to FurnaceBurnEvent
+                                 isLit = true;
+                                 changed = true;
 diff --git a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-index 5b28e257982c911f4d8ffe286dc125b3f9b64ee4..ffa75dc83ceda1f4175b66e9a2fc2ede7f99f491 100755
+index 60a0a2c466cc688377815b9f17ff09c59b72eb64..adb043e6daf79d3911a24eeaaba8068826a8d388 100644
 --- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-@@ -242,6 +242,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
-             brewResults.add(i, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(potionBrewing.mix(itemStack, items.get(i))));
+@@ -248,6 +248,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
+             brewResults.add(dest, org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(potionBrewing.mix(ingredient, items.get(dest))));
          }
  
-+        ItemStack craftingRemainder = itemStack.getItem().getCraftingRemainder(); // Kiterino - Expose leftover items in events
++        ItemStackTemplate remainder = ingredient.getItem().getCraftingRemainder(); // Kiterino - Expose leftover items in events
          if (owner != null) {
              org.bukkit.event.inventory.BrewEvent event = new org.bukkit.event.inventory.BrewEvent(
                  org.bukkit.craftbukkit.block.CraftBlock.at(level, pos),
-@@ -249,9 +250,18 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
+@@ -255,9 +256,18 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
                  brewResults,
-                 brewingStandBlockEntity.fuel
+                 entity.fuel
              );
 +            // Kiterino start - Expose leftover items in events
-+            if (!craftingRemainder.isEmpty()) {
-+                event.setRemainingItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(craftingRemainder));
++            if (remainder != null) {
++                event.setRemainingItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(remainder.create()));
 +            }
 +            // Kiterino end - Expose leftover items in events
              if (!event.callEvent()) {
@@ -69,17 +66,17 @@ index 5b28e257982c911f4d8ffe286dc125b3f9b64ee4..ffa75dc83ceda1f4175b66e9a2fc2ede
              }
 +            // Kiterino start - Expose leftover items in events
 +            org.bukkit.inventory.ItemStack remainingItem = event.getRemainingItem();
-+            craftingRemainder = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
++            remainder = remainingItem == null ? null : ItemStackTemplate.fromNonEmptyStack(ItemStack.fromBukkitCopy(remainingItem));
 +            // Kiterino end - Expose leftover items in events
  
-             for (int i = 0; i < 3; i++) {
-                 if (i < brewResults.size()) {
-@@ -264,7 +274,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
+             for (int dest = 0; dest < 3; dest++) {
+                 if (dest < brewResults.size()) {
+@@ -270,7 +280,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements
          // CraftBukkit end
  
-         itemStack.shrink(1);
--        ItemStack craftingRemainder = itemStack.getItem().getCraftingRemainder();
-+        // ItemStack craftingRemainder = itemStack.getItem().getCraftingRemainder(); // Kiterino - Moved up - Expose leftover items in events
-         if (!craftingRemainder.isEmpty()) {
-             if (itemStack.isEmpty()) {
-                 itemStack = craftingRemainder;
+         ingredient.shrink(1);
+-        ItemStackTemplate remainder = ingredient.getItem().getCraftingRemainder();
++        // ItemStackTemplate remainder = ingredient.getItem().getCraftingRemainder(); // Kiterino - Moved up - Expose leftover items in events
+         if (remainder != null) {
+             if (ingredient.isEmpty()) {
+                 ingredient = remainder.create();

@@ -5,30 +5,30 @@ Subject: [PATCH] Custom fuel rules
 
 
 diff --git a/net/minecraft/world/level/block/entity/FuelValues.java b/net/minecraft/world/level/block/entity/FuelValues.java
-index 3a431745c769b8131c2201ff17f1246cbc1820a6..f9b469c8d0b6ffc14f0d5fc2de55c262c245df11 100644
+index 9af4edf9fea87325957008e2e464469d1cb8366c..37f7a552a82f6e7582ec99f036b4f585c6182f9c 100644
 --- a/net/minecraft/world/level/block/entity/FuelValues.java
 +++ b/net/minecraft/world/level/block/entity/FuelValues.java
 @@ -18,13 +18,28 @@ import net.minecraft.world.level.block.Blocks;
  
  public class FuelValues {
      public final Object2IntSortedMap<Item> values;
-+    public final java.util.List<java.util.function.Function<org.bukkit.inventory.ItemStack, Integer>> extraRules = new java.util.ArrayList<>(); // Kiterino - Custom fuel rules
++    public final java.util.List<java.util.function.Function<org.bukkit.inventory.ItemStack, @org.jspecify.annotations.Nullable Integer>> extraRules = new java.util.ArrayList<>(); // Kiterino - Custom fuel rules
  
-     FuelValues(Object2IntSortedMap<Item> values) {
+     private FuelValues(final Object2IntSortedMap<Item> values) {
          this.values = values;
      }
  
-     public boolean isFuel(ItemStack stack) {
--        return this.values.containsKey(stack.getItem());
+     public boolean isFuel(final ItemStack itemStack) {
+-        return this.values.containsKey(itemStack.getItem());
 +        // Kiterino - Custom fuel rules
-+        if (this.values.containsKey(stack.getItem())) {
++        if (this.values.containsKey(itemStack.getItem())) {
 +            return true;
 +        }
-+        if (stack.isEmpty()) {
++        if (itemStack.isEmpty()) {
 +            return false;
 +        }
-+        var bukkitItem = stack.asBukkitMirror();
-+        for (var extraCheck : extraRules) {
++        var bukkitItem = itemStack.asBukkitMirror();
++        for (var extraCheck : this.extraRules) {
 +            if (extraCheck.apply(bukkitItem) != null) {
 +                return true;
 +            }
@@ -41,21 +41,21 @@ index 3a431745c769b8131c2201ff17f1246cbc1820a6..f9b469c8d0b6ffc14f0d5fc2de55c262
 @@ -32,7 +47,19 @@ public class FuelValues {
      }
  
-     public int burnDuration(ItemStack stack) {
--        return stack.isEmpty() ? 0 : this.values.getInt(stack.getItem());
+     public int burnDuration(final ItemStack itemStack) {
+-        return itemStack.isEmpty() ? 0 : this.values.getInt(itemStack.getItem());
 +        // Kiterino start - Custom fuel rules
-+        if (stack.isEmpty()) {
++        if (itemStack.isEmpty()) {
 +            return 0;
 +        }
-+        var bukkitItem = stack.asBukkitMirror();
-+        for (var extraCheck : extraRules) {
++        var bukkitItem = itemStack.asBukkitMirror();
++        for (var extraCheck : this.extraRules) {
 +            Integer duration = extraCheck.apply(bukkitItem);
 +            if (duration != null) {
 +                return duration;
 +            }
 +        }
-+        return this.values.getInt(stack.getItem());
++        return this.values.getInt(itemStack.getItem());
 +        // Kiterino end - Custom fuel rules
      }
  
-     public static FuelValues vanillaBurnTimes(HolderLookup.Provider registries, FeatureFlagSet enabledFeatures) {
+     public static FuelValues vanillaBurnTimes(final HolderLookup.Provider registries, final FeatureFlagSet enabledFeatures) {

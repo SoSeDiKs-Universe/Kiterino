@@ -5,7 +5,7 @@ Subject: [PATCH] Preserve variant paintings
 
 
 diff --git a/net/minecraft/world/entity/decoration/painting/Painting.java b/net/minecraft/world/entity/decoration/painting/Painting.java
-index f8b795bcfb5337db40963cc40772a8d9f4efeaf8..ae47ab1857669db49584313ae3299bacd790ff7a 100644
+index 67e853146b4171c4b36a1fd2997e97a2f5a39f62..7aaa36579489f11343c9d6add5dc32bf34120c80 100644
 --- a/net/minecraft/world/entity/decoration/painting/Painting.java
 +++ b/net/minecraft/world/entity/decoration/painting/Painting.java
 @@ -42,6 +42,8 @@ public class Painting extends HangingEntity {
@@ -14,17 +14,17 @@ index f8b795bcfb5337db40963cc40772a8d9f4efeaf8..ae47ab1857669db49584313ae3299bac
  
 +    public boolean placedWithoutVariant = true; // Kiterino - Preserve variant paintings
 +
-     public Painting(EntityType<? extends Painting> type, Level level) {
+     public Painting(final EntityType<? extends Painting> type, final Level level) {
          super(type, level);
      }
 @@ -107,6 +109,7 @@ public class Painting extends HangingEntity {
-     protected <T> boolean applyImplicitComponent(DataComponentType<T> component, T value) {
-         if (component == DataComponents.PAINTING_VARIANT) {
+     protected <T> boolean applyImplicitComponent(final DataComponentType<T> type, final T value) {
+         if (type == DataComponents.PAINTING_VARIANT) {
              this.setVariant(castComponentValue(DataComponents.PAINTING_VARIANT, value));
 +            this.placedWithoutVariant = false; // Kiterino - Preserve variant paintings
              return true;
          } else {
-             return super.applyImplicitComponent(component, value);
+             return super.applyImplicitComponent(type, value);
 @@ -161,6 +164,7 @@ public class Painting extends HangingEntity {
          output.store("facing", Direction.LEGACY_ID_CODEC_2D, this.getDirection());
          super.addAdditionalSaveData(output);

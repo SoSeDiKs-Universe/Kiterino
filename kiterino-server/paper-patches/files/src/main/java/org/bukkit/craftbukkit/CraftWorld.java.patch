@@ -1,13 +1,13 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -493,6 +_,28 @@
+@@ -501,6 +_,28 @@
          return true;
      }
  
 +    // Kiterino start - Allow individual chunk refresh
 +    @Override
 +    public boolean refreshChunk(int x, int z, Collection<Player> players) {
-+        ChunkHolder playerChunk = this.world.getChunkSource().chunkMap.getVisibleChunkIfPresent(ChunkPos.asLong(x, z));
++        ChunkHolder playerChunk = this.world.getChunkSource().chunkMap.getVisibleChunkIfPresent(ChunkPos.pack(x, z));
 +        if (playerChunk == null) return false;
 +
 +        // Paper start - chunk system
@@ -29,7 +29,7 @@
      @Override
      public Collection<Player> getPlayersSeeingChunk(Chunk chunk) {
          Preconditions.checkArgument(chunk != null, "chunk cannot be null");
-@@ -2084,4 +_,11 @@
+@@ -2106,4 +_,11 @@
          return POINTERS_SUPPLIER.view(this);
      }
      // Paper end

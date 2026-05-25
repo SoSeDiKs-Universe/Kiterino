@@ -1,12 +1,12 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -196,7 +_,25 @@
+@@ -181,7 +_,25 @@
                  } else {
-                     Holder<Item> holder = Item.STREAM_CODEC.decode(buffer);
-                     DataComponentPatch dataComponentPatch = codec.decode(buffer);
--                    return new ItemStack(holder, varInt, dataComponentPatch);
+                     Holder<Item> item = Item.STREAM_CODEC.decode(input);
+                     DataComponentPatch patch = patchCodec.decode(input);
+-                    return new ItemStack(item, count, patch);
 +                    // Kiterino start - Prevent creative from overriding items
-+                    var itemStack = new ItemStack(holder, varInt, dataComponentPatch);
++                    var itemStack = new ItemStack(item, count, patch);
 +                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride) {
 +                        net.minecraft.world.item.component.CustomData customData = itemStack.components.get(DataComponents.CUSTOM_DATA);
 +                        if (customData != null && customData.contains("kiterino_og_item")) {
@@ -27,22 +27,22 @@
                  }
              }
  
-@@ -207,6 +_,23 @@
+@@ -192,6 +_,23 @@
                  } else {
-                     buffer.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), value, value.getCount())); // Paper - potentially sanitize count
-                     Item.STREAM_CODEC.encode(buffer, value.getItemHolder());
+                     output.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), itemStack, itemStack.getCount())); // Paper - potentially sanitize count
+                     Item.STREAM_CODEC.encode(output, itemStack.typeHolder());
 +                    // Kiterino start - Prevent creative from overriding items
 +                    net.minecraft.world.item.component.CustomData customData = null;
-+                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && !value.isEmpty() && me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.modifiers.isEmpty()) {
-+                        customData = value.get(DataComponents.CUSTOM_DATA);
++                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && !itemStack.isEmpty() && me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.modifiers.isEmpty()) {
++                        customData = itemStack.get(DataComponents.CUSTOM_DATA);
 +                        net.minecraft.nbt.Tag itemData = net.minecraft.world.item.ItemStack.CODEC.encodeStart(
 +                            me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.SERIALIZATION_CONTEXT,
-+                            value
++                            itemStack
 +                        ).getOrThrow();
 +                        if (customData == null) {
 +                            customData = net.minecraft.world.item.component.CustomData.of(new net.minecraft.nbt.CompoundTag());
 +                            customData.getUnsafe().put("kiterino_og_item", itemData);
-+                            value.set(DataComponents.CUSTOM_DATA, customData);
++                            itemStack.set(DataComponents.CUSTOM_DATA, customData);
 +                        } else {
 +                            customData.getUnsafe().put("kiterino_og_item", itemData);
 +                        }
@@ -50,15 +50,15 @@
 +                    // Kiterino end - Prevent creative from overriding items
                      // Paper start - adventure; conditionally render translatable components
                      boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
-                     try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(value))) { // pass the itemstack as context to the obfuscation session
-@@ -214,6 +_,15 @@
-                     codec.encode(buffer, value.components.asPatch());
+                     try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(itemStack))) { // pass the itemstack as context to the obfuscation session
+@@ -199,6 +_,15 @@
+                     patchCodec.encode(output, itemStack.components.asPatch());
                      } finally {
                          net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
 +                        // Kiterino start - Prevent creative from overriding items
 +                        if (customData != null) {
 +                            if (customData.getUnsafe().size() == 1) {
-+                                value.remove(DataComponents.CUSTOM_DATA);
++                                itemStack.remove(DataComponents.CUSTOM_DATA);
 +                            } else {
 +                                customData.getUnsafe().remove("kiterino_og_item");
 +                            }
@@ -67,3 +67,12 @@
                      }
                      // Paper end - adventure; conditionally render translatable components
                  }
+@@ -283,7 +_,7 @@
+     }
+ 
+     private static DataResult<?> validateComponents(final DataComponentMap components) {
+-        if (components.has(DataComponents.MAX_DAMAGE) && components.getOrDefault(DataComponents.MAX_STACK_SIZE, 1) > 1) {
++        if (false && components.has(DataComponents.MAX_DAMAGE) && components.getOrDefault(DataComponents.MAX_STACK_SIZE, 1) > 1) { // Kiterino - Allow stackable damageable items
+             return DataResult.error(() -> "Item cannot be both damageable and stackable");
+         } else {
+             ItemContainerContents container = components.get(DataComponents.CONTAINER);

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
-@@ -926,17 +_,18 @@
+@@ -935,17 +_,18 @@
              }
              amount -= reduce;
              if (amount <= 0) {

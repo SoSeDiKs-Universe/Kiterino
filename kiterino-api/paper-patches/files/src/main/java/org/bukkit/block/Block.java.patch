@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/block/Block.java
 +++ b/src/main/java/org/bukkit/block/Block.java
-@@ -834,4 +_,38 @@
+@@ -839,4 +_,38 @@
       * @return {@code true} if the block can suffocate
       */
      boolean isSuffocating();

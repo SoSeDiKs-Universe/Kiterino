@@ -33,7 +33,6 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -74,8 +73,9 @@ import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.Abstra
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipePropertySet;
 import net.minecraft.world.item.crafting.SelectableRecipe;
@@ -239,17 +239,21 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             if (item.hasData(DataComponentTypes.CONTAINER)) {
                 ItemContainerContents containerContents = item.getData(DataComponentTypes.CONTAINER);
                 assert containerContents != null;
-                List<org.bukkit.inventory.ItemStack> items = new ArrayList<>(containerContents.contents());
-                for (int i = 0; i < items.size(); i++) {
-                    org.bukkit.inventory.ItemStack containerItem = items.get(i);
+                List<org.bukkit.inventory.@Nullable ItemStack> oldItems = containerContents.contents();
+                List<org.bukkit.inventory.ItemStack> newItems = new ArrayList<>(oldItems.size());
+                for (int i = 0; i < newItems.size(); i++) {
+                    org.bukkit.inventory.ItemStack containerItem = newItems.get(i);
+                    if (containerItem == null) containerItem = org.bukkit.inventory.ItemStack.empty();
                     org.bukkit.inventory.ItemStack newItem = ItemModifier.modifyItem(new ItemContextBox(contextBox.getViewer(), contextBox.getLocale(), ItemModifierContext.EMPTY_NO_LORE, containerItem.clone()));
-                    if (newItem != null) {
-                        items.set(i, newItem);
+                    if (newItem == null) {
+                        newItems.set(i, containerItem);
+                    } else {
+                        newItems.set(i, newItem);
                         modified = true;
                     }
                 }
                 if (modified) {
-                    item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(items));
+                    item.setData(DataComponentTypes.CONTAINER, ItemContainerContents.containerContents(newItems));
                 }
             }
             // Block storages
@@ -354,6 +358,18 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                     modified = true;
                 }
             }
+            // Kiterino start - Allow stackable damageable items
+            if ((item.hasData(DataComponentTypes.MAX_DAMAGE) || item.hasData(DataComponentTypes.DAMAGE)) && item.hasData(DataComponentTypes.MAX_STACK_SIZE)) {
+                Integer damage = item.getData(DataComponentTypes.DAMAGE);
+                if (damage == null || damage <= 0) {
+                    item.unsetData(DataComponentTypes.DAMAGE);
+                    item.unsetData(DataComponentTypes.MAX_DAMAGE);
+                } else {
+                    item.unsetData(DataComponentTypes.MAX_STACK_SIZE);
+                }
+                modified = true;
+            }
+            // Kiterino end - Allow stackable damageable items
         }
 
         return modified ? contextBox.getItem() : null;
@@ -609,7 +625,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
                 ItemStack replacement = replaceItem(player, ingredientContext, new ItemStack(holder.value()));
                 if (replacement != null) modified[0] = true;
-                return replacement == null ? holder : replacement.getItemHolder();
+                return replacement == null ? holder : replacement.typeHolder();
             });
             return modified[0] ? new RecipePropertySet(new HashSet<>(items)) : set;
         });
@@ -629,14 +645,13 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             StonecutterRecipe nmsRecipe = recipe.value();
             Ingredient ingredient = replaceIngredient(player, ingredientContext, stonecutterRecipeEntry.input(), false);
 
-            ItemStack original = nmsRecipe.result;
+            ItemStackTemplate originalTemplate = nmsRecipe.result;
+            ItemStack original = originalTemplate.create();
             ItemStack result = replaceItem(player, resultContext, original);
-            if (result == null) {
-                result = original;
-            }
+            ItemStackTemplate resultTemplate = result == null ? originalTemplate : ItemStackTemplate.fromNonEmptyStack(result);
 
-            nmsRecipe = new StonecutterRecipe(nmsRecipe.group(), ingredient, result);
-            stonecutterRecipes.add(new SelectableRecipe.SingleInputEntry<>(ingredient, new SelectableRecipe<>(new SlotDisplay.ItemStackSlotDisplay(result), Optional.of(new RecipeHolder<>(recipe.id(), nmsRecipe)))));
+            nmsRecipe = new StonecutterRecipe(new Recipe.CommonInfo(nmsRecipe.showNotification()), ingredient, resultTemplate);
+            stonecutterRecipes.add(new SelectableRecipe.SingleInputEntry<>(ingredient, new SelectableRecipe<>(new SlotDisplay.ItemStackSlotDisplay(resultTemplate), Optional.of(new RecipeHolder<>(recipe.id(), nmsRecipe)))));
         }
 
         return new ClientboundUpdateRecipesPacket(resourceKeyRecipePropertySetMap, new SelectableRecipe.SingleInputSet<>(stonecutterRecipes));
@@ -737,11 +752,12 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             }
             case SlotDisplay.ItemSlotDisplay itemSlotDisplay -> {
                 ItemStack replacement = replaceItem(player, context, itemSlotDisplay.item().value().getDefaultInstance());
-                yield replacement == null ? itemSlotDisplay : new SlotDisplay.ItemStackSlotDisplay(replacement);
+                yield replacement == null ? itemSlotDisplay : new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(replacement));
             }
             case SlotDisplay.ItemStackSlotDisplay itemStackSlotDisplay -> {
-                ItemStack replacement = replaceItem(player, context, itemStackSlotDisplay.stack());
-                yield replacement == null ? itemStackSlotDisplay : new SlotDisplay.ItemStackSlotDisplay(replacement);
+                ItemStackTemplate stackTemplate = itemStackSlotDisplay.stack();
+                ItemStack replacement = replaceItem(player, context, stackTemplate.create());
+                yield replacement == null ? itemStackSlotDisplay : new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(replacement));
             }
             case SlotDisplay.SmithingTrimDemoSlotDisplay smithingTrimDemoSlotDisplay -> {
                 SlotDisplay base = replaceSlotDisplay(player, contextType, context, smithingTrimDemoSlotDisplay.base());
@@ -764,7 +780,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     private static Ingredient replaceIngredient(@Nullable CraftPlayer player, RecipeBookPacketContext context, Ingredient ingredient, boolean fakeRecipeBook) {
         final boolean[] modified = {false};
 
-        Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toBukkit(ingredient), false);
+        Ingredient superDirtyCopy = CraftRecipe.toIngredient(CraftRecipe.toChoice(ingredient), false);
 
         List<Holder<Item>> values = superDirtyCopy.values.stream().toList();
         List<Holder<Item>> valuesCleaned = values.stream()
@@ -828,13 +844,14 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
 
             var namespacedKey = new NamespacedKey(oldHolder.id().getNamespace(), oldHolder.id().getPath());
             var context = new AdvancementPacketContext(ItemModifierContextType.ADVANCEMENT, null, packet, namespacedKey, oldHolder::toBukkit);
-            ItemStack original = oldDisplay.getIcon();
+            ItemStackTemplate originalTemplate = oldDisplay.getIcon();
+            ItemStack original = originalTemplate.create();
             var contextBox = new ItemContextBox(player, context, original.asBukkitCopy());
             ItemStack result = fromBukkit(contextBox, original);
             if (result == null) continue;
 
             var displayInfo = new DisplayInfo(
-                result,
+                ItemStackTemplate.fromNonEmptyStack(result),
                 oldDisplay.getTitle(),
                 oldDisplay.getDescription(),
                 oldDisplay.getBackground(),
@@ -873,7 +890,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
             if (result != null) {
                 modified = true;
                 merchantOffer = merchantOffer.copy();
-                merchantOffer.baseCostA = new ItemCost(result.getItemHolder(), itemCost.count(), DataComponentExactPredicate.allOf(result.getComponents()), result);
+                merchantOffer.baseCostA = new ItemCost(result.typeHolder(), itemCost.count(), DataComponentExactPredicate.allOf(result.getComponents()), result);
             }
 
             itemCost = merchantOffer.getItemCostB().orElse(null);
@@ -887,7 +904,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
                         modified = true;
                         merchantOffer = merchantOffer.copy();
                     }
-                    merchantOffer.costB = Optional.of(new ItemCost(result.getItemHolder(), itemCost.count(), DataComponentExactPredicate.allOf(result.getComponents()), result));
+                    merchantOffer.costB = Optional.of(new ItemCost(result.typeHolder(), itemCost.count(), DataComponentExactPredicate.allOf(result.getComponents()), result));
                 }
             }
 
@@ -910,11 +927,12 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
     private static Packet<?> handle(@Nullable CraftPlayer player, ClientboundLevelParticlesPacket initialPacket) {
         if (!(initialPacket.getParticle() instanceof ItemParticleOption particleOption)) return initialPacket;
 
-        ItemStack original = particleOption.itemStack;
+        ItemStackTemplate originalTemplate = particleOption.itemStack;
+        ItemStack original = originalTemplate.create();
         var contextBox = new ItemContextBox(player, new BasePacketContext(ItemModifierContextType.PARTICLE, null, initialPacket), original.asBukkitCopy());
         ItemStack result = fromBukkit(contextBox, original);
         if (result != null) {
-            particleOption.itemStack = result;
+            particleOption.itemStack = ItemStackTemplate.fromNonEmptyStack(result);
         }
         return initialPacket;
     }

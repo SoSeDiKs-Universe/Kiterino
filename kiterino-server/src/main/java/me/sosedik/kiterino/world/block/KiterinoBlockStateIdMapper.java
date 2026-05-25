@@ -5,7 +5,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
 import net.minecraft.world.level.block.DaylightDetectorBlock;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -70,8 +70,8 @@ public class KiterinoBlockStateIdMapper extends IdMapper<BlockState> {
             return value.setValue(GrowingPlantHeadBlock.AGE, 0);
         }
         if (value.is(Blocks.FARMLAND)) {
-            if (value.getValue(FarmBlock.MOISTURE) != FarmBlock.MAX_MOISTURE) {
-                return value.setValue(FarmBlock.MOISTURE, 0);
+            if (value.getValue(FarmlandBlock.MOISTURE) != FarmlandBlock.MAX_MOISTURE) {
+                return value.setValue(FarmlandBlock.MOISTURE, 0);
             }
             return value;
         }
