@@ -80,10 +80,21 @@
          boolean inLava = this.fluidInteraction.isInFluid(FluidTags.LAVA);
          if (inWater) {
              this.resetFallDistance();
-@@ -3367,6 +_,21 @@
-         }
+@@ -3362,10 +_,30 @@
      }
  
+     public void ejectPassengers() {
++        // Kiterino start - Properly pass dismount cancellation for cross-dimension teleport
++        ejectPassengers(false);
++    }
++    public void ejectPassengers(boolean suppressCancellation) {
++        // Kiterino end - Properly pass dismount cancellation for cross-dimension teleport
+         for (int i = this.passengers.size() - 1; i >= 0; i--) {
+-            this.passengers.get(i).stopRiding();
++            this.passengers.get(i).stopRiding(suppressCancellation); // Kiterino - Properly pass dismount cancellation for cross-dimension teleport
+         }
+     }
++
 +    // Kiterino start - Allow setting entity's rider
 +    public boolean setRider(Player rider) {
 +        if (!new org.bukkit.event.entity.EntityMountEvent(rider.getBukkitEntity(), this.getBukkitEntity()).callEvent()) return false;
@@ -98,15 +109,43 @@
 +        return getRider() != null;
 +    }
 +    // Kiterino end - Allow setting entity's rider
-+
+ 
      public void removeVehicle() {
          // Paper start - Force entity dismount during teleportation
-         this.removeVehicle(false);
-@@ -4066,6 +_,7 @@
+@@ -4160,12 +_,18 @@
+     private @Nullable Entity teleportCrossDimension(final ServerLevel oldLevel, final ServerLevel newLevel, final TeleportTransition transition) {
+         List<Entity> oldPassengers = this.getPassengers();
+         List<Entity> newPassengers = new ArrayList<>(oldPassengers.size());
+-        this.ejectPassengers();
++        Player preservedRider = this.getRider(); // Kiterino - Preserve rider on cross-dimension teleport
++        this.ejectPassengers(true); // Kiterino - Properly pass dismount cancellation for cross-dimension teleport
  
-         this.portalCooldown = oldEntity.portalCooldown;
-         this.portalProcess = oldEntity.portalProcess;
-+        this.rider = oldEntity.rider; // Kiterino - Preserve rider state on entity change
-     }
+         for (Entity passenger : oldPassengers) {
+             Entity newPassenger = passenger.teleport(this.calculatePassengerTransition(transition, passenger));
+             if (newPassenger != null) {
+                 newPassengers.add(newPassenger);
++                // Kiterino start - Preserve rider on cross-dimension teleport
++                if (passenger == preservedRider && newPassenger instanceof Player newRider) {
++                    preservedRider = newRider;
++                }
++                // Kiterino end - Preserve rider on cross-dimension teleport
+             }
+         }
  
-     public @Nullable Entity teleport(TeleportTransition transition) { // Paper - remove param final
+@@ -4186,9 +_,16 @@
+             newEntity.teleportSetPosition(PositionMoveRotation.of(this), PositionMoveRotation.of(transition), transition.relatives());
+             if (this.inWorld) newLevel.addDuringTeleport(newEntity); // CraftBukkit - Don't spawn the new entity if the current entity isn't spawned
+ 
++            newEntity.rider = preservedRider; // Kiterino - Preserve rider on cross-dimension teleport
+             for (Entity newPassenger : newPassengers) {
+                 newPassenger.startRiding(newEntity, true, false);
+             }
++
++            // Kiterino start - Preserve rider on cross-dimension teleport
++            if (newEntity.rider != null && !newEntity.getPassengers().contains(newEntity.rider)) {
++                newEntity.rider = null;
++            }
++            // Kiterino end - Preserve rider on cross-dimension teleport
+ 
+             newLevel.resetEmptyTime();
+             transition.postTeleportTransition().onTransition(newEntity);
