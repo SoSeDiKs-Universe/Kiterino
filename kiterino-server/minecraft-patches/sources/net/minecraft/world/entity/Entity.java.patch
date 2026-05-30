@@ -80,6 +80,25 @@
          boolean inLava = this.fluidInteraction.isInFluid(FluidTags.LAVA);
          if (inWater) {
              this.resetFallDistance();
+@@ -2521,6 +_,18 @@
+         if (victim instanceof ServerPlayer) {
+             CriteriaTriggers.ENTITY_KILLED_PLAYER.trigger((ServerPlayer)victim, this, killingBlow);
+         }
++        // Kiterino start - Award stats to rider
++        if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && victim != this && getRider() instanceof ServerPlayer riderPlayer) {
++            DamageSource killBlow = killingBlow.copy();
++            if (killBlow.directEntity == this) {
++                killBlow.directEntity = riderPlayer;
++            }
++            if (killBlow.causingEntity == this) {
++                killBlow.causingEntity = riderPlayer;
++            }
++            riderPlayer.awardKillScore(victim, killBlow);
++        }
++        // Kiterino end - Award stats to rider
+     }
+ 
+     public boolean shouldRender(final double camX, final double camY, final double camZ) {
 @@ -3362,10 +_,30 @@
      }
  

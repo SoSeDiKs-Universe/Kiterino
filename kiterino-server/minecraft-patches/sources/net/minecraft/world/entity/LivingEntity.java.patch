@@ -33,6 +33,134 @@
              }
  
              this.refreshDirtyAttributes();
+@@ -1616,10 +_,26 @@
+                     serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
+                 }
+             }
++            // Kiterino start - Award stats to rider
++            else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && getRider() instanceof ServerPlayer serverPlayer) {
++                CriteriaTriggers.ENTITY_HURT_PLAYER.trigger(serverPlayer, source, originalDamage, damage, blocked);
++                if (damageBlocked > 0.0F && damageBlocked < 3.4028235E37F) {
++                    serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
++                }
++            }
++            // Kiterino end - Award stats to rider
+ 
+             if (source.getEntity() instanceof ServerPlayer sourcePlayer) {
+                 CriteriaTriggers.PLAYER_HURT_ENTITY.trigger(sourcePlayer, this, source, originalDamage, damage, blocked);
+             }
++            // Kiterino start - Award stats to rider
++            else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider) {
++                Entity sourceEntity = source.getEntity();
++                if (sourceEntity != null && sourceEntity.getRider() instanceof ServerPlayer sourcePlayer) {
++                    CriteriaTriggers.PLAYER_HURT_ENTITY.trigger(sourcePlayer, this, source, originalDamage, damage, blocked);
++                }
++            }
++            // Kiterino end - Award stats to rider
+ 
+             return success;
+         }
+@@ -2453,6 +_,18 @@
+                     } else if (damageSource.getEntity() instanceof ServerPlayer) {
+                         ((ServerPlayer)damageSource.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
+                     }
++                    // Kiterino start - Award stats to rider
++                    else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider) {
++                        if (getRider() instanceof ServerPlayer serverPlayer) {
++                            serverPlayer.awardStat(Stats.DAMAGE_RESISTED, Math.round(damageResisted * 10.0F));
++                        } else {
++                            Entity sourceEntity = damageSource.getEntity();
++                            if (sourceEntity != null && sourceEntity.getRider() instanceof ServerPlayer serverPlayer) {
++                                serverPlayer.awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
++                            }
++                        }
++                    }
++                    // Kiterino end - Award stats to rider
+                 }
+             }
+ 
+@@ -2570,6 +_,18 @@
+                     } else if (source.getEntity() instanceof ServerPlayer) {
+                         ((ServerPlayer)source.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
+                     }
++                    // Kiterino start - Award stats to rider
++                    else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider) {
++                        if (getRider() instanceof ServerPlayer serverPlayer) {
++                            serverPlayer.awardStat(Stats.DAMAGE_RESISTED, Math.round(damageResisted * 10.0F));
++                        } else {
++                            Entity sourceEntity = source.getEntity();
++                            if (sourceEntity != null && sourceEntity.getRider() instanceof ServerPlayer serverPlayer) {
++                                serverPlayer.awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
++                            }
++                        }
++                    }
++                    // Kiterino end - Award stats to rider
+                 }
+             }
+ 
+@@ -2606,10 +_,20 @@
+             if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && this instanceof Player player) {
+                 player.awardStat(Stats.DAMAGE_ABSORBED, Math.round(absorbedDamage * 10.0F));
+             }
++            // Kiterino start - Award stats to rider
++            else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && getRider() instanceof Player player) {
++                player.awardStat(Stats.DAMAGE_ABSORBED, Math.round(absorbedDamage * 10.0F));
++            }
++            // Kiterino end - Award stats to rider
+             // CraftBukkit end
+             if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && source.getEntity() instanceof ServerPlayer serverPlayer) {
+                 serverPlayer.awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
+             }
++            // Kiterino start - Award stats to rider
++            else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && getRider() instanceof ServerPlayer serverPlayer) {
++                serverPlayer.awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
++            }
++            // Kiterino end - Award stats to rider
+ 
+             // CraftBukkit start
+             if (dmg > 0 || !human) {
+@@ -2620,6 +_,13 @@
+                         ((net.minecraft.world.entity.player.Player)this).awardStat(Stats.DAMAGE_TAKEN, Math.round(dmg * 10.0F));
+                     }
+                 }
++                // Kiterino start - Award stats to rider
++                else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && getRider() instanceof ServerPlayer serverPlayer) {
++                    if (dmg < 3.4028235E37F) {
++                        serverPlayer.awardStat(Stats.DAMAGE_TAKEN, Math.round(dmg * 10.0F));
++                    }
++                }
++                // Kiterino end - Award stats to rider
+                 // CraftBukkit end
+                 this.getCombatTracker().recordDamage(source, dmg);
+                 this.setHealth(this.getHealth() - dmg);
+@@ -2639,10 +_,27 @@
+                             serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
+                         }
+                     }
++                    // Kiterino start - Award stats to rider
++                    else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && getRider() instanceof ServerPlayer serverPlayer) {
++                        CriteriaTriggers.ENTITY_HURT_PLAYER.trigger(serverPlayer, source, originalDamage, dmg, true);
++                        float damageBlocked = (float)-event.getDamage(DamageModifier.BLOCKING);
++                        if (damageBlocked > 0.0F && damageBlocked < 3.4028235E37F) {
++                            serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
++                        }
++                    }
++                    // Kiterino end - Award stats to rider
+ 
+                     if (source.getEntity() instanceof ServerPlayer) {
+                         CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayer)source.getEntity(), this, source, originalDamage, dmg, true); // Paper - fix taken/dealt param order
+                     }
++                    // Kiterino start - Award stats to rider
++                    else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider) {
++                        Entity sourceEntity = source.getEntity();
++                        if (sourceEntity != null && sourceEntity.getRider() instanceof ServerPlayer serverPlayer) {
++                            CriteriaTriggers.PLAYER_HURT_ENTITY.trigger(serverPlayer, this, source, originalDamage, dmg, true);
++                        }
++                    }
++                    // Kiterino end - Award stats to rider
+ 
+                     return !io.papermc.paper.configuration.GlobalConfiguration.get().unsupportedSettings.skipVanillaDamageTickWhenShieldBlocked; // Paper - this should always return true, however expose an unsupported setting to flip this to false to enable "shield stunning".
+                 } else {
 @@ -2728,6 +_,7 @@
                  );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
@@ -71,3 +199,15 @@
                  }
              }
          }
+@@ -4140,6 +_,11 @@
+         if (thrower instanceof ServerPlayer) {
+             CriteriaTriggers.THROWN_ITEM_PICKED_UP_BY_ENTITY.trigger((ServerPlayer)thrower, entity.getItem(), this);
+         }
++        // Kiterino start - Award stats to rider
++        else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && thrower != null && thrower.getRider() instanceof ServerPlayer riderPlayer) {
++            CriteriaTriggers.THROWN_ITEM_PICKED_UP_BY_ENTITY.trigger(riderPlayer, entity.getItem(), this);
++        }
++        // Kiterino end - Award stats to rider
+     }
+ 
+     public void take(final Entity entity, final int orgCount) {

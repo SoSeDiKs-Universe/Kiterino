@@ -1,0 +1,37 @@
+--- a/net/minecraft/world/damagesource/DamageSource.java
++++ b/net/minecraft/world/damagesource/DamageSource.java
+@@ -113,8 +_,8 @@
+     }
+ 
+     // Cloning the instance lets us return unique instances of DamageSource without affecting constants defined in DamageSources
+-    private DamageSource copy() {
+-        final DamageSource damageSource = new DamageSource(this.type, this.directEntity, this.causingEntity, this.damageSourcePosition);
++    public DamageSource copy() { // Kiterino - Make public - Award stats to rider
++        final DamageSource damageSource = new DamageSource(this.type, this.directEntity, this.causingEntity, this.damageSourcePosition, true); // Kiterino - Add EntityDamageSourcePick
+         damageSource.knownCause = this.knownCause;
+         damageSource.eventEntityDamager = this.eventEntityDamager;
+         damageSource.eventBlockDamager = this.eventBlockDamager;
+@@ -142,7 +_,23 @@
+     public DamageSource(
+         final Holder<DamageType> type, final @Nullable Entity directEntity, final @Nullable Entity causingEntity, final @Nullable Vec3 damageSourcePosition
+     ) {
++        // Kiterino start - Add EntityDamageSourcePick
++        this(type, directEntity, causingEntity, damageSourcePosition, false);
++    }
++
++    public DamageSource(
++        Holder<DamageType> type, @Nullable Entity directEntity, @Nullable Entity causingEntity, @Nullable Vec3 damageSourcePosition, boolean suppressEvent
++    ) {
++        // Kiterino end - Add EntityDamageSourcePick
+         this.type = type;
++        // Kiterino start - Add EntityDamageSourcePick
++        if (!suppressEvent && (directEntity != null || causingEntity != null)) {
++            var event = new me.sosedik.kiterino.event.damage.EntityDamageSourcePick(directEntity == null ? null : directEntity.getBukkitEntity(), causingEntity == null ? null : causingEntity.getBukkitEntity());
++            event.callEvent();
++            directEntity = event.getDirectEntity() instanceof org.bukkit.craftbukkit.entity.CraftEntity craftEntity ? craftEntity.getHandle() : null;
++            causingEntity = event.getCausingEntity() instanceof org.bukkit.craftbukkit.entity.CraftEntity craftEntity ? craftEntity.getHandle() : null;
++        }
++        // Kiterino end - Add EntityDamageSourcePick
+         this.causingEntity = causingEntity;
+         this.directEntity = directEntity;
+         this.damageSourcePosition = damageSourcePosition;

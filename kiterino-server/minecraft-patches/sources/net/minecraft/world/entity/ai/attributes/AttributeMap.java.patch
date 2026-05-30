@@ -1,0 +1,27 @@
+--- a/net/minecraft/world/entity/ai/attributes/AttributeMap.java
++++ b/net/minecraft/world/entity/ai/attributes/AttributeMap.java
+@@ -19,6 +_,7 @@
+     private final Set<AttributeInstance> attributesToUpdate = new ObjectOpenHashSet<>();
+     private final AttributeSupplier supplier;
+     private final net.minecraft.world.entity.LivingEntity entity; // Purpur - Ridables
++    private final java.util.Set<Holder<Attribute>> customAttributes = new java.util.HashSet<>(); // Kiterino - Filter custom attributes from sending to the client
+ 
+     public AttributeMap(final AttributeSupplier supplier) {
+         // Purpur start - Ridables
+@@ -46,7 +_,7 @@
+     }
+ 
+     public Collection<AttributeInstance> getSyncableAttributes() {
+-        return this.attributes.values().stream().filter(instance -> instance.getAttribute().value().isClientSyncable() && (entity == null || entity.shouldSendAttribute(instance.getAttribute().value()))).collect(Collectors.toList()); // Purpur - Ridables
++        return this.attributes.values().stream().filter(instance -> instance.getAttribute().value().isClientSyncable() && !this.customAttributes.contains(instance.getAttribute()) && (entity == null || entity.shouldSendAttribute(instance.getAttribute().value()))).collect(Collectors.toList()); // Purpur - Ridables // Kiterino - Filter custom attributes from sending to the client
+     }
+ 
+     public @Nullable AttributeInstance getInstance(final Holder<Attribute> attribute) {
+@@ -159,6 +_,7 @@
+     public void registerAttribute(Holder<Attribute> attributeBase) {
+         AttributeInstance attributeModifiable = new AttributeInstance(attributeBase, AttributeInstance::getAttribute);
+         attributes.put(attributeBase, attributeModifiable);
++        this.customAttributes.add(attributeBase); // Kiterino - Filter custom attributes from sending to the client
+     }
+     // Paper - end - living entity allow attribute registration
+ 

@@ -9,3 +9,15 @@
      }
  
      public boolean isWearingBodyArmor() {
+@@ -1637,6 +_,11 @@
+ 
+         this.postPiercingAttack();
+         if (target instanceof net.minecraft.server.level.ServerPlayer) this.ticksSinceLastInteraction = 0; // Purpur - Entity lifespan
++        // Kiterino start - Award stats to rider
++        if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && wasHurt && getRider() instanceof net.minecraft.server.level.ServerPlayer riderPlayer) {
++            riderPlayer.awardStat(net.minecraft.stats.Stats.DAMAGE_DEALT, Math.round(dmg * 10.0F));
++        }
++        // Kiterino end - Award stats to rider
+         return wasHurt;
+     }
+ 

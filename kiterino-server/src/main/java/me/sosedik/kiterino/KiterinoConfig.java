@@ -192,10 +192,12 @@ public final class KiterinoConfig {
     public static boolean aviateRequireItem;
     public static boolean vehicleIgnoreRider;
     public static boolean surviveIgnoreInvulnerability;
+    public static boolean awardStatsToRider;
     private static void statsOptions() {
         aviateRequireItem = getBoolean(config, "stats.aviate-require-item", false, "Require a gliding item for aviate statistic"); // Kiterino - Require wearing an item for elytra distance statistics
         vehicleIgnoreRider = getBoolean(config, "stats.vehicle-ignore-rider", false, "Ignore Purpur's riders for vehicle statistics"); // Kiterino - Don't count Purpur's riding towards distance statistics
         surviveIgnoreInvulnerability = getBoolean(config, "stats.survive-ignore-vulnerability", false, "Ignore invulnerable players for time since death statistics"); // Kiterino - Ignore invulnerable player for time since death
+        awardStatsToRider = getBoolean(config, "stats.award-stats-to-rider", false, "Award things like mob hits/kills to entity's rider"); // Kiterino - Award stats to rider
     }
     // Kiterino end - Stats options
 

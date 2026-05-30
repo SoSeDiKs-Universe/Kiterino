@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/level/block/TargetBlock.java
++++ b/net/minecraft/world/level/block/TargetBlock.java
+@@ -50,6 +_,15 @@
+             playerOwner.awardStat(Stats.TARGET_HIT);
+             CriteriaTriggers.TARGET_BLOCK_HIT.trigger(playerOwner, projectile, hitResult.getLocation(), outputStrength);
+         }
++        // Kiterino start - Award stats to rider
++        else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider) {
++            Entity projectileOwner = projectile.getOwner();
++            if (projectileOwner != null && projectileOwner.getRider() instanceof ServerPlayer rider) {
++                rider.awardStat(Stats.TARGET_HIT);
++                CriteriaTriggers.TARGET_BLOCK_HIT.trigger(rider, projectile, hitResult.getLocation(), outputStrength);
++            }
++        }
++        // Kiterino end - Award stats to rider
+     }
+ 
+     private static int updateRedstoneOutput(final LevelAccessor level, final BlockState state, final BlockHitResult hitResult, final Entity entity) {
