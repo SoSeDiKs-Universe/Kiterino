@@ -5,10 +5,10 @@ Subject: [PATCH] Default pickup loot in summon
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 387baeee3a3535c71140bcaed2ca88823d3471e2..91822ead5500fb506ff78ebcffbe098947fbaef9 100644
+index 195bc559c9a400744c9cef0f36a6afed82c1f51a..871839d823785f32f4d43dc003ca6fd7c86f6c3a 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4754,6 +4754,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4839,6 +4839,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return false;
      }
  
@@ -22,7 +22,7 @@ index 387baeee3a3535c71140bcaed2ca88823d3471e2..91822ead5500fb506ff78ebcffbe0989
      public final EntityDimensions getDimensions(final Pose pose) {
          return pose == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getDefaultDimensions(pose).scale(this.getScale());
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index f28c85e1d0a5a9d3b4d214dc35ef5d0c44c18669..263f9859df1794d29f28f233585af6250cebea1a 100644
+index c2459b062aefe2b99d4bba783eb7ce7ac63be703..49cc0ec83cb7adc03bb05053f3a1d85ef5e39781 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
 @@ -480,7 +480,7 @@ public abstract class Mob extends LivingEntity implements Targeting, EquipmentUs
@@ -35,7 +35,7 @@ index f28c85e1d0a5a9d3b4d214dc35ef5d0c44c18669..263f9859df1794d29f28f233585af625
              this.setCanPickUpLoot(canPickUpLoot);
          }
 diff --git a/net/minecraft/world/entity/animal/allay/Allay.java b/net/minecraft/world/entity/animal/allay/Allay.java
-index 86129786c9927fc5aa941207971e28ff4b20023f..7648544f0224494d52f11deaf93adf93307ac4b3 100644
+index 9e31aaff00f76cfbba9539d7e2bb3283afdaae65..7e10d1920c867861a7a9e2e3c481e85833e26a89 100644
 --- a/net/minecraft/world/entity/animal/allay/Allay.java
 +++ b/net/minecraft/world/entity/animal/allay/Allay.java
 @@ -322,6 +322,13 @@ public class Allay extends PathfinderMob implements InventoryCarrier, VibrationS
@@ -53,7 +53,7 @@ index 86129786c9927fc5aa941207971e28ff4b20023f..7648544f0224494d52f11deaf93adf93
          return !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
      }
 diff --git a/net/minecraft/world/entity/animal/dolphin/Dolphin.java b/net/minecraft/world/entity/animal/dolphin/Dolphin.java
-index 5e966f61ab5a48c6fc7168af3680ab3133d89365..1494b0e4a46b0c86f72b4f3c7315da3f63d94b07 100644
+index 048deece8e45f51d3bad36ef0afd39847086aa9f..319de886224ad08d6d5f81ea390929a865a972d6 100644
 --- a/net/minecraft/world/entity/animal/dolphin/Dolphin.java
 +++ b/net/minecraft/world/entity/animal/dolphin/Dolphin.java
 @@ -118,6 +118,13 @@ public class Dolphin extends AgeableWaterCreature {
@@ -71,10 +71,10 @@ index 5e966f61ab5a48c6fc7168af3680ab3133d89365..1494b0e4a46b0c86f72b4f3c7315da3f
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/animal/fox/Fox.java b/net/minecraft/world/entity/animal/fox/Fox.java
-index 5afc548f802b037154c369f04972ed0f786479bd..3bfb8ebf9d5b03f4f3729e710dcaf72f63c5c626 100644
+index afbfa283a489d3d6e02c9724d338798e99490557..48bf3a6fab6536aa93cab6667ef0a6cff6ea858f 100644
 --- a/net/minecraft/world/entity/animal/fox/Fox.java
 +++ b/net/minecraft/world/entity/animal/fox/Fox.java
-@@ -155,6 +155,13 @@ public class Fox extends Animal {
+@@ -154,6 +154,13 @@ public class Fox extends Animal {
          this.getNavigation().setRequiredPathLength(32.0F);
      }
  
@@ -89,10 +89,10 @@ index 5afc548f802b037154c369f04972ed0f786479bd..3bfb8ebf9d5b03f4f3729e710dcaf72f
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/animal/panda/Panda.java b/net/minecraft/world/entity/animal/panda/Panda.java
-index 0480c5851ff94e095bc54106051d0ca4d2db82e0..9004d541cbf16aff4e0da3065c1b2d3c7c627683 100644
+index f509b3a3a8f1021d5292ec6ed0a6a91e09787754..3f8ada9058c1e50044ed764672789f3245bf4938 100644
 --- a/net/minecraft/world/entity/animal/panda/Panda.java
 +++ b/net/minecraft/world/entity/animal/panda/Panda.java
-@@ -111,6 +111,13 @@ public class Panda extends Animal {
+@@ -110,6 +110,13 @@ public class Panda extends Animal {
          }
      }
  
@@ -152,10 +152,10 @@ index 65090418480c1bb4d30c7228db8c804802e3b500..9e911949017f288b624dc7a16f6d78c4
          this.timeInOverworld = input.getIntOr("TimeInOverworld", 0);
      }
 diff --git a/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java b/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java
-index 062c7f20e73b882ef0550d90e3da47ac39a1b3a7..641b0041d57198dad64120cfa291061e54118f34 100644
+index d02869b5c17378abf18b4ba3514e8916c62b904c..79b0356ac48188e12ae9368bf125bb4da50c728a 100644
 --- a/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java
 +++ b/net/minecraft/world/entity/monster/skeleton/AbstractSkeleton.java
-@@ -153,6 +153,13 @@ public abstract class AbstractSkeleton extends Monster implements RangedAttackMo
+@@ -148,6 +148,13 @@ public abstract class AbstractSkeleton extends Monster implements RangedAttackMo
          return groupData;
      }
  
@@ -170,10 +170,10 @@ index 062c7f20e73b882ef0550d90e3da47ac39a1b3a7..641b0041d57198dad64120cfa291061e
          if (this.level() != null && !this.level().isClientSide()) {
              this.goalSelector.removeGoal(this.meleeGoal);
 diff --git a/net/minecraft/world/entity/monster/zombie/Zombie.java b/net/minecraft/world/entity/monster/zombie/Zombie.java
-index a0b1399d8ea3aeb583dd0c0f1b5ec6300eacf28d..32ecc366f15f64917b02cec773c7000a5abf154e 100644
+index 04ba29b8864804899e19b08b1952df781c96a23e..91c65edb4c0acd56be8cfcebf6dcadcf8beabab5 100644
 --- a/net/minecraft/world/entity/monster/zombie/Zombie.java
 +++ b/net/minecraft/world/entity/monster/zombie/Zombie.java
-@@ -114,6 +114,13 @@ public class Zombie extends Monster {
+@@ -113,6 +113,13 @@ public class Zombie extends Monster {
          this(EntityType.ZOMBIE, level);
      }
  
@@ -188,7 +188,7 @@ index a0b1399d8ea3aeb583dd0c0f1b5ec6300eacf28d..32ecc366f15f64917b02cec773c7000a
      @Override
      public boolean isRidable() {
 diff --git a/net/minecraft/world/entity/npc/villager/Villager.java b/net/minecraft/world/entity/npc/villager/Villager.java
-index b8817f5791560e8b1f8297eed7f932bb5c3d0974..acb5f58bf55669bf2d8521d8ce83a6cc763006e0 100644
+index 0503f9aa01099ebb807c3b6ccfe88f9610cc36b5..b41278fa5fa442081496b699addd86391d698f50 100644
 --- a/net/minecraft/world/entity/npc/villager/Villager.java
 +++ b/net/minecraft/world/entity/npc/villager/Villager.java
 @@ -201,6 +201,13 @@ public class Villager extends AbstractVillager implements VillagerDataHolder, Re

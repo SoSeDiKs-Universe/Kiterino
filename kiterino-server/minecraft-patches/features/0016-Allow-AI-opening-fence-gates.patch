@@ -5,7 +5,7 @@ Subject: [PATCH] Allow AI opening fence gates
 
 
 diff --git a/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java b/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
-index a8bdf295c83dd0cabc4f85dfbee6d7271dadbe1b..2c89b3b605498e11e3c7c2e99c813aee493ffcb7 100644
+index 3d7026568c6ab3ae090f0f3fc4bc03fe8c883470..9a25862be99ee089338668ddab0264f73e7a7741 100644
 --- a/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 +++ b/net/minecraft/world/entity/ai/behavior/InteractWithDoor.java
 @@ -67,6 +67,22 @@ public class InteractWithDoor {
@@ -74,7 +74,7 @@ index a8bdf295c83dd0cabc4f85dfbee6d7271dadbe1b..2c89b3b605498e11e3c7c2e99c813aee
                          iterator.remove();
                      } else {
 diff --git a/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java b/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java
-index b45807e66f927344cdaccf0727c5e2e2a96eb460..83eb714b577354de52eda42392d882ed39423251 100644
+index 0b383b16145d44e5dc29b8de123546656b4793dd..2ebf75064a2b1fb088e0f358e4833ccf968ed9f4 100644
 --- a/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/DoorInteractGoal.java
 @@ -29,6 +29,11 @@ public abstract class DoorInteractGoal extends Goal {
@@ -101,32 +101,32 @@ index b45807e66f927344cdaccf0727c5e2e2a96eb460..83eb714b577354de52eda42392d882ed
          }
      }
  
-@@ -60,6 +70,11 @@ public abstract class DoorInteractGoal extends Goal {
-                     this.doorPos = new BlockPos(node.x, node.y + 1, node.z);
-                     if (!(this.mob.distanceToSqr(this.doorPos.getX(), this.mob.getY(), this.doorPos.getZ()) > 2.25)) {
-                         this.hasDoor = DoorBlock.isWoodenDoor(this.mob.level(), this.doorPos);
-+                        // Kiterino start - Allow AI opening fence gates
-+                        if (this.mob.level().kiterinoConfig.doorOpenAIAffectsGates && !this.hasDoor) {
-+                            this.hasDoor = this.mob.level().getBlockState(this.doorPos).getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock;
-+                        }
-+                        // Kiterino end - Allow AI opening fence gates
-                         if (this.hasDoor) {
-                             return true;
-                         }
-@@ -68,6 +83,11 @@ public abstract class DoorInteractGoal extends Goal {
+@@ -63,6 +73,11 @@ public abstract class DoorInteractGoal extends Goal {
+                 this.doorPos = new BlockPos(node.x, node.y + 1, node.z);
+                 if (!(this.mob.distanceToSqr(this.doorPos.getX(), this.mob.getY(), this.doorPos.getZ()) > 2.25)) {
+                     this.hasDoor = DoorBlock.isWoodenDoor(this.mob.level(), this.doorPos);
++                    // Kiterino start - Allow AI opening fence gates
++                    if (this.mob.level().kiterinoConfig.doorOpenAIAffectsGates && !this.hasDoor) {
++                        this.hasDoor = this.mob.level().getBlockState(this.doorPos).getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock;
++                    }
++                    // Kiterino end - Allow AI opening fence gates
+                     if (this.hasDoor) {
+                         return true;
+                     }
+@@ -71,6 +86,11 @@ public abstract class DoorInteractGoal extends Goal {
  
-                 this.doorPos = this.mob.blockPosition().above();
-                 this.hasDoor = DoorBlock.isWoodenDoor(this.mob.level(), this.doorPos);
-+                // Kiterino start - Allow AI opening fence gates
-+                if (this.mob.level().kiterinoConfig.doorOpenAIAffectsGates && !this.hasDoor) {
-+                    this.hasDoor = this.mob.level().getBlockState(this.doorPos).getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock;
-+                }
-+                // Kiterino end - Allow AI opening fence gates
-                 return this.hasDoor;
-             } else {
-                 return false;
+             this.doorPos = this.mob.blockPosition().above();
+             this.hasDoor = DoorBlock.isWoodenDoor(this.mob.level(), this.doorPos);
++            // Kiterino start - Allow AI opening fence gates
++            if (this.mob.level().kiterinoConfig.doorOpenAIAffectsGates && !this.hasDoor) {
++                this.hasDoor = this.mob.level().getBlockState(this.doorPos).getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock;
++            }
++            // Kiterino end - Allow AI opening fence gates
+             return this.hasDoor;
+         } else {
+             return false;
 diff --git a/net/minecraft/world/level/block/FenceGateBlock.java b/net/minecraft/world/level/block/FenceGateBlock.java
-index 54a9ad47f5990a38648e5b6466d8c817e8b3cf8d..5f79d070d60d40d3d8881bbd99f501610a1481a5 100644
+index a82b060163a028ae45f207177a8f35c0b1b6793b..5e6e8f7b1ee51f6c4a7644b4dc973130a3d46c02 100644
 --- a/net/minecraft/world/level/block/FenceGateBlock.java
 +++ b/net/minecraft/world/level/block/FenceGateBlock.java
 @@ -218,4 +218,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
@@ -152,17 +152,18 @@ index 54a9ad47f5990a38648e5b6466d8c817e8b3cf8d..5f79d070d60d40d3d8881bbd99f50161
 +    // Kiterino end - Allow AI opening fence gates
  }
 diff --git a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 47a457ede2b7913812e72c3ddd54c68f28b01e03..666dd63ef99c635bcca0e3fda6ddd8a02d38e40a 100644
+index 88b131b1cb859e8579e1697173020a4dcd2f03a6..710367b91706b06eb699312bf114010bab46d1a2 100644
 --- a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -535,6 +535,10 @@ public class WalkNodeEvaluator extends NodeEvaluator {
-                 } else {
+@@ -562,6 +562,11 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                      return door.type().canOpenByHand() ? PathType.DOOR_WOOD_CLOSED : PathType.DOOR_IRON_CLOSED;
                  }
-+            // Kiterino start - Allow AI opening fence gates
-+            } else if (level instanceof net.minecraft.server.level.ServerLevel serverLevel && serverLevel.kiterinoConfig.doorOpenAIAffectsGates && block instanceof FenceGateBlock && !blockState.getValue(FenceGateBlock.OPEN)) {
-+                return PathType.DOOR_WOOD_CLOSED;
-+            // Kiterino end - Allow AI opening fence gates
-             } else if (block instanceof BaseRailBlock) {
-                 return PathType.RAIL;
-             } else if (block instanceof LeavesBlock) {
+             } else {
++                // Kiterino start - Allow AI opening fence gates
++                if (level instanceof net.minecraft.server.level.ServerLevel serverLevel && serverLevel.kiterinoConfig.doorOpenAIAffectsGates && block instanceof FenceGateBlock && !blockState.getValue(FenceGateBlock.OPEN)) {
++                    return PathType.DOOR_WOOD_CLOSED;
++                }
++                // Kiterino end - Allow AI opening fence gates
+                 if (block instanceof BaseRailBlock) {
+                     return PathType.RAIL;
+                 }

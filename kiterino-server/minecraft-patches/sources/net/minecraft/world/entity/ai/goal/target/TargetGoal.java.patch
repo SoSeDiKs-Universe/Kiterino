@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
 +++ b/net/minecraft/world/entity/ai/goal/target/TargetGoal.java
-@@ -133,4 +_,10 @@
+@@ -139,4 +_,10 @@
          this.unseenMemoryTicks = unseenMemoryTicks;
          return this;
      }

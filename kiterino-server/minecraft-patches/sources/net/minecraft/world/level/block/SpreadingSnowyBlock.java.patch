@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/SpreadingSnowyBlock.java
 +++ b/net/minecraft/world/level/block/SpreadingSnowyBlock.java
-@@ -96,6 +_,11 @@
+@@ -98,6 +_,11 @@
                              org.bukkit.craftbukkit.event.CraftEventFactory.handleBlockSpreadEvent(level, pos, testPos, defaultBlockState.setValue(SNOWY, isSnowySetting(access.getBlockState(testPos.above()))), Block.UPDATE_ALL); // CraftBukkit
                              // Paper end - Perf: optimize dirt and snow spreading
                          }

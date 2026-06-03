@@ -6,20 +6,20 @@ Subject: [PATCH] Better EntityShootBowEvent cancellation
 Don't increase stats / play bow sound if event was cancelled
 
 diff --git a/net/minecraft/world/item/BowItem.java b/net/minecraft/world/item/BowItem.java
-index eb9d1d0ae200603e09be683608b2a8b971033817..bef022378130e9303814ab592114168d6dbdc4e3 100644
+index 6b5fe2fa8c02e99e651a066d126f1e5891bb4740..2aee7df5d21c9885916c075a482aa22a9cf33fbd 100644
 --- a/net/minecraft/world/item/BowItem.java
 +++ b/net/minecraft/world/item/BowItem.java
-@@ -44,7 +44,7 @@ public class BowItem extends ProjectileWeaponItem {
-                 } else {
-                     List<ItemStack> firedProjectiles = draw(itemStack, projectile, player, !projectile.has(net.minecraft.core.component.DataComponents.INTANGIBLE_PROJECTILE)); // Kiterino - Infinite projectiles
-                     if (level instanceof ServerLevel serverLevel && !firedProjectiles.isEmpty()) {
--                        this.shoot(serverLevel, player, player.getUsedItemHand(), itemStack, firedProjectiles, pow * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, pow == 1.0F, null, pow); // Paper - Pass draw strength // Purpur - Projectile offset config
-+                        if (!this.shoot(serverLevel, player, player.getUsedItemHand(), itemStack, firedProjectiles, pow * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, pow == 1.0F, null, pow)) return false; // Paper - Pass draw strength // Purpur - Projectile offset config // Kiterino - Better EntityShootBowEvent cancellation
-                     }
+@@ -46,7 +46,7 @@ public class BowItem extends ProjectileWeaponItem {
  
-                     level.playSound(
+             List<ItemStack> firedProjectiles = draw(itemStack, projectile, player, !projectile.has(net.minecraft.core.component.DataComponents.INTANGIBLE_PROJECTILE)); // Kiterino - Infinite projectiles
+             if (level instanceof ServerLevel serverLevel && !firedProjectiles.isEmpty()) {
+-                this.shoot(serverLevel, player, player.getUsedItemHand(), itemStack, firedProjectiles, pow * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, pow == 1.0F, null, pow); // Paper - Pass draw strength // Purpur - Projectile offset config
++	            if (!this.shoot(serverLevel, player, player.getUsedItemHand(), itemStack, firedProjectiles, pow * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, pow == 1.0F, null, pow)) return false; // Paper - Pass draw strength // Purpur - Projectile offset config // Kiterino - Better EntityShootBowEvent cancellation
+             }
+ 
+             level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index 21a9d9163eb1f759f04af4c7a59add8fb4bb3774..aaba9c2a525fac2c7d7856f15366af21ae081d40 100644
+index 285509cd868098c788b713dea1d74471ea11d754..b34e4295dfbcffc0ec5ba2d1ed821b0e5be3b1ed 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
 @@ -198,7 +198,7 @@ public class CrossbowItem extends ProjectileWeaponItem {
@@ -32,7 +32,7 @@ index 21a9d9163eb1f759f04af4c7a59add8fb4bb3774..aaba9c2a525fac2c7d7856f15366af21
                      CriteriaTriggers.SHOT_CROSSBOW.trigger(player, weapon);
                      player.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
 diff --git a/net/minecraft/world/item/ProjectileWeaponItem.java b/net/minecraft/world/item/ProjectileWeaponItem.java
-index da5aa5346e04feb6c5b6e77aaf2f91fd9cc022b3..b2953e71f0c05c1bbb5733d91d9df0cb9b7b45b9 100644
+index 039fc3ced4e06a97346264b52375ddd298fb8422..d78ee648df7ebed9ada8f8f3b48e1586f2efb74d 100644
 --- a/net/minecraft/world/item/ProjectileWeaponItem.java
 +++ b/net/minecraft/world/item/ProjectileWeaponItem.java
 @@ -40,7 +40,7 @@ public abstract class ProjectileWeaponItem extends Item {

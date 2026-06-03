@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/state/StateHolder.java
 +++ b/net/minecraft/world/level/block/state/StateHolder.java
-@@ -58,6 +_,22 @@
+@@ -57,6 +_,22 @@
          // Paper end - optimise blockstate property access
      }
  

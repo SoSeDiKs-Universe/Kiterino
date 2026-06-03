@@ -4,22 +4,22 @@
          ResourceKey<Level> newDimension = fromEnd ? respawnData.dimension() : Level.END;
          BlockPos spawnBlockPos = fromEnd ? respawnData.pos() : ServerLevel.END_SPAWN_POINT;
          ServerLevel newLevel = currentLevel.getServer().getLevel(newDimension);
-+	    // Kiterino start - Call EntityPortalReadyEvent for End Portal
-+	    io.papermc.paper.event.entity.EntityPortalReadyEvent portalReadyEvent = new io.papermc.paper.event.entity.EntityPortalReadyEvent(entity.getBukkitEntity(), newLevel == null ? null : newLevel.getWorld(), org.bukkit.PortalType.ENDER);
-+	    if (!portalReadyEvent.callEvent()) {
-+		    return null;
-+	    }
-+	    newLevel = portalReadyEvent.getTargetWorld() == null ? null : ((org.bukkit.craftbukkit.CraftWorld) portalReadyEvent.getTargetWorld()).getHandle();
-+	    // Kiterino end - Call EntityPortalReadyEvent for End Portal
++        // Kiterino start - Call EntityPortalReadyEvent for End Portal
++        io.papermc.paper.event.entity.EntityPortalReadyEvent portalReadyEvent = new io.papermc.paper.event.entity.EntityPortalReadyEvent(entity.getBukkitEntity(), newLevel == null ? null : newLevel.getWorld(), org.bukkit.PortalType.ENDER);
++        if (!portalReadyEvent.callEvent()) {
++            return null;
++        }
++        newLevel = portalReadyEvent.getTargetWorld() == null ? null : ((org.bukkit.craftbukkit.CraftWorld) portalReadyEvent.getTargetWorld()).getHandle();
++        // Kiterino end - Call EntityPortalReadyEvent for End Portal
          if (newLevel == null) {
              return null;
-         } else {
-@@ -108,7 +_,7 @@
-                 xRot = respawnData.pitch();
-                 relatives = Relative.union(Relative.DELTA, Relative.ROTATION);
-                 if (entity instanceof ServerPlayer serverPlayer) {
--                    return serverPlayer.findRespawnPositionAndUseSpawnBlock(false, TeleportTransition.DO_NOTHING, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL); // CraftBukkit
-+                    return serverPlayer.findRespawnPositionAndUseSpawnBlock(false, TeleportTransition.DO_NOTHING, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL, newLevel); // CraftBukkit // Kiterino - Call EntityPortalReadyEvent for End Portal
-                 }
+         }
+@@ -109,7 +_,7 @@
+             xRot = respawnData.pitch();
+             relatives = Relative.union(Relative.DELTA, Relative.ROTATION);
+             if (entity instanceof ServerPlayer serverPlayer) {
+-                return serverPlayer.findRespawnPositionAndUseSpawnBlock(false, TeleportTransition.DO_NOTHING, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL); // CraftBukkit
++                return serverPlayer.findRespawnPositionAndUseSpawnBlock(false, TeleportTransition.DO_NOTHING, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.END_PORTAL, newLevel); // CraftBukkit // Kiterino - Call EntityPortalReadyEvent for End Portal
+             }
  
-                 spawnPos = entity.adjustSpawnLocation(newLevel, spawnBlockPos).getBottomCenter();
+             spawnPos = entity.adjustSpawnLocation(newLevel, spawnBlockPos).getBottomCenter();

@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -604,6 +_,7 @@
+@@ -601,6 +_,7 @@
          }
          TeleportTransition respawnInfo = result.transition();
          Level fromLevel = serverPlayer.level();
@@ -8,7 +8,7 @@
          // Paper end - respawn event
          this.players.remove(serverPlayer);
          this.playersByName.remove(serverPlayer.getScoreboardName().toLowerCase(java.util.Locale.ROOT)); // Paper
-@@ -692,7 +_,7 @@
+@@ -689,7 +_,7 @@
  
          // It's possible for respawn to be in a diff dimension
          if (fromLevel != level) {

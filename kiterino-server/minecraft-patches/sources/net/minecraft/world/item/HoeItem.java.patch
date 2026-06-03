@@ -1,14 +1,14 @@
 --- a/net/minecraft/world/item/HoeItem.java
 +++ b/net/minecraft/world/item/HoeItem.java
-@@ -62,6 +_,11 @@
-             // Purpur end - Tool actionable options
-             if (predicate.test(context)) {
-                 Player player = context.getPlayer();
-+                // Kiterino start - Add missing EntityBlockChange
-+                if (!org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, pos, tillable.into().defaultBlockState())) {
-+                    return InteractionResult.PASS;
-+                }
-+                // Kiterino end - Add missing EntityBlockChange
-                 if (!TILLABLES.containsKey(clickedBlock)) level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F); // Purpur - Tool actionable options - force sound
-                 if (!level.isClientSide()) {
-                     action.accept(context);
+@@ -63,6 +_,11 @@
+         // Purpur end - Tool actionable options
+         if (predicate.test(context)) {
+             Player player = context.getPlayer();
++            // Kiterino start - Add missing EntityBlockChange
++            if (!org.bukkit.craftbukkit.event.CraftEventFactory.callEntityChangeBlockEvent(player, pos, tillable.into().defaultBlockState())) {
++                return InteractionResult.PASS;
++            }
++            // Kiterino end - Add missing EntityBlockChange
+             if (!TILLABLES.containsKey(clickedBlock)) level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F); // Purpur - Tool actionable options - force sound
+             if (!level.isClientSide()) {
+                 action.accept(context);

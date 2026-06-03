@@ -11,7 +11,7 @@
      private int lastCheckY;
      public @Nullable Holder<MobEffect> primaryPower;
      public @Nullable Holder<MobEffect> secondaryPower;
-@@ -92,7 +_,7 @@
+@@ -88,7 +_,7 @@
          public void set(final int dataId, final int value) {
              switch (dataId) {
                  case 0:
@@ -20,7 +20,7 @@
                      break;
                  case 1:
                      if (!BeaconBlockEntity.this.level.isClientSide() && !BeaconBlockEntity.this.beamSections.isEmpty()) {
-@@ -230,7 +_,7 @@
+@@ -226,7 +_,7 @@
          int previousLevels = entity.levels;
          if (level.getGameTime() % 80L == 0L) {
              if (!entity.beamSections.isEmpty() || (level.purpurConfig.beaconAllowEffectsWithTintedGlass && isTintedGlass)) { // Purpur - fix beacon effects persisting with broken base while tinted glass is used
@@ -29,7 +29,7 @@
              }
  
              if (entity.levels > 0 && (!entity.beamSections.isEmpty() || (level.purpurConfig.beaconAllowEffectsWithTintedGlass && isTintedGlass))) { // Purpur - allow beacon effects when covered by tinted glass
-@@ -422,7 +_,10 @@
+@@ -418,7 +_,10 @@
          super.loadAdditional(input);
          this.primaryPower = loadEffect(input, "primary_effect");
          this.secondaryPower = loadEffect(input, "secondary_effect");
@@ -41,7 +41,7 @@
          this.name = parseCustomNameSafe(input, "CustomName");
          this.lockKey = LockCode.fromTag(input);
          this.effectRange = input.getDoubleOr(PAPER_RANGE_TAG, -1); // Paper - Custom beacon ranges
-@@ -433,6 +_,7 @@
+@@ -429,6 +_,7 @@
          super.saveAdditional(output);
          storeEffect(output, "primary_effect", this.primaryPower);
          storeEffect(output, "secondary_effect", this.secondaryPower);

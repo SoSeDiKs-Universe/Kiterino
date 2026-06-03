@@ -127,7 +127,7 @@ index 1ace17d8fc7e7b8b4722a1889d49233c0ec55e20..90b3514f16d1e4555a5ffd79493a10e7
          }
      }
 diff --git a/net/minecraft/world/item/crafting/Ingredient.java b/net/minecraft/world/item/crafting/Ingredient.java
-index 32d5829f605357b83ff559b5f298faba00f5b53e..e8122350f22fa9e27d9649c0cbf21c08363b8f82 100644
+index f1319a05609dc98e2fa546381a2d8400b8c436b8..2e91d9d6dcfc373cd9ca83a4d10928b76470dfcc 100644
 --- a/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/net/minecraft/world/item/crafting/Ingredient.java
 @@ -35,7 +35,7 @@ public final class Ingredient implements Predicate<ItemStack>, StackedContents.I
@@ -139,7 +139,7 @@ index 32d5829f605357b83ff559b5f298faba00f5b53e..e8122350f22fa9e27d9649c0cbf21c08
  
      public boolean isExact() {
          return this.itemStacks != null;
-@@ -83,7 +83,7 @@ public final class Ingredient implements Predicate<ItemStack>, StackedContents.I
+@@ -85,7 +85,7 @@ public final class Ingredient implements Predicate<ItemStack>, StackedContents.I
      @Override
      public boolean test(final ItemStack input) {
          // CraftBukkit start
@@ -148,7 +148,7 @@ index 32d5829f605357b83ff559b5f298faba00f5b53e..e8122350f22fa9e27d9649c0cbf21c08
              return this.itemStacks.contains(input); // Paper - Improve exact choice recipe ingredients (hashing FTW!)
          }
          // CraftBukkit end
-@@ -101,15 +101,15 @@ public final class Ingredient implements Predicate<ItemStack>, StackedContents.I
+@@ -103,15 +103,15 @@ public final class Ingredient implements Predicate<ItemStack>, StackedContents.I
          return switch (itemOrExact) {
              case io.papermc.paper.inventory.recipe.ItemOrExact.Item(final Holder<Item> item) ->
                  !this.isExact() && this.values.contains(item);

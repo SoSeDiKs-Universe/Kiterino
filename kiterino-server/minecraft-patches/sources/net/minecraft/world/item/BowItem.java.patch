@@ -8,12 +8,12 @@
              }
              // Purpur end - Infinity bow settings
              if (projectile.isEmpty()) {
-@@ -41,7 +_,7 @@
-                 if (pow < 0.1) {
-                     return false;
-                 } else {
--                    List<ItemStack> firedProjectiles = draw(itemStack, projectile, player);
-+                    List<ItemStack> firedProjectiles = draw(itemStack, projectile, player, !projectile.has(net.minecraft.core.component.DataComponents.INTANGIBLE_PROJECTILE)); // Kiterino - Infinite projectiles
-                     if (level instanceof ServerLevel serverLevel && !firedProjectiles.isEmpty()) {
-                         this.shoot(serverLevel, player, player.getUsedItemHand(), itemStack, firedProjectiles, pow * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, pow == 1.0F, null, pow); // Paper - Pass draw strength // Purpur - Projectile offset config
-                     }
+@@ -43,7 +_,7 @@
+                 return false;
+             }
+ 
+-            List<ItemStack> firedProjectiles = draw(itemStack, projectile, player);
++            List<ItemStack> firedProjectiles = draw(itemStack, projectile, player, !projectile.has(net.minecraft.core.component.DataComponents.INTANGIBLE_PROJECTILE)); // Kiterino - Infinite projectiles
+             if (level instanceof ServerLevel serverLevel && !firedProjectiles.isEmpty()) {
+                 this.shoot(serverLevel, player, player.getUsedItemHand(), itemStack, firedProjectiles, pow * 3.0F, (float) serverLevel.purpurConfig.bowProjectileOffset, pow == 1.0F, null, pow); // Paper - Pass draw strength // Purpur - Projectile offset config
+             }

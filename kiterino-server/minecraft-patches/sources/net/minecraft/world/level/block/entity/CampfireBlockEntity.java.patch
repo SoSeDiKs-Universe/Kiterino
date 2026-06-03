@@ -53,8 +53,8 @@
      public static void particleTick(final Level level, final BlockPos pos, final BlockState state, final CampfireBlockEntity entity) {
          RandomSource random = level.getRandom();
          if (random.nextFloat() < 0.11F) {
-@@ -210,7 +_,21 @@
-         CompoundTag var4;
+@@ -209,7 +_,21 @@
+     public CompoundTag getUpdateTag(final HolderLookup.Provider registries) {
          try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(this.problemPath(), LOGGER)) {
              TagValueOutput output = TagValueOutput.createWithContext(reporter, registries);
 -            ContainerHelper.saveAllItems(output, this.items, true);
@@ -73,6 +73,6 @@
 +            }
 +            ContainerHelper.saveAllItems(output, items, true);
 +            // Kiterino end - Spoof sent items on block entities
-             var4 = output.buildResult();
+             return output.buildResult();
          }
- 
+     }

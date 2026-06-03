@@ -1,53 +1,53 @@
 --- a/net/minecraft/world/item/BundleItem.java
 +++ b/net/minecraft/world/item/BundleItem.java
-@@ -64,6 +_,11 @@
-             ItemStack other = slot.getItem();
-             BundleContents.Mutable contents = new BundleContents.Mutable(initialContents);
-             if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
-+                // Kiterino start - Add Bundle API
-+                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerPutItemInBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), false).callEvent()) {
-+                    return false;
-+                }
-+                // Kiterino end - Add Bundle API
-                 if (contents.tryTransfer(slot, player) > 0) {
-                     playInsertSound(player);
-                 } else {
-@@ -74,6 +_,11 @@
-                 this.broadcastChangesOnContainerMenu(player);
-                 return true;
-             } else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
-+                // Kiterino start - Add Bundle API
-+                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerRemoveItemFromBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), false).callEvent()) {
-+                    return false;
-+                }
-+                // Kiterino end - Add Bundle API
-                 ItemStack itemStack = contents.removeOne();
-                 if (itemStack != null) {
-                     ItemStack remainder = slot.safeInsert(itemStack);
-@@ -107,6 +_,11 @@
+@@ -65,6 +_,11 @@
+         ItemStack other = slot.getItem();
+         BundleContents.Mutable contents = new BundleContents.Mutable(initialContents);
+         if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
++            // Kiterino start - Add Bundle API
++            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerPutItemInBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), false).callEvent()) {
++                return false;
++            }
++            // Kiterino end - Add Bundle API
+             if (contents.tryTransfer(slot, player) > 0) {
+                 playInsertSound(player);
              } else {
-                 BundleContents.Mutable contents = new BundleContents.Mutable(initialContents);
-                 if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
-+                    // Kiterino start - Add Bundle API
-+                    if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerPutItemInBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), true).callEvent()) {
-+                        return false;
-+                    }
-+                    // Kiterino end - Add Bundle API
-                     if (slot.allowModification(player) && contents.tryInsert(other) > 0) {
-                         playInsertSound(player);
-                     } else {
-@@ -117,6 +_,11 @@
-                     this.broadcastChangesOnContainerMenu(player);
-                     return true;
-                 } else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
-+                    // Kiterino start - Add Bundle API
-+                    if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerRemoveItemFromBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), true).callEvent()) {
-+                        return false;
-+                    }
-+                    // Kiterino end - Add Bundle API
-                     if (slot.allowModification(player)) {
-                         ItemStack removed = contents.removeOne();
-                         if (removed != null) {
+@@ -75,6 +_,11 @@
+             this.broadcastChangesOnContainerMenu(player);
+             return true;
+         } else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
++            // Kiterino start - Add Bundle API
++            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerRemoveItemFromBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), false).callEvent()) {
++                return false;
++            }
++            // Kiterino end - Add Bundle API
+             ItemStack itemStack = contents.removeOne();
+             if (itemStack != null) {
+                 ItemStack remainder = slot.safeInsert(itemStack);
+@@ -109,6 +_,11 @@
+ 
+         BundleContents.Mutable contents = new BundleContents.Mutable(initialContents);
+         if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
++            // Kiterino start - Add Bundle API
++            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerPutItemInBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), true).callEvent()) {
++                return false;
++            }
++            // Kiterino end - Add Bundle API
+             if (slot.allowModification(player) && contents.tryInsert(other) > 0) {
+                 playInsertSound(player);
+             } else {
+@@ -119,6 +_,11 @@
+             this.broadcastChangesOnContainerMenu(player);
+             return true;
+         } else if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
++            // Kiterino start - Add Bundle API
++            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && !new me.sosedik.kiterino.event.player.PlayerRemoveItemFromBundleEvent(serverPlayer.getBukkitEntity(), self.asBukkitCopy(), other.asBukkitCopy(), slot.getContainerSlot(), true).callEvent()) {
++                return false;
++            }
++            // Kiterino end - Add Bundle API
+             if (slot.allowModification(player)) {
+                 ItemStack removed = contents.removeOne();
+                 if (removed != null) {
 @@ -190,6 +_,13 @@
      }
  

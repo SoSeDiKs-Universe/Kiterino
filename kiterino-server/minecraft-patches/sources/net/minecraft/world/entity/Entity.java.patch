@@ -1,7 +1,7 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
 @@ -303,6 +_,7 @@
-     public final RandomSource random; // Paper - Share random for entities to make them more random // Add toggle for RNG manipulation
+     public final RandomSource random; // Paper - Share random for entities to make them more random // Purpur - Add toggle for RNG manipulation
      public int tickCount;
      private int remainingFireTicks;
 +    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino - Forced panic mode API
@@ -52,7 +52,7 @@
          }
          // Paper start - detailed watchdog information
          } finally {
-@@ -2073,6 +_,18 @@
+@@ -2075,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }
  
@@ -71,7 +71,7 @@
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -2107,7 +_,7 @@
+@@ -2109,7 +_,7 @@
  
      protected boolean updateFluidInteraction() {
          this.fluidInteraction.update(this, !this.isPushedByFluid());
@@ -80,7 +80,7 @@
          boolean inLava = this.fluidInteraction.isInFluid(FluidTags.LAVA);
          if (inWater) {
              this.resetFallDistance();
-@@ -2521,6 +_,18 @@
+@@ -2523,6 +_,18 @@
          if (victim instanceof ServerPlayer) {
              CriteriaTriggers.ENTITY_KILLED_PLAYER.trigger((ServerPlayer)victim, this, killingBlow);
          }
@@ -99,7 +99,7 @@
      }
  
      public boolean shouldRender(final double camX, final double camY, final double camZ) {
-@@ -3362,10 +_,30 @@
+@@ -3365,10 +_,30 @@
      }
  
      public void ejectPassengers() {
@@ -131,7 +131,7 @@
  
      public void removeVehicle() {
          // Paper start - Force entity dismount during teleportation
-@@ -4160,12 +_,18 @@
+@@ -4162,12 +_,18 @@
      private @Nullable Entity teleportCrossDimension(final ServerLevel oldLevel, final ServerLevel newLevel, final TeleportTransition transition) {
          List<Entity> oldPassengers = this.getPassengers();
          List<Entity> newPassengers = new ArrayList<>(oldPassengers.size());
@@ -151,20 +151,20 @@
              }
          }
  
-@@ -4186,9 +_,16 @@
-             newEntity.teleportSetPosition(PositionMoveRotation.of(this), PositionMoveRotation.of(transition), transition.relatives());
-             if (this.inWorld) newLevel.addDuringTeleport(newEntity); // CraftBukkit - Don't spawn the new entity if the current entity isn't spawned
+@@ -4189,9 +_,16 @@
+         newEntity.teleportSetPosition(PositionMoveRotation.of(this), PositionMoveRotation.of(transition), transition.relatives());
+         if (this.inWorld) newLevel.addDuringTeleport(newEntity); // CraftBukkit - Don't spawn the new entity if the current entity isn't spawned
  
-+            newEntity.rider = preservedRider; // Kiterino - Preserve rider on cross-dimension teleport
-             for (Entity newPassenger : newPassengers) {
-                 newPassenger.startRiding(newEntity, true, false);
-             }
++        newEntity.rider = preservedRider; // Kiterino - Preserve rider on cross-dimension teleport
+         for (Entity newPassenger : newPassengers) {
+             newPassenger.startRiding(newEntity, true, false);
+         }
 +
-+            // Kiterino start - Preserve rider on cross-dimension teleport
-+            if (newEntity.rider != null && !newEntity.getPassengers().contains(newEntity.rider)) {
-+                newEntity.rider = null;
-+            }
-+            // Kiterino end - Preserve rider on cross-dimension teleport
++        // Kiterino start - Preserve rider on cross-dimension teleport
++        if (newEntity.rider != null && !newEntity.getPassengers().contains(newEntity.rider)) {
++            newEntity.rider = null;
++        }
++        // Kiterino end - Preserve rider on cross-dimension teleport
  
-             newLevel.resetEmptyTime();
-             transition.postTeleportTransition().onTransition(newEntity);
+         newLevel.resetEmptyTime();
+         transition.postTeleportTransition().onTransition(newEntity);

@@ -5,10 +5,10 @@ Subject: [PATCH] Add EntityLoadsProjectileEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 77c00ef7b25acc9884d8f4117e4706f45cd97134..5913beef80612067b4fdb4afb8f124fa89a18082 100644
+index f36d32456254a0d781c7652309c6322ed357926e..dea5b9f2647f9dfac756d0e358645895ba507c86 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -4840,6 +4840,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+@@ -4925,6 +4925,23 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
          return ItemStack.EMPTY;
      }
  
@@ -33,7 +33,7 @@ index 77c00ef7b25acc9884d8f4117e4706f45cd97134..5913beef80612067b4fdb4afb8f124fa
          return switch (equipmentSlot) {
              case MAINHAND -> EntityEvent.MAINHAND_BREAK;
 diff --git a/net/minecraft/world/entity/monster/Monster.java b/net/minecraft/world/entity/monster/Monster.java
-index 597f72bd91ad5b214a6c08eae49b581385dc2834..12edfe8c90e2bb8ea3182e3c6c173810ca1ef75d 100644
+index 0ce15ca820010f2dd44488e60ac06517968884bb..4c2ba1c50d3f4b691470fe1c81452db3a7c48a8c 100644
 --- a/net/minecraft/world/entity/monster/Monster.java
 +++ b/net/minecraft/world/entity/monster/Monster.java
 @@ -159,7 +159,7 @@ public abstract class Monster extends PathfinderMob implements Enemy {
@@ -46,29 +46,30 @@ index 597f72bd91ad5b214a6c08eae49b581385dc2834..12edfe8c90e2bb8ea3182e3c6c173810
              return ItemStack.EMPTY;
          }
 diff --git a/net/minecraft/world/entity/player/Player.java b/net/minecraft/world/entity/player/Player.java
-index f8de2d745ccb7348bec9ce05c7803b176c36fc93..7467dfd81faaa9bc6c74598b843f6d415e7d2ef9 100644
+index 3c9ac666232f9677e6e119ce26b8d3161da3ce51..9898338bed6fcd520d19779006be44f29fb6c84c 100644
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -2111,19 +2111,19 @@ public abstract class Player extends Avatar implements ContainerUser {
-             Predicate<ItemStack> supportedProjectiles = ((ProjectileWeaponItem)heldWeapon.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(heldWeapon, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
-             ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedProjectiles);
-             if (!heldProjectile.isEmpty()) {
--                return heldProjectile;
-+                return getProjectile(heldWeapon, heldProjectile, supportedProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
-             } else {
-                 supportedProjectiles = ((ProjectileWeaponItem)heldWeapon.getItem()).getAllSupportedProjectiles().and(item -> this.tryReadyArrow(heldWeapon, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
+@@ -2112,7 +2112,7 @@ public abstract class Player extends Avatar implements ContainerUser {
+         Predicate<ItemStack> supportedProjectiles = ((ProjectileWeaponItem)heldWeapon.getItem()).getSupportedHeldProjectiles().and(item -> this.tryReadyArrow(heldWeapon, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
+         ItemStack heldProjectile = ProjectileWeaponItem.getHeldProjectile(this, supportedProjectiles);
+         if (!heldProjectile.isEmpty()) {
+-            return heldProjectile;
++	        return getProjectile(heldWeapon, heldProjectile, supportedProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
+         }
  
-                 for (int i = 0; i < this.inventory.getContainerSize(); i++) {
-                     ItemStack itemStack = this.inventory.getItem(i);
-                     if (supportedProjectiles.test(itemStack)) {
--                        return itemStack;
-+                        return getProjectile(heldProjectile, itemStack, supportedProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
-                     }
-                 }
- 
-                 if (anyEventCancelled.booleanValue() && !this.abilities.instabuild && this instanceof final ServerPlayer player) this.resyncUsingItem(player); // Paper - resync if no item matched the Predicate
--                return this.hasInfiniteMaterials() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
-+                return getProjectile(heldWeapon, this.hasInfiniteMaterials() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY, supportedProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
+         supportedProjectiles = ((ProjectileWeaponItem)heldWeapon.getItem()).getAllSupportedProjectiles().and(item -> this.tryReadyArrow(heldWeapon, item, anyEventCancelled)); // Paper - PlayerReadyArrowEvent
+@@ -2120,12 +2120,12 @@ public abstract class Player extends Avatar implements ContainerUser {
+         for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+             ItemStack itemStack = this.inventory.getItem(i);
+             if (supportedProjectiles.test(itemStack)) {
+-                return itemStack;
++	            return getProjectile(heldProjectile, itemStack, supportedProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
              }
          }
+ 
+         if (anyEventCancelled.booleanValue() && !this.abilities.instabuild && this instanceof final ServerPlayer player) this.resyncUsingItem(player); // Paper - resync if no item matched the Predicate
+-        return this.hasInfiniteMaterials() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
++	    return getProjectile(heldWeapon, this.hasInfiniteMaterials() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY, supportedProjectiles); // Kiterino - Add EntityLoadsProjectileEvent
      }
+ 
+     @Override

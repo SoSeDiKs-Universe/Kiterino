@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -290,7 +_,7 @@
+@@ -293,7 +_,7 @@
                  this.sleepCounter = 100;
              }
  

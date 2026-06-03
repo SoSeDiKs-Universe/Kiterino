@@ -5,10 +5,10 @@ Subject: [PATCH] Fixup ridables controls
 
 
 diff --git a/net/minecraft/world/entity/animal/polarbear/PolarBear.java b/net/minecraft/world/entity/animal/polarbear/PolarBear.java
-index 5e218adce80f2d8d64cca54894abffaf6eb0baa0..69cf8734238b880f85a90defb87f40f9ef55473b 100644
+index ee3bc947ef81ea27b02135c0f0ea6d6168ca9fbd..24e6978473c64d3d1d1145720714e4b373331951 100644
 --- a/net/minecraft/world/entity/animal/polarbear/PolarBear.java
 +++ b/net/minecraft/world/entity/animal/polarbear/PolarBear.java
-@@ -110,7 +110,7 @@ public class PolarBear extends Animal implements NeutralMob {
+@@ -109,7 +109,7 @@ public class PolarBear extends Animal implements NeutralMob {
      @Override
      public boolean onSpacebar() {
          if (!isStanding()) {
@@ -18,10 +18,10 @@ index 5e218adce80f2d8d64cca54894abffaf6eb0baa0..69cf8734238b880f85a90defb87f40f9
                  playSound(SoundEvents.POLAR_BEAR_WARNING, 1.0F, 1.0F);
              }
 diff --git a/net/minecraft/world/entity/animal/squid/Squid.java b/net/minecraft/world/entity/animal/squid/Squid.java
-index 3f197daef44cafb00390d0e429eceae8505d9c1d..f999a83e1171b3791da2bce045e5b0384d0abc79 100644
+index d3809367a849ac56a0e57b5b2af01695d5a30193..a426f662398254ae477f7fb336b74682af7a1f63 100644
 --- a/net/minecraft/world/entity/animal/squid/Squid.java
 +++ b/net/minecraft/world/entity/animal/squid/Squid.java
-@@ -385,12 +385,13 @@ public class Squid extends AgeableWaterCreature {
+@@ -380,12 +380,13 @@ public class Squid extends AgeableWaterCreature {
          public void tick() {
              // Purpur start - Ridables
              net.minecraft.world.entity.player.Player rider = squid.getRider();
@@ -40,7 +40,7 @@ index 3f197daef44cafb00390d0e429eceae8505d9c1d..f999a83e1171b3791da2bce045e5b038
                  if (forward < 0.0F) {
                      speed *= -0.5;
 diff --git a/net/minecraft/world/entity/monster/Creeper.java b/net/minecraft/world/entity/monster/Creeper.java
-index 46a769f2960fd4a35305231b84c56ff36d622d8f..567a6cd03e724c531d9669b474113ed8b6fde013 100644
+index 56cfc2b7cf9bd7edc966f59de091d2793c6adfb3..ae499c28881c44decc478622b6e58b27740b2b13 100644
 --- a/net/minecraft/world/entity/monster/Creeper.java
 +++ b/net/minecraft/world/entity/monster/Creeper.java
 @@ -88,8 +88,8 @@ public class Creeper extends Monster {

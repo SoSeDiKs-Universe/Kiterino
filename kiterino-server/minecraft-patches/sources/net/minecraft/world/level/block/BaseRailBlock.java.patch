@@ -20,4 +20,4 @@
 +        // Kiterino end - Allow placing rails on more surfaces
          if (!canSupportRigidBlock(level, pos.below())) {
              return true;
-         } else {
+         }
