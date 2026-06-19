@@ -1,0 +1,11 @@
+--- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -3464,7 +_,7 @@
+                         this.player.containerMenu.setRemoteSlotUnsafe(e.getIntKey(), e.getValue());
+                     }
+ 
+-                    this.player.containerMenu.setRemoteCarried(packet.carriedItem());
++                    this.player.containerMenu.setRemoteCarried(HashedStack.EMPTY); // Kiterino - Workaround carried item desync
+                     this.player.containerMenu.resumeRemoteUpdates();
+                     if (fullResyncNeeded) {
+                         this.player.containerMenu.broadcastFullState();

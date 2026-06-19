@@ -1,10 +1,11 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -182,7 +_,25 @@
+@@ -182,8 +_,53 @@
  
                  Holder<Item> item = Item.STREAM_CODEC.decode(input);
                  DataComponentPatch patch = patchCodec.decode(input);
 -                return new ItemStack(item, count, patch);
+-            }
 +                // Kiterino start - Prevent creative from overriding items
 +                var itemStack = new ItemStack(item, count, patch);
 +                if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride) {
@@ -12,39 +13,76 @@
 +                    if (customData != null && customData.contains("kiterino_og_item")) {
 +                        net.minecraft.nbt.Tag itemTag = customData.getUnsafe().get("kiterino_og_item");
 +                        assert itemTag != null;
-+                        if (itemTag instanceof net.minecraft.nbt.StringTag) {
-+                            itemStack = ItemStack.EMPTY;
-+                        } else {
-+                            itemStack = net.minecraft.world.item.ItemStack.CODEC.parse(
-+                                me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.SERIALIZATION_CONTEXT,
-+                                itemTag
-+                            ).getOrThrow();
-+                        }
++                        itemStack = decodeItem(input, itemTag);
 +                    }
 +                }
 +                return itemStack;
 +                // Kiterino end - Prevent creative from overriding items
-             }
++            }
++
++            // Kiterino start - Prevent creative from overriding items
++            private ItemStack decodeItem(RegistryFriendlyByteBuf input, net.minecraft.nbt.Tag itemTag) {
++                if (!(itemTag instanceof net.minecraft.nbt.ByteArrayTag tag)) {
++                    return ItemStack.EMPTY;
++                }
++
++                byte[] serializedItem = tag.asByteArray().orElseGet(() -> new byte[0]);
++                if (serializedItem.length == 0) {
++                    return ItemStack.EMPTY;
++                }
++
++                net.minecraft.nbt.CompoundTag compound;
++                try {
++                    compound = net.minecraft.nbt.NbtIo.readCompressed(
++                        new java.io.ByteArrayInputStream(serializedItem), net.minecraft.nbt.NbtAccounter.unlimitedHeap()
++                    );
++                } catch (java.io.IOException _) {
++                    return ItemStack.EMPTY;
++                }
++                if (compound.getStringOr("id", "minecraft:air").equals("minecraft:air")) {
++                    return ItemStack.EMPTY;
++                }
++
++                DataResult<ItemStack> dataResult = ItemStack.CODEC.parse(
++                    input.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), compound
++                );
++                if (dataResult.isError()) {
++                    return ItemStack.EMPTY;
++                }
++
++                return dataResult.getOrThrow();
++            }
++            // Kiterino end - Prevent creative from overriding items
  
              @Override
-@@ -192,6 +_,23 @@
+             public void encode(final RegistryFriendlyByteBuf output, final ItemStack itemStack) {
+@@ -192,6 +_,32 @@
                  } else {
                      output.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), itemStack, itemStack.getCount())); // Paper - potentially sanitize count
                      Item.STREAM_CODEC.encode(output, itemStack.typeHolder());
 +                    // Kiterino start - Prevent creative from overriding items
 +                    net.minecraft.world.item.component.CustomData customData = null;
 +                    if (me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && !itemStack.isEmpty() && me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.modifiers.isEmpty()) {
-+                        customData = itemStack.get(DataComponents.CUSTOM_DATA);
-+                        net.minecraft.nbt.Tag itemData = net.minecraft.world.item.ItemStack.CODEC.encodeStart(
-+                            me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.SERIALIZATION_CONTEXT,
-+                            itemStack
-+                        ).getOrThrow();
-+                        if (customData == null) {
-+                            customData = net.minecraft.world.item.component.CustomData.of(new net.minecraft.nbt.CompoundTag());
-+                            customData.getUnsafe().put("kiterino_og_item", itemData);
-+                            itemStack.set(DataComponents.CUSTOM_DATA, customData);
-+                        } else {
-+                            customData.getUnsafe().put("kiterino_og_item", itemData);
++                        try {
++                            customData = itemStack.get(DataComponents.CUSTOM_DATA);
++                            net.minecraft.nbt.CompoundTag itemData = (net.minecraft.nbt.CompoundTag) net.minecraft.world.item.ItemStack.CODEC.encodeStart(
++                                me.sosedik.kiterino.modifier.item.ItemModifiersHandlerImpl.SERIALIZATION_CONTEXT,
++                                itemStack
++                            ).getOrThrow();
++                            var outputStream = new java.io.ByteArrayOutputStream();
++                            net.minecraft.nbt.NbtIo.writeCompressed(
++                                itemData,
++                                outputStream
++                            );
++                            byte[] serializedItem = outputStream.toByteArray();
++                            if (customData == null) {
++                                customData = net.minecraft.world.item.component.CustomData.of(new net.minecraft.nbt.CompoundTag());
++                                customData.getUnsafe().putByteArray("kiterino_og_item", serializedItem);
++                                itemStack.set(DataComponents.CUSTOM_DATA, customData);
++                            } else {
++                                customData.getUnsafe().putByteArray("kiterino_og_item", serializedItem);
++                            }
++                        } catch (java.lang.IllegalStateException | java.io.IOException _) {
 +                        }
 +                    }
 +                    // Kiterino end - Prevent creative from overriding items

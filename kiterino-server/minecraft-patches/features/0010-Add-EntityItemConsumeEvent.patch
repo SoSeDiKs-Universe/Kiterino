@@ -5,7 +5,7 @@ Subject: [PATCH] Add EntityItemConsumeEvent
 
 
 diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
-index 21880d0414201a9a4c109ab24bcc10d679916680..195bc559c9a400744c9cef0f36a6afed82c1f51a 100644
+index 21880d0414201a9a4c109ab24bcc10d679916680..240bd405baafaf69addce100230f911f5b2e96c7 100644
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
 @@ -4556,12 +4556,12 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
@@ -23,10 +23,11 @@ index 21880d0414201a9a4c109ab24bcc10d679916680..195bc559c9a400744c9cef0f36a6afed
  
                          if (event.isCancelled()) {
                              net.minecraft.world.item.component.Consumable consumable = this.useItem.get(DataComponents.CONSUMABLE);
-@@ -4582,6 +4582,18 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
-                     final ItemStack defaultReplacement = result;
-                     if (event != null && event.getReplacement() != null) {
-                         result = CraftItemStack.asNMSCopy(event.getReplacement());
+@@ -4576,7 +4576,18 @@ public abstract class LivingEntity extends Entity implements Attackable, Waypoin
+ 
+                         result = (craftItem.equals(event.getItem())) ? this.useItem.finishUsingItem(this.level(), this) : CraftItemStack.asNMSCopy(event.getItem()).finishUsingItem(this.level(), this);
+                     } else {
+-                        result = this.useItem.finishUsingItem(this.level(), this);
 +                        // Kiterino start - Add EntityItemConsumeEvent
 +                        org.bukkit.inventory.ItemStack craftItem = CraftItemStack.asBukkitCopy(this.useItem);
 +                        org.bukkit.inventory.EquipmentSlot equipmentSlot = org.bukkit.craftbukkit.CraftEquipmentSlot.getHand(hand);
@@ -40,5 +41,5 @@ index 21880d0414201a9a4c109ab24bcc10d679916680..195bc559c9a400744c9cef0f36a6afed
 +                        result = (craftItem.equals(event.getItem())) ? this.useItem.finishUsingItem(this.level(), this) : CraftItemStack.asNMSCopy(event.getItem()).finishUsingItem(this.level(), this);
 +                        // Kiterino end - Add EntityItemConsumeEvent
                      }
-                     // Paper end
-                     // CraftBukkit end
+                     // Paper start - save the default replacement item and change it if necessary
+                     final ItemStack defaultReplacement = result;

@@ -33,8 +33,8 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -108,6 +108,8 @@ import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -976,11 +978,26 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         CraftPlayer player = (CraftPlayer) contextBox.getViewer();
         if (player != null && me.sosedik.kiterino.KiterinoConfig.preventCreativeItemOverride && player.getGameMode() == org.bukkit.GameMode.CREATIVE && (!org.bukkit.inventory.ItemStack.isEmpty(bukkitItem) || !original.isEmpty())) {
             ItemStack itemStack = bukkitItem == null ? original.copy() : ItemStack.fromBukkitCopy(bukkitItem);
-            net.minecraft.nbt.Tag itemData = original.isEmpty() ? null : net.minecraft.world.item.ItemStack.CODEC.encodeStart(
+            CompoundTag itemData = original.isEmpty() ? null : (CompoundTag) net.minecraft.world.item.ItemStack.CODEC.encodeStart(
                 SERIALIZATION_CONTEXT,
                 original
             ).getOrThrow();
-            net.minecraft.world.item.component.CustomData.update(DataComponents.CUSTOM_DATA, itemStack, tag -> tag.put("kiterino_og_item", itemData == null ? StringTag.valueOf("minecraft:air") : itemData));
+            byte[] serializedItem;
+            if (itemData != null) {
+                var outputStream = new ByteArrayOutputStream();
+                try {
+                    net.minecraft.nbt.NbtIo.writeCompressed(
+                        itemData,
+                        outputStream
+                    );
+                } catch (IOException _) {
+                    return itemStack;
+                }
+                serializedItem = outputStream.toByteArray();
+            } else {
+                serializedItem = new byte[0];
+            }
+            net.minecraft.world.item.component.CustomData.update(DataComponents.CUSTOM_DATA, itemStack, tag -> tag.putByteArray("kiterino_og_item", serializedItem));
             return itemStack;
         }
         // Kiterino end - Prevent creative from overriding items
