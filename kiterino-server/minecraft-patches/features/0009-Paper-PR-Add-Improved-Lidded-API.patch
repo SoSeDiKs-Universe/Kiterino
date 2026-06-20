@@ -6,10 +6,10 @@ Subject: [PATCH] Paper PR - Add Improved Lidded API
 https://github.com/PaperMC/Paper/pull/11814
 
 diff --git a/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java b/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java
-index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888e9876c33 100644
+index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..39502867a2e76580cd674570aacf5aabead53812 100644
 --- a/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java
 +++ b/net/minecraft/world/level/block/entity/ContainerOpenersCounter.java
-@@ -16,20 +16,57 @@ public abstract class ContainerOpenersCounter {
+@@ -16,20 +16,7 @@ public abstract class ContainerOpenersCounter {
      private static final int CHECK_TICK_DELAY = 5;
      private int openCount;
      private double maxInteractionRange;
@@ -17,25 +17,38 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
 -    public boolean opened;
 -    public void onOpenAPI(Level level, BlockPos pos, BlockState blockState) {
 -        this.onOpen(level, pos, blockState);
-+    // Kiterino start - Paper PR - Add Improved Lidded API
+-    }
+-
+-    public void onCloseAPI(Level level, BlockPos pos, BlockState blockState) {
+-        this.onClose(level, pos, blockState);
+-    }
+-
+-    public void openerCountChangedAPI(Level level, BlockPos pos, BlockState blockState, int previous, int current) {
+-        this.openerCountChanged(level, pos, blockState, previous, current);
+-    }
+-    // CraftBukkit end
 +    // public boolean opened; // Kiterino - Paper PR - Replace with new Lidded API
+ 
+     protected abstract void onOpen(final Level level, final BlockPos pos, final BlockState blockState);
+ 
+@@ -37,16 +24,67 @@ public abstract class ContainerOpenersCounter {
+ 
+     protected abstract void openerCountChanged(final Level level, final BlockPos pos, final BlockState blockState, int previous, int current);
+ 
++    // Kiterino start - Paper PR - Add Improved Lidded API
 +    public abstract boolean isOwnContainer(Player player);
 +
 +    private io.papermc.paper.block.LidMode apiLidMode = io.papermc.paper.block.LidMode.DEFAULT;
 +    private final java.util.Set<Player> cancelledPlayers = new java.util.HashSet<>(); // Kiterino - Paper PR - Store players whose opening was cancelled by PlayerLiddedOpenEvent
 +    public void startForceLiddedLidOpen(Level level, BlockPos pos, BlockState state) {
 +        incrementOpeners(null, level, pos, state, 16);
-     }
- 
--    public void onCloseAPI(Level level, BlockPos pos, BlockState blockState) {
--        this.onClose(level, pos, blockState);
++    }
++
 +    public void stopForceLiddedLidOpen(Level level, BlockPos pos, BlockState state) {
 +        decrementOpeners(null, level, pos, state);
 +        apiLidMode = io.papermc.paper.block.LidMode.DEFAULT;
-     }
--
--    public void openerCountChangedAPI(Level level, BlockPos pos, BlockState blockState, int previous, int current) {
--        this.openerCountChanged(level, pos, blockState, previous, current);
++    }
++
 +    public void startForceLiddedLidClose(Level level, BlockPos pos, BlockState state) {
 +        if (this.getTrueLidState() == io.papermc.paper.block.LidState.OPEN) {
 +            this.onClose(level, pos, state);
@@ -72,12 +85,12 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
 +            throw new IllegalStateException("trueOpenCount is negative: " + trueOpenCount + " openCount: " + openCount + " virtualViewerPresent: " + virtualViewerPresent);
 +        }
 +        return trueOpenCount > 0 ? io.papermc.paper.block.LidState.OPEN : io.papermc.paper.block.LidState.CLOSED;
-     }
--    // CraftBukkit end
- 
-     protected abstract void onOpen(final Level level, final BlockPos pos, final BlockState blockState);
- 
-@@ -43,10 +80,8 @@ public abstract class ContainerOpenersCounter {
++    }
++    // Kiterino end - Paper PR - Add Improved Lidded API
++
+     // Paper start - delay open/close callbacks
+     public boolean delayCallbacks() {
+         return false;
      }
      // Paper end - delay open/close callbacks
  
@@ -89,7 +102,7 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
      ) {
          // Paper start - delay open/close callbacks
          if (this.delayCallbacks()) {
-@@ -54,8 +89,20 @@ public abstract class ContainerOpenersCounter {
+@@ -54,8 +92,20 @@ public abstract class ContainerOpenersCounter {
              return;
          }
          // Paper end - delay open/close callbacks
@@ -110,7 +123,7 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
          // Paper start - Call BlockRedstoneEvent
          if (blockState.is(net.minecraft.world.level.block.Blocks.TRAPPED_CHEST)) {
              int oldCurrent = Math.clamp(previous, 0, 15);
-@@ -74,10 +121,18 @@ public abstract class ContainerOpenersCounter {
+@@ -74,10 +124,18 @@ public abstract class ContainerOpenersCounter {
          }
  
          this.openerCountChanged(level, pos, blockState, previous, this.openCount);
@@ -130,7 +143,7 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
          // Paper start - delay open/close callbacks
          if (this.delayCallbacks()) {
              scheduleRecheck(level, pos, blockState, 1);
-@@ -87,6 +142,16 @@ public abstract class ContainerOpenersCounter {
+@@ -87,6 +145,16 @@ public abstract class ContainerOpenersCounter {
          if (this.openCount == 0) return; // Paper - Prevent ContainerOpenersCounter openCount from going negative
          int previous = this.openCount--;
  
@@ -147,7 +160,7 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
          // Paper start - Call BlockRedstoneEvent
          if (blockState.is(net.minecraft.world.level.block.Blocks.TRAPPED_CHEST)) {
              int oldCurrent = Math.clamp(previous, 0, 15);
-@@ -126,13 +191,22 @@ public abstract class ContainerOpenersCounter {
+@@ -126,13 +194,22 @@ public abstract class ContainerOpenersCounter {
          List<ContainerUser> containerUsers = this.getEntitiesWithContainerOpen(level, pos);
          this.maxInteractionRange = 0.0;
  
@@ -174,7 +187,7 @@ index 52737172ccfa0c7c977e4f2fe1db242e0bb92d25..c91933f4db402158ac6b5c9df1d04888
              // Paper start - Call BlockRedstoneEvent
              if (blockState.is(net.minecraft.world.level.block.Blocks.TRAPPED_CHEST)) {
 diff --git a/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java b/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
-index 5f6078e4cc06c059c01c7a20421f2f3a364a058b..b6c60581b75218a657175a5f1471ca62f84960cb 100644
+index d1a2e671509b51f0bfad1633b1cdc2be671fca81..bb0fe2c93e6c5b16d36bfb8106fa4fb657ca0cbc 100644
 --- a/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/ShulkerBoxBlockEntity.java
 @@ -52,7 +52,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
@@ -189,7 +202,7 @@ index 5f6078e4cc06c059c01c7a20421f2f3a364a058b..b6c60581b75218a657175a5f1471ca62
 @@ -175,7 +175,7 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
      @Override
      public boolean triggerEvent(final int b0, final int b1) {
-         if (b0 == 1) {
+         if (b0 == EVENT_SET_OPEN_COUNT) {
 -            this.openCount = b1;
 +            if (this.apiLidMode != io.papermc.paper.block.LidMode.FORCED_CLOSED && this.apiLidMode != io.papermc.paper.block.LidMode.CLOSED_UNTIL_NOT_VIEWED) this.openCount = b1; // Kiterino - Paper PR - Skip Mutate when forced closed by lidded api
              if (b1 == 0) {
@@ -285,7 +298,7 @@ index 5f6078e4cc06c059c01c7a20421f2f3a364a058b..b6c60581b75218a657175a5f1471ca62
 +            //if (this.opened) return; // CraftBukkit - only animate if the ShulkerBox hasn't been forced open already by an API call.
 +            if (this.apiLidMode == io.papermc.paper.block.LidMode.FORCED_CLOSED || this.apiLidMode == io.papermc.paper.block.LidMode.CLOSED_UNTIL_NOT_VIEWED) return;
 +            // Kiterino end - Paper PR - Replace with Improved Lidded API
-             this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
+             this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), EVENT_SET_OPEN_COUNT, this.openCount);
              if (this.openCount == 1) {
                  this.level.gameEvent(containerUser.getLivingEntity(), GameEvent.CONTAINER_OPEN, this.worldPosition);
 @@ -216,14 +292,32 @@ public class ShulkerBoxBlockEntity extends RandomizableContainerBlockEntity impl
@@ -319,6 +332,6 @@ index 5f6078e4cc06c059c01c7a20421f2f3a364a058b..b6c60581b75218a657175a5f1471ca62
 +                return;
 +            }
 +            // Kiterino end - Paper PR - Add Improved Lidded API
-             this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), 1, this.openCount);
+             this.level.blockEvent(this.worldPosition, this.getBlockState().getBlock(), EVENT_SET_OPEN_COUNT, this.openCount);
              if (this.openCount <= 0) {
                  this.level.gameEvent(containerUser.getLivingEntity(), GameEvent.CONTAINER_CLOSE, this.worldPosition);

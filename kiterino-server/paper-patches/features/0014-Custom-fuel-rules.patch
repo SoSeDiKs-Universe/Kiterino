@@ -5,10 +5,10 @@ Subject: [PATCH] Custom fuel rules
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cbf0e0b9b704c62e87a40fb658ae7e3392acd8e0..ff6fd15aee41e89ca6914276bf498acadf400b07 100644
+index ca516f93e16294a1a98529a2be0a1dbaced5344a..a7012912a3fc7a7537cbc7705b4ab2e7391f8508 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1513,6 +1513,13 @@ public final class CraftServer implements Server {
+@@ -1516,6 +1516,13 @@ public final class CraftServer implements Server {
      }
      // Purpur end - Added the ability to add combustible items
  

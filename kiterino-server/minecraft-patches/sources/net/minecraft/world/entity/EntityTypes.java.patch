@@ -1,9 +1,19 @@
---- a/net/minecraft/world/entity/EntityType.java
-+++ b/net/minecraft/world/entity/EntityType.java
-@@ -1226,6 +_,16 @@
-     private final FeatureFlagSet requiredFeatures;
-     private final boolean allowedInPeaceful;
- 
+--- a/net/minecraft/world/entity/EntityTypes.java
++++ b/net/minecraft/world/entity/EntityTypes.java
+@@ -4,6 +_,8 @@
+ import java.util.function.Supplier;
+ import net.minecraft.core.Registry;
+ import net.minecraft.core.registries.BuiltInRegistries;
++import net.minecraft.core.registries.Registries;
++import net.minecraft.resources.Identifier;
+ import net.minecraft.resources.ResourceKey;
+ import net.minecraft.tags.BlockTags;
+ import net.minecraft.world.entity.ambient.Bat;
+@@ -1198,6 +_,16 @@
+     private static EntityType.EntityFactory<ChestRaft> chestRaftFactory(final Supplier<Item> dropItem) {
+         return (entityType, level) -> new ChestRaft(entityType, level, dropItem);
+     }
++
 +    // Kiterino start - Injecting custom entities
 +    static {
 +        me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl.setup();
@@ -13,7 +23,6 @@
 +        return register(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(key.namespace(), key.value())), builder);
 +    }
 +    // Kiterino end - Injecting custom entities
-+
+ 
      private static <T extends Entity> EntityType<T> register(final ResourceKey<EntityType<?>> id, final EntityType.Builder<T> builder) {
          return Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
-     }

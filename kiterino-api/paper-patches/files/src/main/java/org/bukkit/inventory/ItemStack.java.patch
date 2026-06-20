@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
-@@ -1858,4 +_,46 @@
+@@ -1859,4 +_,46 @@
          return this.craftDelegate.damage(amount, ignoreUnbreaking);
      }
      // Purpur end - ItemStack convenience methods

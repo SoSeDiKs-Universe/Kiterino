@@ -5,19 +5,17 @@ Subject: [PATCH] Add highly questionable BlockDispenseEvent additions
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index c9d50e6c9fb9e783fc5125fd4e64da454f1bc316..cbfeba4c64dfa7d789229121e80d7c55ea95f4a0 100644
+index 2013a91e4a86d23a6fcc095d6e3b6d08a9f7ac1c..496a0e6eedff0f1f31512d5012855663b79e8d55 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2279,14 +2279,19 @@ public class CraftEventFactory {
+@@ -2266,13 +2266,18 @@ public class CraftEventFactory {
          return event.callEvent();
      }
  
--    @Nullable
--    public static ItemStack handleBlockDispenseEvent(net.minecraft.core.dispenser.BlockSource pointer, BlockPos to, ItemStack itemStack, net.minecraft.core.dispenser.DispenseItemBehavior instance) {
-+//    @Nullable // Kiterino - More BlockDispenseEvent API
-+    public static DispenseResult handleBlockDispenseEvent(net.minecraft.core.dispenser.BlockSource pointer, BlockPos to, ItemStack itemStack, net.minecraft.core.dispenser.DispenseItemBehavior instance, java.util.function.Consumer<org.bukkit.event.block.BlockDispenseEvent> extra) { // Kiterino - More BlockDispenseEvent API
+-    public static @Nullable ItemStack handleBlockDispenseEvent(net.minecraft.core.dispenser.BlockSource pointer, BlockPos to, ItemStack dispensed, net.minecraft.core.dispenser.DispenseItemBehavior instance) {
++    public static DispenseResult handleBlockDispenseEvent(net.minecraft.core.dispenser.BlockSource pointer, BlockPos to, ItemStack dispensed, net.minecraft.core.dispenser.DispenseItemBehavior instance, java.util.function.Consumer<org.bukkit.event.block.BlockDispenseEvent> extra) { // Kiterino - More BlockDispenseEvent API
          org.bukkit.block.Block bukkitBlock = CraftBlock.at(pointer.level(), pointer.pos());
-         CraftItemStack craftItem = CraftItemStack.asCraftMirror(itemStack.isDamageableItem() ? itemStack : itemStack.copyWithCount(1));
+         CraftItemStack craftItem = CraftItemStack.asCraftMirror(dispensed.isDamageableItem() ? dispensed : dispensed.copyWithCount(1));
  
          org.bukkit.event.block.BlockDispenseEvent event = new org.bukkit.event.block.BlockDispenseEvent(bukkitBlock, craftItem.clone(), CraftVector.toBukkit(to));
 +        // Kiterino start - More BlockDispenseEvent API
@@ -26,24 +24,24 @@ index c9d50e6c9fb9e783fc5125fd4e64da454f1bc316..cbfeba4c64dfa7d789229121e80d7c55
 +        }
 +        // Kiterino end - More BlockDispenseEvent API
          if (!event.callEvent()) {
--            return itemStack;
-+            return new DispenseResult(itemStack, event); // Kiterino - More BlockDispenseEvent API
+-            return dispensed;
++	        return new DispenseResult(dispensed, event); // Kiterino - More BlockDispenseEvent API
          }
  
          if (!event.getItem().equals(craftItem)) {
-@@ -2295,11 +2300,13 @@ public class CraftEventFactory {
+@@ -2281,11 +2286,13 @@ public class CraftEventFactory {
              net.minecraft.core.dispenser.DispenseItemBehavior itemBehavior = net.minecraft.world.level.block.DispenserBlock.getDispenseBehavior(pointer, eventStack);
              if (itemBehavior != net.minecraft.core.dispenser.DispenseItemBehavior.NOOP && itemBehavior != instance) {
                  itemBehavior.dispense(pointer, eventStack);
--                return itemStack;
-+                itemStack.shrink(1); // Kiterino - More BlockDispenseEvent API
-+                return new DispenseResult(itemStack, event); // Kiterino - More BlockDispenseEvent API
+-                return dispensed;
++	            dispensed.shrink(1); // Kiterino - More BlockDispenseEvent API
++	            return new DispenseResult(dispensed, event); // Kiterino - More BlockDispenseEvent API
              }
          }
 -        return null;
 +        return new DispenseResult(null, event); // Kiterino - More BlockDispenseEvent API
      }
-+    public record DispenseResult(@Nullable ItemStack dispensedItem, org.bukkit.event.block.BlockDispenseEvent event) {}
++	public record DispenseResult(@Nullable ItemStack dispensedItem, org.bukkit.event.block.BlockDispenseEvent event) {}
  
      /**
       * Calls the {@link io.papermc.paper.event.entity.EntityFertilizeEggEvent}.

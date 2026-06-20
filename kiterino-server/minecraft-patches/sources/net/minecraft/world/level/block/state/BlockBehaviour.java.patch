@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
-@@ -1124,7 +_,7 @@
-         private float friction = 0.6F;
+@@ -1132,7 +_,7 @@
          private float speedFactor = 1.0F;
          private float jumpFactor = 1.0F;
+         private float bounceRestitution;
 -        private @Nullable ResourceKey<Block> id;
 +        private @Nullable ResourceKey<Block> id; public @Nullable ResourceKey<Block> getId() { return this.id; } // Kiterino - Data-driven blocks
          private DependantName<Block, Optional<ResourceKey<LootTable>>> drops = id -> Optional.of(

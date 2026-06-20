@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/damagesource/DamageSource.java
 +++ b/net/minecraft/world/damagesource/DamageSource.java
-@@ -113,8 +_,8 @@
+@@ -117,8 +_,8 @@
      }
  
      // Cloning the instance lets us return unique instances of DamageSource without affecting constants defined in DamageSources
@@ -11,7 +11,7 @@
          damageSource.knownCause = this.knownCause;
          damageSource.eventEntityDamager = this.eventEntityDamager;
          damageSource.eventBlockDamager = this.eventBlockDamager;
-@@ -142,7 +_,23 @@
+@@ -146,7 +_,23 @@
      public DamageSource(
          final Holder<DamageType> type, final @Nullable Entity directEntity, final @Nullable Entity causingEntity, final @Nullable Vec3 damageSourcePosition
      ) {

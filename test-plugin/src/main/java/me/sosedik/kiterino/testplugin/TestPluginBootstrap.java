@@ -11,7 +11,7 @@ import me.sosedik.kiterino.testplugin.impl.item.TestItemImpl;
 import me.sosedik.kiterino.util.KiterinoBootstrapEntityTypeInjectorImpl;
 import net.kyori.adventure.text.Component;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import org.bukkit.craftbukkit.entity.CraftEntityTypes;
 import org.jspecify.annotations.NullMarked;
@@ -48,7 +48,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
             key -> {
                 switch (key.value()) {
                     case "entity_1" -> {
-                        KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TestEntities.ENTITY_1, EntityType.SHEEP);
+                        KiterinoBootstrapEntityTypeInjectorImpl.ENTITY_TYPE_REPLACEMENTS.put(TestEntities.ENTITY_1, EntityTypes.SHEEP);
                         DefaultAttributes.register(TestEntities.ENTITY_1, net.minecraft.world.entity.animal.pig.Pig.createAttributes().build());
                     }
                     default -> throw new IllegalArgumentException();

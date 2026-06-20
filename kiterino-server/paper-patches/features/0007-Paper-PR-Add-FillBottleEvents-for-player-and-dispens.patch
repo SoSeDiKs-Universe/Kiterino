@@ -17,12 +17,12 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 895368348e5d31516700992376b9637e26f4856f..13db6b4595ca149c2d013a00286c63107e94a65e 100644
+index c80f2972f3df854a5a83d10e358c3580ec8d952a..a6935d5c4b07886dbcf44c535d38327aab76407e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2442,4 +2442,18 @@ public class CraftEventFactory {
+@@ -2440,4 +2440,18 @@ public class CraftEventFactory {
          }
-         return new TimeSkipEvent(source.getLevel().getWorld(), ClockTimeSkipEvent.SkipReason.COMMAND, skipAmount);
+         return event.getFuseTime();
      }
 +
 +    // Kiterino start - Paper PR - Add FillBottleEvents for player and dispenser

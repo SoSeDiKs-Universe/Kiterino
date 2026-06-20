@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/Bootstrap.java
 +++ b/net/minecraft/server/Bootstrap.java
-@@ -43,6 +_,12 @@
+@@ -44,6 +_,12 @@
          if (!isBootstrapped) {
              isBootstrapped = true;
              Instant start = Instant.now();

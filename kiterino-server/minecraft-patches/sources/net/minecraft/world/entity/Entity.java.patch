@@ -6,9 +6,9 @@
      private int remainingFireTicks;
 +    public int forcePanicTicks; public boolean isForcePanicking() { return forcePanicTicks > 0; } // Kiterino - Forced panic mode API
      private final EntityFluidInteraction fluidInteraction = new EntityFluidInteraction(Set.of(FluidTags.WATER, FluidTags.LAVA));
-     public boolean wasTouchingWater;
+     protected boolean wasTouchingWater;
      protected boolean wasEyeInWater;
-@@ -939,6 +_,12 @@
+@@ -944,6 +_,12 @@
              this.clearFire();
          }
  
@@ -21,7 +21,7 @@
          if (this.isInLava()) {
              this.fallDistance *= 0.5;
              // CraftBukkit start
-@@ -1299,6 +_,30 @@
+@@ -1297,6 +_,30 @@
                  this.setDeltaMovement(this.getDeltaMovement().multiply(blockSpeedFactor, 1.0, blockSpeedFactor));
                  profiler.pop();
              }
@@ -52,7 +52,7 @@
          }
          // Paper start - detailed watchdog information
          } finally {
-@@ -2075,6 +_,18 @@
+@@ -2160,6 +_,18 @@
          return this.isInWater() || this.isInLava();
      }
  
@@ -71,7 +71,7 @@
      public boolean isUnderWater() {
          return this.wasEyeInWater && this.isInWater();
      }
-@@ -2109,7 +_,7 @@
+@@ -2194,7 +_,7 @@
  
      protected boolean updateFluidInteraction() {
          this.fluidInteraction.update(this, !this.isPushedByFluid());
@@ -80,9 +80,9 @@
          boolean inLava = this.fluidInteraction.isInFluid(FluidTags.LAVA);
          if (inWater) {
              this.resetFallDistance();
-@@ -2523,6 +_,18 @@
-         if (victim instanceof ServerPlayer) {
-             CriteriaTriggers.ENTITY_KILLED_PLAYER.trigger((ServerPlayer)victim, this, killingBlow);
+@@ -2612,6 +_,18 @@
+         if (victim instanceof ServerPlayer serverPlayer) {
+             CriteriaTriggers.ENTITY_KILLED_PLAYER.trigger(serverPlayer, this, killingBlow);
          }
 +        // Kiterino start - Award stats to rider
 +        if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && victim != this && getRider() instanceof ServerPlayer riderPlayer) {
@@ -99,7 +99,7 @@
      }
  
      public boolean shouldRender(final double camX, final double camY, final double camZ) {
-@@ -3365,10 +_,30 @@
+@@ -3428,10 +_,30 @@
      }
  
      public void ejectPassengers() {
@@ -131,7 +131,7 @@
  
      public void removeVehicle() {
          // Paper start - Force entity dismount during teleportation
-@@ -4162,12 +_,18 @@
+@@ -4235,12 +_,18 @@
      private @Nullable Entity teleportCrossDimension(final ServerLevel oldLevel, final ServerLevel newLevel, final TeleportTransition transition) {
          List<Entity> oldPassengers = this.getPassengers();
          List<Entity> newPassengers = new ArrayList<>(oldPassengers.size());
@@ -151,7 +151,7 @@
              }
          }
  
-@@ -4189,9 +_,16 @@
+@@ -4262,9 +_,16 @@
          newEntity.teleportSetPosition(PositionMoveRotation.of(this), PositionMoveRotation.of(transition), transition.relatives());
          if (this.inWorld) newLevel.addDuringTeleport(newEntity); // CraftBukkit - Don't spawn the new entity if the current entity isn't spawned
  

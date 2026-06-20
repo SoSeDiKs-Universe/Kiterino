@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -968,7 +_,7 @@
+@@ -994,7 +_,7 @@
      }
  
      public boolean isSaddled() {
@@ -9,7 +9,7 @@
      }
  
      public boolean isWearingBodyArmor() {
-@@ -1638,6 +_,11 @@
+@@ -1668,6 +_,11 @@
  
          this.postPiercingAttack();
          if (target instanceof net.minecraft.server.level.ServerPlayer) this.ticksSinceLastInteraction = 0; // Purpur - Entity lifespan

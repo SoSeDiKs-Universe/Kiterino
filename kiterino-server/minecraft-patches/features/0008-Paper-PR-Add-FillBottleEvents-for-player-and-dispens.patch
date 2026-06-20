@@ -17,7 +17,7 @@ AreaEffectCloud.
 Co-authored-by: Dmitry Sidorov <jonmagon@gmail.com>
 
 diff --git a/net/minecraft/core/cauldron/CauldronInteractions.java b/net/minecraft/core/cauldron/CauldronInteractions.java
-index 04b47a788586d21a37f73ba2dcf9036ea174872b..011c30bb74709ca0dae4f37f2b6bb8d6b626babe 100644
+index 80b4905bc7b9c67a0d4355e5de3b3cdb46fcb061..62518efa0844486aed27b98c9f9958088b6ac963 100644
 --- a/net/minecraft/core/cauldron/CauldronInteractions.java
 +++ b/net/minecraft/core/cauldron/CauldronInteractions.java
 @@ -56,7 +56,13 @@ public class CauldronInteractions {
@@ -36,10 +36,10 @@ index 04b47a788586d21a37f73ba2dcf9036ea174872b..011c30bb74709ca0dae4f37f2b6bb8d6
                      player.awardStat(Stats.ITEM_USED.get(usedItem));
                      // level.setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState()); // CraftBukkit
 diff --git a/net/minecraft/core/dispenser/DispenseItemBehavior.java b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-index 56b9f9016a652a704d785de683738efcf02a44f9..acc5a81c0193cac07959210f232a1564875c0ed5 100644
+index aa5bebc293a73468cadf7939fd0a64822953e452..d59664335fef13ac66391c386cfde012cf8318b7 100644
 --- a/net/minecraft/core/dispenser/DispenseItemBehavior.java
 +++ b/net/minecraft/core/dispenser/DispenseItemBehavior.java
-@@ -523,13 +523,25 @@ public interface DispenseItemBehavior {
+@@ -474,13 +474,25 @@ public interface DispenseItemBehavior {
                      // Paper end - Call BlockDispenseEvent
                      if (state.is(BlockTags.BEEHIVES, s -> s.hasProperty(BeehiveBlock.HONEY_LEVEL) && s.getBlock() instanceof BeehiveBlock)
                          && state.getValue(BeehiveBlock.HONEY_LEVEL) >= 5) {
@@ -68,7 +68,7 @@ index 56b9f9016a652a704d785de683738efcf02a44f9..acc5a81c0193cac07959210f232a1564
                          return super.execute(source, dispensed);
                      }
 diff --git a/net/minecraft/world/item/BottleItem.java b/net/minecraft/world/item/BottleItem.java
-index e45fb987b709cbd798b7bcd179a559d8ab70e6ff..a1edc3f09e9112ebbd521e9b41d971ca38edf7d4 100644
+index 83c4c614ccc3a219d4e27d9e17d0fc61ec6e4dd9..528086c0f977d73dd55380ba52d8d3582359cd2b 100644
 --- a/net/minecraft/world/item/BottleItem.java
 +++ b/net/minecraft/world/item/BottleItem.java
 @@ -33,6 +33,17 @@ public class BottleItem extends Item {
@@ -122,10 +122,10 @@ index e45fb987b709cbd798b7bcd179a559d8ab70e6ff..a1edc3f09e9112ebbd521e9b41d971ca
              }
  
 diff --git a/net/minecraft/world/level/block/BeehiveBlock.java b/net/minecraft/world/level/block/BeehiveBlock.java
-index 0d3e97012b0d590dc2b93e4886a7009f6f78e0d7..4cc8721b2c81a14286c427bbb33760ff7460a3c5 100644
+index e071dae775a5dc95eb0d5d6c080e623aeaa97385..425b87d462047f39f8c287c8f736c4e9efaf98c0 100644
 --- a/net/minecraft/world/level/block/BeehiveBlock.java
 +++ b/net/minecraft/world/level/block/BeehiveBlock.java
-@@ -180,12 +180,25 @@ public class BeehiveBlock extends BaseEntityBlock {
+@@ -181,12 +181,25 @@ public class BeehiveBlock extends BaseEntityBlock {
                  hiveEmptied = true;
                  level.gameEvent(player, GameEvent.SHEAR, pos);
              } else if (itemStack.is(Items.GLASS_BOTTLE)) {

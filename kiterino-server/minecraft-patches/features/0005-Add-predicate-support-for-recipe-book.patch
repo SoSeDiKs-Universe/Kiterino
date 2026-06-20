@@ -127,7 +127,7 @@ index 1ace17d8fc7e7b8b4722a1889d49233c0ec55e20..90b3514f16d1e4555a5ffd79493a10e7
          }
      }
 diff --git a/net/minecraft/world/item/crafting/Ingredient.java b/net/minecraft/world/item/crafting/Ingredient.java
-index f1319a05609dc98e2fa546381a2d8400b8c436b8..2e91d9d6dcfc373cd9ca83a4d10928b76470dfcc 100644
+index bea563449db499c938e84023d605f0ea28b70d18..d8a06017ec194edcd9cf1e382bfdd4b57625ca74 100644
 --- a/net/minecraft/world/item/crafting/Ingredient.java
 +++ b/net/minecraft/world/item/crafting/Ingredient.java
 @@ -35,7 +35,7 @@ public final class Ingredient implements Predicate<ItemStack>, StackedContents.I
@@ -166,4 +166,4 @@ index f1319a05609dc98e2fa546381a2d8400b8c436b8..2e91d9d6dcfc373cd9ca83a4d10928b7
 +        return o instanceof Ingredient other && Objects.equals(this.values, other.values) && Objects.equals(this.itemStacks, other.itemStacks) && Objects.equals(this.predicate, other.predicate); // CraftBukkit // Kiterino - Add predicate support for the recipe book
      }
  
-     public static Ingredient of(final ItemLike itemLike) {
+     @Override

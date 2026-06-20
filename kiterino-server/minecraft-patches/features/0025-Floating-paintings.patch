@@ -5,10 +5,10 @@ Subject: [PATCH] Floating paintings
 
 
 diff --git a/net/minecraft/world/entity/decoration/painting/Painting.java b/net/minecraft/world/entity/decoration/painting/Painting.java
-index 1183074c7b6aee4d9e1069cdf92b27273f939d49..3050cdc8979e71a9d74d038cccfe5e70709db9b8 100644
+index a9998d3e8d79a147e21085bff41964050e1b6e7c..b3aaab7b42eb77ba1c0dd2b36b35c7732ae37c37 100644
 --- a/net/minecraft/world/entity/decoration/painting/Painting.java
 +++ b/net/minecraft/world/entity/decoration/painting/Painting.java
-@@ -46,6 +46,30 @@ public class Painting extends HangingEntity {
+@@ -47,6 +47,30 @@ public class Painting extends HangingEntity {
          super(type, level);
      }
  
@@ -39,7 +39,7 @@ index 1183074c7b6aee4d9e1069cdf92b27273f939d49..3050cdc8979e71a9d74d038cccfe5e70
      @Override
      protected void defineSynchedData(final SynchedEntityData.Builder entityData) {
          super.defineSynchedData(entityData);
-@@ -100,7 +124,7 @@ public class Painting extends HangingEntity {
+@@ -101,7 +125,7 @@ public class Painting extends HangingEntity {
          candidate.setDirection(direction);
          potentialVariants.removeIf(variant -> {
              candidate.setVariant((Holder<PaintingVariant>)variant);
@@ -49,10 +49,10 @@ index 1183074c7b6aee4d9e1069cdf92b27273f939d49..3050cdc8979e71a9d74d038cccfe5e70
          if (potentialVariants.isEmpty()) {
              return Optional.empty();
 diff --git a/net/minecraft/world/item/HangingEntityItem.java b/net/minecraft/world/item/HangingEntityItem.java
-index a611db7d20c8652abac02c2bb80bfd974a990df0..52f2a076ffa29e446aeb9a0403623bea8cc4ede7 100644
+index e3d81dc449545d6ce25c2f2cb46d521cc6a2a422..547d322ea3018b543d88646bcff0492af358925e 100644
 --- a/net/minecraft/world/item/HangingEntityItem.java
 +++ b/net/minecraft/world/item/HangingEntityItem.java
-@@ -83,6 +83,11 @@ public class HangingEntityItem extends Item {
+@@ -84,6 +84,11 @@ public class HangingEntityItem extends Item {
              }
  
              itemInHand.shrink(1);

@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -834,8 +_,8 @@
+@@ -849,8 +_,8 @@
                  // Paper end - per-world time
              }
  

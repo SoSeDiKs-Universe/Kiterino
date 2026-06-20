@@ -40,7 +40,7 @@ index bc7e4e5560708fea89c584b1d8b471f4966f311a..70145bafa7c9c45a6f7a7a6854e9eefa
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);
 diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..5fc4b6a765006c96f7c9645a9f3988ae59a3c4b3 100644
+index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..9394fc2658fb88960d5ba8414dfa4783c3b65c4c 100644
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 @@ -32,6 +32,7 @@ public record ServerBuildInfoImpl(
@@ -68,12 +68,12 @@ index 1b0ee48e28aaa68ddb1f28c23d3c5f5f40505c98..5fc4b6a765006c96f7c9645a9f3988ae
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
 -        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand
-+        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur - Rebrand // Kiterino - Rebrand
++        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID) || brandId.equals(BRAND_PURPUR_ID); // Purpur - Fix pufferfish issues // Purpur - Rebrand // Kiterino - Rebrand
      }
  
      @Override
 diff --git a/src/main/java/org/spigotmc/WatchdogThread.java b/src/main/java/org/spigotmc/WatchdogThread.java
-index bf0cda94d87e46149a21505fc67ddb9ad9af0838..49acaea3219372f1048ac49e3d94a737bbcb630d 100644
+index 6f36f98c3e2017257b5a88cb85195f2b67230a29..01ad1a5123902e04641198a28d8e0d4779bf54ac 100644
 --- a/src/main/java/org/spigotmc/WatchdogThread.java
 +++ b/src/main/java/org/spigotmc/WatchdogThread.java
 @@ -75,14 +75,14 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
@@ -107,7 +107,7 @@ index bf0cda94d87e46149a21505fc67ddb9ad9af0838..49acaea3219372f1048ac49e3d94a737
 -                logger.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Purpur!):"); // Paper // Purpur - Rebrand
 +                logger.log(Level.SEVERE, "Server thread dump (Look for plugins here before reporting to Kiterino!):"); // Paper // Kiterino - Rebrand
                  FeatureHooks.dumpAllChunkLoadInfo(MinecraftServer.getServer(), isLongTimeout); // Paper - log detailed tick information
-                 WatchdogThread.dumpThread(ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().serverThread.threadId(), Integer.MAX_VALUE), logger);
+                 WatchdogThread.dumpThread(ManagementFactory.getThreadMXBean().getThreadInfo(MinecraftServer.getServer().getRunningThread().threadId(), Integer.MAX_VALUE), logger);
                  logger.log(Level.SEVERE, "------------------------------");
 @@ -120,7 +120,7 @@ public class WatchdogThread extends ca.spottedleaf.moonrise.common.util.TickThre
                          WatchdogThread.dumpThread(thread, logger);

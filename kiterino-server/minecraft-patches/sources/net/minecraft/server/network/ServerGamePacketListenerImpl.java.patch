@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -3464,7 +_,7 @@
+@@ -3446,7 +_,7 @@
                          this.player.containerMenu.setRemoteSlotUnsafe(e.getIntKey(), e.getValue());
                      }
  

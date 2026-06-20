@@ -5,10 +5,10 @@ Subject: [PATCH] Preserve variant paintings
 
 
 diff --git a/net/minecraft/world/entity/decoration/painting/Painting.java b/net/minecraft/world/entity/decoration/painting/Painting.java
-index 67e853146b4171c4b36a1fd2997e97a2f5a39f62..7aaa36579489f11343c9d6add5dc32bf34120c80 100644
+index b3aaab7b42eb77ba1c0dd2b36b35c7732ae37c37..c2fdcb5e6ce23534421ddb5a186957faf098cc32 100644
 --- a/net/minecraft/world/entity/decoration/painting/Painting.java
 +++ b/net/minecraft/world/entity/decoration/painting/Painting.java
-@@ -42,6 +42,8 @@ public class Painting extends HangingEntity {
+@@ -43,6 +43,8 @@ public class Painting extends HangingEntity {
      );
      public static final float DEPTH = 0.0625F;
  
@@ -17,7 +17,7 @@ index 67e853146b4171c4b36a1fd2997e97a2f5a39f62..7aaa36579489f11343c9d6add5dc32bf
      public Painting(final EntityType<? extends Painting> type, final Level level) {
          super(type, level);
      }
-@@ -107,6 +109,7 @@ public class Painting extends HangingEntity {
+@@ -108,6 +110,7 @@ public class Painting extends HangingEntity {
      protected <T> boolean applyImplicitComponent(final DataComponentType<T> type, final T value) {
          if (type == DataComponents.PAINTING_VARIANT) {
              this.setVariant(castComponentValue(DataComponents.PAINTING_VARIANT, value));
@@ -25,7 +25,7 @@ index 67e853146b4171c4b36a1fd2997e97a2f5a39f62..7aaa36579489f11343c9d6add5dc32bf
              return true;
          } else {
              return super.applyImplicitComponent(type, value);
-@@ -161,6 +164,7 @@ public class Painting extends HangingEntity {
+@@ -162,6 +165,7 @@ public class Painting extends HangingEntity {
          output.store("facing", Direction.LEGACY_ID_CODEC_2D, this.getDirection());
          super.addAdditionalSaveData(output);
          VariantUtils.writeVariant(output, this.getVariant());
@@ -33,7 +33,7 @@ index 67e853146b4171c4b36a1fd2997e97a2f5a39f62..7aaa36579489f11343c9d6add5dc32bf
      }
  
      @Override
-@@ -169,6 +173,7 @@ public class Painting extends HangingEntity {
+@@ -170,6 +174,7 @@ public class Painting extends HangingEntity {
          super.readAdditionalSaveData(input);
          this.setDirection(direction);
          VariantUtils.readVariant(input, Registries.PAINTING_VARIANT).ifPresent(this::setVariant);
@@ -41,7 +41,7 @@ index 67e853146b4171c4b36a1fd2997e97a2f5a39f62..7aaa36579489f11343c9d6add5dc32bf
      }
  
      @Override
-@@ -209,6 +214,11 @@ public class Painting extends HangingEntity {
+@@ -210,6 +215,11 @@ public class Painting extends HangingEntity {
                  // Purpur start - Apply display names from item forms of entities to entities and vice versa
                  final ItemStack painting = new ItemStack(Items.PAINTING);
                  if (!this.level().purpurConfig.persistentDroppableEntityDisplayNames) painting.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, null);

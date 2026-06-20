@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/Main.java
 +++ b/net/minecraft/server/Main.java
-@@ -151,6 +_,19 @@
+@@ -154,6 +_,19 @@
  
              // Paper start - eula system property
              boolean eulaAgreed = Boolean.getBoolean("com.mojang.eula.agree");

@@ -5,14 +5,14 @@ Subject: [PATCH] Fixup ridables controls
 
 
 diff --git a/src/main/java/org/purpurmc/purpur/controller/WaterMoveControllerWASD.java b/src/main/java/org/purpurmc/purpur/controller/WaterMoveControllerWASD.java
-index 922e48799c43ca322a8f550c98a26e1e2959439c..d3ac67ded8188bd4e06eaea62600e09c69154389 100644
+index 65301b22a918b300f30d52838fc7c885f3f7b31c..7bfe89337bb169c98c37546135eb69186e1a5fd8 100644
 --- a/src/main/java/org/purpurmc/purpur/controller/WaterMoveControllerWASD.java
 +++ b/src/main/java/org/purpurmc/purpur/controller/WaterMoveControllerWASD.java
-@@ -36,7 +36,7 @@ public class WaterMoveControllerWASD extends MoveControllerWASD {
+@@ -36,7 +36,7 @@ public class WaterMoveControllerWASD<T extends Mob> extends MoveControllerWASD<T
              vertical = 0.0F;
          }
  
--        if (rider.jumping && spacebarEvent(entity)) {
+-        if (rider.isJumping() && spacebarEvent(entity)) {
 +        if (lastClientInput.jump() && spacebarEvent(entity)) { // Kiterino - Fixup ridables controls
              entity.onSpacebar();
          }

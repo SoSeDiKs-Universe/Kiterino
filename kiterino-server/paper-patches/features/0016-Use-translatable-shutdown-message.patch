@@ -7,10 +7,10 @@ Lazy hardcoded value until it supports MiniMessage:
 https://github.com/PaperMC/Paper/issues/11208
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index ff6fd15aee41e89ca6914276bf498acadf400b07..df36d850c24446f559d8b932f6c2d8cb8142114d 100644
+index a7012912a3fc7a7537cbc7705b4ab2e7391f8508..21eb354141cbe1daec03cec19938e9516f81bd30 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -1764,6 +1764,7 @@ public final class CraftServer implements Server {
+@@ -1767,6 +1767,7 @@ public final class CraftServer implements Server {
  
      @Override
      public net.kyori.adventure.text.Component shutdownMessage() {

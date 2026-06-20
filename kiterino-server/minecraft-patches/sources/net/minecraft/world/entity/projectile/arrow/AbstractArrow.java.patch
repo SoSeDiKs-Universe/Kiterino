@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/projectile/arrow/AbstractArrow.java
 +++ b/net/minecraft/world/entity/projectile/arrow/AbstractArrow.java
-@@ -787,7 +_,7 @@
+@@ -792,7 +_,7 @@
      }
  
      protected float getWaterInertia() {

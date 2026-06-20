@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -182,8 +_,53 @@
+@@ -181,8 +_,53 @@
  
                  Holder<Item> item = Item.STREAM_CODEC.decode(input);
                  DataComponentPatch patch = patchCodec.decode(input);
@@ -56,7 +56,7 @@
  
              @Override
              public void encode(final RegistryFriendlyByteBuf output, final ItemStack itemStack) {
-@@ -192,6 +_,32 @@
+@@ -191,6 +_,32 @@
                  } else {
                      output.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), itemStack, itemStack.getCount())); // Paper - potentially sanitize count
                      Item.STREAM_CODEC.encode(output, itemStack.typeHolder());
@@ -89,7 +89,7 @@
                      // Paper start - adventure; conditionally render translatable components
                      boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
                      try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(itemStack))) { // pass the itemstack as context to the obfuscation session
-@@ -199,6 +_,15 @@
+@@ -198,6 +_,15 @@
                      patchCodec.encode(output, itemStack.components.asPatch());
                      } finally {
                          net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
@@ -105,7 +105,7 @@
                      }
                      // Paper end - adventure; conditionally render translatable components
                  }
-@@ -283,7 +_,7 @@
+@@ -282,7 +_,7 @@
      }
  
      private static DataResult<?> validateComponents(final DataComponentMap components) {

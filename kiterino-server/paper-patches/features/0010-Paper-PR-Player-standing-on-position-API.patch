@@ -6,10 +6,10 @@ Subject: [PATCH] Paper PR - Player standing on position API
 https://github.com/PaperMC/Paper/pull/9298
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 59d31a157999216fd7bbc6503ab0a7643ed7f343..754a57b35c263da84e97d23e986b89ac9ec2fedc 100644
+index c8eec15efad040e3628937f67cae1da29a4e877a..576f113d36dbd261e1eeaca26529ae2bf3deee36 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1362,6 +1362,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1360,6 +1360,20 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.entity.get(io.papermc.paper.datacomponent.PaperDataComponentType.bukkitToMinecraft(type)) != null;
      }
  

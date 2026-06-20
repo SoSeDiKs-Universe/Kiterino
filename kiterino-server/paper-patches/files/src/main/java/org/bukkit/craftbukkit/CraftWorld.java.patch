@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -501,6 +_,28 @@
+@@ -493,6 +_,28 @@
          return true;
      }
  
@@ -29,7 +29,7 @@
      @Override
      public Collection<Player> getPlayersSeeingChunk(Chunk chunk) {
          Preconditions.checkArgument(chunk != null, "chunk cannot be null");
-@@ -2106,4 +_,11 @@
+@@ -2090,4 +_,11 @@
          return POINTERS_SUPPLIER.view(this);
      }
      // Paper end

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/decoration/painting/Painting.java
 +++ b/net/minecraft/world/entity/decoration/painting/Painting.java
-@@ -219,6 +_,13 @@
+@@ -220,6 +_,13 @@
  
      @Override
      public ItemStack getPickResult() {

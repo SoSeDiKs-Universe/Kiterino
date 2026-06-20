@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/EnderChestBlock.java
 +++ b/net/minecraft/world/level/block/EnderChestBlock.java
-@@ -103,7 +_,7 @@
+@@ -104,7 +_,7 @@
      }
  
      // Purpur start - Barrels and enderchests 6 rows

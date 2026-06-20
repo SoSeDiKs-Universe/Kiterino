@@ -5,10 +5,10 @@ Subject: [PATCH] Correctly handle insta break destroy progress
 
 
 diff --git a/net/minecraft/world/level/block/state/BlockBehaviour.java b/net/minecraft/world/level/block/state/BlockBehaviour.java
-index 2fe605409d2fc791af593d08c0623a312760d6eb..ef93f74f13a2b26ab9cbf1c65a5b7b89727b5860 100644
+index 279f1936f631ad61c89a14afddb84aecba4cd2f4..d27c49fbcb33cf21aa900d5d5e4efa1d136cbcb4 100644
 --- a/net/minecraft/world/level/block/state/BlockBehaviour.java
 +++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
-@@ -364,6 +364,11 @@ public abstract class BlockBehaviour implements FeatureElement {
+@@ -358,6 +358,11 @@ public abstract class BlockBehaviour implements FeatureElement {
  
      protected float getDestroyProgress(final BlockState state, final Player player, final BlockGetter level, final BlockPos pos) {
          float destroySpeed = state.getDestroySpeed(level, pos);

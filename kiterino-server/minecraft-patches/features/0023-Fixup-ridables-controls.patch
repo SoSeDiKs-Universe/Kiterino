@@ -5,10 +5,10 @@ Subject: [PATCH] Fixup ridables controls
 
 
 diff --git a/net/minecraft/world/entity/animal/polarbear/PolarBear.java b/net/minecraft/world/entity/animal/polarbear/PolarBear.java
-index ee3bc947ef81ea27b02135c0f0ea6d6168ca9fbd..24e6978473c64d3d1d1145720714e4b373331951 100644
+index 46276e32dcc7884758e333c45f65ce03133c04fe..127c6baa388872fe8242b86199d94f90b2421191 100644
 --- a/net/minecraft/world/entity/animal/polarbear/PolarBear.java
 +++ b/net/minecraft/world/entity/animal/polarbear/PolarBear.java
-@@ -109,7 +109,7 @@ public class PolarBear extends Animal implements NeutralMob {
+@@ -115,7 +115,7 @@ public class PolarBear extends Animal implements NeutralMob {
      @Override
      public boolean onSpacebar() {
          if (!isStanding()) {
@@ -18,7 +18,7 @@ index ee3bc947ef81ea27b02135c0f0ea6d6168ca9fbd..24e6978473c64d3d1d1145720714e4b3
                  playSound(SoundEvents.POLAR_BEAR_WARNING, 1.0F, 1.0F);
              }
 diff --git a/net/minecraft/world/entity/animal/squid/Squid.java b/net/minecraft/world/entity/animal/squid/Squid.java
-index d3809367a849ac56a0e57b5b2af01695d5a30193..a426f662398254ae477f7fb336b74682af7a1f63 100644
+index dcb597337bc69be21f0924dda89a5299aa8d0f21..f0dfc1e1e11df3a5406aae105dcaf4a564bcaebf 100644
 --- a/net/minecraft/world/entity/animal/squid/Squid.java
 +++ b/net/minecraft/world/entity/animal/squid/Squid.java
 @@ -380,12 +380,13 @@ public class Squid extends AgeableWaterCreature {
@@ -26,7 +26,7 @@ index d3809367a849ac56a0e57b5b2af01695d5a30193..a426f662398254ae477f7fb336b74682
              // Purpur start - Ridables
              net.minecraft.world.entity.player.Player rider = squid.getRider();
 -            if (rider != null && squid.isControllable()) {
--                if (rider.jumping) {
+-                if (rider.isJumping()) {
 +            if (rider instanceof net.minecraft.server.level.ServerPlayer serverPlayer && squid.isControllable()) {
 +                net.minecraft.world.entity.player.Input lastClientInput = serverPlayer.getLastClientInput(); // Kiterino - Fixup ridables controls
 +                if (lastClientInput.jump()) { // Kiterino - Fixup ridables controls
@@ -40,7 +40,7 @@ index d3809367a849ac56a0e57b5b2af01695d5a30193..a426f662398254ae477f7fb336b74682
                  if (forward < 0.0F) {
                      speed *= -0.5;
 diff --git a/net/minecraft/world/entity/monster/Creeper.java b/net/minecraft/world/entity/monster/Creeper.java
-index 56cfc2b7cf9bd7edc966f59de091d2793c6adfb3..ae499c28881c44decc478622b6e58b27740b2b13 100644
+index 9d8b9e3e21ee721f5ea9339143839eeaebd341ae..b409f0f4232a6c32f7da33e06759cf2bb74943df 100644
 --- a/net/minecraft/world/entity/monster/Creeper.java
 +++ b/net/minecraft/world/entity/monster/Creeper.java
 @@ -88,8 +88,8 @@ public class Creeper extends Monster {
@@ -63,11 +63,33 @@ index 56cfc2b7cf9bd7edc966f59de091d2793c6adfb3..ae499c28881c44decc478622b6e58b27
                      getRider().getBukkitEntity().hasPermission("allow.special.creeper")) {
                  setIgnited(true);
                  setSwellDir(1);
-diff --git a/net/minecraft/world/entity/monster/Slime.java b/net/minecraft/world/entity/monster/Slime.java
-index 0636fdf31330da5523b9ad11869776a21a6f68b1..e7eb429b765d139f09362e4ded65a9cfedd2d22f 100644
---- a/net/minecraft/world/entity/monster/Slime.java
-+++ b/net/minecraft/world/entity/monster/Slime.java
-@@ -92,9 +92,10 @@ public class Slime extends Mob implements Enemy {
+diff --git a/net/minecraft/world/entity/monster/cubemob/AbstractCubeMob.java b/net/minecraft/world/entity/monster/cubemob/AbstractCubeMob.java
+index 9d4410c84c0ebb9d9e0a9eead27b235992ed2df8..b4a69663b3e4486bbb417c2cf2da36916ade2fff 100644
+--- a/net/minecraft/world/entity/monster/cubemob/AbstractCubeMob.java
++++ b/net/minecraft/world/entity/monster/cubemob/AbstractCubeMob.java
+@@ -558,7 +558,7 @@ public abstract class AbstractCubeMob extends AgeableMob {
+             } else {
+                 this.operation = MoveControl.Operation.WAIT;
+                 if (this.mob.onGround()) {
+-                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (this.mob.getRider() != null && this.mob.isControllable() && (this.mob.getRider().getForwardMot() != 0 || this.mob.getRider().getStrafeMot() != 0) ? 2.0D : 1.0D))); // Purpur - Ridables
++                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (this.mob.getRider() instanceof net.minecraft.server.level.ServerPlayer serverPlayer && this.mob.isControllable() && serverPlayer.getLastClientInput().forward() != serverPlayer.getLastClientInput().backward() ? 2.0D : 1.0D))); // Purpur - Ridables // Kiterino - Fixup ridables controls
+                     if (this.jumpDelay-- <= 0) {
+                         this.jumpDelay = this.mob.getJumpDelay();
+                         if (this.isAggressive) {
+@@ -575,7 +575,7 @@ public abstract class AbstractCubeMob extends AgeableMob {
+                         this.mob.setSpeed(0.0F);
+                     }
+                 } else {
+-                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (this.mob.getRider() != null && this.mob.isControllable() && (this.mob.getRider().getForwardMot() != 0 || this.mob.getRider().getStrafeMot() != 0) ? 2.0D : 1.0D))); // Purpur - Ridables
++                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (this.mob.getRider() instanceof net.minecraft.server.level.ServerPlayer serverPlayer && this.mob.isControllable() && serverPlayer.getLastClientInput().forward() != serverPlayer.getLastClientInput().backward() ? 2.0D : 1.0D))); // Purpur - Ridables // Kiterino - Fixup ridables controls
+                 }
+             }
+         }
+diff --git a/net/minecraft/world/entity/monster/cubemob/Slime.java b/net/minecraft/world/entity/monster/cubemob/Slime.java
+index 1faab89a0c6febdbbb15c8f1345fbd8e71f3af6e..e5121dce0b6d3e4bc042457b96475334b388b643 100644
+--- a/net/minecraft/world/entity/monster/cubemob/Slime.java
++++ b/net/minecraft/world/entity/monster/cubemob/Slime.java
+@@ -69,9 +69,10 @@ public class Slime extends AbstractCubeMob implements Enemy {
  
      @Override
      public boolean onSpacebar() {
@@ -78,23 +100,5 @@ index 0636fdf31330da5523b9ad11869776a21a6f68b1..e7eb429b765d139f09362e4ded65a9cf
 +            net.minecraft.world.entity.player.Input lastClientInput = serverPlayer.getLastClientInput(); // Kiterino - Fixup ridables controls
 +            if (lastClientInput.forward() == lastClientInput.backward()) { // Kiterino - Fixup ridables controls
                  jumpFromGround(); // jump() here if not moving
-             }
-         }
-@@ -648,7 +649,7 @@ public class Slime extends Mob implements Enemy {
-             } else {
-                 this.operation = MoveControl.Operation.WAIT;
-                 if (this.mob.onGround()) {
--                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (slime.getRider() != null && slime.isControllable() && (slime.getRider().getForwardMot() != 0 || slime.getRider().getStrafeMot() != 0) ? 2.0D : 1.0D))); // Purpur - Ridables
-+                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (slime.getRider() instanceof net.minecraft.server.level.ServerPlayer serverPlayer && slime.isControllable() && serverPlayer.getLastClientInput().forward() != serverPlayer.getLastClientInput().backward() ? 2.0D : 1.0D))); // Purpur - Ridables // Kiterino - Fixup ridables controls
-                     if (this.jumpDelay-- <= 0) {
-                         this.jumpDelay = this.slime.getJumpDelay();
-                         if (this.isAggressive) {
-@@ -665,7 +666,7 @@ public class Slime extends Mob implements Enemy {
-                         this.mob.setSpeed(0.0F);
-                     }
-                 } else {
--                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (slime.getRider() != null && slime.isControllable() && (slime.getRider().getForwardMot() != 0 || slime.getRider().getStrafeMot() != 0) ? 2.0D : 1.0D))); // Purpur - Ridables
-+                    this.mob.setSpeed((float)(this.getSpeedModifier() * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * (slime.getRider() instanceof net.minecraft.server.level.ServerPlayer serverPlayer && slime.isControllable() && serverPlayer.getLastClientInput().forward() != serverPlayer.getLastClientInput().backward() ? 2.0D : 1.0D))); // Purpur - Ridables // Kiterino - Fixup ridables controls
-                 }
              }
          }

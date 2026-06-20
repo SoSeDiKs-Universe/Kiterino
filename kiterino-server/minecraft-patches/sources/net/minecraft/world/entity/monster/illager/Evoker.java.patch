@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/illager/Evoker.java
 +++ b/net/minecraft/world/entity/monster/illager/Evoker.java
-@@ -363,6 +_,7 @@
+@@ -377,6 +_,7 @@
              Sheep wololoTarget = Evoker.this.getWololoTarget();
              if (wololoTarget != null && wololoTarget.isAlive()) {
                  wololoTarget.setColor(DyeColor.RED);

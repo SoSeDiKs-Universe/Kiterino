@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/zombie/Drowned.java
 +++ b/net/minecraft/world/entity/monster/zombie/Drowned.java
-@@ -98,6 +_,17 @@
+@@ -99,6 +_,17 @@
      }
      // Purpur end - Ridables
  

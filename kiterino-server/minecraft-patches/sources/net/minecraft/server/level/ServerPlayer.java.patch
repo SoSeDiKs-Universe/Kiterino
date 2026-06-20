@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -828,7 +_,7 @@
+@@ -827,7 +_,7 @@
                  this.foodData.tick(this);
                  this.awardStat(Stats.PLAY_TIME);
                  this.awardStat(Stats.TOTAL_WORLD_TIME);
@@ -9,7 +9,7 @@
                      this.awardStat(Stats.TIME_SINCE_DEATH);
                  }
  
-@@ -1353,7 +_,13 @@
+@@ -1359,7 +_,13 @@
          final boolean consumeSpawnBlock, final TeleportTransition.PostTeleportTransition postTeleportTransition,
          final org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason
      ) {
@@ -24,7 +24,7 @@
          return result == null ? null : result.transition();
      }
  
-@@ -1361,13 +_,19 @@
+@@ -1367,13 +_,19 @@
          final boolean consumeSpawnBlock, final TeleportTransition.PostTeleportTransition postTeleportTransition,
          final org.bukkit.event.player.PlayerRespawnEvent.RespawnReason respawnReason
      ) {
@@ -45,7 +45,7 @@
          if (respawnLevel != null && respawnConfig != null) {
              Optional<ServerPlayer.RespawnPosAngle> respawn = findRespawnAndUseSpawnBlock(respawnLevel, respawnConfig, consumeSpawnBlock);
              if (respawn.isPresent()) {
-@@ -2066,8 +_,13 @@
+@@ -2073,8 +_,13 @@
                      }
                  }
              } else if (this.isFallFlying()) {
@@ -61,7 +61,7 @@
              } else {
                  int horizontalDistance = Math.round((float)Math.sqrt(dx * dx + dz * dz) * 100.0F);
                  if (horizontalDistance > 25) {
-@@ -2081,6 +_,11 @@
+@@ -2088,6 +_,11 @@
          if (this.isPassenger() && !didNotMove(dx, dy, dz)) {
              int distance = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
              Entity vehicle = this.getVehicle();

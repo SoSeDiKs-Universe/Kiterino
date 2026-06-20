@@ -99,7 +99,7 @@ index 0000000000000000000000000000000000000000..edd7f3ff362e62a50afc55a2f217ddc7
 +	}
 +}
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBarrel.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBarrel.java
-index 921452422c417d0c2a505790fefd05f92e1a58e1..b70a14c005aa9259f52cef93500ad6667d9b41d9 100644
+index 7aa0cf0f2abdaae5fbf0264ed3342ad0a4e2a8a1..b70a14c005aa9259f52cef93500ad6667d9b41d9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBarrel.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBarrel.java
 @@ -10,7 +10,7 @@ import org.bukkit.block.Barrel;
@@ -111,7 +111,7 @@ index 921452422c417d0c2a505790fefd05f92e1a58e1..b70a14c005aa9259f52cef93500ad666
  
      public CraftBarrel(World world, BarrelBlockEntity blockEntity) {
          super(world, blockEntity);
-@@ -34,36 +34,54 @@ public class CraftBarrel extends CraftLootable<BarrelBlockEntity> implements Bar
+@@ -34,31 +34,53 @@ public class CraftBarrel extends CraftLootable<BarrelBlockEntity> implements Bar
          return new CraftInventory(this.getBlockEntity());
      }
  
@@ -130,42 +130,36 @@ index 921452422c417d0c2a505790fefd05f92e1a58e1..b70a14c005aa9259f52cef93500ad666
 -    public void open() {
 +    public void startForceLiddedLidClose() {
          this.requirePlaced();
--        if (!this.getBlockEntity().openersCounter.opened) {
--            BlockState state = this.getBlockEntity().getBlockState();
--            boolean open = state.getValue(BarrelBlock.OPEN);
--
--            if (!open) {
--                this.getBlockEntity().updateBlockState(state, true);
--                if (this.getWorldHandle() instanceof net.minecraft.world.level.Level) {
--                    this.getBlockEntity().playSound(state, SoundEvents.BARREL_OPEN);
--                }
--            }
+-        if (!this.getBlockEntity().openersCounter.opened && this.getWorldHandle() instanceof net.minecraft.world.level.Level level) {
+-            BlockState block = this.getBlockEntity().getBlockState();
+-            int openCount = this.getBlockEntity().openersCounter.getOpenerCount();
++        this.getBlockEntity().openersCounter.startForceLiddedLidClose(this.getBlockEntity().getLevel(), this.getBlockEntity().getBlockPos(), this.getBlockEntity().getBlockState());
++    }
+ 
+-            this.getBlockEntity().openersCounter.onOpenAPI(level, this.getPosition(), block);
+-            this.getBlockEntity().openersCounter.openerCountChangedAPI(level, this.getPosition(), block, openCount, openCount + 1);
 -        }
 -        this.getBlockEntity().openersCounter.opened = true;
-+        this.getBlockEntity().openersCounter.startForceLiddedLidClose(this.getBlockEntity().getLevel(), this.getBlockEntity().getBlockPos(), this.getBlockEntity().getBlockState());
++    @Override
++    public void stopForceLiddedLidClose() {
++        this.requirePlaced();
++        this.getBlockEntity().openersCounter.stopForceLiddedLidClose(this.getBlockEntity().getLevel(), this.getBlockEntity().getBlockPos(), this.getBlockEntity().getBlockState());
      }
  
      @Override
 -    public void close() {
-+    public void stopForceLiddedLidClose() {
++    public io.papermc.paper.block.LidState getEffectiveLidState() {
          this.requirePlaced();
--        if (this.getBlockEntity().openersCounter.opened) {
--            BlockState state = this.getBlockEntity().getBlockState();
--            this.getBlockEntity().updateBlockState(state, false);
--            if (this.getWorldHandle() instanceof net.minecraft.world.level.Level) {
--                this.getBlockEntity().playSound(state, SoundEvents.BARREL_CLOSE);
--            }
+-        if (this.getBlockEntity().openersCounter.opened && this.getWorldHandle() instanceof net.minecraft.world.level.Level level) {
+-            BlockState block = this.getBlockEntity().getBlockState();
+-            int openCount = this.getBlockEntity().openersCounter.getOpenerCount();
++        return this.getBlockEntity().openersCounter.getEffectiveLidState();
++    }
+ 
+-            this.getBlockEntity().openersCounter.onCloseAPI(level, this.getPosition(), block);
+-            this.getBlockEntity().openersCounter.openerCountChangedAPI(level, this.getPosition(), block, openCount, 0);
 -        }
 -        this.getBlockEntity().openersCounter.opened = false;
-+        this.getBlockEntity().openersCounter.stopForceLiddedLidClose(this.getBlockEntity().getLevel(), this.getBlockEntity().getBlockPos(), this.getBlockEntity().getBlockState());
-+    }
-+
-+    @Override
-+    public io.papermc.paper.block.LidState getEffectiveLidState() {
-+        this.requirePlaced();
-+        return this.getBlockEntity().openersCounter.getEffectiveLidState();
-     }
- 
 +    @Override
 +    public io.papermc.paper.block.LidState getTrueLidState() {
 +        this.requirePlaced();
@@ -175,7 +169,7 @@ index 921452422c417d0c2a505790fefd05f92e1a58e1..b70a14c005aa9259f52cef93500ad666
 +    public io.papermc.paper.block.LidMode getLidMode() {
 +        this.requirePlaced();
 +        return this.getBlockEntity().openersCounter.getLidMode();
-+    }
+     }
 +    @Override
 +    public io.papermc.paper.block.LidMode setLidMode(final io.papermc.paper.block.LidMode targetLidMode) {
 +        this.requirePlaced();
@@ -184,11 +178,10 @@ index 921452422c417d0c2a505790fefd05f92e1a58e1..b70a14c005aa9259f52cef93500ad666
 +        return newEffectiveMode;
 +    }
 +    // Kiterino end - Paper PR - Add Improved Lidded Api
-+
+ 
      @Override
      public CraftBarrel copy() {
-         return new CraftBarrel(this, null);
-@@ -74,10 +92,4 @@ public class CraftBarrel extends CraftLootable<BarrelBlockEntity> implements Bar
+@@ -70,10 +92,4 @@ public class CraftBarrel extends CraftLootable<BarrelBlockEntity> implements Bar
          return new CraftBarrel(this, location);
      }
  
@@ -377,7 +370,7 @@ index 2a9243e416bb75f8e942b08a7d3d22bd6ba4df47..8e118d27adfbc056a477ec5305e31031
      @Override
      public boolean isBlocked() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java b/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java
-index c9337d641d5f6be9d3ccf502bfdcbc88c8fdcfb4..c9b2703d9748befa8d0010f0b0ad9f5deb361aae 100644
+index 2e46d8831e86d0674c5ea57d79aa8a5e94a1de54..3b14f67c01726044e25da7a8c389d49a61a63fa1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java
 @@ -11,7 +11,7 @@ import org.bukkit.block.ShulkerBox;
@@ -477,10 +470,10 @@ index c9337d641d5f6be9d3ccf502bfdcbc88c8fdcfb4..c9b2703d9748befa8d0010f0b0ad9f5d
 +
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 13db6b4595ca149c2d013a00286c63107e94a65e..8832caad5c38b181adfff6922a0502a2484e2684 100644
+index a6935d5c4b07886dbcf44c535d38327aab76407e..bc8cf69df450e0252c1f82fc8577ca6aa928923d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -2456,4 +2456,16 @@ public class CraftEventFactory {
+@@ -2454,4 +2454,16 @@ public class CraftEventFactory {
          return event;
      }
      // Kiterino end - Paper PR - Add FillBottleEvents for player and dispenser

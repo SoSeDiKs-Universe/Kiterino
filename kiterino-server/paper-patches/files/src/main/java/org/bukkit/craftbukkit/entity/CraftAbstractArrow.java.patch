@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractArrow.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractArrow.java
-@@ -192,4 +_,11 @@
+@@ -196,4 +_,11 @@
          this.getHandle().projectileSource = shooter;
      }
      // Paper end - Fix PickupStatus getting reset

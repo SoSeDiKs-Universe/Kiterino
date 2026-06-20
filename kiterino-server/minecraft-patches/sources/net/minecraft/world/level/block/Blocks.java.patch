@@ -1,39 +1,39 @@
 --- a/net/minecraft/world/level/block/Blocks.java
 +++ b/net/minecraft/world/level/block/Blocks.java
-@@ -704,6 +_,7 @@
+@@ -723,6 +_,7 @@
              .requiresCorrectToolForDrops()
              .strength(4.0F)
              .pushReaction(PushReaction.DESTROY)
 +            .ignitedByLava() // Kiterino - Flammable cobwebs
      );
      public static final Block SHORT_GRASS = register(
-         "short_grass",
-@@ -3399,7 +_,9 @@
+         BlockItemIds.SHORT_GRASS,
+@@ -3082,7 +_,9 @@
      );
      public static final Block PACKED_ICE = register(
-         "packed_ice",
+         BlockItemIds.PACKED_ICE,
 +        me.sosedik.kiterino.world.level.block.PackedIceBlock::new, // Kiterino - Melt packed ice in Nether
          BlockBehaviour.Properties.of().mapColor(MapColor.ICE).instrument(NoteBlockInstrument.CHIME).friction(0.98F).strength(0.5F).sound(SoundType.GLASS)
 +            .randomTicks() // Kiterino - Melt packed ice in Nether
      );
      public static final Block SUNFLOWER = register(
-         "sunflower",
-@@ -6753,12 +_,12 @@
+         BlockItemIds.SUNFLOWER,
+@@ -5545,12 +_,12 @@
      public static final Block PINK_PETALS = register(
-         "pink_petals",
+         BlockItemIds.PINK_PETALS,
          FlowerBedBlock::new,
 -        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY)
 +        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY) // Kiterino - Replaceable petals
      );
      public static final Block WILDFLOWERS = register(
-         "wildflowers",
+         BlockItemIds.WILDFLOWERS,
          FlowerBedBlock::new,
 -        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY)
 +        BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollision().sound(SoundType.PINK_PETALS).pushReaction(PushReaction.DESTROY) // Kiterino - Replaceable petals
      );
      public static final Block LEAF_LITTER = register(
-         "leaf_litter",
-@@ -7230,5 +_,6 @@
+         BlockItemIds.LEAF_LITTER,
+@@ -6004,5 +_,6 @@
                  state.initCache();
              }
          }

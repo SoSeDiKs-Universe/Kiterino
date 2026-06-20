@@ -1,6 +1,6 @@
 --- a/src/main/java/com/destroystokyo/paper/MaterialTags.java
 +++ b/src/main/java/com/destroystokyo/paper/MaterialTags.java
-@@ -785,4 +_,26 @@
+@@ -786,4 +_,26 @@
          .add(Material.NETHERITE_AXE, Material.NETHERITE_HOE, Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_SWORD, Material.NETHERITE_SPEAR)
          .lock();
  

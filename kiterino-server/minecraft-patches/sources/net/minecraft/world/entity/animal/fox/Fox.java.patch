@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/animal/fox/Fox.java
 +++ b/net/minecraft/world/entity/animal/fox/Fox.java
-@@ -1267,7 +_,7 @@
+@@ -1262,7 +_,7 @@
  
          @Override
          public boolean shouldPanic() {

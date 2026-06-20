@@ -184,10 +184,10 @@ index f1a616432ea732d5a316113ae19a6e0e1ef3dd17..4355df36f9619b8c77bd145c65598beb
          if (position == null) {
              position = info.getOptionalParameter(LootContextParams.THIS_ENTITY).position(); // Every vanilla context has origin or this_entity, see LootContextParamSets
 diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-index aad7b919eb8f21dc75fa9424258bd6de39cae691..d8e0f731df2f03ad1cba9b777d029a78908f8a96 100644
+index f4f54d0747b013a9126e32e6c6de6fb7310a5857..fec1c75fd5884efc52e8f2ba635af41ce8ab5a25 100644
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockStates.java
-@@ -238,6 +238,13 @@ public final class CraftBlockStates {
+@@ -239,6 +239,13 @@ public final class CraftBlockStates {
          return CraftBlockStates.getBlockState(null, pos, state, blockEntity);
      }
  

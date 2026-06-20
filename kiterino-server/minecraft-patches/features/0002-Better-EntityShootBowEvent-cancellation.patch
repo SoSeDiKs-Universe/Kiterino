@@ -6,10 +6,10 @@ Subject: [PATCH] Better EntityShootBowEvent cancellation
 Don't increase stats / play bow sound if event was cancelled
 
 diff --git a/net/minecraft/world/item/BowItem.java b/net/minecraft/world/item/BowItem.java
-index 6b5fe2fa8c02e99e651a066d126f1e5891bb4740..2aee7df5d21c9885916c075a482aa22a9cf33fbd 100644
+index 3c0e02d46d5670d69d3338f0aadff54bc86035de..dbf3ce0750c5154fd9a0933c53c9dac827a650db 100644
 --- a/net/minecraft/world/item/BowItem.java
 +++ b/net/minecraft/world/item/BowItem.java
-@@ -46,7 +46,7 @@ public class BowItem extends ProjectileWeaponItem {
+@@ -44,7 +44,7 @@ public class BowItem extends ProjectileWeaponItem {
  
              List<ItemStack> firedProjectiles = draw(itemStack, projectile, player, !projectile.has(net.minecraft.core.component.DataComponents.INTANGIBLE_PROJECTILE)); // Kiterino - Infinite projectiles
              if (level instanceof ServerLevel serverLevel && !firedProjectiles.isEmpty()) {
@@ -19,7 +19,7 @@ index 6b5fe2fa8c02e99e651a066d126f1e5891bb4740..2aee7df5d21c9885916c075a482aa22a
  
              level.playSound(
 diff --git a/net/minecraft/world/item/CrossbowItem.java b/net/minecraft/world/item/CrossbowItem.java
-index 285509cd868098c788b713dea1d74471ea11d754..b34e4295dfbcffc0ec5ba2d1ed821b0e5be3b1ed 100644
+index d54f67ac95b1f93ea6d3db10160c68def11acc4e..854708f28e0b63e0e374d587b587bef1575f5200 100644
 --- a/net/minecraft/world/item/CrossbowItem.java
 +++ b/net/minecraft/world/item/CrossbowItem.java
 @@ -198,7 +198,7 @@ public class CrossbowItem extends ProjectileWeaponItem {

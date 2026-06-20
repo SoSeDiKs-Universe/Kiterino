@@ -5,10 +5,10 @@ Subject: [PATCH] Change enabled experiments
 
 
 diff --git a/net/minecraft/server/Main.java b/net/minecraft/server/Main.java
-index 2ff3629c61ea06922d1c6ab94dfea37539b913ba..36abf241769d1bcb94a0e17abba654cae4489b70 100644
+index d59ccfab91841dc328c2bab587b3e2c16c228f24..eabc05d6ee64475f26ec175efff687ec7b583a38 100644
 --- a/net/minecraft/server/Main.java
 +++ b/net/minecraft/server/Main.java
-@@ -433,6 +433,7 @@ public class Main {
+@@ -440,6 +440,7 @@ public class Main {
              initMode = true;
              dataConfigToUse = new WorldDataConfiguration(properties.initialDataPackConfiguration, FeatureFlags.DEFAULT_FLAGS);
          }

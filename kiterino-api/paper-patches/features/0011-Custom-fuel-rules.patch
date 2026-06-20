@@ -5,10 +5,10 @@ Subject: [PATCH] Custom fuel rules
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 1cb089a00e9ecd8e345177e342d821ad0478f584..73680d8b2e046c3a8c1e7d21ffd1b676d99b9e31 100644
+index e7285a912117505332425ffe98e170929b283926..bbcfe03ca481478819ba953790d2c8d0197d29b8 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -3050,6 +3050,17 @@ public final class Bukkit {
+@@ -3054,6 +3054,17 @@ public final class Bukkit {
      }
      // Purpur end - Added the ability to add combustible items
  
@@ -27,10 +27,10 @@ index 1cb089a00e9ecd8e345177e342d821ad0478f584..73680d8b2e046c3a8c1e7d21ffd1b676
      /**
       * Creates debug block highlight on specified block location and show it to all players on the server.
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 81428ad31c7726eb9f91ddc8d44fb2f34f3df729..656fab7ad2cdeb3f511277919a661790fbfc7855 100644
+index 69ac7e96c1a2f796fa7326a40d10c5ba46d6ab77..33c2d74eb8a7b9c63343a1b9a4e1b1a1f58662f7 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2834,6 +2834,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2830,6 +2830,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
      public void removeFuel(@NotNull Material material);
      // Purpur end - Added the ability to add combustible items
  

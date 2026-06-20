@@ -1,13 +1,13 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
-@@ -486,10 +_,24 @@
+@@ -466,10 +_,24 @@
          net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
          boolean result = false;
  
 +        // Kiterino start - Call BlockDestroyEvent for breakNaturally
 +        boolean dropResources = true;
 +        int expDrop = dropExperience ? block.getExpDrop(state, this.level.getMinecraftWorld(), this.position, nmsItem, true) : 0;
-+        if (block != Blocks.AIR) {
++        if (!state.isAir()) {
 +            var blockDestroyEvent = new com.destroystokyo.paper.event.block.BlockDestroyEvent(this, state.getFluidState().createLegacyBlock().asBlockData(), state.asBlockData(), expDrop, true);
 +            blockDestroyEvent.setPlayEffect(triggerEffect);
 +            if (!blockDestroyEvent.callEvent()) return false;

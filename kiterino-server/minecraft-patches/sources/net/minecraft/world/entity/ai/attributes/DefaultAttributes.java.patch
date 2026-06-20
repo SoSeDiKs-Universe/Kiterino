@@ -1,18 +1,18 @@
 --- a/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
 +++ b/net/minecraft/world/entity/ai/attributes/DefaultAttributes.java
-@@ -91,7 +_,7 @@
+@@ -93,7 +_,7 @@
  
  public class DefaultAttributes {
      private static final Logger LOGGER = LogUtils.getLogger();
 -    private static final Map<EntityType<? extends LivingEntity>, AttributeSupplier> SUPPLIERS = ImmutableMap.<EntityType<? extends LivingEntity>, AttributeSupplier>builder()
 +    private static final Map<EntityType<? extends LivingEntity>, AttributeSupplier> SUPPLIERS = new java.util.HashMap<>(ImmutableMap.<EntityType<? extends LivingEntity>, AttributeSupplier>builder() // Kiterino - Injecting custom entities
-         .put(EntityType.ALLAY, Allay.createAttributes().build())
-         .put(EntityType.ARMADILLO, Armadillo.createAttributes().build())
-         .put(EntityType.ARMOR_STAND, ArmorStand.createAttributes().build())
-@@ -184,7 +_,17 @@
-         .put(EntityType.ZOMBIE_NAUTILUS, ZombieNautilus.createAttributes().build())
-         .put(EntityType.ZOMBIE_VILLAGER, Zombie.createAttributes().build())
-         .put(EntityType.ZOMBIFIED_PIGLIN, ZombifiedPiglin.createAttributes().build())
+         .put(EntityTypes.ALLAY, Allay.createAttributes().build())
+         .put(EntityTypes.ARMADILLO, Armadillo.createAttributes().build())
+         .put(EntityTypes.ARMOR_STAND, ArmorStand.createAttributes().build())
+@@ -187,7 +_,17 @@
+         .put(EntityTypes.ZOMBIE_NAUTILUS, ZombieNautilus.createAttributes().build())
+         .put(EntityTypes.ZOMBIE_VILLAGER, Zombie.createAttributes().build())
+         .put(EntityTypes.ZOMBIFIED_PIGLIN, ZombifiedPiglin.createAttributes().build())
 -        .build();
 +        .build()); // Kiterino - Injecting custom entities
 +

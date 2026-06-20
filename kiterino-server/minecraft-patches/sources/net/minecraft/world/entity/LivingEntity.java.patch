@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -972,10 +_,20 @@
+@@ -974,10 +_,20 @@
                          }
                          // CraftBukkit end
                          iterator.remove();
@@ -21,7 +21,7 @@
                  }
              } catch (ConcurrentModificationException var6) {
              }
-@@ -1349,6 +_,11 @@
+@@ -1352,6 +_,11 @@
                          serverPlayer.connection.send(new ClientboundRemoveMobEffectPacket(this.getId(), effect.getEffect()));
                      }
                  }
@@ -33,7 +33,7 @@
              }
  
              this.refreshDirtyAttributes();
-@@ -1621,10 +_,26 @@
+@@ -1599,10 +_,26 @@
                  serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
              }
          }
@@ -60,7 +60,7 @@
  
          return success;
      }
-@@ -2457,6 +_,18 @@
+@@ -2434,6 +_,18 @@
                  } else if (damageSource.getEntity() instanceof ServerPlayer) {
                      ((ServerPlayer)damageSource.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
                  }
@@ -79,7 +79,7 @@
              }
          }
  
-@@ -2575,6 +_,18 @@
+@@ -2553,6 +_,18 @@
                      } else if (source.getEntity() instanceof ServerPlayer) {
                          ((ServerPlayer)source.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
                      }
@@ -98,7 +98,7 @@
                  }
              }
  
-@@ -2611,10 +_,20 @@
+@@ -2588,10 +_,20 @@
              if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && this instanceof Player player) {
                  player.awardStat(Stats.DAMAGE_ABSORBED, Math.round(absorbedDamage * 10.0F));
              }
@@ -119,7 +119,7 @@
  
              // CraftBukkit start
              if (dmg > 0.0F || !human) {
-@@ -2625,6 +_,13 @@
+@@ -2602,6 +_,13 @@
                          ((net.minecraft.world.entity.player.Player)this).awardStat(Stats.DAMAGE_TAKEN, Math.round(dmg * 10.0F));
                      }
                  }
@@ -133,7 +133,7 @@
                  // CraftBukkit end
                  this.getCombatTracker().recordDamage(source, dmg);
                  this.setHealth(this.getHealth() - dmg);
-@@ -2644,10 +_,27 @@
+@@ -2621,10 +_,27 @@
                              serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
                          }
                      }
@@ -147,8 +147,8 @@
 +                    }
 +                    // Kiterino end - Award stats to rider
  
-                     if (source.getEntity() instanceof ServerPlayer) {
-                         CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayer)source.getEntity(), this, source, originalDamage, dmg, true); // Paper - fix taken/dealt param order
+                     if (source.getEntity() instanceof ServerPlayer sourcePlayer) {
+                         CriteriaTriggers.PLAYER_HURT_ENTITY.trigger(sourcePlayer, this, source, originalDamage, dmg, true); // Paper - fix taken/dealt param order
                      }
 +                    // Kiterino start - Award stats to rider
 +                    else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider) {
@@ -161,7 +161,7 @@
  
                      return !io.papermc.paper.configuration.GlobalConfiguration.get().unsupportedSettings.skipVanillaDamageTickWhenShieldBlocked; // Paper - this should always return true, however expose an unsupported setting to flip this to false to enable "shield stunning".
                  } else {
-@@ -2733,6 +_,7 @@
+@@ -2710,6 +_,7 @@
                  );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (sendToSwingingEntity) {
@@ -169,7 +169,7 @@
                      chunkSource.sendToTrackingPlayersAndSelf(this, packet);
                  } else {
                      chunkSource.sendToTrackingPlayers(this, packet);
-@@ -3499,7 +_,7 @@
+@@ -3505,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -178,7 +178,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3936,9 +_,17 @@
+@@ -3943,9 +_,17 @@
                      flag = false;
                  }
  
@@ -199,9 +199,14 @@
                  }
              }
          }
-@@ -4146,6 +_,11 @@
-         if (thrower instanceof ServerPlayer) {
-             CriteriaTriggers.THROWN_ITEM_PICKED_UP_BY_ENTITY.trigger((ServerPlayer)thrower, entity.getItem(), this);
+@@ -4149,9 +_,15 @@
+     }
+ 
+     public void onItemPickup(final ItemEntity entity) {
+-        if (EntityReference.getEntity(entity.thrower, this.level()::getGlobalPlayerByUUID, Entity.class) instanceof ServerPlayer serverPlayer) { // Paper - check global player list where appropriate
++        Entity thrower = EntityReference.getEntity(entity.thrower, this.level()::getGlobalPlayerByUUID, Entity.class); // Kiterino - Award stats to rider
++        if (thrower instanceof ServerPlayer serverPlayer) { // Paper - check global player list where appropriate // Kiterino - Award stats to rider
+             CriteriaTriggers.THROWN_ITEM_PICKED_UP_BY_ENTITY.trigger(serverPlayer, entity.getItem(), this);
          }
 +        // Kiterino start - Award stats to rider
 +        else if (me.sosedik.kiterino.KiterinoConfig.awardStatsToRider && thrower != null && thrower.getRider() instanceof ServerPlayer riderPlayer) {

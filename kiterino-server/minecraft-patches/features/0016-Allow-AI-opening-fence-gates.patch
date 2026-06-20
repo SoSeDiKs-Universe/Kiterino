@@ -126,10 +126,10 @@ index 0b383b16145d44e5dc29b8de123546656b4793dd..2ebf75064a2b1fb088e0f358e4833ccf
          } else {
              return false;
 diff --git a/net/minecraft/world/level/block/FenceGateBlock.java b/net/minecraft/world/level/block/FenceGateBlock.java
-index a82b060163a028ae45f207177a8f35c0b1b6793b..5e6e8f7b1ee51f6c4a7644b4dc973130a3d46c02 100644
+index 9ca0a8ae74a0a6a1c52d8ce70fd28a01ffe6cffb..f3635f74d3457bbf7b6a5bbce17c4106a9462667 100644
 --- a/net/minecraft/world/level/block/FenceGateBlock.java
 +++ b/net/minecraft/world/level/block/FenceGateBlock.java
-@@ -218,4 +218,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
+@@ -214,4 +214,21 @@ public class FenceGateBlock extends HorizontalDirectionalBlock {
      public static boolean connectsToDirection(final BlockState state, final Direction direction) {
          return state.getValue(FACING).getAxis() == direction.getClockWise().getAxis();
      }
@@ -152,7 +152,7 @@ index a82b060163a028ae45f207177a8f35c0b1b6793b..5e6e8f7b1ee51f6c4a7644b4dc973130
 +    // Kiterino end - Allow AI opening fence gates
  }
 diff --git a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 88b131b1cb859e8579e1697173020a4dcd2f03a6..710367b91706b06eb699312bf114010bab46d1a2 100644
+index 29da2af5d4a09f3ff21fa2d0653c05d45c475aa6..13dcc4a503872ff8b5d8f4c4f6ab258e9e713ecc 100644
 --- a/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 @@ -562,6 +562,11 @@ public class WalkNodeEvaluator extends NodeEvaluator {

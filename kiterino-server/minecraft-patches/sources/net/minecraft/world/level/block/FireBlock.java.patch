@@ -12,7 +12,7 @@
              } else {
                  if (!oldState.is(Blocks.TNT)) level.removeBlock(pos, false); // Paper - TNTPrimeEvent; We might be cancelling it below, move the setAir down
              }
-@@ -566,5 +_,6 @@
+@@ -536,5 +_,6 @@
          fire.setFlammable(Blocks.OAK_SHELF, 30, 20);
          fire.setFlammable(Blocks.PALE_OAK_SHELF, 30, 20);
          fire.setFlammable(Blocks.SPRUCE_SHELF, 30, 20);

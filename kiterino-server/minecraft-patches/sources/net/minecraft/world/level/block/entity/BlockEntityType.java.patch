@@ -1,8 +1,8 @@
 --- a/net/minecraft/world/level/block/entity/BlockEntityType.java
 +++ b/net/minecraft/world/level/block/entity/BlockEntityType.java
-@@ -289,7 +_,7 @@
+@@ -16,7 +_,7 @@
  
-     private BlockEntityType(final BlockEntityType.BlockEntitySupplier<? extends T> factory, final Set<Block> validBlocks) {
+     public BlockEntityType(final BlockEntityType.BlockEntitySupplier<? extends T> factory, final Set<Block> validBlocks) {
          this.factory = factory;
 -        this.validBlocks = validBlocks;
 +        this.validBlocks = new java.util.HashSet<>(validBlocks); // Kiterino - Allow modifying valid blocks - Injecting custom blocks

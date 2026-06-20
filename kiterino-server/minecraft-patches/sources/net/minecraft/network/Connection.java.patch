@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/Connection.java
 +++ b/net/minecraft/network/Connection.java
-@@ -689,7 +_,28 @@
+@@ -690,7 +_,28 @@
      public void configurePacketHandler(final ChannelPipeline pipeline) {
          pipeline.addLast("hackfix", new ChannelOutboundHandlerAdapter() {
              @Override

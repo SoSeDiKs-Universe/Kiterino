@@ -5,10 +5,10 @@ Subject: [PATCH] Rework some deprecations/javadocs
 
 
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 3267b864ccdf7f1435cd79eaea486658c5a7ee5b..1cb089a00e9ecd8e345177e342d821ad0478f584 100644
+index f874b714be2c77cb002de029535a3a1c2f3e8c6d..e7285a912117505332425ffe98e170929b283926 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2643,7 +2643,7 @@ public final class Bukkit {
+@@ -2647,7 +2647,7 @@ public final class Bukkit {
       * @return the unsafe values instance
       * @see UnsafeValues
       */
@@ -36,20 +36,20 @@ index 31ce15fa8cc6b4c79f6be4cbb4be5d9e6a9d7536..8806f151ade9f5ab7633ec7e32f19853
  
      /**
 diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
-index cff5d4681e6eaf0769112e05a83880109d6463ed..4237ebfe7d1fe12558668565b46e869687e31054 100644
+index bb29c4c7237542e343db28c1a2f7d0fda12a7dc9..fceb471c5f0f923ab7cdce4db96259375c3ffd18 100644
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -33,7 +33,7 @@ import java.util.Map;
+@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
   * may be poorly named, throw exceptions, have misleading parameters, or any
   * other bad programming practice.
   */
 -@Deprecated(since = "1.7.2")
 +// @Deprecated(since = "1.7.2") // Kiterino - Rework some deprecations
  public interface UnsafeValues {
-     // Paper start
-     net.kyori.adventure.text.flattener.ComponentFlattener componentFlattener();
+ 
+     Material toLegacy(Material material);
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index e332fb2d6d5ddbe31356a139ae7ff86e8e0c7034..7078a4a58246f9656f4f790769c3aa75f9b4402a 100644
+index a16438b1b04fe44c39cb8e8882c8a3dd370adb51..b89a7fd90477a16f7a0eef5ddb36aa0ea1f3a819 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -3389,9 +3389,9 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
