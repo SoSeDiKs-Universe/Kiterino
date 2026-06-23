@@ -1,8 +1,8 @@
 --- a/src/main/java/org/bukkit/inventory/meta/AxolotlBucketMeta.java
 +++ b/src/main/java/org/bukkit/inventory/meta/AxolotlBucketMeta.java
-@@ -36,4 +_,43 @@
+@@ -37,4 +_,43 @@
+ 
      @Override
-     @NotNull
      AxolotlBucketMeta clone();
 +
 +    // Kiterino start - Expose age to AxolotlBucketMeta
