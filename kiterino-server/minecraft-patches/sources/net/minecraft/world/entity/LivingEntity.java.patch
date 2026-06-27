@@ -60,7 +60,7 @@
  
          return success;
      }
-@@ -2434,6 +_,18 @@
+@@ -2433,6 +_,18 @@
                  } else if (damageSource.getEntity() instanceof ServerPlayer) {
                      ((ServerPlayer)damageSource.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
                  }
@@ -79,7 +79,7 @@
              }
          }
  
-@@ -2553,6 +_,18 @@
+@@ -2552,6 +_,18 @@
                      } else if (source.getEntity() instanceof ServerPlayer) {
                          ((ServerPlayer)source.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(damageResisted * 10.0F));
                      }
@@ -98,7 +98,7 @@
                  }
              }
  
-@@ -2588,10 +_,20 @@
+@@ -2587,10 +_,20 @@
              if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && this instanceof Player player) {
                  player.awardStat(Stats.DAMAGE_ABSORBED, Math.round(absorbedDamage * 10.0F));
              }
@@ -119,7 +119,7 @@
  
              // CraftBukkit start
              if (dmg > 0.0F || !human) {
-@@ -2602,6 +_,13 @@
+@@ -2601,6 +_,13 @@
                          ((net.minecraft.world.entity.player.Player)this).awardStat(Stats.DAMAGE_TAKEN, Math.round(dmg * 10.0F));
                      }
                  }
@@ -133,7 +133,7 @@
                  // CraftBukkit end
                  this.getCombatTracker().recordDamage(source, dmg);
                  this.setHealth(this.getHealth() - dmg);
-@@ -2621,10 +_,27 @@
+@@ -2620,10 +_,27 @@
                              serverPlayer.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(damageBlocked * 10.0F));
                          }
                      }
@@ -161,7 +161,7 @@
  
                      return !io.papermc.paper.configuration.GlobalConfiguration.get().unsupportedSettings.skipVanillaDamageTickWhenShieldBlocked; // Paper - this should always return true, however expose an unsupported setting to flip this to false to enable "shield stunning".
                  } else {
-@@ -2710,6 +_,7 @@
+@@ -2709,6 +_,7 @@
                  );
                  ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
                  if (sendToSwingingEntity) {
@@ -169,7 +169,7 @@
                      chunkSource.sendToTrackingPlayersAndSelf(this, packet);
                  } else {
                      chunkSource.sendToTrackingPlayers(this, packet);
-@@ -3505,7 +_,7 @@
+@@ -3504,7 +_,7 @@
                  this.getCombatTracker().recheckStatus();
              }
  
@@ -178,7 +178,7 @@
                  this.stopSleeping();
              }
          }
-@@ -3943,9 +_,17 @@
+@@ -3942,9 +_,17 @@
                      flag = false;
                  }
  
@@ -199,7 +199,7 @@
                  }
              }
          }
-@@ -4149,9 +_,15 @@
+@@ -4148,9 +_,15 @@
      }
  
      public void onItemPickup(final ItemEntity entity) {

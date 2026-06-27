@@ -45,7 +45,7 @@
          if (respawnLevel != null && respawnConfig != null) {
              Optional<ServerPlayer.RespawnPosAngle> respawn = findRespawnAndUseSpawnBlock(respawnLevel, respawnConfig, consumeSpawnBlock);
              if (respawn.isPresent()) {
-@@ -2073,8 +_,13 @@
+@@ -2074,8 +_,13 @@
                      }
                  }
              } else if (this.isFallFlying()) {
@@ -61,7 +61,7 @@
              } else {
                  int horizontalDistance = Math.round((float)Math.sqrt(dx * dx + dz * dz) * 100.0F);
                  if (horizontalDistance > 25) {
-@@ -2088,6 +_,11 @@
+@@ -2089,6 +_,11 @@
          if (this.isPassenger() && !didNotMove(dx, dy, dz)) {
              int distance = Math.round((float)Math.sqrt(dx * dx + dy * dy + dz * dz) * 100.0F);
              Entity vehicle = this.getVehicle();

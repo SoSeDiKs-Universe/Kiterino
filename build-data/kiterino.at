@@ -31,8 +31,8 @@ public net.minecraft.world.item.crafting.SmithingTransformRecipe template
 public net.minecraft.world.level.block.ComposterBlock add(FLnet/minecraft/world/level/ItemLike;)V
 public net.minecraft.world.level.block.EnderChestBlock CONTAINER_TITLE
 public net.minecraft.world.level.block.EnderChestBlock getEnderChestSixRows(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/inventory/PlayerEnderChestContainer;)Lnet/minecraft/world/inventory/ChestMenu;
-public net.minecraft.world.level.block.entity.BlockEntityTypes register(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;
 public net.minecraft.world.level.block.entity.BlockEntityType$BlockEntitySupplier
+public net.minecraft.world.level.block.entity.BlockEntityTypes register(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;
 public-f net.minecraft.core.particles.ItemParticleOption itemStack
 public-f net.minecraft.network.protocol.BundlePacket packets
 public-f net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket carriedItem

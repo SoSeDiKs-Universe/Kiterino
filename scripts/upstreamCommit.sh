@@ -12,6 +12,7 @@ function getCommits() {
 set -e
 PS1="$"
 
+git add build-data/
 git add gradle.properties
 
 # Purpur updates
