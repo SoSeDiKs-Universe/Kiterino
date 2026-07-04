@@ -5,29 +5,29 @@ Subject: [PATCH] Expose leftover items in events
 
 
 diff --git a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index f5df972ec8f83e65efabd630d3ccf1abc35a962f..db11959c45931b44ff60c7d6cbc5500e7ea6d11a 100644
+index 993e6aabfd05a74523705b3dc2c4f8f2f88b2de3..356dadc60b4500634a72d490982e9a8470578039 100644
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -222,6 +222,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
-                             org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(fuel),
-                             entity.getBurnDuration(level.fuelValues(), fuel)
-                         );
-+                        // Kiterino start - Expose leftover items in events
-+                        ItemStackTemplate craftingRemainder = fuel.getItem().getCraftingRemainder();
-+                        if (craftingRemainder != null) {
-+                            furnaceBurnEvent.setRemainingItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(craftingRemainder.create()));
-+                        }
-+                        // Kiterino end - Expose leftover items in events
-                         if (!furnaceBurnEvent.callEvent()) return;
-                         // CraftBukkit end
-                         if (!isLit) {
-@@ -230,7 +236,17 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+@@ -224,6 +224,12 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+                                 org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(fuel),
+                                 newLitTime
+                             );
++                            // Kiterino start - Expose leftover items in events
++                            ItemStackTemplate craftingRemainder = fuel.getItem().getCraftingRemainder();
++                            if (craftingRemainder != null) {
++                                burnEvent.setRemainingItem(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(craftingRemainder.create()));
++                            }
++                            // Kiterino end - Expose leftover items in events
+                             if (!burnEvent.callEvent()) return;
+                             newLitTime = burnEvent.getBurnTime();
+                             // CraftBukkit end
+@@ -231,7 +237,17 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
                              entity.litTotalTime = newLitTime;
-                             if (newLitTime > 0 && furnaceBurnEvent.isBurning()) { // CraftBukkit - respect event output // TODO - snapshot - double check surrounding diff post squash
-                                 if (furnaceBurnEvent.willConsumeFuel()) { // Paper - add consumeFuel to FurnaceBurnEvent
+                             if (newLitTime > 0 && burnEvent.isBurning()) { // CraftBukkit - respect event output
+                                 if (burnEvent.willConsumeFuel()) { // Paper - add consumeFuel to FurnaceBurnEvent
 -                                consumeFuel(entity.items, fuel);
 +                                    // Kiterino start - Expose leftover items in events
-+                                    org.bukkit.inventory.ItemStack remainingItem = furnaceBurnEvent.getRemainingItem();
++                                    org.bukkit.inventory.ItemStack remainingItem = burnEvent.getRemainingItem();
 +                                    ItemStack craftingRemainderItem = remainingItem == null ? ItemStack.EMPTY : ItemStack.fromBukkitCopy(remainingItem);
 +                                    fuel.shrink(1);
 +                                    if (fuel.isEmpty()) {
@@ -41,7 +41,7 @@ index f5df972ec8f83e65efabd630d3ccf1abc35a962f..db11959c45931b44ff60c7d6cbc5500e
                                  isLit = true;
                                  changed = true;
 diff --git a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
-index 6c96ea9b477999453b2e9e59c119d70ea1e44453..c58afc3d06ee96bcfa8c767c917d487ccb09614e 100644
+index 5d26efb1feb1fd7d0f3bcc0fd7678b303518312a..00c6bed3678ed2c29f1a443886973ac1e0480173 100644
 --- a/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/BrewingStandBlockEntity.java
 @@ -245,6 +245,7 @@ public class BrewingStandBlockEntity extends BaseContainerBlockEntity implements

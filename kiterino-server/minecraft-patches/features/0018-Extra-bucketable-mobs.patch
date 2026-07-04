@@ -104,10 +104,10 @@ index c0a931526bf663da06949fbe0a4a19ba5ecc5838..1c471a7266b0146d6a85fa8995fd6383
              ItemStack result = ItemUtils.createFilledResult(itemStack, player, bucket, false);
              player.setItemInHand(hand, result);
 diff --git a/net/minecraft/world/entity/Mob.java b/net/minecraft/world/entity/Mob.java
-index 2d3fab8bda2335aad7b0dad4f5dacb3392cdf8bf..2bc16bdb23103473df0ad1e627e09a94dc03a720 100644
+index 15611bbd35b1ce319fa90ee64151a2cc9f58c026..198d4c8be5c60dbbce716fc6f72f722030f83d45 100644
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -1397,6 +1397,12 @@ public abstract class Mob extends LivingEntity implements Targeting, EquipmentUs
+@@ -1379,6 +1379,12 @@ public abstract class Mob extends LivingEntity implements Targeting, EquipmentUs
      }
  
      protected InteractionResult mobInteract(final Player player, final InteractionHand hand) {

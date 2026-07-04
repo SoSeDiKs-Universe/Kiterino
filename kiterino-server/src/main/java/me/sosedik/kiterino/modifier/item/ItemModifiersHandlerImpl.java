@@ -952,7 +952,7 @@ public class ItemModifiersHandlerImpl extends ItemModifiersHandler {
         boolean prev = ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(true);
         Component component = initialPacket.content();
-        component = ComponentSerialization.replaceHoverEvent(player,player == null ? Locale.US : player.locale(), component);
+        component = ComponentSerialization.replaceHoverEvent(player, player == null ? Locale.US : player.locale(), component);
         ComponentSerialization.DONT_RENDER_TRANSLATABLES.set(prev);
         return new ClientboundSystemChatPacket(component, false);
     }

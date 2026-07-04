@@ -22,10 +22,10 @@ index 6fbcac0adbc452482a40341fcf94c4d63666bdab..912339a41a3667cac3bc9f687a7e4ab0
  
          return result;
 diff --git a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-index db11959c45931b44ff60c7d6cbc5500e7ea6d11a..aab3af5528884bd1cf6b708a79b85e9d29dbb1ff 100644
+index 356dadc60b4500634a72d490982e9a8470578039..bdaefce921c5723802bbc29d932c8547c8bfb520 100644
 --- a/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
 +++ b/net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.java
-@@ -363,7 +363,14 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
+@@ -364,7 +364,14 @@ public abstract class AbstractFurnaceBlockEntity extends BaseContainerBlockEntit
          // CraftBukkit end
  
          if (inputItemStack.is(Items.WET_SPONGE) && !items.get(1).isEmpty() && items.get(1).is(Items.BUCKET)) {
